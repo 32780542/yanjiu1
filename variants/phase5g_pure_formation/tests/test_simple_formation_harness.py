@@ -40,6 +40,14 @@ EXPECTED_MODES = {
     "longitudinal": {"formation_enabled": True, "formation_lane_change_enabled": False},
     "lane_priority": {"formation_enabled": True, "formation_lane_change_enabled": True},
 }
+MAIN_SIX_EXPECTED = (
+    ("v0", 100.0, 1.65, 10.0),
+    ("v1", 145.0, 1.65, 9.5),
+    ("v2", 190.0, 1.65, 10.5),
+    ("v3", 122.0, 4.95, 10.5),
+    ("v4", 167.0, 4.95, 9.5),
+    ("v5", 108.0, 8.25, 10.0),
+)
 
 
 def mutable_ids(value):
@@ -94,6 +102,72 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertIs(registered["simple_formation_enabled"], False)
         self.assertEqual(dict(self.harness.MODES), EXPECTED_MODES)
         self.assertEqual(tuple(self.harness.MODES), ("off", "longitudinal", "lane_priority"))
+
+    def test_approved_simple_rules_bind_the_exact_unformed_main_six_input(self):
+        _, physical, policy = self.harness.parameters(
+            "lane_priority", 10.0,
+            simple_rules=True, simple_overrides=SIMPLE_DEFAULTS,
+        )
+        self.assertEqual(
+            {key: physical[key] for key in PARAMETERS}, SIMPLE_DEFAULTS,
+        )
+        self.assertEqual(
+            {key: policy[key] for key in PARAMETERS}, SIMPLE_DEFAULTS,
+        )
+        self.assertIs(physical["simple_formation_enabled"], True)
+        self.assertEqual(phase5g_cases.MAIN_SIX, MAIN_SIX_EXPECTED)
+
+        case = phase5g_cases.main_six_case(physical)
+        self.assertEqual(len(case["initial"]), 6)
+        self.assertEqual(set(case["controlled"]), set(case["initial"]))
+        self.assertEqual(case["scripts"], {})
+        self.assertEqual(
+            tuple(
+                (key, state["x_m"], state["y_m"], state["vx_mps"])
+                for key, state in case["initial"].items()
+            ),
+            MAIN_SIX_EXPECTED,
+        )
+        self.assertEqual(
+            [
+                sum(state["y_m"] == center for state in case["initial"].values())
+                for center in phase5g_cases.LANE_CENTERS_M
+            ],
+            [3, 2, 1],
+        )
+        audit = phase5g_cases.validate_initial(case["initial"], physical)
+        self.assertTrue(audit["passed"], audit)
+        self.assertFalse(audit["detector"]["success"], audit["detector"])
+        self.assertTrue(
+            audit["detector"]["frames"][0]["fleet_failure_reasons"],
+            audit["detector"],
+        )
+
+    def test_seeded_small_cases_contain_only_controlled_normal_vehicles(self):
+        _, physical, _ = self.harness.parameters(
+            "lane_priority", 10.0,
+            simple_rules=True, simple_overrides=SIMPLE_DEFAULTS,
+        )
+        expected_lane_counts = {3: [1, 1, 1], 6: [3, 2, 1], 12: [4, 4, 4]}
+        for count in (3, 6, 12):
+            with self.subTest(count=count):
+                case = phase5g_cases.seeded_case(physical, count, 1)
+                self.assertEqual(len(case["initial"]), count)
+                self.assertEqual(len(case["controlled"]), count)
+                self.assertEqual(set(case["controlled"]), set(case["initial"]))
+                self.assertEqual(case["scripts"], {})
+                self.assertEqual(
+                    [
+                        sum(
+                            state["y_m"] == center
+                            for state in case["initial"].values()
+                        )
+                        for center in phase5g_cases.LANE_CENTERS_M
+                    ],
+                    expected_lane_counts[count],
+                )
+                audit = phase5g_cases.validate_initial(case["initial"], physical)
+                self.assertTrue(audit["passed"], audit)
 
     def test_simple_parameters_change_only_switch_and_six_resolved_values(self):
         base_model, base_physical, base_policy = self.harness.parameters("lane_priority")
