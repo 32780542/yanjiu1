@@ -1,6 +1,9 @@
 """Tests for the user-facing SUMO GUI demonstration entry point."""
+import hashlib
 import json
 import math
+import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -274,7 +277,8 @@ class _SimpleTraceFixture:
             network=self.network,
             traci_python=self.traci_python,
         )
-        self.config = gui.SimpleFormationDemoConfig()
+        self.config = replace(
+            gui.SimpleFormationDemoConfig(), simulation_duration_s=0.1)
 
     def tearDown(self):
         self.temporary.cleanup()
@@ -298,6 +302,51 @@ class _SimpleTraceFixture:
         (path / 'evidence_hashes.json').write_text(
             json.dumps(files, sort_keys=True), encoding='utf-8')
 
+    @staticmethod
+    def canonical_digest(value):
+        encoded = (json.dumps(
+            value, sort_keys=True, separators=(',', ':'), ensure_ascii=False,
+            allow_nan=False) + '\n').encode('utf-8')
+        return hashlib.sha256(encoded).hexdigest()
+
+    @staticmethod
+    def snapshot_manifest(path):
+        return {
+            item.relative_to(path).as_posix(): {
+                'sha256': gui.sha256_file(item), 'type': 'regular'}
+            for item in sorted(path.rglob('*')) if item.is_file()
+        }
+
+    def write_completion_anchor(self, outer):
+        trust = outer.parent / '.phase5g-trust'
+        source_path = trust / f'{outer.name}.json'
+        source = json.loads(source_path.read_text(encoding='utf-8'))
+        evidence_path = outer / 'evidence_hashes.json'
+        evidence = json.loads(evidence_path.read_text(encoding='utf-8'))
+        child_manifest = self.snapshot_manifest(outer / 'case')
+        completion = {
+            'schema': 'phase5g_simple_demo_completion_anchor_v1',
+            'run_id': outer.name,
+            'outer_schema': 'phase5g_simple_demo_v1',
+            'source_anchor_schema': 'phase5g_external_trust_anchor_v2',
+            'source_anchor_sha256': gui.sha256_file(source_path),
+            'source_manifest_sha256': source['source_manifest_sha256'],
+            'input_manifest_sha256': source['input_manifest_sha256'],
+            'child_directory': 'case',
+            'child_manifest': child_manifest,
+            'child_manifest_sha256': self.canonical_digest(child_manifest),
+            'outer_evidence_hashes': evidence,
+            'outer_evidence_manifest_sha256': self.canonical_digest(evidence),
+            'outer_evidence_file_sha256': gui.sha256_file(evidence_path),
+        }
+        (trust / f'{outer.name}.completion.json').write_text(
+            json.dumps(completion, sort_keys=True), encoding='utf-8')
+
+    def reseal_trusted(self, outer):
+        self.seal(outer / 'case')
+        self.seal(outer)
+        self.write_completion_anchor(outer)
+
     def make_outer(self, name='fresh'):
         outer = self.variant_results / 'phase5g' / 'simple_gui_sources' / name
         case = outer / 'case'
@@ -307,30 +356,81 @@ class _SimpleTraceFixture:
             actor: self.state(0.0, 100.0 + index * 15.0)
             for index, actor in enumerate(actors)
         }
-        completed = {
-            'status': 'completed', 'initial': initial,
-            'steps': {
-                actor: {
-                    'final': self.state(0.1, 101.0 + index * 15.0),
-                    'samples': [],
-                }
+        intervals = round(self.config.simulation_duration_s / 0.1)
+        records = []
+        current = initial
+        for step in range(1, intervals + 1):
+            time_s = step * 0.1
+            final = {
+                actor: self.state(
+                    time_s, 100.0 + index * 15.0 + time_s * 10.0)
                 for index, actor in enumerate(actors)
-            },
-        }
+            }
+            records.append({
+                'status': 'completed', 'initial': current,
+                'steps': {
+                    actor: {
+                        'initial': current[actor], 'final': final[actor],
+                        'samples': [final[actor]], 'command': {}, 'dt_s': 0.1,
+                    }
+                    for actor in actors
+                },
+            })
+            current = final
         (case / 'trace.jsonl').write_text(
-            json.dumps({'status': 'running', 'initial': initial}) + '\n'
-            + json.dumps(completed) + '\n', encoding='utf-8')
+            ''.join(json.dumps(record) + '\n' for record in records),
+            encoding='utf-8')
         (case / 'metadata.json').write_text(json.dumps({
             'execution_status': 'completed',
+            'intervals': intervals, 'trace_intervals': intervals,
             'case': {'name': 'main_6_3_2_1', 'controlled': actors,
                      'duration_s': self.config.simulation_duration_s,
                      'initial': initial, 'scripts': {}},
-            'parameters': {'length_m': 4.0},
+            'parameters': {'length_m': 4.0, 'control_sync_dt_s': 0.1},
         }), encoding='utf-8')
         (case / 'validation.json').write_text(json.dumps({
             'status': 'completed', 'sealed': True, 'recording_passed': True,
         }), encoding='utf-8')
         self.seal(case)
+        code_snapshot = outer / 'code_snapshot'
+        input_snapshot = outer / 'input_snapshot'
+        (code_snapshot / 'noa').mkdir(parents=True)
+        (code_snapshot / 'configs').mkdir(parents=True)
+        (input_snapshot / 'configs').mkdir(parents=True)
+        (code_snapshot / 'noa/simple_formation.py').write_text(
+            '# trusted fixture\n', encoding='utf-8')
+        (code_snapshot / 'configs/phase5g.json').write_text(
+            '{}\n', encoding='utf-8')
+        (input_snapshot / 'configs/phase5g.json').write_text(
+            '{}\n', encoding='utf-8')
+        (input_snapshot / 'phase5g_cases.json').write_text(
+            '{}\n', encoding='utf-8')
+        code_manifest = self.snapshot_manifest(code_snapshot)
+        input_manifest = self.snapshot_manifest(input_snapshot)
+        source_hashes = {
+            'noa/simple_formation.py':
+                code_manifest['noa/simple_formation.py']['sha256'],
+        }
+        input_hashes = {
+            name: entry['sha256'] for name, entry in input_manifest.items()
+        }
+        (outer / 'code_hashes.json').write_text(
+            json.dumps(source_hashes, sort_keys=True), encoding='utf-8')
+        (outer / 'input_hashes.json').write_text(
+            json.dumps(input_hashes, sort_keys=True), encoding='utf-8')
+        (outer / 'code_snapshot_manifest.json').write_text(
+            json.dumps(code_manifest, sort_keys=True), encoding='utf-8')
+        (outer / 'input_snapshot_manifest.json').write_text(
+            json.dumps(input_manifest, sort_keys=True), encoding='utf-8')
+        mode_registry = {
+            'off': {'formation_enabled': False,
+                    'formation_lane_change_enabled': False},
+            'longitudinal': {'formation_enabled': True,
+                             'formation_lane_change_enabled': False},
+            'lane_priority': {'formation_enabled': True,
+                              'formation_lane_change_enabled': True},
+        }
+        case_file_sha = input_hashes['phase5g_cases.json']
         (outer / 'metadata.json').write_text(json.dumps({
             'schema': 'phase5g_simple_demo_v1', 'formal': False,
             'mode': 'lane_priority', 'simple_formation_enabled': True,
@@ -351,6 +451,8 @@ class _SimpleTraceFixture:
                 'simple_formation_max_lane_changes':
                     self.config.max_formation_lane_changes,
             },
+            'case_file_sha256': case_file_sha,
+            'mode_registry': mode_registry,
             'case_directory': 'case',
         }), encoding='utf-8')
         (outer / 'validation.json').write_text(json.dumps({
@@ -358,10 +460,289 @@ class _SimpleTraceFixture:
             'engineering_passed': True, 'case_directory': 'case',
         }), encoding='utf-8')
         self.seal(outer)
+        trust = outer.parent / '.phase5g-trust'
+        trust.mkdir(exist_ok=True)
+        source_anchor = {
+            'schema': 'phase5g_external_trust_anchor_v2',
+            'run_id': outer.name,
+            'source_manifest_sha256': self.canonical_digest(code_manifest),
+            'input_manifest_sha256': self.canonical_digest(input_manifest),
+            'source_hashes': source_hashes,
+            'input_hashes': input_hashes,
+            'code_snapshot_manifest': code_manifest,
+            'input_snapshot_manifest': input_manifest,
+            'case_file_sha256': case_file_sha,
+            'mode_registry_sha256': self.canonical_digest(mode_registry),
+        }
+        (trust / f'{outer.name}.json').write_text(
+            json.dumps(source_anchor, sort_keys=True), encoding='utf-8')
+        self.write_completion_anchor(outer)
         return outer
+
+    def assert_trust_failure_before_child(self, outer, pattern):
+        original_read = gui._read_json
+
+        def guarded_read(path):
+            candidate = Path(path).resolve()
+            if candidate.is_relative_to((outer / 'case').resolve()):
+                raise AssertionError(f'信任验证前读取了child JSON: {candidate}')
+            return original_read(path)
+
+        completed = subprocess.CompletedProcess(
+            [], 0, stdout=json.dumps({'path': str(outer)}), stderr='')
+        with patch.object(gui, 'validate_simple_config', return_value=self.paths), \
+                patch.object(gui.subprocess, 'run', return_value=completed), \
+                patch.object(gui, '_read_json', side_effect=guarded_read), \
+                patch.object(gui, 'create_run_directory') as create, \
+                patch.object(gui.subprocess, 'Popen') as popen, \
+                self.assertRaisesRegex(RuntimeError, pattern):
+            gui.run_simple_formation_demo(
+                self.config, self.root, output_fn=lambda line: None)
+        create.assert_not_called()
+        popen.assert_not_called()
+
+    def assert_trace_failure_before_gui(self, outer, pattern):
+        completed = subprocess.CompletedProcess(
+            [], 0, stdout=json.dumps({'path': str(outer)}), stderr='')
+        with patch.object(gui, 'validate_simple_config', return_value=self.paths), \
+                patch.object(gui.subprocess, 'run', return_value=completed), \
+                patch.object(gui, 'create_run_directory') as create, \
+                patch.object(gui.subprocess, 'Popen') as popen, \
+                self.assertRaisesRegex(RuntimeError, pattern):
+            gui.run_simple_formation_demo(
+                self.config, self.root, output_fn=lambda line: None)
+        create.assert_not_called()
+        popen.assert_not_called()
+
+    def trace_records(self, outer):
+        return [json.loads(line) for line in (
+            outer / 'case' / 'trace.jsonl').read_text(
+                encoding='utf-8').splitlines()]
+
+    def write_trusted_trace(self, outer, records):
+        (outer / 'case' / 'trace.jsonl').write_text(
+            ''.join(json.dumps(record, allow_nan=True) + '\n' for record in records),
+            encoding='utf-8')
+        self.reseal_trusted(outer)
 
 
 class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
+    def test_missing_source_or_completion_anchor_fails_before_child_json(self):
+        source_missing = self.make_outer('missing-source-anchor')
+        trust = source_missing.parent / '.phase5g-trust'
+        (trust / f'{source_missing.name}.json').unlink()
+        self.assert_trust_failure_before_child(source_missing, 'source anchor.*缺失')
+
+        completion_missing = self.make_outer('missing-completion-anchor')
+        (trust / f'{completion_missing.name}.completion.json').unlink()
+        self.assert_trust_failure_before_child(
+            completion_missing, 'completion anchor.*缺失')
+
+    def test_tampered_source_anchor_and_exact_fields_are_rejected(self):
+        for index, operation in enumerate(('tamper', 'extra', 'missing')):
+            with self.subTest(operation=operation):
+                outer = self.make_outer(f'anchor-{index}')
+                anchor_path = (
+                    outer.parent / '.phase5g-trust' / f'{outer.name}.json')
+                anchor = json.loads(anchor_path.read_text(encoding='utf-8'))
+                if operation == 'tamper':
+                    anchor['source_manifest_sha256'] = '0' * 64
+                    pattern = 'source anchor.*SHA-256'
+                elif operation == 'extra':
+                    anchor['unexpected'] = True
+                    pattern = 'source anchor.*额外字段'
+                else:
+                    del anchor['input_hashes']
+                    pattern = 'source anchor.*缺少字段'
+                anchor_path.write_text(json.dumps(anchor), encoding='utf-8')
+                self.assert_trust_failure_before_child(outer, pattern)
+
+    def test_completion_anchor_tamper_and_exact_fields_are_rejected(self):
+        for index, operation in enumerate(('tamper', 'extra', 'missing')):
+            with self.subTest(operation=operation):
+                outer = self.make_outer(f'completion-{index}')
+                completion_path = (
+                    outer.parent / '.phase5g-trust'
+                    / f'{outer.name}.completion.json')
+                completion = json.loads(
+                    completion_path.read_text(encoding='utf-8'))
+                if operation == 'tamper':
+                    completion['source_anchor_sha256'] = '0' * 64
+                    pattern = 'completion anchor.*source anchor SHA-256'
+                elif operation == 'extra':
+                    completion['unexpected'] = True
+                    pattern = 'completion anchor.*额外字段'
+                else:
+                    del completion['child_manifest']
+                    pattern = 'completion anchor.*缺少字段'
+                completion_path.write_text(
+                    json.dumps(completion), encoding='utf-8')
+                self.assert_trust_failure_before_child(outer, pattern)
+
+    def test_tampered_or_swapped_child_is_rejected_even_after_resealing(self):
+        tampered = self.make_outer('tampered-child')
+        trace = tampered / 'case' / 'trace.jsonl'
+        trace.write_text(
+            trace.read_text(encoding='utf-8').replace('101.0', '102.0', 1),
+            encoding='utf-8')
+        self.seal(tampered / 'case')
+        self.seal(tampered)
+        self.assert_trust_failure_before_child(
+            tampered, 'completion anchor.*child manifest')
+
+        original = self.make_outer('swap-target')
+        donor = self.make_outer('swap-donor')
+        donor_trace = donor / 'case' / 'trace.jsonl'
+        donor_trace.write_text(
+            donor_trace.read_text(encoding='utf-8').replace('101.0', '103.0', 1),
+            encoding='utf-8')
+        self.reseal_trusted(donor)
+        shutil.rmtree(original / 'case')
+        shutil.copytree(donor / 'case', original / 'case')
+        self.seal(original)
+        self.assert_trust_failure_before_child(
+            original, 'completion anchor.*child manifest')
+
+    def test_snapshot_tamper_is_not_accepted(self):
+        outer = self.make_outer('snapshot-tamper')
+        source = outer / 'code_snapshot' / 'noa' / 'simple_formation.py'
+        source.write_text('# changed\n', encoding='utf-8')
+        self.seal(outer)
+        self.write_completion_anchor(outer)
+        self.assert_trust_failure_before_child(outer, 'code snapshot')
+
+    def test_outer_reparse_is_rejected_before_resolve_and_child_read(self):
+        outer = self.make_outer('outer-reparse')
+        outer_info = os.lstat(outer)
+        original_is_reparse = gui._is_reparse
+
+        def mark_outer_reparse(info):
+            if (getattr(info, 'st_dev', None), getattr(info, 'st_ino', None)) == (
+                    outer_info.st_dev, outer_info.st_ino):
+                return True
+            return original_is_reparse(info)
+
+        with patch.object(gui, '_is_reparse', side_effect=mark_outer_reparse):
+            self.assert_trust_failure_before_child(
+                outer, '结果路径.*reparse')
+
+    def test_playback_uses_the_exact_trace_text_that_preflight_validated(self):
+        outer = self.make_outer('immutable-preflight')
+        source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        records = self.trace_records(outer)
+        records[0]['steps']['v0']['final']['x_m'] = -99.0
+        records[0]['steps']['v0']['samples'][-1]['x_m'] = -99.0
+        (outer / 'case' / 'trace.jsonl').write_text(
+            ''.join(json.dumps(record) + '\n' for record in records),
+            encoding='utf-8')
+
+        frames = list(gui.iter_trace_frames(source))
+        self.assertEqual(frames[1].states['v0']['x_m'], 101.0)
+
+    def test_trace_requires_json_objects_and_completed_frame_structure(self):
+        invalid_rows = (
+            ('array', '必须是JSON对象'),
+            ('null', '必须是JSON对象'),
+            ('string', '必须是JSON对象'),
+            ('status', '必须是completed'),
+            ('steps', 'steps'),
+        )
+        for index, (kind, pattern) in enumerate(invalid_rows):
+            with self.subTest(index=index):
+                outer = self.make_outer(f'bad-record-{index}')
+                valid = self.trace_records(outer)[0]
+                record = {
+                    'array': [], 'null': None, 'string': 'record',
+                    'status': {**valid, 'status': 'running'},
+                    'steps': {**valid, 'steps': None},
+                }[kind]
+                self.write_trusted_trace(outer, [record])
+                self.assert_trace_failure_before_gui(outer, pattern)
+
+    def test_trace_rejects_missing_or_nonfinite_required_state_values(self):
+        required = (
+            'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps')
+        for index, field in enumerate(required):
+            with self.subTest(field=field):
+                outer = self.make_outer(f'missing-state-{index}')
+                records = self.trace_records(outer)
+                del records[0]['steps']['v0']['final'][field]
+                self.write_trusted_trace(outer, records)
+                self.assert_trace_failure_before_gui(outer, field)
+
+        invalid = (True, math.nan, math.inf, -math.inf)
+        for index, value in enumerate(invalid):
+            with self.subTest(value=value):
+                outer = self.make_outer(f'bad-number-{index}')
+                records = self.trace_records(outer)
+                records[0]['steps']['v0']['final']['x_m'] = value
+                self.write_trusted_trace(outer, records)
+                self.assert_trace_failure_before_gui(
+                    outer, 'x_m.*有限数字|JSON常量')
+
+    def test_trace_rejects_invalid_actor_step_states(self):
+        mutations = {
+            'empty-samples': (
+                lambda step: step.update(samples=[]), '样本'),
+            'nonobject-sample': (
+                lambda step: step.update(samples=[None]), 'JSON对象'),
+            'bad-sample-number': (
+                lambda step: step['samples'][0].update(x_m=True),
+                'exact int/float'),
+            'missing-step-initial': (
+                lambda step: step.pop('initial'), 'initial'),
+            'mismatched-step-initial': (
+                lambda step: step['initial'].update(x_m=-1.0), 'initial'),
+            'final-not-last-sample': (
+                lambda step: step['samples'][-1].update(x_m=-1.0), 'final'),
+        }
+        for name, (mutate, pattern) in mutations.items():
+            with self.subTest(name=name):
+                outer = self.make_outer(f'bad-step-{name}')
+                records = self.trace_records(outer)
+                mutate(records[0]['steps']['v0'])
+                self.write_trusted_trace(outer, records)
+                self.assert_trace_failure_before_gui(outer, pattern)
+
+    def test_trace_rejects_actor_and_time_contract_violations(self):
+        missing_actor = self.make_outer('missing-actor')
+        records = self.trace_records(missing_actor)
+        del records[0]['steps']['v0']
+        self.write_trusted_trace(missing_actor, records)
+        self.assert_trace_failure_before_gui(missing_actor, '车辆集合')
+
+        mismatched_time = self.make_outer('mismatched-time')
+        records = self.trace_records(mismatched_time)
+        records[0]['steps']['v0']['final']['time_s'] = 0.2
+        records[0]['steps']['v0']['samples'][-1]['time_s'] = 0.2
+        self.write_trusted_trace(mismatched_time, records)
+        self.assert_trace_failure_before_gui(mismatched_time, '时间')
+
+        self.config = replace(self.config, simulation_duration_s=0.2)
+        nonmonotonic = self.make_outer('nonmonotonic-time')
+        records = self.trace_records(nonmonotonic)
+        for step in records[1]['steps'].values():
+            step['final']['time_s'] = 0.1
+            step['samples'][-1]['time_s'] = 0.1
+        self.write_trusted_trace(nonmonotonic, records)
+        self.assert_trace_failure_before_gui(nonmonotonic, '严格递增|控制周期')
+
+        discontinuous = self.make_outer('discontinuous-state')
+        self.config = replace(self.config, simulation_duration_s=0.2)
+        records = self.trace_records(discontinuous)
+        records[1]['initial']['v0']['x_m'] = -1.0
+        records[1]['steps']['v0']['initial']['x_m'] = -1.0
+        self.write_trusted_trace(discontinuous, records)
+        self.assert_trace_failure_before_gui(discontinuous, '连续')
+
+        mismatched_samples = self.make_outer('mismatched-sample-frames')
+        records = self.trace_records(mismatched_samples)
+        records[0]['steps']['v0']['samples'].insert(
+            0, self.state(0.05, 100.5))
+        self.write_trusted_trace(mismatched_samples, records)
+        self.assert_trace_failure_before_gui(
+            mismatched_samples, '样本.*车辆|车辆.*样本')
+
     def test_generator_forwards_each_editable_value_once_with_safe_subprocess(self):
         config = replace(
             self.config, vehicle_count=12, target_speed_mps=9.5,
@@ -467,7 +848,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
         metadata['simple_parameters']['simple_formation_adjacent_gap_m'] = 99.0
         metadata_path.write_text(json.dumps(metadata), encoding='utf-8')
-        self.seal(rules)
+        self.reseal_trusted(rules)
         with self.assertRaisesRegex(ValueError, 'simple_parameters'):
             gui.load_simple_trace_source(rules, self.paths, self.config)
 
@@ -476,8 +857,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         child_metadata = json.loads(child_metadata_path.read_text(encoding='utf-8'))
         child_metadata['case']['initial']['background'] = self.state(0.0, 500.0)
         child_metadata_path.write_text(json.dumps(child_metadata), encoding='utf-8')
-        self.seal(members / 'case')
-        self.seal(members)
+        self.reseal_trusted(members)
         with self.assertRaisesRegex(ValueError, '全量受控'):
             gui.load_simple_trace_source(members, self.paths, self.config)
 

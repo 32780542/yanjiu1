@@ -2,11 +2,13 @@
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import hashlib
+import io
 import json
 import math
 import os
 from pathlib import Path
 import socket
+import stat
 import subprocess
 import sys
 import traceback
@@ -88,6 +90,7 @@ class TraceSource:
     validation: Mapping
     evidence_status: str
     actors: tuple[str, ...]
+    verified_trace_bytes: bytes | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -407,7 +410,11 @@ def iter_trace_frames(source: TraceSource) -> Iterator[TraceFrame]:
     expected_actors = set(source.actors)
     saw_initial = False
     previous_time = -math.inf
-    with source.trace_path.open(encoding='utf-8') as stream:
+    if source.verified_trace_bytes is None:
+        stream = source.trace_path.open(encoding='utf-8')
+    else:
+        stream = io.StringIO(source.verified_trace_bytes.decode('utf-8'))
+    with stream:
         for line_number, line in enumerate(stream, start=1):
             if not line.strip():
                 raise ValueError(f'trace.jsonl 第{line_number}行为空')
@@ -443,41 +450,514 @@ def iter_trace_frames(source: TraceSource) -> Iterator[TraceFrame]:
         raise ValueError('trace.jsonl 没有轨迹记录')
 
 
+_SOURCE_ANCHOR_FIELDS = frozenset({
+    'schema', 'run_id', 'source_manifest_sha256', 'input_manifest_sha256',
+    'source_hashes', 'input_hashes', 'code_snapshot_manifest',
+    'input_snapshot_manifest', 'case_file_sha256', 'mode_registry_sha256',
+})
+_COMPLETION_ANCHOR_FIELDS = frozenset({
+    'schema', 'run_id', 'outer_schema', 'source_anchor_schema',
+    'source_anchor_sha256', 'source_manifest_sha256', 'input_manifest_sha256',
+    'child_directory', 'child_manifest', 'child_manifest_sha256',
+    'outer_evidence_hashes', 'outer_evidence_manifest_sha256',
+    'outer_evidence_file_sha256',
+})
+_HEX_DIGITS = frozenset('0123456789abcdef')
+
+
+def _json_digest(value) -> str:
+    try:
+        payload = (json.dumps(
+            value, sort_keys=True, separators=(',', ':'), ensure_ascii=False,
+            allow_nan=False) + '\n').encode('utf-8')
+    except (TypeError, ValueError) as error:
+        raise RuntimeError(f'信任材料不能规范化为JSON: {error}') from error
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _reject_json_constant(value):
+    raise ValueError(f'禁止非有限JSON常量 {value}')
+
+
+def _read_strict_object(path: Path, label: str, fields=None) -> dict:
+    try:
+        value = json.loads(
+            Path(path).read_text(encoding='utf-8-sig'),
+            parse_constant=_reject_json_constant)
+    except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
+        raise RuntimeError(f'{label}不是有效JSON对象: {error}') from error
+    if not isinstance(value, dict):
+        raise RuntimeError(f'{label}必须是JSON对象')
+    if fields is not None:
+        missing = sorted(set(fields) - set(value))
+        extra = sorted(set(value) - set(fields))
+        if missing:
+            raise RuntimeError(f'{label}缺少字段: {missing}')
+        if extra:
+            raise RuntimeError(f'{label}存在额外字段: {extra}')
+    return value
+
+
+def _is_reparse(info) -> bool:
+    return bool(getattr(info, 'st_file_attributes', 0)
+                & getattr(stat, 'FILE_ATTRIBUTE_REPARSE_POINT', 0))
+
+
+def _lstat_no_reparse(path: Path, boundary: Path, label: str):
+    """Inspect one lexical path under a boundary before any resolving occurs."""
+    target = Path(os.path.abspath(path))
+    base = Path(os.path.abspath(boundary))
+    try:
+        relative = target.relative_to(base)
+    except ValueError as error:
+        raise RuntimeError(f'{label}越界: {target}') from error
+    current = base
+    for part in (Path('.'), *relative.parts):
+        if part != Path('.'):
+            current /= part
+        try:
+            info = os.lstat(current)
+        except OSError as error:
+            raise RuntimeError(f'{label}缺失: {target}') from error
+        if current.is_symlink() or _is_reparse(info):
+            raise RuntimeError(f'{label}禁止符号链接、junction或reparse point: {current}')
+    return target, base, info
+
+
+def _require_regular_file(path: Path, boundary: Path, label: str) -> Path:
+    """Require a real regular file and reject reparse points in its path."""
+    target, _, info = _lstat_no_reparse(path, boundary, label)
+    if not stat.S_ISREG(info.st_mode):
+        raise RuntimeError(f'{label}不是普通文件: {target}')
+    return target
+
+
+def _resolve_result_directory(path: Path, boundary: Path, label: str) -> Path:
+    """Reject lexical reparse paths, then resolve a result directory in bounds."""
+    target, base, info = _lstat_no_reparse(path, boundary, label)
+    if not stat.S_ISDIR(info.st_mode):
+        raise RuntimeError(f'{label}不是目录: {target}')
+    resolved = target.resolve(strict=True)
+    resolved_base = base.resolve(strict=True)
+    if resolved == resolved_base or not resolved.is_relative_to(resolved_base):
+        raise RuntimeError(f'{label}越界: {resolved}')
+    return resolved
+
+
+def _regular_file_manifest(path: Path, label: str) -> dict[str, dict[str, str]]:
+    """Describe one exact regular-file tree without following reparse points."""
+    root = Path(os.path.abspath(path))
+    try:
+        root_info = os.lstat(root)
+    except OSError as error:
+        raise RuntimeError(f'{label}目录缺失: {root}') from error
+    if root.is_symlink() or _is_reparse(root_info):
+        raise RuntimeError(f'{label}根目录禁止符号链接、junction或reparse point')
+    if not stat.S_ISDIR(root_info.st_mode):
+        raise RuntimeError(f'{label}不是目录: {root}')
+    files = {}
+    folded = {}
+
+    def visit(folder: Path):
+        try:
+            entries = sorted(os.scandir(folder), key=lambda item: item.name)
+        except OSError as error:
+            raise RuntimeError(f'{label}无法枚举目录: {folder}') from error
+        for entry in entries:
+            candidate = Path(os.path.abspath(entry.path))
+            try:
+                relative = candidate.relative_to(root).as_posix()
+            except ValueError as error:
+                raise RuntimeError(f'{label}路径越界: {candidate}') from error
+            try:
+                info = entry.stat(follow_symlinks=False)
+            except OSError as error:
+                raise RuntimeError(f'{label}.{relative}无法读取属性') from error
+            if entry.is_symlink() or _is_reparse(info):
+                raise RuntimeError(
+                    f'{label}.{relative}禁止符号链接、junction或reparse point')
+            if stat.S_ISDIR(info.st_mode):
+                visit(candidate)
+            elif stat.S_ISREG(info.st_mode):
+                collision = folded.get(relative.casefold())
+                if collision is not None and collision != relative:
+                    raise RuntimeError(
+                        f'{label}存在大小写路径冲突: {collision}, {relative}')
+                folded[relative.casefold()] = relative
+                files[relative] = {
+                    'sha256': sha256_file(candidate), 'type': 'regular'}
+            else:
+                raise RuntimeError(f'{label}.{relative}不是普通文件')
+
+    visit(root)
+    return files
+
+
+def _valid_digest(value) -> bool:
+    return (type(value) is str and len(value) == 64
+            and set(value).issubset(_HEX_DIGITS))
+
+
+def _safe_relative_name(name, label: str) -> str:
+    if type(name) is not str or not name or '\\' in name:
+        raise RuntimeError(f'{label}含无效相对路径: {name!r}')
+    path = Path(name)
+    if path.is_absolute() or path.as_posix() != name \
+            or any(part in ('', '.', '..') for part in path.parts):
+        raise RuntimeError(f'{label}含越界或非规范路径: {name!r}')
+    return name
+
+
+def _validate_snapshot_manifest(value, label: str) -> dict:
+    if not isinstance(value, dict) or not value:
+        raise RuntimeError(f'{label}必须是非空JSON对象')
+    folded = {}
+    for name, entry in value.items():
+        _safe_relative_name(name, label)
+        collision = folded.get(name.casefold())
+        if collision is not None and collision != name:
+            raise RuntimeError(f'{label}存在大小写路径冲突: {collision}, {name}')
+        folded[name.casefold()] = name
+        if not isinstance(entry, dict):
+            raise RuntimeError(f'{label}.{name}必须是JSON对象')
+        missing = sorted({'sha256', 'type'} - set(entry))
+        extra = sorted(set(entry) - {'sha256', 'type'})
+        if missing or extra:
+            raise RuntimeError(
+                f'{label}.{name}字段不精确: missing={missing}; extra={extra}')
+        if entry['type'] != 'regular' or not _valid_digest(entry['sha256']):
+            raise RuntimeError(f'{label}.{name}必须绑定普通文件和小写SHA-256')
+    return value
+
+
+def _validate_hash_map(value, label: str) -> dict:
+    if not isinstance(value, dict) or not value:
+        raise RuntimeError(f'{label}必须是非空JSON对象')
+    for name, digest in value.items():
+        _safe_relative_name(name, label)
+        if not _valid_digest(digest):
+            raise RuntimeError(f'{label}.{name}不是小写SHA-256')
+    return value
+
+
+def _bind_hash_map(hashes: dict, manifest: dict, label: str) -> None:
+    for name, digest in hashes.items():
+        entry = manifest.get(name)
+        if not isinstance(entry, dict) or entry.get('sha256') != digest \
+                or entry.get('type') != 'regular':
+            raise RuntimeError(f'{label}.{name}与snapshot manifest不一致')
+
+
 def _verify_sealed_directory(path: Path) -> Mapping[str, str]:
-    """Verify that one evidence manifest exactly seals its directory tree."""
-    root = Path(path).resolve()
+    """Verify one exact regular-file tree against its local evidence seal."""
+    root = Path(os.path.abspath(path))
     manifest_path = root / 'evidence_hashes.json'
-    if not manifest_path.is_file():
-        raise FileNotFoundError(f'证据清单缺失: {manifest_path}')
-    hashes = _read_json(manifest_path)
-    if not isinstance(hashes, dict) or not hashes:
-        raise ValueError(f'证据清单不是非空对象: {manifest_path}')
-    actual = {
-        file.relative_to(root).as_posix()
-        for file in root.rglob('*')
-        if file.is_file() and file != manifest_path
+    actual = _regular_file_manifest(root, '证据目录')
+    if 'evidence_hashes.json' not in actual:
+        raise RuntimeError('证据目录缺少 evidence_hashes.json')
+    hashes = _read_strict_object(manifest_path, 'evidence_hashes.json')
+    expected = {
+        name: entry['sha256'] for name, entry in actual.items()
+        if name != 'evidence_hashes.json'
     }
-    if set(hashes) != actual:
-        missing = sorted(actual - set(hashes))
-        extra = sorted(set(hashes) - actual)
-        raise ValueError(f'证据清单文件集合不一致: missing={missing}; extra={extra}')
-    for relative in sorted(hashes):
-        verify_relative_hash(root, hashes, relative)
+    if hashes != expected:
+        missing = sorted(set(expected) - set(hashes))
+        extra = sorted(set(hashes) - set(expected))
+        changed = sorted(
+            name for name in set(expected) & set(hashes)
+            if expected[name] != hashes[name])
+        raise RuntimeError(
+            '证据清单不一致: '
+            f'missing={missing}; extra={extra}; changed={changed}')
     return hashes
+
+
+def _verify_simple_trust(
+        outer: Path, paths: SimpleCheckedPaths) -> tuple[dict, str]:
+    """Verify sibling content-integrity anchors, not signatures, before child parsing."""
+    trust = outer.parent / '.phase5g-trust'
+    source_path = _require_regular_file(
+        trust / f'{outer.name}.json', paths.variant_results,
+        'source anchor')
+    completion_path = _require_regular_file(
+        trust / f'{outer.name}.completion.json', paths.variant_results,
+        'completion anchor')
+    source = _read_strict_object(
+        source_path, 'source anchor', _SOURCE_ANCHOR_FIELDS)
+    completion = _read_strict_object(
+        completion_path, 'completion anchor', _COMPLETION_ANCHOR_FIELDS)
+    if source['schema'] != 'phase5g_external_trust_anchor_v2' \
+            or source['run_id'] != outer.name:
+        raise RuntimeError('source anchor的schema或run_id不一致')
+    if completion['schema'] != 'phase5g_simple_demo_completion_anchor_v1' \
+            or completion['run_id'] != outer.name \
+            or completion['outer_schema'] != 'phase5g_simple_demo_v1' \
+            or completion['source_anchor_schema'] != source['schema'] \
+            or completion['child_directory'] != 'case':
+        raise RuntimeError('completion anchor的schema、run_id或child_directory不一致')
+    if completion['source_anchor_sha256'] != sha256_file(source_path):
+        raise RuntimeError('completion anchor的source anchor SHA-256不一致')
+    for name in ('source_manifest_sha256', 'input_manifest_sha256'):
+        if completion[name] != source[name] or not _valid_digest(source[name]):
+            raise RuntimeError(f'completion anchor与source anchor的{name}不一致')
+
+    code_manifest = _validate_snapshot_manifest(
+        _read_strict_object(
+            outer / 'code_snapshot_manifest.json',
+            'code snapshot manifest'),
+        'code snapshot manifest')
+    input_manifest = _validate_snapshot_manifest(
+        _read_strict_object(
+            outer / 'input_snapshot_manifest.json',
+            'input snapshot manifest'),
+        'input snapshot manifest')
+    anchored_code_manifest = _validate_snapshot_manifest(
+        source['code_snapshot_manifest'], 'source anchor.code snapshot manifest')
+    anchored_input_manifest = _validate_snapshot_manifest(
+        source['input_snapshot_manifest'], 'source anchor.input snapshot manifest')
+    if code_manifest != anchored_code_manifest:
+        raise RuntimeError('code snapshot manifest与source anchor不一致')
+    if input_manifest != anchored_input_manifest:
+        raise RuntimeError('input snapshot manifest与source anchor不一致')
+    if _json_digest(code_manifest) != source['source_manifest_sha256']:
+        raise RuntimeError('code snapshot manifest根SHA-256不一致')
+    if _json_digest(input_manifest) != source['input_manifest_sha256']:
+        raise RuntimeError('input snapshot manifest根SHA-256不一致')
+    if code_manifest != _regular_file_manifest(
+            outer / 'code_snapshot', 'code snapshot'):
+        raise RuntimeError('code snapshot完整文件manifest不一致')
+    if input_manifest != _regular_file_manifest(
+            outer / 'input_snapshot', 'input snapshot'):
+        raise RuntimeError('input snapshot完整文件manifest不一致')
+
+    code_hashes = _validate_hash_map(
+        _read_strict_object(outer / 'code_hashes.json', 'code_hashes.json'),
+        'code_hashes.json')
+    input_hashes = _validate_hash_map(
+        _read_strict_object(outer / 'input_hashes.json', 'input_hashes.json'),
+        'input_hashes.json')
+    anchored_code = _validate_hash_map(source['source_hashes'],
+                                       'source anchor.source_hashes')
+    anchored_inputs = _validate_hash_map(source['input_hashes'],
+                                         'source anchor.input_hashes')
+    if code_hashes != anchored_code:
+        raise RuntimeError('code_hashes.json与source anchor不一致')
+    if input_hashes != anchored_inputs:
+        raise RuntimeError('input_hashes.json与source anchor不一致')
+    _bind_hash_map(code_hashes, code_manifest, 'code_hashes.json')
+    _bind_hash_map(input_hashes, input_manifest, 'input_hashes.json')
+    if input_hashes.get('phase5g_cases.json') != source['case_file_sha256'] \
+            or not _valid_digest(source['case_file_sha256']) \
+            or not _valid_digest(source['mode_registry_sha256']):
+        raise RuntimeError('source anchor的case或mode registry SHA-256不一致')
+
+    child_manifest = _validate_snapshot_manifest(
+        completion['child_manifest'], 'completion anchor.child manifest')
+    if _json_digest(child_manifest) != completion['child_manifest_sha256']:
+        raise RuntimeError('completion anchor的child manifest根SHA-256不一致')
+    actual_child = _regular_file_manifest(outer / 'case', 'case child manifest')
+    if child_manifest != actual_child:
+        raise RuntimeError('completion anchor的child manifest与实际case不一致')
+    evidence = _verify_sealed_directory(outer)
+    anchored_evidence = completion['outer_evidence_hashes']
+    if not isinstance(anchored_evidence, dict) or evidence != anchored_evidence:
+        raise RuntimeError('completion anchor的outer evidence清单不一致')
+    if _json_digest(evidence) != completion['outer_evidence_manifest_sha256']:
+        raise RuntimeError('completion anchor的outer evidence根SHA-256不一致')
+    if sha256_file(outer / 'evidence_hashes.json') \
+            != completion['outer_evidence_file_sha256']:
+        raise RuntimeError('completion anchor的outer evidence文件SHA-256不一致')
+    trace_entry = child_manifest.get('trace.jsonl')
+    if not isinstance(trace_entry, dict) or not _valid_digest(
+            trace_entry.get('sha256')):
+        raise RuntimeError('completion anchor的child manifest缺少trace.jsonl')
+    return source, trace_entry['sha256']
+
+
+_TRACE_STATE_FIELDS = (
+    'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps')
+
+
+def _trace_number(value, label: str) -> float:
+    if type(value) not in (int, float) or not math.isfinite(value):
+        raise RuntimeError(f'{label}必须是exact int/float有限数字（不接受bool）')
+    return float(value)
+
+
+def _trace_state_time(state, label: str) -> float:
+    if not isinstance(state, dict):
+        raise RuntimeError(f'{label}必须是JSON对象')
+    for field in _TRACE_STATE_FIELDS:
+        if field not in state:
+            raise RuntimeError(f'{label}缺少{field}')
+        _trace_number(state[field], f'{label}.{field}')
+    return float(state['time_s'])
+
+
+def _trace_frame_time(states, actors: tuple[str, ...], label: str) -> float:
+    if not isinstance(states, dict) or set(states) != set(actors):
+        raise RuntimeError(f'{label}车辆集合与controlled不一致')
+    times = [
+        _trace_state_time(states[actor], f'{label}.{actor}') for actor in actors
+    ]
+    if any(not math.isclose(value, times[0], abs_tol=1e-9, rel_tol=0.0)
+           for value in times[1:]):
+        raise RuntimeError(f'{label}各车辆时间不一致')
+    return times[0]
+
+
+def _preflight_simple_trace(
+        trace_path: Path, metadata: Mapping, actors: tuple[str, ...],
+        expected_sha256: str) -> bytes:
+    """Parse and validate the complete replay stream before a GUI run exists."""
+    case = metadata.get('case')
+    parameters = metadata.get('parameters')
+    if not isinstance(case, dict) or not isinstance(parameters, dict):
+        raise RuntimeError('case metadata缺少case或parameters对象')
+    duration = _trace_number(case.get('duration_s'), 'case.duration_s')
+    control_dt = _trace_number(
+        parameters.get('control_sync_dt_s'), 'parameters.control_sync_dt_s')
+    if duration <= 0 or control_dt <= 0:
+        raise RuntimeError('case duration和control dt必须为正数')
+    expected_intervals = round(duration / control_dt)
+    if expected_intervals < 1 or not math.isclose(
+            expected_intervals * control_dt, duration,
+            abs_tol=1e-9, rel_tol=0.0):
+        raise RuntimeError('case duration不包含完整control dt周期')
+    if type(metadata.get('intervals')) is not int \
+            or metadata['intervals'] != expected_intervals \
+            or type(metadata.get('trace_intervals')) is not int \
+            or metadata['trace_intervals'] != expected_intervals:
+        raise RuntimeError('case metadata的intervals/trace_intervals与duration不一致')
+    case_initial = case.get('initial')
+    _trace_frame_time(case_initial, actors, 'case.initial')
+
+    count = 0
+    first_time = None
+    previous_final = None
+    previous_final_states = None
+    try:
+        trace_bytes = Path(trace_path).read_bytes()
+        trace_text = trace_bytes.decode('utf-8')
+    except (OSError, UnicodeError) as error:
+        raise RuntimeError(f'无法打开新轨迹trace: {trace_path}') from error
+    if hashlib.sha256(trace_bytes).hexdigest() != expected_sha256:
+        raise RuntimeError('trace字节与completion anchor绑定的SHA-256不一致')
+    stream = io.StringIO(trace_text)
+    with stream:
+        for line_number, line in enumerate(stream, start=1):
+            if not line.strip():
+                raise RuntimeError(f'trace第{line_number}行为空')
+            try:
+                record = json.loads(line, parse_constant=_reject_json_constant)
+            except json.JSONDecodeError as error:
+                raise RuntimeError(f'trace第{line_number}行不是有效JSON对象') from error
+            except ValueError as error:
+                raise RuntimeError(
+                    f'trace第{line_number}行含禁止的非有限JSON常量') from error
+            if not isinstance(record, dict):
+                raise RuntimeError(f'trace第{line_number}行必须是JSON对象')
+            if record.get('status') != 'completed':
+                raise RuntimeError(f'trace第{line_number}行状态必须是completed')
+            initial_states = record.get('initial')
+            initial_time = _trace_frame_time(
+                initial_states, actors, f'trace第{line_number}行initial')
+            if first_time is None:
+                first_time = initial_time
+                if initial_states != case_initial:
+                    raise RuntimeError('trace首行initial与case.initial不连续')
+            elif not math.isclose(
+                    initial_time, previous_final, abs_tol=1e-9, rel_tol=0.0) \
+                    or initial_states != previous_final_states:
+                raise RuntimeError(f'trace第{line_number}行initial状态/时间不连续')
+            steps = record.get('steps')
+            if not isinstance(steps, dict) or set(steps) != set(actors):
+                raise RuntimeError(f'trace第{line_number}行steps车辆集合不一致')
+            final_states = {}
+            sample_times_by_actor = {}
+            for actor in actors:
+                step = steps[actor]
+                if not isinstance(step, dict):
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}结构无效')
+                step_initial = step.get('initial')
+                _trace_state_time(
+                    step_initial, f'trace第{line_number}行steps.{actor}.initial')
+                if step_initial != initial_states[actor]:
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}.initial'
+                        '与record initial不一致')
+                if not isinstance(step.get('command'), dict):
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}.command必须是JSON对象')
+                step_dt = _trace_number(
+                    step.get('dt_s'), f'trace第{line_number}行steps.{actor}.dt_s')
+                if not math.isclose(
+                        step_dt, control_dt, abs_tol=1e-9, rel_tol=0.0):
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}.dt_s'
+                        '与control dt不一致')
+                samples = step.get('samples')
+                if not isinstance(samples, list) or not samples:
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}样本必须是非空数组')
+                sample_time = initial_time
+                actor_sample_times = []
+                for sample_index, sample in enumerate(samples):
+                    next_time = _trace_state_time(
+                        sample,
+                        f'trace第{line_number}行steps.{actor}'
+                        f'.samples[{sample_index}]')
+                    if next_time <= sample_time:
+                        raise RuntimeError(
+                            f'trace第{line_number}行steps.{actor}样本时间'
+                            '未严格递增')
+                    sample_time = next_time
+                    actor_sample_times.append(next_time)
+                sample_times_by_actor[actor] = actor_sample_times
+                final_state = step.get('final')
+                _trace_state_time(
+                    final_state, f'trace第{line_number}行steps.{actor}.final')
+                final_states[actor] = final_state
+                if final_state != samples[-1]:
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}.final'
+                        '状态/时间与最后样本不一致')
+            reference_sample_times = sample_times_by_actor[actors[0]]
+            for actor in actors[1:]:
+                candidate_times = sample_times_by_actor[actor]
+                if len(candidate_times) != len(reference_sample_times) or any(
+                        not math.isclose(left, right, abs_tol=1e-9, rel_tol=0.0)
+                        for left, right in zip(
+                            candidate_times, reference_sample_times)):
+                    raise RuntimeError(
+                        f'trace第{line_number}行样本车辆帧时间不一致')
+            final_time = _trace_frame_time(
+                final_states, actors, f'trace第{line_number}行final')
+            if final_time <= initial_time or not math.isclose(
+                    final_time, initial_time + control_dt,
+                    abs_tol=1e-9, rel_tol=0.0):
+                raise RuntimeError(
+                    f'trace第{line_number}行时间未严格递增或不符合控制周期')
+            previous_final = final_time
+            previous_final_states = final_states
+            count += 1
+    if count != expected_intervals:
+        raise RuntimeError(f'trace区间数不完整: {count}/{expected_intervals}')
+    if first_time is None or not math.isclose(
+            previous_final - first_time, duration,
+            abs_tol=1e-9, rel_tol=0.0):
+        raise RuntimeError('trace总时长与保存duration/control dt契约不一致')
+    return trace_bytes
 
 
 def load_simple_trace_source(
         outer_path: Path, paths: SimpleCheckedPaths,
         config: SimpleFormationDemoConfig | None = None) -> TraceSource:
     """Load only a newly generated, sealed Phase5G simple-formation trace."""
-    try:
-        outer = Path(outer_path).resolve(strict=True)
-    except OSError as error:
-        raise FileNotFoundError(f'新轨迹结果路径不存在: {outer_path}') from error
-    if not outer.is_dir() or outer == paths.variant_results \
-            or not outer.is_relative_to(paths.variant_results):
-        raise ValueError(f'结果路径越界，必须位于Phase5G results目录内: {outer}')
-    _verify_sealed_directory(outer)
+    outer = _resolve_result_directory(
+        outer_path, paths.variant_results, '结果路径')
+    source_anchor, trace_sha256 = _verify_simple_trust(outer, paths)
     metadata = _read_json(outer / 'metadata.json')
     validation = _read_json(outer / 'validation.json')
     if metadata.get('schema') != 'phase5g_simple_demo_v1' \
@@ -489,6 +969,11 @@ def load_simple_trace_source(
             or validation.get('complete_execution') is not True \
             or validation.get('engineering_passed') is not True:
         raise ValueError('新轨迹validation未完成工程验收')
+    if metadata.get('case_file_sha256') != source_anchor['case_file_sha256']:
+        raise ValueError('新轨迹metadata.case_file_sha256与source anchor不一致')
+    if _json_digest(metadata.get('mode_registry')) \
+            != source_anchor['mode_registry_sha256']:
+        raise ValueError('新轨迹metadata.mode_registry与source anchor不一致')
     if config is not None:
         expected = {
             'vehicle_count': config.vehicle_count,
@@ -539,13 +1024,14 @@ def load_simple_trace_source(
     trace_path = case_dir / 'trace.jsonl'
     if not trace_path.is_file():
         raise FileNotFoundError(f'新轨迹trace缺失: {trace_path}')
+    verified_trace_bytes = _preflight_simple_trace(
+        trace_path, child_metadata, actors, trace_sha256)
     source = TraceSource(
         case_name=str(case.get('name', 'simple_formation')),
         case_dir=case_dir, trace_path=trace_path,
         metadata=child_metadata, validation=child_validation,
-        evidence_status='completed', actors=actors)
-    if sum(1 for _ in iter_trace_frames(source)) < 2:
-        raise ValueError('新轨迹没有完整控制区间')
+        evidence_status='completed', actors=actors,
+        verified_trace_bytes=verified_trace_bytes)
     return source
 
 
@@ -600,13 +1086,8 @@ def generate_fresh_simple_trace(
     candidate = Path(raw_path)
     if not candidate.is_absolute():
         candidate = paths.variant_root / candidate
-    try:
-        resolved = candidate.resolve(strict=True)
-    except OSError as error:
-        raise RuntimeError(f'Phase5G新轨迹结果路径不存在: {candidate}') from error
-    if not resolved.is_dir() or resolved == paths.variant_results \
-            or not resolved.is_relative_to(paths.variant_results):
-        raise RuntimeError(f'Phase5G结果路径越界: {resolved}')
+    resolved = _resolve_result_directory(
+        candidate, paths.variant_results, 'Phase5G结果路径')
     try:
         source = load_simple_trace_source(resolved, paths, config)
     except (OSError, ValueError) as error:
