@@ -1,0 +1,1263 @@
+"""Paired Phase 5G pure-formation execution and independent factual summaries."""
+
+from dataclasses import asdict
+from datetime import datetime, timezone
+import json
+import math
+import os
+from pathlib import Path
+import re
+import shutil
+import stat
+import sys
+import tempfile
+import traceback
+from types import MappingProxyType
+from typing import Mapping, Sequence
+from uuid import uuid4
+
+from experiments.phase3 import NET
+from experiments.phase3_audit import geometry_report
+from experiments.phase4_audit import driving_metrics
+from experiments.phase4_bootstrap import bootstrap
+from experiments.phase5 import frames_from_records
+from experiments.phase5_detection import detect_frames
+from experiments.records import atomic_json as _project_atomic_json
+from models.vehicle import VehicleState
+from noa import simple_formation
+from perception.road import VisibleRoad
+from research.common import ROOT, code_manifest, output_path, read_json, settings, sha256
+from safety.geometry import RoadEnvelope
+from simulation.phase5g_clock import (
+    CLOCK_SCHEMA,
+    Phase5GClock,
+    initial_memory_hash,
+    neutral_phase5g_memories,
+)
+
+
+_MODE_SPECS = (
+    ("off", False, False),
+    ("longitudinal", True, False),
+    ("lane_priority", True, True),
+)
+MODES = MappingProxyType({
+    name: MappingProxyType({
+        "formation_enabled": formation,
+        "formation_lane_change_enabled": lane_change,
+    })
+    for name, formation, lane_change in _MODE_SPECS
+})
+SUMMARY_KEYS = (
+    "whole_cohort_formation_success", "formed_time_s", "held_time_s",
+    "completed_lane_changes", "formation_lane_changes", "final_lane_counts",
+    "minimum_speed_mps", "final_speed_spread_mps", "speed_recovered",
+    "collision_count", "geometry_passed", "comfort_passed",
+)
+FORMATION_LANE_REASONS = frozenset((
+    "formation_geometry", "simple_formation_balance",
+))
+SOURCE_FILES = (
+    "run.py",
+    "configs/phase5g.json",
+    "experiments/phase5g.py",
+    "experiments/phase5g_cases.py",
+    "experiments/phase5g_replay.py",
+    "experiments/phase5_detection.py",
+    "noa/controller.py",
+    "noa/formation.py",
+    "noa/formation_lane.py",
+    "noa/simple_formation.py",
+    "simulation/noa_clock.py",
+    "simulation/phase5g_clock.py",
+    "docs/superpowers/specs/2026-09-14-phase5g-simple-local-ifelse-formation-design.md",
+    "docs/superpowers/plans/2026-09-14-phase5g-simple-local-ifelse-formation.md",
+)
+INPUTS = (
+    "scenarios/cai2024/bottleneck.net.xml",
+    "docs/parameter_registry.csv",
+    "docs/phase5g_pure_formation_plan.md",
+    "docs/superpowers/specs/2026-09-14-phase5g-pure-formation-design.md",
+    "docs/superpowers/plans/2026-09-14-phase5g-pure-formation.md",
+    "docs/superpowers/specs/2026-09-14-phase5g-simple-local-ifelse-formation-design.md",
+    "docs/superpowers/plans/2026-09-14-phase5g-simple-local-ifelse-formation.md",
+    "configs/phase5g.json",
+)
+
+
+def atomic_json(path: str | Path, data: object) -> None:
+    """Atomic JSON writer scoped to already validated Phase 5G artifact paths."""
+    target = Path(path).resolve()
+    if target.is_relative_to(ROOT):
+        _project_atomic_json(target, data)
+        return
+    target.parent.mkdir(parents=True, exist_ok=True)
+    staging = target.with_name(target.name + ".writing")
+    staging.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(staging, target)
+
+
+def _finalizer_json(path: str | Path, data: object) -> None:
+    """Minimal atomic writer kept independent from derived-evidence persistence."""
+    target = Path(path).resolve()
+    target.parent.mkdir(parents=True, exist_ok=True)
+    staging = target.with_name(target.name + ".finalizing")
+    staging.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    os.replace(staging, target)
+
+
+def _produced_evidence(path: Path) -> list[str]:
+    return sorted(
+        file.relative_to(path).as_posix()
+        for file in path.rglob("*")
+        if file.is_file() and file.name not in {
+            "evidence_hashes.json", "unsealed_evidence_hashes.json",
+        }
+    )
+
+
+def _write_unsealed_manifest(path: Path) -> None:
+    """Bind every raw child file when normal child sealing itself failed."""
+    _finalizer_json(path / "unsealed_evidence_hashes.json", {
+        name: sha256(path / name)
+        for name in _produced_evidence(path)
+    })
+
+
+class Phase5GRunRecord:
+    """Append-only record supporting project results and explicit system Temp bases."""
+    def __init__(self, base: str | Path, metadata: dict):
+        self.base = Path(base).resolve()
+        self.run_id = (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+                       + "_" + uuid4().hex[:8])
+        self.path = self.base / self.run_id
+        self.metadata = metadata
+        self.finished = False
+
+    def __enter__(self):
+        self.path.mkdir(parents=True, exist_ok=False)
+        self._save({"passed": False, "status": "running"})
+        try:
+            atomic_json(self.path / "metadata.json", {**self.metadata, "run_id": self.run_id})
+        except BaseException as error:
+            self.__exit__(type(error), error, error.__traceback__)
+            raise
+        return self
+
+    def _save(self, result: dict) -> None:
+        atomic_json(self.path / "validation.json", {**result, "run_id": self.run_id})
+        atomic_json(self.base / "latest.json", {
+            "run_id": self.run_id, "path": str(self.path),
+            "status": result["status"], "passed": result["passed"],
+        })
+
+    def finish(self, result: dict) -> None:
+        self._save({**result, "status": "completed"})
+        self.finished = True
+
+    def __exit__(self, kind, error, tb):
+        if error is not None:
+            self._save({
+                "passed": False, "status": "failed",
+                "error": f"{kind.__name__}: {error}",
+                "traceback": "".join(traceback.format_exception(kind, error, tb)),
+            })
+        elif not self.finished:
+            self._save({"passed": False, "status": "failed", "error": "Run not finalized"})
+            raise RuntimeError("Run not finalized")
+        return False
+
+
+RunRecord = Phase5GRunRecord
+
+
+def _strict_mode(mode: object) -> str:
+    if type(mode) is not str or mode not in {item[0] for item in _MODE_SPECS}:
+        raise ValueError("mode must be exactly off, longitudinal, or lane_priority")
+    return mode
+
+
+def _mode_flags(mode: str) -> dict[str, bool]:
+    checked = _strict_mode(mode)
+    return {
+        "formation_enabled": next(row[1] for row in _MODE_SPECS if row[0] == checked),
+        "formation_lane_change_enabled": next(row[2] for row in _MODE_SPECS if row[0] == checked),
+    }
+
+
+def _mode_registry() -> dict[str, dict[str, bool]]:
+    return {name: _mode_flags(name) for name, _, _ in _MODE_SPECS}
+
+
+def _validated_output_base(value: str | Path) -> Path:
+    """Resolve a narrow append-only Phase 5G output base before creating anything."""
+    if not isinstance(value, (str, Path)) or (isinstance(value, str) and not value.strip()):
+        raise ValueError("output_base must be a nonempty safe results or temporary directory")
+    raw = Path(value)
+    if str(raw).strip() in ("", "."):
+        raise ValueError("output_base must not be the project directory")
+    resolved = (ROOT / raw).resolve() if not raw.is_absolute() else raw.resolve()
+    if resolved.exists() and not resolved.is_dir():
+        raise ValueError("output_base must be a directory, not a file")
+    if resolved == Path(resolved.anchor) or resolved in (ROOT, ROOT.parent):
+        raise ValueError("output_base must not be a filesystem, workspace, or project root")
+    temp_roots = {Path(tempfile.gettempdir()).resolve()}
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if local_app_data:
+        temp_roots.add((Path(local_app_data) / "Temp").resolve())
+    allowed_temp = any(resolved != root and resolved.is_relative_to(root)
+                       for root in temp_roots)
+    allowed = ((resolved.is_relative_to(ROOT)
+                and resolved.relative_to(ROOT).parts[0] in ("results", "tmp"))
+               or allowed_temp)
+    if not allowed:
+        raise ValueError("output_base must be under project results/tmp or the system Temp directory")
+    return resolved
+
+
+def _finite(name: str, value: object, *, positive: bool = False) -> float:
+    if type(value) not in (int, float):
+        raise ValueError(f"{name} must be a finite number, not bool")
+    try:
+        number = float(value)
+    except (OverflowError, TypeError, ValueError) as error:
+        raise ValueError(f"{name} must be a finite number, not bool") from error
+    if not math.isfinite(number) or (positive and number <= 0):
+        qualifier = "positive finite" if positive else "finite"
+        raise ValueError(f"{name} must be a {qualifier} number, not bool")
+    return number
+
+
+def _registered() -> dict:
+    path = ROOT / "configs" / "phase5g.json"
+    value = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(value, dict):
+        raise ValueError("configs/phase5g.json must contain one parameter object")
+    return value
+
+
+def parameters(mode: str, target_speed_mps: float = 10.0, *,
+               simple_rules: bool = False,
+               simple_overrides: Mapping[str, object] | None = None):
+    """Resolve one formal mode plus an explicitly isolated simple-demo switch."""
+    from experiments.phase5 import parameters as phase5_parameters
+
+    mode = _strict_mode(mode)
+    if type(simple_rules) is not bool:
+        raise ValueError("simple_rules must be an exact bool")
+    if simple_overrides is not None and not isinstance(simple_overrides, Mapping):
+        raise ValueError("simple_overrides must be a mapping")
+    if not simple_rules and simple_overrides:
+        raise ValueError("simple_overrides require simple_rules=True")
+    target = _finite("target_speed_mps", target_speed_mps, positive=True)
+    model, physical, policy = phase5_parameters(mode != "off")
+    if target > model.p["max_speed_mps"]:
+        raise ValueError("target_speed_mps must not exceed model max_speed_mps")
+    registered = _registered()
+    if simple_rules:
+        if simple_overrides is None or set(simple_overrides) != set(simple_formation.PARAMETERS):
+            raise ValueError("simple_overrides must contain exactly the six simple parameters")
+        resolved_simple = {
+            name: simple_overrides[name] for name in simple_formation.PARAMETERS
+        }
+    else:
+        resolved_simple = {
+            name: registered.get(name) for name in simple_formation.PARAMETERS
+        }
+    simple_formation.validate_parameters(resolved_simple)
+    physical.update(settings("phase4"))
+    physical.update(settings("phase5"))
+    physical.update(registered)
+    policy.update(registered)
+    common = {
+        "phase5g_enabled": True,
+        "r5_enabled": False,
+        "r5_lane_priority_enabled": False,
+        "phase5g_target_speed_mps": target,
+        "noa_target_speed_mps": target,
+        "simple_formation_enabled": simple_rules,
+        **resolved_simple,
+        **_mode_flags(mode),
+    }
+    physical.update(common)
+    policy.update(common)
+    return model, physical, policy
+
+
+def source_hashes() -> dict[str, str]:
+    result = {}
+    for name in SOURCE_FILES:
+        path = ROOT / name
+        if not path.is_file():
+            raise ValueError(f"required Phase 5G source missing: {name}")
+        result[name] = sha256(path)
+    return result
+
+
+def snapshot_manifest(path: str | Path, label: str) -> dict[str, dict[str, str]]:
+    """Describe an exact regular-file tree without following Windows reparse points."""
+    root = Path(os.path.abspath(path))
+    try:
+        root_info = os.lstat(root)
+    except OSError as error:
+        raise ValueError(f"{label}: missing directory") from error
+    root_attributes = getattr(root_info, "st_file_attributes", 0)
+    if root.is_symlink() or bool(
+        root_attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
+    ):
+        raise ValueError(f"{label}: root reparse point forbidden")
+    if not stat.S_ISDIR(root_info.st_mode):
+        raise ValueError(f"{label}: missing directory")
+    files: dict[str, dict[str, str]] = {}
+    folded: dict[str, str] = {}
+
+    def visit(folder: Path) -> None:
+        with os.scandir(folder) as entries:
+            for entry in sorted(entries, key=lambda item: item.name):
+                candidate = Path(entry.path)
+                relative = candidate.relative_to(root).as_posix()
+                info = entry.stat(follow_symlinks=False)
+                attributes = getattr(info, "st_file_attributes", 0)
+                reparse = bool(attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+                if entry.is_symlink() or reparse:
+                    raise ValueError(f"{label}.{relative}: reparse point forbidden")
+                if stat.S_ISDIR(info.st_mode):
+                    visit(candidate)
+                elif stat.S_ISREG(info.st_mode):
+                    collision = folded.get(relative.casefold())
+                    if collision is not None and collision != relative:
+                        raise ValueError(
+                            f"{label}: case-insensitive path collision: {collision}, {relative}"
+                        )
+                    folded[relative.casefold()] = relative
+                    files[relative] = {"sha256": sha256(candidate), "type": "regular"}
+                else:
+                    raise ValueError(f"{label}.{relative}: non-regular file forbidden")
+
+    visit(root)
+    return files
+
+
+def expected_snapshot_manifests(case_file: str | Path) -> tuple[dict, dict]:
+    """Build caller-held exact manifests for code and immutable runtime inputs."""
+    source_case = output_path(case_file)
+    source = code_manifest()
+    code_names = set(source) | set(INPUTS)
+    code = {
+        name: {"sha256": sha256(ROOT / name), "type": "regular"}
+        for name in sorted(code_names)
+    }
+    inputs = {
+        name: {"sha256": sha256(ROOT / name), "type": "regular"}
+        for name in INPUTS
+    }
+    inputs["phase5g_cases.json"] = {
+        "sha256": sha256(source_case), "type": "regular",
+    }
+    return code, inputs
+
+
+def seal_directory(path: str | Path) -> None:
+    """Seal every current file and replace only the manifest itself."""
+    root = _validated_output_base(path)
+    atomic_json(root / "evidence_hashes.json", {
+        file.relative_to(root).as_posix(): sha256(file)
+        for file in sorted(root.rglob("*"))
+        if file.is_file() and file != root / "evidence_hashes.json"
+    })
+
+
+def _anchor_digest(value: object) -> str:
+    from experiments.phase5g_cases import digest_json
+
+    return digest_json(value)
+
+
+def _write_trust_anchor(run_path: Path, code_hashes: dict, input_hashes: dict,
+                        code_snapshot_manifest: dict, input_snapshot_manifest: dict,
+                        case_file_sha256: str, mode_registry: dict) -> Path:
+    """Write the caller-side trust root outside the resealable run package."""
+    anchor = run_path.parent / ".phase5g-trust" / f"{run_path.name}.json"
+    anchor.parent.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "schema": "phase5g_external_trust_anchor_v2",
+        "run_id": run_path.name,
+        "source_manifest_sha256": _anchor_digest(code_snapshot_manifest),
+        "input_manifest_sha256": _anchor_digest(input_snapshot_manifest),
+        "source_hashes": code_hashes,
+        "input_hashes": input_hashes,
+        "code_snapshot_manifest": code_snapshot_manifest,
+        "input_snapshot_manifest": input_snapshot_manifest,
+        "case_file_sha256": case_file_sha256,
+        "mode_registry_sha256": _anchor_digest(mode_registry),
+    }
+    with anchor.open("x", encoding="utf-8", newline="\n") as stream:
+        json.dump(payload, stream, sort_keys=True, separators=(",", ":"),
+                  ensure_ascii=False, allow_nan=False)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    return anchor
+
+
+def expected_replay_anchors(case_file: str | Path) -> dict[str, str]:
+    """Capture caller-side roots before a run so a whole-package rewrite is rejected."""
+    source_case = output_path(case_file)
+    if not source_case.is_file():
+        raise ValueError("an explicit existing Phase 5G case file is required")
+    _load_case_bundle(source_case)
+    code_snapshot_manifest, input_snapshot_manifest = expected_snapshot_manifests(source_case)
+    return {
+        "expected_source_sha256": _anchor_digest(code_snapshot_manifest),
+        "expected_input_sha256": _anchor_digest(input_snapshot_manifest),
+    }
+
+
+def expected_variants(cases: Sequence[Mapping[str, object]]) -> dict[str, dict]:
+    from experiments.phase5g_cases import digest_json, physical_case
+
+    result = {}
+    for case in cases:
+        name = case.get("name")
+        if type(name) is not str or not re.fullmatch(r"[A-Za-z0-9_-]+", name):
+            raise ValueError("case names must be nonempty filesystem-safe strings")
+        digest = digest_json(physical_case(case))
+        for mode, _, _ in _MODE_SPECS:
+            result[f"{name}_{mode}"] = {
+                "case_name": name,
+                "mode": mode,
+                "vehicle_count": len(case.get("controlled", ())),
+                "case_seed": case.get("private_rng_provenance", {}).get("case_seed"),
+                "purpose": case.get("purpose"),
+                "expected_lane_changes": case.get("expected_lane_changes"),
+                "physical_input_sha256": digest,
+                "case_input_sha256": digest_json(case),
+            }
+    return result
+
+
+def _variant_input_sha256(mode: str, case: Mapping[str, object], model,
+                          physical: Mapping[str, object], policy: Mapping[str, object],
+                          memories: Mapping[str, object]) -> str:
+    from experiments.phase5g_cases import digest_json
+
+    return digest_json({
+        "mode": _strict_mode(mode), "case": case,
+        "model_parameters": dict(model.p), "parameters": dict(physical),
+        "policy_parameters": dict(policy), "initial_memories": memories,
+    })
+
+
+def _lane_index(y_m: float, width_m: float) -> int | None:
+    lane = round(y_m / width_m - 0.5)
+    center = width_m * (lane + 0.5)
+    return lane if 0 <= lane < 3 and abs(y_m - center) <= 0.15 else None
+
+
+def _completed_records(trace_rows: Sequence[dict]) -> list[dict]:
+    return [row for row in trace_rows if row.get("status") == "completed"]
+
+
+def _readback_facts(record: Mapping[str, object], keys: Sequence[str], *,
+                    advances_before: int, advances_after: int) -> dict:
+    """Record complete per-actor synchronization coverage and proven commit state."""
+    phase = record.get("readback_phase")
+    reports = record.get("readback")
+    reports = reports if isinstance(reports, dict) else {}
+    states = {}
+    for key in sorted(keys):
+        report = reports.get(key)
+        states[key] = (report.get("status", "recorded")
+                       if isinstance(report, dict) else "not_read")
+    coverage = {
+        status: [key for key, value in states.items() if value == status]
+        for status in ("recorded", "readback_exception", "not_read")
+    }
+    return {
+        "failure_phase": phase,
+        "commit_applied": bool(advances_after > advances_before),
+        "failure_readback_states": states,
+        "readback_coverage": coverage,
+    }
+
+
+def _record_is_physical(record: Mapping[str, object], keys: Sequence[str], *,
+                        live: bool) -> bool:
+    complete = (set(record.get("steps", {})) == set(keys)
+                and set(record.get("diagnostics", {})) == set(keys))
+    if not complete:
+        return False
+    if record.get("status") == "completed" or not live:
+        return True
+    return record.get("commit_applied") is True
+
+
+def _lane_change_facts(records: Sequence[dict], case: Mapping[str, object],
+                       model_parameters: Mapping[str, object]) -> dict:
+    width = float(model_parameters["lane_width_m"])
+    actors = {}
+    for key in case["controlled"]:
+        changes, active = [], None
+        stable = _lane_index(records[0]["initial"][key]["y_m"], width) if records else None
+        for row in records:
+            before = row["inputs"][key]["memory"]
+            after = row["decisions"][key]["memory"]
+            submitted = after.get("plan")
+            plan_fields = {"start_s", "y_start_m", "y_target_m", "duration_s", "speed_mps"}
+            valid_plan = isinstance(submitted, dict) and set(submitted) == plan_fields
+            if before.get("plan") is None and valid_plan:
+                start_y = submitted.get("y_start_m")
+                target_y = submitted.get("y_target_m")
+                start_lane = (_lane_index(float(start_y), width)
+                              if type(start_y) in (int, float) else None)
+                target_lane = (_lane_index(float(target_y), width)
+                               if type(target_y) in (int, float) else None)
+                active = {
+                    "plan": json.loads(json.dumps(submitted, allow_nan=False)),
+                    "request_reason": after.get("lane_change_reason", ""),
+                    "from_lane": stable, "plan_start_lane": start_lane,
+                    "target_lane": target_lane,
+                }
+            before_count = before.get("completed_lane_changes", 0)
+            after_count = after.get("completed_lane_changes", 0)
+            completion = (active is not None and before.get("plan") == active["plan"]
+                          and after.get("plan") is None
+                          and type(before_count) is int and type(after_count) is int
+                          and after_count == before_count + 1)
+            arrival = row["initial"][key]
+            target_lane = active["target_lane"] if active is not None else None
+            arrival_lane = _lane_index(arrival["y_m"], width)
+            if (completion and active["from_lane"] is not None
+                    and active["plan_start_lane"] == active["from_lane"]
+                    and target_lane is not None and active["from_lane"] != target_lane
+                    and arrival_lane == target_lane
+                    and abs(arrival["heading_rad"]) <= 0.05):
+                changes.append({"time_s": arrival["time_s"],
+                                "from_lane": active["from_lane"],
+                                "to_lane": target_lane,
+                                "request_reason": active["request_reason"]})
+                stable, active = target_lane, None
+            elif completion:
+                active = None
+        actors[key] = changes
+    flattened = [row for rows in actors.values() for row in rows]
+    return {
+        "actors": actors,
+        "completed_lane_changes": len(flattened),
+        "formation_lane_changes": sum(row["request_reason"] in FORMATION_LANE_REASONS
+                                      for row in flattened),
+    }
+
+
+def _speed_facts(records: Sequence[dict], case: Mapping[str, object],
+                 target_speed_mps: float, tolerance_mps: float, *,
+                 formed_time_s: float | None, held_time_s: float | None) -> dict:
+    states = []
+    if records:
+        states.extend(records[0]["initial"].values())
+        states.extend(sample for row in records for step in row["steps"].values()
+                      for sample in step["samples"])
+        final = {key: records[-1]["steps"][key]["final"] for key in case["controlled"]}
+    else:
+        final = {}
+    speeds = [math.hypot(state["vx_mps"], state.get("vy_mps", 0.0)) for state in states]
+    final_speeds = [math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
+                    for state in final.values()]
+    frames = ([{"time_s": next(iter(row["initial"].values()))["time_s"],
+                "states": row["initial"]} for row in records] if records else [])
+    if records:
+        frames.append({
+            "time_s": next(iter(final.values()))["time_s"], "states": final,
+        })
+    window_end = (formed_time_s + 10.0
+                  if type(formed_time_s) in (int, float) else None)
+    window_frames = [frame for frame in frames
+                     if window_end is not None
+                     and formed_time_s - 1e-9 <= frame["time_s"] <= window_end + 1e-9]
+    frame_speeds = []
+    for frame in window_frames:
+        if set(frame["states"]) != set(case["controlled"]):
+            frame_speeds = []
+            break
+        frame_speeds.append([
+            math.hypot(frame["states"][key]["vx_mps"],
+                       frame["states"][key].get("vy_mps", 0.0))
+            for key in case["controlled"]
+        ])
+    coverage = bool(
+        window_end is not None and held_time_s is not None
+        and held_time_s + 1e-9 >= window_end
+        and window_frames and window_frames[-1]["time_s"] + 1e-9 >= window_end
+    )
+    all_speeds = [speed for row in frame_speeds for speed in row]
+    max_spread = max((max(row) - min(row) for row in frame_speeds), default=None)
+    hold_passed = bool(
+        coverage and frame_speeds
+        and all(abs(speed - target_speed_mps) <= tolerance_mps + 1e-9
+                for speed in all_speeds)
+        and max_spread is not None and max_spread <= 1.0 + 1e-9
+    )
+    hold_window = {
+        "formed_time_s": formed_time_s, "required_end_time_s": window_end,
+        "detected_held_time_s": held_time_s,
+        "frame_count": len(window_frames),
+        "observed_start_time_s": window_frames[0]["time_s"] if window_frames else None,
+        "observed_end_time_s": window_frames[-1]["time_s"] if window_frames else None,
+        "minimum_speed_mps": min(all_speeds) if all_speeds else None,
+        "maximum_target_deviation_mps": (
+            max(abs(speed - target_speed_mps) for speed in all_speeds)
+            if all_speeds else None),
+        "maximum_speed_spread_mps": max_spread,
+        "coverage_passed": coverage, "speed_recovered": hold_passed,
+    }
+    return {
+        "minimum_speed_mps": min(speeds) if speeds else None,
+        "final_speed_spread_mps": (
+            max(final_speeds) - min(final_speeds) if final_speeds else None
+        ),
+        "speed_recovered": hold_passed,
+        "final_speeds_mps": final_speeds,
+        "hold_window": hold_window,
+    }
+
+
+def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
+                     physical: Mapping[str, object]) -> dict:
+    """Recompute every Phase 5G outcome from physical traces and independent audits."""
+    committed = list(records)
+    # A synchronization failure after the one physical commit remains factual
+    # physics even though the controller transaction itself did not complete.
+    frames = frames_from_records([{**row, "status": "completed"} for row in committed])
+    detection = {
+        "default": detect_frames(frames),
+        "sensitivity": {
+            str(factor): detect_frames(
+                frames, position_tolerance=2.0 * factor, speed_tolerance=factor,
+            )
+            for factor in (0.5, 1.0, 1.5)
+        },
+    }
+    if committed:
+        geometry = geometry_report(committed, model, RoadEnvelope.from_net(NET))
+        metrics = driving_metrics(committed, model, physical, {**case, "requirements": {}})
+    else:
+        geometry = {
+            "passed": False, "vehicle_substeps": 0, "outside_substeps": 0,
+            "collision_substeps": 0, "outside_model_envelope_substeps": 0,
+            "outside_events": [], "collision_events": [], "model_envelope_events": [],
+            "scope": "No complete physical interval was produced.",
+        }
+        metrics = {"actors": {}, "requirements_passed": False,
+                   "comfort_passed": False, "tracking_passed": False}
+    intervals = [row for row in detection["default"]["intervals"]
+                 if row["whole_cohort"] and row["success"]]
+    first = min(intervals, key=lambda row: row["formed_time_s"]) if intervals else None
+    lane_changes = _lane_change_facts(committed, case, model.p)
+    speed = _speed_facts(
+        committed, case, float(physical["noa_target_speed_mps"]),
+        float(physical["formation_maintaining_speed_tolerance_mps"]),
+        formed_time_s=first["formed_time_s"] if first else None,
+        held_time_s=first["held_time_s"] if first else None,
+    )
+    final_states = ({key: committed[-1]["steps"][key]["final"]
+                     for key in case["controlled"]} if committed else {})
+    counts = [0, 0, 0]
+    for state in final_states.values():
+        lane = _lane_index(state["y_m"], float(model.p["lane_width_m"]))
+        if lane is not None:
+            counts[lane] += 1
+    summary = {
+        "whole_cohort_formation_success": detection["default"]["whole_cohort_success"],
+        "formed_time_s": first["formed_time_s"] if first else None,
+        "held_time_s": first["held_time_s"] if first else None,
+        "completed_lane_changes": lane_changes["completed_lane_changes"],
+        "formation_lane_changes": lane_changes["formation_lane_changes"],
+        "final_lane_counts": counts,
+        "minimum_speed_mps": speed["minimum_speed_mps"],
+        "final_speed_spread_mps": speed["final_speed_spread_mps"],
+        "speed_recovered": speed["speed_recovered"],
+        "collision_count": geometry["collision_substeps"],
+        "geometry_passed": geometry["passed"],
+        "comfort_passed": metrics["comfort_passed"],
+    }
+    if tuple(summary) != SUMMARY_KEYS:
+        raise RuntimeError("Phase 5G summary schema drift")
+    return {"detection": detection, "geometry": geometry, "metrics": metrics,
+            "lane_changes": lane_changes, "speed_recovery": speed, "summary": summary}
+
+
+def variant_acceptance(metadata: Mapping[str, object], derived: Mapping[str, object], *,
+                       trace_intervals: int, completed_intervals: int) -> dict:
+    """Independently derive the exact runner acceptance fields from produced evidence."""
+    status = metadata.get("execution_status")
+    if status not in ("completed", "failed"):
+        raise ValueError("metadata.execution_status: not finalized")
+    recording = type(trace_intervals) is int and trace_intervals > 0
+    summary = derived["summary"]
+    driving = bool(
+        completed_intervals > 0 and status == "completed"
+        and derived["geometry"]["passed"]
+        and summary["collision_count"] == 0
+        and derived["speed_recovery"]["speed_recovered"]
+    )
+    comfort = bool(derived["metrics"]["comfort_passed"])
+    return {
+        "status": status,
+        "recording_passed": recording,
+        "driving_passed": driving,
+        "comfort_passed": comfort,
+        "passed": bool(recording and driving and comfort),
+    }
+
+
+def scientific_gate(case: Mapping[str, object], mode: str, summary: Mapping[str, object],
+                    *, execution_completed: bool,
+                    speed_recovery: Mapping[str, object]) -> bool | None:
+    """Apply the preregistered main-six gate; keep every other result factual."""
+    mode = _strict_mode(mode)
+    if case.get("name") != "main_6_3_2_1" or len(case.get("controlled", ())) != 6 \
+            or mode != "lane_priority":
+        return None
+    return bool(
+        execution_completed
+        and summary["whole_cohort_formation_success"]
+        and summary["final_lane_counts"] == [2, 2, 2]
+        and summary["formation_lane_changes"] >= 1
+        and summary["formed_time_s"] is not None
+        and summary["formed_time_s"] <= 30.0 + 1e-9
+        and summary["held_time_s"] is not None
+        and summary["held_time_s"] - summary["formed_time_s"] >= 10.0 - 1e-9
+        and speed_recovery.get("speed_recovered") is True
+        and summary["final_speed_spread_mps"] is not None
+        and summary["final_speed_spread_mps"] <= 1.0 + 1e-9
+        and summary["collision_count"] == 0
+        and summary["geometry_passed"]
+        and summary["comfort_passed"]
+    )
+
+
+def _scientific_applicable(case: Mapping[str, object], mode: str) -> bool:
+    return bool(case.get("name") == "main_6_3_2_1"
+                and len(case.get("controlled", ())) == 6
+                and mode == "lane_priority")
+
+
+def _initial_memories(case: Mapping[str, object], mode: str, *,
+                      simple_rules: bool = False) -> dict:
+    raw = case["initial_memories"]
+    if simple_rules:
+        result = {}
+        for key, row in raw.items():
+            copied = json.loads(json.dumps(row, allow_nan=False))
+            copied.update(reference_track_id=None, formation_lane_change_done=False)
+            result[key] = asdict(simple_formation.memory_from_dict(copied))
+        return result
+    return neutral_phase5g_memories(raw) if mode == "off" else json.loads(
+        json.dumps(raw, allow_nan=False)
+    )
+
+
+def run_variant(path: str | Path, model, physical: Mapping[str, object],
+                policy: Mapping[str, object], case: Mapping[str, object], mode: str,
+                *, live: bool = True) -> dict:
+    """Run one immutable physical case/mode, retaining any produced prefix."""
+    from experiments.phase3_replay import compare_tree
+    from experiments.phase5g_cases import digest_json, physical_case
+
+    mode = _strict_mode(mode)
+    if type(live) is not bool:
+        raise ValueError("live must be bool")
+    simple_rules = physical.get("simple_formation_enabled")
+    simple_overrides = ({
+        name: physical.get(name) for name in simple_formation.PARAMETERS
+    } if simple_rules is True else None)
+    expected_model, expected_physical, expected_policy = parameters(
+        mode, physical.get("noa_target_speed_mps"), simple_rules=simple_rules,
+        simple_overrides=simple_overrides,
+    )
+    compare_tree(dict(expected_model.p), dict(model.p), 0.0, "model_parameters")
+    compare_tree(expected_physical, dict(physical), 0.0, "parameters")
+    compare_tree(expected_policy, dict(policy), 0.0, "policy_parameters")
+    target = _validated_output_base(path)
+    target.mkdir(parents=True, exist_ok=False)
+    atomic_json(target / "validation.json", {"passed": False, "status": "running"})
+    memories = _initial_memories(case, mode, simple_rules=simple_rules)
+    metadata = {
+        "schema": "phase5g_variant_v1", "mode": mode, "formal": False,
+        "case": case, "parameters": dict(physical), "policy_parameters": dict(policy),
+        "model_parameters": dict(model.p), "initial": case["initial"],
+        "initial_memories": memories,
+        "initial_memories_sha256": initial_memory_hash(memories),
+        "private_rng_provenance": case["private_rng_provenance"],
+        "physical_input_sha256": digest_json(physical_case(case)),
+        "case_input_sha256": digest_json(case),
+        "parameters_input_sha256": _variant_input_sha256(
+            mode, case, model, physical, policy, memories,
+        ),
+        "clock_schema": CLOCK_SCHEMA,
+        "intervals": round(case["duration_s"] / physical["control_sync_dt_s"]),
+        "live": live, "sumo_time_offset_s": None, "execution_status": "running",
+        "lifecycle_status": "running",
+        "source_hashes": source_hashes(),
+    }
+    atomic_json(target / "metadata.json", metadata)
+    # Even pre-clock failures retain an explicit, append-only empty trace prefix.
+    (target / "stdout.log").touch(exist_ok=False)
+    (target / "trace.jsonl").touch(exist_ok=False)
+    records, trace_count, completed_count = [], 0, 0
+    conn = bridge = clock = None
+    failure = None
+    pending_interrupt = None
+    try:
+        if metadata["intervals"] < 1 or not math.isclose(
+            metadata["intervals"] * physical["control_sync_dt_s"], case["duration_s"],
+            abs_tol=1e-9, rel_tol=0.0,
+        ):
+            raise ValueError("case.duration_s must contain complete control intervals")
+        road = VisibleRoad.from_net(NET)
+        metadata["road"] = asdict(road)
+        atomic_json(target / "metadata.json", metadata)
+        initial = {key: VehicleState(**state) for key, state in case["initial"].items()}
+        clock = Phase5GClock(
+            initial, model, road, physical, policy, case["controlled"], case["scripts"],
+            memories, clock_schema=CLOCK_SCHEMA,
+            initial_memories_sha256=metadata["initial_memories_sha256"],
+        )
+        with (target / "stdout.log").open("a", encoding="utf-8") as stdout, \
+                (target / "trace.jsonl").open("a", encoding="utf-8") as trace:
+            if live:
+                conn, bridge = bootstrap(
+                    target, initial, model,
+                    {**physical, "phase3_seed": physical["phase4_seed"]}, stdout,
+                )
+                metadata.update(sumo_time_offset_s=bridge.time_offset,
+                                sumo_version=conn.getVersion())
+                atomic_json(target / "metadata.json", metadata)
+            for _ in range(metadata["intervals"]):
+                advances_before = getattr(bridge, "advances", 0)
+                try:
+                    record = clock.tick(bridge=bridge)
+                except BaseException:
+                    if clock.last_record:
+                        sync = _readback_facts(
+                            clock.last_record, case["initial"],
+                            advances_before=advances_before,
+                            advances_after=getattr(bridge, "advances", advances_before),
+                        )
+                        clock.last_record.update(sync)
+                        trace.write(json.dumps(clock.last_record, allow_nan=False) + "\n")
+                        trace.flush()
+                        trace_count += 1
+                        if _record_is_physical(
+                            clock.last_record, case["initial"], live=live,
+                        ):
+                            records.append(clock.last_record)
+                    raise
+                trace.write(json.dumps(record, allow_nan=False) + "\n")
+                trace.flush()
+                records.append(record)
+                trace_count += 1
+                completed_count += 1
+        metadata["execution_status"] = "completed"
+    except BaseException as error:
+        failure = f"{type(error).__name__}: {error}"
+        metadata.update(execution_status="failed", failure_error=failure,
+                        failure_traceback=traceback.format_exc(),
+                        failure_readback_phase=getattr(bridge, "readback_phase", None))
+        if not isinstance(error, Exception):
+            pending_interrupt = error
+    finally:
+        if conn is not None:
+            try:
+                conn.close()
+            except Exception as error:
+                failure = f"Close failure: {error}"
+                metadata.update(execution_status="failed", close_error=failure)
+    last = clock.last_record if clock is not None else None
+    physical_intervals = len(records)
+    metadata.update(
+        recorded_intervals=physical_intervals, trace_intervals=trace_count,
+        completed_intervals=completed_count, physical_intervals=physical_intervals,
+        partial_tail=trace_count > physical_intervals,
+        failure_stage=last.get("failure_stage") if last else None,
+        failure_actor=last.get("failure_actor") if last else None,
+    )
+    if failure and last is not None:
+        for name in ("failure_phase", "commit_applied",
+                     "failure_readback_states", "readback_coverage"):
+            metadata[name] = last.get(name)
+    derived = None
+    lifecycle_stage = "metadata"
+    try:
+        atomic_json(target / "metadata.json", metadata)
+        lifecycle_stage = "evaluation"
+        derived = evaluate_records(records, case, model, physical)
+        for name in ("detection", "geometry", "metrics", "lane_changes", "speed_recovery"):
+            lifecycle_stage = f"derived.{name}"
+            atomic_json(target / f"{name}.json", derived[name])
+        lifecycle_stage = "acceptance"
+        scientific = scientific_gate(
+            case, mode, derived["summary"],
+            execution_completed=metadata["execution_status"] == "completed",
+            speed_recovery=derived["speed_recovery"],
+        )
+        acceptance = variant_acceptance(
+            metadata, derived, trace_intervals=trace_count,
+            completed_intervals=completed_count,
+        )
+        result = {
+            **acceptance, "error": failure,
+            "live": live, "recorded_intervals": physical_intervals,
+            "planned_intervals": metadata["intervals"],
+            "summary": derived["summary"], "scientific_passed": scientific,
+            "failure_stage": metadata.get("failure_stage"),
+            "case_index": {"case_name": case["name"], "mode": mode},
+            "sealed": True,
+        }
+        lifecycle_stage = "validation"
+        metadata["lifecycle_status"] = "finalized"
+        atomic_json(target / "metadata.json", metadata)
+        result["produced_evidence"] = _produced_evidence(target)
+        atomic_json(target / "validation.json", result)
+    except BaseException as error:
+        if not isinstance(error, Exception):
+            pending_interrupt = error
+        failure = f"{type(error).__name__}: {error}"
+        metadata.update(
+            lifecycle_status="failed", failure_stage=lifecycle_stage,
+            failure_error=failure, failure_traceback=traceback.format_exc(),
+        )
+        _finalizer_json(target / "metadata.json", metadata)
+        result = {
+            "status": "failed", "recording_passed": trace_count > 0,
+            "driving_passed": False,
+            "comfort_passed": bool(
+                derived is not None and derived["metrics"]["comfort_passed"]),
+            "passed": False,
+            "error": failure, "failure_stage": lifecycle_stage,
+            "live": live, "recorded_intervals": physical_intervals,
+            "planned_intervals": metadata["intervals"],
+            "summary": derived["summary"] if derived is not None else None,
+            "scientific_passed": False if _scientific_applicable(case, mode) else None,
+            "case_index": {"case_name": case["name"], "mode": mode},
+            "produced_evidence": _produced_evidence(target),
+            "sealed": True,
+        }
+        _finalizer_json(target / "validation.json", result)
+    try:
+        seal_directory(target)
+    except BaseException as error:
+        if not isinstance(error, Exception):
+            pending_interrupt = error
+        failure = f"{type(error).__name__}: {error}"
+        metadata.update(lifecycle_status="failed", failure_stage="sealing",
+                        failure_error=failure, failure_traceback=traceback.format_exc())
+        result.update(status="failed", passed=False, driving_passed=False,
+                      error=failure, failure_stage="sealing", sealed=False)
+        result["produced_evidence"] = _produced_evidence(target)
+        _finalizer_json(target / "metadata.json", metadata)
+        _finalizer_json(target / "validation.json", result)
+        _write_unsealed_manifest(target)
+    if pending_interrupt is not None:
+        raise pending_interrupt
+    return result
+
+
+def _load_case_bundle(case_file: str | Path) -> dict:
+    from experiments import phase5g_cases
+
+    path = output_path(case_file)
+    if not path.is_file():
+        raise ValueError("an explicit existing Phase 5G case file is required")
+    raw = path.read_bytes()
+    data = phase5g_cases._strict_json(raw)
+    if data.get("schema") == "phase5g_execution_cases_v1":
+        return _load_development_bundle(raw)
+    specs = data.get("case_specs")
+    speed_range = data.get("speed_range_mps")
+    if not isinstance(specs, list) or not isinstance(speed_range, list) or len(speed_range) != 2:
+        raise ValueError("case_file.case_specs/speed_range_mps are required")
+    _, physical, _ = parameters("lane_priority")
+    return phase5g_cases.load_bundle(
+        raw, physical, specs, speed_min_mps=speed_range[0], speed_max_mps=speed_range[1],
+    )
+
+
+def development_case_bundle(case_specs: Sequence[Sequence[int]], duration_s: float,
+                            *, speed_min_mps: float = 8.0,
+                            speed_max_mps: float = 12.0) -> dict:
+    """Build an explicitly timed, non-formal input bundle for replayable tests/demos."""
+    from experiments import phase5g_cases
+
+    duration = _finite("duration_s", duration_s, positive=True)
+    _, physical, _ = parameters("lane_priority")
+    intervals = round(duration / physical["control_sync_dt_s"])
+    if intervals < 1 or not math.isclose(
+        intervals * physical["control_sync_dt_s"], duration, abs_tol=1e-9, rel_tol=0.0,
+    ):
+        raise ValueError("duration_s must contain complete control intervals")
+    base = phase5g_cases.build_bundle(
+        physical, case_specs, speed_min_mps=speed_min_mps,
+        speed_max_mps=speed_max_mps,
+    )
+    cases = [{**case, "duration_s": duration} for case in base["cases"]]
+    envelope = {
+        "schema": "phase5g_execution_cases_v1",
+        "base_schema": base["schema"],
+        "base_bundle_sha256": base["bundle_sha256"],
+        "source_path": base["source_path"],
+        "generator_sha256": base["generator_sha256"],
+        "config_sha256": base["config_sha256"],
+        "model_parameters_sha256": base["model_parameters_sha256"],
+        "development_seeds": base["development_seeds"],
+        "holdout_seeds": base["holdout_seeds"],
+        "case_specs": base["case_specs"],
+        "speed_range_mps": base["speed_range_mps"],
+        "duration_s_by_case": {case["name"]: duration for case in cases},
+        "physical_sha256": phase5g_cases.digest_json(
+            [phase5g_cases.physical_case(case) for case in cases]
+        ),
+        "initial_state_sha256": phase5g_cases.digest_json(cases),
+        "cases": cases,
+    }
+    return {**envelope, "bundle_sha256": phase5g_cases.digest_json(envelope)}
+
+
+def _load_development_bundle(raw: bytes) -> dict:
+    from experiments import phase5g_cases
+
+    supplied = phase5g_cases._strict_json(raw)
+    if raw != phase5g_cases.canonical_json_bytes(supplied):
+        raise ValueError("Phase 5G execution case bundle is not canonical JSON bytes")
+    speed = supplied.get("speed_range_mps")
+    specs = supplied.get("case_specs")
+    durations = supplied.get("duration_s_by_case")
+    if not isinstance(speed, list) or len(speed) != 2 or not isinstance(specs, list) \
+            or not isinstance(durations, dict) or not durations:
+        raise ValueError("execution case bundle fields differ")
+    values = list(durations.values())
+    if not values or any(value != values[0] for value in values):
+        raise ValueError("duration_s_by_case must explicitly use one registered duration")
+    expected = development_case_bundle(
+        specs, values[0], speed_min_mps=speed[0], speed_max_mps=speed[1],
+    )
+    if phase5g_cases.canonical_json_bytes(supplied) != phase5g_cases.canonical_json_bytes(expected):
+        raise ValueError("execution case source, duration, memory, or physical input changed")
+    return supplied
+
+
+def write_development_case_bundle(path: str | Path, *, case_specs: Sequence[Sequence[int]],
+                                  duration_s: float) -> dict:
+    """Exclusively save a non-formal explicit-duration bundle; never a formal freeze."""
+    from experiments.phase5g_cases import canonical_json_bytes
+
+    target = output_path(path)
+    if target.exists():
+        raise FileExistsError(target)
+    bundle = development_case_bundle(case_specs, duration_s)
+    payload = canonical_json_bytes(bundle)
+    _load_development_bundle(payload)
+    target.parent.mkdir(parents=True, exist_ok=True)
+    with target.open("xb") as stream:
+        stream.write(payload)
+    return bundle
+
+
+def run_phase5g(case_file: str | Path, *, base: str | Path | None = None,
+                live: bool = True, formal: bool = False,
+                mode_registry: Mapping[str, Mapping[str, bool]] | None = None) -> Path:
+    """Run all three modes against every case in one strict frozen bundle."""
+    registered_modes = _mode_registry()
+    registry = registered_modes if mode_registry is None else mode_registry
+    if registry != registered_modes:
+        raise ValueError("mode_registry must equal the exact registered Phase 5G modes")
+    if type(live) is not bool or type(formal) is not bool:
+        raise ValueError("live and formal must be bool")
+    bundle = _load_case_bundle(case_file)
+    source_case = output_path(case_file)
+    if formal and (source_case.name != "phase5g_cases_frozen.json"
+                   or bundle.get("schema") != "phase5g_pure_formation_cases_v1"):
+        raise ValueError("formal execution requires the strict Task 5 frozen case bundle")
+    output_base = _validated_output_base(base or ROOT / "results/phase5g/runs")
+    cases = bundle["cases"]
+    specs = expected_variants(cases)
+    run = RunRecord(output_base, {
+        "purpose": "Phase 5G pure formation paired suite",
+        "schema": "phase5g_run_v1", "formal": formal, "live": live,
+        "case_file_source": str(source_case), "case_file_sha256": sha256(source_case),
+        "mode_registry": registered_modes, "command_line": sys.argv, "python": sys.version,
+    })
+    variants = {}
+    index = {"expected_variants": specs, "started_variants": [],
+             "finalized_variants": [], "completed_variants": [],
+             "unsealed_variants": []}
+    try:
+        with run:
+            source = code_manifest()
+            atomic_json(run.path / "code_hashes.json", source)
+            for name in source:
+                destination = run.path / "code_snapshot" / name
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(ROOT / name, destination)
+            input_hashes = {}
+            for name in INPUTS:
+                destination = run.path / "input_snapshot" / name
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(ROOT / name, destination)
+                input_hashes[name] = sha256(destination)
+                runtime_input = run.path / "code_snapshot" / name
+                if not runtime_input.exists():
+                    runtime_input.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(ROOT / name, runtime_input)
+            frozen = run.path / "input_snapshot" / "phase5g_cases.json"
+            shutil.copy2(source_case, frozen)
+            input_hashes["phase5g_cases.json"] = sha256(frozen)
+            atomic_json(run.path / "input_hashes.json", input_hashes)
+            code_snapshot_manifest = snapshot_manifest(
+                run.path / "code_snapshot", "code_snapshot")
+            input_snapshot_manifest = snapshot_manifest(
+                run.path / "input_snapshot", "input_snapshot")
+            atomic_json(run.path / "code_snapshot_manifest.json", code_snapshot_manifest)
+            atomic_json(run.path / "input_snapshot_manifest.json", input_snapshot_manifest)
+            _write_trust_anchor(
+                run.path, source, input_hashes,
+                code_snapshot_manifest, input_snapshot_manifest,
+                sha256(source_case), registered_modes,
+            )
+            atomic_json(run.path / "frozen_cases.json", cases)
+            atomic_json(run.path / "case_index.json", index)
+            by_name = {case["name"]: case for case in cases}
+            for name, spec in specs.items():
+                case = by_name[spec["case_name"]]
+                model, physical, policy = parameters(spec["mode"])
+                index["started_variants"].append(name)
+                atomic_json(run.path / "case_index.json", index)
+                variants[name] = run_variant(
+                    run.path / "cases" / name, model, physical, policy, case,
+                    spec["mode"], live=live,
+                )
+                index["finalized_variants"].append(name)
+                if variants[name]["status"] == "completed":
+                    index["completed_variants"].append(name)
+                if variants[name].get("sealed") is False:
+                    index["unsealed_variants"].append(name)
+                atomic_json(run.path / "case_index.json", index)
+                atomic_json(run.path / "progress.json", {
+                    "last_variant": name,
+                    "started_variants": index["started_variants"],
+                    "finalized_variants": index["finalized_variants"],
+                })
+            main_name = "main_6_3_2_1_lane_priority"
+            scientific = variants.get(main_name, {}).get("scientific_passed") is True
+            result = {
+                "passed": all(value["passed"] for value in variants.values()) and scientific,
+                "engineering_passed": all(value["recording_passed"] for value in variants.values()),
+                "scientific_gate_passed": scientific,
+                "complete_execution": set(index["completed_variants"]) == set(specs),
+                "retained_partial_package": False, "variants": variants,
+                "case_index": "case_index.json", "formal": formal,
+            }
+            run.finish(result)
+    except BaseException:
+        if run.path.is_dir() and (run.path / "validation.json").is_file():
+            for name in index["started_variants"]:
+                path = run.path / "cases" / name / "validation.json"
+                if path.is_file():
+                    variants[name] = read_json(path)
+            failure = read_json(run.path / "validation.json")
+            failure.update(
+                variants=variants, case_index="case_index.json", formal=formal,
+                retained_partial_package=True, passed=False,
+                engineering_passed=False, scientific_gate_passed=False,
+                complete_execution=False,
+            )
+            atomic_json(run.path / "validation.json", failure)
+        raise
+    finally:
+        if run.path.is_dir():
+            seal_directory(run.path)
+    print(json.dumps({"path": str(run.path), "formal": formal}, ensure_ascii=False), flush=True)
+    return run.path
+
+
+def _exact_seed(seed: object) -> int:
+    if type(seed) is not int or not 0 <= seed < 2**64:
+        raise ValueError("seed must be an exact uint64 integer, not bool")
+    return seed
+
+
+def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
+                     duration_s: float, output_base: str | Path,
+                     mode: str = "lane_priority", formal: bool = False,
+                     live: bool = False,
+                     local_formation_range_m: float = 90.0,
+                     adjacent_lane_gap_m: float = 15.0,
+                     same_lane_gap_m: float = 30.0,
+                     position_tolerance_m: float = 2.0,
+                     formation_accel_limit_mps2: float = 0.5,
+                     max_formation_lane_changes: int = 1) -> Path:
+    """Generate one non-formal lane-priority trace for later SUMO-GUI playback."""
+    from experiments.phase5g_cases import SUPPORTED_COUNTS, main_six_case, seeded_case
+
+    if type(vehicle_count) is not int or vehicle_count not in SUPPORTED_COUNTS:
+        raise ValueError("vehicle_count must be exactly 3, 6, or 12")
+    seed = _exact_seed(seed)
+    target_speed = _finite("target_speed_mps", target_speed_mps, positive=True)
+    duration = _finite("duration_s", duration_s, positive=True)
+    if _strict_mode(mode) != "lane_priority" or formal is not False:
+        raise ValueError("demo is exactly one non-formal lane_priority case")
+    if type(live) is not bool:
+        raise ValueError("live must be bool")
+    resolved_simple = {
+        "simple_formation_local_range_m": _finite(
+            "local_formation_range_m", local_formation_range_m, positive=True),
+        "simple_formation_adjacent_gap_m": _finite(
+            "adjacent_lane_gap_m", adjacent_lane_gap_m, positive=True),
+        "simple_formation_same_gap_m": _finite(
+            "same_lane_gap_m", same_lane_gap_m, positive=True),
+        "simple_formation_position_tolerance_m": _finite(
+            "position_tolerance_m", position_tolerance_m, positive=True),
+        "simple_formation_accel_limit_mps2": _finite(
+            "formation_accel_limit_mps2", formation_accel_limit_mps2, positive=True),
+        "simple_formation_max_lane_changes": max_formation_lane_changes,
+    }
+    simple_formation.validate_parameters(resolved_simple)
+    model, physical, policy = parameters(
+        mode, target_speed, simple_rules=True, simple_overrides=resolved_simple,
+    )
+    if not math.isclose(round(duration / physical["control_sync_dt_s"])
+                        * physical["control_sync_dt_s"], duration, abs_tol=1e-9, rel_tol=0.0):
+        raise ValueError("duration_s must contain complete control intervals")
+    base = _validated_output_base(output_base)
+    if vehicle_count == 6:
+        case = main_six_case(physical)
+        seeded = seeded_case(physical, 6, seed)
+        case = {**case, "name": f"demo_6_seed{seed}", "duration_s": duration,
+                "initial_memories": seeded["initial_memories"],
+                "private_rng_provenance": seeded["private_rng_provenance"]}
+    else:
+        case = {**seeded_case(physical, vehicle_count, seed), "duration_s": duration}
+    run = RunRecord(base, {
+        "purpose": "Non-formal simple local if/else formation GUI source trace",
+        "schema": "phase5g_simple_demo_v1",
+        "formal": False, "mode": mode, "vehicle_count": vehicle_count,
+        "simple_formation_enabled": True,
+        "seed": seed, "target_speed_mps": target_speed, "duration_s": duration,
+        "simple_parameters": resolved_simple,
+    })
+    try:
+        with run:
+            result = run_variant(run.path / "case", model, physical, policy, case, mode, live=live)
+            run.finish({"passed": result["recording_passed"], "formal": False,
+                        "mode": mode, "case_directory": "case", "variant": result})
+    finally:
+        if run.path.is_dir():
+            seal_directory(run.path)
+    print(json.dumps({"path": str(run.path), "formal": False}, ensure_ascii=False), flush=True)
+    return run.path

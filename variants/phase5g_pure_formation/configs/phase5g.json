@@ -1,0 +1,22 @@
+{
+  "phase5g_enabled": true,
+  "simple_formation_enabled": false,
+  "formation_lane_change_enabled": true,
+  "formation_lane_stable_s": 1.0,
+  "formation_lane_lock_s": 5.0,
+  "formation_lane_front_margin_m": 2.0,
+  "formation_lane_backoff_min_s": 0.5,
+  "formation_lane_backoff_max_s": 2.0,
+  "formation_lane_duration_candidates_s": [5.0, 7.5, 10.0],
+  "formation_lane_min_relation_gain": 1,
+  "simple_formation_local_range_m": 90.0,
+  "simple_formation_adjacent_gap_m": 15.0,
+  "simple_formation_same_gap_m": 30.0,
+  "simple_formation_position_tolerance_m": 2.0,
+  "simple_formation_accel_limit_mps2": 0.5,
+  "simple_formation_max_lane_changes": 1,
+  "phase5g_target_speed_mps": 10.0,
+  "phase5g_initial_speed_min_mps": 8.0,
+  "phase5g_initial_speed_max_mps": 12.0,
+  "phase5g_duration_s": 45.0
+}
