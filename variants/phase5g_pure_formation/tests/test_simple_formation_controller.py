@@ -155,6 +155,31 @@ class SimpleFormationControllerTests(unittest.TestCase):
         hold = guard.call_args.args[1]
         self.assertEqual(hold.y_start_m, hold.y_target_m)
 
+    def test_rejected_longitudinal_increment_keeps_visible_remembered_reference(self):
+        reference = self.neighbor(7, 40.0, 1)
+        memory = SimpleFormationMemory((), "CRUISE", reference_track_id=7)
+        baseline = decide(
+            self.control(neighbors=(reference,), memory=NoaMemory((), "CRUISE")),
+            {
+                **self.p,
+                "formation_enabled": False,
+                "simple_formation_enabled": False,
+                "formation_lane_change_enabled": False,
+            },
+        )
+        with patch("noa.controller.verify_candidate", return_value=REJECTED):
+            decision = decide(
+                self.control(neighbors=(reference,), memory=memory), self.p
+            )
+        diagnostic = decision.diagnostics["simple_formation"]
+        self.assertEqual(decision.memory.reference_track_id, 7)
+        self.assertEqual(diagnostic["reference_track_id"], 7)
+        self.assertEqual(diagnostic["reference_reason"], "longitudinal_safety_rejected")
+        self.assertEqual(diagnostic["applied_increment_mps2"], 0.0)
+        self.assertIsNone(diagnostic["guard"])
+        self.assertEqual(decision.action.acceleration_mps2,
+                         baseline.action.acceleration_mps2)
+
     def test_unique_less_populated_lane_creates_one_fixed_safe_plan(self):
         neighbors = (
             self.neighbor(1, 70.0, 0),
@@ -198,7 +223,10 @@ class SimpleFormationControllerTests(unittest.TestCase):
         )
         self.assertEqual(
             decision.diagnostics["simple_formation"]["guard"]["kind"],
-            "lane_change",
+            "longitudinal",
+        )
+        self.assertEqual(
+            decision.diagnostics["simple_formation"]["guard"]["result"], SAFE
         )
 
     def test_completed_simple_plan_sets_done_and_blocks_a_second_request(self):

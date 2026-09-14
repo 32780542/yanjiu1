@@ -383,6 +383,8 @@ def decide(control, parameters):
                 simple_diagnostic["reference_track_id"] = None
                 simple_diagnostic["reference_reason"] = "no_visible_reference"
             else:
+                remembered_reference = reference.track_id == memory.reference_track_id
+                memory = replace(memory, reference_track_id=reference.track_id)
                 desired_gap = simple_formation.desired_gap_m(
                     ego_lane, reference.lane_index, p
                 )
@@ -408,21 +410,22 @@ def decide(control, parameters):
                     reference_track_id=reference.track_id,
                     reference_reason=(
                         "remembered_visible_reference"
-                        if reference.track_id == memory.reference_track_id
+                        if remembered_reference
                         else "unique_nearest_visible_reference"
                     ),
                     desired_gap_m=desired_gap,
                     target_position_error_m=error,
                     raw_increment_mps2=increment,
-                    guard={"kind": "longitudinal", "result": guard},
                 )
                 if guard["safe"]:
+                    simple_diagnostic["guard"] = {
+                        "kind": "longitudinal",
+                        "result": guard,
+                    }
                     simple_diagnostic["applied_increment_mps2"] = proposed - accel
                     accel = proposed
-                    memory = replace(memory, reference_track_id=reference.track_id)
                 else:
                     simple_diagnostic["reference_reason"] = "longitudinal_safety_rejected"
-                    memory = replace(memory, reference_track_id=None)
     r5_pending=[]
     if adaptive and motivation and not cooldown and not emergency:
         centers = road.centers_m
@@ -584,11 +587,11 @@ def decide(control, parameters):
                         ego.time_s, ego.y_m, target_y, duration, ego.vx_mps
                     )
                     guard = verify_candidate(control, candidate, road, accel, p)
-                    simple_diagnostic["guard"] = {
-                        "kind": "lane_change",
-                        "result": guard,
-                    }
                     if guard["safe"]:
+                        simple_diagnostic["guard"] = {
+                            "kind": "lane_change",
+                            "result": guard,
+                        }
                         memory = replace(
                             memory,
                             plan=candidate,
