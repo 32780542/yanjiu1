@@ -76,6 +76,72 @@ def memory_from_dict(data):
     )
 
 
+def lane_index(current_y_m, lane_centers_m, tolerance_m):
+    """Classify one lateral point only when it is unambiguously in a lane strip."""
+    centers = tuple(lane_centers_m)
+    if (
+        type(current_y_m) not in (int, float)
+        or not math.isfinite(current_y_m)
+        or type(tolerance_m) not in (int, float)
+        or not math.isfinite(tolerance_m)
+        or tolerance_m < 0
+        or len(centers) < 2
+        or any(type(value) not in (int, float) or not math.isfinite(value) for value in centers)
+        or any(right <= left for left, right in zip(centers, centers[1:]))
+    ):
+        raise ValueError("Invalid visible lane geometry")
+    midpoints = tuple((left + right) / 2 for left, right in zip(centers, centers[1:]))
+    boundaries = (
+        centers[0] - (centers[1] - centers[0]) / 2,
+        *midpoints,
+        centers[-1] + (centers[-1] - centers[-2]) / 2,
+    )
+    matches = tuple(
+        index
+        for index, (lower, upper) in enumerate(zip(boundaries, boundaries[1:]))
+        if lower + tolerance_m <= current_y_m <= upper - tolerance_m
+    )
+    return matches[0] if len(matches) == 1 else None
+
+
+def local_vehicles(control, road, parameters):
+    """Convert filtered ego-frame detections into local world-coordinate rows."""
+    tolerance = parameters["noa_geometry_tolerance_m"]
+    ego = control.ego
+    centers = tuple(road.centers_m)
+    c, s = math.cos(ego.heading_rad), math.sin(ego.heading_rad)
+    ego_vx = ego.vx_mps * c - ego.vy_mps * s
+    rows = []
+    for detection in control.observation.neighbors:
+        if type(detection.track_id) is not int or detection.track_id < 0:
+            raise ValueError("Invalid local sensor track")
+        x_m = ego.x_m + c * detection.relative_x_m - s * detection.relative_y_m
+        y_m = ego.y_m + s * detection.relative_x_m + c * detection.relative_y_m
+        vx_mps = (
+            ego_vx
+            + c * detection.relative_vx_mps
+            - s * detection.relative_vy_mps
+        )
+        heading = ego.heading_rad + detection.relative_heading_rad
+        lateral_half = (
+            abs(math.cos(heading)) * detection.width_m
+            + abs(math.sin(heading)) * detection.length_m
+        ) / 2
+        lower = lane_index(y_m - lateral_half, centers, tolerance)
+        upper = lane_index(y_m + lateral_half, centers, tolerance)
+        visible = any(
+            x0 - tolerance <= x_m <= x1 + tolerance
+            and y0 - tolerance <= y_m - lateral_half
+            and y_m + lateral_half <= y1 + tolerance
+            for x0, x1, y0, y1 in road.envelope.regions
+        )
+        associated = lower if visible and lower is not None and lower == upper else None
+        rows.append(
+            LocalVehicle(detection.track_id, x_m, y_m, vx_mps, associated)
+        )
+    return tuple(rows)
+
+
 def choose_reference(ego_x_m, vehicles, remembered_track_id, tolerance_m):
     """Hold one visible local track, otherwise select one unambiguous nearest front row."""
     ahead = tuple(
