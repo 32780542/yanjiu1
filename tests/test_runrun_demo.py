@@ -366,30 +366,51 @@ class _SimpleTraceFixture:
                     time_s, 100.0 + index * 15.0 + time_s * 10.0)
                 for index, actor in enumerate(actors)
             }
+            steps = {}
+            for index, actor in enumerate(actors):
+                samples = [
+                    self.state(
+                        (step - 1) * 0.1 + sample_index * 0.01,
+                        100.0 + index * 15.0
+                        + ((step - 1) * 0.1 + sample_index * 0.01) * 10.0)
+                    for sample_index in range(1, 10)
+                ]
+                samples.append(final[actor])
+                steps[actor] = {
+                    'initial': current[actor], 'final': final[actor],
+                    'samples': samples,
+                    'command': {
+                        'acceleration_mps2': 0.0, 'steering_rad': 0.0},
+                    'dt_s': 0.01,
+                }
             records.append({
                 'status': 'completed', 'initial': current,
-                'steps': {
-                    actor: {
-                        'initial': current[actor], 'final': final[actor],
-                        'samples': [final[actor]], 'command': {}, 'dt_s': 0.1,
-                    }
-                    for actor in actors
-                },
+                'inputs': {}, 'decisions': {}, 'actions': {},
+                'diagnostics': {}, 'readback': None,
+                'steps': steps,
             })
             current = final
         (case / 'trace.jsonl').write_text(
             ''.join(json.dumps(record) + '\n' for record in records),
             encoding='utf-8')
         (case / 'metadata.json').write_text(json.dumps({
+            'schema': 'phase5g_variant_v1', 'mode': 'lane_priority',
+            'formal': False, 'live': False, 'lifecycle_status': 'finalized',
             'execution_status': 'completed',
             'intervals': intervals, 'trace_intervals': intervals,
+            'initial': initial,
             'case': {'name': 'main_6_3_2_1', 'controlled': actors,
                      'duration_s': self.config.simulation_duration_s,
                      'initial': initial, 'scripts': {}},
-            'parameters': {'length_m': 4.0, 'control_sync_dt_s': 0.1},
+            'parameters': {
+                'length_m': 4.0, 'control_sync_dt_s': 0.1,
+                'dynamics_dt_s': 0.01,
+            },
+            'parent_run_id': outer.name,
         }), encoding='utf-8')
         (case / 'validation.json').write_text(json.dumps({
-            'status': 'completed', 'sealed': True, 'recording_passed': True,
+            'status': 'completed', 'passed': True,
+            'sealed': True, 'recording_passed': True,
         }), encoding='utf-8')
         self.seal(case)
         code_snapshot = outer / 'code_snapshot'
@@ -433,6 +454,7 @@ class _SimpleTraceFixture:
         case_file_sha = input_hashes['phase5g_cases.json']
         (outer / 'metadata.json').write_text(json.dumps({
             'schema': 'phase5g_simple_demo_v1', 'formal': False,
+            'run_id': outer.name,
             'mode': 'lane_priority', 'simple_formation_enabled': True,
             'vehicle_count': self.config.vehicle_count,
             'seed': self.config.random_seed,
@@ -456,8 +478,10 @@ class _SimpleTraceFixture:
             'case_directory': 'case',
         }), encoding='utf-8')
         (outer / 'validation.json').write_text(json.dumps({
-            'status': 'completed', 'complete_execution': True,
-            'engineering_passed': True, 'case_directory': 'case',
+            'run_id': outer.name, 'status': 'completed', 'passed': True,
+            'complete_execution': True, 'engineering_passed': True,
+            'formal': False, 'mode': 'lane_priority',
+            'case_directory': 'case',
         }), encoding='utf-8')
         self.seal(outer)
         trust = outer.parent / '.phase5g-trust'
@@ -481,6 +505,7 @@ class _SimpleTraceFixture:
 
     def assert_trust_failure_before_child(self, outer, pattern):
         original_read = gui._read_json
+        original_strict_read = gui._read_strict_object
 
         def guarded_read(path):
             candidate = Path(path).resolve()
@@ -488,11 +513,19 @@ class _SimpleTraceFixture:
                 raise AssertionError(f'信任验证前读取了child JSON: {candidate}')
             return original_read(path)
 
+        def guarded_strict_read(path, *args, **kwargs):
+            candidate = Path(path).resolve()
+            if candidate.is_relative_to((outer / 'case').resolve()):
+                raise AssertionError(f'信任验证前读取了child JSON: {candidate}')
+            return original_strict_read(path, *args, **kwargs)
+
         completed = subprocess.CompletedProcess(
             [], 0, stdout=json.dumps({'path': str(outer)}), stderr='')
         with patch.object(gui, 'validate_simple_config', return_value=self.paths), \
                 patch.object(gui.subprocess, 'run', return_value=completed), \
                 patch.object(gui, '_read_json', side_effect=guarded_read), \
+                patch.object(
+                    gui, '_read_strict_object', side_effect=guarded_strict_read), \
                 patch.object(gui, 'create_run_directory') as create, \
                 patch.object(gui.subprocess, 'Popen') as popen, \
                 self.assertRaisesRegex(RuntimeError, pattern):
@@ -629,6 +662,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
     def test_playback_uses_the_exact_trace_text_that_preflight_validated(self):
         outer = self.make_outer('immutable-preflight')
         source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        expected_digest = hashlib.sha256(source.verified_trace_bytes).hexdigest()
         records = self.trace_records(outer)
         records[0]['steps']['v0']['final']['x_m'] = -99.0
         records[0]['steps']['v0']['samples'][-1]['x_m'] = -99.0
@@ -636,8 +670,157 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
             ''.join(json.dumps(record) + '\n' for record in records),
             encoding='utf-8')
 
-        frames = list(gui.iter_trace_frames(source))
+        with patch.object(
+                Path, 'open', side_effect=AssertionError('reopened trace disk')):
+            frames = list(gui.iter_trace_frames(source))
         self.assertEqual(frames[1].states['v0']['x_m'], 101.0)
+        self.assertEqual(source.trace_sha256, expected_digest)
+
+    def test_trace_requires_exact_nine_field_vehicle_states(self):
+        mutations = {
+            'missing-yaw': lambda record: (
+                record['initial']['v0'].pop('yaw_rate_radps'),
+                record['steps']['v0']['initial'].pop('yaw_rate_radps')),
+            'extra-state-field': lambda record: (
+                record['steps']['v0']['final'].update(extra=0.0),
+                record['steps']['v0']['samples'][-1].update(extra=0.0)),
+            'bool-steering': lambda record: (
+                record['steps']['v0']['final'].update(steering_rad=True),
+                record['steps']['v0']['samples'][-1].update(steering_rad=True)),
+        }
+        patterns = {
+            'missing-yaw': 'yaw_rate_radps',
+            'extra-state-field': '字段.*精确|额外',
+            'bool-steering': 'steering_rad.*exact int/float',
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                outer = self.make_outer(f'exact-state-{name}')
+                records = self.trace_records(outer)
+                mutate(records[0])
+                self.write_trusted_trace(outer, records)
+                self.assert_trace_failure_before_gui(outer, patterns[name])
+
+    def test_trace_requires_exact_step_and_command_schema(self):
+        mutations = {
+            'extra-step': lambda step: step.update(extra={}),
+            'missing-command-field': lambda step: step['command'].pop(
+                'acceleration_mps2'),
+            'extra-command-field': lambda step: step['command'].update(extra=0.0),
+            'bool-command': lambda step: step['command'].update(
+                acceleration_mps2=True),
+        }
+        patterns = {
+            'extra-step': 'step.*字段',
+            'missing-command-field': 'command.*acceleration_mps2',
+            'extra-command-field': 'command.*字段',
+            'bool-command': 'acceleration_mps2.*exact int/float',
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                outer = self.make_outer(f'exact-step-{name}')
+                records = self.trace_records(outer)
+                mutate(records[0]['steps']['v0'])
+                self.write_trusted_trace(outer, records)
+                self.assert_trace_failure_before_gui(outer, patterns[name])
+
+    def test_real_dynamics_dt_samples_fill_each_control_interval(self):
+        outer = self.make_outer('real-dynamics-dt')
+        source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        self.assertEqual(source.trace_sha256, gui.sha256_file(source.trace_path))
+
+    def test_trace_rejects_incomplete_or_misaligned_dynamics_samples(self):
+        missing_sample = self.make_outer('missing-dynamics-sample')
+        records = self.trace_records(missing_sample)
+        for step in records[0]['steps'].values():
+            del step['samples'][4]
+        self.write_trusted_trace(missing_sample, records)
+        self.assert_trace_failure_before_gui(
+            missing_sample, '样本.*完整|dynamics')
+
+        misaligned_sample = self.make_outer('misaligned-dynamics-sample')
+        records = self.trace_records(misaligned_sample)
+        for step in records[0]['steps'].values():
+            step['samples'][0]['time_s'] = 0.015
+        self.write_trusted_trace(misaligned_sample, records)
+        self.assert_trace_failure_before_gui(
+            misaligned_sample, 'dynamics|样本.*间隔')
+
+    def test_trace_requires_positive_dynamics_dt_parameter(self):
+        for index, value in enumerate((None, True, 0.0, math.nan)):
+            with self.subTest(value=value):
+                outer = self.make_outer(f'bad-dynamics-dt-{index}')
+                metadata_path = outer / 'case' / 'metadata.json'
+                metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+                if value is None:
+                    del metadata['parameters']['dynamics_dt_s']
+                else:
+                    metadata['parameters']['dynamics_dt_s'] = value
+                metadata_path.write_text(
+                    json.dumps(metadata, allow_nan=True), encoding='utf-8')
+                self.reseal_trusted(outer)
+                self.assert_trace_failure_before_gui(
+                    outer, 'dynamics_dt_s|非有限JSON')
+
+    def test_completed_record_requires_gui_dependency_containers(self):
+        mutations = {
+            'missing-inputs': lambda record: record.pop('inputs'),
+            'bad-decisions': lambda record: record.update(decisions=[]),
+            'bad-diagnostics': lambda record: record.update(diagnostics=None),
+            'bad-actions': lambda record: record.update(actions='bad'),
+            'bad-readback': lambda record: record.update(readback=[]),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                outer = self.make_outer(f'record-container-{name}')
+                records = self.trace_records(outer)
+                mutate(records[0])
+                self.write_trusted_trace(outer, records)
+                self.assert_trace_failure_before_gui(
+                    outer, 'inputs|decisions|diagnostics|actions|readback')
+
+    def test_outer_and_child_metadata_json_must_be_objects(self):
+        targets = (
+            ('outer-metadata', 'metadata.json'),
+            ('outer-validation', 'validation.json'),
+            ('child-metadata', 'case/metadata.json'),
+            ('child-validation', 'case/validation.json'),
+        )
+        for index, (name, relative) in enumerate(targets):
+            for payload in ([], None):
+                with self.subTest(name=name, payload=payload):
+                    outer = self.make_outer(f'object-{index}-{payload is None}')
+                    (outer / relative).write_text(
+                        json.dumps(payload), encoding='utf-8')
+                    self.reseal_trusted(outer)
+                    self.assert_trace_failure_before_gui(outer, 'JSON对象')
+
+    def test_metadata_requires_bound_schema_status_and_exact_types(self):
+        mutations = {
+            'outer-missing-schema': (
+                'metadata.json', lambda value: value.pop('schema'), 'schema'),
+            'child-missing-schema': (
+                'case/metadata.json', lambda value: value.pop('schema'), 'schema'),
+            'outer-bool-seed': (
+                'metadata.json', lambda value: value.update(seed=True), 'seed'),
+            'outer-bad-run-id': (
+                'validation.json', lambda value: value.update(run_id=1), 'run_id'),
+            'child-false-as-int': (
+                'case/metadata.json', lambda value: value.update(formal=0), 'formal'),
+            'child-true-as-int': (
+                'case/validation.json',
+                lambda value: value.update(recording_passed=1),
+                'recording_passed'),
+        }
+        for name, (relative, mutate, pattern) in mutations.items():
+            with self.subTest(name=name):
+                outer = self.make_outer(f'metadata-{name}')
+                path = outer / relative
+                value = json.loads(path.read_text(encoding='utf-8'))
+                mutate(value)
+                path.write_text(json.dumps(value), encoding='utf-8')
+                self.reseal_trusted(outer)
+                self.assert_trace_failure_before_gui(outer, pattern)
 
     def test_trace_requires_json_objects_and_completed_frame_structure(self):
         invalid_rows = (
@@ -685,7 +868,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
             'empty-samples': (
                 lambda step: step.update(samples=[]), '样本'),
             'nonobject-sample': (
-                lambda step: step.update(samples=[None]), 'JSON对象'),
+                lambda step: step['samples'].__setitem__(0, None), 'JSON对象'),
             'bad-sample-number': (
                 lambda step: step['samples'][0].update(x_m=True),
                 'exact int/float'),
@@ -725,7 +908,8 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
             step['final']['time_s'] = 0.1
             step['samples'][-1]['time_s'] = 0.1
         self.write_trusted_trace(nonmonotonic, records)
-        self.assert_trace_failure_before_gui(nonmonotonic, '严格递增|控制周期')
+        self.assert_trace_failure_before_gui(
+            nonmonotonic, '严格递增|控制周期|dynamics dt间隔')
 
         discontinuous = self.make_outer('discontinuous-state')
         self.config = replace(self.config, simulation_duration_s=0.2)
@@ -741,7 +925,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
             0, self.state(0.05, 100.5))
         self.write_trusted_trace(mismatched_samples, records)
         self.assert_trace_failure_before_gui(
-            mismatched_samples, '样本.*车辆|车辆.*样本')
+            mismatched_samples, '样本.*车辆|车辆.*样本|样本.*完整')
 
     def test_generator_forwards_each_editable_value_once_with_safe_subprocess(self):
         config = replace(
@@ -849,7 +1033,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         metadata['simple_parameters']['simple_formation_adjacent_gap_m'] = 99.0
         metadata_path.write_text(json.dumps(metadata), encoding='utf-8')
         self.reseal_trusted(rules)
-        with self.assertRaisesRegex(ValueError, 'simple_parameters'):
+        with self.assertRaisesRegex(RuntimeError, 'simple_parameters'):
             gui.load_simple_trace_source(rules, self.paths, self.config)
 
         members = self.make_outer('background-member')
@@ -858,7 +1042,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         child_metadata['case']['initial']['background'] = self.state(0.0, 500.0)
         child_metadata_path.write_text(json.dumps(child_metadata), encoding='utf-8')
         self.reseal_trusted(members)
-        with self.assertRaisesRegex(ValueError, '全量受控'):
+        with self.assertRaisesRegex(RuntimeError, '全量受控'):
             gui.load_simple_trace_source(members, self.paths, self.config)
 
 
@@ -1065,14 +1249,24 @@ class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
     def test_gui_mode_plays_only_controlled_trace_actors_and_saves_metadata(self):
         outer = self.make_outer()
         source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        expected_trace_sha256 = source.trace_sha256
         generated = gui.GeneratedSimpleTrace(outer.resolve(), source)
+        source.trace_path.write_text('replaced after preflight\n', encoding='utf-8')
         session = MagicMock()
         connection = MagicMock()
         session.__enter__.return_value = connection
         session.__exit__.return_value = False
         stats = gui.PlaybackStats(451, 45.0, 0, 0, 'trace_completed')
+        original_sha256_file = gui.sha256_file
+
+        def forbid_trace_reread(path):
+            if Path(path) == source.trace_path:
+                raise AssertionError('GUI metadata reread trace disk')
+            return original_sha256_file(path)
+
         with patch.object(gui, 'validate_simple_config', return_value=self.paths), \
-                patch.object(gui, 'play_algorithm', return_value=stats) as playback:
+                patch.object(gui, 'play_algorithm', return_value=stats) as playback, \
+                patch.object(gui, 'sha256_file', side_effect=forbid_trace_reread):
             result = gui.run_simple_formation_demo(
                 self.config, self.root, generator=lambda *args: generated,
                 runtime=lambda *args: session, input_fn=lambda prompt: '',
@@ -1086,6 +1280,7 @@ class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
         self.assertEqual(metadata['status'], 'completed')
         self.assertEqual(metadata['generation_source'], str(outer.resolve()))
         self.assertEqual(metadata['controlled_actors'], list(source.actors))
+        self.assertEqual(metadata['source_trace_sha256'], expected_trace_sha256)
         self.assertEqual(metadata['frames_played'], 451)
         self.assertEqual(metadata['colliding_vehicle_reports'], 0)
         self.assertEqual(metadata['teleport_starts'], 0)

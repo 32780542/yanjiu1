@@ -91,6 +91,7 @@ class TraceSource:
     evidence_status: str
     actors: tuple[str, ...]
     verified_trace_bytes: bytes | None = None
+    trace_sha256: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -413,6 +414,9 @@ def iter_trace_frames(source: TraceSource) -> Iterator[TraceFrame]:
     if source.verified_trace_bytes is None:
         stream = source.trace_path.open(encoding='utf-8')
     else:
+        actual_digest = hashlib.sha256(source.verified_trace_bytes).hexdigest()
+        if source.trace_sha256 != actual_digest:
+            raise RuntimeError('不可变trace字节与保存的SHA-256不一致')
         stream = io.StringIO(source.verified_trace_bytes.decode('utf-8'))
     with stream:
         for line_number, line in enumerate(stream, start=1):
@@ -774,8 +778,16 @@ def _verify_simple_trust(
     return source, trace_entry['sha256']
 
 
-_TRACE_STATE_FIELDS = (
-    'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps')
+_TRACE_STATE_FIELDS = frozenset({
+    'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps',
+    'yaw_rate_radps', 'a_drive_mps2', 'steering_rad',
+})
+_TRACE_STEP_FIELDS = frozenset({
+    'initial', 'final', 'command', 'samples', 'dt_s',
+})
+_TRACE_COMMAND_FIELDS = frozenset({'acceleration_mps2', 'steering_rad'})
+_TRACE_RECORD_CONTAINERS = (
+    'inputs', 'decisions', 'actions', 'diagnostics')
 
 
 def _trace_number(value, label: str) -> float:
@@ -787,11 +799,28 @@ def _trace_number(value, label: str) -> float:
 def _trace_state_time(state, label: str) -> float:
     if not isinstance(state, dict):
         raise RuntimeError(f'{label}必须是JSON对象')
-    for field in _TRACE_STATE_FIELDS:
-        if field not in state:
-            raise RuntimeError(f'{label}缺少{field}')
+    missing = sorted(_TRACE_STATE_FIELDS - set(state))
+    extra = sorted(set(state) - _TRACE_STATE_FIELDS)
+    if missing or extra:
+        raise RuntimeError(
+            f'{label}的VehicleState字段必须精确: '
+            f'missing={missing}; extra={extra}')
+    for field in sorted(_TRACE_STATE_FIELDS):
         _trace_number(state[field], f'{label}.{field}')
     return float(state['time_s'])
+
+
+def _validate_trace_command(command, label: str) -> None:
+    if not isinstance(command, dict):
+        raise RuntimeError(f'{label}必须是JSON对象')
+    missing = sorted(_TRACE_COMMAND_FIELDS - set(command))
+    extra = sorted(set(command) - _TRACE_COMMAND_FIELDS)
+    if missing or extra:
+        raise RuntimeError(
+            f'{label}的command字段必须精确: '
+            f'missing={missing}; extra={extra}')
+    for field in sorted(_TRACE_COMMAND_FIELDS):
+        _trace_number(command[field], f'{label}.{field}')
 
 
 def _trace_frame_time(states, actors: tuple[str, ...], label: str) -> float:
@@ -817,8 +846,19 @@ def _preflight_simple_trace(
     duration = _trace_number(case.get('duration_s'), 'case.duration_s')
     control_dt = _trace_number(
         parameters.get('control_sync_dt_s'), 'parameters.control_sync_dt_s')
-    if duration <= 0 or control_dt <= 0:
-        raise RuntimeError('case duration和control dt必须为正数')
+    dynamics_dt = _trace_number(
+        parameters.get('dynamics_dt_s'), 'parameters.dynamics_dt_s')
+    if duration <= 0:
+        raise RuntimeError('case.duration_s必须为正数')
+    if control_dt <= 0:
+        raise RuntimeError('parameters.control_sync_dt_s必须为正数')
+    if dynamics_dt <= 0:
+        raise RuntimeError('parameters.dynamics_dt_s必须为正数')
+    expected_samples = round(control_dt / dynamics_dt)
+    if expected_samples < 1 or not math.isclose(
+            expected_samples * dynamics_dt, control_dt,
+            abs_tol=1e-9, rel_tol=0.0):
+        raise RuntimeError('control dt不包含完整dynamics dt周期')
     expected_intervals = round(duration / control_dt)
     if expected_intervals < 1 or not math.isclose(
             expected_intervals * control_dt, duration,
@@ -859,6 +899,14 @@ def _preflight_simple_trace(
                 raise RuntimeError(f'trace第{line_number}行必须是JSON对象')
             if record.get('status') != 'completed':
                 raise RuntimeError(f'trace第{line_number}行状态必须是completed')
+            for field in _TRACE_RECORD_CONTAINERS:
+                if not isinstance(record.get(field), dict):
+                    raise RuntimeError(
+                        f'trace第{line_number}行.{field}必须存在且是JSON对象')
+            if 'readback' not in record or record['readback'] is not None \
+                    and not isinstance(record['readback'], dict):
+                raise RuntimeError(
+                    f'trace第{line_number}行.readback必须存在且为null/JSON对象')
             initial_states = record.get('initial')
             initial_time = _trace_frame_time(
                 initial_states, actors, f'trace第{line_number}行initial')
@@ -880,6 +928,12 @@ def _preflight_simple_trace(
                 if not isinstance(step, dict):
                     raise RuntimeError(
                         f'trace第{line_number}行steps.{actor}结构无效')
+                missing = sorted(_TRACE_STEP_FIELDS - set(step))
+                extra = sorted(set(step) - _TRACE_STEP_FIELDS)
+                if missing or extra:
+                    raise RuntimeError(
+                        f'trace第{line_number}行steps.{actor}.step字段'
+                        f'必须精确: missing={missing}; extra={extra}')
                 step_initial = step.get('initial')
                 _trace_state_time(
                     step_initial, f'trace第{line_number}行steps.{actor}.initial')
@@ -887,32 +941,36 @@ def _preflight_simple_trace(
                     raise RuntimeError(
                         f'trace第{line_number}行steps.{actor}.initial'
                         '与record initial不一致')
-                if not isinstance(step.get('command'), dict):
-                    raise RuntimeError(
-                        f'trace第{line_number}行steps.{actor}.command必须是JSON对象')
+                _validate_trace_command(
+                    step['command'], f'trace第{line_number}行steps.{actor}.command')
                 step_dt = _trace_number(
                     step.get('dt_s'), f'trace第{line_number}行steps.{actor}.dt_s')
                 if not math.isclose(
-                        step_dt, control_dt, abs_tol=1e-9, rel_tol=0.0):
+                        step_dt, dynamics_dt, abs_tol=1e-9, rel_tol=0.0):
                     raise RuntimeError(
                         f'trace第{line_number}行steps.{actor}.dt_s'
-                        '与control dt不一致')
+                        '与dynamics dt不一致')
                 samples = step.get('samples')
-                if not isinstance(samples, list) or not samples:
+                if not isinstance(samples, list) \
+                        or len(samples) != expected_samples:
                     raise RuntimeError(
-                        f'trace第{line_number}行steps.{actor}样本必须是非空数组')
-                sample_time = initial_time
+                        f'trace第{line_number}行steps.{actor}样本不完整：'
+                        f'{len(samples) if isinstance(samples, list) else "非数组"}'
+                        f'/{expected_samples}个dynamics样本')
                 actor_sample_times = []
                 for sample_index, sample in enumerate(samples):
                     next_time = _trace_state_time(
                         sample,
                         f'trace第{line_number}行steps.{actor}'
                         f'.samples[{sample_index}]')
-                    if next_time <= sample_time:
+                    expected_sample_time = (
+                        initial_time + (sample_index + 1) * dynamics_dt)
+                    if not math.isclose(
+                            next_time, expected_sample_time,
+                            abs_tol=1e-9, rel_tol=0.0):
                         raise RuntimeError(
                             f'trace第{line_number}行steps.{actor}样本时间'
-                            '未严格递增')
-                    sample_time = next_time
+                            '不符合dynamics dt间隔')
                     actor_sample_times.append(next_time)
                 sample_times_by_actor[actor] = actor_sample_times
                 final_state = step.get('final')
@@ -951,87 +1009,213 @@ def _preflight_simple_trace(
     return trace_bytes
 
 
+def _require_exact_field(document: Mapping, name: str, expected, label: str):
+    value = document.get(name)
+    valid = type(value) is type(expected) and value == expected
+    if not valid:
+        raise RuntimeError(
+            f'{label}.{name}必须是精确{type(expected).__name__}'
+            f' {expected!r}，实际为{value!r}')
+    return value
+
+
+def _require_exact_int_field(
+        document: Mapping, name: str, label: str, *, minimum: int = 0,
+        maximum: int | None = None) -> int:
+    value = document.get(name)
+    if type(value) is not int or value < minimum \
+            or maximum is not None and value > maximum:
+        raise RuntimeError(
+            f'{label}.{name}必须是exact int（不接受bool）')
+    return value
+
+
+def _require_positive_number_field(
+        document: Mapping, name: str, label: str) -> float:
+    value = _trace_number(document.get(name), f'{label}.{name}')
+    if value <= 0:
+        raise RuntimeError(f'{label}.{name}必须为正数')
+    return value
+
+
+def _require_object_field(document: Mapping, name: str, label: str) -> dict:
+    value = document.get(name)
+    if not isinstance(value, dict):
+        raise RuntimeError(f'{label}.{name}必须是JSON对象')
+    return value
+
+
+def _validate_outer_simple_documents(
+        outer: Path, metadata: Mapping, validation: Mapping,
+        config: SimpleFormationDemoConfig | None) -> None:
+    label = '新轨迹metadata'
+    _require_exact_field(metadata, 'schema', 'phase5g_simple_demo_v1', label)
+    _require_exact_field(metadata, 'run_id', outer.name, label)
+    _require_exact_field(metadata, 'formal', False, label)
+    _require_exact_field(metadata, 'mode', 'lane_priority', label)
+    _require_exact_field(metadata, 'simple_formation_enabled', True, label)
+    count = _require_exact_int_field(metadata, 'vehicle_count', label, minimum=1)
+    if count not in (3, 6, 12):
+        raise RuntimeError(f'{label}.vehicle_count必须是3、6或12')
+    seed = _require_exact_int_field(
+        metadata, 'seed', label, maximum=2**64 - 1)
+    target_speed = _require_positive_number_field(
+        metadata, 'target_speed_mps', label)
+    duration = _require_positive_number_field(metadata, 'duration_s', label)
+    simple = _require_object_field(metadata, 'simple_parameters', label)
+    expected_simple_names = {
+        'simple_formation_local_range_m',
+        'simple_formation_adjacent_gap_m',
+        'simple_formation_same_gap_m',
+        'simple_formation_position_tolerance_m',
+        'simple_formation_accel_limit_mps2',
+        'simple_formation_max_lane_changes',
+    }
+    if set(simple) != expected_simple_names:
+        raise RuntimeError(f'{label}.simple_parameters字段集不一致')
+    for name in expected_simple_names - {'simple_formation_max_lane_changes'}:
+        _require_positive_number_field(simple, name, f'{label}.simple_parameters')
+    if _require_exact_int_field(
+            simple, 'simple_formation_max_lane_changes',
+            f'{label}.simple_parameters', minimum=1) != 1:
+        raise RuntimeError(
+            f'{label}.simple_parameters.simple_formation_max_lane_changes必须为1')
+    if not _valid_digest(metadata.get('case_file_sha256')):
+        raise RuntimeError(f'{label}.case_file_sha256必须是小写SHA-256')
+    _require_object_field(metadata, 'mode_registry', label)
+
+    validation_label = '新轨迹validation'
+    _require_exact_field(validation, 'run_id', outer.name, validation_label)
+    _require_exact_field(validation, 'status', 'completed', validation_label)
+    _require_exact_field(validation, 'passed', True, validation_label)
+    _require_exact_field(
+        validation, 'complete_execution', True, validation_label)
+    _require_exact_field(
+        validation, 'engineering_passed', True, validation_label)
+    _require_exact_field(validation, 'formal', False, validation_label)
+    _require_exact_field(validation, 'mode', 'lane_priority', validation_label)
+    _require_exact_field(validation, 'case_directory', 'case', validation_label)
+
+    if config is None:
+        return
+    expected = {
+        'vehicle_count': config.vehicle_count,
+        'seed': config.random_seed,
+        'target_speed_mps': config.target_speed_mps,
+        'duration_s': config.simulation_duration_s,
+    }
+    actual = {
+        'vehicle_count': count, 'seed': seed,
+        'target_speed_mps': target_speed, 'duration_s': duration,
+    }
+    for name, value in expected.items():
+        if actual[name] != value:
+            raise RuntimeError(f'{label}.{name}与顶部配置不一致')
+    expected_simple = {
+        'simple_formation_local_range_m': config.local_formation_range_m,
+        'simple_formation_adjacent_gap_m': config.adjacent_lane_gap_m,
+        'simple_formation_same_gap_m': config.same_lane_gap_m,
+        'simple_formation_position_tolerance_m': config.position_tolerance_m,
+        'simple_formation_accel_limit_mps2':
+            config.formation_accel_limit_mps2,
+        'simple_formation_max_lane_changes':
+            config.max_formation_lane_changes,
+    }
+    for name, value in expected_simple.items():
+        if simple[name] != value:
+            raise RuntimeError(
+                f'{label}.simple_parameters.{name}与顶部配置不一致')
+
+
+def _validate_child_simple_documents(
+        outer: Path, metadata: Mapping, validation: Mapping) -> None:
+    label = 'case metadata'
+    _require_exact_field(metadata, 'schema', 'phase5g_variant_v1', label)
+    _require_exact_field(metadata, 'mode', 'lane_priority', label)
+    _require_exact_field(metadata, 'formal', False, label)
+    _require_exact_field(metadata, 'live', False, label)
+    _require_exact_field(metadata, 'execution_status', 'completed', label)
+    _require_exact_field(metadata, 'lifecycle_status', 'finalized', label)
+    _require_exact_field(metadata, 'parent_run_id', outer.name, label)
+    _require_object_field(metadata, 'case', label)
+    _require_object_field(metadata, 'parameters', label)
+    _require_object_field(metadata, 'initial', label)
+    _require_exact_int_field(metadata, 'intervals', label, minimum=1)
+    _require_exact_int_field(metadata, 'trace_intervals', label, minimum=1)
+
+    validation_label = 'case validation'
+    _require_exact_field(validation, 'status', 'completed', validation_label)
+    if type(validation.get('passed')) is not bool:
+        raise RuntimeError(f'{validation_label}.passed必须是exact bool')
+    _require_exact_field(validation, 'sealed', True, validation_label)
+    _require_exact_field(
+        validation, 'recording_passed', True, validation_label)
+
+
 def load_simple_trace_source(
         outer_path: Path, paths: SimpleCheckedPaths,
         config: SimpleFormationDemoConfig | None = None) -> TraceSource:
     """Load only a newly generated, sealed Phase5G simple-formation trace."""
     outer = _resolve_result_directory(
         outer_path, paths.variant_results, '结果路径')
-    source_anchor, trace_sha256 = _verify_simple_trust(outer, paths)
-    metadata = _read_json(outer / 'metadata.json')
-    validation = _read_json(outer / 'validation.json')
-    if metadata.get('schema') != 'phase5g_simple_demo_v1' \
-            or metadata.get('formal') is not False \
-            or metadata.get('mode') != 'lane_priority' \
-            or metadata.get('simple_formation_enabled') is not True:
-        raise ValueError('新轨迹metadata不是非正式simple formation演示')
-    if validation.get('status') != 'completed' \
-            or validation.get('complete_execution') is not True \
-            or validation.get('engineering_passed') is not True:
-        raise ValueError('新轨迹validation未完成工程验收')
+    source_anchor, expected_trace_sha256 = _verify_simple_trust(outer, paths)
+    metadata = _read_strict_object(
+        outer / 'metadata.json', '新轨迹metadata')
+    validation = _read_strict_object(
+        outer / 'validation.json', '新轨迹validation')
+    _validate_outer_simple_documents(outer, metadata, validation, config)
     if metadata.get('case_file_sha256') != source_anchor['case_file_sha256']:
-        raise ValueError('新轨迹metadata.case_file_sha256与source anchor不一致')
+        raise RuntimeError('新轨迹metadata.case_file_sha256与source anchor不一致')
     if _json_digest(metadata.get('mode_registry')) \
             != source_anchor['mode_registry_sha256']:
-        raise ValueError('新轨迹metadata.mode_registry与source anchor不一致')
-    if config is not None:
-        expected = {
-            'vehicle_count': config.vehicle_count,
-            'seed': config.random_seed,
-            'target_speed_mps': config.target_speed_mps,
-            'duration_s': config.simulation_duration_s,
-        }
-        for name, value in expected.items():
-            if metadata.get(name) != value:
-                raise ValueError(f'新轨迹metadata.{name}与顶部配置不一致')
-        expected_simple = {
-            'simple_formation_local_range_m': config.local_formation_range_m,
-            'simple_formation_adjacent_gap_m': config.adjacent_lane_gap_m,
-            'simple_formation_same_gap_m': config.same_lane_gap_m,
-            'simple_formation_position_tolerance_m': config.position_tolerance_m,
-            'simple_formation_accel_limit_mps2':
-                config.formation_accel_limit_mps2,
-            'simple_formation_max_lane_changes':
-                config.max_formation_lane_changes,
-        }
-        if metadata.get('simple_parameters') != expected_simple:
-            raise ValueError('新轨迹metadata.simple_parameters与顶部配置不一致')
+        raise RuntimeError('新轨迹metadata.mode_registry与source anchor不一致')
 
-    case_dir = (outer / 'case').resolve(strict=True)
-    if not case_dir.is_dir() or not case_dir.is_relative_to(outer):
-        raise ValueError('新轨迹case目录越界或不存在')
+    case_dir = _resolve_result_directory(outer / 'case', outer, 'case目录')
     _verify_sealed_directory(case_dir)
-    child_metadata = _read_json(case_dir / 'metadata.json')
-    child_validation = _read_json(case_dir / 'validation.json')
-    if child_metadata.get('execution_status') != 'completed' \
-            or child_validation.get('status') != 'completed' \
-            or child_validation.get('sealed') is not True \
-            or child_validation.get('recording_passed') is not True:
-        raise ValueError('新轨迹case未完成或未通过记录验收')
-    case = child_metadata.get('case')
-    controlled = case.get('controlled') if isinstance(case, dict) else None
+    child_metadata = _read_strict_object(
+        case_dir / 'metadata.json', 'case metadata')
+    child_validation = _read_strict_object(
+        case_dir / 'validation.json', 'case validation')
+    _validate_child_simple_documents(
+        outer, child_metadata, child_validation)
+    case = child_metadata['case']
+    controlled = case.get('controlled')
     if not isinstance(controlled, list) or not controlled \
-            or any(not isinstance(actor, str) or not actor for actor in controlled) \
+            or any(type(actor) is not str or not actor for actor in controlled) \
             or len(set(controlled)) != len(controlled):
-        raise ValueError('新轨迹case.metadata.case.controlled无效')
+        raise RuntimeError('新轨迹case.metadata.case.controlled无效')
     actors = tuple(controlled)
-    if config is not None and len(actors) != config.vehicle_count:
-        raise ValueError('新轨迹controlled车辆数与顶部配置不一致')
+    if len(actors) != metadata['vehicle_count']:
+        raise RuntimeError('新轨迹controlled车辆数与outer metadata不一致')
     initial = case.get('initial')
     if not isinstance(initial, dict) or set(initial) != set(actors) \
             or case.get('scripts') != {}:
-        raise ValueError('新轨迹case必须全量受控且不得包含背景或脚本车辆')
+        raise RuntimeError('新轨迹case必须全量受控且不得包含背景或脚本车辆')
+    if child_metadata['initial'] != initial:
+        raise RuntimeError('case metadata.initial与case.initial不一致')
+    if type(case.get('name')) is not str or not case['name']:
+        raise RuntimeError('case metadata.case.name必须是非空字符串')
+    case_duration = _require_positive_number_field(
+        case, 'duration_s', 'case metadata.case')
+    if case_duration != metadata['duration_s']:
+        raise RuntimeError('case metadata.case.duration_s与outer metadata不一致')
+    parameters = child_metadata['parameters']
+    _require_positive_number_field(parameters, 'length_m', 'case metadata.parameters')
+    _require_positive_number_field(
+        parameters, 'control_sync_dt_s', 'case metadata.parameters')
     trace_path = case_dir / 'trace.jsonl'
     if not trace_path.is_file():
         raise FileNotFoundError(f'新轨迹trace缺失: {trace_path}')
     verified_trace_bytes = _preflight_simple_trace(
-        trace_path, child_metadata, actors, trace_sha256)
+        trace_path, child_metadata, actors, expected_trace_sha256)
+    trace_sha256 = hashlib.sha256(verified_trace_bytes).hexdigest()
     source = TraceSource(
-        case_name=str(case.get('name', 'simple_formation')),
+        case_name=case['name'],
         case_dir=case_dir, trace_path=trace_path,
         metadata=child_metadata, validation=child_validation,
         evidence_status='completed', actors=actors,
-        verified_trace_bytes=verified_trace_bytes)
+        verified_trace_bytes=verified_trace_bytes,
+        trace_sha256=trace_sha256)
     return source
 
 
@@ -1463,6 +1647,9 @@ def run_simple_formation_demo(
         return generated.outer_path
 
     source = generated.source
+    if source.verified_trace_bytes is None or source.trace_sha256 \
+            != hashlib.sha256(source.verified_trace_bytes).hexdigest():
+        raise RuntimeError('simple formation缺少已验证的不可变trace字节')
     run_dir = create_run_directory(paths.root, 'simple_formation')
     route_path = run_dir / 'simple_formation.rou.xml'
     config_path = run_dir / 'simple_formation.sumocfg'
@@ -1480,7 +1667,7 @@ def run_simple_formation_demo(
         source_case=source.case_name,
         source_status=source.evidence_status,
         source_trace=str(source.trace_path),
-        source_trace_sha256=sha256_file(source.trace_path),
+        source_trace_sha256=source.trace_sha256,
         controlled_actors=list(source.actors),
         network=str(paths.network),
         network_sha256=sha256_file(paths.network),
