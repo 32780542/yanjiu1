@@ -44,7 +44,10 @@ def _manifest_differences(path: Path) -> list[str]:
 
 
 def _validate_metadata(metadata: dict) -> tuple[KinematicModel, dict, dict]:
-    from experiments.phase5g import MODES, parameters, source_hashes
+    from experiments.phase5g import (
+        MODES, _variant_input_sha256, parameters, source_hashes,
+    )
+    from experiments.phase5g_cases import digest_json, physical_case
     from noa.simple_formation import PARAMETERS
 
     mode = metadata.get("mode")
@@ -110,6 +113,16 @@ def _validate_metadata(metadata: dict) -> tuple[KinematicModel, dict, dict]:
         raise ValueError("metadata.initial_memories_sha256: hash differs")
     if metadata.get("initial") != metadata.get("case", {}).get("initial"):
         raise ValueError("metadata.initial: differs from case.initial")
+    case = metadata.get("case")
+    if metadata.get("physical_input_sha256") != digest_json(physical_case(case)):
+        raise ValueError("metadata.physical_input_sha256: differs")
+    if metadata.get("case_input_sha256") != digest_json(case):
+        raise ValueError("metadata.case_input_sha256: differs")
+    expected_input_digest = _variant_input_sha256(
+        mode, case, model, physical, policy, metadata.get("initial_memories"),
+    )
+    if metadata.get("parameters_input_sha256") != expected_input_digest:
+        raise ValueError("metadata.parameters_input_sha256: differs")
     if tolerance < 0:
         raise ValueError("metadata.model_parameters.replay_absolute_tolerance: invalid")
     return model, physical, policy

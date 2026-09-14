@@ -5,6 +5,7 @@ from dataclasses import asdict, fields
 import importlib
 import json
 from pathlib import Path
+import shutil
 import sys
 import tempfile
 import unittest
@@ -314,6 +315,78 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         tampered["parameters"]["simple_formation_adjacent_gap_m"] = 12.0
         with self.assertRaises(ValueError):
             self.replay._validate_metadata(tampered)
+
+    def test_replay_rejects_resealed_bilateral_parameter_tampering_by_input_digest(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "bilateral-parameter-tampering"
+            self.harness.run_variant(
+                path, model, physical, policy, case, "lane_priority", live=False,
+            )
+            metadata_path = path / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            self.assertIn("parameters_input_sha256", metadata)
+            metadata["parameters"]["simple_formation_local_range_m"] = 79.0
+            metadata["policy_parameters"]["simple_formation_local_range_m"] = 79.0
+            self.harness.atomic_json(metadata_path, metadata)
+            self.harness.seal_directory(path)
+            replay = self.replay.replay_variant(path)
+        self.assertFalse(replay["passed"], replay)
+        self.assertIn("metadata.parameters_input_sha256", "\n".join(replay["errors"]))
+
+    def test_replay_rejects_missing_parameter_input_digest_by_exact_field_name(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical)
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "missing-parameter-input-digest"
+            self.harness.run_variant(
+                path, model, physical, policy, case, "lane_priority", live=False,
+            )
+            metadata_path = path / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            del metadata["parameters_input_sha256"]
+            self.harness.atomic_json(metadata_path, metadata)
+            self.harness.seal_directory(path)
+            replay = self.replay.replay_variant(path)
+        self.assertFalse(replay["passed"], replay)
+        self.assertIn("metadata.parameters_input_sha256", "\n".join(replay["errors"]))
+
+    def test_replay_rejects_missing_or_changed_case_input_digests_by_field_name(self):
+        from experiments.phase5g_cases import digest_json, physical_case
+
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "digest-source"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            original = json.loads((source / "metadata.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                original["physical_input_sha256"], digest_json(physical_case(case)),
+            )
+            self.assertEqual(original["case_input_sha256"], digest_json(case))
+            for index, (field, operation) in enumerate((
+                ("physical_input_sha256", "delete"),
+                ("physical_input_sha256", "change"),
+                ("case_input_sha256", "delete"),
+                ("case_input_sha256", "change"),
+            )):
+                path = Path(temp) / f"digest-tamper-{index}"
+                shutil.copytree(source, path)
+                metadata_path = path / "metadata.json"
+                metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+                if operation == "delete":
+                    del metadata[field]
+                else:
+                    metadata[field] = "0" * 64
+                self.harness.atomic_json(metadata_path, metadata)
+                self.harness.seal_directory(path)
+                with self.subTest(field=field, operation=operation):
+                    replay = self.replay.replay_variant(path)
+                    self.assertFalse(replay["passed"], replay)
+                    self.assertIn(f"metadata.{field}", "\n".join(replay["errors"]))
 
     def test_lane_change_facts_count_both_formation_reasons_only(self):
         state0 = {
