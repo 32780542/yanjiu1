@@ -173,9 +173,14 @@ class SimpleFormationRuleTests(unittest.TestCase):
         self.assertEqual(decision.counts, (0, 3, 0))
 
     def test_lane_balance_requires_ego_to_be_local_rear_most(self):
-        rows = (self.vehicle(1, -5.0, 1), self.vehicle(2, 10.0, 1))
+        rows = (
+            self.vehicle(1, -5.0, 1),
+            self.vehicle(2, 10.0, 1),
+            self.vehicle(3, 10.0, 0),
+        )
         decision = choose_lane(0.0, 1, rows, self.centers, False, self.p)
         self.assertIsNone(decision.target_lane_index)
+        self.assertEqual(decision.reason, "not_local_rear_most")
 
     def test_lane_balance_stops_after_the_one_completed_formation_change(self):
         rows = (self.vehicle(1, 10.0, 0),)
