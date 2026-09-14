@@ -87,6 +87,7 @@ INPUTS = (
 SIMPLE_DEMO_INPUT_SCHEMA = "phase5g_simple_demo_cases_v1"
 SIMPLE_DEMO_EXECUTION_SCHEMA = "phase5g_simple_demo_execution_v1"
 SIMPLE_DEMO_INDEX_SCHEMA = "phase5g_simple_demo_index_v1"
+SIMPLE_DEMO_COMPLETION_SCHEMA = "phase5g_simple_demo_completion_anchor_v1"
 
 
 def atomic_json(path: str | Path, data: object) -> None:
@@ -410,6 +411,46 @@ def _write_trust_anchor(run_path: Path, code_hashes: dict, input_hashes: dict,
     return anchor
 
 
+def _write_completion_anchor(run_path: Path) -> Path:
+    """Bind finalized simple-demo output after its outer evidence seal succeeds."""
+    trust = run_path.parent / ".phase5g-trust"
+    source_anchor_path = trust / f"{run_path.name}.json"
+    if not source_anchor_path.is_file():
+        raise ValueError("completion anchor requires the runtime source/input anchor")
+    source_anchor = json.loads(source_anchor_path.read_text(encoding="utf-8"))
+    if source_anchor.get("schema") != "phase5g_external_trust_anchor_v2" \
+            or source_anchor.get("run_id") != run_path.name:
+        raise ValueError("completion anchor source/input anchor differs")
+    evidence_path = run_path / "evidence_hashes.json"
+    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+    if not isinstance(evidence, dict) or not evidence:
+        raise ValueError("completion anchor requires sealed outer evidence")
+    child_manifest = snapshot_manifest(run_path / "case", "case")
+    payload = {
+        "schema": SIMPLE_DEMO_COMPLETION_SCHEMA,
+        "run_id": run_path.name,
+        "outer_schema": "phase5g_simple_demo_v1",
+        "source_anchor_schema": source_anchor["schema"],
+        "source_anchor_sha256": sha256(source_anchor_path),
+        "source_manifest_sha256": source_anchor["source_manifest_sha256"],
+        "input_manifest_sha256": source_anchor["input_manifest_sha256"],
+        "child_directory": "case",
+        "child_manifest": child_manifest,
+        "child_manifest_sha256": _anchor_digest(child_manifest),
+        "outer_evidence_hashes": evidence,
+        "outer_evidence_manifest_sha256": _anchor_digest(evidence),
+        "outer_evidence_file_sha256": sha256(evidence_path),
+    }
+    anchor = trust / f"{run_path.name}.completion.json"
+    with anchor.open("x", encoding="utf-8", newline="\n") as stream:
+        json.dump(payload, stream, sort_keys=True, separators=(",", ":"),
+                  ensure_ascii=False, allow_nan=False)
+        stream.write("\n")
+        stream.flush()
+        os.fsync(stream.fileno())
+    return anchor
+
+
 def _write_replay_materials(run_path: Path, case_payload: bytes, *,
                             case_file_sha256: str, mode_registry: dict) -> None:
     """Freeze code and runtime inputs, then create the contemporaneous trust root."""
@@ -491,7 +532,8 @@ def expected_variants(cases: Sequence[Mapping[str, object]]) -> dict[str, dict]:
 def _variant_input_sha256(mode: str, case: Mapping[str, object], model,
                            physical: Mapping[str, object], policy: Mapping[str, object],
                            memories: Mapping[str, object], *,
-                           parent_run_id: str | None = None) -> str:
+                           parent_run_id: str | None = None,
+                           output_nonce: str | None = None) -> str:
     from experiments.phase5g_cases import digest_json
 
     payload = {
@@ -505,6 +547,12 @@ def _variant_input_sha256(mode: str, case: Mapping[str, object], model,
         ):
             raise ValueError("parent_run_id must be an exact Phase 5G run id")
         payload["parent_run_id"] = parent_run_id
+    if output_nonce is not None:
+        if type(output_nonce) is not str or not re.fullmatch(
+            r"[0-9a-f]{32}", output_nonce
+        ):
+            raise ValueError("output_nonce must be an exact lowercase UUID hex value")
+        payload["output_nonce"] = output_nonce
     return digest_json(payload)
 
 
@@ -819,7 +867,8 @@ def _initial_memories(case: Mapping[str, object], mode: str, *,
 
 def run_variant(path: str | Path, model, physical: Mapping[str, object],
                  policy: Mapping[str, object], case: Mapping[str, object], mode: str,
-                 *, live: bool = True, parent_run_id: str | None = None) -> dict:
+                 *, live: bool = True, parent_run_id: str | None = None,
+                 output_nonce: str | None = None) -> dict:
     """Run one immutable physical case/mode, retaining any produced prefix."""
     from experiments.phase3_replay import compare_tree
     from experiments.phase5g_cases import digest_json, physical_case
@@ -854,6 +903,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
         "parameters_input_sha256": _variant_input_sha256(
             mode, case, model, physical, policy, memories,
             parent_run_id=parent_run_id,
+            output_nonce=output_nonce,
         ),
         "clock_schema": CLOCK_SCHEMA,
         "intervals": round(case["duration_s"] / physical["control_sync_dt_s"]),
@@ -863,6 +913,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
     }
     if parent_run_id is not None:
         metadata["parent_run_id"] = parent_run_id
+    if output_nonce is not None:
+        metadata["output_nonce"] = output_nonce
     atomic_json(target / "metadata.json", metadata)
     # Even pre-clock failures retain an explicit, append-only empty trace prefix.
     (target / "stdout.log").touch(exist_ok=False)
@@ -977,6 +1029,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
             "case_index": {"case_name": case["name"], "mode": mode},
             "sealed": True,
         }
+        if parent_run_id is not None:
+            result["scientific_gate_applicable"] = _scientific_applicable(case, mode)
         lifecycle_stage = "validation"
         metadata["lifecycle_status"] = "finalized"
         atomic_json(target / "metadata.json", metadata)
@@ -1006,6 +1060,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
             "produced_evidence": _produced_evidence(target),
             "sealed": True,
         }
+        if parent_run_id is not None:
+            result["scientific_gate_applicable"] = _scientific_applicable(case, mode)
         _finalizer_json(target / "validation.json", result)
     try:
         seal_directory(target)
@@ -1272,7 +1328,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
     if vehicle_count == 6:
         case = main_six_case(physical)
         seeded = seeded_case(physical, 6, seed)
-        case = {**case, "name": f"demo_6_seed{seed}", "duration_s": duration,
+        case = {**case, "duration_s": duration,
                 "initial_memories": seeded["initial_memories"],
                 "private_rng_provenance": seeded["private_rng_provenance"]}
     else:
@@ -1288,10 +1344,12 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         "simple_parameters": resolved_simple,
     }
     run = RunRecord(base, run_metadata)
+    output_nonce = uuid4().hex
     execution = {
         "schema": SIMPLE_DEMO_EXECUTION_SCHEMA,
         "case_directory": "case",
         "parent_run_id": run.run_id,
+        "output_nonce": output_nonce,
         "case_name": case["name"],
         "mode": mode,
         "vehicle_count": vehicle_count,
@@ -1305,6 +1363,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         "parameters_input_sha256": _variant_input_sha256(
             mode, case, model, physical, policy, memories,
             parent_run_id=run.run_id,
+            output_nonce=output_nonce,
         ),
         "initial_memories_sha256": initial_memory_hash(memories),
     }
@@ -1340,7 +1399,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
             atomic_json(run.path / "case_index.json", index)
             result = run_variant(
                 run.path / "case", model, physical, policy, case, mode,
-                live=live, parent_run_id=run.run_id,
+                live=live, parent_run_id=run.run_id, output_nonce=output_nonce,
             )
             index["finalized"] = True
             index["completed"] = result.get("status") == "completed"
@@ -1350,7 +1409,8 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
             run.finish({
                 "passed": bool(engineering and complete),
                 "engineering_passed": engineering,
-                "scientific_gate_passed": result.get("scientific_passed") is True,
+                "scientific_gate_applicable": _scientific_applicable(case, mode),
+                "scientific_gate_passed": result.get("scientific_passed"),
                 "complete_execution": complete,
                 "formal": False, "mode": mode,
                 "case_directory": "case", "case_index": "case_index.json",
@@ -1359,5 +1419,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
     finally:
         if run.path.is_dir():
             seal_directory(run.path)
+            if run.finished and index["completed"]:
+                _write_completion_anchor(run.path)
     print(json.dumps({"path": str(run.path), "formal": False}, ensure_ascii=False), flush=True)
     return run.path

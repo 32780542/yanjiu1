@@ -92,9 +92,9 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         with patch.object(sys, "argv", ["run.py", *argv]):
             return self.entry.main()
 
-    def make_short_demo(self, base, *, seed=11):
+    def make_short_demo(self, base, *, seed=11, count=3):
         return self.harness.run_phase5g_demo(
-            vehicle_count=3, seed=seed, target_speed_mps=10.0,
+            vehicle_count=count, seed=seed, target_speed_mps=10.0,
             duration_s=0.1, output_base=base, live=False,
             local_formation_range_m=78.0,
             adjacent_lane_gap_m=14.0,
@@ -112,6 +112,12 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         copied = destination.parent / ".phase5g-trust" / f"{destination.name}.json"
         copied.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(original, copied)
+        original_completion = original.with_name(f"{source.name}.completion.json")
+        if original_completion.is_file():
+            shutil.copy2(
+                original_completion,
+                copied.with_name(f"{destination.name}.completion.json"),
+            )
         return destination
 
     def test_registered_simple_defaults_and_formal_modes_are_exact(self):
@@ -619,6 +625,10 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertTrue((source / "input_snapshot").is_dir())
             anchor_path = source.parent / ".phase5g-trust" / f"{source.name}.json"
             self.assertTrue(anchor_path.is_file())
+            completion_path = (
+                source.parent / ".phase5g-trust" / f"{source.name}.completion.json"
+            )
+            self.assertTrue(completion_path.is_file())
 
             metadata = json.loads((source / "metadata.json").read_text(encoding="utf-8"))
             execution = metadata["execution"]
@@ -628,6 +638,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             index = json.loads((source / "case_index.json").read_text(encoding="utf-8"))
             child = json.loads((source / "case" / "metadata.json").read_text(encoding="utf-8"))
             anchor = json.loads(anchor_path.read_text(encoding="utf-8"))
+            completion = json.loads(completion_path.read_text(encoding="utf-8"))
 
             self.assertEqual(set(bundle), {"schema", "cases", "execution"})
             self.assertEqual(bundle["schema"], "phase5g_simple_demo_cases_v1")
@@ -642,6 +653,8 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertEqual(execution["case_directory"], "case")
             self.assertEqual(execution["parent_run_id"], source.name)
             self.assertEqual(child["parent_run_id"], source.name)
+            self.assertEqual(execution["output_nonce"], child["output_nonce"])
+            self.assertEqual(len(execution["output_nonce"]), 32)
             self.assertEqual(execution["mode"], "lane_priority")
             self.assertIs(execution["simple_formation_enabled"], True)
             self.assertEqual(execution["simple_parameters"], SIMPLE_NONDEFAULTS)
@@ -683,6 +696,22 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                              self.harness._anchor_digest(input_manifest))
             self.assertEqual(anchor["case_file_sha256"], sha256(bundle_path))
             self.assertEqual(metadata["case_file_sha256"], sha256(bundle_path))
+            self.assertEqual(completion["schema"],
+                             "phase5g_simple_demo_completion_anchor_v1")
+            self.assertEqual(completion["run_id"], source.name)
+            self.assertEqual(completion["source_manifest_sha256"],
+                             anchor["source_manifest_sha256"])
+            self.assertEqual(completion["input_manifest_sha256"],
+                             anchor["input_manifest_sha256"])
+            self.assertEqual(completion["child_directory"], "case")
+            self.assertEqual(
+                completion["child_manifest"],
+                self.harness.snapshot_manifest(source / "case", "case"),
+            )
+            evidence = json.loads(
+                (source / "evidence_hashes.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(completion["outer_evidence_hashes"], evidence)
 
     def test_demo_outer_replay_uses_sibling_anchor_and_keeps_science_factual(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -692,23 +721,61 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertTrue(report["semantic_replay_passed"], report)
         self.assertTrue(report["complete_execution"], report)
         self.assertTrue(report["engineering_passed"], report)
-        self.assertFalse(report["scientific_gate_passed"], report)
+        self.assertFalse(report["scientific_gate_applicable"], report)
+        self.assertIsNone(report["scientific_gate_passed"], report)
         self.assertEqual(report["trust_model"],
                          "sibling_anchor_only_not_whole-package-tamper-resistant")
+
+    def test_demo_scientific_gate_tri_state_is_explicit_for_three_and_six(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            for count, applicable, scientific in (
+                (3, False, None), (6, True, False), (12, False, None),
+            ):
+                with self.subTest(count=count):
+                    source = self.make_short_demo(
+                        root / f"demo-{count}", count=count, seed=11,
+                    )
+                    child = json.loads(
+                        (source / "case" / "validation.json").read_text(
+                            encoding="utf-8"
+                        )
+                    )
+                    outer = json.loads(
+                        (source / "validation.json").read_text(encoding="utf-8")
+                    )
+                    child_metadata = json.loads(
+                        (source / "case" / "metadata.json").read_text(
+                            encoding="utf-8"
+                        )
+                    )
+                    if count == 6:
+                        self.assertEqual(child_metadata["case"]["name"],
+                                         "main_6_3_2_1")
+                    self.assertIs(child["scientific_gate_applicable"], applicable)
+                    self.assertIs(child["scientific_passed"], scientific)
+                    self.assertIs(outer["scientific_gate_applicable"], applicable)
+                    self.assertIs(outer["scientific_gate_passed"], scientific)
+                    replay = self.replay.replay_run(
+                        source, base=root / f"replay-{count}",
+                    )
+                    self.assertTrue(replay["passed"], replay)
+                    self.assertIs(replay["scientific_gate_applicable"], applicable)
+                    self.assertIs(replay["scientific_gate_passed"], scientific)
 
     def test_demo_outer_replay_rejects_snapshot_binding_and_child_swap_tampering(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             source = self.make_short_demo(root / "source", seed=11)
             other = self.make_short_demo(root / "other", seed=11)
-            attacks = {}
+            attacks = []
 
             code = self.copy_demo_with_anchor(source, root / "attack-code")
             changed = code / "code_snapshot" / "experiments" / "phase5g.py"
             changed.write_text(changed.read_text(encoding="utf-8") + "\n# attack\n",
                                encoding="utf-8")
             self.harness.seal_directory(code)
-            attacks["code_hashes.experiments/phase5g.py"] = code
+            attacks.append(("code_hashes.experiments/phase5g.py", code))
 
             inputs = self.copy_demo_with_anchor(source, root / "attack-input")
             changed = inputs / "input_snapshot" / "phase5g_cases.json"
@@ -716,7 +783,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             value["cases"][0]["purpose"] = "tampered frozen case"
             changed.write_bytes(phase5g_cases.canonical_json_bytes(value))
             self.harness.seal_directory(inputs)
-            attacks["input_hashes.phase5g_cases.json"] = inputs
+            attacks.append(("input_hashes.phase5g_cases.json", inputs))
 
             binding = self.copy_demo_with_anchor(source, root / "attack-binding")
             changed = binding / "case_index.json"
@@ -724,21 +791,49 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             value["execution"]["case_name"] = "different_case"
             self.harness.atomic_json(changed, value)
             self.harness.seal_directory(binding)
-            attacks["case_index.execution.case_name"] = binding
+            attacks.append(("completion_anchor", binding))
 
             child_swap = self.copy_demo_with_anchor(source, root / "attack-child")
             shutil.rmtree(child_swap / "case")
             shutil.copytree(other / "case", child_swap / "case")
             self.harness.seal_directory(child_swap)
-            attacks["case.metadata.parent_run_id"] = child_swap
+            attacks.append(("completion_anchor", child_swap))
 
-            for expected, attack in attacks.items():
+            for expected, attack in attacks:
                 with self.subTest(expected=expected):
                     report = self.replay.replay_run(
                         attack, base=attack.parent / "replays",
                     )
                     self.assertFalse(report["passed"], report)
                     self.assertIn(expected, "\n".join(report["errors"]))
+
+    def test_demo_completion_anchor_rejects_deep_same_input_child_swap(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = self.make_short_demo(root / "source", seed=11)
+            other = self.make_short_demo(root / "other", seed=11)
+            attack = self.copy_demo_with_anchor(source, root / "attack")
+            shutil.rmtree(attack / "case")
+            shutil.copytree(other / "case", attack / "case")
+            execution = json.loads(
+                (attack / "metadata.json").read_text(encoding="utf-8")
+            )["execution"]
+            child_metadata_path = attack / "case" / "metadata.json"
+            child_metadata = json.loads(child_metadata_path.read_text(encoding="utf-8"))
+            child_metadata["parent_run_id"] = attack.name
+            child_metadata["parameters_input_sha256"] = execution[
+                "parameters_input_sha256"
+            ]
+            self.harness.atomic_json(child_metadata_path, child_metadata)
+            self.harness.seal_directory(attack / "case")
+            self.harness.seal_directory(attack)
+
+            report = self.replay.replay_run(
+                attack, base=attack.parent / "replays",
+            )
+        self.assertFalse(report["passed"], report)
+        self.assertFalse(report["cases"], report)
+        self.assertIn("completion_anchor", "\n".join(report["errors"]))
 
     def test_demo_outer_replay_rejects_missing_trust_material_without_fallback(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -759,6 +854,19 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertFalse(report["passed"], report)
             self.assertIn("code_snapshot: missing directory", "\n".join(report["errors"]))
 
+            no_completion = self.copy_demo_with_anchor(source, root / "no-completion")
+            completion = (
+                no_completion.parent / ".phase5g-trust"
+                / f"{no_completion.name}.completion.json"
+            )
+            if completion.exists():
+                completion.unlink()
+            report = self.replay.replay_run(
+                no_completion, base=root / "replays-no-completion",
+            )
+            self.assertFalse(report["passed"], report)
+            self.assertIn("completion_anchor: missing", "\n".join(report["errors"]))
+
     def test_demo_outer_replay_rejects_missing_and_extra_schema_fields(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -778,7 +886,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             index["unexpected"] = True
             self.harness.atomic_json(index_path, index)
             self.harness.seal_directory(extra)
-            attacks["case_index.fields"] = extra
+            attacks["completion_anchor.outer_evidence_hashes.case_index.json"] = extra
 
             for expected, attack in attacks.items():
                 with self.subTest(expected=expected):
@@ -787,6 +895,33 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                     )
                     self.assertFalse(report["passed"], report)
                     self.assertIn(expected, "\n".join(report["errors"]))
+
+    def test_outer_replay_schema_dispatch_rejects_unknown_and_corrupt_without_fallback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            attacks = {
+                "unknown": ('{"schema":"unknown_outer_v1"}', "metadata.schema"),
+                "corrupt": ('{"schema":', "metadata.json"),
+            }
+            for name, (payload, expected) in attacks.items():
+                with self.subTest(name=name):
+                    source = root / name
+                    source.mkdir()
+                    (source / "metadata.json").write_text(payload, encoding="utf-8")
+                    with patch.object(
+                        self.replay, "_validate_source_run",
+                        side_effect=AssertionError("unexpected formal fallback"),
+                    ) as formal, patch.object(
+                        self.replay, "_validate_simple_source_run",
+                        side_effect=AssertionError("unexpected simple fallback"),
+                    ) as simple:
+                        report = self.replay._replay_run_local(source, {})
+                    self.assertFalse(report["passed"], report)
+                    errors = "\n".join(report["errors"])
+                    self.assertIn(expected, errors)
+                    self.assertNotIn("unexpected", errors)
+                    formal.assert_not_called()
+                    simple.assert_not_called()
 
     def test_cli_demo_replay_exit_depends_on_engineering_pass_only(self):
         with patch(

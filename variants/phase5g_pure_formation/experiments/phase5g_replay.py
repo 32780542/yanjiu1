@@ -121,9 +121,13 @@ def _validate_metadata(metadata: dict) -> tuple[KinematicModel, dict, dict]:
     parent_run_id = metadata.get("parent_run_id")
     if "parent_run_id" in metadata and type(parent_run_id) is not str:
         raise ValueError("metadata.parent_run_id: value differs")
+    output_nonce = metadata.get("output_nonce")
+    if "output_nonce" in metadata and type(output_nonce) is not str:
+        raise ValueError("metadata.output_nonce: value differs")
     expected_input_digest = _variant_input_sha256(
         mode, case, model, physical, policy, metadata.get("initial_memories"),
         parent_run_id=parent_run_id,
+        output_nonce=output_nonce,
     )
     if metadata.get("parameters_input_sha256") != expected_input_digest:
         raise ValueError("metadata.parameters_input_sha256: differs")
@@ -339,6 +343,10 @@ def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) ->
         ))
         compare_tree(acceptance, saved["scientific_passed"], 0.0,
                      "validation.scientific_passed")
+        applicable = _scientific_applicable(metadata["case"], metadata["mode"])
+        if metadata.get("parent_run_id") is not None:
+            compare_tree(applicable, saved.get("scientific_gate_applicable"), 0.0,
+                         "validation.scientific_gate_applicable")
         result.update(
             passed=True, partial_source=recomputed["status"] == "failed",
             execution_completed=recomputed["status"] == "completed",
@@ -352,6 +360,7 @@ def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) ->
             detection_replay_passed=True, lane_change_replay_passed=True,
             speed_recovery_replay_passed=True, acceptance_replay_passed=True,
             trace=trace, summary=derived["summary"], scientific_passed=acceptance,
+            scientific_gate_applicable=applicable,
         )
     except Exception as error:
         result["errors"].append(f"{type(error).__name__}: {error}")
@@ -422,14 +431,16 @@ def _validate_trusted_materials(path: Path, anchor: dict,
     return stored_code, raw
 
 
-def _validate_source_run(path: Path, anchor: dict) -> tuple[dict, dict, dict]:
+def _validate_source_run(path: Path, anchor: dict, *,
+                         metadata: dict | None = None) -> tuple[dict, dict, dict]:
     from experiments.phase5g import parameters
     from experiments import phase5g_cases
 
     differences = _manifest_differences(path)
     if differences:
         raise ValueError(f"evidence_hashes: files differ: {differences}")
-    metadata = read_json(path / "metadata.json")
+    if metadata is None:
+        metadata = read_json(path / "metadata.json")
     if metadata.get("schema") != "phase5g_run_v1":
         raise ValueError("metadata.schema: not a Phase 5G run")
     stored_code, raw = _validate_trusted_materials(path, anchor, metadata)
@@ -509,7 +520,69 @@ def _exact_fields(value: object, expected: set[str], label: str) -> dict:
     return value
 
 
-def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, dict, dict]:
+def _validate_simple_completion_anchor(path: Path, source_anchor: dict) -> dict:
+    """Verify finalized output bytes before any child metadata or trace is consumed."""
+    from experiments.phase5g import (
+        SIMPLE_DEMO_COMPLETION_SCHEMA, _anchor_digest, snapshot_manifest,
+    )
+
+    completion_path = (
+        path.parent / ".phase5g-trust" / f"{path.name}.completion.json"
+    )
+    if not completion_path.is_file():
+        raise ValueError(f"completion_anchor: missing explicit anchor {completion_path}")
+    try:
+        completion = json.loads(completion_path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        raise ValueError("completion_anchor: unreadable or invalid JSON") from error
+    _exact_fields(completion, {
+        "schema", "run_id", "outer_schema", "source_anchor_schema",
+        "source_anchor_sha256", "source_manifest_sha256", "input_manifest_sha256",
+        "child_directory", "child_manifest", "child_manifest_sha256",
+        "outer_evidence_hashes", "outer_evidence_manifest_sha256",
+        "outer_evidence_file_sha256",
+    }, "completion_anchor")
+    expected_scalars = {
+        "schema": SIMPLE_DEMO_COMPLETION_SCHEMA,
+        "run_id": path.name,
+        "outer_schema": "phase5g_simple_demo_v1",
+        "source_anchor_schema": "phase5g_external_trust_anchor_v2",
+        "source_manifest_sha256": source_anchor.get("source_manifest_sha256"),
+        "input_manifest_sha256": source_anchor.get("input_manifest_sha256"),
+        "child_directory": "case",
+    }
+    for name, expected in expected_scalars.items():
+        compare_tree(expected, completion[name], 0.0, f"completion_anchor.{name}")
+    source_anchor_path = path.parent / ".phase5g-trust" / f"{path.name}.json"
+    compare_tree(sha256(source_anchor_path), completion["source_anchor_sha256"], 0.0,
+                 "completion_anchor.source_anchor_sha256")
+    child_manifest = completion["child_manifest"]
+    if not isinstance(child_manifest, dict):
+        raise ValueError("completion_anchor.child_manifest: fields differ")
+    compare_tree(_anchor_digest(child_manifest), completion["child_manifest_sha256"],
+                 0.0, "completion_anchor.child_manifest_sha256")
+    try:
+        actual_child = snapshot_manifest(path / "case", "case")
+    except ValueError as error:
+        raise ValueError(f"completion_anchor.child_manifest: {error}") from error
+    compare_tree(child_manifest, actual_child, 0.0, "completion_anchor.child_manifest")
+    evidence_path = path / "evidence_hashes.json"
+    evidence = read_json(evidence_path)
+    if not isinstance(evidence, dict) or not evidence:
+        raise ValueError("completion_anchor.outer_evidence_hashes: fields differ")
+    compare_tree(completion["outer_evidence_hashes"], evidence, 0.0,
+                 "completion_anchor.outer_evidence_hashes")
+    compare_tree(_anchor_digest(evidence),
+                 completion["outer_evidence_manifest_sha256"], 0.0,
+                 "completion_anchor.outer_evidence_manifest_sha256")
+    compare_tree(sha256(evidence_path), completion["outer_evidence_file_sha256"],
+                 0.0, "completion_anchor.outer_evidence_file_sha256")
+    return completion
+
+
+def _validate_simple_source_run(path: Path, anchor: dict, *,
+                                metadata: dict | None = None
+                                ) -> tuple[dict, dict, dict, dict]:
     """Bind one simple-demo child to its anchored generated case and parameters."""
     from experiments import phase5g_cases
     from experiments.phase5g import (
@@ -523,7 +596,8 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
     differences = _manifest_differences(path)
     if differences:
         raise ValueError(f"evidence_hashes: files differ: {differences}")
-    metadata = read_json(path / "metadata.json")
+    if metadata is None:
+        metadata = read_json(path / "metadata.json")
     _exact_fields(metadata, {
         "purpose", "schema", "formal", "mode", "vehicle_count",
         "simple_formation_enabled", "seed", "target_speed_mps", "duration_s",
@@ -545,6 +619,7 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
     if metadata["run_id"] != path.name:
         raise ValueError("metadata.run_id: differs from directory")
     _, raw = _validate_trusted_materials(path, anchor, metadata)
+    _validate_simple_completion_anchor(path, anchor)
 
     bundle = phase5g_cases._strict_json(raw)
     if raw != phase5g_cases.canonical_json_bytes(bundle):
@@ -558,7 +633,8 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
         raise ValueError("input_snapshot.phase5g_cases.json.cases: must contain one case")
     case = bundle["cases"][0]
     execution = _exact_fields(bundle["execution"], {
-        "schema", "case_directory", "parent_run_id", "case_name", "mode", "vehicle_count",
+        "schema", "case_directory", "parent_run_id", "output_nonce",
+        "case_name", "mode", "vehicle_count",
         "case_seed", "target_speed_mps", "duration_s",
         "simple_formation_enabled", "simple_parameters",
         "physical_input_sha256", "case_input_sha256", "parameters_input_sha256",
@@ -579,6 +655,7 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
         "schema": SIMPLE_DEMO_EXECUTION_SCHEMA,
         "case_directory": "case",
         "parent_run_id": path.name,
+        "output_nonce": execution["output_nonce"],
         "case_name": case.get("name"),
         "mode": "lane_priority",
         "vehicle_count": len(case.get("controlled", ())),
@@ -595,6 +672,7 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
         "parameters_input_sha256": _variant_input_sha256(
             "lane_priority", case, model, physical, policy, memories,
             parent_run_id=path.name,
+            output_nonce=execution["output_nonce"],
         ),
         "initial_memories_sha256": initial_memory_hash(memories),
     }
@@ -637,6 +715,8 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
     child_metadata = read_json(child / "metadata.json")
     compare_tree(path.name, child_metadata.get("parent_run_id"), 0.0,
                  "case.metadata.parent_run_id")
+    compare_tree(execution["output_nonce"], child_metadata.get("output_nonce"), 0.0,
+                 "case.metadata.output_nonce")
     compare_tree(case, child_metadata.get("case"), 0.0, "case.metadata.case")
     compare_tree("lane_priority", child_metadata.get("mode"), 0.0,
                  "case.metadata.mode")
@@ -674,7 +754,8 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
     gate = read_json(path / "validation.json")
     _exact_fields(gate, {
         "passed", "status", "run_id", "engineering_passed",
-        "scientific_gate_passed", "complete_execution", "formal", "mode",
+        "scientific_gate_applicable", "scientific_gate_passed",
+        "complete_execution", "formal", "mode",
         "case_directory", "case_index", "variant",
     }, "validation")
     recording = child_validation.get("recording_passed") is True
@@ -684,7 +765,9 @@ def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, d
         "status": "completed",
         "run_id": metadata["run_id"],
         "engineering_passed": recording,
-        "scientific_gate_passed": child_validation.get("scientific_passed") is True,
+        "scientific_gate_applicable": child_validation.get(
+            "scientific_gate_applicable"),
+        "scientific_gate_passed": child_validation.get("scientific_passed"),
         "complete_execution": complete,
         "formal": False,
         "mode": "lane_priority",
@@ -752,19 +835,22 @@ def aggregate_replay_results(expected: dict, cases: list[dict]) -> dict:
     }
 
 
-def _replay_simple_run_local(source: Path, anchor: dict) -> dict:
+def _replay_simple_run_local(source: Path, anchor: dict, metadata: dict) -> dict:
     """Replay one trusted non-formal simple demo without asserting scientific success."""
     result = {
         "passed": False, "semantic_replay_passed": False,
         "complete_execution": False, "variant_acceptance_passed": False,
         "source_validation_passed": False,
         "execution_gate_passed": False,
-        "scientific_gate_passed": False, "source_run": str(source),
+        "scientific_gate_applicable": False,
+        "scientific_gate_passed": None, "source_run": str(source),
         "errors": [], "cases": [], "engineering_passed": False,
         "formal": False,
     }
     try:
-        _, _, index, _ = _validate_simple_source_run(source, anchor)
+        _, _, index, _ = _validate_simple_source_run(
+            source, anchor, metadata=metadata,
+        )
         report = replay_variant(source / "case")
         result["cases"].append({"case": "case", **report})
         if report.get("passed") is not True:
@@ -786,7 +872,13 @@ def _replay_simple_run_local(source: Path, anchor: dict) -> dict:
             semantic and complete
             and report.get("recomputed_recording_passed") is True
         )
-        scientific = report.get("scientific_passed") is True
+        applicable = report.get("scientific_gate_applicable")
+        scientific = report.get("scientific_passed")
+        if type(applicable) is not bool:
+            raise ValueError("case.validation.scientific_gate_applicable: must be bool")
+        if (applicable and type(scientific) is not bool) \
+                or (not applicable and scientific is not None):
+            raise ValueError("case.validation.scientific_passed: invalid tri-state")
         result.update(
             passed=engineering,
             semantic_replay_passed=semantic,
@@ -794,6 +886,7 @@ def _replay_simple_run_local(source: Path, anchor: dict) -> dict:
             variant_acceptance_passed=report.get("recomputed_passed") is True,
             source_validation_passed=source_validation,
             execution_gate_passed=engineering,
+            scientific_gate_applicable=applicable,
             scientific_gate_passed=scientific,
             engineering_passed=engineering,
             partial_source=report.get("partial_source") is True,
@@ -807,11 +900,6 @@ def _replay_simple_run_local(source: Path, anchor: dict) -> dict:
 def _replay_run_local(run_dir: str | Path, anchor: dict) -> dict:
     """Execute semantic replay inside the saved code snapshot import namespace."""
     source = Path(run_dir).resolve()
-    try:
-        if read_json(source / "metadata.json").get("schema") == "phase5g_simple_demo_v1":
-            return _replay_simple_run_local(source, anchor)
-    except Exception:
-        pass
     result = {
         "passed": False, "semantic_replay_passed": False,
         "complete_execution": False, "variant_acceptance_passed": False,
@@ -821,7 +909,20 @@ def _replay_run_local(run_dir: str | Path, anchor: dict) -> dict:
         "errors": [], "cases": [],
     }
     try:
-        metadata, bundle, stored_code = _validate_source_run(source, anchor)
+        try:
+            metadata = read_json(source / "metadata.json")
+        except Exception as error:
+            raise ValueError("metadata.json: unreadable or invalid JSON") from error
+        if not isinstance(metadata, dict):
+            raise ValueError("metadata.json: top level must be an object")
+        schema = metadata.get("schema")
+        if schema == "phase5g_simple_demo_v1":
+            return _replay_simple_run_local(source, anchor, metadata)
+        if schema != "phase5g_run_v1":
+            raise ValueError("metadata.schema: unknown Phase 5G outer schema")
+        metadata, bundle, stored_code = _validate_source_run(
+            source, anchor, metadata=metadata,
+        )
         gate = read_json(source / "validation.json")
         from experiments.phase5g import expected_variants
         expected = expected_variants(bundle["cases"])
