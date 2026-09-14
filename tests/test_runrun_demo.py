@@ -1,5 +1,6 @@
 """Tests for the user-facing SUMO GUI demonstration entry point."""
 import hashlib
+import io
 import json
 import math
 import os
@@ -127,6 +128,18 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                 gui.validate_simple_config(
                     replace(gui.SimpleFormationDemoConfig(), **{field: value}),
                     gui.PROJECT_ROOT)
+
+    def test_extreme_finite_duration_is_a_named_validation_error(self):
+        config = replace(
+            gui.SimpleFormationDemoConfig(),
+            simulation_duration_s=sys.float_info.max)
+        with patch.object(gui.subprocess, 'run') as process, \
+                patch.object(gui, 'create_run_directory') as create, \
+                self.assertRaisesRegex(ValueError, 'SIMULATION_DURATION_S'):
+            gui.run_simple_formation_demo(
+                config, gui.PROJECT_ROOT, output_fn=lambda line: None)
+        process.assert_not_called()
+        create.assert_not_called()
 
 
 class NativeArtifactTests(unittest.TestCase):
@@ -356,6 +369,53 @@ class _SimpleTraceFixture:
             actor: self.state(0.0, 100.0 + index * 15.0)
             for index, actor in enumerate(actors)
         }
+        simple_parameters = {
+            'simple_formation_local_range_m':
+                self.config.local_formation_range_m,
+            'simple_formation_adjacent_gap_m':
+                self.config.adjacent_lane_gap_m,
+            'simple_formation_same_gap_m': self.config.same_lane_gap_m,
+            'simple_formation_position_tolerance_m':
+                self.config.position_tolerance_m,
+            'simple_formation_accel_limit_mps2':
+                self.config.formation_accel_limit_mps2,
+            'simple_formation_max_lane_changes':
+                self.config.max_formation_lane_changes,
+        }
+        private_rng_provenance = {
+            'algorithm': 'SplitMix64', 'version': 1,
+            'source': (
+                'sha256_case_seed_vehicle_count_and_stable_physical_ordinal_v1'),
+            'case_seed': self.config.random_seed,
+            'vehicle_count': self.config.vehicle_count,
+            'states_by_actor': {
+                actor: index + 1 for index, actor in enumerate(actors)},
+            'stable_ordinal_by_actor': {
+                actor: index for index, actor in enumerate(actors)},
+            'actor_identity_used': False, 'online_initialization': False,
+        }
+        case_payload = {
+            'name': 'main_6_3_2_1', 'controlled': actors,
+            'duration_s': self.config.simulation_duration_s,
+            'initial': initial, 'scripts': {},
+            'private_rng_provenance': private_rng_provenance,
+        }
+        execution = {
+            'schema': 'phase5g_simple_demo_execution_v1',
+            'case_directory': 'case', 'parent_run_id': outer.name,
+            'output_nonce': '1' * 32, 'case_name': case_payload['name'],
+            'mode': 'lane_priority',
+            'vehicle_count': self.config.vehicle_count,
+            'case_seed': self.config.random_seed,
+            'target_speed_mps': self.config.target_speed_mps,
+            'duration_s': self.config.simulation_duration_s,
+            'simple_formation_enabled': True,
+            'simple_parameters': simple_parameters,
+            'physical_input_sha256': '2' * 64,
+            'case_input_sha256': '3' * 64,
+            'parameters_input_sha256': '4' * 64,
+            'initial_memories_sha256': '5' * 64,
+        }
         intervals = round(self.config.simulation_duration_s / 0.1)
         records = []
         current = initial
@@ -399,13 +459,20 @@ class _SimpleTraceFixture:
             'execution_status': 'completed',
             'intervals': intervals, 'trace_intervals': intervals,
             'initial': initial,
-            'case': {'name': 'main_6_3_2_1', 'controlled': actors,
-                     'duration_s': self.config.simulation_duration_s,
-                     'initial': initial, 'scripts': {}},
+            'case': case_payload,
             'parameters': {
                 'length_m': 4.0, 'control_sync_dt_s': 0.1,
                 'dynamics_dt_s': 0.01,
+                'noa_target_speed_mps': self.config.target_speed_mps,
+                'simple_formation_enabled': True,
+                **simple_parameters,
             },
+            'policy_parameters': {
+                'noa_target_speed_mps': self.config.target_speed_mps,
+                'simple_formation_enabled': True,
+                **simple_parameters,
+            },
+            'private_rng_provenance': private_rng_provenance,
             'parent_run_id': outer.name,
         }), encoding='utf-8')
         (case / 'validation.json').write_text(json.dumps({
@@ -424,8 +491,14 @@ class _SimpleTraceFixture:
             '{}\n', encoding='utf-8')
         (input_snapshot / 'configs/phase5g.json').write_text(
             '{}\n', encoding='utf-8')
+        input_bundle = {
+            'schema': 'phase5g_simple_demo_cases_v1',
+            'cases': [case_payload], 'execution': execution,
+        }
         (input_snapshot / 'phase5g_cases.json').write_text(
-            '{}\n', encoding='utf-8')
+            json.dumps(
+                input_bundle, sort_keys=True, separators=(',', ':'),
+                ensure_ascii=False) + '\n', encoding='utf-8')
         code_manifest = self.snapshot_manifest(code_snapshot)
         input_manifest = self.snapshot_manifest(input_snapshot)
         source_hashes = {
@@ -460,21 +533,10 @@ class _SimpleTraceFixture:
             'seed': self.config.random_seed,
             'target_speed_mps': self.config.target_speed_mps,
             'duration_s': self.config.simulation_duration_s,
-            'simple_parameters': {
-                'simple_formation_local_range_m':
-                    self.config.local_formation_range_m,
-                'simple_formation_adjacent_gap_m':
-                    self.config.adjacent_lane_gap_m,
-                'simple_formation_same_gap_m': self.config.same_lane_gap_m,
-                'simple_formation_position_tolerance_m':
-                    self.config.position_tolerance_m,
-                'simple_formation_accel_limit_mps2':
-                    self.config.formation_accel_limit_mps2,
-                'simple_formation_max_lane_changes':
-                    self.config.max_formation_lane_changes,
-            },
+            'simple_parameters': simple_parameters,
             'case_file_sha256': case_file_sha,
             'mode_registry': mode_registry,
+            'execution': execution,
             'case_directory': 'case',
         }), encoding='utf-8')
         (outer / 'validation.json').write_text(json.dumps({
@@ -544,6 +606,14 @@ class _SimpleTraceFixture:
                 self.assertRaisesRegex(RuntimeError, pattern):
             gui.run_simple_formation_demo(
                 self.config, self.root, output_fn=lambda line: None)
+        create.assert_not_called()
+        popen.assert_not_called()
+
+    def assert_loader_failure_before_gui(self, outer, pattern):
+        with patch.object(gui, 'create_run_directory') as create, \
+                patch.object(gui.subprocess, 'Popen') as popen, \
+                self.assertRaisesRegex(RuntimeError, pattern):
+            gui.load_simple_trace_source(outer, self.paths, self.config)
         create.assert_not_called()
         popen.assert_not_called()
 
@@ -662,7 +732,12 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
     def test_playback_uses_the_exact_trace_text_that_preflight_validated(self):
         outer = self.make_outer('immutable-preflight')
         source = gui.load_simple_trace_source(outer, self.paths, self.config)
-        expected_digest = hashlib.sha256(source.verified_trace_bytes).hexdigest()
+        expected_digest = source.trace_sha256
+        self.assertFalse(hasattr(source, 'verified_trace_bytes'))
+        self.assertIsInstance(source.frames, tuple)
+        self.assertEqual(len(source.frames), 2)
+        with self.assertRaises(FrozenInstanceError):
+            source.frames[0].states['v0'].x_m = -1.0
         records = self.trace_records(outer)
         records[0]['steps']['v0']['final']['x_m'] = -99.0
         records[0]['steps']['v0']['samples'][-1]['x_m'] = -99.0
@@ -673,8 +748,77 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         with patch.object(
                 Path, 'open', side_effect=AssertionError('reopened trace disk')):
             frames = list(gui.iter_trace_frames(source))
+        self.assertIs(frames[0], source.frames[0])
         self.assertEqual(frames[1].states['v0']['x_m'], 101.0)
         self.assertEqual(source.trace_sha256, expected_digest)
+
+    def test_full_duration_source_has_451_frozen_control_frames(self):
+        self.config = gui.SimpleFormationDemoConfig()
+        outer = self.make_outer('full-duration-frames')
+        source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        self.assertIsInstance(source.frames, tuple)
+        self.assertEqual(len(source.frames), 451)
+        self.assertEqual(source.frames[0].time_s, 0.0)
+        self.assertEqual(source.frames[-1].time_s, 45.0)
+        self.assertEqual(tuple(source.frames[0].states), source.actors)
+
+    def test_trusted_json_files_are_each_opened_once_for_hash_and_parse(self):
+        outer = self.make_outer('single-read-json')
+        trust = outer.parent / '.phase5g-trust'
+        targets = tuple(path.resolve() for path in (
+            trust / f'{outer.name}.json',
+            trust / f'{outer.name}.completion.json',
+            outer / 'metadata.json', outer / 'validation.json',
+            outer / 'case' / 'metadata.json',
+            outer / 'case' / 'validation.json',
+            outer / 'code_snapshot_manifest.json',
+            outer / 'input_snapshot_manifest.json',
+            outer / 'code_hashes.json', outer / 'input_hashes.json',
+            outer / 'input_snapshot' / 'phase5g_cases.json',
+            outer / 'evidence_hashes.json',
+            outer / 'case' / 'evidence_hashes.json',
+            outer / 'case' / 'trace.jsonl',
+        ))
+        counts = {path: 0 for path in targets}
+        original_open = Path.open
+
+        def counting_open(path, *args, **kwargs):
+            resolved = Path(path).resolve()
+            if resolved in counts:
+                counts[resolved] += 1
+            return original_open(path, *args, **kwargs)
+
+        with patch.object(Path, 'open', new=counting_open):
+            gui.load_simple_trace_source(outer, self.paths, self.config)
+        for path, count in counts.items():
+            with self.subTest(path=path):
+                self.assertEqual(count, 1)
+
+    def test_outer_metadata_consumes_the_same_bytes_that_were_hashed(self):
+        outer = self.make_outer('replace-between-hash-and-parse')
+        target = (outer / 'metadata.json').resolve()
+        original = target.read_bytes()
+        replacement = json.loads(original.decode('utf-8'))
+        replacement['diagnostic_marker'] = 'unverified replacement'
+        replacement_bytes = json.dumps(replacement).encode('utf-8')
+        original_open = Path.open
+        open_count = 0
+
+        def replacing_open(path, mode='r', *args, **kwargs):
+            nonlocal open_count
+            if Path(path).resolve() == target:
+                open_count += 1
+                if open_count > 1:
+                    if 'b' in mode:
+                        return io.BytesIO(replacement_bytes)
+                    return io.StringIO(replacement_bytes.decode('utf-8'))
+            return original_open(path, mode, *args, **kwargs)
+
+        with patch.object(Path, 'open', new=replacing_open):
+            source = gui.load_simple_trace_source(
+                outer, self.paths, self.config)
+        self.assertEqual(open_count, 1)
+        self.assertNotIn('diagnostic_marker', source.metadata)
 
     def test_trace_requires_exact_nine_field_vehicle_states(self):
         mutations = {
@@ -821,6 +965,46 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
                 path.write_text(json.dumps(value), encoding='utf-8')
                 self.reseal_trusted(outer)
                 self.assert_trace_failure_before_gui(outer, pattern)
+
+    def test_child_execution_parameters_are_bound_to_anchored_input(self):
+        simple_fields = (
+            'simple_formation_local_range_m',
+            'simple_formation_adjacent_gap_m',
+            'simple_formation_same_gap_m',
+            'simple_formation_position_tolerance_m',
+            'simple_formation_accel_limit_mps2',
+            'simple_formation_max_lane_changes',
+        )
+        mutations = [
+            (container, field, 2 if field.endswith('lane_changes') else 99.0)
+            for container in ('parameters', 'policy_parameters')
+            for field in simple_fields
+        ]
+        mutations.extend((
+            ('parameters', 'simple_formation_enabled', False),
+            ('policy_parameters', 'simple_formation_enabled', False),
+            ('parameters', 'noa_target_speed_mps', 11.0),
+            ('policy_parameters', 'noa_target_speed_mps', 11.0),
+        ))
+        for index, (container, field, replacement) in enumerate(mutations):
+            with self.subTest(container=container, field=field):
+                outer = self.make_outer(f'child-parameter-{index}')
+                metadata_path = outer / 'case' / 'metadata.json'
+                metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+                metadata[container][field] = replacement
+                metadata_path.write_text(json.dumps(metadata), encoding='utf-8')
+                self.reseal_trusted(outer)
+                self.assert_loader_failure_before_gui(outer, field)
+
+        for index, field in enumerate(('case_seed', 'vehicle_count')):
+            with self.subTest(field=field):
+                outer = self.make_outer(f'child-provenance-{index}')
+                metadata_path = outer / 'case' / 'metadata.json'
+                metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
+                metadata['case']['private_rng_provenance'][field] += 1
+                metadata_path.write_text(json.dumps(metadata), encoding='utf-8')
+                self.reseal_trusted(outer)
+                self.assert_loader_failure_before_gui(outer, field)
 
     def test_trace_requires_json_objects_and_completed_frame_structure(self):
         invalid_rows = (
@@ -1325,6 +1509,44 @@ class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
                 self.assertEqual(metadata['status'], expected_status)
                 if expected_status != 'failed':
                     self.assertNotIn('traceback', metadata)
+
+    def test_user_close_during_owned_session_cleanup_is_user_closed(self):
+        outer = self.make_outer('close-during-default-wait')
+        source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        generated = gui.GeneratedSimpleTrace(outer.resolve(), source)
+
+        class FatalTraCIError(Exception):
+            pass
+
+        connection = MagicMock()
+        connection.close.side_effect = FatalTraCIError(
+            'connection closed by peer')
+        process = MagicMock()
+        process.poll.return_value = None
+        log = MagicMock()
+        session = gui.OwnedGuiSession(connection, process, log)
+        stats = gui.PlaybackStats(2, 0.1, 0, 0, 'trace_completed')
+        caught = None
+        try:
+            with patch.object(
+                    gui, 'validate_simple_config', return_value=self.paths), \
+                    patch.object(gui, 'play_algorithm', return_value=stats):
+                run_dir = gui.run_simple_formation_demo(
+                    self.config, self.root,
+                    generator=lambda *args: generated,
+                    runtime=lambda *args: session,
+                    input_fn=lambda prompt: '', output_fn=lambda line: None)
+        except RuntimeError as error:
+            caught = error
+            run_dir = sorted(
+                (self.root / 'results' / 'demo_runs').iterdir())[-1]
+        metadata = json.loads(
+            (run_dir / 'run_metadata.json').read_text(encoding='utf-8'))
+        self.assertEqual(metadata['status'], 'user_closed')
+        self.assertNotIn('traceback', metadata)
+        self.assertIsNone(caught)
+        process.terminate.assert_called_once()
+        log.close.assert_called_once()
 
     def test_generation_failure_never_creates_demo_run_or_starts_gui(self):
         runtime = MagicMock()

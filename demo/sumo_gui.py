@@ -2,7 +2,6 @@
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import hashlib
-import io
 import json
 import math
 import os
@@ -28,6 +27,10 @@ EVIDENCE_MANIFEST_SHA256 = (
 )
 SIMPLE_VARIANT_REL = Path('variants/phase5g_pure_formation')
 SIMPLE_OUTPUT_BASE = Path('results/phase5g/simple_gui_sources')
+_PLAYBACK_STATE_FIELDS = (
+    'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps',
+    'yaw_rate_radps', 'a_drive_mps2', 'steering_rad',
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,6 +85,53 @@ class SimpleCheckedPaths:
 
 
 @dataclass(frozen=True, slots=True)
+class TraceVehicleState(Mapping):
+    time_s: float
+    x_m: float
+    y_m: float
+    heading_rad: float
+    vx_mps: float
+    vy_mps: float
+    yaw_rate_radps: float
+    a_drive_mps2: float
+    steering_rad: float
+
+    def __getitem__(self, name: str) -> float:
+        if name not in _PLAYBACK_STATE_FIELDS:
+            raise KeyError(name)
+        return getattr(self, name)
+
+    def __iter__(self):
+        return iter(_PLAYBACK_STATE_FIELDS)
+
+    def __len__(self) -> int:
+        return len(_PLAYBACK_STATE_FIELDS)
+
+
+@dataclass(frozen=True, slots=True)
+class FrozenActorStates(Mapping):
+    entries: tuple[tuple[str, TraceVehicleState], ...]
+
+    def __getitem__(self, actor: str) -> TraceVehicleState:
+        for name, state in self.entries:
+            if name == actor:
+                return state
+        raise KeyError(actor)
+
+    def __iter__(self):
+        return (name for name, _ in self.entries)
+
+    def __len__(self) -> int:
+        return len(self.entries)
+
+
+@dataclass(frozen=True, slots=True)
+class TraceFrame:
+    time_s: float
+    states: Mapping[str, Mapping[str, float]]
+
+
+@dataclass(frozen=True, slots=True)
 class TraceSource:
     case_name: str
     case_dir: Path
@@ -90,7 +140,7 @@ class TraceSource:
     validation: Mapping
     evidence_status: str
     actors: tuple[str, ...]
-    verified_trace_bytes: bytes | None = None
+    frames: tuple[TraceFrame, ...] | None = None
     trace_sha256: str | None = None
 
 
@@ -98,12 +148,6 @@ class TraceSource:
 class GeneratedSimpleTrace:
     outer_path: Path
     source: TraceSource
-
-
-@dataclass(frozen=True, slots=True)
-class TraceFrame:
-    time_s: float
-    states: Mapping[str, Mapping[str, float]]
 
 
 @dataclass(frozen=True, slots=True)
@@ -184,7 +228,11 @@ def validate_simple_config(
         'SIMULATION_DURATION_S', config.simulation_duration_s, 0.0, math.inf)
     if config.simulation_duration_s <= 0:
         raise ValueError('SIMULATION_DURATION_S 必须是正的有限数字')
-    intervals = round(config.simulation_duration_s / 0.1)
+    interval_ratio = config.simulation_duration_s / 0.1
+    if not math.isfinite(interval_ratio):
+        raise ValueError(
+            'SIMULATION_DURATION_S 与 0.1 秒换算后的周期数必须是有限数字')
+    intervals = round(interval_ratio)
     if not math.isclose(intervals * 0.1, config.simulation_duration_s,
                         abs_tol=1e-9, rel_tol=0.0):
         raise ValueError('SIMULATION_DURATION_S 必须是 0.1 秒的完整倍数')
@@ -406,18 +454,27 @@ def _frame_time(states: Mapping[str, Mapping[str, float]]) -> float:
     return times[0]
 
 
+def _freeze_trace_frame(
+        time_s: float, states: Mapping[str, Mapping[str, float]],
+        actors: tuple[str, ...]) -> TraceFrame:
+    frozen = FrozenActorStates(tuple(
+        (actor, TraceVehicleState(**{
+            name: float(states[actor][name]) for name in _PLAYBACK_STATE_FIELDS
+        }))
+        for actor in actors
+    ))
+    return TraceFrame(float(time_s), frozen)
+
+
 def iter_trace_frames(source: TraceSource) -> Iterator[TraceFrame]:
     """Yield initial and completed control-frame states, preserving failed tails."""
+    if source.frames is not None:
+        yield from source.frames
+        return
     expected_actors = set(source.actors)
     saw_initial = False
     previous_time = -math.inf
-    if source.verified_trace_bytes is None:
-        stream = source.trace_path.open(encoding='utf-8')
-    else:
-        actual_digest = hashlib.sha256(source.verified_trace_bytes).hexdigest()
-        if source.trace_sha256 != actual_digest:
-            raise RuntimeError('不可变trace字节与保存的SHA-256不一致')
-        stream = io.StringIO(source.verified_trace_bytes.decode('utf-8'))
+    stream = source.trace_path.open(encoding='utf-8')
     with stream:
         for line_number, line in enumerate(stream, start=1):
             if not line.strip():
@@ -431,7 +488,7 @@ def iter_trace_frames(source: TraceSource) -> Iterator[TraceFrame]:
                 if not isinstance(initial, dict) or set(initial) != expected_actors:
                     raise ValueError('trace初始车辆集合与metadata不一致')
                 previous_time = _frame_time(initial)
-                yield TraceFrame(previous_time, initial)
+                yield _freeze_trace_frame(previous_time, initial, source.actors)
                 saw_initial = True
             status = record.get('status')
             if status != 'completed':
@@ -448,7 +505,7 @@ def iter_trace_frames(source: TraceSource) -> Iterator[TraceFrame]:
             time_s = _frame_time(states)
             if time_s <= previous_time:
                 raise ValueError(f'trace第{line_number}行时间未严格递增')
-            yield TraceFrame(time_s, states)
+            yield _freeze_trace_frame(time_s, states, source.actors)
             previous_time = time_s
     if not saw_initial:
         raise ValueError('trace.jsonl 没有轨迹记录')
@@ -483,10 +540,54 @@ def _reject_json_constant(value):
     raise ValueError(f'禁止非有限JSON常量 {value}')
 
 
-def _read_strict_object(path: Path, label: str, fields=None) -> dict:
+@dataclass(frozen=True, slots=True)
+class _FileSnapshot:
+    sha256: str
+    data: bytes | None
+
+
+def _file_cache_key(path: Path) -> Path:
+    return Path(os.path.abspath(path))
+
+
+def _read_file_snapshot(
+        path: Path, label: str,
+        cache: dict[Path, _FileSnapshot] | None = None) -> _FileSnapshot:
+    key = _file_cache_key(path)
+    if cache is not None and key in cache:
+        snapshot = cache[key]
+        if snapshot.data is None:
+            raise RuntimeError(f'{label}已散列但未缓存同一份解析字节')
+        return snapshot
     try:
+        with key.open('rb') as stream:
+            data = stream.read()
+    except OSError as error:
+        raise RuntimeError(f'{label}无法读取: {key}') from error
+    snapshot = _FileSnapshot(hashlib.sha256(data).hexdigest(), data)
+    if cache is not None:
+        cache[key] = snapshot
+    return snapshot
+
+
+def _cached_file_sha256(
+        path: Path, cache: dict[Path, _FileSnapshot] | None) -> str:
+    key = _file_cache_key(path)
+    if cache is not None and key in cache:
+        return cache[key].sha256
+    digest = sha256_file(key)
+    if cache is not None:
+        cache[key] = _FileSnapshot(digest, None)
+    return digest
+
+
+def _read_strict_object(
+        path: Path, label: str, fields=None,
+        cache: dict[Path, _FileSnapshot] | None = None) -> dict:
+    try:
+        snapshot = _read_file_snapshot(path, label, cache)
         value = json.loads(
-            Path(path).read_text(encoding='utf-8-sig'),
+            snapshot.data.decode('utf-8-sig'),
             parse_constant=_reject_json_constant)
     except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as error:
         raise RuntimeError(f'{label}不是有效JSON对象: {error}') from error
@@ -548,7 +649,11 @@ def _resolve_result_directory(path: Path, boundary: Path, label: str) -> Path:
     return resolved
 
 
-def _regular_file_manifest(path: Path, label: str) -> dict[str, dict[str, str]]:
+def _regular_file_manifest(
+        path: Path, label: str, *,
+        cache: dict[Path, _FileSnapshot] | None = None,
+        deferred_hashes: Mapping[str, str] | None = None
+        ) -> dict[str, dict[str, str]]:
     """Describe one exact regular-file tree without following reparse points."""
     root = Path(os.path.abspath(path))
     try:
@@ -588,8 +693,15 @@ def _regular_file_manifest(path: Path, label: str) -> dict[str, dict[str, str]]:
                     raise RuntimeError(
                         f'{label}存在大小写路径冲突: {collision}, {relative}')
                 folded[relative.casefold()] = relative
-                files[relative] = {
-                    'sha256': sha256_file(candidate), 'type': 'regular'}
+                deferred = (deferred_hashes or {}).get(relative)
+                if deferred is not None:
+                    if not _valid_digest(deferred):
+                        raise RuntimeError(
+                            f'{label}.{relative}的延迟SHA-256无效')
+                    digest = deferred
+                else:
+                    digest = _cached_file_sha256(candidate, cache)
+                files[relative] = {'sha256': digest, 'type': 'regular'}
             else:
                 raise RuntimeError(f'{label}.{relative}不是普通文件')
 
@@ -652,14 +764,20 @@ def _bind_hash_map(hashes: dict, manifest: dict, label: str) -> None:
             raise RuntimeError(f'{label}.{name}与snapshot manifest不一致')
 
 
-def _verify_sealed_directory(path: Path) -> Mapping[str, str]:
+def _verify_sealed_directory(
+        path: Path, *, cache: dict[Path, _FileSnapshot] | None = None,
+        deferred_hashes: Mapping[str, str] | None = None) -> Mapping[str, str]:
     """Verify one exact regular-file tree against its local evidence seal."""
     root = Path(os.path.abspath(path))
     manifest_path = root / 'evidence_hashes.json'
-    actual = _regular_file_manifest(root, '证据目录')
+    _read_file_snapshot(
+        manifest_path, '证据清单 evidence_hashes.json', cache)
+    actual = _regular_file_manifest(
+        root, '证据目录', cache=cache, deferred_hashes=deferred_hashes)
     if 'evidence_hashes.json' not in actual:
         raise RuntimeError('证据目录缺少 evidence_hashes.json')
-    hashes = _read_strict_object(manifest_path, 'evidence_hashes.json')
+    hashes = _read_strict_object(
+        manifest_path, 'evidence_hashes.json', cache=cache)
     expected = {
         name: entry['sha256'] for name, entry in actual.items()
         if name != 'evidence_hashes.json'
@@ -677,8 +795,10 @@ def _verify_sealed_directory(path: Path) -> Mapping[str, str]:
 
 
 def _verify_simple_trust(
-        outer: Path, paths: SimpleCheckedPaths) -> tuple[dict, str]:
+        outer: Path, paths: SimpleCheckedPaths
+        ) -> tuple[dict, str, dict[Path, _FileSnapshot]]:
     """Verify sibling content-integrity anchors, not signatures, before child parsing."""
+    cache = {}
     trust = outer.parent / '.phase5g-trust'
     source_path = _require_regular_file(
         trust / f'{outer.name}.json', paths.variant_results,
@@ -687,9 +807,9 @@ def _verify_simple_trust(
         trust / f'{outer.name}.completion.json', paths.variant_results,
         'completion anchor')
     source = _read_strict_object(
-        source_path, 'source anchor', _SOURCE_ANCHOR_FIELDS)
+        source_path, 'source anchor', _SOURCE_ANCHOR_FIELDS, cache)
     completion = _read_strict_object(
-        completion_path, 'completion anchor', _COMPLETION_ANCHOR_FIELDS)
+        completion_path, 'completion anchor', _COMPLETION_ANCHOR_FIELDS, cache)
     if source['schema'] != 'phase5g_external_trust_anchor_v2' \
             or source['run_id'] != outer.name:
         raise RuntimeError('source anchor的schema或run_id不一致')
@@ -699,7 +819,8 @@ def _verify_simple_trust(
             or completion['source_anchor_schema'] != source['schema'] \
             or completion['child_directory'] != 'case':
         raise RuntimeError('completion anchor的schema、run_id或child_directory不一致')
-    if completion['source_anchor_sha256'] != sha256_file(source_path):
+    if completion['source_anchor_sha256'] \
+            != cache[_file_cache_key(source_path)].sha256:
         raise RuntimeError('completion anchor的source anchor SHA-256不一致')
     for name in ('source_manifest_sha256', 'input_manifest_sha256'):
         if completion[name] != source[name] or not _valid_digest(source[name]):
@@ -708,12 +829,12 @@ def _verify_simple_trust(
     code_manifest = _validate_snapshot_manifest(
         _read_strict_object(
             outer / 'code_snapshot_manifest.json',
-            'code snapshot manifest'),
+            'code snapshot manifest', cache=cache),
         'code snapshot manifest')
     input_manifest = _validate_snapshot_manifest(
         _read_strict_object(
             outer / 'input_snapshot_manifest.json',
-            'input snapshot manifest'),
+            'input snapshot manifest', cache=cache),
         'input snapshot manifest')
     anchored_code_manifest = _validate_snapshot_manifest(
         source['code_snapshot_manifest'], 'source anchor.code snapshot manifest')
@@ -727,18 +848,23 @@ def _verify_simple_trust(
         raise RuntimeError('code snapshot manifest根SHA-256不一致')
     if _json_digest(input_manifest) != source['input_manifest_sha256']:
         raise RuntimeError('input snapshot manifest根SHA-256不一致')
+    _read_file_snapshot(
+        outer / 'input_snapshot' / 'phase5g_cases.json',
+        'input_snapshot.phase5g_cases.json', cache)
     if code_manifest != _regular_file_manifest(
-            outer / 'code_snapshot', 'code snapshot'):
+            outer / 'code_snapshot', 'code snapshot', cache=cache):
         raise RuntimeError('code snapshot完整文件manifest不一致')
     if input_manifest != _regular_file_manifest(
-            outer / 'input_snapshot', 'input snapshot'):
+            outer / 'input_snapshot', 'input snapshot', cache=cache):
         raise RuntimeError('input snapshot完整文件manifest不一致')
 
     code_hashes = _validate_hash_map(
-        _read_strict_object(outer / 'code_hashes.json', 'code_hashes.json'),
+        _read_strict_object(
+            outer / 'code_hashes.json', 'code_hashes.json', cache=cache),
         'code_hashes.json')
     input_hashes = _validate_hash_map(
-        _read_strict_object(outer / 'input_hashes.json', 'input_hashes.json'),
+        _read_strict_object(
+            outer / 'input_hashes.json', 'input_hashes.json', cache=cache),
         'input_hashes.json')
     anchored_code = _validate_hash_map(source['source_hashes'],
                                        'source anchor.source_hashes')
@@ -759,35 +885,56 @@ def _verify_simple_trust(
         completion['child_manifest'], 'completion anchor.child manifest')
     if _json_digest(child_manifest) != completion['child_manifest_sha256']:
         raise RuntimeError('completion anchor的child manifest根SHA-256不一致')
-    actual_child = _regular_file_manifest(outer / 'case', 'case child manifest')
+    trace_entry = child_manifest.get('trace.jsonl')
+    if not isinstance(trace_entry, dict) or not _valid_digest(
+            trace_entry.get('sha256')):
+        raise RuntimeError('completion anchor的child manifest缺少trace.jsonl')
+    trace_sha256 = trace_entry['sha256']
+    for name in ('metadata.json', 'validation.json'):
+        _read_file_snapshot(
+            outer / 'case' / name, f'case {name}', cache)
+    _read_file_snapshot(
+        outer / 'case' / 'evidence_hashes.json',
+        'case evidence_hashes.json', cache)
+    actual_child = _regular_file_manifest(
+        outer / 'case', 'case child manifest', cache=cache,
+        deferred_hashes={'trace.jsonl': trace_sha256})
     if child_manifest != actual_child:
         raise RuntimeError('completion anchor的child manifest与实际case不一致')
-    evidence = _verify_sealed_directory(outer)
+    _verify_sealed_directory(
+        outer / 'case', cache=cache,
+        deferred_hashes={'trace.jsonl': trace_sha256})
+    for name in ('metadata.json', 'validation.json'):
+        _read_file_snapshot(outer / name, f'outer {name}', cache)
+    evidence = _verify_sealed_directory(
+        outer, cache=cache,
+        deferred_hashes={'case/trace.jsonl': trace_sha256})
     anchored_evidence = completion['outer_evidence_hashes']
     if not isinstance(anchored_evidence, dict) or evidence != anchored_evidence:
         raise RuntimeError('completion anchor的outer evidence清单不一致')
     if _json_digest(evidence) != completion['outer_evidence_manifest_sha256']:
         raise RuntimeError('completion anchor的outer evidence根SHA-256不一致')
-    if sha256_file(outer / 'evidence_hashes.json') \
+    if cache[_file_cache_key(outer / 'evidence_hashes.json')].sha256 \
             != completion['outer_evidence_file_sha256']:
         raise RuntimeError('completion anchor的outer evidence文件SHA-256不一致')
-    trace_entry = child_manifest.get('trace.jsonl')
-    if not isinstance(trace_entry, dict) or not _valid_digest(
-            trace_entry.get('sha256')):
-        raise RuntimeError('completion anchor的child manifest缺少trace.jsonl')
-    return source, trace_entry['sha256']
+    return source, trace_sha256, cache
 
 
-_TRACE_STATE_FIELDS = frozenset({
-    'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps',
-    'yaw_rate_radps', 'a_drive_mps2', 'steering_rad',
-})
+_TRACE_STATE_FIELDS = frozenset(_PLAYBACK_STATE_FIELDS)
 _TRACE_STEP_FIELDS = frozenset({
     'initial', 'final', 'command', 'samples', 'dt_s',
 })
 _TRACE_COMMAND_FIELDS = frozenset({'acceleration_mps2', 'steering_rad'})
 _TRACE_RECORD_CONTAINERS = (
     'inputs', 'decisions', 'actions', 'diagnostics')
+_SIMPLE_PARAMETER_FIELDS = frozenset({
+    'simple_formation_local_range_m',
+    'simple_formation_adjacent_gap_m',
+    'simple_formation_same_gap_m',
+    'simple_formation_position_tolerance_m',
+    'simple_formation_accel_limit_mps2',
+    'simple_formation_max_lane_changes',
+})
 
 
 def _trace_number(value, label: str) -> float:
@@ -837,7 +984,7 @@ def _trace_frame_time(states, actors: tuple[str, ...], label: str) -> float:
 
 def _preflight_simple_trace(
         trace_path: Path, metadata: Mapping, actors: tuple[str, ...],
-        expected_sha256: str) -> bytes:
+        expected_sha256: str) -> tuple[tuple[TraceFrame, ...], str]:
     """Parse and validate the complete replay stream before a GUI run exists."""
     case = metadata.get('case')
     parameters = metadata.get('parameters')
@@ -876,16 +1023,20 @@ def _preflight_simple_trace(
     first_time = None
     previous_final = None
     previous_final_states = None
+    frames = []
+    trace_digest = hashlib.sha256()
     try:
-        trace_bytes = Path(trace_path).read_bytes()
-        trace_text = trace_bytes.decode('utf-8')
-    except (OSError, UnicodeError) as error:
+        stream = Path(trace_path).open('rb')
+    except OSError as error:
         raise RuntimeError(f'无法打开新轨迹trace: {trace_path}') from error
-    if hashlib.sha256(trace_bytes).hexdigest() != expected_sha256:
-        raise RuntimeError('trace字节与completion anchor绑定的SHA-256不一致')
-    stream = io.StringIO(trace_text)
     with stream:
-        for line_number, line in enumerate(stream, start=1):
+        for line_number, raw_line in enumerate(stream, start=1):
+            trace_digest.update(raw_line)
+            try:
+                line = raw_line.decode('utf-8')
+            except UnicodeError as error:
+                raise RuntimeError(
+                    f'trace第{line_number}行不是有效UTF-8') from error
             if not line.strip():
                 raise RuntimeError(f'trace第{line_number}行为空')
             try:
@@ -914,6 +1065,8 @@ def _preflight_simple_trace(
                 first_time = initial_time
                 if initial_states != case_initial:
                     raise RuntimeError('trace首行initial与case.initial不连续')
+                frames.append(_freeze_trace_frame(
+                    initial_time, initial_states, actors))
             elif not math.isclose(
                     initial_time, previous_final, abs_tol=1e-9, rel_tol=0.0) \
                     or initial_states != previous_final_states:
@@ -999,14 +1152,18 @@ def _preflight_simple_trace(
                     f'trace第{line_number}行时间未严格递增或不符合控制周期')
             previous_final = final_time
             previous_final_states = final_states
+            frames.append(_freeze_trace_frame(final_time, final_states, actors))
             count += 1
+    trace_sha256 = trace_digest.hexdigest()
+    if trace_sha256 != expected_sha256:
+        raise RuntimeError('trace字节与completion anchor绑定的SHA-256不一致')
     if count != expected_intervals:
         raise RuntimeError(f'trace区间数不完整: {count}/{expected_intervals}')
     if first_time is None or not math.isclose(
             previous_final - first_time, duration,
             abs_tol=1e-9, rel_tol=0.0):
         raise RuntimeError('trace总时长与保存duration/control dt契约不一致')
-    return trace_bytes
+    return tuple(frames), trace_sha256
 
 
 def _require_exact_field(document: Mapping, name: str, expected, label: str):
@@ -1043,6 +1200,150 @@ def _require_object_field(document: Mapping, name: str, label: str) -> dict:
     if not isinstance(value, dict):
         raise RuntimeError(f'{label}.{name}必须是JSON对象')
     return value
+
+
+def _require_exact_tree(actual, expected, label: str) -> None:
+    """Compare trusted JSON values without Python's bool/int equality alias."""
+    if type(actual) is not type(expected):
+        raise RuntimeError(
+            f'{label}类型不一致: {type(actual).__name__}/'
+            f'{type(expected).__name__}')
+    if isinstance(expected, dict):
+        if set(actual) != set(expected):
+            raise RuntimeError(f'{label}字段集合不一致')
+        for name in expected:
+            _require_exact_tree(actual[name], expected[name], f'{label}.{name}')
+    elif isinstance(expected, list):
+        if len(actual) != len(expected):
+            raise RuntimeError(f'{label}数组长度不一致')
+        for index, (left, right) in enumerate(zip(actual, expected)):
+            _require_exact_tree(left, right, f'{label}[{index}]')
+    elif actual != expected:
+        raise RuntimeError(f'{label}值与锚定输入不一致')
+
+
+def _require_bound_number(document: Mapping, name: str, expected, label: str):
+    actual = _trace_number(document.get(name), f'{label}.{name}')
+    expected_number = _trace_number(expected, f'锚定execution.{name}')
+    if actual != expected_number:
+        raise RuntimeError(f'{label}.{name}与锚定execution不一致')
+    return actual
+
+
+def _validate_anchored_simple_input(
+        outer: Path, bundle: Mapping, metadata: Mapping) -> tuple[dict, dict]:
+    label = 'input_snapshot.phase5g_cases.json'
+    _require_exact_field(bundle, 'schema', 'phase5g_simple_demo_cases_v1', label)
+    cases = bundle.get('cases')
+    if not isinstance(cases, list) or len(cases) != 1 \
+            or not isinstance(cases[0], dict):
+        raise RuntimeError(f'{label}.cases必须精确包含一个case对象')
+    case = cases[0]
+    execution = _require_object_field(bundle, 'execution', label)
+    execution_label = f'{label}.execution'
+    _require_exact_field(
+        execution, 'schema', 'phase5g_simple_demo_execution_v1', execution_label)
+    _require_exact_field(execution, 'case_directory', 'case', execution_label)
+    _require_exact_field(execution, 'parent_run_id', outer.name, execution_label)
+    _require_exact_field(execution, 'mode', 'lane_priority', execution_label)
+    _require_exact_field(
+        execution, 'simple_formation_enabled', True, execution_label)
+    count = _require_exact_int_field(
+        execution, 'vehicle_count', execution_label, minimum=1)
+    seed = _require_exact_int_field(
+        execution, 'case_seed', execution_label, maximum=2**64 - 1)
+    target = _require_positive_number_field(
+        execution, 'target_speed_mps', execution_label)
+    duration = _require_positive_number_field(execution, 'duration_s', execution_label)
+    simple = _require_object_field(execution, 'simple_parameters', execution_label)
+    if set(simple) != _SIMPLE_PARAMETER_FIELDS:
+        raise RuntimeError(f'{execution_label}.simple_parameters字段集不一致')
+    for name in _SIMPLE_PARAMETER_FIELDS - {'simple_formation_max_lane_changes'}:
+        _require_positive_number_field(simple, name, f'{execution_label}.simple_parameters')
+    if _require_exact_int_field(
+            simple, 'simple_formation_max_lane_changes',
+            f'{execution_label}.simple_parameters', minimum=1) != 1:
+        raise RuntimeError(
+            f'{execution_label}.simple_parameters.'
+            'simple_formation_max_lane_changes必须为1')
+    _require_exact_tree(
+        metadata.get('execution'), execution, '新轨迹metadata.execution')
+    bindings = {
+        'vehicle_count': count, 'seed': seed,
+        'target_speed_mps': target, 'duration_s': duration,
+        'simple_parameters': simple,
+    }
+    for name, expected in bindings.items():
+        if name == 'simple_parameters':
+            _require_exact_tree(metadata[name], expected, f'新轨迹metadata.{name}')
+        elif metadata[name] != expected:
+            raise RuntimeError(f'新轨迹metadata.{name}与锚定execution不一致')
+
+    _require_exact_field(case, 'name', execution.get('case_name'), f'{label}.cases[0]')
+    controlled = case.get('controlled')
+    if not isinstance(controlled, list) or len(controlled) != count:
+        raise RuntimeError(f'{label}.cases[0].controlled与vehicle_count不一致')
+    provenance = _require_object_field(
+        case, 'private_rng_provenance', f'{label}.cases[0]')
+    if _require_exact_int_field(
+            provenance, 'case_seed', f'{label}.cases[0].private_rng_provenance',
+            maximum=2**64 - 1) != seed:
+        raise RuntimeError(
+            f'{label}.cases[0].private_rng_provenance.case_seed不一致')
+    if _require_exact_int_field(
+            provenance, 'vehicle_count',
+            f'{label}.cases[0].private_rng_provenance', minimum=1) != count:
+        raise RuntimeError(
+            f'{label}.cases[0].private_rng_provenance.vehicle_count不一致')
+    return case, execution
+
+
+def _validate_child_execution_bindings(
+        metadata: Mapping, input_case: Mapping, execution: Mapping) -> None:
+    case = metadata['case']
+    child_controlled = case.get('controlled')
+    child_initial = case.get('initial')
+    if not isinstance(child_controlled, list) \
+            or not isinstance(child_initial, dict) \
+            or set(child_initial) != set(child_controlled) \
+            or case.get('scripts') != {}:
+        raise RuntimeError('case metadata.case必须全量受控且不得含背景或脚本车辆')
+    input_provenance = input_case['private_rng_provenance']
+    child_provenance = _require_object_field(
+        case, 'private_rng_provenance', 'case metadata.case')
+    for name in ('case_seed', 'vehicle_count'):
+        actual = _require_exact_int_field(
+            child_provenance, name, 'case metadata.case.private_rng_provenance',
+            maximum=2**64 - 1)
+        expected = input_provenance[name]
+        if actual != expected:
+            raise RuntimeError(
+                f'case metadata.case.private_rng_provenance.{name}'
+                '与锚定输入不一致')
+    _require_exact_tree(case, input_case, 'case metadata.case')
+    _require_exact_tree(
+        metadata.get('private_rng_provenance'), input_provenance,
+        'case metadata.private_rng_provenance')
+
+    simple = execution['simple_parameters']
+    for container_name in ('parameters', 'policy_parameters'):
+        container = _require_object_field(
+            metadata, container_name, 'case metadata')
+        label = f'case metadata.{container_name}'
+        _require_exact_field(
+            container, 'simple_formation_enabled', True, label)
+        _require_bound_number(
+            container, 'noa_target_speed_mps',
+            execution['target_speed_mps'], label)
+        for name in _SIMPLE_PARAMETER_FIELDS:
+            expected = simple[name]
+            if name == 'simple_formation_max_lane_changes':
+                actual = _require_exact_int_field(
+                    container, name, label, minimum=1)
+                if actual != expected:
+                    raise RuntimeError(f'{label}.{name}与锚定execution不一致')
+            else:
+                _require_bound_number(container, name, expected, label)
 
 
 def _validate_outer_simple_documents(
@@ -1158,26 +1459,33 @@ def load_simple_trace_source(
     """Load only a newly generated, sealed Phase5G simple-formation trace."""
     outer = _resolve_result_directory(
         outer_path, paths.variant_results, '结果路径')
-    source_anchor, expected_trace_sha256 = _verify_simple_trust(outer, paths)
+    source_anchor, expected_trace_sha256, cache = _verify_simple_trust(
+        outer, paths)
     metadata = _read_strict_object(
-        outer / 'metadata.json', '新轨迹metadata')
+        outer / 'metadata.json', '新轨迹metadata', cache=cache)
     validation = _read_strict_object(
-        outer / 'validation.json', '新轨迹validation')
+        outer / 'validation.json', '新轨迹validation', cache=cache)
     _validate_outer_simple_documents(outer, metadata, validation, config)
     if metadata.get('case_file_sha256') != source_anchor['case_file_sha256']:
         raise RuntimeError('新轨迹metadata.case_file_sha256与source anchor不一致')
     if _json_digest(metadata.get('mode_registry')) \
             != source_anchor['mode_registry_sha256']:
         raise RuntimeError('新轨迹metadata.mode_registry与source anchor不一致')
+    input_bundle = _read_strict_object(
+        outer / 'input_snapshot' / 'phase5g_cases.json',
+        'input_snapshot.phase5g_cases.json', cache=cache)
+    input_case, execution = _validate_anchored_simple_input(
+        outer, input_bundle, metadata)
 
     case_dir = _resolve_result_directory(outer / 'case', outer, 'case目录')
-    _verify_sealed_directory(case_dir)
     child_metadata = _read_strict_object(
-        case_dir / 'metadata.json', 'case metadata')
+        case_dir / 'metadata.json', 'case metadata', cache=cache)
     child_validation = _read_strict_object(
-        case_dir / 'validation.json', 'case validation')
+        case_dir / 'validation.json', 'case validation', cache=cache)
     _validate_child_simple_documents(
         outer, child_metadata, child_validation)
+    _validate_child_execution_bindings(
+        child_metadata, input_case, execution)
     case = child_metadata['case']
     controlled = case.get('controlled')
     if not isinstance(controlled, list) or not controlled \
@@ -1206,15 +1514,14 @@ def load_simple_trace_source(
     trace_path = case_dir / 'trace.jsonl'
     if not trace_path.is_file():
         raise FileNotFoundError(f'新轨迹trace缺失: {trace_path}')
-    verified_trace_bytes = _preflight_simple_trace(
+    frames, trace_sha256 = _preflight_simple_trace(
         trace_path, child_metadata, actors, expected_trace_sha256)
-    trace_sha256 = hashlib.sha256(verified_trace_bytes).hexdigest()
     source = TraceSource(
         case_name=case['name'],
         case_dir=case_dir, trace_path=trace_path,
         metadata=child_metadata, validation=child_validation,
         evidence_status='completed', actors=actors,
-        verified_trace_bytes=verified_trace_bytes,
+        frames=frames,
         trace_sha256=trace_sha256)
     return source
 
@@ -1434,10 +1741,12 @@ class OwnedGuiSession:
 
     def __exit__(self, exc_type, exc, tb):
         cleanup_errors = []
+        cleanup_exceptions = []
         try:
             self.connection.close(False)
         except Exception as error:
             cleanup_errors.append(f'close: {type(error).__name__}: {error}')
+            cleanup_exceptions.append(error)
         try:
             if self.process.poll() is None:
                 self.process.terminate()
@@ -1448,12 +1757,15 @@ class OwnedGuiSession:
                     self.process.wait(timeout=10)
         except Exception as error:
             cleanup_errors.append(f'process: {type(error).__name__}: {error}')
+            cleanup_exceptions.append(error)
         try:
             self.log.close()
         except Exception as error:
             cleanup_errors.append(f'log: {type(error).__name__}: {error}')
+            cleanup_exceptions.append(error)
         if cleanup_errors and exc_type is None:
-            raise RuntimeError('; '.join(cleanup_errors))
+            raise RuntimeError('; '.join(cleanup_errors)) \
+                from cleanup_exceptions[0]
         return False
 
 
@@ -1520,9 +1832,17 @@ def _finish_metadata(path: Path, metadata: dict, status: str, **fields):
 
 
 def _is_user_closed(error: BaseException) -> bool:
-    text = str(error).lower()
-    return type(error).__name__ == 'FatalTraCIError' and any(
-        marker in text for marker in ('connection closed', 'peer shutdown', 'tcpip'))
+    seen = set()
+    current = error
+    while current is not None and id(current) not in seen:
+        seen.add(id(current))
+        text = str(current).lower()
+        if type(current).__name__ == 'FatalTraCIError' and any(
+                marker in text for marker in (
+                    'connection closed', 'peer shutdown', 'tcpip')):
+            return True
+        current = current.__cause__ or current.__context__
+    return False
 
 
 def _wait_if_requested(config: DemoConfig, input_fn, output_fn):
@@ -1647,9 +1967,8 @@ def run_simple_formation_demo(
         return generated.outer_path
 
     source = generated.source
-    if source.verified_trace_bytes is None or source.trace_sha256 \
-            != hashlib.sha256(source.verified_trace_bytes).hexdigest():
-        raise RuntimeError('simple formation缺少已验证的不可变trace字节')
+    if not source.frames or not _valid_digest(source.trace_sha256):
+        raise RuntimeError('simple formation缺少已验证的不可变控制帧')
     run_dir = create_run_directory(paths.root, 'simple_formation')
     route_path = run_dir / 'simple_formation.rou.xml'
     config_path = run_dir / 'simple_formation.sumocfg'
