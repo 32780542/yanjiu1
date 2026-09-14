@@ -156,11 +156,14 @@ def choose_lane(
     )
     if not adjacent:
         return LaneDecision(None, "no_adjacent_lane", counts)
-    minimum = min(counts[lane] for lane in adjacent)
-    targets = tuple(lane for lane in adjacent if counts[lane] == minimum)
+    candidates = tuple(
+        lane for lane in adjacent if counts[lane] < counts[ego_lane_index]
+    )
+    if not candidates:
+        return LaneDecision(None, "no_less_populated_adjacent_lane", counts)
+    minimum = min(counts[lane] for lane in candidates)
+    targets = tuple(lane for lane in candidates if counts[lane] == minimum)
     if len(targets) != 1:
         return LaneDecision(None, "adjacent_lane_tie", counts)
     target = targets[0]
-    if counts[target] >= counts[ego_lane_index]:
-        return LaneDecision(None, "no_less_populated_adjacent_lane", counts)
     return LaneDecision(target, "simple_formation_balance", counts)

@@ -154,8 +154,12 @@ class SimpleFormationRuleTests(unittest.TestCase):
     def test_longitudinal_threshold_is_strict_and_uses_adjacent_gap(self):
         at_upper = self.vehicle(1, 17.0, 1, speed=20.2)
         over_upper = self.vehicle(2, 17.01, 1, speed=10.0)
+        at_lower = self.vehicle(3, 28.0, 0, speed=20.3)
+        below_lower = self.vehicle(4, 27.99, 0, speed=20.3)
         self.assertAlmostEqual(longitudinal_increment(0.0, 20.0, 0, at_upper, self.p), 0.2)
         self.assertEqual(longitudinal_increment(0.0, 20.0, 0, over_upper, self.p), 0.5)
+        self.assertAlmostEqual(longitudinal_increment(0.0, 20.0, 0, at_lower, self.p), 0.3)
+        self.assertEqual(longitudinal_increment(0.0, 20.0, 0, below_lower, self.p), -0.5)
 
     def test_lane_balance_moves_local_rear_vehicle_to_unique_less_populated_side(self):
         rows = (
@@ -170,7 +174,15 @@ class SimpleFormationRuleTests(unittest.TestCase):
         rows = (self.vehicle(1, 10.0, 1), self.vehicle(2, 20.0, 1))
         decision = choose_lane(0.0, 1, rows, self.centers, False, self.p)
         self.assertIsNone(decision.target_lane_index)
+        self.assertEqual(decision.reason, "adjacent_lane_tie")
         self.assertEqual(decision.counts, (0, 3, 0))
+
+    def test_lane_balance_reports_no_candidate_when_neither_adjacent_lane_is_strictly_less(self):
+        rows = (self.vehicle(1, 10.0, 0), self.vehicle(2, 10.0, 2))
+        decision = choose_lane(0.0, 1, rows, self.centers, False, self.p)
+        self.assertIsNone(decision.target_lane_index)
+        self.assertEqual(decision.reason, "no_less_populated_adjacent_lane")
+        self.assertEqual(decision.counts, (1, 1, 1))
 
     def test_lane_balance_requires_ego_to_be_local_rear_most(self):
         rows = (
