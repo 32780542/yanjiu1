@@ -290,6 +290,37 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(decision.memory.plan, plan)
         self.assertEqual(decision.memory.own_behavior, "EXECUTE_LC")
 
+    def test_active_simple_fallback_guard_reports_the_executed_acceleration(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = SimpleFormationMemory(
+            (),
+            "EXECUTE_LC",
+            plan=plan,
+            target_y_m=CENTERS_M[1],
+            prepare_since_s=0.0,
+            lane_change_reason="simple_formation_balance",
+        )
+        fallback_accepted = {
+            **SAFE,
+            "reason": "fallback_swept_prediction_clear",
+            "checked_s": 4.0,
+        }
+        with patch(
+            "noa.controller.verify_candidate",
+            side_effect=(REJECTED, fallback_accepted),
+        ) as guard:
+            decision = decide(
+                self.control(time_s=1.0, x=120.0, lane=0, memory=memory), self.p
+            )
+
+        self.assertEqual(guard.call_count, 2)
+        fallback_acceleration = guard.call_args_list[1].args[3]
+        self.assertEqual(decision.action.acceleration_mps2, fallback_acceleration)
+        self.assertEqual(fallback_acceleration, -self.p["comfort_braking_mps2"])
+        public_guard = decision.diagnostics["simple_formation"]["guard"]
+        self.assertEqual(public_guard["kind"], "active_plan")
+        self.assertIs(public_guard["result"], fallback_accepted)
+
     def test_emergency_and_base_overtake_motivation_preempt_simple_rules(self):
         close = self.neighbor(3, 8.0, 0, speed=0.0)
         with patch(

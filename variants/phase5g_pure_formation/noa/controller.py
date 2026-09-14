@@ -329,7 +329,10 @@ def decide(control, parameters):
                 diagnostics["simple_formation"].update(
                     reference_reason="active_plan",
                     lane_reason="active_plan",
-                    guard={"kind": "active_plan", "result": prediction},
+                    guard={
+                        "kind": "active_plan",
+                        "result": diagnostics.get("fallback_prediction", prediction),
+                    },
                 )
             return NoaDecision(action, replace(memory, own_behavior=state), diagnostics)
     if r5_enabled:
