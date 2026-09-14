@@ -82,4 +82,4 @@ python -I -B -S run.py verify
 
 `build`只生成四档600 s需求，不运行实验矩阵。`smoke`只用1250 veh/(lane·h)的前60 s计划，加一个单独终止车道探针，并最多排空至240 s。各档CSV为共同到达计划；`.types.csv`是真实类型的离线初始化标签，不可进入邻车观测；`.rou.xml`为原生拓扑测试适配，不是NOA实现。所有方法后续必须复用相同需求文件。
 
-运行日志保存在`results/phase0`、`results/phase1`与`results/phase2`；阶段2每次尝试在runs或replays下独立建档，最终验收引用固定run_id。冒烟重复运行前，旧目录会归档至`results/phase1/smoke_history`；当前结果先标记未完成，失败会留下明确状态与traceback；其他已知失败证据另存带`initial_failed`或`red`的文件。研究代码及配置有逐文件SHA-256记录，当前git分支为`phase01`，尚未提交。没有借用父目录测试基线。
+运行日志保存在`results/phase0`、`results/phase1`与`results/phase2`；阶段2每次尝试在runs或replays下独立建档，最终验收引用固定run_id。冒烟重复运行前，旧目录会归档至`results/phase1/smoke_history`；当前结果先标记未完成，失败会留下明确状态与traceback；其他已知失败证据另存带`initial_failed`或`red`的文件。研究代码及配置有逐文件SHA-256记录，当前git分支为`phase01`；本轮已有本地提交，但尚未推送到远端。没有借用父目录测试基线。
