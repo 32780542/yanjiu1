@@ -42,6 +42,26 @@ EXPECTED_MODES = {
 }
 
 
+def mutable_ids(value):
+    """Collect every recursively reachable mutable container identity."""
+    if isinstance(value, dict):
+        result = {id(value)}
+        for item in value.values():
+            result.update(mutable_ids(item))
+        return result
+    if isinstance(value, (list, set, bytearray)):
+        result = {id(value)}
+        for item in value:
+            result.update(mutable_ids(item))
+        return result
+    if isinstance(value, tuple):
+        result = set()
+        for item in value:
+            result.update(mutable_ids(item))
+        return result
+    return set()
+
+
 class SimpleFormationHarnessTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -100,6 +120,41 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertIs(policy["r5_enabled"], False)
         self.assertEqual({key: physical[key] for key in PARAMETERS}, SIMPLE_NONDEFAULTS)
         self.assertEqual({key: policy[key] for key in PARAMETERS}, SIMPLE_NONDEFAULTS)
+
+    def test_parameter_trees_share_no_mutable_identity_in_legacy_or_simple_mode(self):
+        for simple_rules in (False, True):
+            overrides = SIMPLE_NONDEFAULTS if simple_rules else None
+            with self.subTest(simple_rules=simple_rules):
+                model, physical, policy = self.harness.parameters(
+                    "lane_priority", simple_rules=simple_rules,
+                    simple_overrides=overrides,
+                )
+                physical_ids = mutable_ids(physical)
+                policy_ids = mutable_ids(policy)
+                model_ids = mutable_ids(dict(model.p))
+                self.assertTrue(physical_ids.isdisjoint(policy_ids))
+                self.assertTrue(physical_ids.isdisjoint(model_ids))
+                self.assertTrue(policy_ids.isdisjoint(model_ids))
+
+                policy_before = deepcopy(policy)
+                model_before = deepcopy(dict(model.p))
+                physical["formation_lane_duration_candidates_s"].append(12.5)
+                self.assertEqual(policy, policy_before)
+                self.assertEqual(dict(model.p), model_before)
+
+                _, later_physical, later_policy = self.harness.parameters(
+                    "lane_priority", simple_rules=simple_rules,
+                    simple_overrides=overrides,
+                )
+                self.assertNotIn(
+                    12.5, later_physical["formation_lane_duration_candidates_s"],
+                )
+                self.assertNotIn(
+                    12.5, later_policy["formation_lane_duration_candidates_s"],
+                )
+                self.assertTrue(mutable_ids(later_physical).isdisjoint(
+                    mutable_ids(later_policy)
+                ))
 
     def test_parameters_require_exact_boolean_and_override_contract(self):
         for value in (None, 0, 1, "true", [], {}):

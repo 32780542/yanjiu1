@@ -1,5 +1,6 @@
 """Paired Phase 5G pure-formation execution and independent factual summaries."""
 
+from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime, timezone
 import json
@@ -273,8 +274,8 @@ def parameters(mode: str, target_speed_mps: float = 10.0, *,
     simple_formation.validate_parameters(resolved_simple)
     physical.update(settings("phase4"))
     physical.update(settings("phase5"))
-    physical.update(registered)
-    policy.update(registered)
+    physical.update(deepcopy(registered))
+    policy.update(deepcopy(registered))
     common = {
         "phase5g_enabled": True,
         "r5_enabled": False,
