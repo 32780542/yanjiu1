@@ -84,6 +84,9 @@ INPUTS = (
     "docs/superpowers/plans/2026-09-14-phase5g-simple-local-ifelse-formation.md",
     "configs/phase5g.json",
 )
+SIMPLE_DEMO_INPUT_SCHEMA = "phase5g_simple_demo_cases_v1"
+SIMPLE_DEMO_EXECUTION_SCHEMA = "phase5g_simple_demo_execution_v1"
+SIMPLE_DEMO_INDEX_SCHEMA = "phase5g_simple_demo_index_v1"
 
 
 def atomic_json(path: str | Path, data: object) -> None:
@@ -407,6 +410,48 @@ def _write_trust_anchor(run_path: Path, code_hashes: dict, input_hashes: dict,
     return anchor
 
 
+def _write_replay_materials(run_path: Path, case_payload: bytes, *,
+                            case_file_sha256: str, mode_registry: dict) -> None:
+    """Freeze code and runtime inputs, then create the contemporaneous trust root."""
+    source = code_manifest()
+    atomic_json(run_path / "code_hashes.json", source)
+    for name in source:
+        destination = run_path / "code_snapshot" / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, destination)
+    input_hashes = {}
+    for name in INPUTS:
+        destination = run_path / "input_snapshot" / name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ROOT / name, destination)
+        input_hashes[name] = sha256(destination)
+        runtime_input = run_path / "code_snapshot" / name
+        if not runtime_input.exists():
+            runtime_input.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(ROOT / name, runtime_input)
+    frozen = run_path / "input_snapshot" / "phase5g_cases.json"
+    frozen.parent.mkdir(parents=True, exist_ok=True)
+    with frozen.open("xb") as stream:
+        stream.write(case_payload)
+        stream.flush()
+        os.fsync(stream.fileno())
+    if sha256(frozen) != case_file_sha256:
+        raise ValueError("phase5g_cases.json: frozen input digest differs")
+    input_hashes["phase5g_cases.json"] = case_file_sha256
+    atomic_json(run_path / "input_hashes.json", input_hashes)
+    code_snapshot_manifest = snapshot_manifest(
+        run_path / "code_snapshot", "code_snapshot")
+    input_snapshot_manifest = snapshot_manifest(
+        run_path / "input_snapshot", "input_snapshot")
+    atomic_json(run_path / "code_snapshot_manifest.json", code_snapshot_manifest)
+    atomic_json(run_path / "input_snapshot_manifest.json", input_snapshot_manifest)
+    _write_trust_anchor(
+        run_path, source, input_hashes,
+        code_snapshot_manifest, input_snapshot_manifest,
+        case_file_sha256, mode_registry,
+    )
+
+
 def expected_replay_anchors(case_file: str | Path) -> dict[str, str]:
     """Capture caller-side roots before a run so a whole-package rewrite is rejected."""
     source_case = output_path(case_file)
@@ -444,15 +489,23 @@ def expected_variants(cases: Sequence[Mapping[str, object]]) -> dict[str, dict]:
 
 
 def _variant_input_sha256(mode: str, case: Mapping[str, object], model,
-                          physical: Mapping[str, object], policy: Mapping[str, object],
-                          memories: Mapping[str, object]) -> str:
+                           physical: Mapping[str, object], policy: Mapping[str, object],
+                           memories: Mapping[str, object], *,
+                           parent_run_id: str | None = None) -> str:
     from experiments.phase5g_cases import digest_json
 
-    return digest_json({
+    payload = {
         "mode": _strict_mode(mode), "case": case,
         "model_parameters": dict(model.p), "parameters": dict(physical),
         "policy_parameters": dict(policy), "initial_memories": memories,
-    })
+    }
+    if parent_run_id is not None:
+        if type(parent_run_id) is not str or not re.fullmatch(
+            r"\d{8}T\d{12}Z_[0-9a-f]{8}", parent_run_id
+        ):
+            raise ValueError("parent_run_id must be an exact Phase 5G run id")
+        payload["parent_run_id"] = parent_run_id
+    return digest_json(payload)
 
 
 def _lane_index(y_m: float, width_m: float) -> int | None:
@@ -765,8 +818,8 @@ def _initial_memories(case: Mapping[str, object], mode: str, *,
 
 
 def run_variant(path: str | Path, model, physical: Mapping[str, object],
-                policy: Mapping[str, object], case: Mapping[str, object], mode: str,
-                *, live: bool = True) -> dict:
+                 policy: Mapping[str, object], case: Mapping[str, object], mode: str,
+                 *, live: bool = True, parent_run_id: str | None = None) -> dict:
     """Run one immutable physical case/mode, retaining any produced prefix."""
     from experiments.phase3_replay import compare_tree
     from experiments.phase5g_cases import digest_json, physical_case
@@ -800,6 +853,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
         "case_input_sha256": digest_json(case),
         "parameters_input_sha256": _variant_input_sha256(
             mode, case, model, physical, policy, memories,
+            parent_run_id=parent_run_id,
         ),
         "clock_schema": CLOCK_SCHEMA,
         "intervals": round(case["duration_s"] / physical["control_sync_dt_s"]),
@@ -807,6 +861,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
         "lifecycle_status": "running",
         "source_hashes": source_hashes(),
     }
+    if parent_run_id is not None:
+        metadata["parent_run_id"] = parent_run_id
     atomic_json(target / "metadata.json", metadata)
     # Even pre-clock failures retain an explicit, append-only empty trace prefix.
     (target / "stdout.log").touch(exist_ok=False)
@@ -1100,36 +1156,10 @@ def run_phase5g(case_file: str | Path, *, base: str | Path | None = None,
              "unsealed_variants": []}
     try:
         with run:
-            source = code_manifest()
-            atomic_json(run.path / "code_hashes.json", source)
-            for name in source:
-                destination = run.path / "code_snapshot" / name
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(ROOT / name, destination)
-            input_hashes = {}
-            for name in INPUTS:
-                destination = run.path / "input_snapshot" / name
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(ROOT / name, destination)
-                input_hashes[name] = sha256(destination)
-                runtime_input = run.path / "code_snapshot" / name
-                if not runtime_input.exists():
-                    runtime_input.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(ROOT / name, runtime_input)
-            frozen = run.path / "input_snapshot" / "phase5g_cases.json"
-            shutil.copy2(source_case, frozen)
-            input_hashes["phase5g_cases.json"] = sha256(frozen)
-            atomic_json(run.path / "input_hashes.json", input_hashes)
-            code_snapshot_manifest = snapshot_manifest(
-                run.path / "code_snapshot", "code_snapshot")
-            input_snapshot_manifest = snapshot_manifest(
-                run.path / "input_snapshot", "input_snapshot")
-            atomic_json(run.path / "code_snapshot_manifest.json", code_snapshot_manifest)
-            atomic_json(run.path / "input_snapshot_manifest.json", input_snapshot_manifest)
-            _write_trust_anchor(
-                run.path, source, input_hashes,
-                code_snapshot_manifest, input_snapshot_manifest,
-                sha256(source_case), registered_modes,
+            _write_replay_materials(
+                run.path, source_case.read_bytes(),
+                case_file_sha256=sha256(source_case),
+                mode_registry=registered_modes,
             )
             atomic_json(run.path / "frozen_cases.json", cases)
             atomic_json(run.path / "case_index.json", index)
@@ -1204,7 +1234,10 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                      formation_accel_limit_mps2: float = 0.5,
                      max_formation_lane_changes: int = 1) -> Path:
     """Generate one non-formal lane-priority trace for later SUMO-GUI playback."""
-    from experiments.phase5g_cases import SUPPORTED_COUNTS, main_six_case, seeded_case
+    from experiments.phase5g_cases import (
+        SUPPORTED_COUNTS, canonical_json_bytes, digest_json, main_six_case,
+        physical_case, seeded_case,
+    )
 
     if type(vehicle_count) is not int or vehicle_count not in SUPPORTED_COUNTS:
         raise ValueError("vehicle_count must be exactly 3, 6, or 12")
@@ -1244,19 +1277,85 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                 "private_rng_provenance": seeded["private_rng_provenance"]}
     else:
         case = {**seeded_case(physical, vehicle_count, seed), "duration_s": duration}
-    run = RunRecord(base, {
+    memories = _initial_memories(case, mode, simple_rules=True)
+    registered_modes = _mode_registry()
+    run_metadata = {
         "purpose": "Non-formal simple local if/else formation GUI source trace",
         "schema": "phase5g_simple_demo_v1",
         "formal": False, "mode": mode, "vehicle_count": vehicle_count,
         "simple_formation_enabled": True,
         "seed": seed, "target_speed_mps": target_speed, "duration_s": duration,
         "simple_parameters": resolved_simple,
+    }
+    run = RunRecord(base, run_metadata)
+    execution = {
+        "schema": SIMPLE_DEMO_EXECUTION_SCHEMA,
+        "case_directory": "case",
+        "parent_run_id": run.run_id,
+        "case_name": case["name"],
+        "mode": mode,
+        "vehicle_count": vehicle_count,
+        "case_seed": seed,
+        "target_speed_mps": target_speed,
+        "duration_s": duration,
+        "simple_formation_enabled": True,
+        "simple_parameters": resolved_simple,
+        "physical_input_sha256": digest_json(physical_case(case)),
+        "case_input_sha256": digest_json(case),
+        "parameters_input_sha256": _variant_input_sha256(
+            mode, case, model, physical, policy, memories,
+            parent_run_id=run.run_id,
+        ),
+        "initial_memories_sha256": initial_memory_hash(memories),
+    }
+    input_bundle = {
+        "schema": SIMPLE_DEMO_INPUT_SCHEMA,
+        "cases": [case],
+        "execution": execution,
+    }
+    case_payload = canonical_json_bytes(input_bundle)
+    case_file_sha256 = digest_json(input_bundle)
+    run_metadata.update({
+        "case_file_sha256": case_file_sha256,
+        "mode_registry": registered_modes,
+        "execution": execution,
     })
+    index = {
+        "schema": SIMPLE_DEMO_INDEX_SCHEMA,
+        "execution": execution,
+        "started": False,
+        "finalized": False,
+        "completed": False,
+    }
     try:
         with run:
-            result = run_variant(run.path / "case", model, physical, policy, case, mode, live=live)
-            run.finish({"passed": result["recording_passed"], "formal": False,
-                        "mode": mode, "case_directory": "case", "variant": result})
+            _write_replay_materials(
+                run.path, case_payload,
+                case_file_sha256=case_file_sha256,
+                mode_registry=registered_modes,
+            )
+            atomic_json(run.path / "frozen_cases.json", [case])
+            atomic_json(run.path / "case_index.json", index)
+            index["started"] = True
+            atomic_json(run.path / "case_index.json", index)
+            result = run_variant(
+                run.path / "case", model, physical, policy, case, mode,
+                live=live, parent_run_id=run.run_id,
+            )
+            index["finalized"] = True
+            index["completed"] = result.get("status") == "completed"
+            atomic_json(run.path / "case_index.json", index)
+            engineering = result.get("recording_passed") is True
+            complete = index["completed"]
+            run.finish({
+                "passed": bool(engineering and complete),
+                "engineering_passed": engineering,
+                "scientific_gate_passed": result.get("scientific_passed") is True,
+                "complete_execution": complete,
+                "formal": False, "mode": mode,
+                "case_directory": "case", "case_index": "case_index.json",
+                "variant": result,
+            })
     finally:
         if run.path.is_dir():
             seal_directory(run.path)

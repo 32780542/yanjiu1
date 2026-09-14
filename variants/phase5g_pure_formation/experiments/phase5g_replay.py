@@ -118,8 +118,12 @@ def _validate_metadata(metadata: dict) -> tuple[KinematicModel, dict, dict]:
         raise ValueError("metadata.physical_input_sha256: differs")
     if metadata.get("case_input_sha256") != digest_json(case):
         raise ValueError("metadata.case_input_sha256: differs")
+    parent_run_id = metadata.get("parent_run_id")
+    if "parent_run_id" in metadata and type(parent_run_id) is not str:
+        raise ValueError("metadata.parent_run_id: value differs")
     expected_input_digest = _variant_input_sha256(
         mode, case, model, physical, policy, metadata.get("initial_memories"),
+        parent_run_id=parent_run_id,
     )
     if metadata.get("parameters_input_sha256") != expected_input_digest:
         raise ValueError("metadata.parameters_input_sha256: differs")
@@ -354,17 +358,13 @@ def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) ->
     return result
 
 
-def _validate_source_run(path: Path, anchor: dict) -> tuple[dict, dict, dict]:
-    from experiments.phase5g import (INPUTS, _anchor_digest, _mode_registry,
-                                     parameters, snapshot_manifest)
-    from experiments import phase5g_cases
+def _validate_trusted_materials(path: Path, anchor: dict,
+                                metadata: dict) -> tuple[dict, bytes]:
+    """Validate the shared anchored snapshot boundary for every outer schema."""
+    from experiments.phase5g import (
+        INPUTS, _anchor_digest, _mode_registry, snapshot_manifest,
+    )
 
-    differences = _manifest_differences(path)
-    if differences:
-        raise ValueError(f"evidence_hashes: files differ: {differences}")
-    metadata = read_json(path / "metadata.json")
-    if metadata.get("schema") != "phase5g_run_v1":
-        raise ValueError("metadata.schema: not a Phase 5G run")
     registered_modes = _mode_registry()
     compare_tree(registered_modes, metadata.get("mode_registry"), 0.0,
                  "metadata.mode_registry")
@@ -419,6 +419,20 @@ def _validate_source_run(path: Path, anchor: dict) -> tuple[dict, dict, dict]:
         "case_file_sha256"
     ):
         raise ValueError("input_snapshot.phase5g_cases.json: trusted case input differs")
+    return stored_code, raw
+
+
+def _validate_source_run(path: Path, anchor: dict) -> tuple[dict, dict, dict]:
+    from experiments.phase5g import parameters
+    from experiments import phase5g_cases
+
+    differences = _manifest_differences(path)
+    if differences:
+        raise ValueError(f"evidence_hashes: files differ: {differences}")
+    metadata = read_json(path / "metadata.json")
+    if metadata.get("schema") != "phase5g_run_v1":
+        raise ValueError("metadata.schema: not a Phase 5G run")
+    stored_code, raw = _validate_trusted_materials(path, anchor, metadata)
     from experiments.phase5g import _load_development_bundle
     envelope = phase5g_cases._strict_json(raw)
     if envelope.get("schema") == "phase5g_execution_cases_v1":
@@ -489,6 +503,199 @@ def _validate_variant_binding(folder: Path, expected_name: str, expected: dict,
                  f"{prefix}.metadata.source_hashes")
 
 
+def _exact_fields(value: object, expected: set[str], label: str) -> dict:
+    if not isinstance(value, dict) or set(value) != expected:
+        raise ValueError(f"{label}.fields: differ")
+    return value
+
+
+def _validate_simple_source_run(path: Path, anchor: dict) -> tuple[dict, dict, dict, dict]:
+    """Bind one simple-demo child to its anchored generated case and parameters."""
+    from experiments import phase5g_cases
+    from experiments.phase5g import (
+        SIMPLE_DEMO_EXECUTION_SCHEMA, SIMPLE_DEMO_INDEX_SCHEMA,
+        SIMPLE_DEMO_INPUT_SCHEMA, _initial_memories, _variant_input_sha256,
+        parameters, source_hashes,
+    )
+    from noa.simple_formation import PARAMETERS, validate_parameters
+    from simulation.phase5g_clock import initial_memory_hash
+
+    differences = _manifest_differences(path)
+    if differences:
+        raise ValueError(f"evidence_hashes: files differ: {differences}")
+    metadata = read_json(path / "metadata.json")
+    _exact_fields(metadata, {
+        "purpose", "schema", "formal", "mode", "vehicle_count",
+        "simple_formation_enabled", "seed", "target_speed_mps", "duration_s",
+        "simple_parameters", "case_file_sha256", "mode_registry", "execution",
+        "run_id",
+    }, "metadata")
+    if metadata["schema"] != "phase5g_simple_demo_v1":
+        raise ValueError("metadata.schema: not a simple Phase 5G demo")
+    if metadata["purpose"] != (
+        "Non-formal simple local if/else formation GUI source trace"
+    ):
+        raise ValueError("metadata.purpose: differs")
+    if metadata["formal"] is not False:
+        raise ValueError("metadata.formal: must be false")
+    if metadata["mode"] != "lane_priority":
+        raise ValueError("metadata.mode: must be lane_priority")
+    if metadata["simple_formation_enabled"] is not True:
+        raise ValueError("metadata.simple_formation_enabled: must be true")
+    if metadata["run_id"] != path.name:
+        raise ValueError("metadata.run_id: differs from directory")
+    _, raw = _validate_trusted_materials(path, anchor, metadata)
+
+    bundle = phase5g_cases._strict_json(raw)
+    if raw != phase5g_cases.canonical_json_bytes(bundle):
+        raise ValueError("input_snapshot.phase5g_cases.json: not canonical JSON bytes")
+    _exact_fields(bundle, {"schema", "cases", "execution"},
+                  "input_snapshot.phase5g_cases.json")
+    if bundle["schema"] != SIMPLE_DEMO_INPUT_SCHEMA:
+        raise ValueError("input_snapshot.phase5g_cases.json.schema: differs")
+    if not isinstance(bundle["cases"], list) or len(bundle["cases"]) != 1 \
+            or not isinstance(bundle["cases"][0], dict):
+        raise ValueError("input_snapshot.phase5g_cases.json.cases: must contain one case")
+    case = bundle["cases"][0]
+    execution = _exact_fields(bundle["execution"], {
+        "schema", "case_directory", "parent_run_id", "case_name", "mode", "vehicle_count",
+        "case_seed", "target_speed_mps", "duration_s",
+        "simple_formation_enabled", "simple_parameters",
+        "physical_input_sha256", "case_input_sha256", "parameters_input_sha256",
+        "initial_memories_sha256",
+    }, "input_snapshot.phase5g_cases.json.execution")
+    if execution["schema"] != SIMPLE_DEMO_EXECUTION_SCHEMA:
+        raise ValueError("input_snapshot.phase5g_cases.json.execution.schema: differs")
+    simple_parameters = execution["simple_parameters"]
+    if not isinstance(simple_parameters, dict) or set(simple_parameters) != set(PARAMETERS):
+        raise ValueError("input_snapshot.phase5g_cases.json.execution.simple_parameters: fields differ")
+    validate_parameters(simple_parameters)
+    model, physical, policy = parameters(
+        "lane_priority", execution["target_speed_mps"], simple_rules=True,
+        simple_overrides=simple_parameters,
+    )
+    memories = _initial_memories(case, "lane_priority", simple_rules=True)
+    expected_execution = {
+        "schema": SIMPLE_DEMO_EXECUTION_SCHEMA,
+        "case_directory": "case",
+        "parent_run_id": path.name,
+        "case_name": case.get("name"),
+        "mode": "lane_priority",
+        "vehicle_count": len(case.get("controlled", ())),
+        "case_seed": case.get("private_rng_provenance", {}).get("case_seed"),
+        "target_speed_mps": physical["noa_target_speed_mps"],
+        "duration_s": case.get("duration_s"),
+        "simple_formation_enabled": True,
+        "simple_parameters": {
+            name: physical[name] for name in PARAMETERS
+        },
+        "physical_input_sha256": phase5g_cases.digest_json(
+            phase5g_cases.physical_case(case)),
+        "case_input_sha256": phase5g_cases.digest_json(case),
+        "parameters_input_sha256": _variant_input_sha256(
+            "lane_priority", case, model, physical, policy, memories,
+            parent_run_id=path.name,
+        ),
+        "initial_memories_sha256": initial_memory_hash(memories),
+    }
+    compare_tree(expected_execution, execution, 0.0,
+                 "input_snapshot.phase5g_cases.json.execution")
+    compare_tree(execution, metadata["execution"], 0.0, "metadata.execution")
+    for outer, inner in (
+        ("mode", "mode"), ("vehicle_count", "vehicle_count"),
+        ("seed", "case_seed"), ("target_speed_mps", "target_speed_mps"),
+        ("duration_s", "duration_s"),
+        ("simple_formation_enabled", "simple_formation_enabled"),
+        ("simple_parameters", "simple_parameters"),
+    ):
+        compare_tree(execution[inner], metadata[outer], 0.0, f"metadata.{outer}")
+    compare_tree(bundle["cases"], read_json(path / "frozen_cases.json"), 0.0,
+                 "frozen_cases")
+
+    index = read_json(path / "case_index.json")
+    _exact_fields(index, {
+        "schema", "execution", "started", "finalized", "completed",
+    }, "case_index")
+    if index["schema"] != SIMPLE_DEMO_INDEX_SCHEMA:
+        raise ValueError("case_index.schema: differs")
+    compare_tree(execution, index["execution"], 0.0, "case_index.execution")
+    for name in ("started", "finalized", "completed"):
+        if type(index[name]) is not bool:
+            raise ValueError(f"case_index.{name}: must be bool")
+    if not index["started"] or not index["finalized"]:
+        raise ValueError("case_index: simple demo execution is incomplete")
+
+    actual_directories = {
+        entry.name for entry in path.iterdir() if entry.is_dir()
+    }
+    if actual_directories != {"case", "code_snapshot", "input_snapshot"}:
+        raise ValueError("directories: simple demo layout differs")
+    child = path / "case"
+    if not (child / "evidence_hashes.json").is_file() \
+            or (child / "unsealed_evidence_hashes.json").exists():
+        raise ValueError("case.evidence_hashes: sealed child required")
+    child_metadata = read_json(child / "metadata.json")
+    compare_tree(path.name, child_metadata.get("parent_run_id"), 0.0,
+                 "case.metadata.parent_run_id")
+    compare_tree(case, child_metadata.get("case"), 0.0, "case.metadata.case")
+    compare_tree("lane_priority", child_metadata.get("mode"), 0.0,
+                 "case.metadata.mode")
+    compare_tree(False, child_metadata.get("formal"), 0.0,
+                 "case.metadata.formal")
+    compare_tree(dict(model.p), child_metadata.get("model_parameters"), 0.0,
+                 "case.metadata.model_parameters")
+    compare_tree(physical, child_metadata.get("parameters"), 0.0,
+                 "case.metadata.parameters")
+    compare_tree(policy, child_metadata.get("policy_parameters"), 0.0,
+                 "case.metadata.policy_parameters")
+    compare_tree(memories, child_metadata.get("initial_memories"), 0.0,
+                 "case.metadata.initial_memories")
+    for name in (
+        "physical_input_sha256", "case_input_sha256", "parameters_input_sha256",
+        "initial_memories_sha256",
+    ):
+        compare_tree(execution[name], child_metadata.get(name), 0.0,
+                     f"case.metadata.{name}")
+    expected_sources = source_hashes()
+    compare_tree(expected_sources, child_metadata.get("source_hashes"), 0.0,
+                 "case.metadata.source_hashes")
+
+    child_validation = read_json(child / "validation.json")
+    if child_validation.get("sealed") is not True:
+        raise ValueError("case.validation.sealed: must be true")
+    expected_index = {
+        "schema": SIMPLE_DEMO_INDEX_SCHEMA,
+        "execution": execution,
+        "started": True,
+        "finalized": True,
+        "completed": child_validation.get("status") == "completed",
+    }
+    compare_tree(expected_index, index, 0.0, "case_index")
+    gate = read_json(path / "validation.json")
+    _exact_fields(gate, {
+        "passed", "status", "run_id", "engineering_passed",
+        "scientific_gate_passed", "complete_execution", "formal", "mode",
+        "case_directory", "case_index", "variant",
+    }, "validation")
+    recording = child_validation.get("recording_passed") is True
+    complete = child_validation.get("status") == "completed"
+    expected_gate = {
+        "passed": bool(recording and complete),
+        "status": "completed",
+        "run_id": metadata["run_id"],
+        "engineering_passed": recording,
+        "scientific_gate_passed": child_validation.get("scientific_passed") is True,
+        "complete_execution": complete,
+        "formal": False,
+        "mode": "lane_priority",
+        "case_directory": "case",
+        "case_index": "case_index.json",
+        "variant": child_validation,
+    }
+    compare_tree(expected_gate, gate, 0.0, "validation")
+    return metadata, execution, index, gate
+
+
 def validate_execution_index(expected: dict, started: list, finalized: list,
                              completed: list, *, partial: bool) -> None:
     """Validate attempt coverage without relabeling a finalized physical failure."""
@@ -545,9 +752,66 @@ def aggregate_replay_results(expected: dict, cases: list[dict]) -> dict:
     }
 
 
+def _replay_simple_run_local(source: Path, anchor: dict) -> dict:
+    """Replay one trusted non-formal simple demo without asserting scientific success."""
+    result = {
+        "passed": False, "semantic_replay_passed": False,
+        "complete_execution": False, "variant_acceptance_passed": False,
+        "source_validation_passed": False,
+        "execution_gate_passed": False,
+        "scientific_gate_passed": False, "source_run": str(source),
+        "errors": [], "cases": [], "engineering_passed": False,
+        "formal": False,
+    }
+    try:
+        _, _, index, _ = _validate_simple_source_run(source, anchor)
+        report = replay_variant(source / "case")
+        result["cases"].append({"case": "case", **report})
+        if report.get("passed") is not True:
+            raise ValueError(f"case: {'; '.join(report.get('errors', ())) }")
+        semantic = bool(report.get("passed") is True and all(
+            report.get(name) is True for name in (
+                "decision_replay_passed", "integration_replay_passed",
+                "detection_replay_passed", "lane_change_replay_passed",
+                "speed_recovery_replay_passed", "acceptance_replay_passed",
+            )
+        ))
+        complete = bool(index["completed"] and report.get("execution_completed") is True)
+        source_validation = bool(
+            semantic
+            and report.get("source_status") == report.get("recomputed_status")
+            and report.get("source_passed") == report.get("recomputed_passed")
+        )
+        engineering = bool(
+            semantic and complete
+            and report.get("recomputed_recording_passed") is True
+        )
+        scientific = report.get("scientific_passed") is True
+        result.update(
+            passed=engineering,
+            semantic_replay_passed=semantic,
+            complete_execution=complete,
+            variant_acceptance_passed=report.get("recomputed_passed") is True,
+            source_validation_passed=source_validation,
+            execution_gate_passed=engineering,
+            scientific_gate_passed=scientific,
+            engineering_passed=engineering,
+            partial_source=report.get("partial_source") is True,
+            unstarted_variants=[],
+        )
+    except Exception as error:
+        result["errors"].append(f"{type(error).__name__}: {error}")
+    return result
+
+
 def _replay_run_local(run_dir: str | Path, anchor: dict) -> dict:
     """Execute semantic replay inside the saved code snapshot import namespace."""
     source = Path(run_dir).resolve()
+    try:
+        if read_json(source / "metadata.json").get("schema") == "phase5g_simple_demo_v1":
+            return _replay_simple_run_local(source, anchor)
+    except Exception:
+        pass
     result = {
         "passed": False, "semantic_replay_passed": False,
         "complete_execution": False, "variant_acceptance_passed": False,

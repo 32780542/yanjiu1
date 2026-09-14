@@ -92,6 +92,28 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         with patch.object(sys, "argv", ["run.py", *argv]):
             return self.entry.main()
 
+    def make_short_demo(self, base, *, seed=11):
+        return self.harness.run_phase5g_demo(
+            vehicle_count=3, seed=seed, target_speed_mps=10.0,
+            duration_s=0.1, output_base=base, live=False,
+            local_formation_range_m=78.0,
+            adjacent_lane_gap_m=14.0,
+            same_lane_gap_m=28.0,
+            position_tolerance_m=1.5,
+            formation_accel_limit_mps2=0.4,
+            max_formation_lane_changes=1,
+        )
+
+    def copy_demo_with_anchor(self, source, parent):
+        destination = Path(parent) / source.name
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(source, destination)
+        original = source.parent / ".phase5g-trust" / f"{source.name}.json"
+        copied = destination.parent / ".phase5g-trust" / f"{destination.name}.json"
+        copied.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(original, copied)
+        return destination
+
     def test_registered_simple_defaults_and_formal_modes_are_exact(self):
         registered = json.loads(
             (ROOT / "configs" / "phase5g.json").read_text(encoding="utf-8")
@@ -580,6 +602,200 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         hashes = self.harness.source_hashes()
         self.assertTrue(required.issubset(hashes))
         self.assertTrue(all(len(hashes[name]) == 64 for name in required))
+
+    def test_demo_builds_complete_trusted_single_execution_package(self):
+        from experiments.phase5g_cases import digest_json, physical_case
+        from research.common import sha256
+
+        with tempfile.TemporaryDirectory() as temp:
+            source = self.make_short_demo(Path(temp) / "demos")
+            required = {
+                "code_hashes.json", "input_hashes.json",
+                "code_snapshot_manifest.json", "input_snapshot_manifest.json",
+                "frozen_cases.json", "case_index.json",
+            }
+            self.assertTrue(all((source / name).is_file() for name in required))
+            self.assertTrue((source / "code_snapshot").is_dir())
+            self.assertTrue((source / "input_snapshot").is_dir())
+            anchor_path = source.parent / ".phase5g-trust" / f"{source.name}.json"
+            self.assertTrue(anchor_path.is_file())
+
+            metadata = json.loads((source / "metadata.json").read_text(encoding="utf-8"))
+            execution = metadata["execution"]
+            bundle_path = source / "input_snapshot" / "phase5g_cases.json"
+            bundle = json.loads(bundle_path.read_text(encoding="utf-8"))
+            frozen = json.loads((source / "frozen_cases.json").read_text(encoding="utf-8"))
+            index = json.loads((source / "case_index.json").read_text(encoding="utf-8"))
+            child = json.loads((source / "case" / "metadata.json").read_text(encoding="utf-8"))
+            anchor = json.loads(anchor_path.read_text(encoding="utf-8"))
+
+            self.assertEqual(set(bundle), {"schema", "cases", "execution"})
+            self.assertEqual(bundle["schema"], "phase5g_simple_demo_cases_v1")
+            self.assertEqual(bundle["cases"], frozen)
+            self.assertEqual(len(frozen), 1)
+            self.assertEqual(bundle["execution"], execution)
+            self.assertEqual(index["execution"], execution)
+            self.assertEqual(index["schema"], "phase5g_simple_demo_index_v1")
+            self.assertIs(index["started"], True)
+            self.assertIs(index["finalized"], True)
+            self.assertIs(index["completed"], True)
+            self.assertEqual(execution["case_directory"], "case")
+            self.assertEqual(execution["parent_run_id"], source.name)
+            self.assertEqual(child["parent_run_id"], source.name)
+            self.assertEqual(execution["mode"], "lane_priority")
+            self.assertIs(execution["simple_formation_enabled"], True)
+            self.assertEqual(execution["simple_parameters"], SIMPLE_NONDEFAULTS)
+            self.assertEqual(execution["case_input_sha256"], digest_json(frozen[0]))
+            self.assertEqual(
+                execution["physical_input_sha256"], digest_json(physical_case(frozen[0])),
+            )
+            for field in (
+                "case_input_sha256", "physical_input_sha256",
+                "parameters_input_sha256", "initial_memories_sha256",
+            ):
+                self.assertEqual(execution[field], child[field])
+            self.assertEqual(
+                {key: child["parameters"][key] for key in PARAMETERS},
+                SIMPLE_NONDEFAULTS,
+            )
+            self.assertEqual(
+                {key: child["policy_parameters"][key] for key in PARAMETERS},
+                SIMPLE_NONDEFAULTS,
+            )
+
+            code_manifest = json.loads(
+                (source / "code_snapshot_manifest.json").read_text(encoding="utf-8")
+            )
+            input_manifest = json.loads(
+                (source / "input_snapshot_manifest.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(
+                code_manifest,
+                self.harness.snapshot_manifest(source / "code_snapshot", "code_snapshot"),
+            )
+            self.assertEqual(
+                input_manifest,
+                self.harness.snapshot_manifest(source / "input_snapshot", "input_snapshot"),
+            )
+            self.assertEqual(anchor["source_manifest_sha256"],
+                             self.harness._anchor_digest(code_manifest))
+            self.assertEqual(anchor["input_manifest_sha256"],
+                             self.harness._anchor_digest(input_manifest))
+            self.assertEqual(anchor["case_file_sha256"], sha256(bundle_path))
+            self.assertEqual(metadata["case_file_sha256"], sha256(bundle_path))
+
+    def test_demo_outer_replay_uses_sibling_anchor_and_keeps_science_factual(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source = self.make_short_demo(Path(temp) / "demos")
+            report = self.replay.replay_run(source, base=Path(temp) / "replays")
+        self.assertTrue(report["passed"], report)
+        self.assertTrue(report["semantic_replay_passed"], report)
+        self.assertTrue(report["complete_execution"], report)
+        self.assertTrue(report["engineering_passed"], report)
+        self.assertFalse(report["scientific_gate_passed"], report)
+        self.assertEqual(report["trust_model"],
+                         "sibling_anchor_only_not_whole-package-tamper-resistant")
+
+    def test_demo_outer_replay_rejects_snapshot_binding_and_child_swap_tampering(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = self.make_short_demo(root / "source", seed=11)
+            other = self.make_short_demo(root / "other", seed=11)
+            attacks = {}
+
+            code = self.copy_demo_with_anchor(source, root / "attack-code")
+            changed = code / "code_snapshot" / "experiments" / "phase5g.py"
+            changed.write_text(changed.read_text(encoding="utf-8") + "\n# attack\n",
+                               encoding="utf-8")
+            self.harness.seal_directory(code)
+            attacks["code_hashes.experiments/phase5g.py"] = code
+
+            inputs = self.copy_demo_with_anchor(source, root / "attack-input")
+            changed = inputs / "input_snapshot" / "phase5g_cases.json"
+            value = json.loads(changed.read_text(encoding="utf-8"))
+            value["cases"][0]["purpose"] = "tampered frozen case"
+            changed.write_bytes(phase5g_cases.canonical_json_bytes(value))
+            self.harness.seal_directory(inputs)
+            attacks["input_hashes.phase5g_cases.json"] = inputs
+
+            binding = self.copy_demo_with_anchor(source, root / "attack-binding")
+            changed = binding / "case_index.json"
+            value = json.loads(changed.read_text(encoding="utf-8"))
+            value["execution"]["case_name"] = "different_case"
+            self.harness.atomic_json(changed, value)
+            self.harness.seal_directory(binding)
+            attacks["case_index.execution.case_name"] = binding
+
+            child_swap = self.copy_demo_with_anchor(source, root / "attack-child")
+            shutil.rmtree(child_swap / "case")
+            shutil.copytree(other / "case", child_swap / "case")
+            self.harness.seal_directory(child_swap)
+            attacks["case.metadata.parent_run_id"] = child_swap
+
+            for expected, attack in attacks.items():
+                with self.subTest(expected=expected):
+                    report = self.replay.replay_run(
+                        attack, base=attack.parent / "replays",
+                    )
+                    self.assertFalse(report["passed"], report)
+                    self.assertIn(expected, "\n".join(report["errors"]))
+
+    def test_demo_outer_replay_rejects_missing_trust_material_without_fallback(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = self.make_short_demo(root / "source")
+            no_anchor = root / "no-anchor" / source.name
+            no_anchor.parent.mkdir(parents=True)
+            shutil.copytree(source, no_anchor)
+            with self.assertRaisesRegex(ValueError, "trust_anchor"):
+                self.replay.replay_run(no_anchor, base=root / "replays-no-anchor")
+
+            no_snapshot = self.copy_demo_with_anchor(source, root / "no-snapshot")
+            shutil.rmtree(no_snapshot / "code_snapshot")
+            self.harness.seal_directory(no_snapshot)
+            report = self.replay.replay_run(
+                no_snapshot, base=root / "replays-no-snapshot",
+            )
+            self.assertFalse(report["passed"], report)
+            self.assertIn("code_snapshot: missing directory", "\n".join(report["errors"]))
+
+    def test_demo_outer_replay_rejects_missing_and_extra_schema_fields(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            source = self.make_short_demo(root / "source")
+            attacks = {}
+            missing = self.copy_demo_with_anchor(source, root / "missing-field")
+            metadata_path = missing / "metadata.json"
+            metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+            del metadata["purpose"]
+            self.harness.atomic_json(metadata_path, metadata)
+            self.harness.seal_directory(missing)
+            attacks["metadata.fields"] = missing
+
+            extra = self.copy_demo_with_anchor(source, root / "extra-field")
+            index_path = extra / "case_index.json"
+            index = json.loads(index_path.read_text(encoding="utf-8"))
+            index["unexpected"] = True
+            self.harness.atomic_json(index_path, index)
+            self.harness.seal_directory(extra)
+            attacks["case_index.fields"] = extra
+
+            for expected, attack in attacks.items():
+                with self.subTest(expected=expected):
+                    report = self.replay.replay_run(
+                        attack, base=attack.parent / "replays",
+                    )
+                    self.assertFalse(report["passed"], report)
+                    self.assertIn(expected, "\n".join(report["errors"]))
+
+    def test_cli_demo_replay_exit_depends_on_engineering_pass_only(self):
+        with patch(
+            "experiments.phase5g_replay.replay_run",
+            return_value={"passed": True, "scientific_gate_passed": False},
+        ) as replay, self.assertRaises(SystemExit) as exited:
+            self.call_cli(["phase5g-replay", "--run-dir", "simple-demo"])
+        self.assertEqual(exited.exception.code, 0)
+        replay.assert_called_once_with("simple-demo")
 
 
 if __name__ == "__main__":
