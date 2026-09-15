@@ -20,7 +20,6 @@ from experiments.phase3 import NET
 from experiments.phase3_audit import geometry_report
 from experiments.phase4_audit import driving_metrics
 from experiments.phase4_bootstrap import bootstrap
-from experiments.phase5 import frames_from_records
 from experiments.phase5_detection import detect_frames
 from models.vehicle import VehicleState
 from noa import simple_formation
@@ -710,8 +709,22 @@ def _lane_index(y_m: float, width_m: float) -> int | None:
     return lane if 0 <= lane < 3 and abs(y_m - center) <= 0.15 else None
 
 
-def _completed_records(trace_rows: Sequence[dict]) -> list[dict]:
-    return [row for row in trace_rows if row.get("status") == "completed"]
+class _PhysicalTraceRecords:
+    """Re-openable, bounded-memory view of physical JSONL intervals."""
+
+    def __init__(self, trace_path, keys: Sequence[str], *, live: bool):
+        self.trace_path = trace_path
+        self.keys = tuple(keys)
+        self.live = live
+
+    def __iter__(self):
+        with self.trace_path.open(encoding="utf-8") as stream:
+            for line in stream:
+                if not line.strip():
+                    continue
+                record = json.loads(line)
+                if _record_is_physical(record, self.keys, live=self.live):
+                    yield record
 
 
 def _readback_facts(record: Mapping[str, object], keys: Sequence[str], *,
@@ -748,32 +761,42 @@ def _record_is_physical(record: Mapping[str, object], keys: Sequence[str], *,
     return record.get("commit_applied") is True
 
 
-def _lane_change_facts(records: Sequence[dict], case: Mapping[str, object],
-                       model_parameters: Mapping[str, object]) -> dict:
-    width = float(model_parameters["lane_width_m"])
-    actors = {}
-    for key in case["controlled"]:
-        changes, active = [], None
-        stable = _lane_index(records[0]["initial"][key]["y_m"], width) if records else None
-        for row in records:
+class _LaneChangeAccumulator:
+    def __init__(self, case: Mapping[str, object],
+                 model_parameters: Mapping[str, object]):
+        self.controlled = tuple(case["controlled"])
+        self.width = float(model_parameters["lane_width_m"])
+        self.actors = {
+            key: {"changes": [], "active": None, "stable": None}
+            for key in self.controlled
+        }
+        self.started = False
+
+    def consume(self, row: Mapping[str, object]) -> None:
+        plan_fields = {"start_s", "y_start_m", "y_target_m", "duration_s", "speed_mps"}
+        for key in self.controlled:
+            item = self.actors[key]
+            if not self.started:
+                item["stable"] = _lane_index(
+                    row["initial"][key]["y_m"], self.width)
             before = row["inputs"][key]["memory"]
             after = row["decisions"][key]["memory"]
             submitted = after.get("plan")
-            plan_fields = {"start_s", "y_start_m", "y_target_m", "duration_s", "speed_mps"}
             valid_plan = isinstance(submitted, dict) and set(submitted) == plan_fields
             if before.get("plan") is None and valid_plan:
                 start_y = submitted.get("y_start_m")
                 target_y = submitted.get("y_target_m")
-                start_lane = (_lane_index(float(start_y), width)
+                start_lane = (_lane_index(float(start_y), self.width)
                               if type(start_y) in (int, float) else None)
-                target_lane = (_lane_index(float(target_y), width)
+                target_lane = (_lane_index(float(target_y), self.width)
                                if type(target_y) in (int, float) else None)
-                active = {
+                item["active"] = {
                     "plan": json.loads(json.dumps(submitted, allow_nan=False)),
                     "request_reason": after.get("lane_change_reason", ""),
-                    "from_lane": stable, "plan_start_lane": start_lane,
+                    "from_lane": item["stable"], "plan_start_lane": start_lane,
                     "target_lane": target_lane,
                 }
+            active = item["active"]
             before_count = before.get("completed_lane_changes", 0)
             after_count = after.get("completed_lane_changes", 0)
             completion = (active is not None and before.get("plan") == active["plan"]
@@ -782,49 +805,98 @@ def _lane_change_facts(records: Sequence[dict], case: Mapping[str, object],
                           and after_count == before_count + 1)
             arrival = row["initial"][key]
             target_lane = active["target_lane"] if active is not None else None
-            arrival_lane = _lane_index(arrival["y_m"], width)
+            arrival_lane = _lane_index(arrival["y_m"], self.width)
             if (completion and active["from_lane"] is not None
                     and active["plan_start_lane"] == active["from_lane"]
                     and target_lane is not None and active["from_lane"] != target_lane
                     and arrival_lane == target_lane
                     and abs(arrival["heading_rad"]) <= 0.05):
-                changes.append({"time_s": arrival["time_s"],
-                                "from_lane": active["from_lane"],
-                                "to_lane": target_lane,
-                                "request_reason": active["request_reason"]})
-                stable, active = target_lane, None
+                item["changes"].append({
+                    "time_s": arrival["time_s"],
+                    "from_lane": active["from_lane"],
+                    "to_lane": target_lane,
+                    "request_reason": active["request_reason"],
+                })
+                item["stable"], item["active"] = target_lane, None
             elif completion:
-                active = None
-        actors[key] = changes
-    flattened = [row for rows in actors.values() for row in rows]
-    return {
-        "actors": actors,
-        "completed_lane_changes": len(flattened),
-        "formation_lane_changes": sum(row["request_reason"] in FORMATION_LANE_REASONS
-                                      for row in flattened),
-    }
+                item["active"] = None
+        self.started = True
+
+    def result(self) -> dict:
+        actors = {key: item["changes"] for key, item in self.actors.items()}
+        flattened = [row for rows in actors.values() for row in rows]
+        return {
+            "actors": actors,
+            "completed_lane_changes": len(flattened),
+            "formation_lane_changes": sum(
+                row["request_reason"] in FORMATION_LANE_REASONS
+                for row in flattened),
+        }
 
 
-def _speed_facts(records: Sequence[dict], case: Mapping[str, object],
-                 target_speed_mps: float, tolerance_mps: float, *,
-                 formed_time_s: float | None, held_time_s: float | None) -> dict:
-    states = []
-    if records:
-        states.extend(records[0]["initial"].values())
-        states.extend(sample for row in records for step in row["steps"].values()
-                      for sample in step["samples"])
-        final = {key: records[-1]["steps"][key]["final"] for key in case["controlled"]}
-    else:
-        final = {}
-    speeds = [math.hypot(state["vx_mps"], state.get("vy_mps", 0.0)) for state in states]
-    final_speeds = [math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
-                    for state in final.values()]
-    frames = ([{"time_s": next(iter(row["initial"].values()))["time_s"],
-                "states": row["initial"]} for row in records] if records else [])
-    if records:
-        frames.append({
-            "time_s": next(iter(final.values()))["time_s"], "states": final,
+def _lane_change_facts(records, case: Mapping[str, object],
+                       model_parameters: Mapping[str, object]) -> dict:
+    accumulator = _LaneChangeAccumulator(case, model_parameters)
+    for row in records:
+        accumulator.consume(row)
+    return accumulator.result()
+
+
+class _SpeedAccumulator:
+    def __init__(self, case: Mapping[str, object]):
+        self.controlled = tuple(case["controlled"])
+        self.frames = []
+        self.minimum_speed_mps = None
+        self.final = {}
+        self.started = False
+
+    def _consume_speed(self, state: Mapping[str, object]) -> None:
+        speed = math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
+        self.minimum_speed_mps = (
+            speed if self.minimum_speed_mps is None
+            else min(self.minimum_speed_mps, speed)
+        )
+
+    def consume(self, row: Mapping[str, object]) -> None:
+        initial = {key: dict(state) for key, state in row["initial"].items()}
+        self.frames.append({
+            "time_s": next(iter(initial.values()))["time_s"], "states": initial,
         })
+        if not self.started:
+            for state in row["initial"].values():
+                self._consume_speed(state)
+        for step in row["steps"].values():
+            for sample in step["samples"]:
+                self._consume_speed(sample)
+        self.final = {
+            key: dict(row["steps"][key]["final"]) for key in self.controlled
+        }
+        self.started = True
+
+    def result(self, target_speed_mps: float, tolerance_mps: float, *,
+               formed_time_s: float | None, held_time_s: float | None) -> dict:
+        frames = list(self.frames)
+        if self.started:
+            frames.append({
+                "time_s": next(iter(self.final.values()))["time_s"],
+                "states": {key: dict(state) for key, state in self.final.items()},
+            })
+        final_speeds = [
+            math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
+            for state in self.final.values()
+        ]
+        return _speed_facts_from_compact(
+            frames, final_speeds, self.minimum_speed_mps,
+            self.controlled, target_speed_mps, tolerance_mps,
+            formed_time_s=formed_time_s, held_time_s=held_time_s,
+        )
+
+
+def _speed_facts_from_compact(frames: Sequence[dict], final_speeds: Sequence[float],
+                              minimum_speed_mps: float | None,
+                              controlled: Sequence[str], target_speed_mps: float,
+                              tolerance_mps: float, *, formed_time_s: float | None,
+                              held_time_s: float | None) -> dict:
     window_end = (formed_time_s + 10.0
                   if type(formed_time_s) in (int, float) else None)
     window_frames = [frame for frame in frames
@@ -832,13 +904,13 @@ def _speed_facts(records: Sequence[dict], case: Mapping[str, object],
                      and formed_time_s - 1e-9 <= frame["time_s"] <= window_end + 1e-9]
     frame_speeds = []
     for frame in window_frames:
-        if set(frame["states"]) != set(case["controlled"]):
+        if set(frame["states"]) != set(controlled):
             frame_speeds = []
             break
         frame_speeds.append([
             math.hypot(frame["states"][key]["vx_mps"],
                        frame["states"][key].get("vy_mps", 0.0))
-            for key in case["controlled"]
+            for key in controlled
         ])
     coverage = bool(
         window_end is not None and held_time_s is not None
@@ -867,7 +939,7 @@ def _speed_facts(records: Sequence[dict], case: Mapping[str, object],
         "coverage_passed": coverage, "speed_recovered": hold_passed,
     }
     return {
-        "minimum_speed_mps": min(speeds) if speeds else None,
+        "minimum_speed_mps": minimum_speed_mps,
         "final_speed_spread_mps": (
             max(final_speeds) - min(final_speeds) if final_speeds else None
         ),
@@ -877,13 +949,38 @@ def _speed_facts(records: Sequence[dict], case: Mapping[str, object],
     }
 
 
-def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
-                     physical: Mapping[str, object]) -> dict:
-    """Recompute every Phase 5G outcome from physical traces and independent audits."""
-    committed = list(records)
-    # A synchronization failure after the one physical commit remains factual
-    # physics even though the controller transaction itself did not complete.
-    frames = frames_from_records([{**row, "status": "completed"} for row in committed])
+def _speed_facts(records, case: Mapping[str, object],
+                 target_speed_mps: float, tolerance_mps: float, *,
+                 formed_time_s: float | None, held_time_s: float | None) -> dict:
+    accumulator = _SpeedAccumulator(case)
+    for row in records:
+        accumulator.consume(row)
+    return accumulator.result(
+        target_speed_mps, tolerance_mps,
+        formed_time_s=formed_time_s, held_time_s=held_time_s,
+    )
+
+
+def _evaluate_record_source(source, case: Mapping[str, object], model,
+                            physical: Mapping[str, object]) -> dict:
+    """Aggregate a re-openable physical source in three bounded scans."""
+    lane_accumulator = _LaneChangeAccumulator(case, model.p)
+    speed_accumulator = _SpeedAccumulator(case)
+    record_count = 0
+    final_all = {}
+    for row in source():
+        record_count += 1
+        lane_accumulator.consume(row)
+        speed_accumulator.consume(row)
+        final_all = {
+            key: dict(step["final"]) for key, step in row["steps"].items()
+        }
+    frames = list(speed_accumulator.frames)
+    if record_count:
+        frames.append({
+            "time_s": next(iter(final_all.values()))["time_s"],
+            "states": final_all,
+        })
     detection = {
         "default": detect_frames(frames),
         "sensitivity": {
@@ -893,9 +990,10 @@ def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
             for factor in (0.5, 1.0, 1.5)
         },
     }
-    if committed:
-        geometry = geometry_report(committed, model, RoadEnvelope.from_net(NET))
-        metrics = driving_metrics(committed, model, physical, {**case, "requirements": {}})
+    if record_count:
+        geometry = geometry_report(source(), model, RoadEnvelope.from_net(NET))
+        metrics = driving_metrics(
+            source(), model, physical, {**case, "requirements": {}})
     else:
         geometry = {
             "passed": False, "vehicle_substeps": 0, "outside_substeps": 0,
@@ -908,15 +1006,14 @@ def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
     intervals = [row for row in detection["default"]["intervals"]
                  if row["whole_cohort"] and row["success"]]
     first = min(intervals, key=lambda row: row["formed_time_s"]) if intervals else None
-    lane_changes = _lane_change_facts(committed, case, model.p)
-    speed = _speed_facts(
-        committed, case, float(physical["noa_target_speed_mps"]),
+    lane_changes = lane_accumulator.result()
+    speed = speed_accumulator.result(
+        float(physical["noa_target_speed_mps"]),
         float(physical["formation_maintaining_speed_tolerance_mps"]),
         formed_time_s=first["formed_time_s"] if first else None,
         held_time_s=first["held_time_s"] if first else None,
     )
-    final_states = ({key: committed[-1]["steps"][key]["final"]
-                     for key in case["controlled"]} if committed else {})
+    final_states = speed_accumulator.final
     counts = [0, 0, 0]
     for state in final_states.values():
         lane = _lane_index(state["y_m"], float(model.p["lane_width_m"]))
@@ -940,6 +1037,26 @@ def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
         raise RuntimeError("Phase 5G summary schema drift")
     return {"detection": detection, "geometry": geometry, "metrics": metrics,
             "lane_changes": lane_changes, "speed_recovery": speed, "summary": summary}
+
+
+def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
+                     physical: Mapping[str, object]) -> dict:
+    """Small-fixture wrapper over the same streaming aggregation implementation."""
+    if isinstance(records, _PhysicalTraceRecords):
+        source = lambda: iter(records)
+    else:
+        committed = tuple(records)
+        source = lambda: iter(committed)
+    return _evaluate_record_source(source, case, model, physical)
+
+
+def evaluate_trace(trace_path, case: Mapping[str, object], model,
+                   physical: Mapping[str, object], *, live: bool) -> dict:
+    """Evaluate a trace with three sequential scans and no whole-file read."""
+    if type(live) is not bool:
+        raise ValueError("live must be bool")
+    records = _PhysicalTraceRecords(trace_path, case["initial"], live=live)
+    return evaluate_records(records, case, model, physical)
 
 
 def variant_acceptance(metadata: Mapping[str, object], derived: Mapping[str, object], *,
@@ -1067,7 +1184,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
     # Even pre-clock failures retain an explicit, append-only empty trace prefix.
     _write_new_output_bytes(target / "stdout.log", b"")
     _write_new_output_bytes(target / "trace.jsonl", b"")
-    records, trace_count, completed_count = [], 0, 0
+    trace_count, completed_count, physical_count = 0, 0, 0
     conn = bridge = clock = None
     failure = None
     pending_interrupt = None
@@ -1116,11 +1233,11 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                         if _record_is_physical(
                             clock.last_record, case["initial"], live=live,
                         ):
-                            records.append(clock.last_record)
+                            physical_count += 1
                     raise
                 trace.write(json.dumps(record, allow_nan=False) + "\n")
                 trace.flush()
-                records.append(record)
+                physical_count += 1
                 trace_count += 1
                 completed_count += 1
         metadata["execution_status"] = "completed"
@@ -1139,7 +1256,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                 failure = f"Close failure: {error}"
                 metadata.update(execution_status="failed", close_error=failure)
     last = clock.last_record if clock is not None else None
-    physical_intervals = len(records)
+    physical_intervals = physical_count
     metadata.update(
         recorded_intervals=physical_intervals, trace_intervals=trace_count,
         completed_intervals=completed_count, physical_intervals=physical_intervals,
@@ -1156,7 +1273,10 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
     try:
         atomic_json(target / "metadata.json", metadata)
         lifecycle_stage = "evaluation"
-        derived = evaluate_records(records, case, model, physical)
+        derived = evaluate_trace(
+            _require_output_regular_file(target / "trace.jsonl"),
+            case, model, physical, live=live,
+        )
         for name in ("detection", "geometry", "metrics", "lane_changes", "speed_recovery"):
             lifecycle_stage = f"derived.{name}"
             atomic_json(target / f"{name}.json", derived[name])

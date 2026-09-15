@@ -3,6 +3,7 @@
 from copy import deepcopy
 from dataclasses import asdict, fields
 import importlib
+import inspect
 import json
 import os
 from pathlib import Path
@@ -10,6 +11,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tracemalloc
 import unittest
 from types import MappingProxyType
 from unittest.mock import patch
@@ -82,6 +84,65 @@ def mutable_ids(value):
     return set()
 
 
+class GeneratedBoundedTrace:
+    """Re-openable JSONL index stream with unique per-record memory payloads."""
+
+    def __init__(self, template, *, intervals=48,
+                 retained_test_bytes=24 * 1024 * 1024):
+        self.template = deepcopy(template)
+        self.intervals = intervals
+        self.retained_test_bytes = retained_test_bytes
+        self.record_payload_bytes = (
+            retained_test_bytes + intervals - 1) // intervals
+        self.scan_bytes = []
+        self.original_loads = json.loads
+
+    def open(self, *args, **kwargs):
+        if args and args[0] not in ("r", "rt"):
+            raise AssertionError(f"unexpected generated trace mode: {args[0]}")
+        owner = self
+        scan = len(self.scan_bytes)
+        self.scan_bytes.append(0)
+
+        class Stream:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                return False
+
+            def __iter__(self):
+                for index in range(owner.intervals):
+                    line = json.dumps({"generated_index": index}) + "\n"
+                    owner.scan_bytes[scan] += owner.record_payload_bytes
+                    yield line
+
+        return Stream()
+
+    def read_text(self, *args, **kwargs):
+        raise AssertionError("trace.jsonl must not be read wholesale")
+
+    def loads(self, payload, *args, **kwargs):
+        marker = self.original_loads(payload, *args, **kwargs)
+        if not isinstance(marker, dict) or set(marker) != {"generated_index"}:
+            return marker
+        index = marker["generated_index"]
+        row = deepcopy(self.template)
+        base_time = next(iter(row["initial"].values()))["time_s"]
+        offset = index * 0.1 - base_time
+        for state in row["initial"].values():
+            state["time_s"] += offset
+        for step in row["steps"].values():
+            step["initial"]["time_s"] += offset
+            for state in step["samples"]:
+                state["time_s"] += offset
+            step["final"]["time_s"] += offset
+        # Unique mutable storage makes any accidental list(records) exceed the
+        # scaled test threshold while the stream releases one row at a time.
+        row["synthetic_record_payload"] = bytearray(self.record_payload_bytes)
+        return row
+
+
 class SimpleFormationHarnessTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -131,6 +192,158 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 copied.with_name(f"{destination.name}.completion.json"),
             )
         return destination
+
+    def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "stream-evaluation-source"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            trace_path = source / "trace.jsonl"
+            with trace_path.open(encoding="utf-8") as stream:
+                rows = [json.loads(line) for line in stream if line.strip()]
+            expected = self.harness.evaluate_records(rows, case, model, physical)
+            original_read_text = Path.read_text
+
+            def reject_trace_read_text(candidate, *args, **kwargs):
+                if Path(candidate).resolve() == trace_path.resolve():
+                    raise AssertionError("trace.jsonl must not be read wholesale")
+                return original_read_text(candidate, *args, **kwargs)
+
+            with patch.object(Path, "read_text", new=reject_trace_read_text):
+                actual = self.harness.evaluate_trace(
+                    trace_path, case, model, physical, live=False,
+                )
+        self.assertEqual(actual, expected)
+
+    def test_evaluate_trace_memory_does_not_retain_the_full_generated_input(self):
+        """Scaled retention test; production 342.30 MiB is verified separately."""
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=12, duration_s=0.1)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "large-stream-template"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            with (source / "trace.jsonl").open(encoding="utf-8") as stream:
+                template = json.loads(next(stream))
+        generated = GeneratedBoundedTrace(template)
+        tracemalloc.start()
+        try:
+            with patch.object(self.harness.json, "loads", new=generated.loads):
+                derived = self.harness.evaluate_trace(
+                    generated, case, model, physical, live=False,
+                )
+            _, peak = tracemalloc.get_traced_memory()
+        finally:
+            tracemalloc.stop()
+        self.assertEqual(
+            derived["detection"]["default"]["frame_count"],
+            generated.intervals + 1,
+        )
+        self.assertLessEqual(len(generated.scan_bytes), 3)
+        self.assertTrue(generated.scan_bytes)
+        self.assertGreaterEqual(min(generated.scan_bytes), generated.retained_test_bytes)
+        self.assertLess(peak, 16 * 1024 * 1024, peak)
+        print(json.dumps({
+            "scaled_stream_input_bytes": generated.retained_test_bytes,
+            "peak_tracemalloc_bytes": peak,
+            "production_trace_reference_mib": 342.30,
+            "scope": "bounded-retention regression; production size is extrapolated",
+        }, sort_keys=True))
+
+    def test_replay_trace_reads_are_bounded_and_never_use_read_text(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "stream-replay-source"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            trace_path = source / "trace.jsonl"
+            original_read_text = Path.read_text
+            original_open = Path.open
+            scans = 0
+
+            def reject_trace_read_text(candidate, *args, **kwargs):
+                if Path(candidate).resolve() == trace_path.resolve():
+                    raise AssertionError("trace.jsonl must not be read wholesale")
+                return original_read_text(candidate, *args, **kwargs)
+
+            def count_trace_open(candidate, *args, **kwargs):
+                nonlocal scans
+                if Path(candidate).resolve() == trace_path.resolve():
+                    scans += 1
+                return original_open(candidate, *args, **kwargs)
+
+            with patch.object(Path, "read_text", new=reject_trace_read_text), \
+                    patch.object(Path, "open", new=count_trace_open):
+                tracemalloc.start()
+                try:
+                    report = self.replay.replay_variant(
+                        source, require_manifest=False,
+                    )
+                    _, peak = tracemalloc.get_traced_memory()
+                finally:
+                    tracemalloc.stop()
+        self.assertTrue(report["passed"], report)
+        self.assertLessEqual(scans, 4)
+        self.assertLess(peak, 64 * 1024 * 1024, peak)
+
+    def test_committed_failed_tail_is_included_in_streamed_physical_evidence(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.1)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "failed-tail-template"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            with (source / "trace.jsonl").open(encoding="utf-8") as stream:
+                row = json.loads(next(stream))
+            row.update(status="failed", commit_applied=True)
+            trace_path = Path(temp) / "failed-tail.jsonl"
+            with trace_path.open("w", encoding="utf-8") as stream:
+                stream.write(json.dumps(row, allow_nan=False) + "\n")
+            expected = self.harness.evaluate_records([row], case, model, physical)
+            actual = self.harness.evaluate_trace(
+                trace_path, case, model, physical, live=True,
+            )
+        self.assertEqual(actual, expected)
+
+    def test_generation_source_does_not_retain_written_trace_records(self):
+        source = inspect.getsource(self.harness.run_variant)
+        self.assertNotIn("records.append", source)
+        evaluator = inspect.getsource(self.harness.evaluate_records)
+        evaluator += inspect.getsource(self.harness._evaluate_record_source)
+        self.assertNotIn("list(records)", evaluator)
+
+    def test_frames_from_records_consumes_and_freezes_each_iterable_row_immediately(self):
+        from experiments.phase5 import frames_from_records
+
+        first = {"time_s": 0.0, "x_m": 1.0}
+        second = {"time_s": 0.1, "x_m": 2.0}
+        final = {"time_s": 0.2, "x_m": 3.0}
+
+        def rows():
+            yield {
+                "status": "completed", "initial": {"v0": first},
+                "steps": {"v0": {"final": second}},
+            }
+            first["x_m"] = 999.0
+            yield {
+                "status": "completed", "initial": {"v0": second},
+                "steps": {"v0": {"final": final}},
+            }
+
+        frames = frames_from_records(rows())
+        second["x_m"] = 888.0
+        final["x_m"] = 777.0
+        self.assertEqual(
+            [frame["states"]["v0"]["x_m"] for frame in frames],
+            [1.0, 2.0, 3.0],
+        )
 
     def test_registered_simple_defaults_and_formal_modes_are_exact(self):
         registered = json.loads(

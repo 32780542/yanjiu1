@@ -255,10 +255,6 @@ def _replay_trace(metadata: dict, trace_path: Path, model, physical: dict,
     }
 
 
-def _records(path: Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
-
-
 def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) -> dict:
     """Rebuild a complete or failed-prefix variant and every derived outcome."""
     path = Path(variant_dir).resolve()
@@ -287,13 +283,12 @@ def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) ->
         trace = _replay_trace(metadata, path / "trace.jsonl", model, physical, policy)
         if not trace["passed"]:
             raise ValueError("; ".join(trace["errors"]))
-        rows = _records(path / "trace.jsonl")
-        from experiments.phase5g import (_record_is_physical, _scientific_applicable,
-                                         evaluate_records, scientific_gate,
-                                         variant_acceptance)
-        physical_rows = [row for row in rows if _record_is_physical(
-            row, metadata["initial"], live=metadata["live"])]
-        derived = evaluate_records(physical_rows, metadata["case"], model, physical)
+        from experiments.phase5g import (_scientific_applicable, evaluate_trace,
+                                         scientific_gate, variant_acceptance)
+        derived = evaluate_trace(
+            path / "trace.jsonl", metadata["case"], model, physical,
+            live=metadata["live"],
+        )
         tolerance = model.p["replay_absolute_tolerance"]
         derived_names = ("detection", "geometry", "metrics", "lane_changes",
                          "speed_recovery")
