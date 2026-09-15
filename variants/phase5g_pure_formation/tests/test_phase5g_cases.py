@@ -38,6 +38,11 @@ CASE_KEYS = {
 }
 
 
+def setUpModule():
+    """Create the shared scratch root when tests run from a clean archive."""
+    TEMP_ROOT.mkdir(exist_ok=True)
+
+
 def phase5g_parameters(mode="lane_priority"):
     model, physical, policy = phase5_parameters(mode != "off")
     registered = json.loads((ROOT / "configs" / "phase5g.json").read_text(encoding="utf-8"))
