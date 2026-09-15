@@ -214,8 +214,6 @@ def validate_config(config: DemoConfig, root: Path = PROJECT_ROOT) -> CheckedPat
     if not network.is_file():
         raise FileNotFoundError(f'缺少瓶颈路网: {network}')
     algorithm_run = root / ALGORITHM_RUN_REL
-    if not algorithm_run.is_dir():
-        raise FileNotFoundError(f'缺少阶段5F正式运行目录: {algorithm_run}')
     return CheckedPaths(root, sumo_gui, network, algorithm_run, sumo_home)
 
 

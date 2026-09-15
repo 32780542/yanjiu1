@@ -19,6 +19,11 @@ from demo import sumo_gui as gui
 import runrun
 
 
+def setUpModule():
+    """Own the scratch root so the suite also runs from a clean Git archive."""
+    (gui.PROJECT_ROOT / 'tmp').mkdir(exist_ok=True)
+
+
 def make_directory_reparse(link, target):
     if os.name == 'nt':
         subprocess.run(
@@ -36,6 +41,28 @@ class DemoConfigurationTests(unittest.TestCase):
         result = gui.validate_config(gui.DemoConfig(), gui.PROJECT_ROOT)
         self.assertEqual(result.sumo_gui.name, 'sumo-gui.exe')
         self.assertEqual(result.network.name, 'bottleneck.net.xml')
+
+    def test_native_validation_does_not_require_historical_algorithm_results(self):
+        with tempfile.TemporaryDirectory(dir=gui.PROJECT_ROOT / 'tmp') as tmp:
+            root = Path(tmp)
+            sumo_home = root / 'sumo'
+            sumo_gui = sumo_home / 'bin' / 'sumo-gui.exe'
+            sumo_gui.parent.mkdir(parents=True)
+            sumo_gui.write_bytes(b'')
+            (root / 'configs').mkdir()
+            (root / 'configs/tools.json').write_text(
+                json.dumps({'sumo_home': str(sumo_home)}), encoding='utf-8')
+            network = root / 'scenarios/cai2024/bottleneck.net.xml'
+            network.parent.mkdir(parents=True)
+            network.write_text('<net/>', encoding='utf-8')
+
+            try:
+                result = gui.validate_config(gui.DemoConfig(), root)
+            except FileNotFoundError as error:
+                self.fail(f'native validation still requires historical results: {error}')
+
+            self.assertEqual(result.algorithm_run, root / gui.ALGORITHM_RUN_REL)
+            self.assertFalse(result.algorithm_run.exists())
 
     def test_invalid_numeric_and_boolean_values_name_the_variable(self):
         bad = [
