@@ -19,6 +19,15 @@ from demo import sumo_gui as gui
 import runrun
 
 
+def make_directory_reparse(link, target):
+    if os.name == 'nt':
+        subprocess.run(
+            ['cmd.exe', '/d', '/c', 'mklink', '/J', str(link), str(target)],
+            check=True, capture_output=True)
+    else:
+        link.symlink_to(target, target_is_directory=True)
+
+
 class DemoConfigurationTests(unittest.TestCase):
     def test_project_root_is_independent_of_current_directory(self):
         self.assertEqual(gui.PROJECT_ROOT, Path(__file__).resolve().parents[1])
@@ -63,6 +72,23 @@ class DemoConfigurationTests(unittest.TestCase):
 
 
 class SimpleFormationConfigurationTests(unittest.TestCase):
+    @staticmethod
+    def make_clean_simple_root(path):
+        root = Path(path)
+        sumo_home = root / 'sumo'
+        sumo_gui = sumo_home / 'bin' / 'sumo-gui.exe'
+        traci_python = sumo_home / 'tools' / 'traci' / '__init__.py'
+        network = root / 'scenarios' / 'cai2024' / 'bottleneck.net.xml'
+        variant_run = root / gui.SIMPLE_VARIANT_REL / 'run.py'
+        for file in (sumo_gui, traci_python, network, variant_run):
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_text('', encoding='utf-8')
+        tools = root / 'configs' / 'tools.json'
+        tools.parent.mkdir(parents=True)
+        tools.write_text(
+            json.dumps({'sumo_home': str(sumo_home)}), encoding='utf-8')
+        return root
+
     def test_defaults_are_the_approved_immutable_simple_formation_values(self):
         expected = {
             'vehicle_count': 6,
@@ -140,6 +166,64 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                 config, gui.PROJECT_ROOT, output_fn=lambda line: None)
         process.assert_not_called()
         create.assert_not_called()
+
+    def test_generation_timeout_budget_is_exact_and_validates_domain(self):
+        self.assertEqual(gui.simple_generation_timeout_s(3, 45.0), 198)
+        self.assertEqual(gui.simple_generation_timeout_s(6, 45.0), 306)
+        self.assertEqual(gui.simple_generation_timeout_s(12, 45.0), 522)
+        self.assertGreater(gui.simple_generation_timeout_s(12, 45.0), 411.375)
+        for count in (True, 2, 5, 13):
+            with self.subTest(count=count), \
+                    self.assertRaisesRegex(ValueError, 'VEHICLE_COUNT'):
+                gui.simple_generation_timeout_s(count, 45.0)
+        for duration in (True, 0, -1.0, math.nan, math.inf):
+            with self.subTest(duration=duration), \
+                    self.assertRaisesRegex(ValueError, 'SIMULATION_DURATION_S'):
+                gui.simple_generation_timeout_s(6, duration)
+        with self.assertRaisesRegex(
+                ValueError, 'SIMULATION_DURATION_S.*3600'):
+            gui.simple_generation_timeout_s(12, 411.375)
+
+    def test_clean_layout_check_accepts_future_results_without_writes_or_process(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self.make_clean_simple_root(temp)
+            results = root / gui.SIMPLE_VARIANT_REL / 'results'
+            self.assertFalse(results.exists())
+            before = sorted(
+                item.relative_to(root).as_posix() for item in root.rglob('*'))
+            with patch.object(gui.subprocess, 'run') as run, \
+                    patch.object(gui.subprocess, 'Popen') as popen, \
+                    patch.object(gui, 'create_run_directory') as create:
+                report = gui.check_simple_environment(
+                    gui.SimpleFormationDemoConfig(), root)
+            after = sorted(
+                item.relative_to(root).as_posix() for item in root.rglob('*'))
+            self.assertEqual(before, after)
+            self.assertEqual(Path(report['variant_results']), results.resolve())
+            self.assertFalse(results.exists())
+            run.assert_not_called()
+            popen.assert_not_called()
+            create.assert_not_called()
+
+    def test_clean_layout_rejects_reparse_variant_before_any_write(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = self.make_clean_simple_root(temp)
+            variant = root / gui.SIMPLE_VARIANT_REL
+            shutil.rmtree(variant)
+            outside = root / 'outside-variant'
+            (outside / 'results').mkdir(parents=True)
+            (outside / 'run.py').write_text('', encoding='utf-8')
+            make_directory_reparse(variant, outside)
+            before = sorted(
+                item.relative_to(root).as_posix() for item in root.rglob('*'))
+            with patch.object(gui.subprocess, 'run') as run, \
+                    self.assertRaisesRegex(RuntimeError, 'reparse|junction|符号链接'):
+                gui.check_simple_environment(
+                    gui.SimpleFormationDemoConfig(), root)
+            after = sorted(
+                item.relative_to(root).as_posix() for item in root.rglob('*'))
+            self.assertEqual(before, after)
+            run.assert_not_called()
 
 
 class NativeArtifactTests(unittest.TestCase):
@@ -1155,9 +1239,20 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
                 self.assertEqual(command[command.index(flag) + 1], value)
         self.assertEqual(kwargs, {
             'cwd': self.variant_root, 'capture_output': True, 'text': True,
-            'encoding': 'utf-8', 'timeout': 180, 'check': False,
+            'encoding': 'utf-8', 'timeout': 474, 'check': False,
             'shell': False,
         })
+
+    def test_generator_timeout_reports_the_actual_computed_budget(self):
+        config = replace(
+            self.config, vehicle_count=3, simulation_duration_s=45.0)
+
+        def timeout_runner(command, **kwargs):
+            raise subprocess.TimeoutExpired(command, kwargs['timeout'])
+
+        with self.assertRaisesRegex(RuntimeError, '198秒'):
+            gui.generate_fresh_simple_trace(
+                config, self.paths, process_runner=timeout_runner)
 
     def test_generator_uses_only_the_last_nonempty_stdout_line(self):
         outer = self.make_outer()

@@ -4,8 +4,10 @@ from copy import deepcopy
 from dataclasses import asdict, fields
 import importlib
 import json
+import os
 from pathlib import Path
 import shutil
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -48,6 +50,16 @@ MAIN_SIX_EXPECTED = (
     ("v4", 167.0, 4.95, 9.5),
     ("v5", 108.0, 8.25, 10.0),
 )
+
+
+def make_directory_reparse(link, target):
+    if os.name == "nt":
+        subprocess.run(
+            ["cmd.exe", "/d", "/c", "mklink", "/J", str(link), str(target)],
+            check=True, capture_output=True,
+        )
+    else:
+        link.symlink_to(target, target_is_directory=True)
 
 
 def mutable_ids(value):
@@ -382,6 +394,61 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                     self.harness.run_phase5g_demo(**kwargs)
                 runner.assert_not_called()
                 self.assertFalse(output.exists())
+
+    def test_demo_creates_missing_safe_output_ancestry_after_validation(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(
+            self.harness, "run_variant", return_value={"recording_passed": True},
+        ):
+            output = Path(temp) / "missing" / "nested" / "simple-demo"
+            self.assertFalse(output.parent.exists())
+            result = self.make_short_demo(output)
+            self.assertTrue(output.is_dir())
+            self.assertEqual(result.parent, output.resolve())
+            self.assertTrue((output / "latest.json").is_file())
+
+    def test_demo_rejects_unsafe_output_bases_before_any_write(self):
+        outside = ROOT / "escaped-output-base-test"
+        self.assertFalse(outside.exists())
+        with patch.object(self.harness, "run_variant") as runner, \
+                self.assertRaisesRegex(ValueError, "output_base"):
+            self.make_short_demo(ROOT / "results" / ".." / outside.name)
+        runner.assert_not_called()
+        self.assertFalse(outside.exists())
+
+        with tempfile.TemporaryDirectory() as temp:
+            temp_root = Path(temp)
+            output_file = temp_root / "output-file"
+            output_file.write_text("unchanged", encoding="utf-8")
+            before = sorted(item.relative_to(temp_root).as_posix()
+                            for item in temp_root.rglob("*"))
+            for unsafe in (output_file, ROOT):
+                with self.subTest(unsafe=unsafe), patch.object(
+                    self.harness, "run_variant",
+                ) as runner, self.assertRaisesRegex(ValueError, "output_base"):
+                    self.make_short_demo(unsafe)
+                runner.assert_not_called()
+                self.assertEqual(
+                    sorted(item.relative_to(temp_root).as_posix()
+                           for item in temp_root.rglob("*")), before)
+            self.assertEqual(output_file.read_text(encoding="utf-8"), "unchanged")
+
+    def test_demo_rejects_reparse_output_base_before_writing_target(self):
+        with tempfile.TemporaryDirectory() as temp:
+            temp_root = Path(temp)
+            target = temp_root / "target"
+            target.mkdir()
+            link = temp_root / "output-link"
+            make_directory_reparse(link, target)
+            before = sorted(item.relative_to(temp_root).as_posix()
+                            for item in temp_root.rglob("*"))
+            with patch.object(self.harness, "run_variant") as runner, \
+                    self.assertRaisesRegex(ValueError, "reparse"):
+                self.make_short_demo(link)
+            after = sorted(item.relative_to(temp_root).as_posix()
+                           for item in temp_root.rglob("*"))
+            runner.assert_not_called()
+            self.assertEqual(before, after)
+            self.assertEqual(list(target.iterdir()), [])
 
     def test_cli_forwards_every_demo_value_exactly_once(self):
         with patch("experiments.phase5g.run_phase5g_demo",

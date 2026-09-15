@@ -257,13 +257,13 @@ def validate_simple_config(
             or config.max_formation_lane_changes != 1:
         raise ValueError('MAX_FORMATION_LANE_CHANGES 必须是整数 1（不接受 bool）')
 
-    root = Path(root).resolve()
+    root = Path(os.path.abspath(root))
+    _resolve_future_directory(root, root, '项目根目录', allow_boundary=True)
     tools_path = root / 'configs' / 'tools.json'
-    if not tools_path.is_file():
-        raise FileNotFoundError(f'缺少SUMO登记文件: {tools_path}')
+    _require_regular_file(tools_path, root, 'SUMO登记文件')
     try:
         tools = json.loads(tools_path.read_text(encoding='utf-8-sig'))
-        sumo_home = Path(tools['sumo_home']).resolve()
+        sumo_home = Path(os.path.abspath(tools['sumo_home']))
     except (OSError, json.JSONDecodeError, KeyError, TypeError) as error:
         raise ValueError(f'无法读取 {tools_path} 中的 sumo_home: {error}') from error
     sumo_gui = sumo_home / 'bin' / 'sumo-gui.exe'
@@ -272,20 +272,33 @@ def validate_simple_config(
     variant_root = root / SIMPLE_VARIANT_REL
     variant_run = variant_root / 'run.py'
     variant_results = variant_root / 'results'
-    for label, path, kind in (
-            ('登记的SUMO界面程序', sumo_gui, 'file'),
-            ('SUMO TraCI入口', traci_python, 'file'),
-            ('瓶颈路网', network, 'file'),
-            ('Phase5G入口', variant_run, 'file'),
-            ('Phase5G结果根目录', variant_results, 'dir')):
-        exists = path.is_file() if kind == 'file' else path.is_dir()
-        if not exists:
-            raise FileNotFoundError(f'缺少{label}: {path}')
+    _require_regular_file(sumo_gui, sumo_home, '登记的SUMO界面程序')
+    _require_regular_file(traci_python, sumo_home, 'SUMO TraCI入口')
+    _require_regular_file(network, root, '瓶颈路网')
+    _resolve_future_directory(
+        variant_root, root, 'Phase5G根目录', require_existing=True)
+    _require_regular_file(variant_run, root, 'Phase5G入口')
+    resolved_results = _resolve_future_directory(
+        variant_results, variant_root, 'Phase5G结果根目录')
     return SimpleCheckedPaths(
-        root=root, variant_root=variant_root.resolve(),
-        variant_run=variant_run.resolve(), variant_results=variant_results.resolve(),
-        sumo_home=sumo_home, sumo_gui=sumo_gui.resolve(),
+        root=root.resolve(), variant_root=variant_root.resolve(),
+        variant_run=variant_run.resolve(), variant_results=resolved_results,
+        sumo_home=sumo_home.resolve(), sumo_gui=sumo_gui.resolve(),
         network=network.resolve(), traci_python=traci_python.resolve())
+
+
+def simple_generation_timeout_s(vehicle_count: int, duration_s: float) -> int:
+    """Return the bounded generation budget for one validated simple trace."""
+    if type(vehicle_count) is not int or vehicle_count not in (3, 6, 12):
+        raise ValueError('VEHICLE_COUNT 必须是整数 3、6 或 12')
+    _finite_number('SIMULATION_DURATION_S', duration_s, 0.0, math.inf)
+    if duration_s <= 0:
+        raise ValueError('SIMULATION_DURATION_S 必须是正的有限数字')
+    estimate = 90.0 + 0.8 * duration_s * vehicle_count
+    if not math.isfinite(estimate) or estimate > 3600:
+        raise ValueError(
+            'SIMULATION_DURATION_S 对当前 VEHICLE_COUNT 超过 3600 秒生成预算上限')
+    return max(180, math.ceil(estimate))
 
 
 def format_number(value: float) -> str:
@@ -627,6 +640,44 @@ def _lstat_no_reparse(path: Path, boundary: Path, label: str):
         if current.is_symlink() or _is_reparse(info):
             raise RuntimeError(f'{label}禁止符号链接、junction或reparse point: {current}')
     return target, base, info
+
+
+def _resolve_future_directory(
+        path: Path, boundary: Path, label: str, *, allow_boundary: bool = False,
+        require_existing: bool = False) -> Path:
+    """Validate existing ancestry without creating a future result directory."""
+    target = Path(os.path.abspath(path))
+    base = Path(os.path.abspath(boundary))
+    try:
+        relative = target.relative_to(base)
+    except ValueError as error:
+        raise RuntimeError(f'{label}越界: {target}') from error
+    if not relative.parts and not allow_boundary:
+        raise RuntimeError(f'{label}不能等于边界根目录: {target}')
+    current = base
+    missing = False
+    for part in (None, *relative.parts):
+        if part is not None:
+            current /= part
+        if missing:
+            continue
+        try:
+            info = os.lstat(current)
+        except FileNotFoundError:
+            missing = True
+            continue
+        if current.is_symlink() or _is_reparse(info):
+            raise RuntimeError(
+                f'{label}禁止符号链接、junction或reparse point: {current}')
+        if not stat.S_ISDIR(info.st_mode):
+            raise RuntimeError(f'{label}路径祖先不是目录: {current}')
+    if require_existing and missing:
+        raise FileNotFoundError(f'缺少{label}: {target}')
+    resolved_base = base.resolve()
+    resolved = target.resolve()
+    if resolved != resolved_base and not resolved.is_relative_to(resolved_base):
+        raise RuntimeError(f'{label}解析后越界: {resolved}')
+    return resolved
 
 
 def _require_regular_file(path: Path, boundary: Path, label: str) -> Path:
@@ -1551,13 +1602,16 @@ def generate_fresh_simple_trace(
         format_number(config.formation_accel_limit_mps2),
         '--max-formation-lane-changes', str(config.max_formation_lane_changes),
     ]
+    timeout_s = simple_generation_timeout_s(
+        config.vehicle_count, config.simulation_duration_s)
     runner = subprocess.run if process_runner is None else process_runner
     try:
         completed = runner(
             command, cwd=paths.variant_root, capture_output=True, text=True,
-            encoding='utf-8', timeout=180, check=False, shell=False)
+            encoding='utf-8', timeout=timeout_s, check=False, shell=False)
     except subprocess.TimeoutExpired as error:
-        raise RuntimeError('生成simple formation轨迹超时（180秒）') from error
+        raise RuntimeError(
+            f'生成simple formation轨迹超时（{timeout_s}秒）') from error
     except OSError as error:
         raise RuntimeError(f'无法启动Phase5G轨迹生成进程: {error}') from error
     if completed.returncode != 0:

@@ -207,22 +207,42 @@ def _validated_output_base(value: str | Path) -> Path:
     raw = Path(value)
     if str(raw).strip() in ("", "."):
         raise ValueError("output_base must not be the project directory")
-    resolved = (ROOT / raw).resolve() if not raw.is_absolute() else raw.resolve()
-    if resolved.exists() and not resolved.is_dir():
-        raise ValueError("output_base must be a directory, not a file")
-    if resolved == Path(resolved.anchor) or resolved in (ROOT, ROOT.parent):
+    lexical = ROOT / raw if not raw.is_absolute() else raw
+    target = Path(os.path.abspath(lexical))
+    if target == Path(target.anchor) or target in (ROOT, ROOT.parent):
         raise ValueError("output_base must not be a filesystem, workspace, or project root")
     temp_roots = {Path(tempfile.gettempdir()).resolve()}
     local_app_data = os.environ.get("LOCALAPPDATA")
     if local_app_data:
         temp_roots.add((Path(local_app_data) / "Temp").resolve())
-    allowed_temp = any(resolved != root and resolved.is_relative_to(root)
-                       for root in temp_roots)
-    allowed = ((resolved.is_relative_to(ROOT)
-                and resolved.relative_to(ROOT).parts[0] in ("results", "tmp"))
-               or allowed_temp)
-    if not allowed:
+    boundary = None
+    if target.is_relative_to(ROOT):
+        relative = target.relative_to(ROOT)
+        if relative.parts and relative.parts[0] in ("results", "tmp"):
+            boundary = ROOT
+    if boundary is None:
+        boundary = next((root for root in temp_roots
+                         if target != root and target.is_relative_to(root)), None)
+    if boundary is None:
         raise ValueError("output_base must be under project results/tmp or the system Temp directory")
+    current = boundary
+    for part in target.relative_to(boundary).parts:
+        current /= part
+        try:
+            info = os.lstat(current)
+        except FileNotFoundError:
+            break
+        attributes = getattr(info, "st_file_attributes", 0)
+        reparse = bool(
+            attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+        if current.is_symlink() or reparse:
+            raise ValueError(f"output_base reparse point forbidden: {current}")
+        if not stat.S_ISDIR(info.st_mode):
+            raise ValueError("output_base must be a directory, not a file")
+    resolved = target.resolve()
+    resolved_boundary = boundary.resolve()
+    if resolved == resolved_boundary or not resolved.is_relative_to(resolved_boundary):
+        raise ValueError("output_base resolved outside its allowed boundary")
     return resolved
 
 
