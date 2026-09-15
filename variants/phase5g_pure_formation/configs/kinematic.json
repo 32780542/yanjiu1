@@ -1,0 +1,8 @@
+{
+  "layer":"kinematic",
+  "defaults":{"status":"user_authorized_simplification","source":"User instruction 2026-09-11","page_or_url":"docs/kinematic_motion.md","rationale":"Use reasonable continuous geometric motion rather than a tire-force vehicle dynamics model; no mass, inertia or tire stiffness required."},
+  "parameters":[
+    {"name":"motion_model","value":"kinematic_bicycle","unit":"model"},
+    {"name":"lane_change_reference","value":"two_quadratic_bezier_segments_C1","unit":"curve","rationale":"Two quadratic segments give parallel endpoint tangents and a continuous join tangent. Curvature is discontinuous at the join; actual steering is rate limited."}
+  ]
+}

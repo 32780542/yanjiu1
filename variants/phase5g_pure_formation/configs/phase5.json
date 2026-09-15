@@ -1,0 +1,24 @@
+{
+  "layer": "phase5",
+  "defaults": {
+    "status": "supplementary_development_setting_unvalidated",
+    "source": "This study stage 5 local longitudinal R1-R5 increment",
+    "page_or_url": "docs/phase5_implementation_plan.md; docs/phase5_controller_unit.md",
+    "rationale": "Declared development hypothesis. Inherit all phase4 hard, comfort, prediction, sensing and actuator bounds unchanged; no hidden types, shared schedule or global slots."
+  },
+  "parameters": [
+    {"name":"formation_reference_rule","value":"front_first","unit":"enum","rationale":"Predeclared B1 if/else comparison: retain current visible forward reference; otherwise nearest same-lane front (30m), then nearest forward adjacent corner (15m). B2 corner_first only reverses the two new-reference groups; exact ambiguity exits. No global slots, ID priority, side/rear reference or safety limit change.","page_or_url":"docs/phase5_implementation_plan.md: B rules comparison"},
+    {"name":"formation_d_ref_m","value":15.0,"unit":"m","rationale":"Adjacent-lane phase offset; same-lane target reference spacing is exactly twice this value, 30m."},
+    {"name":"formation_kp_per_s2","value":0.08,"unit":"1/s^2"},
+    {"name":"formation_kv_per_s","value":0.4,"unit":"1/s"},
+    {"name":"formation_accel_limit_mps2","value":0.5,"unit":"m/s^2"},
+    {"name":"formation_fade_s","value":1.0,"unit":"s"},
+    {"name":"formation_reference_stable_s","value":1.0,"unit":"s"},
+    {"name":"formation_max_relative_speed_mps","value":3.0,"unit":"m/s"},
+    {"name":"formation_max_lateral_speed_mps","value":0.2,"unit":"m/s"},
+    {"name":"formation_lane_change_cooldown_s","value":5.0,"unit":"s","rationale":"Formation activation cooldown after own NOA lane change; phase4 maneuver policy stays unchanged."},
+    {"name":"formation_position_tolerance_m","value":2.0,"unit":"m","rationale":"Local-state label and conflict normalization, not independent group detection."},
+    {"name":"formation_maintaining_speed_tolerance_mps","value":1.0,"unit":"m/s","rationale":"Own state label only; never substitutes for offline formation detection."},
+    {"name":"formation_switch_cost","value":1.0,"unit":"1","rationale":"Dimensionless holding preference in geometric/relative-speed/residual score; no label rank."}
+  ]
+}

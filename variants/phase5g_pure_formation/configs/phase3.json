@@ -1,0 +1,23 @@
+{
+  "layer": "phase3",
+  "defaults": {
+    "status": "supplementary_development_setting",
+    "source": "This study phase 3 implementation",
+    "page_or_url": "docs/phase3_implementation_plan.md; docs/phase3_model.md",
+    "rationale": "Explicit small-case information-isolation bench setting; not a calibrated NOA or paper parameter."
+  },
+  "parameters": [
+    {"name":"sensor_roundoff_ulps","value":8,"unit":"ULP","rationale":"Snap box comparisons within 8 ULP of the largest configured range (2.274e-13 m at 200 m); numerical inclusive-boundary policy only, not measurement noise or a physical range extension."},
+    {"name":"memory_horizon_s","value":1.0,"unit":"s","rationale":"Only prior measured observations in the last second; no refresh outside range; reentry gets a new local track."},
+    {"name":"probe_target_speed_mps","value":20.0,"unit":"m/s"},
+    {"name":"probe_speed_gain_per_s","value":0.4,"unit":"1/s"},
+    {"name":"probe_gap_gain_per_s2","value":0.2,"unit":"1/s^2"},
+    {"name":"probe_relative_speed_gain_per_s","value":0.6,"unit":"1/s"},
+    {"name":"probe_standstill_gap_m","value":2.0,"unit":"m"},
+    {"name":"probe_headway_s","value":1.0,"unit":"s"},
+    {"name":"phase3_seed","value":20260911,"unit":"seed"},
+    {"name":"phase3_duration_s","value":4.0,"unit":"s"},
+    {"name":"phase3_crossing_duration_s","value":6.0,"unit":"s"},
+    {"name":"phase3_drift_duration_s","value":2.0,"unit":"s"}
+  ]
+}

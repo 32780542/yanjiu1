@@ -1,0 +1,41 @@
+{
+  "layer": "phase4",
+  "defaults": {
+    "status": "supplementary_development_setting_unvalidated",
+    "source": "This study stage 4 pure local NOA baseline",
+    "page_or_url": "docs/phase4_controller_notes.md; docs/phase4_implementation_plan.md",
+    "rationale": "Explicit generic controller development value, not branded NOA or a calibrated paper parameter. Hard, comfort, jerk, vehicle and sensing limits remain inherited without override."
+  },
+  "parameters": [
+    {"name":"noa_target_speed_mps","value":20.0,"unit":"m/s","rationale":"Generic nominal cruise speed shared with the previous probe development baseline."},
+    {"name":"noa_speed_gain_per_s","value":0.6,"unit":"1/s"},
+    {"name":"noa_response_time_s","value":0.3,"unit":"s","rationale":"Fixed conservative planning response budget inherited from nominal 0.1s control plus 0.2s actuator lag. Held fixed in sampling studies so changing sampler does not also retune the policy envelope."},
+    {"name":"noa_gap_gain_per_s2","value":0.15,"unit":"1/s^2"},
+    {"name":"noa_relative_speed_gain_per_s","value":0.8,"unit":"1/s"},
+    {"name":"noa_standstill_gap_m","value":3.0,"unit":"m"},
+    {"name":"noa_headway_s","value":1.8,"unit":"s"},
+    {"name":"noa_lateral_kp_per_s2","value":0.6,"unit":"1/s^2"},
+    {"name":"noa_lateral_kd_per_s","value":1.5,"unit":"1/s"},
+    {"name":"noa_lane_change_duration_s","value":5.0,"unit":"s","rationale":"Nominal finite duration for two quadratic Bezier segments; never a periodic lane-change trigger."},
+    {"name":"noa_prepare_duration_s","value":0.5,"unit":"s","rationale":"Require persistent observed motivation and a rechecked candidate before start."},
+    {"name":"noa_lane_change_cooldown_s","value":1.0,"unit":"s"},
+    {"name":"noa_min_lane_change_speed_mps","value":5.0,"unit":"m/s","rationale":"Avoid initiating lateral maneuvers at near-zero kinematic speed."},
+    {"name":"noa_overtake_speed_deficit_mps","value":2.0,"unit":"m/s"},
+    {"name":"noa_overtake_horizon_s","value":10.0,"unit":"s","rationale":"Only consider a slower lead within this nominal closing horizon plus following gap."},
+    {"name":"noa_merge_lookahead_s","value":8.0,"unit":"s","rationale":"Time-scaled local physical lane-end trigger, no global coordinate threshold."},
+    {"name":"noa_prediction_dt_s","value":0.1,"unit":"s","rationale":"Maximum candidate command/prediction slice; each slice integrates the unchanged kinematic model at <= its existing max dynamics dt and uses conservative swept geometry."},
+    {"name":"noa_prediction_settle_s","value":0.5,"unit":"s","rationale":"Include tracking settling after nominal reference end."},
+    {"name":"noa_body_margin_m","value":0.15,"unit":"m","rationale":"Geometric margin, not measurement noise; applied to both ego and predicted neighbor occupancy."},
+    {"name":"noa_prediction_lateral_accel_bound_mps2","value":0.0,"unit":"m/s^2","rationale":"Explicit limited prediction assumption: observed inertial lateral velocity remains constant. Longitudinal reachable range uses full inherited hard acceleration bounds and speed clipping. New unseen future lateral intent is not guaranteed safe."},
+    {"name":"noa_completion_lateral_error_m","value":0.15,"unit":"m"},
+    {"name":"noa_completion_heading_rad","value":0.03,"unit":"rad"},
+    {"name":"noa_geometry_tolerance_m","value":0.0000001,"unit":"m","rationale":"Numerical geometry tolerance only."},
+    {"name":"noa_emergency_ttc_s","value":2.0,"unit":"s","rationale":"Closing-time emergency trigger used together with jerk-aware braking-gap feasibility."},
+    {"name":"noa_stop_release_speed_mps","value":0.1,"unit":"m/s","rationale":"Small positive deadband for stopped-lead holding, not a forced velocity snap."},
+    {"name":"noa_stop_capture_speed_mps","value":3.0,"unit":"m/s","rationale":"Begin terminal stopping early enough to taper actual acceleration before reaching zero speed; local stationary lead/end only, no global time trigger."},
+    {"name":"noa_stop_speed_gain_per_s","value":1.0,"unit":"1/s","rationale":"Terminal speed feedback. Together with the inherited 0.2s actuator lag this yields overdamped low-speed decay; verified in original fixed-duration cases."},
+    {"name":"noa_stop_terminal_braking_mps2","value":0.005,"unit":"m/s^2","rationale":"Finite weak terminal tail for actual integrated stop/hold. Actual jerk still audited at 0.01s and refined 0.005s; no state reset or replacement of actual jerk."},
+    {"name":"noa_stop_position_reserve_m","value":3.0,"unit":"m","rationale":"Place comfortable stopping target 3m upstream of the hard lane-end stopping screen, leaving terminal tracking error room. Development reserve equal to nominal standstill gap, not a global coordinate trigger or a relaxed hard boundary."},
+    {"name":"noa_stop_capture_gap_m","value":12.0,"unit":"m","rationale":"Base terminal stopping region, enlarged by headway times capture speed (total 17.4m). Fixed spatial region avoids releasing as speed falls; release remains based on current visible lead motion or geometry."}
+  ]
+}
