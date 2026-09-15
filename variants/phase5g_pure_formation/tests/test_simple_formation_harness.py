@@ -716,7 +716,36 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_demo_outer_replay_uses_sibling_anchor_and_keeps_science_factual(self):
         with tempfile.TemporaryDirectory() as temp:
             source = self.make_short_demo(Path(temp) / "demos")
-            report = self.replay.replay_run(source, base=Path(temp) / "replays")
+            metadata = json.loads(
+                (source / "metadata.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(metadata["schema"], "phase5g_simple_demo_v1")
+            real_run = self.replay.subprocess.run
+            launches = []
+
+            def record_snapshot_launch(*args, **kwargs):
+                launches.append((args, kwargs))
+                return real_run(*args, **kwargs)
+
+            with patch.object(
+                self.replay.subprocess, "run", side_effect=record_snapshot_launch,
+            ):
+                report = self.replay.replay_run(
+                    source, base=Path(temp) / "replays",
+                )
+            self.assertEqual(len(launches), 1)
+            command = launches[0][0][0]
+            self.assertEqual(Path(launches[0][1]["cwd"]),
+                             source / "code_snapshot")
+            self.assertEqual(command[:5], [sys.executable, "-I", "-B", "-S", "-c"])
+            self.assertIn(
+                f"sys.path.insert(0,{str(source / 'code_snapshot')!r})",
+                command[5],
+            )
+            self.assertIn(
+                "from experiments.phase5g_replay import _replay_run_local",
+                command[5],
+            )
         self.assertTrue(report["passed"], report)
         self.assertTrue(report["semantic_replay_passed"], report)
         self.assertTrue(report["complete_execution"], report)

@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from models.bezier import QuadraticLaneChange
 from models.kinematic import KinematicModel
-from models.vehicle import VehicleState
+from models.vehicle import Actuation, VehicleState
 from noa import simple_formation
 from noa.contracts import NoaMemory
 from noa.controller import decide
@@ -141,6 +141,11 @@ class SimpleFormationControllerTests(unittest.TestCase):
             decision.diagnostics["simple_formation"]["reference_reason"],
             "no_visible_reference",
         )
+        simple = decision.diagnostics["simple_formation"]
+        self.assertIsNone(simple["longitudinal_guard"])
+        self.assertIsNone(simple["lane_guard"])
+        self.assertIsNone(simple["guard"])
+        self.assertEqual(simple["active_plan_guards"], [])
 
     def test_adjacent_reference_uses_fifteen_metres_and_bounded_increment(self):
         reference = self.neighbor(7, 40.0, 1)
@@ -176,9 +181,14 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(diagnostic["reference_track_id"], 7)
         self.assertEqual(diagnostic["reference_reason"], "longitudinal_safety_rejected")
         self.assertEqual(diagnostic["applied_increment_mps2"], 0.0)
-        self.assertIsNone(diagnostic["guard"])
-        self.assertEqual(decision.action.acceleration_mps2,
-                         baseline.action.acceleration_mps2)
+        self.assertEqual(diagnostic["longitudinal_guard"], {
+            "kind": "longitudinal", "result": REJECTED,
+        })
+        self.assertIsNone(diagnostic["lane_guard"])
+        self.assertIs(diagnostic["guard"], diagnostic["longitudinal_guard"])
+        self.assertEqual(decision.action, Actuation(0.0, 0.0))
+        self.assertEqual(decision.action, baseline.action)
+        self.assertEqual(decision.memory, memory)
 
     def test_unique_less_populated_lane_creates_one_fixed_safe_plan(self):
         neighbors = (
@@ -197,6 +207,32 @@ class SimpleFormationControllerTests(unittest.TestCase):
             decision.diagnostics["simple_formation"]["lane_reason"],
             "simple_formation_balance",
         )
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["longitudinal_guard"], {
+            "kind": "longitudinal", "result": SAFE,
+        })
+        self.assertEqual(simple["lane_guard"], {
+            "kind": "lane_change", "result": SAFE,
+        })
+        self.assertIs(simple["guard"], simple["lane_guard"])
+        self.assertEqual(
+            decision.action,
+            Actuation(-2.4704228341579437, 0.0035639849100249556),
+        )
+        self.assertEqual(
+            decision.memory,
+            SimpleFormationMemory(
+                (), "EXECUTE_LC",
+                plan=QuadraticLaneChange(
+                    0.0, CENTERS_M[0], 4.949999999999999,
+                    self.p["noa_lane_change_duration_s"], 20.0,
+                ),
+                target_y_m=4.949999999999999,
+                prepare_since_s=0.0,
+                lane_change_reason="simple_formation_balance",
+                reference_track_id=1,
+            ),
+        )
 
     def test_lane_guard_rejection_keeps_certified_longitudinal_request(self):
         neighbors = (
@@ -209,24 +245,33 @@ class SimpleFormationControllerTests(unittest.TestCase):
             decision = decide(self.control(neighbors=neighbors), self.p)
         self.assertEqual(guard.call_count, 2)
         self.assertIsNone(decision.memory.plan)
-        self.assertEqual(
-            decision.diagnostics["simple_formation"]["applied_increment_mps2"],
-            0.5,
-        )
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["applied_increment_mps2"], 0.5)
         self.assertEqual(
             decision.action.acceleration_mps2,
             guard.call_args_list[1].args[3],
         )
         self.assertEqual(
-            decision.diagnostics["simple_formation"]["lane_reason"],
-            "safety_rejected",
+            simple["lane_reason"], "safety_rejected",
+        )
+        self.assertEqual(simple["longitudinal_guard"], {
+            "kind": "longitudinal", "result": SAFE,
+        })
+        self.assertEqual(simple["lane_guard"], {
+            "kind": "lane_change", "result": REJECTED,
+        })
+        self.assertIs(simple["guard"], simple["lane_guard"])
+        self.assertFalse(simple["guard"]["result"]["safe"])
+        self.assertEqual(simple["guard"]["result"]["reason"],
+                         "neighbor_reachable_occupancy")
+        self.assertEqual(simple["guard"]["result"]["at_s"], 0.1)
+        self.assertEqual(simple["guard"]["result"]["checked_s"], 0.1)
+        self.assertEqual(
+            decision.action, Actuation(-2.4704228341579437, 0.0),
         )
         self.assertEqual(
-            decision.diagnostics["simple_formation"]["guard"]["kind"],
-            "longitudinal",
-        )
-        self.assertEqual(
-            decision.diagnostics["simple_formation"]["guard"]["result"], SAFE
+            decision.memory,
+            SimpleFormationMemory((), "FOLLOW", reference_track_id=1),
         )
 
     def test_completed_simple_plan_sets_done_and_blocks_a_second_request(self):
@@ -289,6 +334,13 @@ class SimpleFormationControllerTests(unittest.TestCase):
         choose.assert_not_called()
         self.assertEqual(decision.memory.plan, plan)
         self.assertEqual(decision.memory.own_behavior, "EXECUTE_LC")
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["active_plan_guards"], [
+            {"kind": "active_plan", "result": SAFE},
+        ])
+        self.assertIs(simple["guard"], simple["active_plan_guards"][0])
+        self.assertIsNone(simple["longitudinal_guard"])
+        self.assertIsNone(simple["lane_guard"])
 
     def test_active_simple_fallback_guard_reports_the_executed_acceleration(self):
         plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
@@ -315,11 +367,24 @@ class SimpleFormationControllerTests(unittest.TestCase):
 
         self.assertEqual(guard.call_count, 2)
         fallback_acceleration = guard.call_args_list[1].args[3]
-        self.assertEqual(decision.action.acceleration_mps2, fallback_acceleration)
         self.assertEqual(fallback_acceleration, -self.p["comfort_braking_mps2"])
-        public_guard = decision.diagnostics["simple_formation"]["guard"]
+        self.assertEqual(
+            decision.action, Actuation(-3, 0.009978868762134723),
+        )
+        self.assertEqual(decision.action.acceleration_mps2, fallback_acceleration)
+        self.assertEqual(decision.memory, replace(memory, own_behavior="EMERGENCY"))
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["active_plan_guards"], [
+            {"kind": "active_plan", "result": REJECTED},
+            {"kind": "active_plan", "result": fallback_accepted},
+        ])
+        self.assertEqual(len(simple["active_plan_guards"]), 2)
+        self.assertIsNone(simple["longitudinal_guard"])
+        self.assertIsNone(simple["lane_guard"])
+        public_guard = simple["guard"]
         self.assertEqual(public_guard["kind"], "active_plan")
         self.assertIs(public_guard["result"], fallback_accepted)
+        self.assertIs(public_guard, simple["active_plan_guards"][-1])
 
     def test_emergency_and_base_overtake_motivation_preempt_simple_rules(self):
         close = self.neighbor(3, 8.0, 0, speed=0.0)

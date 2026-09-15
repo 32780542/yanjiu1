@@ -240,6 +240,9 @@ def decide(control, parameters):
             "applied_increment_mps2": 0.0,
             "local_counts": None,
             "lane_reason": "not_evaluated",
+            "longitudinal_guard": None,
+            "lane_guard": None,
+            "active_plan_guards": [],
             "guard": None,
         }
     if legacy_formation_lane_active:
@@ -312,13 +315,26 @@ def decide(control, parameters):
             maneuver_accel, _, _, maneuver_emergency, _ = _longitudinal(ego, bodies, ego.y_m, None, p)
             prediction = verify_candidate(control, plan, road, maneuver_accel, p)
             diagnostics['prediction'] = prediction
+            if simple_active:
+                active_guard = {"kind": "active_plan", "result": prediction}
+                diagnostics["simple_formation"]["active_plan_guards"].append(active_guard)
+                diagnostics["simple_formation"]["guard"] = active_guard
             state = 'MERGE' if memory.lane_change_reason == 'observed_lane_end' else 'EXECUTE_LC'
             if prediction['safe'] and not maneuver_emergency:
                 accel = maneuver_accel
             else:
                 accel, state = min(accel, -p['comfort_braking_mps2']), 'EMERGENCY'
                 diagnostics['reason'] = 'active_plan_prediction_unavailable' if not prediction['safe'] else reason
-                diagnostics['fallback_prediction'] = verify_candidate(control, plan, road, accel, p)
+                fallback_prediction = verify_candidate(control, plan, road, accel, p)
+                diagnostics['fallback_prediction'] = fallback_prediction
+                if simple_active:
+                    active_guard = {
+                        "kind": "active_plan", "result": fallback_prediction,
+                    }
+                    diagnostics["simple_formation"]["active_plan_guards"].append(
+                        active_guard
+                    )
+                    diagnostics["simple_formation"]["guard"] = active_guard
             action = Actuation(accel, lateral_command(ego, reference_target(plan, ego.time_s), p))
             if r5_enabled:
                 memory=replace(memory,r5_last_time_s=ego.time_s)
@@ -329,10 +345,6 @@ def decide(control, parameters):
                 diagnostics["simple_formation"].update(
                     reference_reason="active_plan",
                     lane_reason="active_plan",
-                    guard={
-                        "kind": "active_plan",
-                        "result": diagnostics.get("fallback_prediction", prediction),
-                    },
                 )
             return NoaDecision(action, replace(memory, own_behavior=state), diagnostics)
     if r5_enabled:
@@ -409,6 +421,10 @@ def decide(control, parameters):
                     max(ego.vx_mps, p["noa_min_lane_change_speed_mps"]),
                 )
                 guard = verify_candidate(control, hold, road, proposed, p)
+                simple_diagnostic["longitudinal_guard"] = {
+                    "kind": "longitudinal", "result": guard,
+                }
+                simple_diagnostic["guard"] = simple_diagnostic["longitudinal_guard"]
                 simple_diagnostic.update(
                     reference_track_id=reference.track_id,
                     reference_reason=(
@@ -421,10 +437,6 @@ def decide(control, parameters):
                     raw_increment_mps2=increment,
                 )
                 if guard["safe"]:
-                    simple_diagnostic["guard"] = {
-                        "kind": "longitudinal",
-                        "result": guard,
-                    }
                     simple_diagnostic["applied_increment_mps2"] = proposed - accel
                     accel = proposed
                 else:
@@ -590,11 +602,11 @@ def decide(control, parameters):
                         ego.time_s, ego.y_m, target_y, duration, ego.vx_mps
                     )
                     guard = verify_candidate(control, candidate, road, accel, p)
+                    simple_diagnostic["lane_guard"] = {
+                        "kind": "lane_change", "result": guard,
+                    }
+                    simple_diagnostic["guard"] = simple_diagnostic["lane_guard"]
                     if guard["safe"]:
-                        simple_diagnostic["guard"] = {
-                            "kind": "lane_change",
-                            "result": guard,
-                        }
                         memory = replace(
                             memory,
                             plan=candidate,
