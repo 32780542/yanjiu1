@@ -49,6 +49,11 @@ class _PortableTempfile:
 tempfile = _PortableTempfile()
 
 
+def copy_tree(source, destination):
+    """Copy deep snapshot fixtures through Windows extended-length paths."""
+    shutil.copytree(native_io_path(source), native_io_path(destination))
+
+
 class Phase5GHarnessTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -267,7 +272,7 @@ class Phase5GHarnessTests(unittest.TestCase):
             for name, (relative, mutate, expected_path) in mutations.items():
                 with self.subTest(name=name):
                     changed = Path(temp) / ("tampered_" + name)
-                    shutil.copytree(source, changed)
+                    copy_tree(source, changed)
                     path = changed / relative
                     if relative.endswith(".jsonl"):
                         value = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
@@ -290,7 +295,7 @@ class Phase5GHarnessTests(unittest.TestCase):
             for field in fields:
                 with self.subTest(field=field):
                     changed = Path(temp) / f"acceptance_{field}"
-                    shutil.copytree(source, changed)
+                    copy_tree(source, changed)
                     validation = changed / "validation.json"
                     value = json.loads(validation.read_text(encoding="utf-8"))
                     original = value[field]
@@ -363,7 +368,7 @@ class Phase5GHarnessTests(unittest.TestCase):
             for field, replacement in mutations.items():
                 with self.subTest(field=field):
                     changed = source.parent / f"outer_{field}"
-                    shutil.copytree(source, changed)
+                    copy_tree(source, changed)
                     anchor = {**original_anchor, "run_id": changed.name}
                     anchor_path = changed.parent / ".phase5g-trust" / f"{changed.name}.json"
                     anchor_path.write_text(json.dumps(anchor, sort_keys=True,
@@ -628,7 +633,7 @@ class Phase5GHarnessTests(unittest.TestCase):
                 replay = self.replay.replay_variant(folder)
                 self.assertTrue(replay["passed"], replay)
                 changed = Path(temp) / f"{phase}_tamper"
-                shutil.copytree(folder, changed)
+                copy_tree(folder, changed)
                 changed_meta = json.loads((changed / "metadata.json").read_text(encoding="utf-8"))
                 changed_meta["commit_applied"] = not changed_meta["commit_applied"]
                 (changed / "metadata.json").write_text(
