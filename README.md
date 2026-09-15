@@ -49,9 +49,21 @@
 
 `python runrun.py --check` 只检查顶部配置、Phase5G入口、路网、`sumo-gui.exe` 与 TraCI 来源，不运行仿真、不创建演示目录，也不打开 GUI。
 
+## Phase5G 最终复审整改（2026-09-15）
+
+本轮没有改变已批准的无通信局部 if/else 控制动作或安全接受条件。五项整改已经落到可核验工程证据：分别保存 `longitudinal_guard` 与 `lane_guard` 并让公开 `guard` 指向当前被拒的换道守卫；直接入口使用有界输入公式，12车×45 s 的子进程预算为 `522 s`；`--check` 保持 `zero-write`；生成后处理与重放改为流式读取并绑定每次扫描的轨迹身份；Git archive 中补齐可运行闭包与便携 SUMO 发现。相关本地提交为 `29051ef`；`993998e`、`d562f12`、`3f1653a`、`b5934cc`、`193536a`、`37f4d37`；`9e6a65e`、`2f0a75c`、`a3ab69a`；`6af693a`、`4171067`、`ddb3d1c`、`ce66252`、`6ad5681`；以及根环境修复 `9dbb3af`。`6af693a` 首次新增76个闭包文件；后续整改后的最终精确闭包为96个文件，日志为 `D:\yanjiu1\keyan1\results\operations\20260915T061117194742Z_review-d2-final3-closure-audit_75fb2807`。其余逐文件范围和 RED/GREEN 日志见[阶段5检查点](D:/yanjiu1/keyan1/docs/phase5_checkpoint.md)。这些提交尚未 push。
+
+工程事实：最终编译、simple 90/90、Phase5G 101/101、根 demo 75/75 均通过；根全回归在暴露空工具模板缺陷并补充 `research/common.py` 便携发现后为299/299。对应最终日志依次为 `D:\yanjiu1\keyan1\results\operations\20260915T063038691791Z_review-e-compile_c6968997`、`D:\yanjiu1\keyan1\results\operations\20260915T063047928512Z_review-e-simple-all_d1ab6c64`、`D:\yanjiu1\keyan1\results\operations\20260915T063245634168Z_review-e-phase5g-all_6985ebf9`、`D:\yanjiu1\keyan1\results\operations\20260915T063358991331Z_review-e-root-demo_cd6293b2` 和 `D:\yanjiu1\keyan1\results\operations\20260915T064347194380Z_review-e-root-regression-sumo-green_09bfdbb5`，均 exit 0、无 skip。`runrun.py --check` 的直接与原子前后审计为 `D:\yanjiu1\keyan1\results\operations\20260915T070343175313Z_review-e-runrun-check_30f050a0`、`D:\yanjiu1\keyan1\results\operations\20260915T070358941330Z_review-e-runrun-zero-write_115db1c6`，均 exit 0。内存中设置 `SHOW_GUI=False`、12车、45 s 的入口契约测试确认预算 `522 s`，并由真实加载器接受新建的12车/451帧可信测试夹具；它使用 mock subprocess，只验证入口而不是新增科学运行，日志为 `D:\yanjiu1\keyan1\results\operations\20260915T070439280777Z_review-e-runrun-debug-fixture_f2f56ede`。
+
+新科学证据严格按3→6→12顺序各生成一次，固定 seed 1、10 m/s、45 s，输出基址为 `simple_final_review`；精确路径为 `D:\yanjiu1\keyan1\variants\phase5g_pure_formation\results\phase5g\simple_final_review\20260915T064713884072Z_ee92fc0e`、`D:\yanjiu1\keyan1\variants\phase5g_pure_formation\results\phase5g\simple_final_review\20260915T064751667560Z_e3a1b27f`、`D:\yanjiu1\keyan1\variants\phase5g_pure_formation\results\phase5g\simple_final_review\20260915T065009813717Z_832d9ca2`。精确六车重放为 `D:\yanjiu1\keyan1\variants\phase5g_pure_formation\results\phase5g\replays\20260915T065716450367Z_8a58643e`，执行与语义重放通过且误差为0，但 `variant_acceptance_passed=false`。三组都没有碰撞，几何与舒适通过；也都没有形成全队编队、没有完成或编队换道、没有速度恢复。最终车道计数分别为 `[1,1,1]`、`[3,2,1]`、`[4,4,4]`，最低速度分别为8.3754383471、9.4966925096、8.0859588211 m/s；只有登记的六车门槛适用，30 s形成加10 s保持结果为 false。因此工程交付通过不等于科学验收通过，阶段6/7/8仍关闭。
+
+六车轨迹流式审计记录2700个车辆决策。公开 `guard` 的非空计数为2250：换道拒绝451，纵向拒绝1342，纵向安全457；`lane_guard` 为451个换道拒绝，`longitudinal_guard` 为1792个拒绝和458个安全，原因分别为 `neighbor_reachable_occupancy` 与 `conditional_swept_prediction_clear`。全部非空项都有 `safe`、`reason`、`at_s`、`checked_s` 键；451个 `safety_rejected` 换道行的公开守卫均为被拒 `lane_guard`，不匹配数0。审计日志为 `D:\yanjiu1\keyan1\results\operations\20260915T070109830747Z_review-e-final-guard-audit_717c1287`。真实 `tracemalloc` 测得12车真实轨迹生成后处理峰值11.318586 MiB，真实六车精确重放峰值5.370682 MiB，均低于 `64 MiB`；没有用缩放推断替代测量。12车整包重放内存测量在3600 s超时，故没有12车重放峰值结论，该负日志及更早的测量脚本失败均保留在检查点。
+
+旧 `simple_final` 三组负结果和所有早期失败包均保持不变；本轮不能据此声称形成成功、交通效率、通行能力或能耗收益。当前限制仍是相同的有限局部观测、每车私有记忆、每车最多一次换道和既有扫掠安全守卫，不允许通信、真实ID优先级、全局车辆数/槽位、中心分配、候选评分或障碍车。
+
 ## 运行
 
-在 `D:\yanjiu1\keyan1` 的 PowerShell 中按下列顺序运行。默认解释器和SUMO由`configs/tools.json`固定；不使用PATH中的旧SUMO0.32.0。
+在 `D:\yanjiu1\keyan1` 的 PowerShell 中按下列顺序运行。使用当前Python解释器；SUMO主目录按 `SUMO_HOME`、非空 `configs/tools.json`、PATH 的顺序发现，并严格校验实际可执行文件与TraCI模块来源，空配置模板不会固定任何机器路径。
 
 ```powershell
 Set-Location -LiteralPath 'D:\yanjiu1\keyan1'
