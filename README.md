@@ -61,9 +61,21 @@
 
 旧 `simple_final` 三组负结果和所有早期失败包均保持不变；本轮不能据此声称形成成功、交通效率、通行能力或能耗收益。当前限制仍是相同的有限局部观测、每车私有记忆、每车最多一次换道和既有扫掠安全守卫，不允许通信、真实ID优先级、全局车辆数/槽位、中心分配、候选评分或障碍车。
 
-## 运行
+## 当前交付运行
 
-在 `D:\yanjiu1\keyan1` 的 PowerShell 中按下列顺序运行。使用当前Python解释器；SUMO主目录按 `SUMO_HOME`、非空 `configs/tools.json`、PATH 的顺序发现，并严格校验实际可执行文件与TraCI模块来源，空配置模板不会固定任何机器路径。
+当前最小Git闭包已跟踪且可从Git archive运行的主入口只有根目录 `runrun.py`。使用当前Python解释器；SUMO主目录按 `SUMO_HOME`、非空 `configs/tools.json`、PATH 的顺序发现，并严格校验实际可执行文件与TraCI模块来源，空配置模板不会固定任何机器路径。先执行只读检查，再运行当前Phase5G演示：
+
+```powershell
+Set-Location -LiteralPath 'D:\yanjiu1\keyan1'
+python runrun.py --check
+python runrun.py
+```
+
+也可以直接编辑 `runrun.py` 顶部“用户配置区”，然后点击编辑器的“运行”或“调试”；参数与 `SHOW_GUI` 行为见上方“可视化演示入口”。
+
+## 完整历史本地工作区参考（不属于最小Git闭包）
+
+以下 `scripts/run.ps1` 与根 `run.py` 阶段0–4命令只供包含全部未跟踪历史文件的本地研究工作区参考。它们不在当前最小Git闭包中，不作为当前交付入口，也不声称可从Git archive运行。
 
 ```powershell
 Set-Location -LiteralPath 'D:\yanjiu1\keyan1'
