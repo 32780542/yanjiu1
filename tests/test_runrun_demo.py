@@ -168,21 +168,21 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
         create.assert_not_called()
 
     def test_generation_timeout_budget_is_exact_and_validates_domain(self):
-        self.assertEqual(gui.simple_generation_timeout_s(3, 45.0), 198)
-        self.assertEqual(gui.simple_generation_timeout_s(6, 45.0), 306)
-        self.assertEqual(gui.simple_generation_timeout_s(12, 45.0), 522)
-        self.assertGreater(gui.simple_generation_timeout_s(12, 45.0), 411.375)
+        self.assertEqual(gui.simple_generation_timeout_s(45.0, 3), 198)
+        self.assertEqual(gui.simple_generation_timeout_s(45.0, 6), 306)
+        self.assertEqual(gui.simple_generation_timeout_s(45.0, 12), 522)
+        self.assertGreater(gui.simple_generation_timeout_s(45.0, 12), 411.375)
         for count in (True, 2, 5, 13):
             with self.subTest(count=count), \
                     self.assertRaisesRegex(ValueError, 'VEHICLE_COUNT'):
-                gui.simple_generation_timeout_s(count, 45.0)
+                gui.simple_generation_timeout_s(45.0, count)
         for duration in (True, 0, -1.0, math.nan, math.inf):
             with self.subTest(duration=duration), \
                     self.assertRaisesRegex(ValueError, 'SIMULATION_DURATION_S'):
-                gui.simple_generation_timeout_s(6, duration)
+                gui.simple_generation_timeout_s(duration, 6)
         with self.assertRaisesRegex(
                 ValueError, 'SIMULATION_DURATION_S.*3600'):
-            gui.simple_generation_timeout_s(12, 411.375)
+            gui.simple_generation_timeout_s(411.375, 12)
 
     def test_clean_layout_check_accepts_future_results_without_writes_or_process(self):
         with tempfile.TemporaryDirectory() as temp:

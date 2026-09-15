@@ -287,7 +287,7 @@ def validate_simple_config(
         network=network.resolve(), traci_python=traci_python.resolve())
 
 
-def simple_generation_timeout_s(vehicle_count: int, duration_s: float) -> int:
+def simple_generation_timeout_s(duration_s: float, vehicle_count: int) -> int:
     """Return the bounded generation budget for one validated simple trace."""
     if type(vehicle_count) is not int or vehicle_count not in (3, 6, 12):
         raise ValueError('VEHICLE_COUNT 必须是整数 3、6 或 12')
@@ -1603,7 +1603,7 @@ def generate_fresh_simple_trace(
         '--max-formation-lane-changes', str(config.max_formation_lane_changes),
     ]
     timeout_s = simple_generation_timeout_s(
-        config.vehicle_count, config.simulation_duration_s)
+        config.simulation_duration_s, config.vehicle_count)
     runner = subprocess.run if process_runner is None else process_runner
     try:
         completed = runner(
