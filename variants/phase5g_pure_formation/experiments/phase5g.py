@@ -279,26 +279,69 @@ def _checked_mutation_target(path: str | Path, staging_suffix: str) -> tuple[Pat
     target = Path(os.path.abspath(path))
     _require_output_directory(target.parent)
     staging = target.with_name(target.name + staging_suffix)
-    for candidate in (target, staging):
-        try:
-            info = os.lstat(candidate)
-        except FileNotFoundError:
-            continue
+    try:
+        info = os.lstat(target)
+    except FileNotFoundError:
+        pass
+    else:
         attributes = getattr(info, "st_file_attributes", 0)
         reparse = bool(
             attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
-        if candidate.is_symlink() or reparse or not stat.S_ISREG(info.st_mode):
-            raise ValueError(f"output mutation target must be a regular file: {candidate}")
+        if target.is_symlink() or reparse or not stat.S_ISREG(info.st_mode):
+            raise ValueError(f"output mutation target must be a regular file: {target}")
+    try:
+        os.lstat(staging)
+    except FileNotFoundError:
+        pass
+    else:
+        raise FileExistsError(staging)
     return target, staging
+
+
+def _file_identity(info) -> tuple[int, int]:
+    return info.st_dev, info.st_ino
+
+
+def _cleanup_owned_staging(staging: Path, identity: tuple[int, int] | None) -> None:
+    if identity is None:
+        return
+    try:
+        info = os.lstat(staging)
+        attributes = getattr(info, "st_file_attributes", 0)
+        reparse = bool(
+            attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+        if not staging.is_symlink() and not reparse \
+                and stat.S_ISREG(info.st_mode) \
+                and _file_identity(info) == identity:
+            staging.unlink()
+    except OSError:
+        pass
 
 
 def _atomic_output_json(path: str | Path, data: object, staging_suffix: str) -> None:
     payload = json.dumps(
         data, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
     target, staging = _checked_mutation_target(path, staging_suffix)
-    staging.write_text(payload, encoding="utf-8")
-    _require_output_directory(target.parent)
-    os.replace(staging, target)
+    identity = None
+    try:
+        with staging.open("x", encoding="utf-8", newline="\n") as stream:
+            identity = _file_identity(os.fstat(stream.fileno()))
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+        _require_output_directory(target.parent)
+        info = os.lstat(staging)
+        attributes = getattr(info, "st_file_attributes", 0)
+        reparse = bool(
+            attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+        if staging.is_symlink() or reparse or not stat.S_ISREG(info.st_mode) \
+                or _file_identity(info) != identity:
+            raise ValueError("output staging file changed before atomic replace")
+        os.replace(staging, target)
+        identity = None
+    except BaseException:
+        _cleanup_owned_staging(staging, identity)
+        raise
 
 
 def _write_new_output_bytes(path: str | Path, payload: bytes) -> Path:

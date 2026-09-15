@@ -486,6 +486,44 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertEqual(
                 [item.name for item in output.iterdir()], [".phase5g-trust"])
 
+    def test_atomic_staging_hardlink_is_rejected_without_touching_victim(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "output"
+            output.mkdir()
+            writers = (
+                (self.harness.atomic_json, ".writing"),
+                (self.harness._finalizer_json, ".finalizing"),
+            )
+            for index, (writer, suffix) in enumerate(writers):
+                target = output / f"latest-{index}.json"
+                staging = target.with_name(target.name + suffix)
+                victim = output / f"victim-{index}.txt"
+                original = f"do not truncate victim {index}"
+                victim.write_text(original, encoding="utf-8")
+                os.link(victim, staging)
+                with self.subTest(suffix=suffix), self.assertRaises(FileExistsError):
+                    writer(target, {"status": "completed"})
+                self.assertEqual(victim.read_text(encoding="utf-8"), original)
+                self.assertTrue(staging.exists())
+                self.assertTrue(os.path.samefile(victim, staging))
+
+    def test_atomic_replace_does_not_write_through_destination_hardlink(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "output"
+            output.mkdir()
+            victim = output / "victim.txt"
+            victim.write_text("unchanged victim", encoding="utf-8")
+            target = output / "latest.json"
+            os.link(victim, target)
+            self.harness.atomic_json(target, {"status": "completed"})
+            self.assertEqual(
+                victim.read_text(encoding="utf-8"), "unchanged victim")
+            self.assertEqual(
+                json.loads(target.read_text(encoding="utf-8")),
+                {"status": "completed"},
+            )
+            self.assertFalse(os.path.samefile(victim, target))
+
     def test_cli_forwards_every_demo_value_exactly_once(self):
         with patch("experiments.phase5g.run_phase5g_demo",
                    return_value=Path("literal-demo")) as demo:
