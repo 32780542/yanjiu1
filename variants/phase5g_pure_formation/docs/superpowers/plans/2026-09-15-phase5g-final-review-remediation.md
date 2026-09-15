@@ -94,7 +94,7 @@ Keep the existing `guard` field so current consumers accept both old single-guar
 ```powershell
 python scripts/run_logged.py --label review-a-current-tests --timeout 300 -- python -I -B -S variants/phase5g_pure_formation/tests/simple_formation_test_launcher.py all
 python scripts/run_logged.py --label review-a-phase5g-regression --timeout 600 -- python -I -B -S variants/phase5g_pure_formation/tests/phase5g_test_launcher.py all
-python scripts/run_logged.py --label review-a-old-snapshot-replay --timeout 900 -- python -I -B -S variants/phase5g_pure_formation/run.py phase5g-replay --run-dir results/phase5g/simple_demo/20260914T185222941842Z_ae97e081
+python scripts/run_logged.py --label review-a-old-snapshot-replay --timeout 900 -- python -I -B -S variants/phase5g_pure_formation/run.py phase5g-replay --run-dir variants/phase5g_pure_formation/results/phase5g/simple_demo/20260914T185222941842Z_ae97e081
 ```
 
 Expected: both suites pass with no skips; the old anchored package replays from its snapshot and no old file changes. If that literal external package is absent, record the absence in the log and rely on the committed synthetic saved-snapshot test; do not recreate it under the old name.
@@ -274,7 +274,7 @@ self.assertFalse({p for p in tracked if p.lower().endswith(".pdf")})
 - [ ] **Step 3: Prove RED, then stage only the audited list**
 
 ```powershell
-python scripts/run_logged.py --label review-d-baseline-red --timeout 180 -- python -B -m unittest tests.test_phase5g_tracked_baseline -v
+python scripts/run_logged.py --label review-d-baseline-red --timeout 180 -- python -B -m unittest discover -s tests -p test_phase5g_tracked_baseline.py -v
 git status --short
 ```
 
@@ -366,7 +366,7 @@ If one run fails, preserve that prefix and stop evidence generation for review r
 python scripts/run_logged.py --label review-e-final-6-replay --timeout 1200 -- python -I -B -S variants/phase5g_pure_formation/run.py phase5g-replay --run-dir $sixRun
 ```
 
-Keep this step in the same PowerShell session as Step 2. PowerShell expands `$sixRun` before `run_logged.py` starts, so the operation metadata records the exact absolute run path rather than `latest.json`. Stream-scan its trace and record counts by `kind`, `safe`, and `reason`, plus `at_s`/`checked_s` completeness. Specifically verify lane `safety_rejected` rows expose a rejected public lane guard rather than a safe longitudinal guard. Do not alter rules in response to the counts.
+Keep this step in the same PowerShell session as Step 3. PowerShell expands `$sixRun` before `run_logged.py` starts, so the operation metadata records the exact absolute run path rather than `latest.json`. Stream-scan its trace and record counts by `kind`, `safe`, and `reason`, plus `at_s`/`checked_s` completeness. Specifically verify lane `safety_rejected` rows expose a rejected public lane guard rather than a safe longitudinal guard. Do not alter rules in response to the counts.
 
 - [ ] **Step 5: Verify the 12-car direct launcher path and peak memory**
 
@@ -388,7 +388,7 @@ Do not claim traffic efficiency, energy benefit, or formation success unless the
 git diff --check
 git status --short
 git diff --stat HEAD
-python scripts/run_logged.py --label review-e-doc-closure --timeout 120 -- python -B -m unittest tests.test_phase5g_tracked_baseline -v
+python scripts/run_logged.py --label review-e-doc-closure --timeout 120 -- python -B -m unittest discover -s tests -p test_phase5g_tracked_baseline.py -v
 rg -n "longitudinal_guard|lane_guard|522 s|zero-write|64 MiB|simple_final_review|SHOW_GUI=False" README.md docs/phase5_checkpoint.md
 git add README.md docs/phase5_checkpoint.md
 git commit -m "docs: record final phase5g remediation evidence"
