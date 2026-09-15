@@ -2,11 +2,23 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
+import stat
 import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def native_io_path(path):
+    """Return a Windows extended-length spelling for filesystem I/O only."""
+    absolute = os.path.abspath(path)
+    if os.name != 'nt' or absolute.startswith('\\\\?\\'):
+        return absolute
+    if absolute.startswith('\\\\'):
+        return '\\\\?\\UNC\\' + absolute[2:]
+    return '\\\\?\\' + absolute
 
 
 def output_path(path):
@@ -27,7 +39,19 @@ def write_json(path, data):
 
 
 def sha256(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    digest = hashlib.sha256()
+    with open(native_io_path(path), 'rb') as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def regular_file(path):
+    """Check a regular file without Windows MAX_PATH truncation."""
+    try:
+        return stat.S_ISREG(os.lstat(native_io_path(path)).st_mode)
+    except OSError:
+        return False
 
 
 def settings(layer):
@@ -41,11 +65,33 @@ def write_xml(path, root):
     ET.ElementTree(root).write(p, encoding='utf-8', xml_declaration=True)
 
 
+def sumo_home():
+    """Resolve SUMO from SUMO_HOME, a variant-relative config, or PATH."""
+    configured = read_json('configs/tools.json').get('sumo_home', '')
+    if configured is None:
+        configured = ''
+    if not isinstance(configured, str):
+        raise ValueError('configs/tools.json sumo_home must be a string')
+    selected = os.environ.get('SUMO_HOME', '').strip() or configured.strip()
+    if selected:
+        candidate = Path(selected).expanduser()
+        if not candidate.is_absolute():
+            candidate = ROOT / candidate
+        return candidate.resolve()
+    executable = shutil.which('sumo-gui.exe') or shutil.which('sumo-gui') \
+        or shutil.which('sumo.exe') or shutil.which('sumo')
+    if executable:
+        return Path(executable).resolve().parent.parent
+    raise FileNotFoundError(
+        'SUMO not found; set SUMO_HOME, configure a variant-relative '
+        'configs/tools.json sumo_home, or add SUMO to PATH')
+
+
 def tool_env():
     env = os.environ.copy()
-    config = read_json('configs/tools.json')
-    env.update(SUMO_HOME=config['sumo_home'], PYTHONDONTWRITEBYTECODE='1', PYTHONUTF8='1')
-    env['PATH'] = str(Path(config['sumo_home']) / 'bin') + os.pathsep + env.get('PATH', '')
+    home = sumo_home()
+    env.update(SUMO_HOME=str(home), PYTHONDONTWRITEBYTECODE='1', PYTHONUTF8='1')
+    env['PATH'] = str(home / 'bin') + os.pathsep + env.get('PATH', '')
     for key in ('TEMP', 'TMP', 'TMPDIR', 'MPLCONFIGDIR', 'XDG_CACHE_HOME'):
         env[key] = str(ROOT / 'tmp')
     env.pop('PYTHONPATH', None)
@@ -54,7 +100,9 @@ def tool_env():
 
 
 def binary(name):
-    return str(Path(read_json('configs/tools.json')['sumo_home']) / 'bin' / f'{name}.exe')
+    home = sumo_home()
+    windows = home / 'bin' / f'{name}.exe'
+    return str(windows if windows.is_file() else home / 'bin' / name)
 
 
 def command(cmd, log, timeout=60):
@@ -68,7 +116,7 @@ def command(cmd, log, timeout=60):
 
 
 def lock_traci():
-    tool_root = Path(read_json('configs/tools.json')['sumo_home']) / 'tools'
+    tool_root = sumo_home() / 'tools'
     sys.path.insert(0, str(tool_root))
     os.environ.update({k:v for k,v in tool_env().items() if k in ('SUMO_HOME', 'PATH')})
     import traci

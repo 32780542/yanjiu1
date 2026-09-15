@@ -16,7 +16,9 @@ from experiments.phase5g import Phase5GRunRecord as RunRecord
 from models.kinematic import KinematicModel
 from models.vehicle import VehicleState
 from perception.road import VisibleRoad
-from research.common import ROOT, code_manifest, output_path, read_json, sha256
+from research.common import (
+    ROOT, code_manifest, output_path, read_json, regular_file, sha256,
+)
 from simulation.noa_clock import ReplayBoundary
 from simulation.phase5g_clock import CLOCK_SCHEMA, Phase5GClock, initial_memory_hash
 
@@ -452,7 +454,7 @@ def _validate_trusted_materials(path: Path, anchor: dict,
                  0.0, "code_snapshot")
     for name, digest in stored_code.items():
         file = path / "code_snapshot" / name
-        if not file.is_file() or sha256(file) != digest:
+        if not regular_file(file) or sha256(file) != digest:
             raise ValueError(f"code_snapshot.{name}: source differs")
     current = code_manifest()
     compare_tree(current, stored_code, 0.0, "code_hashes")
@@ -475,7 +477,7 @@ def _validate_trusted_materials(path: Path, anchor: dict,
         raise ValueError("input_hashes: fields differ")
     for name, digest in stored_inputs.items():
         file = path / "input_snapshot" / name
-        if not file.is_file() or sha256(file) != digest:
+        if not regular_file(file) or sha256(file) != digest:
             raise ValueError(f"input_snapshot.{name}: differs")
     raw = (path / "input_snapshot" / "phase5g_cases.json").read_bytes()
     if metadata.get("case_file_sha256") != anchor.get("case_file_sha256"):

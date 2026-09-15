@@ -13,6 +13,7 @@ import sys
 import tempfile
 import tracemalloc
 import unittest
+import uuid
 from types import MappingProxyType
 from unittest.mock import patch
 
@@ -204,6 +205,22 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 copied.with_name(f"{destination.name}.completion.json"),
             )
         return destination
+
+    def test_standard_review_temp_root_supports_snapshot_and_replay(self):
+        review_root = (
+            Path(tempfile.gettempdir()) / f"phase5g-review-{uuid.uuid4()}"
+        )
+        output = (
+            review_root / "variants" / "phase5g_pure_formation" / "tmp" / "demos"
+        )
+        try:
+            source = self.make_short_demo(output)
+            report = self.replay.replay_run(
+                source, base=review_root / "replays"
+            )
+            self.assertTrue(report["passed"], report)
+        finally:
+            shutil.rmtree(review_root, ignore_errors=True)
 
     def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):
         model, physical, policy = self.simple_parameters()

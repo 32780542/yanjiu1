@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
+import re
 import subprocess
 import tempfile
 import unittest
@@ -29,7 +31,40 @@ def _audit_module():
     return module
 
 
+def _repository_baseline_files(root: Path) -> set[str]:
+    """Use Git in a checkout and the actual file tree in a source archive."""
+    if (root / ".git").exists():
+        raw = subprocess.run(
+            ["git", "ls-files", "-z"],
+            cwd=root,
+            check=True,
+            capture_output=True,
+        ).stdout
+        return {
+            item.decode("utf-8").replace("\\", "/")
+            for item in raw.split(b"\0")
+            if item
+        }
+    return {
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file()
+    }
+
+
 class Phase5GTrackedBaselineTests(unittest.TestCase):
+    def test_committed_tool_configs_are_machine_portable(self):
+        for relative in (
+            "configs/tools.json",
+            "variants/phase5g_pure_formation/configs/tools.json",
+        ):
+            with self.subTest(relative=relative):
+                text = (ROOT / relative).read_text(encoding="utf-8-sig")
+                payload = json.loads(text)
+                self.assertFalse(re.search(r"(?i)[a-z]:[/\\]", text), text)
+                self.assertNotIn("84335", text)
+                self.assertNotIn("yanjiu1", text.lower())
+                self.assertIn("sumo_home", payload)
     def test_audit_contains_mandatory_runtime_inputs_and_imports(self):
         audit = _audit_module()
         required = set(audit.compute_runtime_closure(ROOT, ENTRIES, LAUNCHERS))
@@ -44,6 +79,7 @@ class Phase5GTrackedBaselineTests(unittest.TestCase):
             "tests/test_phase5g_tracked_baseline.py",
             "tests/test_runrun_demo.py",
             "variants/phase5g_pure_formation/configs/phase5g.json",
+            "variants/phase5g_pure_formation/configs/tools.json",
             "variants/phase5g_pure_formation/docs/parameter_registry.csv",
             "variants/phase5g_pure_formation/experiments/phase5g_cases.py",
             "variants/phase5g_pure_formation/noa/simple_formation.py",
@@ -68,6 +104,34 @@ class Phase5GTrackedBaselineTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "unresolved local import"):
                 audit.compute_runtime_closure(root, ("entry.py",), ())
 
+    def test_audit_rejects_missing_member_from_local_module(self):
+        audit = _audit_module()
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "localmod.py").write_text("present = 1\n", encoding="utf-8")
+            (root / "entry.py").write_text(
+                "from localmod import missing\n", encoding="utf-8"
+            )
+            with self.assertRaisesRegex(ValueError, "unresolved local import"):
+                audit.compute_runtime_closure(root, ("entry.py",), ())
+
+    def test_audit_follows_static_read_json_source_inputs_only(self):
+        audit = _audit_module()
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "configs").mkdir()
+            (root / "configs" / "tools.json").write_text("{}", encoding="utf-8")
+            (root / "results").mkdir()
+            (root / "results" / "old.json").write_text("{}", encoding="utf-8")
+            (root / "entry.py").write_text(
+                "read_json('configs/tools.json')\n"
+                "read_json('results/old.json')\n",
+                encoding="utf-8",
+            )
+            closure = set(audit.compute_runtime_closure(root, ("entry.py",), ()))
+            self.assertIn("configs/tools.json", closure)
+            self.assertNotIn("results/old.json", closure)
+
     def test_audit_rejects_forbidden_selected_path(self):
         audit = _audit_module()
         with tempfile.TemporaryDirectory() as raw:
@@ -81,17 +145,7 @@ class Phase5GTrackedBaselineTests(unittest.TestCase):
     def test_computed_runtime_closure_is_tracked_and_forbidden_files_are_absent(self):
         audit = _audit_module()
         required = set(audit.compute_runtime_closure(ROOT, ENTRIES, LAUNCHERS))
-        raw = subprocess.run(
-            ["git", "ls-files", "-z"],
-            cwd=ROOT,
-            check=True,
-            capture_output=True,
-        ).stdout
-        tracked = {
-            item.decode("utf-8").replace("\\", "/")
-            for item in raw.split(b"\0")
-            if item
-        }
+        tracked = _repository_baseline_files(ROOT)
         self.assertFalse(required - tracked, sorted(required - tracked))
         self.assertFalse({path for path in tracked if path.startswith("results/")})
         self.assertFalse({path for path in tracked if "/results/" in path})
@@ -105,6 +159,17 @@ class Phase5GTrackedBaselineTests(unittest.TestCase):
                 and not path.startswith("variants/phase5g_pure_formation/")
             }
         )
+
+    def test_archive_mode_enumerates_files_without_git_metadata(self):
+        with tempfile.TemporaryDirectory() as raw:
+            root = Path(raw)
+            (root / "nested").mkdir()
+            (root / "entry.py").write_text("pass\n", encoding="utf-8")
+            (root / "nested" / "input.json").write_text("{}", encoding="utf-8")
+            self.assertEqual(
+                {"entry.py", "nested/input.json"},
+                _repository_baseline_files(root),
+            )
 
 
 if __name__ == "__main__":

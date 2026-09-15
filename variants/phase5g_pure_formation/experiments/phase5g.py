@@ -25,7 +25,10 @@ from experiments.phase5_detection import detect_frames
 from models.vehicle import VehicleState
 from noa import simple_formation
 from perception.road import VisibleRoad
-from research.common import ROOT, code_manifest, output_path, read_json, settings, sha256
+from research.common import (
+    ROOT, code_manifest, native_io_path, output_path, read_json, regular_file,
+    settings, sha256,
+)
 from safety.geometry import RoadEnvelope
 from simulation.phase5g_clock import (
     CLOCK_SCHEMA,
@@ -328,20 +331,22 @@ def _atomic_output_json(path: str | Path, data: object, staging_suffix: str) -> 
     target, staging = _checked_mutation_target(path, staging_suffix)
     identity = None
     try:
-        with staging.open("x", encoding="utf-8", newline="\n") as stream:
+        with open(
+            native_io_path(staging), "x", encoding="utf-8", newline="\n"
+        ) as stream:
             identity = _file_identity(os.fstat(stream.fileno()))
             stream.write(payload)
             stream.flush()
             os.fsync(stream.fileno())
         _require_output_directory(target.parent)
-        info = os.lstat(staging)
+        info = os.lstat(native_io_path(staging))
         attributes = getattr(info, "st_file_attributes", 0)
         reparse = bool(
             attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
         if staging.is_symlink() or reparse or not stat.S_ISREG(info.st_mode) \
                 or _file_identity(info) != identity:
             raise ValueError("output staging file changed before atomic replace")
-        os.replace(staging, target)
+        os.replace(native_io_path(staging), native_io_path(target))
         identity = None
     except BaseException:
         _cleanup_owned_staging(staging, identity)
@@ -358,7 +363,7 @@ def _write_new_output_bytes(path: str | Path, payload: bytes) -> Path:
     else:
         raise FileExistsError(target)
     _require_output_directory(target.parent)
-    with target.open("xb") as stream:
+    with open(native_io_path(target), "xb") as stream:
         stream.write(payload)
         stream.flush()
         os.fsync(stream.fileno())
@@ -457,7 +462,7 @@ def source_hashes() -> dict[str, str]:
     result = {}
     for name in SOURCE_FILES:
         path = ROOT / name
-        if not path.is_file():
+        if not regular_file(path):
             raise ValueError(f"required Phase 5G source missing: {name}")
         result[name] = sha256(path)
     return result

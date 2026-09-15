@@ -94,8 +94,27 @@ class DemoConfigurationTests(unittest.TestCase):
             (root / 'scenarios/cai2024').mkdir(parents=True)
             (root / 'scenarios/cai2024/bottleneck.net.xml').write_text('<net/>', encoding='utf-8')
             (root / gui.ALGORITHM_RUN_REL).mkdir(parents=True)
-            with self.assertRaisesRegex(FileNotFoundError, 'sumo-gui.exe'):
+            with patch.dict(os.environ, {'SUMO_HOME': ''}), \
+                    patch.object(gui.shutil, 'which', return_value=None), \
+                    self.assertRaisesRegex(FileNotFoundError, 'sumo-gui.exe'):
                 gui.validate_config(gui.DemoConfig(), root)
+
+    def test_sumo_home_resolution_prefers_environment_then_relative_config(self):
+        with tempfile.TemporaryDirectory(dir=gui.PROJECT_ROOT / 'tmp') as tmp:
+            root = Path(tmp)
+            env_home = root / 'environment-sumo'
+            config_home = root / 'portable-sumo'
+            with patch.dict(os.environ, {'SUMO_HOME': str(env_home)}):
+                self.assertEqual(
+                    gui.resolve_sumo_home({'sumo_home': 'portable-sumo'}, root),
+                    env_home.resolve(),
+                )
+            with patch.dict(os.environ, {'SUMO_HOME': ''}), \
+                    patch.object(gui.shutil, 'which', return_value=None):
+                self.assertEqual(
+                    gui.resolve_sumo_home({'sumo_home': 'portable-sumo'}, root),
+                    config_home.resolve(),
+                )
 
 
 class SimpleFormationConfigurationTests(unittest.TestCase):

@@ -6,6 +6,7 @@ import json
 import math
 import os
 from pathlib import Path
+import shutil
 import socket
 import stat
 import subprocess
@@ -172,6 +173,29 @@ def _finite_number(name, value, minimum, maximum):
     return number
 
 
+def resolve_sumo_home(tools: Mapping, root: Path) -> Path:
+    """Resolve SUMO portably: environment, root-relative config, then PATH."""
+    root = Path(root).resolve()
+    environment = os.environ.get('SUMO_HOME', '').strip()
+    configured = tools.get('sumo_home', '')
+    if configured is None:
+        configured = ''
+    if not isinstance(configured, str):
+        raise ValueError('configs/tools.json 中的 sumo_home 必须是字符串')
+    selected = environment or configured.strip()
+    if selected:
+        candidate = Path(selected).expanduser()
+        if not candidate.is_absolute():
+            candidate = root / candidate
+        return candidate.resolve()
+    executable = shutil.which('sumo-gui.exe') or shutil.which('sumo-gui')
+    if executable:
+        return Path(executable).resolve().parent.parent
+    raise FileNotFoundError(
+        '未找到SUMO：请设置 SUMO_HOME、填写项目根目录相对的 '
+        'configs/tools.json:sumo_home，或把 sumo-gui 加入 PATH')
+
+
 def validate_config(config: DemoConfig, root: Path = PROJECT_ROOT) -> CheckedPaths:
     """Validate editable settings and resolve every required external path."""
     root = Path(root).resolve()
@@ -204,8 +228,8 @@ def validate_config(config: DemoConfig, root: Path = PROJECT_ROOT) -> CheckedPat
         raise FileNotFoundError(f'缺少SUMO登记文件: {tools_path}')
     try:
         tools = json.loads(tools_path.read_text(encoding='utf-8-sig'))
-        sumo_home = Path(tools['sumo_home']).resolve()
-    except (json.JSONDecodeError, KeyError, TypeError) as error:
+        sumo_home = resolve_sumo_home(tools, root)
+    except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
         raise ValueError(f'无法读取 {tools_path} 中的 sumo_home: {error}') from error
     sumo_gui = sumo_home / 'bin' / 'sumo-gui.exe'
     if not sumo_gui.is_file():
@@ -267,7 +291,7 @@ def validate_simple_config(
     _require_regular_file(tools_path, root, 'SUMO登记文件')
     try:
         tools = json.loads(tools_path.read_text(encoding='utf-8-sig'))
-        sumo_home = Path(os.path.abspath(tools['sumo_home']))
+        sumo_home = resolve_sumo_home(tools, root)
     except (OSError, json.JSONDecodeError, KeyError, TypeError) as error:
         raise ValueError(f'无法读取 {tools_path} 中的 sumo_home: {error}') from error
     sumo_gui = sumo_home / 'bin' / 'sumo-gui.exe'

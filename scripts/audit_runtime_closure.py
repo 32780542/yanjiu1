@@ -47,6 +47,7 @@ _PHASE5_UNUSED_IMPORTS = frozenset((
     "experiments.phase5_audit",
     "experiments.phase5_r5_audit",
 ))
+_STATIC_JSON_INPUT_ROOTS = frozenset(("configs",))
 
 
 def _repo_path(root: Path, raw: str | Path) -> tuple[str, Path]:
@@ -203,19 +204,21 @@ def _python_dependencies(root: Path, relative: str, path: Path) -> set[str]:
                     )
                 continue
             dependencies.add(_relative_to_root(root, candidate))
-            if is_package:
-                definitions = _defined_names(candidate)
-                for alias in node.names:
-                    if alias.name == "*":
-                        continue
+            definitions = _defined_names(candidate)
+            for alias in node.names:
+                if alias.name == "*":
+                    continue
+                if is_package:
                     child_name = f"{module}.{alias.name}" if module else alias.name
                     child, _ = _module_candidate(search_root, child_name)
                     if child is not None:
                         dependencies.add(_relative_to_root(root, child))
-                    elif alias.name not in definitions:
-                        raise ValueError(
-                            f"unresolved local import {child_name!r} in {relative}"
-                        )
+                        continue
+                if alias.name not in definitions:
+                    imported = f"{module}.{alias.name}" if module else alias.name
+                    raise ValueError(
+                        f"unresolved local import {imported!r} in {relative}"
+                    )
     dependencies.update(_manifest_dependencies(root, search_root, tree, relative))
     return dependencies
 
@@ -264,6 +267,26 @@ def _manifest_dependencies(
                             f"missing settings dependency {values[0]!r} in {relative}"
                         )
                     dependencies.add(_relative_to_root(root, candidate))
+            elif name == "read_json" and node.args:
+                values = _string_items(node.args[0])
+                if not values:
+                    continue
+                pure = PurePosixPath(values[0].replace("\\", "/"))
+                if (
+                    pure.is_absolute()
+                    or ".." in pure.parts
+                    or not pure.parts
+                    or pure.parts[0].lower() not in _STATIC_JSON_INPUT_ROOTS
+                ):
+                    continue
+                candidate = search_root.joinpath(*pure.parts)
+                if not candidate.is_file():
+                    raise ValueError(
+                        f"missing read_json dependency {values[0]!r} in {relative}"
+                    )
+                dependency = _relative_to_root(root, candidate)
+                _repo_path(root, dependency)
+                dependencies.add(dependency)
     return dependencies
 
 
