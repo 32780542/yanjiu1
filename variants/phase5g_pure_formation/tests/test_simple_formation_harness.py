@@ -450,6 +450,42 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertEqual(before, after)
             self.assertEqual(list(target.iterdir()), [])
 
+    def test_run_record_rechecks_ancestor_swapped_after_validation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            temp_root = Path(temp)
+            ancestor = temp_root / "verified-ancestor"
+            ancestor.mkdir()
+            validated = self.harness._validated_output_base(ancestor / "output")
+            outside = temp_root / "outside"
+            outside.mkdir()
+            ancestor.rmdir()
+            make_directory_reparse(ancestor, outside)
+            with self.assertRaisesRegex(ValueError, "reparse"):
+                with self.harness.RunRecord(validated, {"purpose": "swap test"}):
+                    pass
+            self.assertEqual(list(outside.rglob("*")), [])
+
+    def test_demo_rejects_trust_junction_before_any_json_or_anchor_write(self):
+        with tempfile.TemporaryDirectory() as temp:
+            temp_root = Path(temp)
+            output = temp_root / "simple-demo"
+            output.mkdir()
+            outside = temp_root / "outside"
+            outside.mkdir()
+            make_directory_reparse(output / ".phase5g-trust", outside)
+            with patch.object(
+                self.harness, "run_variant",
+                return_value={
+                    "status": "completed", "recording_passed": True,
+                    "scientific_passed": False,
+                },
+            ) as runner, self.assertRaisesRegex(ValueError, "reparse"):
+                self.make_short_demo(output)
+            runner.assert_not_called()
+            self.assertEqual(list(outside.rglob("*")), [])
+            self.assertEqual(
+                [item.name for item in output.iterdir()], [".phase5g-trust"])
+
     def test_cli_forwards_every_demo_value_exactly_once(self):
         with patch("experiments.phase5g.run_phase5g_demo",
                    return_value=Path("literal-demo")) as demo:

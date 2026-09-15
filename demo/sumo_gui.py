@@ -162,8 +162,14 @@ class PlaybackStats:
 def _finite_number(name, value, minimum, maximum):
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise ValueError(f'{name} 必须是数字，允许范围 {minimum}–{maximum}')
-    if not math.isfinite(value) or not minimum <= value <= maximum:
+    try:
+        number = float(value)
+    except (OverflowError, TypeError, ValueError) as error:
+        raise ValueError(
+            f'{name} 必须是有限数字，允许范围 {minimum}–{maximum}') from error
+    if not math.isfinite(number) or not minimum <= number <= maximum:
         raise ValueError(f'{name} 必须是有限数字，允许范围 {minimum}–{maximum}')
+    return number
 
 
 def validate_config(config: DemoConfig, root: Path = PROJECT_ROOT) -> CheckedPaths:
@@ -291,10 +297,11 @@ def simple_generation_timeout_s(duration_s: float, vehicle_count: int) -> int:
     """Return the bounded generation budget for one validated simple trace."""
     if type(vehicle_count) is not int or vehicle_count not in (3, 6, 12):
         raise ValueError('VEHICLE_COUNT 必须是整数 3、6 或 12')
-    _finite_number('SIMULATION_DURATION_S', duration_s, 0.0, math.inf)
-    if duration_s <= 0:
+    duration = _finite_number(
+        'SIMULATION_DURATION_S', duration_s, 0.0, math.inf)
+    if duration <= 0:
         raise ValueError('SIMULATION_DURATION_S 必须是正的有限数字')
-    estimate = 90.0 + 0.8 * duration_s * vehicle_count
+    estimate = 90.0 + 0.8 * duration * vehicle_count
     if not math.isfinite(estimate) or estimate > 3600:
         raise ValueError(
             'SIMULATION_DURATION_S 对当前 VEHICLE_COUNT 超过 3600 秒生成预算上限')

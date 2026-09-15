@@ -8,7 +8,6 @@ import math
 import os
 from pathlib import Path
 import re
-import shutil
 import stat
 import sys
 import tempfile
@@ -23,7 +22,6 @@ from experiments.phase4_audit import driving_metrics
 from experiments.phase4_bootstrap import bootstrap
 from experiments.phase5 import frames_from_records
 from experiments.phase5_detection import detect_frames
-from experiments.records import atomic_json as _project_atomic_json
 from models.vehicle import VehicleState
 from noa import simple_formation
 from perception.road import VisibleRoad
@@ -92,29 +90,12 @@ SIMPLE_DEMO_COMPLETION_SCHEMA = "phase5g_simple_demo_completion_anchor_v1"
 
 def atomic_json(path: str | Path, data: object) -> None:
     """Atomic JSON writer scoped to already validated Phase 5G artifact paths."""
-    target = Path(path).resolve()
-    if target.is_relative_to(ROOT):
-        _project_atomic_json(target, data)
-        return
-    target.parent.mkdir(parents=True, exist_ok=True)
-    staging = target.with_name(target.name + ".writing")
-    staging.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
-        encoding="utf-8",
-    )
-    os.replace(staging, target)
+    _atomic_output_json(path, data, ".writing")
 
 
 def _finalizer_json(path: str | Path, data: object) -> None:
     """Minimal atomic writer kept independent from derived-evidence persistence."""
-    target = Path(path).resolve()
-    target.parent.mkdir(parents=True, exist_ok=True)
-    staging = target.with_name(target.name + ".finalizing")
-    staging.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
-        encoding="utf-8",
-    )
-    os.replace(staging, target)
+    _atomic_output_json(path, data, ".finalizing")
 
 
 def _produced_evidence(path: Path) -> list[str]:
@@ -138,7 +119,7 @@ def _write_unsealed_manifest(path: Path) -> None:
 class Phase5GRunRecord:
     """Append-only record supporting project results and explicit system Temp bases."""
     def __init__(self, base: str | Path, metadata: dict):
-        self.base = Path(base).resolve()
+        self.base = _validated_output_base(base)
         self.run_id = (datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
                        + "_" + uuid4().hex[:8])
         self.path = self.base / self.run_id
@@ -146,7 +127,9 @@ class Phase5GRunRecord:
         self.finished = False
 
     def __enter__(self):
-        self.path.mkdir(parents=True, exist_ok=False)
+        self.base = _prepare_output_directory(self.base)
+        _prepare_output_directory(self.base / ".phase5g-trust")
+        self.path = _prepare_output_directory(self.path, exclusive=True)
         self._save({"passed": False, "status": "running"})
         try:
             atomic_json(self.path / "metadata.json", {**self.metadata, "run_id": self.run_id})
@@ -200,8 +183,8 @@ def _mode_registry() -> dict[str, dict[str, bool]]:
     return {name: _mode_flags(name) for name, _, _ in _MODE_SPECS}
 
 
-def _validated_output_base(value: str | Path) -> Path:
-    """Resolve a narrow append-only Phase 5G output base before creating anything."""
+def _output_target_and_boundary(value: str | Path) -> tuple[Path, Path]:
+    """Normalize one allowed output path lexically, without following it."""
     if not isinstance(value, (str, Path)) or (isinstance(value, str) and not value.strip()):
         raise ValueError("output_base must be a nonempty safe results or temporary directory")
     raw = Path(value)
@@ -225,13 +208,37 @@ def _validated_output_base(value: str | Path) -> Path:
                          if target != root and target.is_relative_to(root)), None)
     if boundary is None:
         raise ValueError("output_base must be under project results/tmp or the system Temp directory")
+    return target, boundary
+
+
+def _inspect_output_directory(
+        target: Path, boundary: Path, *, create: bool,
+        require_existing: bool, exclusive: bool = False) -> Path:
+    """Best-effort local defense against deterministic path replacement.
+
+    Python on Windows cannot make the whole walk atomic without directory-handle
+    relative APIs.  Each existing or newly created component is nevertheless
+    lstat-checked and containment-checked immediately before later mutations.
+    """
+    resolved_boundary = boundary.resolve(strict=True)
     current = boundary
-    for part in target.relative_to(boundary).parts:
-        current /= part
+    components = (None, *target.relative_to(boundary).parts)
+    for index, part in enumerate(components):
+        if part is not None:
+            current /= part
+        existed = True
         try:
             info = os.lstat(current)
         except FileNotFoundError:
-            break
+            existed = False
+            if not create:
+                if require_existing:
+                    raise ValueError(f"output_base directory missing: {current}")
+                return target
+            current.mkdir(exist_ok=False)
+            info = os.lstat(current)
+        if existed and exclusive and index == len(components) - 1:
+            raise FileExistsError(current)
         attributes = getattr(info, "st_file_attributes", 0)
         reparse = bool(
             attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
@@ -239,11 +246,95 @@ def _validated_output_base(value: str | Path) -> Path:
             raise ValueError(f"output_base reparse point forbidden: {current}")
         if not stat.S_ISDIR(info.st_mode):
             raise ValueError("output_base must be a directory, not a file")
-    resolved = target.resolve()
-    resolved_boundary = boundary.resolve()
-    if resolved == resolved_boundary or not resolved.is_relative_to(resolved_boundary):
-        raise ValueError("output_base resolved outside its allowed boundary")
-    return resolved
+        resolved_current = current.resolve(strict=True)
+        if resolved_current != resolved_boundary \
+                and not resolved_current.is_relative_to(resolved_boundary):
+            raise ValueError("output_base resolved outside its allowed boundary")
+    return target
+
+
+def _validated_output_base(value: str | Path) -> Path:
+    """Validate a narrow output base without creating or resolving its target."""
+    target, boundary = _output_target_and_boundary(value)
+    return _inspect_output_directory(
+        target, boundary, create=False, require_existing=False)
+
+
+def _prepare_output_directory(
+        value: str | Path, *, exclusive: bool = False) -> Path:
+    """Create missing output ancestry one checked component at a time."""
+    target, boundary = _output_target_and_boundary(value)
+    return _inspect_output_directory(
+        target, boundary, create=True, require_existing=True,
+        exclusive=exclusive)
+
+
+def _require_output_directory(value: str | Path) -> Path:
+    target, boundary = _output_target_and_boundary(value)
+    return _inspect_output_directory(
+        target, boundary, create=False, require_existing=True)
+
+
+def _checked_mutation_target(path: str | Path, staging_suffix: str) -> tuple[Path, Path]:
+    target = Path(os.path.abspath(path))
+    _require_output_directory(target.parent)
+    staging = target.with_name(target.name + staging_suffix)
+    for candidate in (target, staging):
+        try:
+            info = os.lstat(candidate)
+        except FileNotFoundError:
+            continue
+        attributes = getattr(info, "st_file_attributes", 0)
+        reparse = bool(
+            attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+        if candidate.is_symlink() or reparse or not stat.S_ISREG(info.st_mode):
+            raise ValueError(f"output mutation target must be a regular file: {candidate}")
+    return target, staging
+
+
+def _atomic_output_json(path: str | Path, data: object, staging_suffix: str) -> None:
+    payload = json.dumps(
+        data, ensure_ascii=False, indent=2, allow_nan=False) + "\n"
+    target, staging = _checked_mutation_target(path, staging_suffix)
+    staging.write_text(payload, encoding="utf-8")
+    _require_output_directory(target.parent)
+    os.replace(staging, target)
+
+
+def _write_new_output_bytes(path: str | Path, payload: bytes) -> Path:
+    target = Path(os.path.abspath(path))
+    _require_output_directory(target.parent)
+    try:
+        os.lstat(target)
+    except FileNotFoundError:
+        pass
+    else:
+        raise FileExistsError(target)
+    _require_output_directory(target.parent)
+    with target.open("xb") as stream:
+        stream.write(payload)
+        stream.flush()
+        os.fsync(stream.fileno())
+    return target
+
+
+def _require_output_regular_file(path: str | Path) -> Path:
+    target = Path(os.path.abspath(path))
+    _require_output_directory(target.parent)
+    try:
+        info = os.lstat(target)
+    except FileNotFoundError as error:
+        raise ValueError(f"output file missing: {target}") from error
+    attributes = getattr(info, "st_file_attributes", 0)
+    reparse = bool(
+        attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+    if target.is_symlink() or reparse or not stat.S_ISREG(info.st_mode):
+        raise ValueError(f"output file must be regular and non-reparse: {target}")
+    return target
+
+
+def _copy_new_output_file(source: str | Path, destination: str | Path) -> Path:
+    return _write_new_output_bytes(destination, Path(source).read_bytes())
 
 
 def _finite(name: str, value: object, *, positive: bool = False) -> float:
@@ -409,7 +500,8 @@ def _write_trust_anchor(run_path: Path, code_hashes: dict, input_hashes: dict,
                         case_file_sha256: str, mode_registry: dict) -> Path:
     """Write the caller-side trust root outside the resealable run package."""
     anchor = run_path.parent / ".phase5g-trust" / f"{run_path.name}.json"
-    anchor.parent.mkdir(parents=True, exist_ok=True)
+    _require_output_directory(run_path)
+    _require_output_directory(anchor.parent)
     payload = {
         "schema": "phase5g_external_trust_anchor_v2",
         "run_id": run_path.name,
@@ -422,26 +514,25 @@ def _write_trust_anchor(run_path: Path, code_hashes: dict, input_hashes: dict,
         "case_file_sha256": case_file_sha256,
         "mode_registry_sha256": _anchor_digest(mode_registry),
     }
-    with anchor.open("x", encoding="utf-8", newline="\n") as stream:
-        json.dump(payload, stream, sort_keys=True, separators=(",", ":"),
-                  ensure_ascii=False, allow_nan=False)
-        stream.write("\n")
-        stream.flush()
-        os.fsync(stream.fileno())
-    return anchor
+    encoded = (json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+        allow_nan=False) + "\n").encode("utf-8")
+    return _write_new_output_bytes(anchor, encoded)
 
 
 def _write_completion_anchor(run_path: Path) -> Path:
     """Bind finalized simple-demo output after its outer evidence seal succeeds."""
     trust = run_path.parent / ".phase5g-trust"
+    _require_output_directory(run_path)
+    _require_output_directory(trust)
     source_anchor_path = trust / f"{run_path.name}.json"
-    if not source_anchor_path.is_file():
-        raise ValueError("completion anchor requires the runtime source/input anchor")
+    _require_output_regular_file(source_anchor_path)
     source_anchor = json.loads(source_anchor_path.read_text(encoding="utf-8"))
     if source_anchor.get("schema") != "phase5g_external_trust_anchor_v2" \
             or source_anchor.get("run_id") != run_path.name:
         raise ValueError("completion anchor source/input anchor differs")
     evidence_path = run_path / "evidence_hashes.json"
+    _require_output_regular_file(evidence_path)
     evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
     if not isinstance(evidence, dict) or not evidence:
         raise ValueError("completion anchor requires sealed outer evidence")
@@ -462,13 +553,10 @@ def _write_completion_anchor(run_path: Path) -> Path:
         "outer_evidence_file_sha256": sha256(evidence_path),
     }
     anchor = trust / f"{run_path.name}.completion.json"
-    with anchor.open("x", encoding="utf-8", newline="\n") as stream:
-        json.dump(payload, stream, sort_keys=True, separators=(",", ":"),
-                  ensure_ascii=False, allow_nan=False)
-        stream.write("\n")
-        stream.flush()
-        os.fsync(stream.fileno())
-    return anchor
+    encoded = (json.dumps(
+        payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False,
+        allow_nan=False) + "\n").encode("utf-8")
+    return _write_new_output_bytes(anchor, encoded)
 
 
 def _write_replay_materials(run_path: Path, case_payload: bytes, *,
@@ -478,24 +566,21 @@ def _write_replay_materials(run_path: Path, case_payload: bytes, *,
     atomic_json(run_path / "code_hashes.json", source)
     for name in source:
         destination = run_path / "code_snapshot" / name
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(ROOT / name, destination)
+        _prepare_output_directory(destination.parent)
+        _copy_new_output_file(ROOT / name, destination)
     input_hashes = {}
     for name in INPUTS:
         destination = run_path / "input_snapshot" / name
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(ROOT / name, destination)
+        _prepare_output_directory(destination.parent)
+        _copy_new_output_file(ROOT / name, destination)
         input_hashes[name] = sha256(destination)
         runtime_input = run_path / "code_snapshot" / name
         if not runtime_input.exists():
-            runtime_input.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / name, runtime_input)
+            _prepare_output_directory(runtime_input.parent)
+            _copy_new_output_file(ROOT / name, runtime_input)
     frozen = run_path / "input_snapshot" / "phase5g_cases.json"
-    frozen.parent.mkdir(parents=True, exist_ok=True)
-    with frozen.open("xb") as stream:
-        stream.write(case_payload)
-        stream.flush()
-        os.fsync(stream.fileno())
+    _prepare_output_directory(frozen.parent)
+    _write_new_output_bytes(frozen, case_payload)
     if sha256(frozen) != case_file_sha256:
         raise ValueError("phase5g_cases.json: frozen input digest differs")
     input_hashes["phase5g_cases.json"] = case_file_sha256
@@ -908,7 +993,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
     compare_tree(expected_physical, dict(physical), 0.0, "parameters")
     compare_tree(expected_policy, dict(policy), 0.0, "policy_parameters")
     target = _validated_output_base(path)
-    target.mkdir(parents=True, exist_ok=False)
+    target = _prepare_output_directory(target, exclusive=True)
     atomic_json(target / "validation.json", {"passed": False, "status": "running"})
     memories = _initial_memories(case, mode, simple_rules=simple_rules)
     metadata = {
@@ -937,8 +1022,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
         metadata["output_nonce"] = output_nonce
     atomic_json(target / "metadata.json", metadata)
     # Even pre-clock failures retain an explicit, append-only empty trace prefix.
-    (target / "stdout.log").touch(exist_ok=False)
-    (target / "trace.jsonl").touch(exist_ok=False)
+    _write_new_output_bytes(target / "stdout.log", b"")
+    _write_new_output_bytes(target / "trace.jsonl", b"")
     records, trace_count, completed_count = [], 0, 0
     conn = bridge = clock = None
     failure = None
@@ -958,8 +1043,10 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
             memories, clock_schema=CLOCK_SCHEMA,
             initial_memories_sha256=metadata["initial_memories_sha256"],
         )
-        with (target / "stdout.log").open("a", encoding="utf-8") as stdout, \
-                (target / "trace.jsonl").open("a", encoding="utf-8") as trace:
+        stdout_path = _require_output_regular_file(target / "stdout.log")
+        trace_path = _require_output_regular_file(target / "trace.jsonl")
+        with stdout_path.open("a", encoding="utf-8") as stdout, \
+                trace_path.open("a", encoding="utf-8") as trace:
             if live:
                 conn, bridge = bootstrap(
                     target, initial, model,
@@ -1196,9 +1283,8 @@ def write_development_case_bundle(path: str | Path, *, case_specs: Sequence[Sequ
     bundle = development_case_bundle(case_specs, duration_s)
     payload = canonical_json_bytes(bundle)
     _load_development_bundle(payload)
-    target.parent.mkdir(parents=True, exist_ok=True)
-    with target.open("xb") as stream:
-        stream.write(payload)
+    _prepare_output_directory(target.parent)
+    _write_new_output_bytes(target, payload)
     return bundle
 
 

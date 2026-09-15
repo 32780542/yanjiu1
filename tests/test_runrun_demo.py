@@ -184,6 +184,19 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                 ValueError, 'SIMULATION_DURATION_S.*3600'):
             gui.simple_generation_timeout_s(411.375, 12)
 
+    def test_huge_integer_duration_is_a_named_value_error(self):
+        huge = 10**400
+        with self.assertRaisesRegex(ValueError, 'SIMULATION_DURATION_S'):
+            gui.simple_generation_timeout_s(huge, 6)
+        with self.assertRaisesRegex(ValueError, 'SIMULATION_DURATION_S'):
+            gui.validate_simple_config(
+                replace(
+                    gui.SimpleFormationDemoConfig(),
+                    simulation_duration_s=huge,
+                ),
+                gui.PROJECT_ROOT,
+            )
+
     def test_clean_layout_check_accepts_future_results_without_writes_or_process(self):
         with tempfile.TemporaryDirectory() as temp:
             root = self.make_clean_simple_root(temp)
