@@ -1,5 +1,6 @@
 """Semantic Phase 5G replay using sealed local source and per-vehicle memory."""
 
+from contextlib import closing
 from dataclasses import asdict
 import json
 from pathlib import Path
@@ -23,21 +24,46 @@ def _file_set(path: Path) -> set[str]:
     return {file.relative_to(path).as_posix() for file in path.rglob("*") if file.is_file()}
 
 
-def _manifest_differences(path: Path) -> list[str]:
+def _manifest_payload(path: Path) -> dict | None:
     manifest_path = path / "evidence_hashes.json"
     if not manifest_path.is_file():
         manifest_path = path / "unsealed_evidence_hashes.json"
     if not manifest_path.is_file():
-        return ["evidence_hashes.json"]
+        return None
     hashes = read_json(manifest_path)
-    if not isinstance(hashes, dict) or not hashes:
+    return hashes if isinstance(hashes, dict) and hashes else None
+
+
+def _manifest_trace_sha256(path: Path, *, required: bool) -> str | None:
+    hashes = _manifest_payload(path)
+    if hashes is None:
+        if required:
+            raise ValueError("evidence_hashes.json: invalid or missing")
+        return None
+    digest = hashes.get("trace.jsonl")
+    if type(digest) is not str or len(digest) != 64 \
+            or any(character not in "0123456789abcdef" for character in digest):
+        if required:
+            raise ValueError("evidence_hashes.trace.jsonl: invalid sha256")
+        return None
+    return digest
+
+
+def _manifest_differences(path: Path, *, deferred: frozenset[str] = frozenset()) -> list[str]:
+    hashes = _manifest_payload(path)
+    if hashes is None:
         return ["evidence_hashes.json"]
     differences = []
     for name, digest in hashes.items():
         file = (path / name).resolve()
         if (type(name) is not str or Path(name).is_absolute()
                 or not file.is_relative_to(path.resolve()) or not file.is_file()
-                or type(digest) is not str or sha256(file) != digest):
+                or type(digest) is not str
+                or (name in deferred and (
+                    len(digest) != 64
+                    or any(character not in "0123456789abcdef"
+                           for character in digest)))
+                or (name not in deferred and sha256(file) != digest)):
             differences.append(name)
     actual = _file_set(path) - {"evidence_hashes.json", "unsealed_evidence_hashes.json"}
     return sorted(set(differences) | (actual ^ set(hashes)))
@@ -152,7 +178,7 @@ def _clock(metadata: dict, model, physical: dict, policy: dict) -> Phase5GClock:
 
 
 def _replay_trace(metadata: dict, trace_path: Path, model, physical: dict,
-                  policy: dict) -> dict:
+                  policy: dict, *, expected_sha256: str | None) -> dict:
     count = completed = physical_count = samples = 0
     maximum = 0.0
     errors = []
@@ -169,11 +195,13 @@ def _replay_trace(metadata: dict, trace_path: Path, model, physical: dict,
             raise ValueError("metadata.trace_intervals: completed source is empty")
         clock = _clock(metadata, model, physical, policy) if expected_count else None
         saw_failed_tail = False
-        with trace_path.open(encoding="utf-8") as stream:
-            for count, line in enumerate(stream, 1):
+        from experiments.phase5g import _iter_jsonl_records
+        with closing(_iter_jsonl_records(
+                trace_path, expected_sha256=expected_sha256,
+                skip_blank=False)) as stream:
+            for count, stored in enumerate(stream, 1):
                 if count > expected_count:
                     raise ValueError(f"trace[{count - 1}]: extra interval")
-                stored = json.loads(line)
                 failed_tail = partial and count == expected_count and stored.get("status") == "failed"
                 boundary = ((metadata.get("failure_stage"), metadata.get("failure_actor"))
                             if failed_tail else None)
@@ -267,8 +295,13 @@ def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) ->
     try:
         metadata = read_json(path / "metadata.json")
         model, physical, policy = _validate_metadata(metadata)
+        expected_trace_sha256 = _manifest_trace_sha256(
+            path, required=require_manifest,
+        )
         if require_manifest:
-            differences = _manifest_differences(path)
+            differences = _manifest_differences(
+                path, deferred=frozenset({"trace.jsonl"}),
+            )
             if differences:
                 raise ValueError(f"evidence_hashes: files differ: {differences}")
         saved = read_json(path / "validation.json")
@@ -280,14 +313,17 @@ def replay_variant(variant_dir: str | Path, *, require_manifest: bool = True) ->
         }
         if set(produced) != actual_produced:
             raise ValueError("validation.produced_evidence: differs from actual prefix")
-        trace = _replay_trace(metadata, path / "trace.jsonl", model, physical, policy)
+        trace = _replay_trace(
+            metadata, path / "trace.jsonl", model, physical, policy,
+            expected_sha256=expected_trace_sha256,
+        )
         if not trace["passed"]:
             raise ValueError("; ".join(trace["errors"]))
         from experiments.phase5g import (_scientific_applicable, evaluate_trace,
                                          scientific_gate, variant_acceptance)
         derived = evaluate_trace(
             path / "trace.jsonl", metadata["case"], model, physical,
-            live=metadata["live"],
+            live=metadata["live"], expected_sha256=expected_trace_sha256,
         )
         tolerance = model.p["replay_absolute_tolerance"]
         derived_names = ("detection", "geometry", "metrics", "lane_changes",

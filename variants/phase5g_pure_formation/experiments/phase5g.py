@@ -3,6 +3,7 @@
 from copy import deepcopy
 from dataclasses import asdict
 from datetime import datetime, timezone
+import hashlib
 import json
 import math
 import os
@@ -525,7 +526,7 @@ def seal_directory(path: str | Path) -> None:
     """Seal every current file and replace only the manifest itself."""
     root = _validated_output_base(path)
     atomic_json(root / "evidence_hashes.json", {
-        file.relative_to(root).as_posix(): sha256(file)
+        file.relative_to(root).as_posix(): _stream_file_sha256(file)
         for file in sorted(root.rglob("*"))
         if file.is_file() and file != root / "evidence_hashes.json"
     })
@@ -709,22 +710,52 @@ def _lane_index(y_m: float, width_m: float) -> int | None:
     return lane if 0 <= lane < 3 and abs(y_m - center) <= 0.15 else None
 
 
+def _stream_file_sha256(path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _iter_jsonl_records(trace_path, *, expected_sha256: str | None,
+                        skip_blank: bool):
+    """Yield decoded rows and verify exact source bytes only after full EOF."""
+    if expected_sha256 is not None and (
+            type(expected_sha256) is not str
+            or re.fullmatch(r"[0-9a-f]{64}", expected_sha256) is None):
+        raise ValueError("trace.jsonl sha256: invalid expected digest")
+    digest = hashlib.sha256()
+    with trace_path.open("rb") as stream:
+        for raw_line in stream:
+            digest.update(raw_line)
+            line = raw_line.decode("utf-8")
+            if skip_blank and not line.strip():
+                continue
+            yield json.loads(line)
+        actual = digest.hexdigest()
+        if expected_sha256 is not None and actual != expected_sha256:
+            raise ValueError(
+                "trace.jsonl sha256 differs: "
+                f"expected {expected_sha256}, actual {actual}")
+
+
 class _PhysicalTraceRecords:
     """Re-openable, bounded-memory view of physical JSONL intervals."""
 
-    def __init__(self, trace_path, keys: Sequence[str], *, live: bool):
+    def __init__(self, trace_path, keys: Sequence[str], *, live: bool,
+                 expected_sha256: str | None):
         self.trace_path = trace_path
         self.keys = tuple(keys)
         self.live = live
+        self.expected_sha256 = expected_sha256
 
     def __iter__(self):
-        with self.trace_path.open(encoding="utf-8") as stream:
-            for line in stream:
-                if not line.strip():
-                    continue
-                record = json.loads(line)
-                if _record_is_physical(record, self.keys, live=self.live):
-                    yield record
+        for record in _iter_jsonl_records(
+                self.trace_path, expected_sha256=self.expected_sha256,
+                skip_blank=True):
+            if _record_is_physical(record, self.keys, live=self.live):
+                yield record
 
 
 def _readback_facts(record: Mapping[str, object], keys: Sequence[str], *,
@@ -1051,11 +1082,15 @@ def evaluate_records(records: Sequence[dict], case: Mapping[str, object], model,
 
 
 def evaluate_trace(trace_path, case: Mapping[str, object], model,
-                   physical: Mapping[str, object], *, live: bool) -> dict:
+                   physical: Mapping[str, object], *, live: bool,
+                   expected_sha256: str | None = None) -> dict:
     """Evaluate a trace with three sequential scans and no whole-file read."""
     if type(live) is not bool:
         raise ValueError("live must be bool")
-    records = _PhysicalTraceRecords(trace_path, case["initial"], live=live)
+    records = _PhysicalTraceRecords(
+        trace_path, case["initial"], live=live,
+        expected_sha256=expected_sha256,
+    )
     return evaluate_records(records, case, model, physical)
 
 
@@ -1273,9 +1308,11 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
     try:
         atomic_json(target / "metadata.json", metadata)
         lifecycle_stage = "evaluation"
+        trace_path = _require_output_regular_file(target / "trace.jsonl")
+        trace_sha256 = _stream_file_sha256(trace_path)
         derived = evaluate_trace(
-            _require_output_regular_file(target / "trace.jsonl"),
-            case, model, physical, live=live,
+            trace_path, case, model, physical, live=live,
+            expected_sha256=trace_sha256,
         )
         for name in ("detection", "geometry", "metrics", "lane_changes", "speed_recovery"):
             lifecycle_stage = f"derived.{name}"

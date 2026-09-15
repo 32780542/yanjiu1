@@ -84,6 +84,17 @@ def mutable_ids(value):
     return set()
 
 
+def add_first_line_json_whitespace(path):
+    path = Path(path)
+    payload = path.read_bytes()
+    line_end = payload.find(b"\n")
+    if line_end < 0:
+        raise AssertionError("trace fixture lacks a complete line")
+    if line_end and payload[line_end - 1:line_end] == b"\r":
+        line_end -= 1
+    path.write_bytes(payload[:line_end] + b" " + payload[line_end:])
+
+
 class GeneratedBoundedTrace:
     """Re-openable JSONL index stream with unique per-record memory payloads."""
 
@@ -98,7 +109,8 @@ class GeneratedBoundedTrace:
         self.original_loads = json.loads
 
     def open(self, *args, **kwargs):
-        if args and args[0] not in ("r", "rt"):
+        mode = args[0] if args else kwargs.get("mode", "r")
+        if mode not in ("r", "rt", "rb"):
             raise AssertionError(f"unexpected generated trace mode: {args[0]}")
         owner = self
         scan = len(self.scan_bytes)
@@ -115,7 +127,7 @@ class GeneratedBoundedTrace:
                 for index in range(owner.intervals):
                     line = json.dumps({"generated_index": index}) + "\n"
                     owner.scan_bytes[scan] += owner.record_payload_bytes
-                    yield line
+                    yield line.encode("utf-8") if "b" in mode else line
 
         return Stream()
 
@@ -291,6 +303,83 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertTrue(report["passed"], report)
         self.assertLessEqual(scans, 4)
         self.assertLess(peak, 64 * 1024 * 1024, peak)
+
+    def test_replay_rejects_json_whitespace_mutated_after_manifest_validation(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "post-manifest-whitespace"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            original = self.replay._manifest_differences
+
+            def validate_then_mutate(path, *args, **kwargs):
+                differences = original(path, *args, **kwargs)
+                add_first_line_json_whitespace(Path(path) / "trace.jsonl")
+                return differences
+
+            with patch.object(
+                self.replay, "_manifest_differences",
+                side_effect=validate_then_mutate,
+            ):
+                report = self.replay.replay_variant(source)
+        self.assertFalse(report["passed"], report)
+        self.assertIn("trace.jsonl", "\n".join(report["errors"]))
+        self.assertIn("sha256", "\n".join(report["errors"]))
+
+    def test_replay_rejects_trace_mutation_between_streamed_scans(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "between-scan-whitespace"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            trace_path = (source / "trace.jsonl").resolve()
+            original_open = Path.open
+            trace_reads = 0
+
+            class MutateAfterClose:
+                def __init__(self, stream):
+                    self.stream = stream
+
+                def __enter__(self):
+                    self.stream.__enter__()
+                    return self
+
+                def __exit__(self, *args):
+                    result = self.stream.__exit__(*args)
+                    with original_open(trace_path, "rb") as reader:
+                        payload = reader.read()
+                    line_end = payload.find(b"\n")
+                    if line_end and payload[line_end - 1:line_end] == b"\r":
+                        line_end -= 1
+                    with original_open(trace_path, "wb") as writer:
+                        writer.write(
+                            payload[:line_end] + b" " + payload[line_end:])
+                    return result
+
+                def __iter__(self):
+                    return iter(self.stream)
+
+            def mutate_after_first_trace_scan(candidate, *args, **kwargs):
+                nonlocal trace_reads
+                stream = original_open(candidate, *args, **kwargs)
+                mode = args[0] if args else kwargs.get("mode", "r")
+                if Path(candidate).resolve() == trace_path and "r" in mode:
+                    trace_reads += 1
+                    if trace_reads == 1:
+                        return MutateAfterClose(stream)
+                return stream
+
+            with patch.object(Path, "open", new=mutate_after_first_trace_scan):
+                report = self.replay.replay_variant(
+                    source, require_manifest=False,
+                )
+        self.assertFalse(report["passed"], report)
+        self.assertIn("trace.jsonl", "\n".join(report["errors"]))
+        self.assertIn("sha256", "\n".join(report["errors"]))
 
     def test_committed_failed_tail_is_included_in_streamed_physical_evidence(self):
         model, physical, policy = self.simple_parameters()
