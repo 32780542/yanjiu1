@@ -304,6 +304,126 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertLessEqual(scans, 4)
         self.assertLess(peak, 64 * 1024 * 1024, peak)
 
+    def test_replay_reads_the_evidence_manifest_once(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "single-manifest-snapshot"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            manifest_path = (source / "evidence_hashes.json").resolve()
+            original_open = Path.open
+            manifest_reads = 0
+
+            def count_manifest_reads(candidate, *args, **kwargs):
+                nonlocal manifest_reads
+                mode = args[0] if args else kwargs.get("mode", "r")
+                if Path(candidate).resolve() == manifest_path and "r" in mode:
+                    manifest_reads += 1
+                return original_open(candidate, *args, **kwargs)
+
+            with patch.object(Path, "open", new=count_manifest_reads):
+                report = self.replay.replay_variant(source)
+        self.assertTrue(report["passed"], report)
+        self.assertEqual(manifest_reads, 1)
+
+    def test_replay_cannot_inject_a_second_manifest_snapshot(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "between-manifest-read"
+            self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            manifest_path = (source / "evidence_hashes.json").resolve()
+            original_open = Path.open
+            manifest_reads = 0
+            mutation_injected = False
+
+            def mutate_on_second_manifest_read(candidate, *args, **kwargs):
+                nonlocal manifest_reads, mutation_injected
+                mode = args[0] if args else kwargs.get("mode", "r")
+                if Path(candidate).resolve() == manifest_path and "r" in mode:
+                    manifest_reads += 1
+                    if manifest_reads == 2:
+                        with original_open(manifest_path, encoding="utf-8") as reader:
+                            hashes = json.load(reader)
+                        hashes["trace.jsonl"] = "0" * 64
+                        with original_open(manifest_path, "w", encoding="utf-8") as writer:
+                            json.dump(hashes, writer, sort_keys=True)
+                        mutation_injected = True
+                return original_open(candidate, *args, **kwargs)
+
+            with patch.object(Path, "open", new=mutate_on_second_manifest_read):
+                report = self.replay.replay_variant(source)
+        self.assertTrue(report["passed"], report)
+        self.assertEqual(manifest_reads, 1)
+        self.assertFalse(mutation_injected)
+
+    def test_optional_manifest_still_binds_all_trace_scans_to_the_first(self):
+        model, physical, policy = self.simple_parameters()
+        case = self.short_case(physical, count=3, duration_s=0.2)
+        for manifest_state in ("absent", "invalid"):
+            with self.subTest(manifest_state=manifest_state), \
+                    tempfile.TemporaryDirectory() as temp:
+                source = Path(temp) / f"optional-manifest-{manifest_state}"
+                self.harness.run_variant(
+                    source, model, physical, policy, case, "lane_priority", live=False,
+                )
+                manifest_path = source / "evidence_hashes.json"
+                if manifest_state == "absent":
+                    manifest_path.unlink()
+                else:
+                    manifest_path.write_text("{", encoding="utf-8")
+                trace_path = (source / "trace.jsonl").resolve()
+                original_open = Path.open
+                trace_reads = 0
+
+                class MutateAfterClose:
+                    def __init__(self, stream):
+                        self.stream = stream
+
+                    def __enter__(self):
+                        self.stream.__enter__()
+                        return self
+
+                    def __exit__(self, *args):
+                        result = self.stream.__exit__(*args)
+                        with original_open(trace_path, "rb") as reader:
+                            payload = reader.read()
+                        line_end = payload.find(b"\n")
+                        if line_end and payload[line_end - 1:line_end] == b"\r":
+                            line_end -= 1
+                        with original_open(trace_path, "wb") as writer:
+                            writer.write(
+                                payload[:line_end] + b" " + payload[line_end:])
+                        return result
+
+                    def __iter__(self):
+                        return iter(self.stream)
+
+                def mutate_after_first_trace_scan(candidate, *args, **kwargs):
+                    nonlocal trace_reads
+                    stream = original_open(candidate, *args, **kwargs)
+                    mode = args[0] if args else kwargs.get("mode", "r")
+                    if Path(candidate).resolve() == trace_path and "r" in mode:
+                        trace_reads += 1
+                        if trace_reads == 1:
+                            return MutateAfterClose(stream)
+                    return stream
+
+                with patch.object(Path, "open", new=mutate_after_first_trace_scan):
+                    report = self.replay.replay_variant(
+                        source, require_manifest=False,
+                    )
+            self.assertFalse(report["passed"], report)
+            self.assertGreaterEqual(trace_reads, 2)
+            self.assertLessEqual(trace_reads, 4)
+            error_text = "\n".join(report["errors"])
+            self.assertIn("trace.jsonl", error_text)
+            self.assertIn("sha256", error_text)
+
     def test_replay_rejects_json_whitespace_mutated_after_manifest_validation(self):
         model, physical, policy = self.simple_parameters()
         case = self.short_case(physical, count=3, duration_s=0.2)

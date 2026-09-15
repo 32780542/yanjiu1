@@ -719,7 +719,7 @@ def _stream_file_sha256(path) -> str:
 
 
 def _iter_jsonl_records(trace_path, *, expected_sha256: str | None,
-                        skip_blank: bool):
+                        skip_blank: bool, verified_sha256: dict | None = None):
     """Yield decoded rows and verify exact source bytes only after full EOF."""
     if expected_sha256 is not None and (
             type(expected_sha256) is not str
@@ -738,6 +738,8 @@ def _iter_jsonl_records(trace_path, *, expected_sha256: str | None,
             raise ValueError(
                 "trace.jsonl sha256 differs: "
                 f"expected {expected_sha256}, actual {actual}")
+        if verified_sha256 is not None:
+            verified_sha256["sha256"] = actual
 
 
 class _PhysicalTraceRecords:
