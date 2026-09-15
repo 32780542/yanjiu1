@@ -15,9 +15,10 @@ site_packages = Path(sysconfig.get_path('purelib'))
 sys.path.extend(str(site_packages / p) for p in ('win32', 'win32/lib'))
 DLL_HANDLES = [os.add_dll_directory(str(site_packages / 'pywin32_system32'))]
 os.chdir(ROOT)
+SCRATCH_ROOT = ROOT.parents[1] / 'tmp'
 for key in ('TEMP', 'TMP', 'TMPDIR', 'MPLCONFIGDIR', 'XDG_CACHE_HOME'):
-    os.environ[key] = str(ROOT / 'tmp')
-(ROOT / 'tmp').mkdir(exist_ok=True)
+    os.environ[key] = str(SCRATCH_ROOT)
+SCRATCH_ROOT.mkdir(exist_ok=True)
 os.environ['PYTHONDONTWRITEBYTECODE'] = '1'
 
 

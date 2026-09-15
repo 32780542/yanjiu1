@@ -16,6 +16,7 @@ import unittest
 from unittest.mock import patch
 
 from experiments import phase5g_cases
+from research.common import native_io_path
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,21 @@ EXPECTED_MODES = {
     "longitudinal": {"formation_enabled": True, "formation_lane_change_enabled": False},
     "lane_priority": {"formation_enabled": True, "formation_lane_change_enabled": True},
 }
+
+
+class _LongPathTemporaryDirectory(tempfile.TemporaryDirectory):
+    """Keep test cleanup reliable for Windows snapshot paths beyond MAX_PATH."""
+
+    @classmethod
+    def _rmtree(cls, name, ignore_errors=False, repeated=False):
+        shutil.rmtree(native_io_path(name), ignore_errors=ignore_errors)
+
+
+class _PortableTempfile:
+    TemporaryDirectory = _LongPathTemporaryDirectory
+
+
+tempfile = _PortableTempfile()
 
 
 class Phase5GHarnessTests(unittest.TestCase):

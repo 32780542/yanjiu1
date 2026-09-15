@@ -23,6 +23,7 @@ from noa.simple_formation import PARAMETERS, SimpleFormationMemory
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SYSTEM_TEMP_ROOT = Path(tempfile.gettempdir())
 
 SIMPLE_DEFAULTS = {
     "simple_formation_local_range_m": 90.0,
@@ -208,7 +209,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
 
     def test_standard_review_temp_root_supports_snapshot_and_replay(self):
         review_root = (
-            Path(tempfile.gettempdir()) / f"phase5g-review-{uuid.uuid4()}"
+            SYSTEM_TEMP_ROOT / f"phase5g-review-{uuid.uuid4()}"
         )
         output = (
             review_root / "variants" / "phase5g_pure_formation" / "tmp" / "demos"
@@ -220,7 +221,9 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             )
             self.assertTrue(report["passed"], report)
         finally:
-            shutil.rmtree(review_root, ignore_errors=True)
+            shutil.rmtree(
+                self.harness.native_io_path(review_root), ignore_errors=True
+            )
 
     def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):
         model, physical, policy = self.simple_parameters()
