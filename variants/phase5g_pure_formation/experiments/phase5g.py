@@ -203,6 +203,10 @@ def _output_target_and_boundary(value: str | Path) -> tuple[Path, Path]:
         relative = target.relative_to(ROOT)
         if relative.parts and relative.parts[0] in ("results", "tmp"):
             boundary = ROOT
+    if boundary is None and (
+            not raw.is_absolute() or lexical.is_relative_to(ROOT)):
+        raise ValueError(
+            "output_base escaped the project results/tmp boundary")
     if boundary is None:
         boundary = next((root for root in temp_roots
                          if target != root and target.is_relative_to(root)), None)

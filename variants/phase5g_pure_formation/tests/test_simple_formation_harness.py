@@ -854,6 +854,18 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                            for item in temp_root.rglob("*")), before)
             self.assertEqual(output_file.read_text(encoding="utf-8"), "unchanged")
 
+    def test_project_results_escape_is_not_reclassified_as_system_temp(self):
+        with tempfile.TemporaryDirectory() as temp:
+            checkout = Path(temp) / "checkout"
+            checkout.mkdir()
+            escaped = checkout / "escaped-output"
+            with patch.object(self.harness, "ROOT", checkout), \
+                    self.assertRaisesRegex(ValueError, "output_base"):
+                self.harness._validated_output_base(
+                    checkout / "results" / ".." / escaped.name
+                )
+            self.assertFalse(escaped.exists())
+
     def test_demo_rejects_reparse_output_base_before_writing_target(self):
         with tempfile.TemporaryDirectory() as temp:
             temp_root = Path(temp)
