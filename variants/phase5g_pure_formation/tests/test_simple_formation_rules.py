@@ -397,6 +397,36 @@ class SimpleFormationRuleTests(unittest.TestCase):
             self.assertIsNone(decision.anchor_track_id)
             self.assertEqual(decision.reason, "wait_ambiguous_tail")
 
+    def test_same_layer_malformed_tail_waits_with_full_local_counts(self):
+        ego = self.vehicle(99, 0.0, 1)
+        rows = (self.vehicle(1, 45.0, 1), self.vehicle(2, 45.0, 2))
+        for ordering in (rows, tuple(reversed(rows))):
+            decision = choose_join(ego, ordering, self.centers, self.p)
+            self.assertIsNone(decision.target_lane_index)
+            self.assertIsNone(decision.anchor_track_id)
+            self.assertEqual(decision.local_counts, (0, 1, 1))
+
+    def test_founder_admission_uses_upper_physical_priority_and_waits_on_tie(self):
+        upper = self.vehicle(10, 20.0, 2)
+        lower = self.vehicle(11, 20.0, 0)
+        self.assertEqual(choose_join(upper, (lower,), self.centers, self.p).target_lane_index, 2)
+        self.assertIsNone(choose_join(lower, (upper,), self.centers, self.p).target_lane_index)
+        twin = self.vehicle(12, 20.0, 2)
+        self.assertIsNone(choose_join(upper, (twin,), self.centers, self.p).target_lane_index)
+        self.assertIsNone(choose_join(twin, (upper,), self.centers, self.p).target_lane_index)
+        slightly_ahead_lower = self.vehicle(13, 21.0, 0)
+        self.assertEqual(choose_join(upper, (slightly_ahead_lower,), self.centers, self.p).target_lane_index, 2)
+        self.assertIsNone(choose_join(slightly_ahead_lower, (upper,), self.centers, self.p).target_lane_index)
+
+    def test_unresolved_waiter_behind_ego_within_tolerance_blocks_join(self):
+        ego = self.vehicle(99, 20.0, 2)
+        tail = self.vehicle(1, 45.0, 1)
+        unresolved = self.vehicle(2, 19.0, None)
+        self.assertFalse(is_next_waiting_vehicle(ego, (tail, unresolved), self.centers, self.p))
+        decision = choose_join(ego, (tail, unresolved), self.centers, self.p)
+        self.assertIsNone(decision.target_lane_index)
+        self.assertEqual(decision.reason, "wait_not_next")
+
     def test_join_decision_is_frozen_and_slotted(self):
         decision = JoinDecision(None, None, None, "wait", (0, 0, 0))
         with self.assertRaises(FrozenInstanceError):

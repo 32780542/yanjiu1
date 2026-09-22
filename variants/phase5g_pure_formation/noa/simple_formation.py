@@ -158,13 +158,17 @@ def infer_tail_join(ego, vehicles, lane_centers_m, p):
 def is_next_waiting_vehicle(ego, vehicles, lane_centers_m, p):
     """Admit the nearest rear waiter, with physical upper-lane tie priority."""
     rows = tuple(row for row in vehicles if row is not ego)
+    tolerance = p["simple_formation_position_tolerance_m"]
     resolved = tuple(row for row in rows if row.lane_index in (0, 1, 2)
-                     and row.x_m > ego.x_m)
+                     and row.x_m > ego.x_m + tolerance)
     stable = _stable_tail_prefix(resolved, p)
     if not stable:
-        return True
+        peers = tuple(row for row in rows if abs(row.x_m - ego.x_m) <= tolerance)
+        return ego.lane_index in (0, 1, 2) and all(
+            row.lane_index is not None and ego.lane_index > row.lane_index
+            for row in peers
+        )
     tail_rear_x = min(row.x_m for row in stable)
-    tolerance = p["simple_formation_position_tolerance_m"]
     if ego.x_m >= tail_rear_x - tolerance:
         return False
     waiters = tuple(row for row in rows if all(row is not part for part in stable)
@@ -183,8 +187,8 @@ def is_next_waiting_vehicle(ego, vehicles, lane_centers_m, p):
 def choose_join(ego, vehicles, lane_centers_m, p):
     """Choose from ego's connected, geometrically formed local tail only."""
     local = connected_tail_neighborhood(ego, vehicles, lane_centers_m, p)
-    ahead = tuple(row for row in local if row.x_m > ego.x_m)
     tolerance = p["simple_formation_position_tolerance_m"]
+    ahead = tuple(row for row in local if row.x_m > ego.x_m + tolerance)
     by_lane = sorted(ahead, key=lambda row: (row.lane_index, row.x_m))
     if any(left.lane_index == right.lane_index
            and right.x_m - left.x_m <= tolerance
@@ -192,14 +196,19 @@ def choose_join(ego, vehicles, lane_centers_m, p):
         return JoinDecision(None, None, None, "wait_ambiguous_tail",
                             lane_counts(ahead, lane_centers_m))
     stable = _stable_tail_prefix(ahead, p)
-    inferred = infer_tail_join(ego, stable, lane_centers_m, p)
-    if local:
-        local_min_x = min(ego.x_m, *(row.x_m for row in local))
-        local_max_x = max(ego.x_m, *(row.x_m for row in local))
-        unresolved = tuple(row for row in vehicles if row.lane_index is None
-                           and local_min_x <= row.x_m <= local_max_x)
-    else:
-        unresolved = ()
+    # A discarded row in the terminal layer is anomalous tail geometry, not a
+    # waiter. Preserve it for count recovery and anchor ambiguity detection.
+    overlaps_tail = stable and any(
+        all(row is not part for part in stable)
+        and row.x_m >= stable[-1].x_m - tolerance
+        for row in ahead
+    )
+    inferred = infer_tail_join(
+        ego, ahead if overlaps_tail else stable, lane_centers_m, p
+    )
+    local_max_x = max(ego.x_m + tolerance, *(row.x_m for row in local))
+    unresolved = tuple(row for row in vehicles if row.lane_index is None
+                       and ego.x_m - tolerance <= row.x_m <= local_max_x)
     if not is_next_waiting_vehicle(ego, local + unresolved, lane_centers_m, p):
         return JoinDecision(None, None, None, "wait_not_next", inferred.local_counts)
     return inferred
