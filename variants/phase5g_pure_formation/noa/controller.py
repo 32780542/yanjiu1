@@ -284,6 +284,7 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
             ego, bodies, road.current_center_m, end_x, p)
         diagnostics['lead_gap_m'] = current_gap
         diagnostics['reason'] = current_reason
+        detail['emergency_override'] = emergency
     memory = replace(memory, reference_track_id=target.reference_track_id)
     requested = simple_formation.formation_acceleration(ego_row, target, p)
     detail.update(

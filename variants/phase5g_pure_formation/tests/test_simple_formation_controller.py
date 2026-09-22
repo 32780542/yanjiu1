@@ -408,6 +408,20 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(unsafe.memory.own_behavior, "EMERGENCY")
         self.assertTrue(unsafe.diagnostics["simple_formation"]["emergency_override"])
 
+    def test_active_anchor_loss_clears_stale_target_lane_emergency_diagnostic(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = replace(self.joining(), plan=plan, target_y_m=CENTERS_M[1],
+                         lane_change_reason="simple_formation_join")
+        with patch("noa.controller._longitudinal", side_effect=(
+            (-10.0, None, None, True, "old_target_emergency"),
+            (0.5, None, None, False, "current_clear"),
+        )):
+            result = decide(self.control(time_s=1.0, memory=memory), self.p)
+        self.assertEqual(result.memory.own_behavior, "CRUISE")
+        self.assertEqual(result.diagnostics["reason"], "current_clear")
+        self.assertEqual(result.action.acceleration_mps2, 0.5)
+        self.assertFalse(result.diagnostics["simple_formation"]["emergency_override"])
+
     def test_stability_uses_configured_position_and_speed_tolerances(self):
         narrow = {**self.p, "simple_formation_position_tolerance_m": 1.0,
                   "simple_formation_speed_tolerance_mps": 0.25}
