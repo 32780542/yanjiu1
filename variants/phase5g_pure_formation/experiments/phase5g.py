@@ -1047,6 +1047,7 @@ class _SpeedAccumulator:
         self.minimum_speed_mps = None
         self.final = {}
         self.seen = set()
+        self.final_frame_facts = {}
 
     def _consume_speed(self, state: Mapping[str, object]) -> None:
         speed = math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
@@ -1057,9 +1058,34 @@ class _SpeedAccumulator:
 
     def consume(self, row: Mapping[str, object]) -> None:
         initial = {key: dict(state) for key, state in row["initial"].items()}
+        facts = {}
+        if "departures" in row:
+            facts["departures"] = deepcopy(row["departures"])
+        join_diagnostics = {}
+        for key, decision in row.get("decisions", {}).items():
+            diagnostics = decision.get("diagnostics", {}) if isinstance(decision, dict) else {}
+            detail = diagnostics.get("simple_formation") if isinstance(diagnostics, dict) else None
+            if isinstance(detail, dict):
+                join_diagnostics[key] = deepcopy(detail)
+        if join_diagnostics:
+            facts["join_diagnostics"] = join_diagnostics
+        readback = row.get("readback")
+        if isinstance(readback, dict):
+            reports = (readback.values()
+                       if all(isinstance(value, dict) for value in readback.values())
+                       else (readback,))
+            teleport_starts = sum(
+                report.get("teleport_starts", 0)
+                for report in reports
+                if type(report.get("teleport_starts", 0)) is int
+            )
+            if teleport_starts:
+                facts["teleport_starts"] = teleport_starts
         self.frames.append({
             "time_s": next(iter(initial.values()))["time_s"], "states": initial,
+            **facts,
         })
+        self.final_frame_facts = facts
         for key, state in row["initial"].items():
             if key not in self.seen:
                 self._consume_speed(state)
@@ -1078,6 +1104,7 @@ class _SpeedAccumulator:
             frames.append({
                 "time_s": next(iter(self.final.values()))["time_s"],
                 "states": {key: dict(state) for key, state in self.final.items()},
+                **deepcopy(self.final_frame_facts),
             })
         final_speeds = [
             math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
@@ -1178,16 +1205,8 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
         frames.append({
             "time_s": next(iter(final_all.values()))["time_s"],
             "states": final_all,
+            **deepcopy(speed_accumulator.final_frame_facts),
         })
-    detection = {
-        "default": detect_frames(frames),
-        "sensitivity": {
-            str(factor): detect_frames(
-                frames, position_tolerance=2.0 * factor, speed_tolerance=factor,
-            )
-            for factor in (0.5, 1.0, 1.5)
-        },
-    }
     if record_count:
         geometry = geometry_report(source(), model, RoadEnvelope.from_net(NET))
         metric_rows = source()
@@ -1220,6 +1239,44 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
         }
         metrics = {"actors": {}, "requirements_passed": False,
                    "comfort_passed": False, "tracking_passed": False}
+    detector_parameters = {
+        "d": float(physical.get("simple_formation_middle_offset_m", 15.0)),
+        "lane_width": float(model.p["lane_width_m"]),
+        "position_tolerance": float(
+            physical.get("simple_formation_position_tolerance_m", 2.0)
+        ),
+        "speed_tolerance": float(
+            physical.get("simple_formation_speed_tolerance_mps", 1.0)
+        ),
+        "persistence_s": float(
+            physical.get("simple_formation_stable_time_s", 1.0)
+        ),
+        "component_gap_m": float(
+            physical.get("simple_formation_component_gap_m", 50.0)
+        ),
+        "incidents": {
+            "collision_events": geometry["collision_events"],
+            "road_departure_events": geometry["outside_events"],
+        },
+    }
+    detection = {
+        "default": detect_frames(frames, **detector_parameters),
+        "sensitivity": {
+            str(factor): detect_frames(
+                frames,
+                **{
+                    **detector_parameters,
+                    "position_tolerance": detector_parameters[
+                        "position_tolerance"
+                    ] * factor,
+                    "speed_tolerance": detector_parameters[
+                        "speed_tolerance"
+                    ] * factor,
+                },
+            )
+            for factor in (0.5, 1.0, 1.5)
+        },
+    }
     intervals = [row for row in detection["default"]["intervals"]
                  if row["whole_cohort"] and row["success"]]
     first = min(intervals, key=lambda row: row["formed_time_s"]) if intervals else None

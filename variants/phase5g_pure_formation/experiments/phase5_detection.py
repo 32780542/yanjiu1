@@ -1,261 +1,499 @@
-"""Independent, read-only detection of staggered structures in recorded frames.
+"""Independent offline evaluation of dynamic local formation components.
 
-No controller imports this module. Vehicle keys identify persistent members only;
-the detector neither reads type/plan/slot labels nor sends its phase fit online.
+The detector consumes recorded physical states and factual experiment evidence.
+It deliberately imports no controller module and never feeds its measurements
+back into an online decision.
 """
-from collections import Counter
+
 from itertools import combinations
 import math
+from typing import Mapping
 
 
 _EPS = 1e-8
+_LANE_COUNT = 3
+_BODY_LENGTH_M = 4.0
+_BODY_WIDTH_M = 1.8
 
 
-def _components(keys, edges):
-    neighbors = {key: set() for key in keys}
-    for left, right in edges:
-        neighbors[left].add(right)
-        neighbors[right].add(left)
-    remaining = set(keys)
-    result = []
-    while remaining:
-        todo = [min(remaining)]
-        component = set()
-        while todo:
-            key = todo.pop()
-            if key in component:
-                continue
-            component.add(key)
-            todo.extend(neighbors[key] - component)
-        remaining -= component
-        result.append(frozenset(component))
-    return result
+def _finite(name, value, *, nonnegative=False):
+    if type(value) not in (int, float) or not math.isfinite(value):
+        raise ValueError(f"{name} must be finite")
+    invalid_range = value < 0 if nonnegative else value <= 0
+    if invalid_range:
+        qualifier = "nonnegative" if nonnegative else "positive"
+        raise ValueError(f"{name} must be {qualifier}")
+    return float(value)
 
 
-def _phase_fit(rows, d):
-    period = 2 * d
-    residues = sorted((row['x'] - row['lane'] * d) % period for row in rows)
-    gaps = [(residues[(i + 1) % len(residues)] - value) % period
-            for i, value in enumerate(residues)]
-    if len(residues) == 1 or max(residues) - min(residues) < _EPS:
-        phase = residues[0]
-    else:
-        cut = max(range(len(gaps)), key=lambda i: (gaps[i], -i))
-        start = residues[(cut + 1) % len(residues)]
-        width = period - gaps[cut]
-        phase = (start + width / 2) % period
-    errors, slots = {}, {}
-    for row in rows:
-        k = round((row['x'] - row['lane'] * d - phase) / period)
-        slots[row['key']] = (row['lane'], row['lane'] + 2 * k)
-        errors[row['key']] = abs(row['x'] - (phase + (row['lane'] + 2 * k) * d))
-    return phase, errors, slots
+def _lane_index(y_m, lane_width_m):
+    estimate = round(y_m / lane_width_m - 0.5)
+    if not 0 <= estimate < _LANE_COUNT:
+        return None
+    center = (estimate + 0.5) * lane_width_m
+    if abs(y_m - center) > lane_width_m / 2 + _EPS:
+        return None
+    return estimate
 
 
-def _slot_edges(slots):
-    return [(left, right) for left, right in combinations(slots, 2)
-            if ((slots[left][0] == slots[right][0] and
-                 abs(slots[left][1] - slots[right][1]) == 2) or
-                (abs(slots[left][0] - slots[right][0]) == 1 and
-                 abs(slots[left][1] - slots[right][1]) == 1))]
+def _physical_rows(states, lane_width_m):
+    rows = {}
+    for key, state in states.items():
+        if type(key) is not str or not isinstance(state, Mapping):
+            raise ValueError("frame states must map string actors to physical states")
+        try:
+            x_m = float(state["x_m"])
+            y_m = float(state["y_m"])
+            vx_mps = float(state["vx_mps"])
+            vy_mps = float(state.get("vy_mps", 0.0))
+        except (KeyError, TypeError, ValueError) as error:
+            raise ValueError(f"{key}: invalid physical state") from error
+        if not all(math.isfinite(value) for value in (x_m, y_m, vx_mps, vy_mps)):
+            raise ValueError(f"{key}: physical state must be finite")
+        rows[key] = {
+            "key": key,
+            "x_m": x_m,
+            "y_m": y_m,
+            "lane": _lane_index(y_m, lane_width_m),
+            "speed_mps": math.hypot(vx_mps, vy_mps),
+        }
+    return rows
 
 
-def _measure(keys, vehicles, d, position_tolerance, speed_tolerance):
-    rows = [vehicles[key] for key in sorted(keys) if key in vehicles]
-    reasons = []
-    if len(rows) != len(keys):
-        reasons.append('member_missing')
-    if len(rows) < 3:
-        reasons.append('fewer_than_three_vehicles')
-    if not rows:
-        return None, reasons
-    lanes = sorted({row['lane'] for row in rows})
-    if not any(right - left == 1 for left, right in zip(lanes, lanes[1:])):
-        reasons.append('no_two_adjacent_lanes')
-    speed_spread = max(row['speed'] for row in rows) - min(row['speed'] for row in rows)
-    if speed_spread > speed_tolerance + _EPS:
-        reasons.append('speed_spread_exceeded')
-    phase, errors, slots = _phase_fit(rows, d)
-    if max(errors.values()) > position_tolerance + _EPS:
-        reasons.append('lattice_error_exceeded')
-    if len(set(slots.values())) != len(slots):
-        reasons.append('duplicate_occupied_slot')
-    edges = _slot_edges(slots)
-    if len(_components(slots, edges)) != 1:
-        reasons.append('disconnected_occupied_slots')
-    min_q = min(slot[1] for slot in slots.values())
-    max_q = max(slot[1] for slot in slots.values())
-    # All parity-compatible sites in the group's fitted longitudinal and lane
-    # envelope form the denominator. Missing entire lanes remain visible here.
-    possible = {(lane, q): (lane, q)
-                for lane in range(min(lanes), max(lanes) + 1)
-                for q in range(min_q, max_q + 1) if (q - lane) % 2 == 0}
-    possible_edges = _slot_edges(possible)
-    span = max(row['front_x'] for row in rows) - min(row['rear_x'] for row in rows)
-    pair_error = max((abs(abs(vehicles[left]['x'] - vehicles[right]['x']) -
-                          (2 * d if slots[left][0] == slots[right][0] else d))
-                      for left, right in edges), default=0.)
-    result = {
-        'members': sorted(keys), 'vehicle_count': len(rows), 'lanes': lanes,
-        'phase_m': phase, 'max_lattice_error_m': max(errors.values()),
-        'speed_spread_mps': speed_spread, 'occupied_slots': len(set(slots.values())),
-        'possible_slots': len(possible),
-        'slot_occupancy_fraction': len(set(slots.values())) / len(possible),
-        'occupancy_edges_numerator': len(edges),
-        'occupancy_edges_denominator': len(possible_edges),
-        'adjacency_occupancy_completeness': len(edges) / len(possible_edges) if possible_edges else 0.,
-        'road_span_m': span,
-        'center_span_m': max(row['x'] for row in rows) - min(row['x'] for row in rows),
-        'max_adjacent_spacing_error_m': pair_error,
+def _physical_components(rows, component_gap_m):
+    ordered = sorted(rows.values(), key=lambda row: (-row["x_m"], row["key"]))
+    groups = []
+    for row in ordered:
+        if not groups or groups[-1][-1]["x_m"] - row["x_m"] > component_gap_m:
+            groups.append([row])
+        else:
+            groups[-1].append(row)
+    return groups
+
+
+def _expected_lane_counts(count):
+    complete, remainder = divmod(count, 3)
+    return [complete + (remainder >= 2), complete, complete + (remainder >= 1)]
+
+
+def _maximum(values):
+    return max(values, default=0.0)
+
+
+def _component_measurement(rows, *, middle_offset_m, same_lane_gap_m,
+                           position_tolerance_m, speed_tolerance_mps):
+    members = sorted(row["key"] for row in rows)
+    lane_rows = {
+        lane: sorted(
+            (row for row in rows if row["lane"] == lane),
+            key=lambda row: (-row["x_m"], row["key"]),
+        )
+        for lane in range(_LANE_COUNT)
     }
-    return result, reasons
+    lane_counts = [len(lane_rows[lane]) for lane in range(_LANE_COUNT)]
+    invalid_lane = [row["key"] for row in rows if row["lane"] is None]
+    upper, middle, lower = lane_rows[2], lane_rows[1], lane_rows[0]
+    outer_error = _maximum(
+        abs(upper[index]["x_m"] - lower[index]["x_m"])
+        for index in range(min(len(upper), len(lower)))
+    )
+    middle_error = _maximum(
+        abs((upper[index]["x_m"] - middle[index]["x_m"]) - middle_offset_m)
+        for index in range(min(len(upper), len(middle)))
+    )
+    same_lane_error = _maximum(
+        abs((front["x_m"] - rear["x_m"]) - same_lane_gap_m)
+        for lane in range(_LANE_COUNT)
+        for front, rear in zip(lane_rows[lane], lane_rows[lane][1:])
+    )
+    speeds = [row["speed_mps"] for row in rows]
+    speed_spread = max(speeds) - min(speeds) if speeds else 0.0
+    reasons = []
+    if len(rows) < 3:
+        reasons.append("fewer_than_three_vehicles")
+    if invalid_lane:
+        reasons.append("road_departure_detected")
+    if lane_counts != _expected_lane_counts(len(rows)):
+        reasons.append("lane_distribution_invalid")
+    if outer_error > position_tolerance_m + _EPS:
+        reasons.append("outer_alignment_error_exceeded")
+    if middle_error > position_tolerance_m + _EPS:
+        reasons.append("middle_offset_error_exceeded")
+    if same_lane_error > position_tolerance_m + _EPS:
+        reasons.append("same_lane_gap_error_exceeded")
+    if speed_spread > speed_tolerance_mps + _EPS:
+        reasons.append("speed_spread_exceeded")
+    max_error = max(outer_error, middle_error, same_lane_error)
+    return {
+        "members": members,
+        "vehicle_count": len(rows),
+        "lanes": sorted(lane for lane, items in lane_rows.items() if items),
+        "lane_counts": lane_counts,
+        "expected_lane_counts": _expected_lane_counts(len(rows)),
+        "max_outer_alignment_error_m": outer_error,
+        "max_middle_offset_error_m": middle_error,
+        "max_same_lane_gap_error_m": same_lane_error,
+        "speed_spread_mps": speed_spread,
+        "failure_reasons": reasons,
+        "valid": not reasons,
+        "max_lattice_error_m": max_error,
+        "max_adjacent_spacing_error_m": max_error,
+        "road_span_m": (
+            max(row["x_m"] for row in rows) - min(row["x_m"] for row in rows)
+            + _BODY_LENGTH_M if rows else 0.0
+        ),
+        "center_span_m": (
+            max(row["x_m"] for row in rows) - min(row["x_m"] for row in rows)
+            if rows else 0.0
+        ),
+    }
 
 
-def _candidates(vehicles, d, position_tolerance, speed_tolerance):
-    """Enumerate O(N^2) phase/speed windows, then connected occupied sites."""
-    period = 2 * d
-    residue = {key: (row['x'] - row['lane'] * d) % period for key, row in vehicles.items()}
-    proposed = set()
-    for start in sorted(set(residue.values())):
-        phase_keys = [key for key, value in residue.items()
-                      if (value - start) % period <= 2 * position_tolerance + _EPS]
-        for min_speed in sorted({vehicles[key]['speed'] for key in phase_keys}):
-            speed_keys = [key for key in phase_keys
-                          if min_speed - _EPS <= vehicles[key]['speed'] <= min_speed + speed_tolerance + _EPS]
-            if len(speed_keys) < 3:
-                continue
-            _, _, slots = _phase_fit([vehicles[key] for key in speed_keys], d)
-            counts = Counter(slots.values())
-            # Ambiguous duplicate slots cannot be used to inflate a group.
-            slots = {key: slot for key, slot in slots.items() if counts[slot] == 1}
-            for component in _components(slots, _slot_edges(slots)):
-                if len(component) >= 3:
-                    proposed.add(component)
-    valid = set()
-    for keys in proposed:
-        _, reasons = _measure(keys, vehicles, d, position_tolerance, speed_tolerance)
-        if not reasons:
-            valid.add(keys)
-    # Retain maximal current components; existing subsets are independently
-    # revalidated by detect_frames, preserving their actual member duration.
-    return {keys for keys in valid if not any(keys < other for other in valid)}
+def _departure_facts(frames):
+    schedules = {}
+    actuals = {}
+    declared = False
+    for frame in frames:
+        raw = frame.get("departures")
+        if raw is None:
+            continue
+        declared = True
+        if not isinstance(raw, Mapping):
+            raise ValueError("frame departures must be an actor mapping")
+        if schedules and set(raw) != set(schedules):
+            raise ValueError("departure cohort changed during recording")
+        for key, row in raw.items():
+            if type(key) is not str or not isinstance(row, Mapping):
+                raise ValueError("invalid departure evidence")
+            scheduled = row.get("scheduled_departure_s")
+            actual = row.get("actual_departure_s")
+            if type(scheduled) not in (int, float) or not math.isfinite(scheduled) \
+                    or scheduled < 0:
+                raise ValueError(f"{key}: invalid scheduled departure")
+            if actual is not None and (
+                    type(actual) not in (int, float) or not math.isfinite(actual)
+                    or actual < scheduled - _EPS):
+                raise ValueError(f"{key}: invalid actual departure")
+            scheduled = float(scheduled)
+            actual = None if actual is None else float(actual)
+            if key in schedules and schedules[key] != scheduled:
+                raise ValueError("scheduled departure changed during recording")
+            if key in actuals and actuals[key] is not None and actuals[key] != actual:
+                raise ValueError("actual departure changed after activation")
+            schedules[key] = scheduled
+            if key not in actuals or actual is not None:
+                actuals[key] = actual
+    if not declared:
+        first_seen = {}
+        for frame in frames:
+            for key in frame["states"]:
+                first_seen.setdefault(key, float(frame["time_s"]))
+        schedules = dict(first_seen)
+        actuals = dict(first_seen)
+    else:
+        actuals = {key: actuals.get(key) for key in schedules}
+    return schedules, actuals
+
+
+def _has_collision(rows):
+    return any(
+        abs(left["x_m"] - right["x_m"]) < _BODY_LENGTH_M - _EPS
+        and abs(left["y_m"] - right["y_m"]) < _BODY_WIDTH_M - _EPS
+        for left, right in combinations(rows.values(), 2)
+    )
+
+
+def _join_phase(detail):
+    if not isinstance(detail, Mapping):
+        return None
+    nested = detail.get("simple_formation")
+    if isinstance(nested, Mapping):
+        detail = nested
+    return detail.get("join_phase")
+
+
+def _close_interval(active, candidates, keys, end_time_s, reason):
+    item = active.pop(keys)
+    item["end_time_s"] = end_time_s
+    item["end_reason"] = reason
+    candidates.append(item)
 
 
 def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
                   speed_tolerance=1.0, persistence_s=5.0,
-                  formation_deadline_s=30.0, hold_s=10.0):
-    """Return sampled geometry, persistent member intervals, and strict success.
-
-    Confirm formation after persistence_s of continuously valid sampled geometry.
-    Strict success requires the complete recorded cohort confirmed by 30 seconds
-    from recording start, then held another 10 seconds. See phase5_detector.md.
-    """
-    parameters = {'d_m': d, 'lane_width_m': lane_width,
-                  'position_tolerance_m': position_tolerance,
-                  'speed_tolerance_mps': speed_tolerance,
-                  'persistence_s': persistence_s, 'formation_deadline_s': formation_deadline_s,
-                  'hold_after_confirmation_s': hold_s,
-                  'max_sample_gap_s': .1, 'body_length_m': 4., 'body_width_m': 1.8}
-    if not all(math.isfinite(value) and value > 0 for value in parameters.values()):
-        raise ValueError('Detector parameters must be positive and finite')
+                  formation_deadline_s=30.0, hold_s=10.0,
+                  component_gap_m=50.0, incidents=None):
+    """Evaluate dynamic physical components without controller-derived roles."""
+    d = _finite("d", d)
+    lane_width = _finite("lane_width", lane_width)
+    position_tolerance = _finite("position_tolerance", position_tolerance)
+    speed_tolerance = _finite("speed_tolerance", speed_tolerance)
+    persistence_s = _finite("persistence_s", persistence_s, nonnegative=True)
+    formation_deadline_s = _finite("formation_deadline_s", formation_deadline_s)
+    hold_s = _finite("hold_s", hold_s)
+    component_gap_m = _finite("component_gap_m", component_gap_m)
     if position_tolerance >= d / 2:
-        raise ValueError('Position tolerance must be smaller than d/2 for an unambiguous lattice')
+        raise ValueError("Position tolerance must be smaller than d/2")
     frames = list(frames)
-    times = [float(frame['time_s']) for frame in frames]
-    if not all(math.isfinite(time) for time in times):
-        raise ValueError('Frame times must be finite')
+    times = []
+    for frame in frames:
+        if not isinstance(frame, Mapping) or not isinstance(frame.get("states"), Mapping):
+            raise ValueError("each detector frame requires a states mapping")
+        time_s = frame.get("time_s")
+        if type(time_s) not in (int, float) or not math.isfinite(time_s):
+            raise ValueError("Frame times must be finite")
+        times.append(float(time_s))
     if any(right <= left for left, right in zip(times, times[1:])):
-        raise ValueError('Frame times must be strictly increasing')
-    sample_step = min((round(right - left, 10) for left, right in zip(times, times[1:])), default=.1)
-    parameters['max_sample_gap_s'] = min(.1, sample_step)
-    cohort = sorted({key for frame in frames for key in frame['states']})
-    active, candidates, measured_frames = {}, [], []
-    gaps = 0
+        raise ValueError("Frame times must be strictly increasing")
+    sample_step = min((right - left for left, right in zip(times, times[1:])), default=0.1)
+    schedules, actuals = _departure_facts(frames)
+    cohort = sorted(schedules)
+    last_actual = (max(actuals.values())
+                   if actuals and all(value is not None for value in actuals.values())
+                   else None)
+    incident_rows = incidents or {}
+    if not isinstance(incident_rows, Mapping):
+        raise ValueError("incidents must be a mapping")
 
-    def close(keys, reason):
-        item = active.pop(keys)
-        item['end_reason'] = reason
-        item['duration_s'] = round(item['end_time_s'] - item['start_time_s'], 10)
-        item['formation_confirmed'] = item['duration_s'] + _EPS >= persistence_s
-        item['formed_time_s'] = round(item['start_time_s'] + persistence_s, 10) if item['formation_confirmed'] else None
-        item['held_time_s'] = (round(item['formed_time_s'] + hold_s, 10)
-                               if item['formation_confirmed'] and item['duration_s'] + _EPS >= persistence_s + hold_s else None)
-        item['formation_by_deadline'] = bool(item['formation_confirmed'] and
-            item['formed_time_s'] <= times[0] + formation_deadline_s + _EPS)
-        item['geometric_hold_10s_from_start'] = item['duration_s'] + _EPS >= hold_s
-        item['whole_cohort'] = item['members'] == cohort
-        item['success'] = item['formation_by_deadline'] and item['held_time_s'] is not None
-        item['failure_reasons'] = []
-        if not item['formation_confirmed']:
-            item['failure_reasons'].append('persistence_too_short')
-        elif not item['formation_by_deadline']:
-            item['failure_reasons'].append('formation_deadline_missed')
-        if item['formation_confirmed'] and item['held_time_s'] is None:
-            item['failure_reasons'].append('hold_after_confirmation_too_short')
-        candidates.append(item)
-
+    component_history = []
+    admission_conflicts = []
+    missing_events = []
+    collision_events = list(incident_rows.get("collision_events", ()))
+    road_events = list(incident_rows.get("road_departure_events", ()))
+    teleport_events = list(incident_rows.get("teleport_events", ()))
+    jump_events = list(incident_rows.get("nonphysical_jump_events", ()))
+    active = {}
+    candidates = []
+    previous_rows = {}
     previous_time = None
-    for time, frame in zip(times, frames):
-        if previous_time is not None and time - previous_time > parameters['max_sample_gap_s'] + _EPS:
-            gaps += 1
-            for keys in list(active):
-                close(keys, 'sample_gap')
-        vehicles = {}
-        for key, state in frame['states'].items():
-            x, y, vx = (float(state[name]) for name in ('x_m', 'y_m', 'vx_mps'))
-            vy, heading = float(state.get('vy_mps', 0.)), float(state.get('heading_rad', 0.))
-            if not all(math.isfinite(value) for value in (x, y, vx, vy, heading)):
-                raise ValueError('Vehicle geometry and velocity must be finite')
-            half_span = 2 * abs(math.cos(heading)) + .9 * abs(math.sin(heading))
-            vehicles[key] = {'key': key, 'x': x, 'lane': math.floor(y / lane_width),
-                             'speed': math.hypot(vx, vy), 'front_x': x + half_span,
-                             'rear_x': x - half_span}
-        proposed = _candidates(vehicles, d, position_tolerance, speed_tolerance) | set(active)
-        groups = []
-        for keys in sorted(proposed, key=lambda keys: (-len(keys), sorted(keys))):
-            measurement, reasons = _measure(keys, vehicles, d, position_tolerance, speed_tolerance)
-            if reasons:
-                if keys in active:
-                    close(keys, 'geometry_or_membership_lost')
-                continue
-            groups.append(measurement)
+    sampling_gaps = 0
+
+    for time_s, frame in zip(times, frames):
+        rows = _physical_rows(frame["states"], lane_width)
+        expected = {
+            key for key, actual in actuals.items()
+            if actual is not None and actual <= time_s + _EPS
+        }
+        for key in sorted(expected - set(rows)):
+            missing_events.append({"time_s": time_s, "actor": key})
+        for row in rows.values():
+            if row["lane"] is None:
+                road_events.append({"time_s": time_s, "actor": row["key"]})
+        if _has_collision(rows):
+            collision_events.append({"time_s": time_s})
+        if frame.get("teleport_starts", 0):
+            teleport_events.append({"time_s": time_s, "count": frame["teleport_starts"]})
+        if previous_time is not None:
+            elapsed = time_s - previous_time
+            if elapsed > sample_step + _EPS:
+                sampling_gaps += 1
+            for key in set(previous_rows) & set(rows):
+                before, after = previous_rows[key], rows[key]
+                distance = math.hypot(
+                    after["x_m"] - before["x_m"],
+                    after["y_m"] - before["y_m"],
+                )
+                plausible = (max(before["speed_mps"], after["speed_mps"]) * elapsed
+                             + 5.0 * elapsed * elapsed + 2.0)
+                if distance > plausible + _EPS:
+                    jump_events.append({
+                        "time_s": time_s, "actor": key,
+                        "distance_m": distance, "plausible_m": plausible,
+                    })
+
+        measurements = [
+            _component_measurement(
+                group, middle_offset_m=d, same_lane_gap_m=2 * d,
+                position_tolerance_m=position_tolerance,
+                speed_tolerance_mps=speed_tolerance,
+            )
+            for group in _physical_components(rows, component_gap_m)
+        ]
+        diagnostics = frame.get("join_diagnostics", {})
+        if diagnostics is not None and not isinstance(diagnostics, Mapping):
+            raise ValueError("join_diagnostics must be an actor mapping")
+        diagnostics = diagnostics or {}
+        for measurement in measurements:
+            joiners = sorted(
+                key for key in measurement["members"]
+                if _join_phase(diagnostics.get(key)) in ("JOINING", "STABILIZING")
+            )
+            if len(joiners) > 1:
+                admission_conflicts.append({
+                    "time_s": time_s,
+                    "component_members": measurement["members"],
+                    "joining_actors": joiners,
+                })
+        current = {
+            frozenset(measurement["members"]): measurement
+            for measurement in measurements if measurement["valid"]
+        }
+        gap = previous_time is not None and time_s - previous_time > sample_step + _EPS
+        for keys in list(active):
+            if gap or keys not in current:
+                _close_interval(
+                    active, candidates, keys, previous_time,
+                    "sample_gap" if gap else "geometry_or_membership_lost",
+                )
+        for keys, measurement in current.items():
             if keys not in active:
-                active[keys] = {'members': sorted(keys), 'start_time_s': time, 'end_time_s': time,
-                                'max_lattice_error_m': 0., 'max_speed_spread_mps': 0.,
-                                'min_adjacency_occupancy_completeness': 1., 'max_road_span_m': 0.}
+                active[keys] = {
+                    "members": sorted(keys), "start_time_s": time_s,
+                    "max_outer_alignment_error_m": 0.0,
+                    "max_middle_offset_error_m": 0.0,
+                    "max_same_lane_gap_error_m": 0.0,
+                    "max_speed_spread_mps": 0.0,
+                }
             item = active[keys]
-            item['end_time_s'] = time
-            item['max_lattice_error_m'] = max(item['max_lattice_error_m'], measurement['max_lattice_error_m'])
-            item['max_speed_spread_mps'] = max(item['max_speed_spread_mps'], measurement['speed_spread_mps'])
-            item['min_adjacency_occupancy_completeness'] = min(item['min_adjacency_occupancy_completeness'],
-                                                             measurement['adjacency_occupancy_completeness'])
-            item['max_road_span_m'] = max(item['max_road_span_m'], measurement['road_span_m'])
-        _, fleet_reasons = _measure(frozenset(cohort), vehicles, d, position_tolerance, speed_tolerance)
-        covered = {key for group in groups for key in group['members']}
-        measured_frames.append({'time_s': time, 'groups': groups,
-            'fleet_coverage_fraction': len(covered) / len(cohort) if cohort else 0.,
-            'largest_group_fraction': max((len(group['members']) / len(cohort) for group in groups), default=0.),
-            'fleet_failure_reasons': fleet_reasons,
-            'fleet_road_span_m': (max(row['front_x'] for row in vehicles.values()) -
-                                  min(row['rear_x'] for row in vehicles.values())) if vehicles else 0.})
-        previous_time = time
+            item["end_time_s"] = time_s
+            for target, source in (
+                ("max_outer_alignment_error_m", "max_outer_alignment_error_m"),
+                ("max_middle_offset_error_m", "max_middle_offset_error_m"),
+                ("max_same_lane_gap_error_m", "max_same_lane_gap_error_m"),
+                ("max_speed_spread_mps", "speed_spread_mps"),
+            ):
+                item[target] = max(item[target], measurement[source])
+        component_history.append({
+            "time_s": time_s,
+            "active_members": sorted(rows),
+            "components": measurements,
+            "missing_departed_members": sorted(expected - set(rows)),
+        })
+        previous_rows = rows
+        previous_time = time_s
     for keys in list(active):
-        close(keys, 'recording_end')
-    candidates.sort(key=lambda item: (item['start_time_s'], -len(item['members']), item['members']))
-    intervals = [item for item in candidates if item['formation_confirmed']]
-    local_success = any(item['success'] for item in intervals)
-    success = any(item['success'] and item['whole_cohort'] for item in intervals)
+        _close_interval(active, candidates, keys, previous_time, "recording_end")
+
+    for item in candidates:
+        duration = max(0.0, item["end_time_s"] - item["start_time_s"])
+        confirmed = duration + _EPS >= persistence_s
+        formed = item["start_time_s"] + persistence_s if confirmed else None
+        held = (formed + hold_s
+                if confirmed and duration + _EPS >= persistence_s + hold_s else None)
+        by_deadline = bool(
+            formed is not None and last_actual is not None
+            and formed <= last_actual + formation_deadline_s + _EPS
+        )
+        item.update(
+            duration_s=round(duration, 10),
+            formation_confirmed=confirmed,
+            formed_time_s=None if formed is None else round(formed, 10),
+            held_time_s=None if held is None else round(held, 10),
+            formation_by_deadline=by_deadline,
+            whole_cohort=item["members"] == cohort,
+        )
+        item["success"] = bool(by_deadline and held is not None)
+        item["failure_reasons"] = []
+        if not confirmed:
+            item["failure_reasons"].append("persistence_too_short")
+        elif not by_deadline:
+            item["failure_reasons"].append("formation_deadline_missed")
+        if confirmed and held is None:
+            item["failure_reasons"].append("hold_after_confirmation_too_short")
+        item["max_lattice_error_m"] = max(
+            item["max_outer_alignment_error_m"],
+            item["max_middle_offset_error_m"],
+            item["max_same_lane_gap_error_m"],
+        )
+    candidates.sort(
+        key=lambda item: (item["start_time_s"], -len(item["members"]), item["members"]),
+    )
+    intervals = [item for item in candidates if item["formation_confirmed"]]
+    whole = [item for item in intervals if item["whole_cohort"]]
+    successful = [item for item in whole if item["success"]]
+    first = min(successful, key=lambda item: item["formed_time_s"]) if successful else None
+
     reasons = []
     if not frames:
-        reasons.append('empty_recording')
-    elif not intervals:
-        reasons.append('no_persistent_local_group')
-    elif not local_success:
-        reasons.append('no_local_group_met_deadline_and_hold')
-    if frames and not success:
-        reasons.append('whole_cohort_milestone_not_met')
-    return {'schema_version': 1, 'offline_only': True, 'parameters': parameters,
-            'cohort_members': cohort, 'cohort_size': len(cohort), 'frame_count': len(frames),
-            'sampling_gap_count': gaps, 'success': success, 'whole_cohort_success': success,
-            'local_success': local_success, 'failure_reasons': reasons,
-            'intervals': intervals, 'candidate_intervals': candidates, 'frames': measured_frames}
+        reasons.append("empty_recording")
+    if schedules and any(value is None for value in actuals.values()):
+        reasons.append("partial_departure_cohort")
+    if missing_events:
+        reasons.append("member_missing")
+    if collision_events:
+        reasons.append("collision_detected")
+    if road_events:
+        reasons.append("road_departure_detected")
+    if teleport_events:
+        reasons.append("teleport_detected")
+    if jump_events:
+        reasons.append("nonphysical_jump_detected")
+    if admission_conflicts:
+        reasons.append("simultaneous_admission_conflict")
+    if frames and not intervals:
+        reasons.append("no_persistent_local_group")
+    if whole and not any(item["formation_by_deadline"] for item in whole):
+        reasons.append("formation_deadline_missed")
+    elif whole and not any(item["held_time_s"] is not None for item in whole):
+        reasons.append("hold_after_confirmation_too_short")
+    if frames and not successful:
+        reasons.append("whole_cohort_milestone_not_met")
+    hazards = {
+        "partial_departure_cohort", "member_missing", "collision_detected",
+        "road_departure_detected", "teleport_detected",
+        "nonphysical_jump_detected", "simultaneous_admission_conflict",
+    }
+    success = bool(first is not None and not hazards.intersection(reasons))
+    maxima_source = [
+        component
+        for row in component_history
+        for component in row["components"]
+        if component["members"] == cohort
+    ]
+    final_counts = (
+        component_history[-1]["components"][0]["lane_counts"]
+        if component_history and len(component_history[-1]["components"]) == 1
+        and component_history[-1]["components"][0]["members"] == cohort
+        else None
+    )
+    parameters = {
+        "d_m": d, "middle_offset_m": d, "same_lane_gap_m": 2 * d,
+        "component_gap_m": component_gap_m, "lane_width_m": lane_width,
+        "position_tolerance_m": position_tolerance,
+        "speed_tolerance_mps": speed_tolerance,
+        "persistence_s": persistence_s,
+        "formation_deadline_s": formation_deadline_s,
+        "hold_after_confirmation_s": hold_s,
+        "max_sample_gap_s": sample_step,
+        "body_length_m": _BODY_LENGTH_M, "body_width_m": _BODY_WIDTH_M,
+    }
+    return {
+        "schema_version": 2, "offline_only": True, "parameters": parameters,
+        "cohort_members": cohort, "cohort_size": len(cohort),
+        "scheduled_departures": schedules, "actual_departures": actuals,
+        "last_actual_departure_s": last_actual,
+        "frame_count": len(frames), "sampling_gap_count": sampling_gaps,
+        "success": success, "whole_cohort_success": success,
+        "local_success": any(item["success"] for item in intervals),
+        "formed_time_s": first["formed_time_s"] if first else None,
+        "held_time_s": first["held_time_s"] if first else None,
+        "final_lane_counts": final_counts,
+        "max_outer_alignment_error_m": _maximum(
+            row["max_outer_alignment_error_m"] for row in maxima_source),
+        "max_middle_offset_error_m": _maximum(
+            row["max_middle_offset_error_m"] for row in maxima_source),
+        "max_same_lane_gap_error_m": _maximum(
+            row["max_same_lane_gap_error_m"] for row in maxima_source),
+        "max_component_speed_spread_mps": _maximum(
+            row["speed_spread_mps"] for row in maxima_source),
+        "admission_conflicts": admission_conflicts,
+        "missing_events": missing_events,
+        "collision_events": collision_events,
+        "road_departure_events": road_events,
+        "teleport_events": teleport_events,
+        "nonphysical_jump_events": jump_events,
+        "failure_reasons": list(dict.fromkeys(reasons)),
+        "intervals": intervals, "candidate_intervals": candidates,
+        "component_history": component_history,
+        "frames": [
+            {
+                "time_s": row["time_s"], "groups": row["components"],
+                "active_members": row["active_members"],
+                "fleet_failure_reasons": sorted({
+                    reason for component in row["components"]
+                    for reason in component["failure_reasons"]
+                }),
+            }
+            for row in component_history
+        ],
+    }
