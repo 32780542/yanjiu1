@@ -418,6 +418,17 @@ class SimpleFormationRuleTests(unittest.TestCase):
         self.assertEqual(choose_join(upper, (slightly_ahead_lower,), self.centers, self.p).target_lane_index, 2)
         self.assertIsNone(choose_join(slightly_ahead_lower, (upper,), self.centers, self.p).target_lane_index)
 
+    def test_isolated_founder_chooses_upper_without_a_visible_vehicle(self):
+        ego = self.vehicle(99, 0.0, 1)
+        decision = choose_join(ego, (), self.centers, self.p)
+        self.assertEqual(decision, JoinDecision(2, None, None, "counts_empty", (0, 0, 0)))
+
+    def test_vehicle_beyond_component_gap_does_not_change_isolated_founder(self):
+        ego = self.vehicle(99, 0.0, 1)
+        outside = self.vehicle(1, 50.01, 2)
+        self.assertEqual(choose_join(ego, (outside,), self.centers, self.p),
+                         choose_join(ego, (), self.centers, self.p))
+
     def test_unresolved_waiter_behind_ego_within_tolerance_blocks_join(self):
         ego = self.vehicle(99, 20.0, 2)
         tail = self.vehicle(1, 45.0, 1)

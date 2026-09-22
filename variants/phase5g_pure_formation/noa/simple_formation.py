@@ -206,7 +206,7 @@ def choose_join(ego, vehicles, lane_centers_m, p):
     inferred = infer_tail_join(
         ego, ahead if overlaps_tail else stable, lane_centers_m, p
     )
-    local_max_x = max(ego.x_m + tolerance, *(row.x_m for row in local))
+    local_max_x = max((ego.x_m + tolerance, *(row.x_m for row in local)))
     unresolved = tuple(row for row in vehicles if row.lane_index is None
                        and ego.x_m - tolerance <= row.x_m <= local_max_x)
     if not is_next_waiting_vehicle(ego, local + unresolved, lane_centers_m, p):
