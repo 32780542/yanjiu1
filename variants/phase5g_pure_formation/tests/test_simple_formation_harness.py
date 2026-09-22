@@ -41,6 +41,17 @@ SIMPLE_NONDEFAULTS = {
     "simple_formation_accel_limit_mps2": 0.4,
     "simple_formation_max_lane_changes": 1,
 }
+DYNAMIC_SIMPLE_DEFAULTS = {
+    "simple_formation_component_gap_m": 50.0,
+    "simple_formation_middle_offset_m": 15.0,
+    "simple_formation_same_lane_gap_m": 30.0,
+    "simple_formation_position_tolerance_m": 2.0,
+    "simple_formation_speed_tolerance_mps": 1.0,
+    "simple_formation_stable_time_s": 1.0,
+    "simple_formation_reference_switch_gain_m": 2.0,
+    "simple_formation_min_lane_change_speed_mps": 5.0,
+    "simple_formation_target_lane_clearance_m": 8.0,
+}
 EXPECTED_MODES = {
     "off": {"formation_enabled": False, "formation_lane_change_enabled": False},
     "longitudinal": {"formation_enabled": True, "formation_lane_change_enabled": False},
@@ -175,6 +186,33 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             simple_rules=True, simple_overrides=resolved,
         )
 
+    def dynamic_parameters(self):
+        return self.harness.parameters(
+            "lane_priority", 10.0,
+            simple_rules=True, simple_overrides=DYNAMIC_SIMPLE_DEFAULTS,
+        )
+
+    def exact_dynamic_case(self, physical, *, duration_s=3.1):
+        case = phase5g_cases.seeded_case(physical, 3, 101)
+        scheduled = (0.0, 2.5, 3.0)
+        for ordinal, actor in enumerate(case["controlled"]):
+            row = case["departures"][actor]
+            row["scheduled_departure_s"] = scheduled[ordinal]
+            row["actual_departure_s"] = None
+            row["state"].update(
+                x_m=100.0,
+                y_m=phase5g_cases.LANE_CENTERS_M[ordinal],
+                vx_mps=10.0,
+                vy_mps=0.0,
+                time_s=0.0,
+            )
+        first = case["controlled"][0]
+        return {
+            **case,
+            "duration_s": duration_s,
+            "initial": {first: deepcopy(case["departures"][first]["state"])},
+        }
+
     def call_cli(self, argv):
         with patch.object(sys, "argv", ["run.py", *argv]):
             return self.entry.main()
@@ -223,6 +261,115 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         finally:
             shutil.rmtree(
                 self.harness.native_io_path(review_root), ignore_errors=True
+            )
+
+    def test_dynamic_trace_and_replay_preserve_activation_decisions_and_records(self):
+        model, physical, policy = self.dynamic_parameters()
+        case = self.exact_dynamic_case(physical)
+        actors = tuple(case["controlled"])
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "dynamic-trace"
+            result = self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority", live=False,
+            )
+            rows = [
+                json.loads(line)
+                for line in (source / "trace.jsonl").read_text(
+                    encoding="utf-8"
+                ).splitlines()
+            ]
+            replay = self.replay.replay_variant(source, require_manifest=False)
+
+        self.assertEqual(result["status"], "completed", result)
+        self.assertEqual(len(rows), 31)
+        actor_sets = [tuple(row["active_actors"]) for row in rows]
+        self.assertTrue(all(
+            set(before).issubset(after)
+            for before, after in zip(actor_sets, actor_sets[1:])
+        ))
+        for row in rows:
+            time_s = next(iter(row["initial"].values()))["time_s"]
+            expected = actors[:1] if time_s < 2.5 - 1e-9 else (
+                actors[:2] if time_s < 3.0 - 1e-9 else actors
+            )
+            self.assertEqual(tuple(row["active_actors"]), expected)
+            self.assertEqual(set(row["inputs"]), set(expected))
+            self.assertEqual(set(row["decisions"]), set(expected))
+            for pending in set(actors) - set(expected):
+                self.assertNotIn(pending, row["inputs"])
+                self.assertNotIn(pending, row["decisions"])
+        self.assertAlmostEqual(
+            rows[-1]["departures"][actors[1]]["actual_departure_s"], 2.5,
+        )
+        self.assertAlmostEqual(
+            rows[-1]["departures"][actors[2]]["actual_departure_s"], 3.0,
+        )
+        self.assertTrue(replay["passed"], replay)
+        self.assertTrue(replay["decision_replay_passed"], replay)
+        self.assertTrue(replay["integration_replay_passed"], replay)
+
+    def test_dynamic_replay_restores_activation_before_a_failed_tick_boundary(self):
+        model, physical, policy = self.dynamic_parameters()
+        case = self.exact_dynamic_case(physical)
+        original = type(model).advance
+        calls = 0
+
+        def fail_first_due_interval(instance, *args, **kwargs):
+            nonlocal calls
+            calls += 1
+            if calls == 26:
+                raise RuntimeError("injected dynamic integration boundary")
+            return original(instance, *args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "dynamic-failed-boundary"
+            with patch.object(type(model), "advance", fail_first_due_interval):
+                result = self.harness.run_variant(
+                    source, model, physical, policy, case,
+                    "lane_priority", live=False,
+                )
+            rows = [
+                json.loads(line)
+                for line in (source / "trace.jsonl").read_text(
+                    encoding="utf-8"
+                ).splitlines()
+            ]
+            metadata = json.loads(
+                (source / "metadata.json").read_text(encoding="utf-8")
+            )
+            replay = self.replay.replay_variant(source, require_manifest=False)
+
+        actors = tuple(case["controlled"])
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(metadata["failure_stage"], "integration")
+        self.assertEqual(metadata["failure_actor"], actors[0])
+        self.assertEqual(rows[-1]["status"], "failed")
+        self.assertEqual(tuple(rows[-1]["active_actors"]), actors[:2])
+        self.assertAlmostEqual(
+            rows[-1]["departures"][actors[1]]["actual_departure_s"], 2.5,
+        )
+        self.assertTrue(replay["passed"], replay)
+        self.assertTrue(replay["partial_source"], replay)
+        self.assertEqual(replay["trace"]["intervals"], len(rows))
+
+    def test_demo_case_selection_uses_dynamic_offline_and_keeps_fixed_live_history(self):
+        _, physical, _ = self.dynamic_parameters()
+        offline = self.harness._demo_case(
+            physical, vehicle_count=6, seed=101, duration_s=45.0, live=False,
+        )
+        live = self.harness._demo_case(
+            physical, vehicle_count=6, seed=101, duration_s=45.0, live=True,
+        )
+        self.assertIn("departures", offline)
+        self.assertEqual(len(offline["initial"]), 1)
+        self.assertEqual(offline["name"], "seeded_6_seed101")
+        self.assertNotIn("departures", live)
+        self.assertEqual(live["name"], "main_6_3_2_1")
+        self.assertEqual(set(live["initial"]), set(live["controlled"]))
+        with self.assertRaisesRegex(ValueError, "fixed six-actor"):
+            self.harness._demo_case(
+                physical, vehicle_count=3, seed=101,
+                duration_s=45.0, live=True,
             )
 
     def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):

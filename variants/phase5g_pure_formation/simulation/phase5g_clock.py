@@ -1,6 +1,6 @@
-"""Restore exact per-actor Phase 5G memory before the first frozen view."""
+"""Restore exact per-actor Phase 5G memory and activate scheduled actors."""
 
-from dataclasses import fields
+from dataclasses import asdict, fields, replace
 import hashlib
 import json
 import math
@@ -14,6 +14,8 @@ from noa.simple_formation import (
     SimpleFormationMemory,
     memory_from_dict as simple_memory_from_dict,
 )
+from models.vehicle import VehicleState
+from perception.ideal import IdealSensor
 from simulation.formation_clock import FormationClock
 
 
@@ -45,6 +47,10 @@ _LANE_CHANGE_REASONS = frozenset((
 _FORMATION_STATES = frozenset((
     "NOA_ONLY", "FALLBACK", "FORMING", "MAINTAINING", "RECONFIGURING",
 ))
+_DEPARTURE_FIELDS = frozenset((
+    "scheduled_departure_s", "actual_departure_s", "state", "physical_ordinal",
+))
+_STATE_FIELDS = frozenset(field.name for field in fields(VehicleState))
 
 
 def _canonical_bytes(value: object) -> bytes:
@@ -218,25 +224,157 @@ class Phase5GClock(FormationClock):
 
     def __init__(self, initial, model, road, parameters, policy_parameters,
                  controlled, scripts, initial_memories, *, clock_schema,
-                 initial_memories_sha256):
+                 initial_memories_sha256, departures=None):
         if clock_schema != CLOCK_SCHEMA:
             raise ValueError("an explicit phase5g_pure_formation_v1 clock schema is required")
         if initial_memories_sha256 != initial_memory_hash(initial_memories):
             raise ValueError("Phase 5G initial memory hash differs from supplied frozen rows")
         parameters_snapshot = _deep_freeze(parameters)
         policy_snapshot = _deep_freeze(policy_parameters)
-        super().__init__(initial, model, road, parameters_snapshot, policy_snapshot,
-                         controlled, scripts)
-        lane_priority = self.p["formation_lane_change_enabled"]
-        simple = self.p["simple_formation_enabled"]
-        self.memories = restore_initial_memories(
-            initial_memories, self.controlled,
-            formation_enabled=self.p["formation_enabled"],
+        all_controlled = tuple(controlled)
+        lane_priority = parameters_snapshot["formation_lane_change_enabled"]
+        simple = parameters_snapshot["simple_formation_enabled"]
+        restored = restore_initial_memories(
+            initial_memories, all_controlled,
+            formation_enabled=parameters_snapshot["formation_enabled"],
             lane_priority_enabled=lane_priority,
             simple_enabled=simple,
         )
+        dynamic = departures is not None
+        departure_rows = self._validated_departures(
+            departures, all_controlled, initial,
+        ) if dynamic else None
+        active_controlled = (
+            tuple(key for key in all_controlled if key in initial)
+            if dynamic else all_controlled
+        )
+        super().__init__(initial, model, road, parameters_snapshot, policy_snapshot,
+                         active_controlled, scripts)
+        self._road = road
+        self._all_controlled = all_controlled
+        self._restored_memories = restored
+        self._dynamic_departures = dynamic
+        self._departures = departure_rows
+        if dynamic:
+            initial_time = self._current_time()
+            for key in active_controlled:
+                self._departures[key]["actual_departure_s"] = initial_time
+            self.memories = {key: restored[key] for key in active_controlled}
+            self._rebuild_active_state()
+        else:
+            self.memories = restored
         self.clock_schema = CLOCK_SCHEMA
         self.initial_memories_sha256 = initial_memories_sha256
+
+    @staticmethod
+    def _validated_departures(raw, controlled, initial):
+        if not isinstance(raw, Mapping) or set(raw) != set(controlled):
+            raise ValueError("departure actor keys must exactly match controlled actors")
+        copied = json.loads(json.dumps(raw, allow_nan=False))
+        ordinals = []
+        for key in controlled:
+            row = copied[key]
+            if not isinstance(row, dict) or set(row) != _DEPARTURE_FIELDS:
+                raise ValueError(f"{key}: exact dynamic departure fields required")
+            scheduled = row["scheduled_departure_s"]
+            ordinal = row["physical_ordinal"]
+            state = row["state"]
+            if (type(scheduled) not in (int, float) or not math.isfinite(scheduled)
+                    or scheduled < 0):
+                raise ValueError(f"{key}: scheduled departure must be finite and nonnegative")
+            if row["actual_departure_s"] is not None:
+                raise ValueError(f"{key}: input actual departure must be unset")
+            if type(ordinal) is not int or ordinal < 0:
+                raise ValueError(f"{key}: physical ordinal must be a nonnegative exact integer")
+            if not isinstance(state, dict) or set(state) != _STATE_FIELDS:
+                raise ValueError(f"{key}: exact VehicleState departure template required")
+            try:
+                template = VehicleState(**state)
+            except (TypeError, ValueError) as error:
+                raise ValueError(f"{key}: invalid VehicleState departure template") from error
+            if any(type(value) not in (int, float) or not math.isfinite(value)
+                   for value in asdict(template).values()):
+                raise ValueError(f"{key}: departure state must be finite")
+            ordinals.append(ordinal)
+        if sorted(ordinals) != list(range(len(controlled))):
+            raise ValueError("physical departure ordinals must be unique and contiguous")
+        if not initial:
+            raise ValueError("dynamic Phase 5G clock requires a time-zero actor")
+        initial_keys = set(initial)
+        due_at_zero = {
+            key for key, row in copied.items()
+            if row["scheduled_departure_s"] <= 1e-9
+        }
+        if initial_keys != due_at_zero:
+            raise ValueError("initial actors must exactly match time-zero departures")
+        for key in initial_keys:
+            if asdict(initial[key]) != copied[key]["state"]:
+                raise ValueError(f"{key}: initial state differs from departure template")
+        return copied
+
+    def _current_time(self):
+        times = tuple(state.time_s for state in self.states.values())
+        if not times or any(not math.isclose(time, times[0], abs_tol=1e-9, rel_tol=0.0)
+                            for time in times[1:]):
+            raise RuntimeError("active Phase 5G states do not share one clock time")
+        return times[0]
+
+    def _rebuild_active_state(self):
+        active = tuple(sorted(
+            self.states,
+            key=lambda key: self._departures[key]["physical_ordinal"],
+        ))
+        self.controlled = active
+        self.states = MappingProxyType({key: self.states[key] for key in active})
+        self.sensors = {key: self.sensors[key] for key in active}
+        self.memories = {key: self.memories.get(key, self._restored_memories[key])
+                         for key in active}
+
+    def _activate_due(self):
+        if not self._dynamic_departures:
+            return
+        now = self._current_time()
+        due = sorted(
+            (
+                key for key, row in self._departures.items()
+                if row["actual_departure_s"] is None
+                and row["scheduled_departure_s"] <= now + 1e-9
+            ),
+            key=lambda key: self._departures[key]["physical_ordinal"],
+        )
+        if not due:
+            return
+        states = dict(self.states)
+        sensors = dict(self.sensors)
+        memories = dict(self.memories)
+        for key in due:
+            row = self._departures[key]
+            states[key] = replace(VehicleState(**row["state"]), time_s=now)
+            sensors[key] = IdealSensor(self.p, self._road)
+            memories[key] = self._restored_memories[key]
+            row["actual_departure_s"] = now
+        self.states = MappingProxyType(states)
+        self.sensors = sensors
+        self.memories = memories
+        self._rebuild_active_state()
+
+    def _dynamic_record_fields(self):
+        return {
+            "departures": json.loads(json.dumps(self._departures, allow_nan=False)),
+            "active_actors": list(self.controlled),
+        }
+
+    def tick(self, bridge=None, order=None, stop_before=None):
+        if not self._dynamic_departures:
+            return super().tick(bridge=bridge, order=order, stop_before=stop_before)
+        self._activate_due()
+        try:
+            return super().tick(
+                bridge=bridge, order=order, stop_before=stop_before,
+            )
+        finally:
+            if self.last_record is not None:
+                self.last_record.update(self._dynamic_record_fields())
 
     def _check_features(self):
         super()._check_features()

@@ -195,6 +195,7 @@ def _clock(metadata: dict, model, physical: dict, policy: dict) -> Phase5GClock:
         metadata["case"]["scripts"], metadata["initial_memories"],
         clock_schema=CLOCK_SCHEMA,
         initial_memories_sha256=metadata["initial_memories_sha256"],
+        departures=metadata["case"].get("departures"),
     )
 
 
@@ -246,7 +247,7 @@ def _replay_trace(metadata: dict, trace_path: Path, model, physical: dict,
                     phase = stored.get("readback_phase")
                     committed = phase == "postcommit"
                     sync_facts = _readback_facts(
-                        stored, metadata["initial"], advances_before=0,
+                        stored, metadata["case"]["controlled"], advances_before=0,
                         advances_after=1 if committed else 0,
                     )
                     for field, value in sync_facts.items():
@@ -280,7 +281,7 @@ def _replay_trace(metadata: dict, trace_path: Path, model, physical: dict,
                 completed += stored.get("status") == "completed"
                 from experiments.phase5g import _record_is_physical
                 is_physical = _record_is_physical(
-                    stored, metadata["initial"], live=metadata["live"],
+                    stored, metadata["case"]["controlled"], live=metadata["live"],
                 )
                 physical_count += is_physical
                 samples += sum(len(step["samples"]) for step in expected.get("steps", {}).values())

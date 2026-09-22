@@ -1,7 +1,7 @@
 """Paired Phase 5G pure-formation execution and independent factual summaries."""
 
 from copy import deepcopy
-from dataclasses import asdict
+from dataclasses import asdict, fields
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -762,9 +762,14 @@ class _PhysicalTraceRecords:
         self.expected_sha256 = expected_sha256
 
     def __iter__(self):
+        previous = frozenset()
         for record in _iter_jsonl_records(
                 self.trace_path, expected_sha256=self.expected_sha256,
                 skip_blank=True):
+            active = _record_active_keys(record, self.keys)
+            if not previous.issubset(active):
+                raise ValueError("trace active actor set is not monotonic")
+            previous = active
             if _record_is_physical(record, self.keys, live=self.live):
                 yield record
 
@@ -792,10 +797,31 @@ def _readback_facts(record: Mapping[str, object], keys: Sequence[str], *,
     }
 
 
+def _record_active_keys(record: Mapping[str, object], keys: Sequence[str]) -> frozenset[str]:
+    final = frozenset(keys)
+    declared = record.get("active_actors")
+    if declared is None:
+        return final
+    if (not isinstance(declared, (list, tuple))
+            or len(declared) != len(set(declared))
+            or any(type(key) is not str for key in declared)):
+        raise ValueError("trace active_actors must be a unique actor sequence")
+    active = frozenset(declared)
+    if not active or not active.issubset(final):
+        raise ValueError("trace active_actors must be a nonempty controlled subset")
+    departures = record.get("departures")
+    if not isinstance(departures, dict) or set(departures) != final:
+        raise ValueError("trace departures must cover the final controlled cohort")
+    if set(record.get("initial", {})) != active:
+        raise ValueError("trace initial actors differ from active_actors")
+    return active
+
+
 def _record_is_physical(record: Mapping[str, object], keys: Sequence[str], *,
                         live: bool) -> bool:
-    complete = (set(record.get("steps", {})) == set(keys)
-                and set(record.get("diagnostics", {})) == set(keys))
+    expected = _record_active_keys(record, keys)
+    complete = (set(record.get("steps", {})) == expected
+                and set(record.get("diagnostics", {})) == expected)
     if not complete:
         return False
     if record.get("status") == "completed" or not live:
@@ -812,13 +838,13 @@ class _LaneChangeAccumulator:
             key: {"changes": [], "active": None, "stable": None}
             for key in self.controlled
         }
-        self.started = False
 
     def consume(self, row: Mapping[str, object]) -> None:
         plan_fields = {"start_s", "y_start_m", "y_target_m", "duration_s", "speed_mps"}
-        for key in self.controlled:
+        present = tuple(row.get("active_actors", tuple(row["initial"])))
+        for key in present:
             item = self.actors[key]
-            if not self.started:
+            if item["stable"] is None:
                 item["stable"] = _lane_index(
                     row["initial"][key]["y_m"], self.width)
             before = row["inputs"][key]["memory"]
@@ -862,7 +888,6 @@ class _LaneChangeAccumulator:
                 item["stable"], item["active"] = target_lane, None
             elif completion:
                 item["active"] = None
-        self.started = True
 
     def result(self) -> dict:
         actors = {key: item["changes"] for key, item in self.actors.items()}
@@ -890,7 +915,7 @@ class _SpeedAccumulator:
         self.frames = []
         self.minimum_speed_mps = None
         self.final = {}
-        self.started = False
+        self.seen = set()
 
     def _consume_speed(self, state: Mapping[str, object]) -> None:
         speed = math.hypot(state["vx_mps"], state.get("vy_mps", 0.0))
@@ -904,21 +929,21 @@ class _SpeedAccumulator:
         self.frames.append({
             "time_s": next(iter(initial.values()))["time_s"], "states": initial,
         })
-        if not self.started:
-            for state in row["initial"].values():
+        for key, state in row["initial"].items():
+            if key not in self.seen:
                 self._consume_speed(state)
+                self.seen.add(key)
         for step in row["steps"].values():
             for sample in step["samples"]:
                 self._consume_speed(sample)
         self.final = {
-            key: dict(row["steps"][key]["final"]) for key in self.controlled
+            key: dict(step["final"]) for key, step in row["steps"].items()
         }
-        self.started = True
 
     def result(self, target_speed_mps: float, tolerance_mps: float, *,
                formed_time_s: float | None, held_time_s: float | None) -> dict:
         frames = list(self.frames)
-        if self.started:
+        if self.seen:
             frames.append({
                 "time_s": next(iter(self.final.values()))["time_s"],
                 "states": {key: dict(state) for key, state in self.final.items()},
@@ -1034,8 +1059,27 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
     }
     if record_count:
         geometry = geometry_report(source(), model, RoadEnvelope.from_net(NET))
-        metrics = driving_metrics(
-            source(), model, physical, {**case, "requirements": {}})
+        metric_rows = source()
+        if case.get("departures") is not None:
+            final = set(case["controlled"])
+            metric_rows = (
+                row for row in metric_rows
+                if set(row.get("active_actors", row.get("initial", {}))) == final
+            )
+        metric_rows = iter(metric_rows)
+        first_metric_row = next(metric_rows, None)
+        if first_metric_row is None:
+            metrics = {"actors": {}, "requirements_passed": False,
+                       "comfort_passed": False, "tracking_passed": False}
+        else:
+            def complete_metric_rows():
+                yield first_metric_row
+                yield from metric_rows
+
+            metrics = driving_metrics(
+                complete_metric_rows(), model, physical,
+                {**case, "requirements": {}},
+            )
     else:
         geometry = {
             "passed": False, "vehicle_substeps": 0, "outside_substeps": 0,
@@ -1099,7 +1143,7 @@ def evaluate_trace(trace_path, case: Mapping[str, object], model,
     if type(live) is not bool:
         raise ValueError("live must be bool")
     records = _PhysicalTraceRecords(
-        trace_path, case["initial"], live=live,
+        trace_path, case["controlled"], live=live,
         expected_sha256=expected_sha256,
     )
     return evaluate_records(records, case, model, physical)
@@ -1166,9 +1210,22 @@ def _initial_memories(case: Mapping[str, object], mode: str, *,
     raw = case["initial_memories"]
     if simple_rules:
         result = {}
+        accepted = {
+            field.name for field in fields(simple_formation.SimpleFormationMemory)
+        }
         for key, row in raw.items():
-            copied = json.loads(json.dumps(row, allow_nan=False))
-            copied.update(reference_track_id=None)
+            copied = {
+                name: value for name, value in
+                json.loads(json.dumps(row, allow_nan=False)).items()
+                if name in accepted
+            }
+            copied.update(
+                reference_track_id=None,
+                join_anchor_track_id=None,
+                desired_lane_index=None,
+                join_phase="FREE",
+                stable_since_s=None,
+            )
             result[key] = asdict(simple_formation.memory_from_dict(copied))
         return result
     return neutral_phase5g_memories(raw) if mode == "off" else json.loads(
@@ -1187,6 +1244,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
     mode = _strict_mode(mode)
     if type(live) is not bool:
         raise ValueError("live must be bool")
+    if live and case.get("departures") is not None:
+        raise ValueError("dynamic Phase 5G departures require local live=False execution")
     simple_rules = physical.get("simple_formation_enabled")
     simple_overrides = ({
         name: physical.get(name) for name in simple_formation.PARAMETERS
@@ -1248,6 +1307,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
             initial, model, road, physical, policy, case["controlled"], case["scripts"],
             memories, clock_schema=CLOCK_SCHEMA,
             initial_memories_sha256=metadata["initial_memories_sha256"],
+            departures=case.get("departures"),
         )
         stdout_path = _require_output_regular_file(target / "stdout.log")
         trace_path = _require_output_regular_file(target / "trace.jsonl")
@@ -1268,7 +1328,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                 except BaseException:
                     if clock.last_record:
                         sync = _readback_facts(
-                            clock.last_record, case["initial"],
+                            clock.last_record, case["controlled"],
                             advances_before=advances_before,
                             advances_after=getattr(bridge, "advances", advances_before),
                         )
@@ -1277,7 +1337,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                         trace.flush()
                         trace_count += 1
                         if _record_is_physical(
-                            clock.last_record, case["initial"], live=live,
+                            clock.last_record, case["controlled"], live=live,
                         ):
                             physical_count += 1
                     raise
@@ -1596,6 +1656,25 @@ def _exact_seed(seed: object) -> int:
     return seed
 
 
+def _demo_case(physical: Mapping[str, object], *, vehicle_count: int, seed: int,
+               duration_s: float, live: bool) -> dict:
+    """Use scheduled local execution offline; retain only the historical live six."""
+    from experiments.phase5g_cases import main_six_case, seeded_case
+
+    seeded = seeded_case(physical, vehicle_count, seed)
+    if not live:
+        return {**seeded, "duration_s": duration_s}
+    if vehicle_count != 6:
+        raise ValueError("live historical execution supports only the fixed six-actor case")
+    fixed = main_six_case(physical)
+    return {
+        **fixed,
+        "duration_s": duration_s,
+        "initial_memories": seeded["initial_memories"],
+        "private_rng_provenance": seeded["private_rng_provenance"],
+    }
+
+
 def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                      duration_s: float, output_base: str | Path,
                      mode: str = "lane_priority", formal: bool = False,
@@ -1608,8 +1687,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                      max_formation_lane_changes: int = 1) -> Path:
     """Generate one non-formal lane-priority trace for later SUMO-GUI playback."""
     from experiments.phase5g_cases import (
-        SUPPORTED_COUNTS, canonical_json_bytes, digest_json, main_six_case,
-        physical_case, seeded_case,
+        SUPPORTED_COUNTS, canonical_json_bytes, digest_json, physical_case,
     )
 
     if type(vehicle_count) is not int or vehicle_count not in SUPPORTED_COUNTS:
@@ -1642,14 +1720,10 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                         * physical["control_sync_dt_s"], duration, abs_tol=1e-9, rel_tol=0.0):
         raise ValueError("duration_s must contain complete control intervals")
     base = _validated_output_base(output_base)
-    if vehicle_count == 6:
-        case = main_six_case(physical)
-        seeded = seeded_case(physical, 6, seed)
-        case = {**case, "duration_s": duration,
-                "initial_memories": seeded["initial_memories"],
-                "private_rng_provenance": seeded["private_rng_provenance"]}
-    else:
-        case = {**seeded_case(physical, vehicle_count, seed), "duration_s": duration}
+    case = _demo_case(
+        physical, vehicle_count=vehicle_count, seed=seed,
+        duration_s=duration, live=live,
+    )
     memories = _initial_memories(case, mode, simple_rules=True)
     registered_modes = _mode_registry()
     run_metadata = {

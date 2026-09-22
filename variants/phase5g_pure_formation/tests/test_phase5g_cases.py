@@ -19,6 +19,7 @@ from noa.formation import FormationMemory
 from perception.road import VisibleRoad
 from research.common import settings
 from safety.geometry import collide
+from simulation.noa_clock import NoaClock
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -418,6 +419,109 @@ class Phase5GClockTests(unittest.TestCase):
             initial_memories_sha256=changes.pop("initial_memories_sha256", digest),
             **changes,
         )
+
+    def dynamic_clock(self):
+        case = deepcopy(self.case)
+        scheduled = (0.0, 2.5, 3.0)
+        for actor, scheduled_departure_s in zip(case["controlled"], scheduled):
+            case["departures"][actor]["scheduled_departure_s"] = scheduled_departure_s
+            case["departures"][actor]["actual_departure_s"] = None
+        case["initial"] = {
+            case["controlled"][0]: deepcopy(
+                case["departures"][case["controlled"][0]]["state"]
+            )
+        }
+        digest = self.clock_module.initial_memory_hash(case["initial_memories"])
+        clock = self.clock_module.Phase5GClock(
+            {
+                actor: VehicleState(**state)
+                for actor, state in case["initial"].items()
+            },
+            self.model, road(), self.p, self.policy, case["controlled"], {},
+            case["initial_memories"], departures=case["departures"],
+            clock_schema=self.clock_module.CLOCK_SCHEMA,
+            initial_memories_sha256=digest,
+        )
+        return case, clock
+
+    def test_phase5g_clock_activates_due_actors_before_one_common_frozen_frame(self):
+        case, clock = self.dynamic_clock()
+        actors = tuple(case["controlled"])
+        self.assertEqual(tuple(clock.states), actors[:1])
+        self.assertEqual(set(clock.sensors), set(actors[:1]))
+        self.assertEqual(set(clock.memories), set(actors[:1]))
+
+        records = [clock.tick() for _ in range(31)]
+        active_sets = [tuple(record["active_actors"]) for record in records]
+        times = [next(iter(record["initial"].values()))["time_s"] for record in records]
+        for record, time_s, active in zip(records, times, active_sets):
+            expected = actors[:1] if time_s < 2.5 - 1e-9 else (
+                actors[:2] if time_s < 3.0 - 1e-9 else actors
+            )
+            self.assertEqual(active, expected)
+            self.assertEqual(set(record["initial"]), set(expected))
+            self.assertEqual(set(record["inputs"]), set(expected))
+            self.assertEqual(set(record["decisions"]), set(expected))
+            self.assertEqual(set(record["steps"]), set(expected))
+
+        at_25 = next(record for record, time_s in zip(records, times)
+                     if abs(time_s - 2.5) <= 1e-9)
+        self.assertEqual(at_25["departures"][actors[0]]["actual_departure_s"], 0.0)
+        self.assertAlmostEqual(
+            at_25["departures"][actors[1]]["actual_departure_s"], 2.5,
+        )
+        self.assertIsNone(at_25["departures"][actors[2]]["actual_departure_s"])
+        for ego in actors[:2]:
+            self.assertNotIn("departures", at_25["inputs"][ego])
+            self.assertNotIn("active_actors", at_25["inputs"][ego])
+            ego_state = at_25["initial"][ego]
+            observed = {
+                (
+                    round(row["relative_x_m"], 9),
+                    round(row["relative_y_m"], 9),
+                    round(row["relative_vx_mps"], 9),
+                    round(row["relative_vy_mps"], 9),
+                    round(row["measurement_time_s"], 9),
+                )
+                for row in at_25["inputs"][ego]["observation"]["neighbors"]
+            }
+            expected = {
+                (
+                    round(state["x_m"] - ego_state["x_m"], 9),
+                    round(state["y_m"] - ego_state["y_m"], 9),
+                    round(state["vx_mps"] - ego_state["vx_mps"], 9),
+                    round(state["vy_mps"] - ego_state["vy_mps"], 9),
+                    2.5,
+                )
+                for actor, state in at_25["initial"].items()
+                if actor != ego
+            }
+            self.assertEqual(observed, expected)
+
+        at_30 = next(record for record, time_s in zip(records, times)
+                     if abs(time_s - 3.0) <= 1e-9)
+        self.assertAlmostEqual(
+            at_30["departures"][actors[1]]["actual_departure_s"], 2.5,
+        )
+        self.assertAlmostEqual(
+            at_30["departures"][actors[2]]["actual_departure_s"], 3.0,
+        )
+        self.assertIsNone(case["departures"][actors[1]]["actual_departure_s"])
+        self.assertIsNone(case["departures"][actors[2]]["actual_departure_s"])
+        self.assertTrue(all(
+            set(before).issubset(after)
+            for before, after in zip(active_sets, active_sets[1:])
+        ))
+
+    def test_base_noa_clock_keeps_its_fixed_actor_set_invariant(self):
+        first = self.case["controlled"][0]
+        model, physical, policy = phase5g_parameters("off")
+        with self.assertRaisesRegex(ValueError, "exactly one independent actor"):
+            NoaClock(
+                {first: VehicleState(**self.case["departures"][first]["state"])},
+                model, road(), physical, policy,
+                self.case["controlled"], {},
+            )
 
     def test_lane_priority_restores_full_separate_immutable_memories_and_tuples(self):
         clock = self.clock()
