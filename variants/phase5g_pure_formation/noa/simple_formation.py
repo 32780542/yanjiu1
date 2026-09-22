@@ -91,12 +91,17 @@ def memory_from_dict(data):
         "FREE", "JOINING", "STABILIZING", "FORMED"
     ):
         raise ValueError("Invalid local-tail join phase")
-    if stable_since is not None and (
-        type(stable_since) not in (int, float)
-        or not math.isfinite(stable_since)
-        or stable_since < 0
-    ):
-        raise ValueError("Invalid local-tail stability timestamp")
+    if stable_since is not None:
+        try:
+            valid_stable_since = (
+                type(stable_since) in (int, float)
+                and math.isfinite(stable_since)
+                and stable_since >= 0
+            )
+        except OverflowError:
+            valid_stable_since = False
+        if not valid_stable_since:
+            raise ValueError("Invalid local-tail stability timestamp")
     base = noa_memory_from_dict(value)
     return SimpleFormationMemory(
         **{field.name: getattr(base, field.name) for field in fields(NoaMemory)},

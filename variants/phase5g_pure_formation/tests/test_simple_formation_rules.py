@@ -124,7 +124,7 @@ class SimpleFormationRuleTests(unittest.TestCase):
         for bad in (None, True, "joining", "UNKNOWN"):
             with self.subTest(phase=bad), self.assertRaises(ValueError):
                 memory_from_dict({**base, "join_phase": bad})
-        for bad in (-1, True, math.inf, -math.inf, math.nan, "1"):
+        for bad in (-1, True, math.inf, -math.inf, math.nan, 10**1000, "1"):
             with self.subTest(stable_since=bad), self.assertRaises(ValueError):
                 memory_from_dict({**base, "stable_since_s": bad})
         for key in ("formation_lane_change_done", "unexpected"):
@@ -142,6 +142,26 @@ class SimpleFormationRuleTests(unittest.TestCase):
         )
         self.assertEqual(restored["ego"].join_phase, "FREE")
         self.assertEqual(restored["ego"].lane_change_reason, "simple_formation_join")
+
+    def test_clock_restores_every_private_local_tail_memory_field(self):
+        original = SimpleFormationMemory(
+            (),
+            "CRUISE",
+            reference_track_id=7,
+            join_anchor_track_id=9,
+            desired_lane_index=2,
+            join_phase="STABILIZING",
+            stable_since_s=3.0,
+        )
+        restored = restore_initial_memories(
+            {"ego": asdict(original)},
+            ("ego",),
+            formation_enabled=True,
+            lane_priority_enabled=False,
+            simple_enabled=True,
+        )
+        self.assertIs(type(restored["ego"]), SimpleFormationMemory)
+        self.assertEqual(restored["ego"], original)
 
     def test_reference_is_none_without_a_visible_lane_resolved_front_vehicle(self):
         rows = (
