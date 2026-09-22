@@ -1168,7 +1168,7 @@ def _initial_memories(case: Mapping[str, object], mode: str, *,
         result = {}
         for key, row in raw.items():
             copied = json.loads(json.dumps(row, allow_nan=False))
-            copied.update(reference_track_id=None, formation_lane_change_done=False)
+            copied.update(reference_track_id=None)
             result[key] = asdict(simple_formation.memory_from_dict(copied))
         return result
     return neutral_phase5g_memories(raw) if mode == "off" else json.loads(

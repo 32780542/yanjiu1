@@ -1032,7 +1032,10 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         for memory in metadata["initial_memories"].values():
             self.assertEqual(set(memory), expected_fields)
             self.assertIsNone(memory["reference_track_id"])
-            self.assertIs(memory["formation_lane_change_done"], False)
+            self.assertIsNone(memory["join_anchor_track_id"])
+            self.assertIsNone(memory["desired_lane_index"])
+            self.assertEqual(memory["join_phase"], "FREE")
+            self.assertIsNone(memory["stable_since_s"])
         self.assertEqual({key: metadata["parameters"][key] for key in PARAMETERS},
                          SIMPLE_NONDEFAULTS)
 

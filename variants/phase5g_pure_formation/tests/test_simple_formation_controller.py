@@ -350,6 +350,78 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(result.action.acceleration_mps2, self.p["min_accel_mps2"])
         self.assertTrue(result.diagnostics["simple_formation"]["emergency_override"])
 
+    def test_active_target_outside_visible_road_cancels_and_holds_current_lane(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = replace(self.joining(anchor=None), plan=plan,
+                         target_y_m=CENTERS_M[1],
+                         lane_change_reason="simple_formation_join")
+        road = SimpleNamespace(
+            centers_m=(CENTERS_M[0], CENTERS_M[2], 11.55),
+            current_center_m=CENTERS_M[0], lane_end=lambda *_: None,
+            envelope=SimpleNamespace(regions=((-300.0, 1200.0, 0.0, 13.2),)),
+        )
+        with patch("noa.controller.reconstruct", return_value=road), patch(
+            "noa.controller.verify_candidate", side_effect=AssertionError("reachable guard used")
+        ):
+            result = decide(self.control(time_s=1.0, memory=memory), self.p)
+        self.assertIsNone(result.memory.plan)
+        self.assertIsNone(result.memory.target_y_m)
+        self.assertEqual(result.memory.join_phase, "JOINING")
+        self.assertEqual(result.memory.own_behavior, "CRUISE")
+        self.assertEqual(result.action.steering_rad, 0.0)
+        self.assertEqual(result.diagnostics["simple_formation"]["hard_gate"], "road")
+        missing_final = replace(memory, desired_lane_index=3)
+        with patch("noa.controller.reconstruct", return_value=road):
+            outside = decide(self.control(time_s=1.0, memory=missing_final), self.p)
+        self.assertIsNone(outside.memory.plan)
+        self.assertEqual(outside.memory.join_phase, "JOINING")
+        self.assertEqual(outside.diagnostics["simple_formation"]["hard_gate"], "road")
+
+    def test_active_anchor_loss_recomputes_same_lane_longitudinal_fallback(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = replace(self.joining(), plan=plan, target_y_m=CENTERS_M[1],
+                         lane_change_reason="simple_formation_join")
+        visible_lead = self.neighbor(9, 30.0, 0, time_s=1.0)
+        centers_seen = []
+
+        def longitudinal(ego, bodies, center, lane_end, parameters):
+            centers_seen.append(center)
+            return ((-0.5 if center == CENTERS_M[1] else -2.25), None,
+                    None, False, "visible_lead")
+
+        with patch("noa.controller._longitudinal", side_effect=longitudinal), patch(
+            "noa.controller.verify_candidate", side_effect=AssertionError("reachable guard used")
+        ):
+            result = decide(self.control(time_s=1.0, neighbors=(visible_lead,),
+                                         memory=memory), self.p)
+        self.assertEqual(centers_seen, [CENTERS_M[1], CENTERS_M[0]])
+        self.assertEqual(result.action.acceleration_mps2, -2.25)
+        self.assertIsNone(result.memory.plan)
+        self.assertEqual(result.memory.join_phase, "FREE")
+        with patch("noa.controller._longitudinal", side_effect=(
+            (-0.5, None, None, False, "cruise"),
+            (-1.0, None, 1.0, True, "visible_lead"),
+        )):
+            unsafe = decide(self.control(time_s=1.0, neighbors=(visible_lead,),
+                                         memory=memory), self.p)
+        self.assertEqual(unsafe.action.acceleration_mps2, self.p["min_accel_mps2"])
+        self.assertEqual(unsafe.memory.own_behavior, "EMERGENCY")
+        self.assertTrue(unsafe.diagnostics["simple_formation"]["emergency_override"])
+
+    def test_stability_uses_configured_position_and_speed_tolerances(self):
+        narrow = {**self.p, "simple_formation_position_tolerance_m": 1.0,
+                  "simple_formation_speed_tolerance_mps": 0.25}
+        memory = self.joining(final=2)
+        cases = ((16.5, 20.0), (15.0, 20.5))
+        for distance, reference_speed in cases:
+            with self.subTest(distance=distance, reference_speed=reference_speed):
+                anchor = self.neighbor(7, distance, 1, speed=reference_speed,
+                                       relative_y=CENTERS_M[1]-CENTERS_M[2])
+                result = decide(self.control(lane=2, neighbors=(anchor,),
+                                             memory=memory), narrow)
+                self.assertEqual(result.memory.join_phase, "JOINING")
+                self.assertIsNone(result.memory.stable_since_s)
+
     def test_two_adjacent_steps_keep_final_lane_and_then_stabilize(self):
         anchor = self.neighbor(7, 15.0, 1)
         first = decide(self.control(neighbors=(anchor,), memory=self.joining()), self.p)
