@@ -156,6 +156,16 @@ class SimpleFormationControllerTests(unittest.TestCase):
             lane_end=lambda *_: 1000.0,
             envelope=SimpleNamespace(regions=((-300.0, 1200.0, 0.0, 9.9),)),
         )
+        with patch("noa.controller.reconstruct", return_value=road), patch(
+            "noa.controller._longitudinal",
+            side_effect=((0.5, None, None, False, "cruise"),
+                         (-1.5, None, None, False, "observed_lane_end_braking")),
+        ) as longitudinal:
+            decision = decide(self.control(lane=2, speed=18.0), self.p)
+        self.assertEqual(longitudinal.call_count, 1)
+        self.assertEqual(decision.diagnostics["simple_formation"]["requested_acceleration_mps2"],
+                         2.0)
+        self.assertEqual(decision.action.acceleration_mps2, 2.0)
 
     @staticmethod
     def ending_upper_road(end_x, *, time_s=0.0, ego_x=100.0):
@@ -173,16 +183,6 @@ class SimpleFormationControllerTests(unittest.TestCase):
                 ((-300.0, 6.6-ego_y), (end_rel, 6.6-ego_y)),
             ),
         )
-        with patch("noa.controller.reconstruct", return_value=road), patch(
-            "noa.controller._longitudinal",
-            side_effect=((0.5, None, None, False, "cruise"),
-                         (-1.5, None, None, False, "observed_lane_end_braking")),
-        ) as longitudinal:
-            decision = decide(self.control(lane=2, speed=18.0), self.p)
-        self.assertEqual(longitudinal.call_count, 1)
-        self.assertEqual(decision.diagnostics["simple_formation"]["requested_acceleration_mps2"],
-                         2.0)
-        self.assertEqual(decision.action.acceleration_mps2, 2.0)
 
     def test_near_lane_end_caps_direct_request_with_road_stop(self):
         road = SimpleNamespace(
