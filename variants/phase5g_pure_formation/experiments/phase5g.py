@@ -779,13 +779,7 @@ class _PhysicalTraceRecords:
         for record in _iter_jsonl_records(
                 self.trace_path, expected_sha256=self.expected_sha256,
                 skip_blank=True):
-            has_active = "active_actors" in record
-            has_departures = "departures" in record
-            if has_active != has_departures:
-                raise ValueError(
-                    "dynamic trace rows require active_actors and departures together"
-                )
-            row_dynamic = has_active
+            row_dynamic = _record_has_dynamic_fields(record)
             if dynamic is None:
                 dynamic = row_dynamic
             elif row_dynamic is not dynamic:
@@ -851,15 +845,23 @@ def _readback_facts(record: Mapping[str, object], keys: Sequence[str], *,
     }
 
 
+def _record_has_dynamic_fields(record: Mapping[str, object]) -> bool:
+    has_active = "active_actors" in record
+    has_departures = "departures" in record
+    if has_active != has_departures:
+        raise ValueError(
+            "dynamic trace rows require active_actors and departures together"
+        )
+    return has_active
+
+
 def _dynamic_record_details(record: Mapping[str, object], keys: Sequence[str]):
     final_order = tuple(keys)
     final = frozenset(final_order)
-    declared = record.get("active_actors")
-    departures = record.get("departures")
-    if declared is None and departures is None:
+    if not _record_has_dynamic_fields(record):
         return final, None, None
-    if declared is None or departures is None:
-        raise ValueError("dynamic trace requires both active_actors and departures")
+    declared = record["active_actors"]
+    departures = record["departures"]
     if (not isinstance(declared, (list, tuple))
             or any(type(key) is not str for key in declared)
             or len(declared) != len(set(declared))):

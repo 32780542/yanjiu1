@@ -458,6 +458,31 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                     trace, case, model, physical, live=False,
                 )
 
+    def test_dynamic_case_rejects_null_dynamic_field_values(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            model, physical, _ = self.dynamic_parameters()
+            for fields in (
+                    ("active_actors", "departures"),
+                    ("active_actors",),
+                    ("departures",)):
+                with self.subTest(null_fields=fields):
+                    malicious = deepcopy(rows)
+                    for field in fields:
+                        malicious[-1][field] = None
+                    trace = Path(temp) / f"dynamic-null-{len(fields)}.jsonl"
+                    trace.write_text(
+                        "".join(
+                            json.dumps(row, allow_nan=False) + "\n"
+                            for row in malicious
+                        ),
+                        encoding="utf-8",
+                    )
+                    with self.assertRaises(ValueError):
+                        self.harness.evaluate_trace(
+                            trace, case, model, physical, live=False,
+                        )
+
     def test_legacy_fixed_trace_without_dynamic_fields_is_still_accepted(self):
         with tempfile.TemporaryDirectory() as temp:
             case, rows = self.dynamic_trace_rows(temp)
@@ -476,6 +501,25 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 trace, legacy_case, model, physical, live=False,
             )
             self.assertIn("summary", derived)
+
+    def test_legacy_case_rejects_present_null_dynamic_keys(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            model, physical, _ = self.dynamic_parameters()
+            row = deepcopy(rows[-1])
+            row["active_actors"] = None
+            row["departures"] = None
+            trace = Path(temp) / "legacy-with-null-dynamic-keys.jsonl"
+            trace.write_text(
+                json.dumps(row, allow_nan=False) + "\n", encoding="utf-8",
+            )
+            legacy_case = deepcopy(case)
+            legacy_case.pop("departures")
+            legacy_case["initial"] = deepcopy(row["initial"])
+            with self.assertRaisesRegex(ValueError, "legacy trace"):
+                self.harness.evaluate_trace(
+                    trace, legacy_case, model, physical, live=False,
+                )
 
     def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):
         model, physical, policy = self.simple_parameters()
