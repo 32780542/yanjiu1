@@ -1261,6 +1261,7 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
             physical.get("simple_formation_component_gap_m", 50.0)
         ),
         "max_sample_gap_s": float(physical["control_sync_dt_s"]),
+        "expected_component_count": case.get("expected_component_count", 1),
         "incidents": {
             "collision_events": geometry["collision_events"],
             "road_departure_events": geometry["outside_events"],

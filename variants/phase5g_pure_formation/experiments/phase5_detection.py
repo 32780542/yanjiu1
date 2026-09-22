@@ -238,6 +238,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
                   speed_tolerance=1.0, persistence_s=1.0,
                   formation_deadline_s=30.0, hold_s=10.0,
                   component_gap_m=50.0, max_sample_gap_s=0.1,
+                  expected_component_count=1,
                   incidents=None):
     """Evaluate dynamic physical components without controller-derived roles."""
     d = _finite("d", d)
@@ -249,6 +250,8 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
     hold_s = _finite("hold_s", hold_s)
     component_gap_m = _finite("component_gap_m", component_gap_m)
     max_sample_gap_s = _finite("max_sample_gap_s", max_sample_gap_s)
+    if type(expected_component_count) is not int or expected_component_count <= 0:
+        raise ValueError("expected_component_count must be a positive integer")
     if position_tolerance >= d / 2:
         raise ValueError("Position tolerance must be smaller than d/2")
     frames = list(frames)
@@ -448,15 +451,33 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
             successful_component_intervals.append(min(
                 successful, key=lambda item: item["formed_time_s"],
             ))
-    all_components_success = bool(expected_component_members) and (
+    every_final_component_succeeded = bool(expected_component_members) and (
         len(successful_component_intervals) == len(expected_component_members)
     )
-    formed_time = (max(item["formed_time_s"]
-                       for item in successful_component_intervals)
-                   if all_components_success else None)
-    held_time = (max(item["held_time_s"]
-                     for item in successful_component_intervals)
-                 if all_components_success else None)
+    all_components_success = bool(
+        len(expected_component_members) == expected_component_count
+        and every_final_component_succeeded
+    )
+    successful_whole = [
+        item for item in intervals
+        if item["members"] == cohort and item["success"]
+    ]
+    whole_cohort_success = bool(successful_whole)
+    selected_intervals = (
+        [min(successful_whole, key=lambda item: item["formed_time_s"])]
+        if expected_component_count == 1 and successful_whole
+        else successful_component_intervals
+        if expected_component_count > 1 and all_components_success
+        else []
+    )
+    selected_milestone_success = bool(
+        whole_cohort_success and len(expected_component_members) == 1
+        if expected_component_count == 1 else all_components_success
+    )
+    formed_time = (max(item["formed_time_s"] for item in selected_intervals)
+                   if selected_milestone_success else None)
+    held_time = (max(item["held_time_s"] for item in selected_intervals)
+                 if selected_milestone_success else None)
 
     reasons = []
     if not frames:
@@ -479,6 +500,8 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         reasons.append("simultaneous_admission_conflict")
     if frames and not intervals:
         reasons.append("no_persistent_local_group")
+    if len(expected_component_members) != expected_component_count:
+        reasons.append("expected_component_count_mismatch")
     expected_intervals = {
         frozenset(members): [
             item for item in intervals if item["members"] == members
@@ -492,9 +515,9 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
             item["formation_by_deadline"] and item["held_time_s"] is not None
             for item in rows) for rows in expected_intervals.values()):
         reasons.append("hold_after_confirmation_too_short")
-    if frames and not all_components_success:
+    if frames and expected_component_count > 1 and not all_components_success:
         reasons.append("expected_component_milestone_not_met")
-    if frames and len(expected_component_members) <= 1 and not all_components_success:
+    if frames and expected_component_count == 1 and not selected_milestone_success:
         reasons.append("whole_cohort_milestone_not_met")
     hazards = {
         "partial_departure_cohort", "actor_present_before_departure",
@@ -503,7 +526,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "nonphysical_jump_detected", "simultaneous_admission_conflict",
     }
     success = bool(
-        last_actual is not None and all_components_success
+        last_actual is not None and selected_milestone_success
         and not hazards.intersection(reasons)
     )
     maxima_source = [
@@ -529,6 +552,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "formation_deadline_s": formation_deadline_s,
         "hold_after_confirmation_s": hold_s,
         "max_sample_gap_s": max_sample_gap_s,
+        "expected_component_count": expected_component_count,
         "body_length_m": _BODY_LENGTH_M, "body_width_m": _BODY_WIDTH_M,
     }
     return {
@@ -540,7 +564,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "all_components_success": all_components_success,
         "successful_component_intervals": successful_component_intervals,
         "frame_count": len(frames), "sampling_gap_count": sampling_gaps,
-        "success": success, "whole_cohort_success": success,
+        "success": success, "whole_cohort_success": whole_cohort_success,
         "local_success": any(item["success"] for item in intervals),
         "formed_time_s": formed_time,
         "held_time_s": held_time,

@@ -179,7 +179,7 @@ class DynamicComponentDetectorTests(unittest.TestCase):
                 self.assertEqual(component["lane_counts"], counts)
                 self.assertNotIn("lane_distribution_invalid", component["failure_reasons"])
 
-    def test_every_final_physical_component_must_meet_deadline_and_hold(self):
+    def test_default_requires_one_whole_cohort_component(self):
         front = formation(3, origin=300.0, prefix="a")
         rear = formation(3, origin=100.0, prefix="b")
         front_departures = departure_rows(3, 0.0, prefix="a")
@@ -201,22 +201,61 @@ class DynamicComponentDetectorTests(unittest.TestCase):
         self.assertEqual(result["expected_component_members"], [
             ["a0", "a1", "a2"], ["b0", "b1", "b2"],
         ])
+        self.assertEqual(result["parameters"]["expected_component_count"], 1)
+        self.assertFalse(result["all_components_success"])
+        self.assertFalse(result["whole_cohort_success"])
+        self.assertFalse(result["success"])
+        self.assertIn(
+            "expected_component_count_mismatch", result["failure_reasons"],
+        )
+        self.assertIn(
+            "whole_cohort_milestone_not_met", result["failure_reasons"],
+        )
+
+    def test_explicit_component_count_requires_every_final_component(self):
+        front = formation(3, origin=300.0, prefix="a")
+        rear = formation(3, origin=100.0, prefix="b")
+        departures = (
+            departure_rows(3, 0.0, prefix="a")
+            | departure_rows(3, 0.0, prefix="b")
+        )
+        frames = [
+            frame(time_s, front | rear, departures) for time_s in range(12)
+        ]
+
+        result = detect_frames(
+            frames, expected_component_count=2, max_sample_gap_s=1.0,
+        )
+
+        self.assertEqual(result["parameters"]["expected_component_count"], 2)
         self.assertTrue(result["all_components_success"])
+        self.assertFalse(result["whole_cohort_success"])
         self.assertTrue(result["success"])
         self.assertEqual(
             {tuple(row["members"]): row["formed_time_s"]
              for row in result["successful_component_intervals"]},
-            {("a0", "a1", "a2"): 11.0, ("b0", "b1", "b2"): 11.0},
+            {("a0", "a1", "a2"): 1.0, ("b0", "b1", "b2"): 1.0},
         )
 
         malformed = deepcopy(frames)
-        for recorded in malformed[10:]:
+        for recorded in malformed:
             recorded["states"]["b2"]["x_m"] -= 3.0
-        failed = detect_frames(malformed, max_sample_gap_s=1.0)
+        failed = detect_frames(
+            malformed, expected_component_count=2, max_sample_gap_s=1.0,
+        )
         self.assertTrue(failed["local_success"])
         self.assertFalse(failed["all_components_success"])
         self.assertFalse(failed["success"])
         self.assertIn("expected_component_milestone_not_met", failed["failure_reasons"])
+
+    def test_expected_component_count_requires_an_exact_positive_integer(self):
+        frames = [frame(0.0, formation(3), departure_rows(3))]
+
+        for invalid in (True, 1.0, 0, -1):
+            with self.subTest(invalid=invalid):
+                with self.assertRaisesRegex(
+                        ValueError, "expected_component_count.*positive integer"):
+                    detect_frames(frames, expected_component_count=invalid)
 
     def test_physical_geometry_and_speed_boundaries_are_inclusive(self):
         rows = formation(6)
