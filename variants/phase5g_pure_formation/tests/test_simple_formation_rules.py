@@ -22,6 +22,7 @@ from noa.simple_formation import (
     memory_from_dict,
     validate_parameters,
 )
+from noa import simple_formation
 from simulation.phase5g_clock import restore_initial_memories
 
 
@@ -34,7 +35,7 @@ class SimpleFormationRuleTests(unittest.TestCase):
             "simple_formation_position_tolerance_m": 2.0,
             "simple_formation_speed_tolerance_mps": 0.5,
             "simple_formation_stable_time_s": 1.0,
-            "simple_formation_reference_switch_gain_m": 5.0,
+            "simple_formation_reference_switch_gain_m": 2.0,
             "simple_formation_min_lane_change_speed_mps": 5.0,
             "simple_formation_target_lane_clearance_m": 15.0,
             # Temporary compatibility values for the unmodified old rule tests below.
@@ -43,12 +44,114 @@ class SimpleFormationRuleTests(unittest.TestCase):
             "simple_formation_same_gap_m": 30.0,
             "simple_formation_accel_limit_mps2": 0.5,
             "simple_formation_max_lane_changes": 1,
+            "noa_target_speed_mps": 30.0,
         }
         self.centers = (1.65, 4.95, 8.25)
 
     @staticmethod
     def vehicle(track, x, lane, speed=20.0, y=0.0):
         return LocalVehicle(track, x, y, speed, lane)
+
+    def target(self, ego_lane, ego_x=100.0, rows=(), memory=None):
+        ego = self.vehicle(99, ego_x, ego_lane)
+        return simple_formation.choose_formation_target(
+            ego, rows, self.centers, memory or SimpleFormationMemory((), "CRUISE"), self.p
+        )
+
+    def test_upper_leader_and_follower_targets(self):
+        leader = self.target(2, rows=(self.vehicle(1, 90.0, 2),))
+        self.assertEqual((leader.role, leader.target_x_m, leader.reference_track_id),
+                         ("upper_leader", None, None))
+        self.assertEqual(leader.reference_speed_mps, self.p["noa_target_speed_mps"])
+        follower = self.target(2, rows=(self.vehicle(1, 145.0, 2, 18.0),
+                                        self.vehicle(2, 160.0, 2)))
+        self.assertEqual((follower.role, follower.target_x_m,
+                          follower.reference_track_id, follower.reference_speed_mps),
+                         ("upper_follower", 115.0, 1, 18.0))
+
+    def test_outer_alignment_middle_offset_and_same_lane_fallback(self):
+        upper = self.vehicle(1, 120.0, 2, 17.0)
+        lower = self.target(0, rows=(upper,))
+        middle = self.target(1, rows=(upper,))
+        fallback = self.target(0, rows=(self.vehicle(2, 140.0, 0, 16.0),))
+        self.assertEqual((lower.role, lower.target_x_m, lower.reference_lane_index),
+                         ("lower_aligned", 120.0, 2))
+        self.assertEqual((middle.role, middle.target_x_m), ("middle_offset", 105.0))
+        self.assertEqual((fallback.role, fallback.target_x_m,
+                          fallback.reference_track_id),
+                         ("same_lane_follower", 110.0, 2))
+
+    def test_same_lane_roles_choose_nearest_front_even_if_farther_target_is_closer(self):
+        rows = (self.vehicle(1, 105.0, 2), self.vehicle(2, 130.0, 2))
+        upper = self.target(2, rows=rows)
+        self.assertEqual((upper.reference_track_id, upper.target_x_m), (1, 75.0))
+        lower_rows = (self.vehicle(3, 105.0, 0), self.vehicle(4, 130.0, 0))
+        lower = self.target(0, rows=lower_rows)
+        self.assertEqual((lower.reference_track_id, lower.target_x_m), (3, 75.0))
+
+    def test_formation_target_record_is_frozen_and_slotted(self):
+        row = self.target(2)
+        with self.assertRaises(FrozenInstanceError):
+            row.role = "other"
+        self.assertFalse(hasattr(row, "__dict__"))
+
+    def test_joiner_keeps_fixed_anchor_and_reports_anchor_loss(self):
+        cases = ((2, 1, 115.0), (0, 2, 130.0), (1, 2, 115.0))
+        for target_lane, anchor_lane, expected_x in cases:
+            with self.subTest(target_lane=target_lane):
+                memory = SimpleFormationMemory((), "CRUISE", join_phase="JOINING",
+                                               desired_lane_index=target_lane,
+                                               join_anchor_track_id=7)
+                rows = (self.vehicle(7, 130.0, anchor_lane, 18.0),
+                        self.vehicle(8, 102.0, 2))
+                target = self.target(0, rows=rows, memory=memory)
+                self.assertEqual((target.role, target.target_x_m,
+                                  target.reference_track_id, target.reference_speed_mps),
+                                 ("joiner", expected_x, 7, 18.0))
+                missing = self.target(0, rows=rows[1:], memory=memory)
+                self.assertIsNone(missing.target_x_m)
+                self.assertIsNone(missing.reference_track_id)
+                self.assertEqual(missing.reason, "join_anchor_lost")
+
+    def test_reference_switch_gain_and_invalid_remembered_reference(self):
+        memory = SimpleFormationMemory((), "CRUISE", reference_track_id=1)
+        held = self.target(0, rows=(self.vehicle(1, 110.0, 2),
+                                    self.vehicle(2, 108.1, 2)), memory=memory)
+        switched = self.target(0, rows=(self.vehicle(1, 110.0, 2),
+                                        self.vehicle(2, 108.0, 2)), memory=memory)
+        self.assertEqual(held.reference_track_id, 1)
+        self.assertEqual(switched.reference_track_id, 2)
+        for rows in ((self.vehicle(2, 108.0, 2),),
+                     (self.vehicle(1, 110.0, 1), self.vehicle(2, 108.0, 2))):
+            self.assertEqual(self.target(0, rows=rows, memory=memory).reference_track_id, 2)
+        rearward = self.target(2, rows=(self.vehicle(1, 95.0, 2),
+                                        self.vehicle(2, 140.0, 2)), memory=memory)
+        self.assertEqual(rearward.reference_track_id, 2)
+
+    def test_physical_tie_does_not_use_track_id(self):
+        rows = (self.vehicle(3, 110.0, 2), self.vehicle(2, 90.0, 2))
+        target = self.target(0, rows=rows)
+        self.assertIsNone(target.target_x_m)
+        self.assertIsNone(target.reference_track_id)
+        remembered = self.target(0, rows=rows,
+                                 memory=SimpleFormationMemory((), "CRUISE",
+                                                              reference_track_id=3))
+        self.assertEqual(remembered.reference_track_id, 3)
+
+    def test_direct_acceleration_uses_reference_speed_error_and_clips(self):
+        ego = self.vehicle(99, 100.0, 0, 20.0)
+        for target_x, reference_speed, expected in (
+            (105.0, 20.0, 1.0), (95.0, 20.0, -1.0),
+            (200.0, 30.0, 2.0), (0.0, 10.0, -3.0),
+        ):
+            with self.subTest(target_x=target_x):
+                target = simple_formation.FormationTarget(
+                    "lower_aligned", target_x, 1, reference_speed, 0, 2, "upper_reference"
+                )
+                self.assertEqual(simple_formation.formation_acceleration(ego, target, self.p),
+                                 expected)
+        leader = self.target(2)
+        self.assertEqual(simple_formation.formation_acceleration(ego, leader, self.p), 2.0)
 
     def test_public_parameter_names_are_exactly_the_local_tail_contract(self):
         self.assertEqual(

@@ -60,6 +60,108 @@ class JoinDecision:
     local_counts: tuple[int, int, int]
 
 
+@dataclass(frozen=True, slots=True)
+class FormationTarget:
+    """One physical longitudinal target selected from ego-local observations."""
+    role: str
+    target_x_m: float | None
+    reference_track_id: int | None
+    reference_speed_mps: float | None
+    target_lane_index: int | None
+    reference_lane_index: int | None
+    reason: str
+
+
+def choose_formation_target(ego, vehicles, lane_centers_m, memory, p):
+    """Select a role and reference using physical error, with private hysteresis."""
+    rows, _ = _physical_inputs(ego, vehicles, lane_centers_m, p)
+    if not isinstance(memory, SimpleFormationMemory):
+        raise ValueError("Invalid simple-formation memory")
+
+    def no_target(reason, lane=None):
+        return FormationTarget("no_target", None, None, None, lane, None, reason)
+
+    def from_row(role, row, target_x, reason, lane):
+        return FormationTarget(role, target_x, row.track_id, row.vx_mps,
+                               lane, row.lane_index, reason)
+
+    if memory.join_phase in ("JOINING", "STABILIZING") and memory.desired_lane_index is not None:
+        lane = memory.desired_lane_index
+        matches = tuple(row for row in rows if row.track_id == memory.join_anchor_track_id)
+        if len(matches) != 1:
+            return no_target("join_anchor_lost", lane)
+        anchor = matches[0]
+        offsets = {(2, 1): p["simple_formation_middle_offset_m"],
+                   (0, 2): 0.0,
+                   (1, 2): p["simple_formation_middle_offset_m"]}
+        offset = offsets.get((lane, anchor.lane_index))
+        if offset is None:
+            return no_target("join_anchor_invalid", lane)
+        return from_row("joiner", anchor, anchor.x_m - offset,
+                        "fixed_join_anchor", lane)
+
+    lane = ego.lane_index
+    if lane is None:
+        return no_target("ego_lane_unresolved")
+    if lane == 2:
+        role = "upper_follower"
+        candidates = tuple((row, row.x_m - p["simple_formation_same_lane_gap_m"])
+                           for row in rows if row.lane_index == 2 and row.x_m > ego.x_m)
+        if not candidates:
+            return FormationTarget("upper_leader", None, None,
+                                   p["noa_target_speed_mps"], 2, None,
+                                   "frontmost_upper")
+    else:
+        role = "lower_aligned" if lane == 0 else "middle_offset"
+        offset = 0.0 if lane == 0 else p["simple_formation_middle_offset_m"]
+        candidates = tuple((row, row.x_m - offset)
+                           for row in rows if row.lane_index == 2)
+        if not candidates:
+            role = "same_lane_follower"
+            candidates = tuple((row, row.x_m - p["simple_formation_same_lane_gap_m"])
+                               for row in rows if row.lane_index == lane
+                               and row.x_m > ego.x_m)
+    if not candidates:
+        return no_target("no_valid_reference", lane)
+
+    errors = tuple(abs(target_x - ego.x_m) for _, target_x in candidates)
+    if role in ("upper_follower", "same_lane_follower"):
+        nearest_x = min(row.x_m for row, _ in candidates)
+        best = tuple(i for i, (row, _) in enumerate(candidates)
+                     if row.x_m == nearest_x)
+    else:
+        best_error = min(errors)
+        best = tuple(i for i, error in enumerate(errors) if error == best_error)
+    remembered = tuple(i for i, (row, _) in enumerate(candidates)
+                       if row.track_id == memory.reference_track_id)
+    held = remembered[0] if len(remembered) == 1 else None
+    gain = p["simple_formation_reference_switch_gain_m"]
+    if held is not None and (held in best or
+                             errors[held] - errors[best[0]] < gain):
+        selected, reason = held, "remembered_reference"
+    elif len(best) == 1:
+        selected = best[0]
+        reason = "switch_gain_met" if held is not None else "nearest_physical_target"
+    elif held is not None:
+        selected, reason = held, "ambiguous_alternative_hold"
+    else:
+        return no_target("ambiguous_physical_reference", lane)
+    row, target_x = candidates[selected]
+    return from_row(role, row, target_x, reason, lane)
+
+
+def formation_acceleration(ego, target, p):
+    """Return the final longitudinal request, independent of NOA cruise."""
+    if target.role == "upper_leader":
+        desired_speed = p["noa_target_speed_mps"]
+    elif target.target_x_m is not None and target.reference_speed_mps is not None:
+        error = target.target_x_m - ego.x_m
+        desired_speed = target.reference_speed_mps + max(-2.0, min(2.0, error / 5.0))
+    else:
+        return None
+    return max(-3.0, min(2.0, desired_speed - ego.vx_mps))
+
+
 def _finite_number(value):
     try:
         return type(value) in (int, float) and math.isfinite(value)

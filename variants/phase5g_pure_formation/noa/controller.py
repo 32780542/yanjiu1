@@ -232,16 +232,16 @@ def decide(control, parameters):
     if simple_active:
         diagnostics["simple_formation"] = {
             "enabled": True,
+            "role": None,
+            "target_x_m": None,
+            "position_error_m": None,
             "reference_track_id": memory.reference_track_id,
             "reference_reason": "not_evaluated",
-            "desired_gap_m": None,
-            "target_position_error_m": None,
-            "raw_increment_mps2": None,
-            "applied_increment_mps2": 0.0,
-            "local_counts": None,
-            "lane_reason": "not_evaluated",
-            "longitudinal_guard": None,
-            "lane_guard": None,
+            "target_lane_index": None,
+            "reference_lane_index": None,
+            "requested_acceleration_mps2": None,
+            "emergency_override": emergency,
+            "lane_reason": "local_tail_lane_control_pending",
             "active_plan_guards": [],
             "guard": None,
         }
@@ -290,8 +290,6 @@ def decide(control, parameters):
             memory = replace(memory, plan=None, target_y_m=None, prepare_since_s=None,
                              last_lc_end_s=ego.time_s, completed_lane_changes=memory.completed_lane_changes+1,
                              lane_change_reason='')
-            if simple_active and completed_reason == "simple_formation_balance":
-                memory = replace(memory, formation_lane_change_done=True)
             if legacy_formation_lane_active and completed_reason == 'formation_geometry':
                 memory = replace(
                     memory,
@@ -370,77 +368,41 @@ def decide(control, parameters):
     elif lead is not None and p['noa_target_speed_mps']-lead.vx >= p['noa_overtake_speed_deficit_mps']:
         if gap <= p['noa_standstill_gap_m']+p['noa_headway_s']*ego.vx_mps+max(0., ego.vx_mps-lead.vx)*p['noa_overtake_horizon_s']:
             motivation = 'slower_visible_lead'
+    if simple_active and motivation == 'slower_visible_lead':
+        motivation = None
     cooldown = memory.last_lc_end_s is not None and ego.time_s-memory.last_lc_end_s < p['noa_lane_change_cooldown_s']
     state = 'EMERGENCY' if emergency else ('FOLLOW' if lead is not None else 'CRUISE')
     simple_vehicles = ()
     if simple_active:
         simple_diagnostic = diagnostics["simple_formation"]
+        simple_vehicles = simple_formation.local_vehicles(control, road, p)
+        ego_lane = road.centers_m.index(road.current_center_m)
+        ego_row = simple_formation.LocalVehicle(
+            0, ego.x_m, ego.y_m, ego.vx_mps, ego_lane
+        )
+        target = simple_formation.choose_formation_target(
+            ego_row, simple_vehicles, road.centers_m, memory, p
+        )
+        memory = replace(memory, reference_track_id=target.reference_track_id)
+        requested = simple_formation.formation_acceleration(ego_row, target, p)
+        simple_diagnostic.update(
+            role=target.role,
+            target_x_m=target.target_x_m,
+            position_error_m=(None if target.target_x_m is None
+                              else target.target_x_m - ego.x_m),
+            reference_track_id=target.reference_track_id,
+            reference_reason=target.reason,
+            target_lane_index=target.target_lane_index,
+            reference_lane_index=target.reference_lane_index,
+            requested_acceleration_mps2=requested,
+        )
         if emergency:
-            simple_diagnostic.update(
-                reference_reason="emergency_priority", lane_reason="emergency_priority"
-            )
-        elif motivation is not None:
-            simple_diagnostic.update(
-                reference_reason="higher_priority_motivation",
-                lane_reason="higher_priority_motivation",
-            )
-        else:
-            simple_vehicles = simple_formation.local_vehicles(control, road, p)
-            ego_lane = road.centers_m.index(road.current_center_m)
-            reference = simple_formation.choose_reference(
-                ego.x_m,
-                simple_vehicles,
-                memory.reference_track_id,
-                p["noa_geometry_tolerance_m"],
-            )
-            if reference is None:
-                memory = replace(memory, reference_track_id=None)
-                simple_diagnostic["reference_track_id"] = None
-                simple_diagnostic["reference_reason"] = "no_visible_reference"
-            else:
-                remembered_reference = reference.track_id == memory.reference_track_id
-                memory = replace(memory, reference_track_id=reference.track_id)
-                desired_gap = simple_formation.desired_gap_m(
-                    ego_lane, reference.lane_index, p
-                )
-                error = reference.x_m - desired_gap - ego.x_m
-                increment = simple_formation.longitudinal_increment(
-                    ego.x_m, ego.vx_mps, ego_lane, reference, p
-                )
-                proposed = clip(
-                    accel + increment,
-                    -p["comfort_braking_mps2"],
-                    p["comfort_accel_mps2"],
-                )
-                proposed = clip(proposed, p["min_accel_mps2"], p["max_accel_mps2"])
-                hold = QuadraticLaneChange(
-                    ego.time_s,
-                    road.current_center_m,
-                    road.current_center_m,
-                    p["noa_lane_change_duration_s"],
-                    max(ego.vx_mps, p["noa_min_lane_change_speed_mps"]),
-                )
-                guard = verify_candidate(control, hold, road, proposed, p)
-                simple_diagnostic["longitudinal_guard"] = {
-                    "kind": "longitudinal", "result": guard,
-                }
-                simple_diagnostic["guard"] = simple_diagnostic["longitudinal_guard"]
-                simple_diagnostic.update(
-                    reference_track_id=reference.track_id,
-                    reference_reason=(
-                        "remembered_visible_reference"
-                        if remembered_reference
-                        else "unique_nearest_visible_reference"
-                    ),
-                    desired_gap_m=desired_gap,
-                    target_position_error_m=error,
-                    raw_increment_mps2=increment,
-                )
-                if guard["safe"]:
-                    simple_diagnostic["applied_increment_mps2"] = proposed - accel
-                    accel = proposed
-                else:
-                    simple_diagnostic["reference_reason"] = "longitudinal_safety_rejected"
+            simple_diagnostic["lane_reason"] = "emergency_priority"
+        elif requested is not None:
+            accel = requested
+            if end_x is not None:
+                road_accel = _longitudinal(ego, (), center, end_x, p)[0]
+                accel = min(accel, road_accel)
     r5_pending=[]
     if adaptive and motivation and not cooldown and not emergency:
         centers = road.centers_m
@@ -572,59 +534,6 @@ def decide(control, parameters):
                     diagnostics['formation_lane']['fallback'] = 'higher_priority_plan_committed'
                 return NoaDecision(action, replace(memory, own_behavior=state), diagnostics)
             break
-    if simple_active:
-        simple_diagnostic = diagnostics["simple_formation"]
-        if emergency:
-            simple_diagnostic["lane_reason"] = "emergency_priority"
-        elif motivation is not None:
-            simple_diagnostic["lane_reason"] = "higher_priority_motivation"
-        elif cooldown:
-            simple_diagnostic["lane_reason"] = "noa_cooldown_active"
-        else:
-            ego_lane = road.centers_m.index(road.current_center_m)
-            lane_decision = simple_formation.choose_lane(
-                ego.x_m,
-                ego_lane,
-                simple_vehicles,
-                road.centers_m,
-                memory.formation_lane_change_done,
-                p,
-            )
-            simple_diagnostic["local_counts"] = lane_decision.counts
-            simple_diagnostic["lane_reason"] = lane_decision.reason
-            if lane_decision.target_lane_index is not None:
-                duration = p["noa_lane_change_duration_s"]
-                if ego.vx_mps < steering_speed_floor(duration, p):
-                    simple_diagnostic["lane_reason"] = "fixed_plan_speed_too_low"
-                else:
-                    target_y = road.centers_m[lane_decision.target_lane_index]
-                    candidate = QuadraticLaneChange(
-                        ego.time_s, ego.y_m, target_y, duration, ego.vx_mps
-                    )
-                    guard = verify_candidate(control, candidate, road, accel, p)
-                    simple_diagnostic["lane_guard"] = {
-                        "kind": "lane_change", "result": guard,
-                    }
-                    simple_diagnostic["guard"] = simple_diagnostic["lane_guard"]
-                    if guard["safe"]:
-                        memory = replace(
-                            memory,
-                            plan=candidate,
-                            target_y_m=target_y,
-                            prepare_since_s=ego.time_s,
-                            lane_change_reason="simple_formation_balance",
-                        )
-                        diagnostics["reason"] = "simple_formation_balance"
-                        action = Actuation(
-                            accel,
-                            lateral_command(
-                                ego, reference_target(candidate, ego.time_s), p
-                            ),
-                        )
-                        return NoaDecision(
-                            action, replace(memory, own_behavior="EXECUTE_LC"), diagnostics
-                        )
-                    simple_diagnostic["lane_reason"] = "safety_rejected"
     if legacy_formation_lane_active:
         lane_diagnostic = diagnostics['formation_lane']
         lock_until = memory.formation_lane_lock_until_s

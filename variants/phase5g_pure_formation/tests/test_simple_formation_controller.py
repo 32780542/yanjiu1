@@ -52,12 +52,15 @@ class SimpleFormationControllerTests(unittest.TestCase):
     def setUp(self):
         self.model = KinematicModel.from_config()
         self.simple = {
-            "simple_formation_local_range_m": 90.0,
-            "simple_formation_adjacent_gap_m": 15.0,
-            "simple_formation_same_gap_m": 30.0,
+            "simple_formation_component_gap_m": 50.0,
+            "simple_formation_middle_offset_m": 15.0,
+            "simple_formation_same_lane_gap_m": 30.0,
             "simple_formation_position_tolerance_m": 2.0,
-            "simple_formation_accel_limit_mps2": 0.5,
-            "simple_formation_max_lane_changes": 1,
+            "simple_formation_speed_tolerance_mps": 0.5,
+            "simple_formation_stable_time_s": 1.0,
+            "simple_formation_reference_switch_gain_m": 2.0,
+            "simple_formation_min_lane_change_speed_mps": 5.0,
+            "simple_formation_target_lane_clearance_m": 15.0,
         }
         self.p = {
             **self.model.p,
@@ -119,315 +122,121 @@ class SimpleFormationControllerTests(unittest.TestCase):
             memory or SimpleFormationMemory((), "CRUISE"),
         )
 
-    def test_no_reference_keeps_base_cruise_and_clears_private_reference(self):
-        side = self.neighbor(4, 0.0, 1)
-        control = self.control(
-            neighbors=(side,),
-            memory=SimpleFormationMemory((), "CRUISE", reference_track_id=19)
-        )
-        baseline = decide(
-            replace(control, memory=NoaMemory((), "CRUISE")),
-            {
-                **self.p,
-                "formation_enabled": False,
-                "simple_formation_enabled": False,
-                "formation_lane_change_enabled": False,
-            },
-        )
-        decision = decide(control, self.p)
-        self.assertEqual(decision.action, baseline.action)
+    def test_no_target_uses_noa_fallback_and_clears_reference(self):
+        memory = SimpleFormationMemory((), "CRUISE", reference_track_id=19)
+        control = self.control(memory=memory)
+        with patch("noa.controller._longitudinal", return_value=(-1.25, None, None, False, "cruise")):
+            decision = decide(control, self.p)
+        self.assertEqual(decision.action.acceleration_mps2, -1.25)
         self.assertIsNone(decision.memory.reference_track_id)
-        self.assertEqual(
-            decision.diagnostics["simple_formation"]["reference_reason"],
-            "no_visible_reference",
-        )
         simple = decision.diagnostics["simple_formation"]
-        self.assertIsNone(simple["longitudinal_guard"])
-        self.assertIsNone(simple["lane_guard"])
-        self.assertIsNone(simple["guard"])
-        self.assertEqual(simple["active_plan_guards"], [])
+        self.assertEqual(simple["role"], "no_target")
+        self.assertIsNone(simple["target_x_m"])
+        self.assertIsNone(simple["requested_acceleration_mps2"])
+        self.assertFalse(simple["emergency_override"])
 
-    def test_adjacent_reference_uses_fifteen_metres_and_bounded_increment(self):
-        reference = self.neighbor(7, 40.0, 1)
-        with patch("noa.controller.verify_candidate", return_value=SAFE) as guard:
-            decision = decide(self.control(neighbors=(reference,)), self.p)
-        diagnostic = decision.diagnostics["simple_formation"]
-        self.assertEqual(diagnostic["reference_track_id"], 7)
-        self.assertEqual(diagnostic["desired_gap_m"], 15.0)
-        self.assertEqual(diagnostic["raw_increment_mps2"], 0.5)
-        self.assertLessEqual(abs(diagnostic["applied_increment_mps2"]), 0.5)
-        self.assertEqual(decision.action.acceleration_mps2, 0.5)
-        hold = guard.call_args.args[1]
-        self.assertEqual(hold.y_start_m, hold.y_target_m)
-
-    def test_rejected_longitudinal_increment_keeps_visible_remembered_reference(self):
-        reference = self.neighbor(7, 40.0, 1)
-        memory = SimpleFormationMemory((), "CRUISE", reference_track_id=7)
-        baseline = decide(
-            self.control(neighbors=(reference,), memory=NoaMemory((), "CRUISE")),
-            {
-                **self.p,
-                "formation_enabled": False,
-                "simple_formation_enabled": False,
-                "formation_lane_change_enabled": False,
-            },
-        )
-        with patch("noa.controller.verify_candidate", return_value=REJECTED):
-            decision = decide(
-                self.control(neighbors=(reference,), memory=memory), self.p
-            )
-        diagnostic = decision.diagnostics["simple_formation"]
+    def test_direct_formation_accel_replaces_opposite_base_cruise(self):
+        upper = self.neighbor(7, 20.0, 2)
+        with patch("noa.controller._longitudinal", return_value=(-2.0, None, None, False, "cruise")):
+            decision = decide(self.control(neighbors=(upper,)), self.p)
+        self.assertEqual(decision.action.acceleration_mps2, 2.0)
         self.assertEqual(decision.memory.reference_track_id, 7)
-        self.assertEqual(diagnostic["reference_track_id"], 7)
-        self.assertEqual(diagnostic["reference_reason"], "longitudinal_safety_rejected")
-        self.assertEqual(diagnostic["applied_increment_mps2"], 0.0)
-        self.assertEqual(diagnostic["longitudinal_guard"], {
-            "kind": "longitudinal", "result": REJECTED,
-        })
-        self.assertIsNone(diagnostic["lane_guard"])
-        self.assertIs(diagnostic["guard"], diagnostic["longitudinal_guard"])
-        self.assertEqual(decision.action, Actuation(0.0, 0.0))
-        self.assertEqual(decision.action, baseline.action)
-        self.assertEqual(decision.memory, memory)
-
-    def test_unique_less_populated_lane_creates_one_fixed_safe_plan(self):
-        neighbors = (
-            self.neighbor(1, 70.0, 0),
-            self.neighbor(2, 80.0, 0),
-        )
-        with patch("noa.controller.verify_candidate", return_value=SAFE) as guard:
-            decision = decide(self.control(neighbors=neighbors), self.p)
-        self.assertGreaterEqual(guard.call_count, 1)
-        self.assertIsNotNone(decision.memory.plan)
-        self.assertAlmostEqual(decision.memory.plan.y_target_m, CENTERS_M[1])
-        self.assertEqual(decision.memory.plan.duration_s, self.p["noa_lane_change_duration_s"])
-        self.assertEqual(decision.memory.lane_change_reason, "simple_formation_balance")
-        self.assertEqual(decision.memory.own_behavior, "EXECUTE_LC")
-        self.assertEqual(
-            decision.diagnostics["simple_formation"]["lane_reason"],
-            "simple_formation_balance",
-        )
         simple = decision.diagnostics["simple_formation"]
-        self.assertEqual(simple["longitudinal_guard"], {
-            "kind": "longitudinal", "result": SAFE,
-        })
-        self.assertEqual(simple["lane_guard"], {
-            "kind": "lane_change", "result": SAFE,
-        })
-        self.assertIs(simple["guard"], simple["lane_guard"])
-        self.assertEqual(
-            decision.action,
-            Actuation(-2.4704228341579437, 0.0035639849100249556),
-        )
-        self.assertEqual(
-            decision.memory,
-            SimpleFormationMemory(
-                (), "EXECUTE_LC",
-                plan=QuadraticLaneChange(
-                    0.0, CENTERS_M[0], 4.949999999999999,
-                    self.p["noa_lane_change_duration_s"], 20.0,
-                ),
-                target_y_m=4.949999999999999,
-                prepare_since_s=0.0,
-                lane_change_reason="simple_formation_balance",
-                reference_track_id=1,
-            ),
-        )
+        self.assertEqual(simple["role"], "lower_aligned")
+        self.assertEqual(simple["target_x_m"], 120.0)
+        self.assertEqual(simple["position_error_m"], 20.0)
+        self.assertEqual(simple["reference_track_id"], 7)
+        self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
+        self.assertEqual(simple["lane_reason"], "local_tail_lane_control_pending")
 
-    def test_lane_guard_rejection_keeps_certified_longitudinal_request(self):
-        neighbors = (
-            self.neighbor(1, 70.0, 0),
-            self.neighbor(2, 80.0, 0),
+    def test_visible_lane_end_caps_direct_request_with_road_stop(self):
+        road = SimpleNamespace(
+            centers_m=CENTERS_M,
+            current_center_m=CENTERS_M[2],
+            lane_end=lambda *_: 1000.0,
+            envelope=SimpleNamespace(regions=((-300.0, 1200.0, 0.0, 9.9),)),
         )
-        with patch(
-            "noa.controller.verify_candidate", side_effect=(SAFE, REJECTED)
-        ) as guard:
-            decision = decide(self.control(neighbors=neighbors), self.p)
-        self.assertEqual(guard.call_count, 2)
-        self.assertIsNone(decision.memory.plan)
-        simple = decision.diagnostics["simple_formation"]
-        self.assertEqual(simple["applied_increment_mps2"], 0.5)
-        self.assertEqual(
-            decision.action.acceleration_mps2,
-            guard.call_args_list[1].args[3],
-        )
-        self.assertEqual(
-            simple["lane_reason"], "safety_rejected",
-        )
-        self.assertEqual(simple["longitudinal_guard"], {
-            "kind": "longitudinal", "result": SAFE,
-        })
-        self.assertEqual(simple["lane_guard"], {
-            "kind": "lane_change", "result": REJECTED,
-        })
-        self.assertIs(simple["guard"], simple["lane_guard"])
-        self.assertFalse(simple["guard"]["result"]["safe"])
-        self.assertEqual(simple["guard"]["result"]["reason"],
-                         "neighbor_reachable_occupancy")
-        self.assertEqual(simple["guard"]["result"]["at_s"], 0.1)
-        self.assertEqual(simple["guard"]["result"]["checked_s"], 0.1)
-        self.assertEqual(
-            decision.action, Actuation(-2.4704228341579437, 0.0),
-        )
-        self.assertEqual(
-            decision.memory,
-            SimpleFormationMemory((), "FOLLOW", reference_track_id=1),
-        )
+        with patch("noa.controller.reconstruct", return_value=road), patch(
+            "noa.controller._longitudinal",
+            side_effect=((0.5, None, None, False, "cruise"),
+                         (-1.5, None, None, False, "observed_lane_end_braking")),
+        ) as longitudinal:
+            decision = decide(self.control(lane=2, speed=18.0), self.p)
+        self.assertEqual(longitudinal.call_count, 2)
+        self.assertEqual(decision.diagnostics["simple_formation"]["requested_acceleration_mps2"],
+                         2.0)
+        self.assertEqual(decision.action.acceleration_mps2, -1.5)
 
-    def test_completed_simple_plan_sets_done_and_blocks_a_second_request(self):
-        duration = self.p["noa_lane_change_duration_s"]
-        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], duration, 20.0)
-        executing = SimpleFormationMemory(
-            (),
-            "EXECUTE_LC",
-            plan=plan,
-            target_y_m=CENTERS_M[1],
-            prepare_since_s=0.0,
-            lane_change_reason="simple_formation_balance",
-        )
-        completed = decide(
-            self.control(time_s=duration, x=200.0, lane=1, memory=executing), self.p
-        )
-        self.assertTrue(completed.memory.formation_lane_change_done)
-        self.assertIsNone(completed.memory.plan)
-        self.assertEqual(completed.memory.completed_lane_changes, 1)
+    def test_upper_leader_uses_target_speed(self):
+        with patch("noa.controller._longitudinal", return_value=(-1.0, None, None, False, "cruise")):
+            decision = decide(self.control(lane=2, speed=20.0), self.p)
+        expected = max(-3.0, min(2.0, self.p["noa_target_speed_mps"] - 20.0))
+        self.assertEqual(decision.action.acceleration_mps2, expected)
+        self.assertEqual(decision.diagnostics["simple_formation"]["role"], "upper_leader")
+        self.assertIsNone(decision.memory.reference_track_id)
 
-        later_time = duration + self.p["noa_lane_change_cooldown_s"] + 0.1
-        imbalance = (
-            self.neighbor(11, 70.0, 1, time_s=later_time, relative_y=0.0),
-            self.neighbor(12, 80.0, 1, time_s=later_time, relative_y=0.0),
-        )
+    def test_joiner_tracks_fixed_anchor_and_preserves_join_memory(self):
+        memory = SimpleFormationMemory((), "CRUISE", join_phase="JOINING",
+                                       desired_lane_index=2, join_anchor_track_id=7)
+        anchor = self.neighbor(7, 30.0, 1, speed=18.0)
+        decision = decide(self.control(neighbors=(anchor,), memory=memory), self.p)
+        self.assertEqual(decision.diagnostics["simple_formation"]["role"], "joiner")
+        self.assertEqual(decision.diagnostics["simple_formation"]["target_x_m"], 115.0)
+        self.assertEqual(decision.memory.join_anchor_track_id, 7)
+        self.assertEqual(decision.memory.desired_lane_index, 2)
+        self.assertEqual(decision.memory.reference_track_id, 7)
+
+    def test_join_anchor_loss_uses_noa_fallback_without_retargeting(self):
+        memory = SimpleFormationMemory((), "CRUISE", join_phase="STABILIZING",
+                                       desired_lane_index=2, join_anchor_track_id=7,
+                                       reference_track_id=7)
+        other = self.neighbor(8, 20.0, 2)
+        with patch("noa.controller._longitudinal", return_value=(-1.0, None, None, False, "cruise")):
+            decision = decide(self.control(neighbors=(other,), memory=memory), self.p)
+        self.assertEqual(decision.action.acceleration_mps2, -1.0)
+        self.assertEqual(decision.diagnostics["simple_formation"]["reference_reason"],
+                         "join_anchor_lost")
+        self.assertIsNone(decision.memory.reference_track_id)
+        self.assertEqual(decision.memory.join_anchor_track_id, 7)
+
+    def test_existing_noa_plan_keeps_running_without_simple_diagnostic_crash(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = SimpleFormationMemory((), "EXECUTE_LC", plan=plan,
+                                       target_y_m=CENTERS_M[1], prepare_since_s=0.0,
+                                       lane_change_reason="observed_lane_end")
         with patch("noa.controller.verify_candidate", return_value=SAFE):
-            blocked = decide(
-                self.control(
-                    time_s=later_time,
-                    x=300.0,
-                    lane=1,
-                    neighbors=imbalance,
-                    memory=completed.memory,
-                ),
-                self.p,
-            )
-        self.assertIsNone(blocked.memory.plan)
-        self.assertEqual(
-            blocked.diagnostics["simple_formation"]["lane_reason"],
-            "formation_lane_change_done",
-        )
-
-    def test_active_plan_is_rechecked_but_never_retargeted(self):
-        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
-        memory = SimpleFormationMemory(
-            (),
-            "EXECUTE_LC",
-            plan=plan,
-            target_y_m=CENTERS_M[1],
-            prepare_since_s=0.0,
-            lane_change_reason="simple_formation_balance",
-        )
-        with patch("noa.controller.verify_candidate", return_value=SAFE), patch(
-            "noa.controller.simple_formation.choose_lane",
-            side_effect=AssertionError("active plan was retargeted"),
-        ) as choose:
-            decision = decide(
-                self.control(time_s=1.0, x=120.0, lane=0, memory=memory), self.p
-            )
-        choose.assert_not_called()
+            decision = decide(self.control(time_s=1.0, memory=memory), self.p)
         self.assertEqual(decision.memory.plan, plan)
-        self.assertEqual(decision.memory.own_behavior, "EXECUTE_LC")
-        simple = decision.diagnostics["simple_formation"]
-        self.assertEqual(simple["active_plan_guards"], [
-            {"kind": "active_plan", "result": SAFE},
-        ])
-        self.assertIs(simple["guard"], simple["active_plan_guards"][0])
-        self.assertIsNone(simple["longitudinal_guard"])
-        self.assertIsNone(simple["lane_guard"])
+        self.assertEqual(decision.diagnostics["simple_formation"]["lane_reason"],
+                         "active_plan")
 
-    def test_active_simple_fallback_guard_reports_the_executed_acceleration(self):
-        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
-        memory = SimpleFormationMemory(
-            (),
-            "EXECUTE_LC",
-            plan=plan,
-            target_y_m=CENTERS_M[1],
-            prepare_since_s=0.0,
-            lane_change_reason="simple_formation_balance",
-        )
-        fallback_accepted = {
-            **SAFE,
-            "reason": "fallback_swept_prediction_clear",
-            "checked_s": 4.0,
-        }
-        with patch(
-            "noa.controller.verify_candidate",
-            side_effect=(REJECTED, fallback_accepted),
-        ) as guard:
-            decision = decide(
-                self.control(time_s=1.0, x=120.0, lane=0, memory=memory), self.p
-            )
-
-        self.assertEqual(guard.call_count, 2)
-        fallback_acceleration = guard.call_args_list[1].args[3]
-        self.assertEqual(fallback_acceleration, -self.p["comfort_braking_mps2"])
-        self.assertEqual(
-            decision.action, Actuation(-3, 0.009978868762134723),
-        )
-        self.assertEqual(decision.action.acceleration_mps2, fallback_acceleration)
-        self.assertEqual(decision.memory, replace(memory, own_behavior="EMERGENCY"))
-        simple = decision.diagnostics["simple_formation"]
-        self.assertEqual(simple["active_plan_guards"], [
-            {"kind": "active_plan", "result": REJECTED},
-            {"kind": "active_plan", "result": fallback_accepted},
-        ])
-        self.assertEqual(len(simple["active_plan_guards"]), 2)
-        self.assertIsNone(simple["longitudinal_guard"])
-        self.assertIsNone(simple["lane_guard"])
-        public_guard = simple["guard"]
-        self.assertEqual(public_guard["kind"], "active_plan")
-        self.assertIs(public_guard["result"], fallback_accepted)
-        self.assertIs(public_guard, simple["active_plan_guards"][-1])
-
-    def test_emergency_and_base_overtake_motivation_preempt_simple_rules(self):
+    def test_immediate_emergency_keeps_noa_braking(self):
         close = self.neighbor(3, 8.0, 0, speed=0.0)
-        with patch(
-            "noa.controller.simple_formation.local_vehicles",
-            side_effect=AssertionError("simple branch ran during emergency"),
-            create=True,
-        ):
-            emergency = decide(self.control(neighbors=(close,)), self.p)
-        self.assertEqual(emergency.memory.own_behavior, "EMERGENCY")
+        memory = SimpleFormationMemory((), "CRUISE", reference_track_id=99)
+        decision = decide(self.control(neighbors=(close,), memory=memory), self.p)
+        self.assertEqual(decision.memory.own_behavior, "EMERGENCY")
+        self.assertTrue(decision.diagnostics["simple_formation"]["emergency_override"])
+        self.assertLessEqual(decision.action.acceleration_mps2, -3.0)
+        self.assertEqual(decision.memory.reference_track_id, 3)
 
+    def test_slow_lead_motivation_does_not_preempt_formation_longitudinal(self):
         slow = self.neighbor(4, 70.0, 0, speed=10.0)
-        with patch("noa.controller.verify_candidate", return_value=SAFE), patch(
-            "noa.controller.simple_formation.local_vehicles",
-            side_effect=AssertionError("simple branch ran during base motivation"),
-            create=True,
-        ):
-            overtake = decide(self.control(neighbors=(slow,)), self.p)
-        self.assertEqual(overtake.memory.lane_change_reason, "slower_visible_lead")
-        self.assertEqual(overtake.memory.own_behavior, "PREPARE_LC")
+        decision = decide(self.control(neighbors=(slow,)), self.p)
+        self.assertEqual(decision.diagnostics["simple_formation"]["role"],
+                         "same_lane_follower")
+        self.assertEqual(decision.action.acceleration_mps2, -3.0)
+        self.assertIsNone(decision.memory.plan)
 
     def test_consistent_local_track_relabel_preserves_physical_action(self):
-        first = (
-            self.neighbor(7, 50.0, 0),
-            self.neighbor(8, 20.0, 1),
-        )
-        second = tuple(replace(row, track_id=row.track_id + 100) for row in first)
-        with patch("noa.controller.verify_candidate", return_value=SAFE):
-            a = decide(
-                self.control(
-                    neighbors=first,
-                    memory=SimpleFormationMemory((), "CRUISE", reference_track_id=7),
-                ),
-                self.p,
-            )
-            b = decide(
-                self.control(
-                    neighbors=second,
-                    memory=SimpleFormationMemory((), "CRUISE", reference_track_id=107),
-                ),
-                self.p,
-            )
+        first = self.neighbor(7, 20.0, 2)
+        second = replace(first, track_id=107)
+        a = decide(self.control(neighbors=(first,), memory=SimpleFormationMemory(
+            (), "CRUISE", reference_track_id=7)), self.p)
+        b = decide(self.control(neighbors=(second,), memory=SimpleFormationMemory(
+            (), "CRUISE", reference_track_id=107)), self.p)
         self.assertEqual(a.action, b.action)
+        self.assertEqual(a.diagnostics["simple_formation"]["target_x_m"],
+                         b.diagnostics["simple_formation"]["target_x_m"])
 
     def test_adapter_rotates_ego_frame_measurements_without_truth_fields(self):
         adapter = getattr(simple_formation, "local_vehicles", None)
@@ -529,7 +338,8 @@ class SimpleFormationControllerTests(unittest.TestCase):
         if "simple_enabled" not in signature.parameters:
             return
         original = SimpleFormationMemory(
-            (), "CRUISE", reference_track_id=17, formation_lane_change_done=True
+            (), "CRUISE", reference_track_id=17, join_anchor_track_id=7,
+            desired_lane_index=2, join_phase="JOINING"
         )
         restored = restore_initial_memories(
             {"ego": asdict(original)},
@@ -555,7 +365,8 @@ class SimpleFormationControllerTests(unittest.TestCase):
         )["ego"]
         self.assertIsInstance(restored, SimpleFormationMemory)
         self.assertIsNone(restored.reference_track_id)
-        self.assertFalse(restored.formation_lane_change_done)
+        self.assertIsNone(restored.join_anchor_track_id)
+        self.assertEqual(restored.join_phase, "FREE")
 
     def test_clock_simple_path_bypasses_formation_wrapper_and_false_uses_it(self):
         clock = object.__new__(Phase5GClock)
