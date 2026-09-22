@@ -1186,6 +1186,12 @@ def _speed_facts(records, case: Mapping[str, object],
     )
 
 
+def _detection_milestone(detection: Mapping[str, object]) -> tuple[float | None, float | None]:
+    """Return the detector's all-component milestone, not a whole-fleet interval."""
+    default = detection["default"]
+    return default["formed_time_s"], default["held_time_s"]
+
+
 def _evaluate_record_source(source, case: Mapping[str, object], model,
                             physical: Mapping[str, object]) -> dict:
     """Aggregate a re-openable physical source in three bounded scans."""
@@ -1254,6 +1260,7 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
         "component_gap_m": float(
             physical.get("simple_formation_component_gap_m", 50.0)
         ),
+        "max_sample_gap_s": float(physical["control_sync_dt_s"]),
         "incidents": {
             "collision_events": geometry["collision_events"],
             "road_departure_events": geometry["outside_events"],
@@ -1277,15 +1284,13 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
             for factor in (0.5, 1.0, 1.5)
         },
     }
-    intervals = [row for row in detection["default"]["intervals"]
-                 if row["whole_cohort"] and row["success"]]
-    first = min(intervals, key=lambda row: row["formed_time_s"]) if intervals else None
+    formed_time_s, held_time_s = _detection_milestone(detection)
     lane_changes = lane_accumulator.result()
     speed = speed_accumulator.result(
         float(physical["noa_target_speed_mps"]),
         float(physical["formation_maintaining_speed_tolerance_mps"]),
-        formed_time_s=first["formed_time_s"] if first else None,
-        held_time_s=first["held_time_s"] if first else None,
+        formed_time_s=formed_time_s,
+        held_time_s=held_time_s,
     )
     final_states = speed_accumulator.final
     counts = [0, 0, 0]
@@ -1295,8 +1300,8 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
             counts[lane] += 1
     summary = {
         "whole_cohort_formation_success": detection["default"]["whole_cohort_success"],
-        "formed_time_s": first["formed_time_s"] if first else None,
-        "held_time_s": first["held_time_s"] if first else None,
+        "formed_time_s": formed_time_s,
+        "held_time_s": held_time_s,
         "completed_lane_changes": lane_changes["completed_lane_changes"],
         "formation_lane_changes": lane_changes["formation_lane_changes"],
         "final_lane_counts": counts,

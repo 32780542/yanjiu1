@@ -2,6 +2,7 @@ from copy import deepcopy
 import unittest
 
 from experiments.phase5_detection import detect_frames
+from experiments import phase5g
 from experiments.phase5g import _SpeedAccumulator
 
 
@@ -57,6 +58,17 @@ def frame(time_s, states, departures=None, join_diagnostics=None, **facts):
 
 
 class DynamicComponentDetectorTests(unittest.TestCase):
+    def test_phase5g_summary_uses_multi_component_detector_milestone(self):
+        detection = {"default": {
+            "formed_time_s": 11.0, "held_time_s": 21.0,
+            "successful_component_intervals": [
+                {"members": ["a0", "a1", "a2"], "formed_time_s": 11.0},
+                {"members": ["b0", "b1", "b2"], "formed_time_s": 11.0},
+            ],
+        }}
+
+        self.assertEqual(phase5g._detection_milestone(detection), (11.0, 21.0))
+
     def test_trace_accumulator_forwards_dynamic_facts_to_offline_detector(self):
         initial = formation(2)
         departures = departure_rows(2, None)
@@ -116,6 +128,22 @@ class DynamicComponentDetectorTests(unittest.TestCase):
             "v0": 0.0, "v1": 5.0, "v2": 10.0,
         })
 
+    def test_actor_present_before_actual_departure_fails_explicitly(self):
+        departures = departure_rows(3, None)
+        departures["v0"]["actual_departure_s"] = 0.0
+        early = frame(0.0, {key: formation(3)[key] for key in ("v0", "v1")},
+                      departures)
+        departures["v1"]["actual_departure_s"] = 5.0
+        departures["v2"]["actual_departure_s"] = 5.0
+        complete = frame(5.0, formation(3), departures)
+
+        result = detect_frames([early, complete])
+
+        self.assertIn("actor_present_before_departure", result["failure_reasons"])
+        self.assertEqual(result["predeparture_actor_events"], [
+            {"time_s": 0.0, "actor": "v1"},
+        ])
+
     def test_components_join_at_50_metres_and_split_above_50(self):
         joined = {
             "a": state(100.0, 2), "b": state(50.0, 0), "c": state(0.0, 1),
@@ -151,6 +179,45 @@ class DynamicComponentDetectorTests(unittest.TestCase):
                 self.assertEqual(component["lane_counts"], counts)
                 self.assertNotIn("lane_distribution_invalid", component["failure_reasons"])
 
+    def test_every_final_physical_component_must_meet_deadline_and_hold(self):
+        front = formation(3, origin=300.0, prefix="a")
+        rear = formation(3, origin=100.0, prefix="b")
+        front_departures = departure_rows(3, 0.0, prefix="a")
+        rear_departures = departure_rows(3, None, prefix="b")
+        for row in rear_departures.values():
+            row["scheduled_departure_s"] = 10.0
+        pending = front_departures | rear_departures
+        departed = deepcopy(pending)
+        for row in departed.values():
+            if row["actual_departure_s"] is None:
+                row["actual_departure_s"] = 10.0
+        frames = [frame(time_s, front, pending) for time_s in range(10)]
+        frames.extend(
+            frame(time_s, front | rear, departed) for time_s in range(10, 22)
+        )
+
+        result = detect_frames(frames, max_sample_gap_s=1.0)
+
+        self.assertEqual(result["expected_component_members"], [
+            ["a0", "a1", "a2"], ["b0", "b1", "b2"],
+        ])
+        self.assertTrue(result["all_components_success"])
+        self.assertTrue(result["success"])
+        self.assertEqual(
+            {tuple(row["members"]): row["formed_time_s"]
+             for row in result["successful_component_intervals"]},
+            {("a0", "a1", "a2"): 11.0, ("b0", "b1", "b2"): 11.0},
+        )
+
+        malformed = deepcopy(frames)
+        for recorded in malformed[10:]:
+            recorded["states"]["b2"]["x_m"] -= 3.0
+        failed = detect_frames(malformed, max_sample_gap_s=1.0)
+        self.assertTrue(failed["local_success"])
+        self.assertFalse(failed["all_components_success"])
+        self.assertFalse(failed["success"])
+        self.assertIn("expected_component_milestone_not_met", failed["failure_reasons"])
+
     def test_physical_geometry_and_speed_boundaries_are_inclusive(self):
         rows = formation(6)
         rows["v1"]["x_m"] += 2.0
@@ -170,10 +237,10 @@ class DynamicComponentDetectorTests(unittest.TestCase):
 
     def test_each_geometric_or_speed_excess_has_a_specific_reason(self):
         mutations = {
-            "outer_alignment_error_exceeded": ("v1", "x_m", 2.01),
-            "middle_offset_error_exceeded": ("v2", "x_m", -2.01),
-            "same_lane_gap_error_exceeded": ("v3", "x_m", -2.01),
-            "speed_spread_exceeded": ("v5", "vx_mps", 1.01),
+            "outer_alignment_error_exceeded": ("v1", "x_m", 2.000000005),
+            "middle_offset_error_exceeded": ("v2", "x_m", -2.000000005),
+            "same_lane_gap_error_exceeded": ("v3", "x_m", -2.000000005),
+            "speed_spread_exceeded": ("v5", "vx_mps", 1.000000005),
         }
         for reason, (actor, field, delta) in mutations.items():
             with self.subTest(reason=reason):
@@ -189,7 +256,7 @@ class DynamicComponentDetectorTests(unittest.TestCase):
         departures = departure_rows(3, 100.0)
         frames = [frame(time_s, formation(3), departures)
                   for time_s in range(120, 133)]
-        result = detect_frames(frames, persistence_s=1.0)
+        result = detect_frames(frames, persistence_s=1.0, max_sample_gap_s=1.0)
         self.assertTrue(result["whole_cohort_success"])
         self.assertEqual(result["last_actual_departure_s"], 100.0)
         self.assertEqual(result["formed_time_s"], 121.0)
@@ -197,15 +264,37 @@ class DynamicComponentDetectorTests(unittest.TestCase):
 
         late = [frame(time_s, formation(3), departures)
                 for time_s in range(131, 144)]
-        late_result = detect_frames(late, persistence_s=1.0)
+        late_result = detect_frames(
+            late, persistence_s=1.0, max_sample_gap_s=1.0,
+        )
         self.assertFalse(late_result["whole_cohort_success"])
         self.assertIn("formation_deadline_missed", late_result["failure_reasons"])
 
         broken = [frame(time_s, formation(3), departures)
                   for time_s in range(120, 131) if time_s != 125]
-        broken_result = detect_frames(broken, persistence_s=1.0)
+        broken_result = detect_frames(
+            broken, persistence_s=1.0, max_sample_gap_s=1.0,
+        )
         self.assertFalse(broken_result["whole_cohort_success"])
         self.assertIn("hold_after_confirmation_too_short", broken_result["failure_reasons"])
+
+    def test_sparse_frames_do_not_count_as_continuous_hold(self):
+        departures = departure_rows(3)
+        rounded_clock = detect_frames([
+            frame(0.0, formation(3), departures),
+            frame(0.10000000000000002, formation(3), departures),
+        ])
+        self.assertEqual(rounded_clock["sampling_gap_count"], 0)
+
+        result = detect_frames([
+            frame(0.0, formation(3), departures),
+            frame(11.0, formation(3), departures),
+        ])
+
+        self.assertEqual(result["parameters"]["persistence_s"], 1.0)
+        self.assertEqual(result["parameters"]["max_sample_gap_s"], 0.1)
+        self.assertEqual(result["sampling_gap_count"], 1)
+        self.assertFalse(result["success"])
 
     def test_conflicting_admission_is_scoped_to_one_component(self):
         rows = formation(6)
@@ -266,6 +355,24 @@ class DynamicComponentDetectorTests(unittest.TestCase):
             frame(0.0, outside_rows, departure_rows(3)),
         ], persistence_s=1.0)
         self.assertIn("road_departure_detected", outside["failure_reasons"])
+
+        for boundary_y in (0.0, 9.9):
+            with self.subTest(boundary_y=boundary_y):
+                boundary = formation(3)
+                boundary["v1"]["y_m"] = boundary_y
+                detected = detect_frames([
+                    frame(0.0, boundary, departure_rows(3)),
+                ])
+                self.assertIn("road_departure_detected", detected["failure_reasons"])
+
+        between_lanes = formation(3)
+        between_lanes["v1"]["y_m"] = 3.3
+        unresolved = detect_frames([
+            frame(0.0, between_lanes, departure_rows(3)),
+        ])
+        component = unresolved["component_history"][0]["components"][0]
+        self.assertIn("lane_association_unresolved", component["failure_reasons"])
+        self.assertNotIn("road_departure_detected", unresolved["failure_reasons"])
 
         teleported = detect_frames([
             frame(0.0, formation(3), departure_rows(3), teleport_starts=1),
