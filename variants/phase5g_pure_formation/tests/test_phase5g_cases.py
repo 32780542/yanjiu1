@@ -420,9 +420,8 @@ class Phase5GClockTests(unittest.TestCase):
             **changes,
         )
 
-    def dynamic_clock(self):
+    def dynamic_clock(self, scheduled=(0.0, 2.5, 3.0)):
         case = deepcopy(self.case)
-        scheduled = (0.0, 2.5, 3.0)
         for actor, scheduled_departure_s in zip(case["controlled"], scheduled):
             case["departures"][actor]["scheduled_departure_s"] = scheduled_departure_s
             case["departures"][actor]["actual_departure_s"] = None
@@ -443,6 +442,18 @@ class Phase5GClockTests(unittest.TestCase):
             initial_memories_sha256=digest,
         )
         return case, clock
+
+    def test_dynamic_activation_time_is_never_before_its_quantized_schedule(self):
+        case, clock = self.dynamic_clock((0.0, 7.2, 7.3))
+        actor = case["controlled"][1]
+        record = None
+        for _ in range(73):
+            record = clock.tick()
+        actual = record["departures"][actor]["actual_departure_s"]
+        scheduled = record["departures"][actor]["scheduled_departure_s"]
+        record_time = next(iter(record["initial"].values()))["time_s"]
+        self.assertGreaterEqual(actual, scheduled)
+        self.assertEqual(actual, record_time)
 
     def test_phase5g_clock_activates_due_actors_before_one_common_frozen_frame(self):
         case, clock = self.dynamic_clock()

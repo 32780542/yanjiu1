@@ -213,6 +213,34 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             "initial": {first: deepcopy(case["departures"][first]["state"])},
         }
 
+    def dynamic_trace_rows(self, root):
+        model, physical, policy = self.dynamic_parameters()
+        case = self.exact_dynamic_case(physical)
+        source = Path(root) / "dynamic-validator-source"
+        result = self.harness.run_variant(
+            source, model, physical, policy, case, "lane_priority", live=False,
+        )
+        self.assertEqual(result["status"], "completed", result)
+        rows = [
+            json.loads(line)
+            for line in (source / "trace.jsonl").read_text(
+                encoding="utf-8"
+            ).splitlines()
+        ]
+        return case, rows
+
+    def assert_dynamic_rows_rejected(self, root, case, rows):
+        trace = Path(root) / f"malicious-{uuid.uuid4().hex}.jsonl"
+        trace.write_text(
+            "".join(json.dumps(row, allow_nan=False) + "\n" for row in rows),
+            encoding="utf-8",
+        )
+        records = self.harness._PhysicalTraceRecords(
+            trace, case["controlled"], live=False, expected_sha256=None,
+        )
+        with self.assertRaises(ValueError):
+            list(records)
+
     def call_cli(self, argv):
         with patch.object(sys, "argv", ["run.py", *argv]):
             return self.entry.main()
@@ -371,6 +399,47 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 physical, vehicle_count=3, seed=101,
                 duration_s=45.0, live=True,
             )
+
+    def test_dynamic_record_rejects_pending_actor_declared_active_before_schedule(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            actors = tuple(case["controlled"])
+            malicious = deepcopy(rows[:1])
+            row = malicious[0]
+            row["active_actors"] = list(actors[:2])
+            for field in (
+                "initial", "inputs", "decisions", "actions", "steps", "diagnostics",
+            ):
+                row[field][actors[1]] = deepcopy(row[field][actors[0]])
+            self.assert_dynamic_rows_rejected(temp, case, malicious)
+
+    def test_dynamic_completed_record_rejects_pending_or_unknown_actor_maps(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            actor = case["controlled"][0]
+            pending = case["controlled"][1]
+            for field in ("inputs", "decisions", "actions", "steps", "diagnostics"):
+                for intruder in (pending, "evil"):
+                    with self.subTest(field=field, intruder=intruder):
+                        malicious = deepcopy(rows)
+                        malicious[0][field][intruder] = deepcopy(
+                            malicious[0][field][actor]
+                        )
+                        self.assert_dynamic_rows_rejected(temp, case, malicious)
+
+    def test_dynamic_record_rejects_rewritten_actual_departure(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            actor = case["controlled"][1]
+            activation = next(
+                index for index, row in enumerate(rows)
+                if row["departures"][actor]["actual_departure_s"] is not None
+            )
+            malicious = deepcopy(rows)
+            malicious[activation + 1]["departures"][actor][
+                "actual_departure_s"
+            ] += 0.1
+            self.assert_dynamic_rows_rejected(temp, case, malicious)
 
     def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):
         model, physical, policy = self.simple_parameters()

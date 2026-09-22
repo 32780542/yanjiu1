@@ -89,6 +89,13 @@ SIMPLE_DEMO_INPUT_SCHEMA = "phase5g_simple_demo_cases_v1"
 SIMPLE_DEMO_EXECUTION_SCHEMA = "phase5g_simple_demo_execution_v1"
 SIMPLE_DEMO_INDEX_SCHEMA = "phase5g_simple_demo_index_v1"
 SIMPLE_DEMO_COMPLETION_SCHEMA = "phase5g_simple_demo_completion_anchor_v1"
+_TRACE_DEPARTURE_FIELDS = frozenset((
+    "scheduled_departure_s", "actual_departure_s", "state", "physical_ordinal",
+))
+_TRACE_STATE_FIELDS = frozenset(field.name for field in fields(VehicleState))
+_TRACE_ACTOR_MAP_FIELDS = (
+    "inputs", "decisions", "actions", "steps", "diagnostics",
+)
 
 
 def atomic_json(path: str | Path, data: object) -> None:
@@ -763,12 +770,42 @@ class _PhysicalTraceRecords:
 
     def __iter__(self):
         previous = frozenset()
+        previous_departures = None
+        previous_time = None
         for record in _iter_jsonl_records(
                 self.trace_path, expected_sha256=self.expected_sha256,
                 skip_blank=True):
-            active = _record_active_keys(record, self.keys)
+            active, time_s, departures = _dynamic_record_details(record, self.keys)
             if not previous.issubset(active):
                 raise ValueError("trace active actor set is not monotonic")
+            if departures is not None:
+                if previous_time is not None and time_s <= previous_time:
+                    raise ValueError("dynamic trace times must increase")
+                if previous_departures is None:
+                    for key in active:
+                        if departures[key]["actual"] != time_s:
+                            raise ValueError(
+                                "first recorded actual departure must equal record time"
+                            )
+                else:
+                    for key in self.keys:
+                        before = previous_departures[key]
+                        after = departures[key]
+                        if before["static"] != after["static"]:
+                            raise ValueError(
+                                "dynamic departure schedule/template/ordinal changed"
+                            )
+                        old_actual = before["actual"]
+                        new_actual = after["actual"]
+                        if old_actual is not None and new_actual != old_actual:
+                            raise ValueError("actual departure changed after activation")
+                        if old_actual is None and new_actual is not None \
+                                and new_actual != time_s:
+                            raise ValueError(
+                                "new actual departure must equal its first record time"
+                            )
+                previous_departures = departures
+                previous_time = time_s
             previous = active
             if _record_is_physical(record, self.keys, live=self.live):
                 yield record
@@ -797,23 +834,98 @@ def _readback_facts(record: Mapping[str, object], keys: Sequence[str], *,
     }
 
 
-def _record_active_keys(record: Mapping[str, object], keys: Sequence[str]) -> frozenset[str]:
-    final = frozenset(keys)
+def _dynamic_record_details(record: Mapping[str, object], keys: Sequence[str]):
+    final_order = tuple(keys)
+    final = frozenset(final_order)
     declared = record.get("active_actors")
-    if declared is None:
-        return final
+    departures = record.get("departures")
+    if declared is None and departures is None:
+        return final, None, None
+    if declared is None or departures is None:
+        raise ValueError("dynamic trace requires both active_actors and departures")
     if (not isinstance(declared, (list, tuple))
-            or len(declared) != len(set(declared))
-            or any(type(key) is not str for key in declared)):
+            or any(type(key) is not str for key in declared)
+            or len(declared) != len(set(declared))):
         raise ValueError("trace active_actors must be a unique actor sequence")
     active = frozenset(declared)
     if not active or not active.issubset(final):
         raise ValueError("trace active_actors must be a nonempty controlled subset")
-    departures = record.get("departures")
     if not isinstance(departures, dict) or set(departures) != final:
         raise ValueError("trace departures must cover the final controlled cohort")
-    if set(record.get("initial", {})) != active:
+    initial = record.get("initial")
+    if not isinstance(initial, dict) or set(initial) != active:
         raise ValueError("trace initial actors differ from active_actors")
+    times = []
+    for key, state in initial.items():
+        if not isinstance(state, dict) or set(state) != _TRACE_STATE_FIELDS:
+            raise ValueError(f"trace initial.{key}: VehicleState fields differ")
+        if any(type(value) not in (int, float) or not math.isfinite(value)
+               for value in state.values()):
+            raise ValueError(f"trace initial.{key}: state must be finite")
+        times.append(state["time_s"])
+    time_s = times[0]
+    if any(value != time_s for value in times[1:]):
+        raise ValueError("dynamic trace initial states do not share one time")
+
+    facts = {}
+    ordinals = []
+    departed = set()
+    for key in final_order:
+        row = departures[key]
+        if not isinstance(row, dict) or set(row) != _TRACE_DEPARTURE_FIELDS:
+            raise ValueError(f"trace departures.{key}: fields differ")
+        scheduled = row["scheduled_departure_s"]
+        actual = row["actual_departure_s"]
+        ordinal = row["physical_ordinal"]
+        template = row["state"]
+        if (type(scheduled) not in (int, float) or not math.isfinite(scheduled)
+                or scheduled < 0):
+            raise ValueError(f"trace departures.{key}: invalid scheduled time")
+        if actual is not None and (
+                type(actual) not in (int, float) or not math.isfinite(actual)
+                or actual < scheduled or actual > time_s):
+            raise ValueError(f"trace departures.{key}: invalid actual time")
+        if type(ordinal) is not int or ordinal < 0:
+            raise ValueError(f"trace departures.{key}: invalid physical ordinal")
+        if not isinstance(template, dict) or set(template) != _TRACE_STATE_FIELDS \
+                or any(type(value) not in (int, float) or not math.isfinite(value)
+                       for value in template.values()):
+            raise ValueError(f"trace departures.{key}: invalid state template")
+        if actual is None:
+            if scheduled <= time_s:
+                raise ValueError(f"trace departures.{key}: due actor is still pending")
+        else:
+            departed.add(key)
+        ordinals.append(ordinal)
+        facts[key] = {
+            "static": (scheduled, ordinal, template),
+            "actual": actual,
+        }
+    if sorted(ordinals) != list(range(len(final_order))):
+        raise ValueError("trace physical ordinals must be unique and contiguous")
+    if active != departed:
+        raise ValueError("trace active_actors differ from actual departures")
+    expected_order = tuple(sorted(active, key=lambda key: departures[key]["physical_ordinal"]))
+    if tuple(declared) != expected_order:
+        raise ValueError("trace active_actors are not in physical ordinal order")
+
+    status = record.get("status")
+    if status not in ("completed", "failed"):
+        raise ValueError("trace status must be completed or failed")
+    for name in _TRACE_ACTOR_MAP_FIELDS:
+        actor_map = record.get(name, {})
+        if not isinstance(actor_map, dict):
+            raise ValueError(f"trace {name} must be an actor mapping")
+        actor_keys = set(actor_map)
+        if not actor_keys.issubset(active):
+            raise ValueError(f"trace {name} contains an inactive actor")
+        if status == "completed" and actor_keys != active:
+            raise ValueError(f"completed trace {name} differs from active_actors")
+    return active, time_s, facts
+
+
+def _record_active_keys(record: Mapping[str, object], keys: Sequence[str]) -> frozenset[str]:
+    active, _, _ = _dynamic_record_details(record, keys)
     return active
 
 

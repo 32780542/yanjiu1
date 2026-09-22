@@ -333,7 +333,15 @@ class Phase5GClock(FormationClock):
     def _activate_due(self):
         if not self._dynamic_departures:
             return
-        now = self._current_time()
+        raw_time = self._current_time()
+        now = round(round(raw_time / self.dt) * self.dt, 12)
+        if not math.isclose(raw_time, now, abs_tol=1e-9, rel_tol=0.0):
+            raise RuntimeError("dynamic Phase 5G state time is outside the control clock")
+        if raw_time != now:
+            self.states = MappingProxyType({
+                key: replace(state, time_s=now)
+                for key, state in self.states.items()
+            })
         due = sorted(
             (
                 key for key, row in self._departures.items()
