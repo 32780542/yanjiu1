@@ -6,6 +6,7 @@ provide identity, priority, communication, global counts, or slot assignment.
 Lane-change safety remains the responsibility of the unchanged NOA controller.
 """
 from dataclasses import dataclass, fields
+from collections.abc import Mapping
 import math
 
 from noa.contracts import NoaMemory, memory_from_dict as noa_memory_from_dict
@@ -59,14 +60,62 @@ class JoinDecision:
     local_counts: tuple[int, int, int]
 
 
+def _finite_number(value):
+    try:
+        return type(value) in (int, float) and math.isfinite(value)
+    except OverflowError:
+        return False
+
+
+def _lane_centers(lane_centers_m):
+    try:
+        centers = tuple(lane_centers_m)
+    except TypeError as exc:
+        raise ValueError("Invalid visible three-lane geometry") from exc
+    if (len(centers) != 3
+            or any(not _finite_number(center) for center in centers)
+            or any(right <= left for left, right in zip(centers, centers[1:]))):
+        raise ValueError("Invalid visible three-lane geometry")
+    return centers
+
+
+def _vehicle_rows(vehicles):
+    try:
+        rows = tuple(vehicles)
+    except TypeError as exc:
+        raise ValueError("Invalid local vehicle rows") from exc
+    for row in rows:
+        _validate_vehicle(row)
+    return rows
+
+
+def _validate_vehicle(row, *, ego=False):
+    if (type(row) is not LocalVehicle
+            or type(row.track_id) is not int or row.track_id < 0
+            or any(not _finite_number(value) for value in (row.x_m, row.y_m, row.vx_mps))
+            or (row.lane_index is None and ego)
+            or (row.lane_index is not None
+                and (type(row.lane_index) is not int or row.lane_index not in (0, 1, 2)))):
+        raise ValueError("Invalid local ego vehicle" if ego else "Invalid local vehicle row")
+
+
+def _physical_inputs(ego, vehicles, lane_centers_m, p):
+    centers = _lane_centers(lane_centers_m)
+    validate_parameters(p)
+    _validate_vehicle(ego, ego=True)
+    return _vehicle_rows(vehicles), centers
+
+
 def connected_tail_neighborhood(ego, vehicles, lane_centers_m, p):
     """Return lane-resolved rows in ego's x-connected visible component."""
-    lane_count = len(tuple(lane_centers_m))
-    rows = sorted(
-        (row for row in vehicles if row.lane_index is not None
-         and 0 <= row.lane_index < lane_count),
-        key=lambda row: row.x_m,
-    )
+    rows, centers = _physical_inputs(ego, vehicles, lane_centers_m, p)
+    return _connected_tail_neighborhood(ego, rows, centers, p)
+
+
+def _connected_tail_neighborhood(ego, vehicles, lane_centers_m, p):
+    lane_count = len(lane_centers_m)
+    rows = (row for row in vehicles if row.lane_index is not None
+            and 0 <= row.lane_index < lane_count)
     nodes = sorted((*rows, ego), key=lambda row: row.x_m)
     ego_at = next(i for i, row in enumerate(nodes) if row is ego)
     first = last = ego_at
@@ -80,7 +129,13 @@ def connected_tail_neighborhood(ego, vehicles, lane_centers_m, p):
 
 def lane_counts(vehicles, lane_centers_m):
     """Count only resolved physical lanes, indexed lower=0 to upper=2."""
-    counts = [0] * len(tuple(lane_centers_m))
+    centers = _lane_centers(lane_centers_m)
+    rows = _vehicle_rows(vehicles)
+    return _lane_counts(rows, centers)
+
+
+def _lane_counts(vehicles, lane_centers_m):
+    counts = [0] * len(lane_centers_m)
     for row in vehicles:
         if row.lane_index is not None and 0 <= row.lane_index < len(counts):
             counts[row.lane_index] += 1
@@ -111,7 +166,10 @@ def _follows_tail(front, rear, p):
 
 def _stable_tail_prefix(rows, p):
     """Take the frontmost geometrically coherent sequence; later rows are waiters."""
-    ordered = _ordered_tail(rows, p)
+    return _coherent_prefix(_ordered_tail(rows, p), p)
+
+
+def _coherent_prefix(ordered, p):
     if not ordered:
         return ()
     last = 1
@@ -122,10 +180,15 @@ def _stable_tail_prefix(rows, p):
 
 def infer_tail_join(ego, vehicles, lane_centers_m, p):
     """Infer the next cycle slot, falling back to local resolved-lane counts."""
+    rows, centers = _physical_inputs(ego, vehicles, lane_centers_m, p)
+    return _infer_tail_join(ego, rows, centers, p)
+
+
+def _infer_tail_join(ego, vehicles, lane_centers_m, p, ordered_rows=None):
     rows = tuple(row for row in vehicles if row.lane_index in (0, 1, 2))
-    counts = lane_counts(rows, lane_centers_m)
-    ordered = _ordered_tail(rows, p)
-    coherent = len(_stable_tail_prefix(rows, p)) == len(rows)
+    counts = _lane_counts(rows, lane_centers_m)
+    ordered = _ordered_tail(rows, p) if ordered_rows is None else ordered_rows
+    coherent = len(_coherent_prefix(ordered, p)) == len(rows)
     offset = p["simple_formation_middle_offset_m"]
     if coherent and ordered:
         rear = ordered[-1]
@@ -157,11 +220,19 @@ def infer_tail_join(ego, vehicles, lane_centers_m, p):
 
 def is_next_waiting_vehicle(ego, vehicles, lane_centers_m, p):
     """Admit the nearest rear waiter, with physical upper-lane tie priority."""
+    rows, centers = _physical_inputs(ego, vehicles, lane_centers_m, p)
+    return _is_next_waiting_vehicle(ego, rows, centers, p)
+
+
+def _is_next_waiting_vehicle(ego, vehicles, lane_centers_m, p, stable_tail=None):
     rows = tuple(row for row in vehicles if row is not ego)
     tolerance = p["simple_formation_position_tolerance_m"]
-    resolved = tuple(row for row in rows if row.lane_index in (0, 1, 2)
-                     and row.x_m > ego.x_m + tolerance)
-    stable = _stable_tail_prefix(resolved, p)
+    if stable_tail is None:
+        resolved = tuple(row for row in rows if row.lane_index in (0, 1, 2)
+                         and row.x_m > ego.x_m + tolerance)
+        stable = _stable_tail_prefix(resolved, p)
+    else:
+        stable = stable_tail
     if not stable:
         peers = tuple(row for row in rows if abs(row.x_m - ego.x_m) <= tolerance)
         return ego.lane_index in (0, 1, 2) and all(
@@ -186,7 +257,8 @@ def is_next_waiting_vehicle(ego, vehicles, lane_centers_m, p):
 
 def choose_join(ego, vehicles, lane_centers_m, p):
     """Choose from ego's connected, geometrically formed local tail only."""
-    local = connected_tail_neighborhood(ego, vehicles, lane_centers_m, p)
+    rows, centers = _physical_inputs(ego, vehicles, lane_centers_m, p)
+    local = _connected_tail_neighborhood(ego, rows, centers, p)
     tolerance = p["simple_formation_position_tolerance_m"]
     ahead = tuple(row for row in local if row.x_m > ego.x_m + tolerance)
     by_lane = sorted(ahead, key=lambda row: (row.lane_index, row.x_m))
@@ -194,8 +266,9 @@ def choose_join(ego, vehicles, lane_centers_m, p):
            and right.x_m - left.x_m <= tolerance
            for left, right in zip(by_lane, by_lane[1:])):
         return JoinDecision(None, None, None, "wait_ambiguous_tail",
-                            lane_counts(ahead, lane_centers_m))
-    stable = _stable_tail_prefix(ahead, p)
+                            _lane_counts(ahead, centers))
+    ordered_ahead = _ordered_tail(ahead, p)
+    stable = _coherent_prefix(ordered_ahead, p)
     # A discarded row in the terminal layer is anomalous tail geometry, not a
     # waiter. Preserve it for count recovery and anchor ambiguity detection.
     overlaps_tail = stable and any(
@@ -203,19 +276,22 @@ def choose_join(ego, vehicles, lane_centers_m, p):
         and row.x_m >= stable[-1].x_m - tolerance
         for row in ahead
     )
-    inferred = infer_tail_join(
-        ego, ahead if overlaps_tail else stable, lane_centers_m, p
-    )
+    inferred_rows = ordered_ahead if overlaps_tail else stable
+    inferred = _infer_tail_join(ego, inferred_rows, centers, p,
+                                ordered_rows=inferred_rows)
     local_max_x = max((ego.x_m + tolerance, *(row.x_m for row in local)))
-    unresolved = tuple(row for row in vehicles if row.lane_index is None
+    unresolved = tuple(row for row in rows if row.lane_index is None
                        and ego.x_m - tolerance <= row.x_m <= local_max_x)
-    if not is_next_waiting_vehicle(ego, local + unresolved, lane_centers_m, p):
+    if not _is_next_waiting_vehicle(ego, local + unresolved, centers, p,
+                                    stable_tail=stable):
         return JoinDecision(None, None, None, "wait_not_next", inferred.local_counts)
     return inferred
 
 
 def validate_parameters(p):
     """Require the complete positive finite local-tail parameter contract."""
+    if not isinstance(p, Mapping):
+        raise ValueError("Invalid simple-formation parameter mapping")
     for key in PARAMETERS:
         value = p.get(key)
         try:

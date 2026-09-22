@@ -438,6 +438,60 @@ class SimpleFormationRuleTests(unittest.TestCase):
         self.assertIsNone(decision.target_lane_index)
         self.assertEqual(decision.reason, "wait_not_next")
 
+    def test_join_freezes_vehicle_and_lane_center_iterators_once(self):
+        ego = self.vehicle(99, 20.0, 2)
+        rows = (self.vehicle(1, 45.0, 1), self.vehicle(2, 19.0, None))
+        expected = choose_join(ego, rows, self.centers, self.p)
+        actual = choose_join(ego, iter(rows), iter(self.centers), self.p)
+        self.assertEqual(actual, expected)
+        self.assertEqual(actual.reason, "wait_not_next")
+        empty = choose_join(self.vehicle(99, 0.0, 1), iter(()), iter(self.centers), self.p)
+        self.assertEqual(empty.local_counts, (0, 0, 0))
+
+    def test_public_local_rules_reject_invalid_three_lane_geometry(self):
+        ego = self.vehicle(99, 0.0, 1)
+        for centers in ((1.0, 2.0), (1.0, 2.0, 3.0, 4.0),
+                        (1.0, 1.0, 3.0), (1.0, 3.0, 2.0),
+                        (1.0, math.nan, 3.0), (1.0, math.inf, 3.0)):
+            with self.subTest(centers=centers), self.assertRaisesRegex(ValueError, "lane geometry"):
+                choose_join(ego, (), centers, self.p)
+
+    def test_public_local_rules_reject_nonfinite_or_unresolved_ego_and_rows(self):
+        good_ego = self.vehicle(99, 0.0, 1)
+        bad_egos = (self.vehicle(99, math.nan, 1), self.vehicle(99, math.inf, 1),
+                    self.vehicle(99, 0.0, None), self.vehicle(99, 0.0, 3))
+        for ego in bad_egos:
+            with self.subTest(ego=ego), self.assertRaises(ValueError):
+                choose_join(ego, (), self.centers, self.p)
+        bad_rows = (self.vehicle(1, math.nan, 1), self.vehicle(1, math.inf, 1),
+                    self.vehicle(1, 30.0, 3), self.vehicle(1, 30.0, 1, speed=math.nan),
+                    self.vehicle(1, 30.0, 1, y=math.inf))
+        for row in bad_rows:
+            with self.subTest(row=row), self.assertRaises(ValueError):
+                choose_join(good_ego, (row,), self.centers, self.p)
+
+    def test_public_local_rules_require_validated_parameter_contract(self):
+        ego = self.vehicle(99, 0.0, 1)
+        invalid = {**self.p, "simple_formation_position_tolerance_m": math.nan}
+        with self.assertRaisesRegex(ValueError, "simple-formation parameter"):
+            choose_join(ego, (), self.centers, invalid)
+        with self.assertRaisesRegex(ValueError, "simple-formation parameter"):
+            choose_join(ego, (), self.centers, None)
+
+    def test_each_public_local_helper_validates_its_physical_inputs(self):
+        ego = self.vehicle(99, 0.0, 1)
+        bad_row = self.vehicle(1, math.nan, 2)
+        for call in (
+            lambda: connected_tail_neighborhood(ego, (), (1.0, 2.0), self.p),
+            lambda: lane_counts((), (1.0, 2.0)),
+            lambda: infer_tail_join(ego, (), (1.0, 2.0), self.p),
+            lambda: is_next_waiting_vehicle(ego, (), (1.0, 2.0), self.p),
+            lambda: lane_counts((bad_row,), self.centers),
+            lambda: infer_tail_join(ego, (bad_row,), self.centers, self.p),
+        ):
+            with self.subTest(call=call), self.assertRaises(ValueError):
+                call()
+
     def test_join_decision_is_frozen_and_slotted(self):
         decision = JoinDecision(None, None, None, "wait", (0, 0, 0))
         with self.assertRaises(FrozenInstanceError):
