@@ -1,9 +1,12 @@
 from copy import deepcopy
+import math
 import unittest
 
 from experiments.phase5_detection import detect_frames
 from experiments import phase5g
 from experiments.phase5g import _SpeedAccumulator
+from models.geometry import BodyPose
+from safety.geometry import collide
 
 
 LANE_Y = (1.65, 4.95, 8.25)
@@ -58,6 +61,110 @@ def frame(time_s, states, departures=None, join_diagnostics=None, **facts):
 
 
 class DynamicComponentDetectorTests(unittest.TestCase):
+    def test_rotated_sat_collision_is_reported(self):
+        upper = state(100.0, 1)
+        lower = state(100.0, 1)
+        upper.update(y_m=6.45, heading_rad=math.pi / 2)
+        lower.update(y_m=3.45, heading_rad=math.pi / 2)
+        self.assertTrue(collide(
+            BodyPose(upper["x_m"], upper["y_m"], upper["heading_rad"], 4.0, 1.8),
+            BodyPose(lower["x_m"], lower["y_m"], lower["heading_rad"], 4.0, 1.8),
+        ))
+
+        result = detect_frames([frame(
+            0.0, {"upper": upper, "lower": lower},
+            {
+                "upper": {"scheduled_departure_s": 0.0, "actual_departure_s": 0.0},
+                "lower": {"scheduled_departure_s": 0.0, "actual_departure_s": 0.0},
+            },
+        )])
+
+        self.assertIn("collision_detected", result["failure_reasons"])
+
+    def test_declared_cohort_rejects_even_a_transient_unexpected_actor(self):
+        departures = departure_rows(3)
+        frames = [
+            frame(time_s, {
+                **formation(3),
+                **({"intruder": state(-100.0, 1)} if time_s == 5 else {}),
+            }, departures)
+            for time_s in range(12)
+        ]
+
+        result = detect_frames(frames, max_sample_gap_s=1.0)
+
+        self.assertFalse(result["success"])
+        self.assertIn("unexpected_actor_present", result["failure_reasons"])
+        self.assertEqual(result["unexpected_actor_events"], [
+            {"time_s": 5.0, "actor": "intruder"},
+        ])
+
+    def test_failed_result_preserves_final_component_and_interval_reasons(self):
+        departures = departure_rows(3)
+        malformed = formation(3)
+        malformed["v2"]["x_m"] -= 3.0
+        final_failure = detect_frames([
+            frame(0.0, malformed, departures),
+            frame(1.0, malformed, departures),
+        ], max_sample_gap_s=1.0)
+        self.assertFalse(final_failure["success"])
+        self.assertIn(
+            "middle_offset_error_exceeded", final_failure["failure_reasons"],
+        )
+
+        short = detect_frames([
+            frame(0.0, formation(3), departures),
+            frame(1.0, malformed, departures),
+        ], max_sample_gap_s=1.0)
+        self.assertIn("persistence_too_short", short["failure_reasons"])
+
+        recovered_frames = []
+        for time_s in range(15):
+            states = malformed if time_s == 2 else formation(3)
+            recovered_frames.append(frame(time_s, states, departures))
+        recovered = detect_frames(recovered_frames, max_sample_gap_s=1.0)
+        self.assertTrue(recovered["success"])
+        self.assertNotIn(
+            "middle_offset_error_exceeded", recovered["failure_reasons"],
+        )
+
+    def test_incidents_are_strictly_validated_and_physically_deduplicated(self):
+        with self.assertRaisesRegex(ValueError, "incidents must be a mapping"):
+            detect_frames([], incidents=[])
+        with self.assertRaisesRegex(ValueError, "collision_events.*collection"):
+            detect_frames([], incidents={"collision_events": {}})
+        with self.assertRaisesRegex(ValueError, "collision_events.*row"):
+            detect_frames([], incidents={
+                "collision_events": [{"time_s": "bad"}],
+            })
+
+        collided = formation(3)
+        collided["v1"] = deepcopy(collided["v0"])
+        result = detect_frames([
+            frame(0.0, collided, departure_rows(3)),
+        ], incidents={"collision_events": [(0.0, "v0", "v1")]})
+        self.assertEqual(result["collision_events"], [
+            {"time_s": 0.0, "actors": ["v0", "v1"]},
+        ])
+
+    def test_declared_departure_schema_is_locked_and_future_actual_is_explicit(self):
+        with self.assertRaisesRegex(ValueError, "departure cohort.*empty"):
+            detect_frames([
+                frame(0.0, {}, {}),
+                frame(1.0, formation(3), departure_rows(3)),
+            ])
+
+        future = detect_frames([frame(0.0, {}, {
+            "v0": {"scheduled_departure_s": 0.0, "actual_departure_s": 100.0},
+        })])
+        self.assertFalse(future["success"])
+        self.assertIn(
+            "actual_departure_after_recording", future["failure_reasons"],
+        )
+        self.assertEqual(future["after_recording_departure_events"], [
+            {"actor": "v0", "actual_departure_s": 100.0, "recording_end_s": 0.0},
+        ])
+
     def test_phase5g_summary_uses_multi_component_detector_milestone(self):
         detection = {"default": {
             "formed_time_s": 11.0, "held_time_s": 21.0,

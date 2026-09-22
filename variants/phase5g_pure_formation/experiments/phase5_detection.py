@@ -9,12 +9,19 @@ from itertools import combinations
 import math
 from typing import Mapping
 
+from models.geometry import BodyPose
+from safety.geometry import collide
+
 
 _EPS = 1e-8
 _TIME_EPS = 1e-12
 _LANE_COUNT = 3
 _BODY_LENGTH_M = 4.0
 _BODY_WIDTH_M = 1.8
+_INCIDENT_NAMES = (
+    "collision_events", "road_departure_events", "teleport_events",
+    "nonphysical_jump_events",
+)
 
 
 def _finite(name, value, *, nonnegative=False):
@@ -62,9 +69,13 @@ def _physical_rows(states, lane_width_m):
             "key": key,
             "x_m": x_m,
             "y_m": y_m,
+            "heading_rad": heading_rad,
             "lane": lane,
             "on_road": on_road,
             "speed_mps": math.hypot(vx_mps, vy_mps),
+            "body": BodyPose(
+                x_m, y_m, heading_rad, _BODY_LENGTH_M, _BODY_WIDTH_M,
+            ),
         }
     return rows
 
@@ -87,6 +98,97 @@ def _expected_lane_counts(count):
 
 def _maximum(values):
     return max(values, default=0.0)
+
+
+def _incident_time(name, value):
+    if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+        raise ValueError(f"{name} incident row has invalid time_s")
+    return float(value)
+
+
+def _incident_actor(name, value):
+    if type(value) is not str or not value:
+        raise ValueError(f"{name} incident row has invalid actor")
+    return value
+
+
+def _normalize_incident(name, row):
+    if name == "collision_events":
+        if isinstance(row, Mapping) and set(row) == {"time_s", "actors"}:
+            time_s, actors = row["time_s"], row["actors"]
+        elif type(row) in (list, tuple) and len(row) == 3:
+            time_s, *actors = row
+        else:
+            raise ValueError(f"{name} incident row must identify time and two actors")
+        if type(actors) not in (list, tuple) or len(actors) != 2:
+            raise ValueError(f"{name} incident row must identify two actors")
+        actors = sorted(_incident_actor(name, actor) for actor in actors)
+        if actors[0] == actors[1]:
+            raise ValueError(f"{name} incident row actors must be distinct")
+        return {"time_s": _incident_time(name, time_s), "actors": actors}
+    if name == "road_departure_events":
+        if isinstance(row, Mapping) and set(row) == {"time_s", "actor"}:
+            time_s, actor = row["time_s"], row["actor"]
+        elif type(row) in (list, tuple) and len(row) == 2:
+            time_s, actor = row
+        else:
+            raise ValueError(f"{name} incident row must identify time and actor")
+        return {
+            "time_s": _incident_time(name, time_s),
+            "actor": _incident_actor(name, actor),
+        }
+    if name == "teleport_events":
+        if not isinstance(row, Mapping) or set(row) != {"time_s", "count"}:
+            raise ValueError(f"{name} incident row must identify time and count")
+        count = row["count"]
+        if type(count) is not int or count <= 0:
+            raise ValueError(f"{name} incident row has invalid count")
+        return {"time_s": _incident_time(name, row["time_s"]), "count": count}
+    if name == "nonphysical_jump_events":
+        required = {"time_s", "actor", "distance_m", "plausible_m"}
+        if not isinstance(row, Mapping) or set(row) != required:
+            raise ValueError(
+                f"{name} incident row must identify time, actor, and distances"
+            )
+        distance = _finite("distance_m", row["distance_m"], nonnegative=True)
+        plausible = _finite("plausible_m", row["plausible_m"], nonnegative=True)
+        return {
+            "time_s": _incident_time(name, row["time_s"]),
+            "actor": _incident_actor(name, row["actor"]),
+            "distance_m": distance, "plausible_m": plausible,
+        }
+    raise ValueError(f"unknown incident collection: {name}")
+
+
+def _incident_key(name, row):
+    if name == "collision_events":
+        return row["time_s"], tuple(row["actors"])
+    if name in ("road_departure_events", "nonphysical_jump_events"):
+        return row["time_s"], row["actor"]
+    return row["time_s"], row["count"]
+
+
+def _incident_collection(incidents, name):
+    raw = incidents.get(name, ())
+    if type(raw) not in (list, tuple):
+        raise ValueError(f"{name} incident collection must be a list or tuple")
+    events = []
+    keys = set()
+    for row in raw:
+        normalized = _normalize_incident(name, row)
+        key = _incident_key(name, normalized)
+        if key not in keys:
+            keys.add(key)
+            events.append(normalized)
+    return events, keys
+
+
+def _append_incident(events, keys, name, row):
+    normalized = _normalize_incident(name, row)
+    key = _incident_key(name, normalized)
+    if key not in keys:
+        keys.add(key)
+        events.append(normalized)
 
 
 def _component_measurement(rows, *, middle_offset_m, same_lane_gap_m,
@@ -168,14 +270,19 @@ def _departure_facts(frames):
     schedules = {}
     actuals = {}
     declared = False
+    declared_cohort = None
     for frame in frames:
         raw = frame.get("departures")
         if raw is None:
             continue
-        declared = True
         if not isinstance(raw, Mapping):
             raise ValueError("frame departures must be an actor mapping")
-        if schedules and set(raw) != set(schedules):
+        if not raw:
+            raise ValueError("declared departure cohort must not be empty")
+        declared = True
+        if declared_cohort is None:
+            declared_cohort = set(raw)
+        elif set(raw) != declared_cohort:
             raise ValueError("departure cohort changed during recording")
         for key, row in raw.items():
             if type(key) is not str or not isinstance(row, Mapping):
@@ -207,15 +314,15 @@ def _departure_facts(frames):
         actuals = dict(first_seen)
     else:
         actuals = {key: actuals.get(key) for key in schedules}
-    return schedules, actuals
+    return schedules, actuals, declared
 
 
-def _has_collision(rows):
-    return any(
-        abs(left["x_m"] - right["x_m"]) < _BODY_LENGTH_M - _EPS
-        and abs(left["y_m"] - right["y_m"]) < _BODY_WIDTH_M - _EPS
+def _collision_pairs(rows):
+    return [
+        tuple(sorted((left["key"], right["key"])))
         for left, right in combinations(rows.values(), 2)
-    )
+        if collide(left["body"], right["body"])
+    ]
 
 
 def _join_phase(detail):
@@ -265,23 +372,47 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         times.append(float(time_s))
     if any(right <= left for left, right in zip(times, times[1:])):
         raise ValueError("Frame times must be strictly increasing")
-    schedules, actuals = _departure_facts(frames)
+    schedules, actuals, departures_declared = _departure_facts(frames)
     cohort = sorted(schedules)
     last_actual = (max(actuals.values())
                    if actuals and all(value is not None for value in actuals.values())
                    else None)
-    incident_rows = incidents or {}
+    recording_end = times[-1] if times else None
+    after_recording_departures = [
+        {
+            "actor": key, "actual_departure_s": actual,
+            "recording_end_s": recording_end,
+        }
+        for key, actual in sorted(actuals.items())
+        if actual is not None and recording_end is not None
+        and actual > recording_end + _TIME_EPS
+    ]
+    incident_rows = {} if incidents is None else incidents
     if not isinstance(incident_rows, Mapping):
         raise ValueError("incidents must be a mapping")
+    unknown_incidents = set(incident_rows) - set(_INCIDENT_NAMES)
+    if unknown_incidents:
+        raise ValueError(
+            f"unknown incident collection: {next(iter(unknown_incidents))!r}"
+        )
 
     component_history = []
     admission_conflicts = []
     missing_events = []
     predeparture_events = []
-    collision_events = list(incident_rows.get("collision_events", ()))
-    road_events = list(incident_rows.get("road_departure_events", ()))
-    teleport_events = list(incident_rows.get("teleport_events", ()))
-    jump_events = list(incident_rows.get("nonphysical_jump_events", ()))
+    unexpected_actor_events = []
+    collision_events, collision_keys = _incident_collection(
+        incident_rows, "collision_events",
+    )
+    road_events, road_keys = _incident_collection(
+        incident_rows, "road_departure_events",
+    )
+    teleport_events, teleport_keys = _incident_collection(
+        incident_rows, "teleport_events",
+    )
+    jump_events, jump_keys = _incident_collection(
+        incident_rows, "nonphysical_jump_events",
+    )
     active = {}
     candidates = []
     previous_rows = {}
@@ -296,6 +427,9 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         }
         for key in sorted(expected - set(rows)):
             missing_events.append({"time_s": time_s, "actor": key})
+        if departures_declared:
+            for key in sorted(set(rows) - set(cohort)):
+                unexpected_actor_events.append({"time_s": time_s, "actor": key})
         for row in rows.values():
             actual = actuals.get(row["key"])
             if row["key"] in schedules \
@@ -304,11 +438,20 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
                     "time_s": time_s, "actor": row["key"],
                 })
             if not row["on_road"]:
-                road_events.append({"time_s": time_s, "actor": row["key"]})
-        if _has_collision(rows):
-            collision_events.append({"time_s": time_s})
+                _append_incident(
+                    road_events, road_keys, "road_departure_events",
+                    {"time_s": time_s, "actor": row["key"]},
+                )
+        for left, right in _collision_pairs(rows):
+            _append_incident(
+                collision_events, collision_keys, "collision_events",
+                {"time_s": time_s, "actors": [left, right]},
+            )
         if frame.get("teleport_starts", 0):
-            teleport_events.append({"time_s": time_s, "count": frame["teleport_starts"]})
+            _append_incident(
+                teleport_events, teleport_keys, "teleport_events",
+                {"time_s": time_s, "count": frame["teleport_starts"]},
+            )
         if previous_time is not None:
             elapsed = time_s - previous_time
             if elapsed > max_sample_gap_s + _TIME_EPS:
@@ -322,10 +465,13 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
                 plausible = (max(before["speed_mps"], after["speed_mps"]) * elapsed
                              + 5.0 * elapsed * elapsed + 2.0)
                 if distance > plausible + _EPS:
-                    jump_events.append({
-                        "time_s": time_s, "actor": key,
-                        "distance_m": distance, "plausible_m": plausible,
-                    })
+                    _append_incident(
+                        jump_events, jump_keys, "nonphysical_jump_events",
+                        {
+                            "time_s": time_s, "actor": key,
+                            "distance_m": distance, "plausible_m": plausible,
+                        },
+                    )
 
         measurements = [
             _component_measurement(
@@ -484,8 +630,12 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         reasons.append("empty_recording")
     if schedules and any(value is None for value in actuals.values()):
         reasons.append("partial_departure_cohort")
+    if after_recording_departures:
+        reasons.append("actual_departure_after_recording")
     if predeparture_events:
         reasons.append("actor_present_before_departure")
+    if unexpected_actor_events:
+        reasons.append("unexpected_actor_present")
     if missing_events:
         reasons.append("member_missing")
     if collision_events:
@@ -520,7 +670,9 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
     if frames and expected_component_count == 1 and not selected_milestone_success:
         reasons.append("whole_cohort_milestone_not_met")
     hazards = {
-        "partial_departure_cohort", "actor_present_before_departure",
+        "partial_departure_cohort", "actual_departure_after_recording",
+        "actor_present_before_departure",
+        "unexpected_actor_present",
         "member_missing", "collision_detected", "road_departure_detected",
         "teleport_detected",
         "nonphysical_jump_detected", "simultaneous_admission_conflict",
@@ -529,6 +681,13 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         last_actual is not None and selected_milestone_success
         and not hazards.intersection(reasons)
     )
+    if not success and component_history:
+        for component in component_history[-1]["components"]:
+            reasons.extend(component["failure_reasons"])
+        for item in candidates:
+            if frozenset(item["members"]) in expected_component_sets \
+                    and not item["success"]:
+                reasons.extend(item["failure_reasons"])
     maxima_source = [
         component
         for row in component_history
@@ -560,6 +719,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "cohort_members": cohort, "cohort_size": len(cohort),
         "scheduled_departures": schedules, "actual_departures": actuals,
         "last_actual_departure_s": last_actual,
+        "after_recording_departure_events": after_recording_departures,
         "expected_component_members": expected_component_members,
         "all_components_success": all_components_success,
         "successful_component_intervals": successful_component_intervals,
@@ -581,6 +741,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "admission_conflicts": admission_conflicts,
         "missing_events": missing_events,
         "predeparture_actor_events": predeparture_events,
+        "unexpected_actor_events": unexpected_actor_events,
         "collision_events": collision_events,
         "road_departure_events": road_events,
         "teleport_events": teleport_events,
