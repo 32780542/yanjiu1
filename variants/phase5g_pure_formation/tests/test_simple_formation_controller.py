@@ -156,6 +156,23 @@ class SimpleFormationControllerTests(unittest.TestCase):
             lane_end=lambda *_: 1000.0,
             envelope=SimpleNamespace(regions=((-300.0, 1200.0, 0.0, 9.9),)),
         )
+
+    @staticmethod
+    def ending_upper_road(end_x, *, time_s=0.0, ego_x=100.0):
+        end_rel = end_x - ego_x
+        ego_y = CENTERS_M[2]
+        return RoadObservation(
+            time_s,
+            (
+                ((-300.0, -ego_y), (1200.0, -ego_y)),
+                ((-300.0, 9.9-ego_y), (end_rel, 9.9-ego_y)),
+                ((end_rel, 6.6-ego_y), (1200.0, 6.6-ego_y)),
+            ),
+            (
+                ((-300.0, 3.3-ego_y), (end_rel, 3.3-ego_y)),
+                ((-300.0, 6.6-ego_y), (end_rel, 6.6-ego_y)),
+            ),
+        )
         with patch("noa.controller.reconstruct", return_value=road), patch(
             "noa.controller._longitudinal",
             side_effect=((0.5, None, None, False, "cruise"),
@@ -184,6 +201,46 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(decision.diagnostics["simple_formation"]["requested_acceleration_mps2"],
                          2.0)
         self.assertEqual(decision.action.acceleration_mps2, -1.5)
+
+    def test_low_speed_lane_end_capture_never_restarts_formation_drive(self):
+        safe_end = (100.0 + self.p["length_m"]/2
+                    + self.p["noa_body_margin_m"]
+                    + self.p["noa_standstill_gap_m"] + 1.0)
+        for speed in (0.0, 0.1):
+            with self.subTest(speed=speed):
+                decision = decide(self.control(
+                    lane=2, speed=speed,
+                    road=self.ending_upper_road(safe_end)), self.p)
+                self.assertEqual(decision.diagnostics["reason"],
+                                 "observed_lane_end_hold")
+                self.assertEqual(decision.diagnostics["simple_formation"][
+                    "requested_acceleration_mps2"], 2.0)
+                self.assertLessEqual(decision.action.acceleration_mps2, 0.0)
+
+    def test_simple_final_acceleration_respects_configured_model_bounds(self):
+        narrow = {**self.p, "min_accel_mps2": -1.0, "max_accel_mps2": 1.0}
+        for speed, requested, expected in ((18.0, 2.0, 1.0),
+                                           (23.0, -3.0, -1.0)):
+            with self.subTest(speed=speed):
+                decision = decide(self.control(lane=2, speed=speed), narrow)
+                self.assertEqual(decision.diagnostics["simple_formation"][
+                    "requested_acceleration_mps2"], requested)
+                self.assertEqual(decision.action.acceleration_mps2, expected)
+
+    def test_near_road_emergency_sets_action_diagnostic_and_state(self):
+        end_x = (100.0 + self.p["length_m"]/2
+                 + self.p["noa_body_margin_m"]
+                 + self.p["noa_standstill_gap_m"] + 10.0)
+        decision = decide(self.control(
+            lane=2, speed=20.0,
+            road=self.ending_upper_road(end_x)), self.p)
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(decision.action.acceleration_mps2,
+                         self.p["min_accel_mps2"])
+        self.assertTrue(simple["road_end_override"])
+        self.assertTrue(simple["emergency_override"])
+        self.assertEqual(decision.memory.own_behavior, "EMERGENCY")
+        self.assertEqual(simple["road_end_reason"], decision.diagnostics["reason"])
 
     def test_upper_leader_uses_target_speed(self):
         with patch("noa.controller._longitudinal", return_value=(-1.0, None, None, False, "cruise")):
@@ -227,6 +284,26 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(decision.memory.plan, plan)
         self.assertEqual(decision.diagnostics["simple_formation"]["lane_reason"],
                          "active_plan")
+
+    def test_existing_noa_plan_fallback_guard_matches_executed_braking(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = SimpleFormationMemory((), "EXECUTE_LC", plan=plan,
+                                       target_y_m=CENTERS_M[1], prepare_since_s=0.0,
+                                       lane_change_reason="observed_lane_end")
+        with patch("noa.controller.verify_candidate",
+                   side_effect=(REJECTED, SAFE)) as guard:
+            decision = decide(self.control(time_s=1.0, memory=memory), self.p)
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(guard.call_count, 2)
+        self.assertEqual(simple["active_plan_guards"], [
+            {"kind": "active_plan", "result": REJECTED},
+            {"kind": "active_plan", "result": SAFE},
+        ])
+        self.assertIs(simple["guard"]["result"], SAFE)
+        self.assertEqual(decision.action.acceleration_mps2,
+                         guard.call_args_list[-1].args[3])
+        self.assertEqual(decision.memory.own_behavior, "EMERGENCY")
+        self.assertTrue(simple["emergency_override"])
 
     def test_immediate_emergency_keeps_noa_braking(self):
         close = self.neighbor(3, 8.0, 0, speed=0.0)

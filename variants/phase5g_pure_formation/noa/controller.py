@@ -200,7 +200,10 @@ def _simple_road_stop_required(ego, lane_end_x, p):
                  - p['noa_body_margin_m'] - p['noa_standstill_gap_m'])
     stopping = _stop_distance(ego.vx_mps, actuator_acceleration_upper(ego, p),
                               p['comfort_braking_mps2'], p)
-    return available <= stopping
+    capture = (ego.vx_mps <= p['noa_stop_capture_speed_mps']
+               and available <= p['noa_stop_capture_gap_m']
+               + p['noa_headway_s']*p['noa_stop_capture_speed_mps'])
+    return available <= stopping or capture
 
 
 def decide(control, parameters):
@@ -269,6 +272,8 @@ def decide(control, parameters):
             "reference_lane_index": None,
             "requested_acceleration_mps2": None,
             "emergency_override": emergency,
+            "road_end_override": False,
+            "road_end_reason": None,
             "lane_reason": "local_tail_lane_control_pending",
             "active_plan_guards": [],
             "guard": None,
@@ -351,6 +356,8 @@ def decide(control, parameters):
             else:
                 accel, state = min(accel, -p['comfort_braking_mps2']), 'EMERGENCY'
                 diagnostics['reason'] = 'active_plan_prediction_unavailable' if not prediction['safe'] else reason
+                if simple_active:
+                    diagnostics["simple_formation"]["emergency_override"] = True
                 fallback_prediction = verify_candidate(control, plan, road, accel, p)
                 diagnostics['fallback_prediction'] = fallback_prediction
                 if simple_active:
@@ -427,11 +434,24 @@ def decide(control, parameters):
         if emergency:
             accel = min(accel, p['min_accel_mps2'])
             simple_diagnostic["lane_reason"] = "emergency_priority"
-        elif requested is not None:
-            accel = requested
+        else:
+            if requested is not None:
+                accel = requested
             if end_x is not None and _simple_road_stop_required(ego, end_x, p):
-                road_accel = _longitudinal(ego, (), center, end_x, p)[0]
-                accel = min(accel, road_accel)
+                road_accel, _, _, road_emergency, road_reason = _longitudinal(
+                    ego, (), center, end_x, p
+                )
+                if road_accel < accel:
+                    accel = road_accel
+                    simple_diagnostic["road_end_override"] = True
+                    simple_diagnostic["road_end_reason"] = road_reason
+                    diagnostics["reason"] = road_reason
+                if road_emergency:
+                    state = "EMERGENCY"
+                    simple_diagnostic["emergency_override"] = True
+                    simple_diagnostic["road_end_reason"] = road_reason
+                    diagnostics["reason"] = road_reason
+        accel = clip(accel, p['min_accel_mps2'], p['max_accel_mps2'])
     r5_pending=[]
     if adaptive and motivation and not cooldown and not emergency:
         centers = road.centers_m
