@@ -13,6 +13,7 @@ import math
 import os
 from pathlib import Path
 import random
+import sys
 from typing import Iterable, Mapping, Sequence
 from uuid import uuid4
 
@@ -104,8 +105,12 @@ def _interval_bounds(low: object, high: object) -> tuple[float, float]:
     high = _finite("depart_interval_max_s", high)
     if low <= 0 or high < low:
         raise ValueError("departure interval bounds must satisfy 0 < minimum <= maximum")
-    first_tick = math.ceil(low / CONTROL_DT_S - 1e-12)
-    last_tick = math.floor(high / CONTROL_DT_S + 1e-12)
+    scaled_low = low / CONTROL_DT_S
+    scaled_high = high / CONTROL_DT_S
+    if not math.isfinite(scaled_low) or not math.isfinite(scaled_high):
+        raise ValueError("departure interval is too large for a 0.1 s control tick")
+    first_tick = math.ceil(scaled_low - 1e-12)
+    last_tick = math.floor(scaled_high + 1e-12)
     if first_tick > last_tick:
         raise ValueError("departure interval bounds contain no 0.1 s control tick")
     return low, high
@@ -291,6 +296,10 @@ def seeded_case(parameters: Mapping[str, object], count: int, seed: int,
     rng = random.Random(seed)
     minimum_tick = math.ceil(interval_low / CONTROL_DT_S - 1e-12)
     maximum_tick = math.floor(interval_high / CONTROL_DT_S + 1e-12)
+    if maximum_tick * max(1, count - 1) > sys.float_info.max:
+        raise ValueError(
+            "departure interval schedule is too large for a 0.1 s control tick"
+        )
     raw_upper = maximum_tick * CONTROL_DT_S
     scheduled_tick = 0
     departures = {}

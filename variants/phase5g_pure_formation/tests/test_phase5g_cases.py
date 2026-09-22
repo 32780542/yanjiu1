@@ -182,6 +182,15 @@ class Phase5GCaseTests(unittest.TestCase):
         second = self.cases.seeded_case(self.p, 12, 103)
         self.assertEqual(self.cases.canonical_json_bytes(first), self.cases.canonical_json_bytes(second))
         changed = self.cases.seeded_case(self.p, 12, 104)
+        def schedule(case):
+            rows = sorted(
+                case["departures"].values(),
+                key=lambda row: row["physical_ordinal"],
+            )
+            return tuple(row["scheduled_departure_s"] for row in rows)
+
+        self.assertEqual(schedule(first), schedule(second))
+        self.assertNotEqual(schedule(first), schedule(changed))
         self.assertNotEqual(
             self.cases.canonical_json_bytes(first["departures"]),
             self.cases.canonical_json_bytes(changed["departures"]),
@@ -264,6 +273,22 @@ class Phase5GCaseTests(unittest.TestCase):
                 self.cases.freeze_cases(target, self.p, ((3, 101),),
                                         speed_min_mps=100.0, speed_max_mps=101.0)
             self.assertFalse(target.exists())
+
+    def test_huge_finite_departure_intervals_raise_named_value_errors(self):
+        cases = (
+            (1e308, 1e308),
+            (2.5, 1e308),
+            (1e307, 1e307),
+        )
+        for low, high in cases:
+            with self.subTest(low=low, high=high), self.assertRaisesRegex(
+                ValueError, "departure interval|0.1 s control tick"
+            ):
+                self.cases.seeded_case(
+                    self.p, 12, 101,
+                    depart_interval_min_s=low,
+                    depart_interval_max_s=high,
+                )
 
     def test_main_and_seeded_case_audits_reject_speed_above_model_limit(self):
         with self.assertRaisesRegex(RuntimeError, "speed"):
