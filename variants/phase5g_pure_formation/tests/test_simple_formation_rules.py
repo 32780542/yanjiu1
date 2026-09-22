@@ -459,7 +459,7 @@ class SimpleFormationRuleTests(unittest.TestCase):
     def test_public_local_rules_reject_nonfinite_or_unresolved_ego_and_rows(self):
         good_ego = self.vehicle(99, 0.0, 1)
         bad_egos = (self.vehicle(99, math.nan, 1), self.vehicle(99, math.inf, 1),
-                    self.vehicle(99, 0.0, None), self.vehicle(99, 0.0, 3))
+                    self.vehicle(99, 0.0, 3))
         for ego in bad_egos:
             with self.subTest(ego=ego), self.assertRaises(ValueError):
                 choose_join(ego, (), self.centers, self.p)
@@ -469,6 +469,12 @@ class SimpleFormationRuleTests(unittest.TestCase):
         for row in bad_rows:
             with self.subTest(row=row), self.assertRaises(ValueError):
                 choose_join(good_ego, (row,), self.centers, self.p)
+
+    def test_unresolved_ego_lane_waits_without_claiming_tail_slot(self):
+        ego = self.vehicle(99, 20.0, None)
+        middle_tail = self.vehicle(1, 45.0, 1)
+        decision = choose_join(ego, (middle_tail,), self.centers, self.p)
+        self.assertEqual(decision, JoinDecision(None, None, None, "wait_not_next", (0, 1, 0)))
 
     def test_public_local_rules_require_validated_parameter_contract(self):
         ego = self.vehicle(99, 0.0, 1)

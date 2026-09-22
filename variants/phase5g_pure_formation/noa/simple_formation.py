@@ -93,7 +93,6 @@ def _validate_vehicle(row, *, ego=False):
     if (type(row) is not LocalVehicle
             or type(row.track_id) is not int or row.track_id < 0
             or any(not _finite_number(value) for value in (row.x_m, row.y_m, row.vx_mps))
-            or (row.lane_index is None and ego)
             or (row.lane_index is not None
                 and (type(row.lane_index) is not int or row.lane_index not in (0, 1, 2)))):
         raise ValueError("Invalid local ego vehicle" if ego else "Invalid local vehicle row")
