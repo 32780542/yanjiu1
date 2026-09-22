@@ -471,6 +471,48 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(result.memory.join_phase, "FREE")
         self.assertIsNone(result.memory.plan)
 
+    def test_count_recovery_lower_anchor_keeps_fixed_target_and_starts_plan(self):
+        lower_anchor = self.neighbor(7, 30.0, 0,
+                                     relative_y=CENTERS_M[0]-CENTERS_M[1])
+        result = decide(self.control(lane=1, neighbors=(lower_anchor,)), self.p)
+        self.assertEqual(result.memory.join_phase, "JOINING")
+        self.assertEqual(result.memory.desired_lane_index, 2)
+        self.assertEqual(result.memory.join_anchor_track_id, 7)
+        self.assertIsNotNone(result.memory.plan)
+        self.assertEqual(result.diagnostics["simple_formation"]["target_x_m"], 115.0)
+
+    def straddling_control(self, *, neighbors=(), memory=None, time_s=0.0):
+        base = self.control(time_s=time_s, lane=1, neighbors=neighbors, memory=memory)
+        return replace(base,
+                       ego=replace(base.ego, y_m=3.5),
+                       observation=replace(
+                           base.observation,
+                           road=self.road_observation(time_s, 100.0, 3.5)))
+
+    def test_current_body_overlap_uses_ego_lateral_position_between_centers(self):
+        overlap = self.neighbor(8, 0.0, 0, relative_y=-0.4)
+        admission = JoinDecision(2, None, None, "counts_empty", (0, 0, 0))
+        with patch("noa.controller.simple_formation.choose_join", return_value=admission):
+            result = decide(self.straddling_control(neighbors=(overlap,)), self.p)
+        self.assertIsNone(result.memory.plan)
+        self.assertEqual(result.memory.join_phase, "FREE")
+        self.assertEqual(result.diagnostics["simple_formation"]["hard_gate"], "body")
+        self.assertEqual(result.action.acceleration_mps2, self.p["min_accel_mps2"])
+
+    def test_active_straddling_front_body_uses_ego_for_immediate_emergency(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[1], CENTERS_M[2], 5.0, 20.0)
+        memory = replace(self.joining(lane=1, final=2, anchor=None),
+                         plan=plan, target_y_m=CENTERS_M[2],
+                         lane_change_reason="simple_formation_join")
+        front = self.neighbor(8, 6.0, 0, relative_y=-0.4, time_s=1.0)
+        with patch("noa.controller._longitudinal",
+                   return_value=(1.0, None, None, False, "cruise")):
+            result = decide(self.straddling_control(time_s=1.0, neighbors=(front,),
+                                                    memory=memory), self.p)
+        self.assertIs(result.memory.plan, plan)
+        self.assertEqual(result.action.acceleration_mps2, self.p["min_accel_mps2"])
+        self.assertEqual(result.memory.own_behavior, "EMERGENCY")
+
     def test_physical_nearest_waiter_acts_while_following_waiter_stays_free(self):
         near = decide(self.control(x=120.0, lane=0, neighbors=(
             self.neighbor(1, 25.0, 1),

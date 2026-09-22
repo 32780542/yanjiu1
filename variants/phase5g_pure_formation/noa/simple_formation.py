@@ -86,12 +86,14 @@ def choose_formation_target(ego, vehicles, lane_centers_m, memory, p):
         if len(matches) != 1:
             return no_target("join_anchor_lost", lane)
         anchor = matches[0]
-        offsets = {(2, 1): p["simple_formation_middle_offset_m"],
-                   (0, 2): 0.0,
-                   (1, 2): p["simple_formation_middle_offset_m"]}
-        offset = offsets.get((lane, anchor.lane_index))
-        if offset is None:
+        if anchor.lane_index is None:
             return no_target("join_anchor_invalid", lane)
+        if lane == anchor.lane_index:
+            offset = p["simple_formation_same_lane_gap_m"]
+        elif (lane, anchor.lane_index) == (0, 2):
+            offset = 0.0
+        else:
+            offset = p["simple_formation_middle_offset_m"]
         return from_row("joiner", anchor, anchor.x_m - offset,
                         "fixed_join_anchor", lane)
 

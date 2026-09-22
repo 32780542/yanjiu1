@@ -133,7 +133,8 @@ class SimpleFormationRuleTests(unittest.TestCase):
                 memory = SimpleFormationMemory((), "CRUISE", join_phase=phase,
                                                join_anchor_track_id=8,
                                                desired_lane_index=2)
-                target = self.target(0, rows=rows, memory=memory)
+                unresolved = (rows[0], self.vehicle(8, 120.0, None))
+                target = self.target(0, rows=unresolved, memory=memory)
                 self.assertEqual((target.role, target.target_x_m, target.reason),
                                  ("no_target", None, "join_anchor_invalid"))
             recovered = self.target(0, rows=rows, memory=SimpleFormationMemory(
@@ -141,6 +142,23 @@ class SimpleFormationRuleTests(unittest.TestCase):
                 desired_lane_index=2))
             self.assertEqual((recovered.role, recovered.target_x_m),
                              ("joiner", 115.0))
+
+    def test_active_join_reproduces_count_recovery_target_for_every_lane_pair(self):
+        ego = self.vehicle(99, 100.0, 1)
+        for final_lane in (0, 1, 2):
+            for anchor_lane in (0, 1, 2):
+                with self.subTest(final_lane=final_lane, anchor_lane=anchor_lane):
+                    anchor = self.vehicle(7, 130.0, anchor_lane)
+                    memory = SimpleFormationMemory(
+                        (), "CRUISE", join_phase="JOINING",
+                        desired_lane_index=final_lane, join_anchor_track_id=7)
+                    target = self.target(ego.lane_index, rows=(anchor,), memory=memory)
+                    offset = (self.p["simple_formation_same_lane_gap_m"]
+                              if final_lane == anchor_lane else
+                              0.0 if (final_lane, anchor_lane) == (0, 2) else
+                              self.p["simple_formation_middle_offset_m"])
+                    self.assertEqual(target.target_x_m, 130.0-offset)
+                    self.assertEqual(target.reason, "fixed_join_anchor")
 
     def test_reference_switch_gain_and_invalid_remembered_reference(self):
         memory = SimpleFormationMemory((), "CRUISE", reference_track_id=1)

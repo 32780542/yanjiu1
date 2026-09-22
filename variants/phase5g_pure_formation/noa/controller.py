@@ -177,12 +177,12 @@ def _longitudinal(ego, bodies, center_y, lane_end_x, parameters):
     return clip(acceleration, p['min_accel_mps2'], p['max_accel_mps2']), closest, closest_gap, emergency, reason
 
 
-def _simple_immediate_emergency(ego, bodies, center_y, p):
+def _simple_immediate_emergency(ego, bodies, p):
     """Screen current front-bumper clearance and measured closing time only."""
     for body in bodies:
         lateral_half = (p['width_m'] + abs(math.cos(body.heading))*body.width
                         + abs(math.sin(body.heading))*body.length) / 2
-        if body.x < ego.x_m or abs(body.y-center_y) > lateral_half:
+        if body.x < ego.x_m or abs(body.y-ego.y_m) > lateral_half:
             continue
         body_half = (abs(math.cos(body.heading))*body.length
                      + abs(math.sin(body.heading))*body.width) / 2
@@ -227,7 +227,7 @@ def _simple_hard_gate(ego, ego_row, rows, centers, next_lane, final_lane, bodies
         return 'road'
     if ego.vx_mps < p['simple_formation_min_lane_change_speed_mps']:
         return 'speed'
-    if _simple_body_overlap(ego, bodies, centers[ego_row.lane_index], p):
+    if _simple_body_overlap(ego, bodies, ego.y_m, p):
         return 'body'
     if not simple_formation.target_lane_clear(ego_row, rows, next_lane, p):
         return 'clearance'
@@ -297,7 +297,7 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
         reference_lane_index=target.reference_lane_index,
         requested_acceleration_mps2=requested,
     )
-    immediate = _simple_immediate_emergency(ego, bodies, road.current_center_m, p)
+    immediate = _simple_immediate_emergency(ego, bodies, p)
     if active_plan:
         immediate = immediate or _simple_body_overlap(
             ego, bodies, memory.plan.y_target_m, p)
@@ -442,7 +442,7 @@ def decide(control, parameters):
     # Source lane ending is a stop constraint until the maneuver is feasible.
     accel, lead, gap, emergency, reason = _longitudinal(ego, bodies, center, end_x, p)
     if simple_active and not active:
-        emergency = _simple_immediate_emergency(ego, bodies, road.current_center_m, p)
+        emergency = _simple_immediate_emergency(ego, bodies, p)
     diagnostics = {'reason':reason, 'lead_gap_m':gap,
                    'own_actuator_acceleration_upper_mps2':actuator_acceleration_upper(ego, p),
                    'lane_center_y_m':road.current_center_m,
