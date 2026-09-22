@@ -177,6 +177,32 @@ def _longitudinal(ego, bodies, center_y, lane_end_x, parameters):
     return clip(acceleration, p['min_accel_mps2'], p['max_accel_mps2']), closest, closest_gap, emergency, reason
 
 
+def _simple_immediate_emergency(ego, bodies, center_y, p):
+    """Screen current front-bumper clearance and measured closing time only."""
+    for body in bodies:
+        lateral_half = (p['width_m'] + abs(math.cos(body.heading))*body.width
+                        + abs(math.sin(body.heading))*body.length) / 2
+        if body.x < ego.x_m or abs(body.y-center_y) > lateral_half:
+            continue
+        body_half = (abs(math.cos(body.heading))*body.length
+                     + abs(math.sin(body.heading))*body.width) / 2
+        gap = body.x - ego.x_m - p['length_m']/2 - body_half
+        closing = ego.vx_mps - body.vx
+        if (gap <= p['noa_standstill_gap_m']
+                or (closing > 0 and gap/closing < p['noa_emergency_ttc_s'])):
+            return True
+    return False
+
+
+def _simple_road_stop_required(ego, lane_end_x, p):
+    """Limit formation drive only inside the visible road's stop envelope."""
+    available = (lane_end_x - ego.x_m - p['length_m']/2
+                 - p['noa_body_margin_m'] - p['noa_standstill_gap_m'])
+    stopping = _stop_distance(ego.vx_mps, actuator_acceleration_upper(ego, p),
+                              p['comfort_braking_mps2'], p)
+    return available <= stopping
+
+
 def decide(control, parameters):
     _validate(control, parameters)
     if 'r5_waiting_policy' in parameters:
@@ -223,6 +249,8 @@ def decide(control, parameters):
     center = memory.target_y_m if active else road.current_center_m
     # Source lane ending is a stop constraint until the maneuver is feasible.
     accel, lead, gap, emergency, reason = _longitudinal(ego, bodies, center, end_x, p)
+    if simple_active and not active:
+        emergency = _simple_immediate_emergency(ego, bodies, road.current_center_m, p)
     diagnostics = {'reason':reason, 'lead_gap_m':gap,
                    'own_actuator_acceleration_upper_mps2':actuator_acceleration_upper(ego, p),
                    'lane_center_y_m':road.current_center_m,
@@ -400,7 +428,7 @@ def decide(control, parameters):
             simple_diagnostic["lane_reason"] = "emergency_priority"
         elif requested is not None:
             accel = requested
-            if end_x is not None:
+            if end_x is not None and _simple_road_stop_required(ego, end_x, p):
                 road_accel = _longitudinal(ego, (), center, end_x, p)[0]
                 accel = min(accel, road_accel)
     r5_pending=[]

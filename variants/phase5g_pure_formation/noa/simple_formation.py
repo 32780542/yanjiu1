@@ -85,8 +85,10 @@ def choose_formation_target(ego, vehicles, lane_centers_m, memory, p):
         return FormationTarget(role, target_x, row.track_id, row.vx_mps,
                                lane, row.lane_index, reason)
 
-    if memory.join_phase in ("JOINING", "STABILIZING") and memory.desired_lane_index is not None:
+    if memory.join_phase in ("JOINING", "STABILIZING"):
         lane = memory.desired_lane_index
+        if lane is None or memory.join_anchor_track_id is None:
+            return no_target("join_state_incomplete", lane)
         matches = tuple(row for row in rows if row.track_id == memory.join_anchor_track_id)
         if len(matches) != 1:
             return no_target("join_anchor_lost", lane)

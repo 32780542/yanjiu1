@@ -113,6 +113,34 @@ class SimpleFormationRuleTests(unittest.TestCase):
                 self.assertIsNone(missing.reference_track_id)
                 self.assertEqual(missing.reason, "join_anchor_lost")
 
+    def test_incomplete_active_join_never_searches_another_upper_reference(self):
+        rows = (self.vehicle(7, 130.0, 1), self.vehicle(8, 120.0, 2))
+        for phase in ("JOINING", "STABILIZING"):
+            with self.subTest(phase=phase, missing="desired_lane"):
+                memory = SimpleFormationMemory((), "CRUISE", join_phase=phase,
+                                               join_anchor_track_id=7)
+                target = self.target(0, rows=rows, memory=memory)
+                self.assertEqual((target.role, target.target_x_m, target.reason),
+                                 ("no_target", None, "join_state_incomplete"))
+            with self.subTest(phase=phase, missing="anchor_id"):
+                memory = SimpleFormationMemory((), "CRUISE", join_phase=phase,
+                                               desired_lane_index=2)
+                target = self.target(0, rows=rows, memory=memory)
+                self.assertEqual((target.role, target.target_x_m, target.reason),
+                                 ("no_target", None, "join_state_incomplete"))
+            with self.subTest(phase=phase, invalid="anchor_lane"):
+                memory = SimpleFormationMemory((), "CRUISE", join_phase=phase,
+                                               join_anchor_track_id=8,
+                                               desired_lane_index=2)
+                target = self.target(0, rows=rows, memory=memory)
+                self.assertEqual((target.role, target.target_x_m, target.reason),
+                                 ("no_target", None, "join_anchor_invalid"))
+            recovered = self.target(0, rows=rows, memory=SimpleFormationMemory(
+                (), "CRUISE", join_phase=phase, join_anchor_track_id=7,
+                desired_lane_index=2))
+            self.assertEqual((recovered.role, recovered.target_x_m),
+                             ("joiner", 115.0))
+
     def test_reference_switch_gain_and_invalid_remembered_reference(self):
         memory = SimpleFormationMemory((), "CRUISE", reference_track_id=1)
         held = self.target(0, rows=(self.vehicle(1, 110.0, 2),

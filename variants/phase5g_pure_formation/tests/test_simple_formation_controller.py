@@ -149,11 +149,29 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
         self.assertEqual(simple["lane_reason"], "local_tail_lane_control_pending")
 
-    def test_visible_lane_end_caps_direct_request_with_road_stop(self):
+    def test_distant_lane_end_does_not_cap_direct_request(self):
         road = SimpleNamespace(
             centers_m=CENTERS_M,
             current_center_m=CENTERS_M[2],
             lane_end=lambda *_: 1000.0,
+            envelope=SimpleNamespace(regions=((-300.0, 1200.0, 0.0, 9.9),)),
+        )
+        with patch("noa.controller.reconstruct", return_value=road), patch(
+            "noa.controller._longitudinal",
+            side_effect=((0.5, None, None, False, "cruise"),
+                         (-1.5, None, None, False, "observed_lane_end_braking")),
+        ) as longitudinal:
+            decision = decide(self.control(lane=2, speed=18.0), self.p)
+        self.assertEqual(longitudinal.call_count, 1)
+        self.assertEqual(decision.diagnostics["simple_formation"]["requested_acceleration_mps2"],
+                         2.0)
+        self.assertEqual(decision.action.acceleration_mps2, 2.0)
+
+    def test_near_lane_end_caps_direct_request_with_road_stop(self):
+        road = SimpleNamespace(
+            centers_m=CENTERS_M,
+            current_center_m=CENTERS_M[2],
+            lane_end=lambda *_: 140.0,
             envelope=SimpleNamespace(regions=((-300.0, 1200.0, 0.0, 9.9),)),
         )
         with patch("noa.controller.reconstruct", return_value=road), patch(
@@ -218,6 +236,27 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertTrue(decision.diagnostics["simple_formation"]["emergency_override"])
         self.assertLessEqual(decision.action.acceleration_mps2, -3.0)
         self.assertEqual(decision.memory.reference_track_id, 3)
+
+    def test_equal_speed_forty_metre_lead_is_not_immediate_emergency(self):
+        lead = self.neighbor(5, 40.0, 2, speed=20.0, relative_y=0.0)
+        decision = decide(self.control(lane=2, speed=20.0,
+                                       neighbors=(lead,)), self.p)
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["role"], "upper_follower")
+        self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
+        self.assertFalse(simple["emergency_override"])
+        self.assertEqual(decision.action.acceleration_mps2, 2.0)
+
+    def test_current_bumper_gap_and_closing_ttc_override_direct_request(self):
+        cases = ((5.0, 20.0), (40.0, 0.0))
+        for distance, speed in cases:
+            with self.subTest(distance=distance, speed=speed):
+                lead = self.neighbor(5, distance, 2, speed=speed,
+                                     relative_y=0.0)
+                decision = decide(self.control(lane=2, speed=20.0,
+                                               neighbors=(lead,)), self.p)
+                self.assertTrue(decision.diagnostics["simple_formation"]["emergency_override"])
+                self.assertLess(decision.action.acceleration_mps2, 0.0)
 
     def test_slow_lead_motivation_does_not_preempt_formation_longitudinal(self):
         slow = self.neighbor(4, 70.0, 0, speed=10.0)
