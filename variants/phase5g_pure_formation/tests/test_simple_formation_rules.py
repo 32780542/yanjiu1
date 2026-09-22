@@ -7,12 +7,18 @@ from noa.contracts import NoaMemory
 from noa.simple_formation import (
     PARAMETERS,
     LaneDecision,
+    JoinDecision,
     LocalVehicle,
     SimpleFormationMemory,
     choose_lane,
+    choose_join,
     choose_reference,
+    connected_tail_neighborhood,
     desired_gap_m,
     longitudinal_increment,
+    infer_tail_join,
+    is_next_waiting_vehicle,
+    lane_counts,
     memory_from_dict,
     validate_parameters,
 )
@@ -22,9 +28,9 @@ from simulation.phase5g_clock import restore_initial_memories
 class SimpleFormationRuleTests(unittest.TestCase):
     def setUp(self):
         self.p = {
-            "simple_formation_component_gap_m": 10.0,
-            "simple_formation_middle_offset_m": 3.0,
-            "simple_formation_same_lane_gap_m": 20.0,
+            "simple_formation_component_gap_m": 50.0,
+            "simple_formation_middle_offset_m": 15.0,
+            "simple_formation_same_lane_gap_m": 30.0,
             "simple_formation_position_tolerance_m": 2.0,
             "simple_formation_speed_tolerance_mps": 0.5,
             "simple_formation_stable_time_s": 1.0,
@@ -292,6 +298,110 @@ class SimpleFormationRuleTests(unittest.TestCase):
         decision = choose_lane(0.0, 0, inside, self.centers, False, self.p)
         self.assertIsNone(decision.target_lane_index)
         self.assertEqual(decision.counts, (2, 2, 0))
+
+    def test_component_joins_at_exactly_fifty_and_splits_above(self):
+        ego = self.vehicle(99, 0.0, 1)
+        connected = (self.vehicle(1, 50.0, 1), self.vehicle(2, 100.0, 2))
+        self.assertEqual(connected_tail_neighborhood(ego, connected, self.centers, self.p), connected)
+        split = (self.vehicle(1, 50.01, 1), self.vehicle(2, 100.0, 2))
+        self.assertEqual(connected_tail_neighborhood(ego, split, self.centers, self.p), ())
+
+    def test_component_excludes_rows_past_a_gap_and_unresolved_lanes(self):
+        ego = self.vehicle(99, 0.0, 1)
+        local = (self.vehicle(1, 20.0, 1),)
+        extended = local + (self.vehicle(2, 71.0, 2), self.vehicle(3, 80.0, None))
+        self.assertEqual(connected_tail_neighborhood(ego, extended, self.centers, self.p), local)
+        self.assertEqual(choose_join(ego, extended, self.centers, self.p),
+                         choose_join(ego, local, self.centers, self.p))
+
+    def test_tail_patterns_choose_upper_lower_then_middle(self):
+        ego = self.vehicle(99, 0.0, 1)
+        middle = self.vehicle(1, 45.0, 1)
+        upper = self.vehicle(2, 30.0, 2)
+        lower = self.vehicle(3, 30.0, 0)
+        for rows, lane, x, anchor, reason in (
+            ((middle,), 2, 30.0, 1, "middle_tail"),
+            ((middle, upper), 0, 30.0, 2, "upper_tail"),
+            ((middle, upper, lower), 1, 15.0, 2, "outer_tail"),
+        ):
+            with self.subTest(rows=rows):
+                result = infer_tail_join(ego, rows, self.centers, self.p)
+                self.assertEqual((result.target_lane_index, result.target_x_m,
+                                  result.anchor_track_id, result.reason), (lane, x, anchor, reason))
+
+    def test_outer_pair_within_position_tolerance_is_one_physical_layer(self):
+        ego = self.vehicle(99, 0.0, 1)
+        rows = (self.vehicle(1, 45.0, 1), self.vehicle(2, 30.0, 2),
+                self.vehicle(3, 31.0, 0))
+        result = choose_join(ego, rows, self.centers, self.p)
+        self.assertEqual((result.target_lane_index, result.target_x_m,
+                          result.anchor_track_id, result.reason),
+                         (1, 15.0, 2, "outer_tail"))
+
+    def test_counts_recover_malformed_tail_in_physical_lane_order(self):
+        ego = self.vehicle(99, 0.0, 1)
+        cases = (
+            ((), (0, 0, 0), 2),
+            ((self.vehicle(1, 35.0, 2),), (0, 0, 1), 0),
+            ((self.vehicle(1, 45.0, 0), self.vehicle(2, 30.0, 2)), (1, 0, 1), 1),
+            ((self.vehicle(1, 60.0, 1), self.vehicle(2, 45.0, 0),
+              self.vehicle(3, 30.0, 2)), (1, 1, 1), 2),
+        )
+        for rows, counts, target in cases:
+            with self.subTest(counts=counts):
+                self.assertEqual(lane_counts(rows, self.centers), counts)
+                result = infer_tail_join(ego, rows, self.centers, self.p)
+                self.assertEqual(result.local_counts, counts)
+                self.assertEqual(result.target_lane_index, target)
+
+    def test_unresolved_lane_is_neither_counted_nor_tail_pattern(self):
+        ego = self.vehicle(99, 0.0, 1)
+        rows = (self.vehicle(1, 45.0, None), self.vehicle(2, 30.0, 2))
+        self.assertEqual(lane_counts(rows, self.centers), (0, 0, 1))
+        self.assertEqual(infer_tail_join(ego, rows, self.centers, self.p).reason, "upper_tail")
+
+    def test_only_closest_waiter_behind_stable_tail_is_admitted(self):
+        tail = (self.vehicle(1, 45.0, 1),)
+        near = self.vehicle(20, 20.0, 0)
+        far = self.vehicle(21, 10.0, 1)
+        self.assertTrue(is_next_waiting_vehicle(near, tail + (far,), self.centers, self.p))
+        self.assertFalse(is_next_waiting_vehicle(far, tail + (near,), self.centers, self.p))
+        self.assertIsNone(choose_join(far, tail + (near,), self.centers, self.p).target_lane_index)
+
+    def test_equal_x_waiters_use_upper_lane_then_wait_on_unresolved_priority(self):
+        tail = (self.vehicle(1, 45.0, 1),)
+        upper = self.vehicle(20, 20.0, 2)
+        lower = self.vehicle(21, 21.0, 0)
+        self.assertTrue(is_next_waiting_vehicle(upper, tail + (lower,), self.centers, self.p))
+        self.assertFalse(is_next_waiting_vehicle(lower, tail + (upper,), self.centers, self.p))
+        unresolved = self.vehicle(22, 20.0, None)
+        self.assertFalse(is_next_waiting_vehicle(upper, tail + (unresolved,), self.centers, self.p))
+
+    def test_relabel_and_neighbor_order_leave_physical_decision_unchanged(self):
+        ego = self.vehicle(99, 0.0, 1)
+        a = self.vehicle(1, 45.0, 1)
+        b = self.vehicle(2, 30.0, 2)
+        first = choose_join(ego, (a, b), self.centers, self.p)
+        second = choose_join(ego, (self.vehicle(200, 30.0, 2),
+                                   self.vehicle(100, 45.0, 1)), self.centers, self.p)
+        self.assertEqual((first.target_lane_index, first.target_x_m, first.reason, first.local_counts),
+                         (second.target_lane_index, second.target_x_m, second.reason, second.local_counts))
+        self.assertEqual((first.anchor_track_id, second.anchor_track_id), (2, 200))
+
+    def test_duplicate_physical_tail_anchor_waits_independent_of_input_order(self):
+        ego = self.vehicle(99, 0.0, 1)
+        rows = (self.vehicle(1, 30.0, 2), self.vehicle(2, 30.0, 2))
+        for ordering in (rows, tuple(reversed(rows))):
+            decision = choose_join(ego, ordering, self.centers, self.p)
+            self.assertIsNone(decision.target_lane_index)
+            self.assertIsNone(decision.anchor_track_id)
+            self.assertEqual(decision.reason, "wait_ambiguous_tail")
+
+    def test_join_decision_is_frozen_and_slotted(self):
+        decision = JoinDecision(None, None, None, "wait", (0, 0, 0))
+        with self.assertRaises(FrozenInstanceError):
+            decision.reason = "other"
+        self.assertFalse(hasattr(decision, "__dict__"))
 
 
 if __name__ == "__main__":

@@ -49,6 +49,162 @@ class LaneDecision:
     counts: tuple[int, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class JoinDecision:
+    """Final physical lane and longitudinal target; counts are lower, middle, upper."""
+    target_lane_index: int | None
+    target_x_m: float | None
+    anchor_track_id: int | None
+    reason: str
+    local_counts: tuple[int, int, int]
+
+
+def connected_tail_neighborhood(ego, vehicles, lane_centers_m, p):
+    """Return lane-resolved rows in ego's x-connected visible component."""
+    lane_count = len(tuple(lane_centers_m))
+    rows = sorted(
+        (row for row in vehicles if row.lane_index is not None
+         and 0 <= row.lane_index < lane_count),
+        key=lambda row: row.x_m,
+    )
+    nodes = sorted((*rows, ego), key=lambda row: row.x_m)
+    ego_at = next(i for i, row in enumerate(nodes) if row is ego)
+    first = last = ego_at
+    gap = p["simple_formation_component_gap_m"]
+    while first > 0 and nodes[first].x_m - nodes[first - 1].x_m <= gap:
+        first -= 1
+    while last + 1 < len(nodes) and nodes[last + 1].x_m - nodes[last].x_m <= gap:
+        last += 1
+    return tuple(row for row in nodes[first:last + 1] if row is not ego)
+
+
+def lane_counts(vehicles, lane_centers_m):
+    """Count only resolved physical lanes, indexed lower=0 to upper=2."""
+    counts = [0] * len(tuple(lane_centers_m))
+    for row in vehicles:
+        if row.lane_index is not None and 0 <= row.lane_index < len(counts):
+            counts[row.lane_index] += 1
+    return tuple(counts)
+
+
+def _ordered_tail(rows, p):
+    """Order x layers front to rear, with aligned outer lanes upper first."""
+    remaining = list(rows)
+    ordered = []
+    tolerance = p["simple_formation_position_tolerance_m"]
+    lane_order = {1: 0, 2: 1, 0: 2}
+    while remaining:
+        front_x = max(row.x_m for row in remaining)
+        layer = [row for row in remaining if front_x - row.x_m <= tolerance]
+        remaining = [row for row in remaining if front_x - row.x_m > tolerance]
+        ordered.extend(sorted(layer, key=lambda row: lane_order[row.lane_index]))
+    return tuple(ordered)
+
+
+def _follows_tail(front, rear, p):
+    offset = p["simple_formation_middle_offset_m"]
+    tolerance = p["simple_formation_position_tolerance_m"]
+    expected = {(1, 2): offset, (2, 0): 0.0, (0, 1): offset}
+    distance = expected.get((front.lane_index, rear.lane_index))
+    return distance is not None and abs(front.x_m - rear.x_m - distance) <= tolerance
+
+
+def _stable_tail_prefix(rows, p):
+    """Take the frontmost geometrically coherent sequence; later rows are waiters."""
+    ordered = _ordered_tail(rows, p)
+    if not ordered:
+        return ()
+    last = 1
+    while last < len(ordered) and _follows_tail(ordered[last - 1], ordered[last], p):
+        last += 1
+    return ordered[:last]
+
+
+def infer_tail_join(ego, vehicles, lane_centers_m, p):
+    """Infer the next cycle slot, falling back to local resolved-lane counts."""
+    rows = tuple(row for row in vehicles if row.lane_index in (0, 1, 2))
+    counts = lane_counts(rows, lane_centers_m)
+    ordered = _ordered_tail(rows, p)
+    coherent = len(_stable_tail_prefix(rows, p)) == len(rows)
+    offset = p["simple_formation_middle_offset_m"]
+    if coherent and ordered:
+        rear = ordered[-1]
+        if rear.lane_index == 1:
+            return JoinDecision(2, rear.x_m - offset, rear.track_id, "middle_tail", counts)
+        if rear.lane_index == 2:
+            return JoinDecision(0, rear.x_m, rear.track_id, "upper_tail", counts)
+        if rear.lane_index == 0 and len(ordered) >= 2 and ordered[-2].lane_index == 2:
+            upper = ordered[-2]
+            return JoinDecision(1, upper.x_m - offset, upper.track_id, "outer_tail", counts)
+
+    target = min((2, 0, 1), key=lambda lane: counts[lane])
+    if not rows:
+        return JoinDecision(target, None, None, "counts_empty", counts)
+    rear_x = min(row.x_m for row in rows)
+    tolerance = p["simple_formation_position_tolerance_m"]
+    anchors = tuple(row for row in rows if abs(row.x_m - rear_x) <= tolerance)
+    if len(anchors) != 1:
+        return JoinDecision(None, None, None, "wait_ambiguous_anchor", counts)
+    anchor = anchors[0]
+    if target == anchor.lane_index:
+        target_x = anchor.x_m - p["simple_formation_same_lane_gap_m"]
+    elif target == 0 and anchor.lane_index == 2:
+        target_x = anchor.x_m
+    else:
+        target_x = anchor.x_m - offset
+    return JoinDecision(target, target_x, anchor.track_id, "counts_recovery", counts)
+
+
+def is_next_waiting_vehicle(ego, vehicles, lane_centers_m, p):
+    """Admit the nearest rear waiter, with physical upper-lane tie priority."""
+    rows = tuple(row for row in vehicles if row is not ego)
+    resolved = tuple(row for row in rows if row.lane_index in (0, 1, 2)
+                     and row.x_m > ego.x_m)
+    stable = _stable_tail_prefix(resolved, p)
+    if not stable:
+        return True
+    tail_rear_x = min(row.x_m for row in stable)
+    tolerance = p["simple_formation_position_tolerance_m"]
+    if ego.x_m >= tail_rear_x - tolerance:
+        return False
+    waiters = tuple(row for row in rows if all(row is not part for part in stable)
+                    and row.x_m < tail_rear_x - tolerance
+                    and row.x_m >= ego.x_m - tolerance)
+    if any(row.x_m > ego.x_m + tolerance for row in waiters):
+        return False
+    peers = tuple(row for row in waiters if abs(row.x_m - ego.x_m) <= tolerance)
+    if any(row.lane_index is None or row.lane_index == ego.lane_index for row in peers):
+        return False
+    if ego.lane_index is None:
+        return False
+    return all(ego.lane_index > row.lane_index for row in peers)
+
+
+def choose_join(ego, vehicles, lane_centers_m, p):
+    """Choose from ego's connected, geometrically formed local tail only."""
+    local = connected_tail_neighborhood(ego, vehicles, lane_centers_m, p)
+    ahead = tuple(row for row in local if row.x_m > ego.x_m)
+    tolerance = p["simple_formation_position_tolerance_m"]
+    by_lane = sorted(ahead, key=lambda row: (row.lane_index, row.x_m))
+    if any(left.lane_index == right.lane_index
+           and right.x_m - left.x_m <= tolerance
+           for left, right in zip(by_lane, by_lane[1:])):
+        return JoinDecision(None, None, None, "wait_ambiguous_tail",
+                            lane_counts(ahead, lane_centers_m))
+    stable = _stable_tail_prefix(ahead, p)
+    inferred = infer_tail_join(ego, stable, lane_centers_m, p)
+    if local:
+        local_min_x = min(ego.x_m, *(row.x_m for row in local))
+        local_max_x = max(ego.x_m, *(row.x_m for row in local))
+        unresolved = tuple(row for row in vehicles if row.lane_index is None
+                           and local_min_x <= row.x_m <= local_max_x)
+    else:
+        unresolved = ()
+    if not is_next_waiting_vehicle(ego, local + unresolved, lane_centers_m, p):
+        return JoinDecision(None, None, None, "wait_not_next", inferred.local_counts)
+    return inferred
+
+
 def validate_parameters(p):
     """Require the complete positive finite local-tail parameter contract."""
     for key in PARAMETERS:
