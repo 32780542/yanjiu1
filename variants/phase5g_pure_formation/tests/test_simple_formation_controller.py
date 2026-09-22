@@ -258,6 +258,25 @@ class SimpleFormationControllerTests(unittest.TestCase):
                 self.assertTrue(decision.diagnostics["simple_formation"]["emergency_override"])
                 self.assertLess(decision.action.acceleration_mps2, 0.0)
 
+    def test_overlapping_same_speed_body_forces_emergency_braking(self):
+        overlap = self.neighbor(5, 0.0, 0, speed=18.0, ego_speed=18.0)
+        upper = self.neighbor(6, 20.0, 2, speed=20.0, ego_speed=18.0)
+        decision = decide(self.control(speed=18.0, neighbors=(overlap, upper)), self.p)
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["role"], "lower_aligned")
+        self.assertTrue(simple["emergency_override"])
+        self.assertLessEqual(decision.action.acceleration_mps2,
+                             self.p["min_accel_mps2"])
+
+    def test_stopped_ego_with_close_fast_front_body_still_brakes(self):
+        close = self.neighbor(5, 5.0, 0, speed=20.0, ego_speed=0.0)
+        decision = decide(self.control(speed=0.0, neighbors=(close,)), self.p)
+        simple = decision.diagnostics["simple_formation"]
+        self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
+        self.assertTrue(simple["emergency_override"])
+        self.assertLessEqual(decision.action.acceleration_mps2,
+                             self.p["min_accel_mps2"])
+
     def test_slow_lead_motivation_does_not_preempt_formation_longitudinal(self):
         slow = self.neighbor(4, 70.0, 0, speed=10.0)
         decision = decide(self.control(neighbors=(slow,)), self.p)

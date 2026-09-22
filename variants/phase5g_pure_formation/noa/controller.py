@@ -425,6 +425,7 @@ def decide(control, parameters):
             requested_acceleration_mps2=requested,
         )
         if emergency:
+            accel = min(accel, p['min_accel_mps2'])
             simple_diagnostic["lane_reason"] = "emergency_priority"
         elif requested is not None:
             accel = requested
