@@ -243,6 +243,7 @@ class Phase5GClock(FormationClock):
         dynamic = departures is not None
         departure_rows = self._validated_departures(
             departures, all_controlled, initial,
+            parameters_snapshot["control_sync_dt_s"],
         ) if dynamic else None
         active_controlled = (
             tuple(key for key in all_controlled if key in initial)
@@ -267,9 +268,12 @@ class Phase5GClock(FormationClock):
         self.initial_memories_sha256 = initial_memories_sha256
 
     @staticmethod
-    def _validated_departures(raw, controlled, initial):
+    def _validated_departures(raw, controlled, initial, control_dt_s):
         if not isinstance(raw, Mapping) or set(raw) != set(controlled):
             raise ValueError("departure actor keys must exactly match controlled actors")
+        if (type(control_dt_s) not in (int, float)
+                or not math.isfinite(control_dt_s) or control_dt_s <= 0):
+            raise ValueError("control_sync_dt_s must be positive and finite")
         copied = json.loads(json.dumps(raw, allow_nan=False))
         ordinals = []
         for key in controlled:
@@ -282,6 +286,11 @@ class Phase5GClock(FormationClock):
             if (type(scheduled) not in (int, float) or not math.isfinite(scheduled)
                     or scheduled < 0):
                 raise ValueError(f"{key}: scheduled departure must be finite and nonnegative")
+            canonical = round(round(scheduled / control_dt_s) * control_dt_s, 12)
+            if not math.isclose(
+                    scheduled, canonical, abs_tol=1e-12, rel_tol=0.0):
+                raise ValueError(f"{key}: scheduled departure must lie on a control tick")
+            row["scheduled_departure_s"] = canonical
             if row["actual_departure_s"] is not None:
                 raise ValueError(f"{key}: input actual departure must be unset")
             if type(ordinal) is not int or ordinal < 0:
@@ -303,7 +312,7 @@ class Phase5GClock(FormationClock):
         initial_keys = set(initial)
         due_at_zero = {
             key for key, row in copied.items()
-            if row["scheduled_departure_s"] <= 1e-9
+            if row["scheduled_departure_s"] == 0.0
         }
         if initial_keys != due_at_zero:
             raise ValueError("initial actors must exactly match time-zero departures")
@@ -346,7 +355,7 @@ class Phase5GClock(FormationClock):
             (
                 key for key, row in self._departures.items()
                 if row["actual_departure_s"] is None
-                and row["scheduled_departure_s"] <= now + 1e-9
+                and row["scheduled_departure_s"] <= now
             ),
             key=lambda key: self._departures[key]["physical_ordinal"],
         )

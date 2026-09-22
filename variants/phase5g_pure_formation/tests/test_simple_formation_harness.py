@@ -441,6 +441,42 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             ] += 0.1
             self.assert_dynamic_rows_rejected(temp, case, malicious)
 
+    def test_dynamic_case_rejects_a_late_trace_row_that_drops_dynamic_fields(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            model, physical, _ = self.dynamic_parameters()
+            malicious = deepcopy(rows)
+            malicious[-1].pop("active_actors")
+            malicious[-1].pop("departures")
+            trace = Path(temp) / "dynamic-switches-to-legacy.jsonl"
+            trace.write_text(
+                "".join(json.dumps(row, allow_nan=False) + "\n" for row in malicious),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(ValueError, "dynamic trace"):
+                self.harness.evaluate_trace(
+                    trace, case, model, physical, live=False,
+                )
+
+    def test_legacy_fixed_trace_without_dynamic_fields_is_still_accepted(self):
+        with tempfile.TemporaryDirectory() as temp:
+            case, rows = self.dynamic_trace_rows(temp)
+            model, physical, _ = self.dynamic_parameters()
+            row = deepcopy(rows[-1])
+            row.pop("active_actors")
+            row.pop("departures")
+            trace = Path(temp) / "legacy-fixed.jsonl"
+            trace.write_text(
+                json.dumps(row, allow_nan=False) + "\n", encoding="utf-8",
+            )
+            legacy_case = deepcopy(case)
+            legacy_case.pop("departures")
+            legacy_case["initial"] = deepcopy(row["initial"])
+            derived = self.harness.evaluate_trace(
+                trace, legacy_case, model, physical, live=False,
+            )
+            self.assertIn("summary", derived)
+
     def test_trace_evaluation_matches_small_record_wrapper_without_whole_file_reads(self):
         model, physical, policy = self.simple_parameters()
         case = self.short_case(physical, count=3, duration_s=0.2)

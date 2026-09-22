@@ -455,6 +455,22 @@ class Phase5GClockTests(unittest.TestCase):
         self.assertGreaterEqual(actual, scheduled)
         self.assertEqual(actual, record_time)
 
+    def test_dynamic_departure_schedule_must_lie_on_a_control_tick(self):
+        with self.assertRaisesRegex(ValueError, "control tick"):
+            self.dynamic_clock((0.0, 2.5000000005, 3.0))
+
+    def test_exact_tick_departure_does_not_activate_one_tick_early(self):
+        case, clock = self.dynamic_clock((0.0, 2.5, 3.0))
+        actor = case["controlled"][1]
+        records = [clock.tick() for _ in range(26)]
+        times = [next(iter(row["initial"].values()))["time_s"] for row in records]
+        before = records[times.index(2.4)]
+        due = records[times.index(2.5)]
+        self.assertNotIn(actor, before["active_actors"])
+        self.assertIsNone(before["departures"][actor]["actual_departure_s"])
+        self.assertIn(actor, due["active_actors"])
+        self.assertEqual(due["departures"][actor]["actual_departure_s"], 2.5)
+
     def test_phase5g_clock_activates_due_actors_before_one_common_frozen_frame(self):
         case, clock = self.dynamic_clock()
         actors = tuple(case["controlled"])

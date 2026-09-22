@@ -762,19 +762,36 @@ class _PhysicalTraceRecords:
     """Re-openable, bounded-memory view of physical JSONL intervals."""
 
     def __init__(self, trace_path, keys: Sequence[str], *, live: bool,
-                 expected_sha256: str | None):
+                 expected_sha256: str | None, dynamic: bool | None = None):
+        if dynamic is not None and type(dynamic) is not bool:
+            raise ValueError("dynamic trace mode hint must be bool or None")
         self.trace_path = trace_path
         self.keys = tuple(keys)
         self.live = live
         self.expected_sha256 = expected_sha256
+        self.dynamic = dynamic
 
     def __iter__(self):
         previous = frozenset()
         previous_departures = None
         previous_time = None
+        dynamic = self.dynamic
         for record in _iter_jsonl_records(
                 self.trace_path, expected_sha256=self.expected_sha256,
                 skip_blank=True):
+            has_active = "active_actors" in record
+            has_departures = "departures" in record
+            if has_active != has_departures:
+                raise ValueError(
+                    "dynamic trace rows require active_actors and departures together"
+                )
+            row_dynamic = has_active
+            if dynamic is None:
+                dynamic = row_dynamic
+            elif row_dynamic is not dynamic:
+                if dynamic:
+                    raise ValueError("dynamic trace row dropped its dynamic fields")
+                raise ValueError("legacy trace row introduced dynamic fields")
             active, time_s, departures = _dynamic_record_details(record, self.keys)
             if not previous.issubset(active):
                 raise ValueError("trace active actor set is not monotonic")
@@ -1257,6 +1274,7 @@ def evaluate_trace(trace_path, case: Mapping[str, object], model,
     records = _PhysicalTraceRecords(
         trace_path, case["controlled"], live=live,
         expected_sha256=expected_sha256,
+        dynamic="departures" in case,
     )
     return evaluate_records(records, case, model, physical)
 
