@@ -1,4 +1,4 @@
-"""Deterministic, feasible pure-formation inputs for Phase 5G.
+"""Deterministic, replayable pure-formation departure inputs for Phase 5G.
 
 This offline registry never reaches a controller.  Private states are derived
 from the registered case seed and a stable physical-row ordinal, never from an
@@ -26,12 +26,17 @@ from safety.geometry import collide, swept_collision
 
 SCHEMA = "phase5g_pure_formation_cases_v1"
 SOURCE_PATH = "experiments/phase5g_cases.py"
-SUPPORTED_COUNTS = (3, 6, 12)
+SUPPORTED_COUNTS = (3, 4, 5, 6, 7, 8, 12)
 DEV_SEEDS = (101, 102, 103)
 HOLDOUT_SEEDS = (5101, 5102, 5103, 5104, 5105)
 LANE_CENTERS_M = (1.65, 4.95, 8.25)
-LANE_TEMPLATES = {3: (1, 1, 1), 6: (3, 2, 1), 12: (4, 4, 4)}
 DURATION_S = 45.0
+CONTROL_DT_S = 0.1
+DEPART_INTERVAL_MIN_S = 2.5
+DEPART_INTERVAL_MAX_S = 4.0
+FORMATION_DEADLINE_S = 30.0
+FORMATION_HOLD_S = 10.0
+SPAWN_X_M = 100.0
 MAIN_SIX = (
     ("v0", 100.0, 1.65, 10.0),
     ("v1", 145.0, 1.65, 9.5),
@@ -91,6 +96,18 @@ def _speed_bounds(parameters: Mapping[str, object], low: object,
         raise ValueError("max_speed_mps must be positive")
     if high > maximum:
         raise ValueError("speed_max_mps must not exceed model max_speed_mps")
+    return low, high
+
+
+def _interval_bounds(low: object, high: object) -> tuple[float, float]:
+    low = _finite("depart_interval_min_s", low)
+    high = _finite("depart_interval_max_s", high)
+    if low <= 0 or high < low:
+        raise ValueError("departure interval bounds must satisfy 0 < minimum <= maximum")
+    first_tick = math.ceil(low / CONTROL_DT_S - 1e-12)
+    last_tick = math.floor(high / CONTROL_DT_S + 1e-12)
+    if first_tick > last_tick:
+        raise ValueError("departure interval bounds contain no 0.1 s control tick")
     return low, high
 
 
@@ -213,11 +230,12 @@ def validate_initial(initial: Mapping[str, Mapping[str, object]],
 
 
 def _case(name: str, initial: dict, keys: tuple[str, ...], case_seed: int,
-          purpose: str, expected_lane_changes: dict, sampling: dict | None = None) -> dict:
+          purpose: str, expected_lane_changes: dict, sampling: dict | None = None,
+          *, duration_s: float = DURATION_S, departures: dict | None = None) -> dict:
     memories, provenance = _memories(keys, case_seed, len(keys))
     result = {
         "name": name,
-        "duration_s": DURATION_S,
+        "duration_s": duration_s,
         "initial": initial,
         "controlled": list(keys),
         "scripts": {},
@@ -228,6 +246,8 @@ def _case(name: str, initial: dict, keys: tuple[str, ...], case_seed: int,
     }
     if sampling is not None:
         result["sampling"] = sampling
+    if departures is not None:
+        result["departures"] = departures
     return result
 
 
@@ -250,55 +270,73 @@ def main_six_case(parameters: Mapping[str, object],
     )
 
 
-def _bases(rng: random.Random, count: int) -> tuple[float, ...]:
-    free_upper = 260.0 - 36.0 * (count - 1)
-    free = sorted(rng.uniform(80.0, free_upper) for _ in range(count))
-    return tuple(value + index * 36.0 for index, value in enumerate(free))
-
-
 def seeded_case(parameters: Mapping[str, object], count: int, seed: int,
                 *, speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
-                actor_keys: Sequence[str] | None = None, max_attempts: int = 1000) -> dict:
-    """Generate one deterministic feasible initial set, rejecting whole sets."""
+                depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
+                depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
+                actor_keys: Sequence[str] | None = None) -> dict:
+    """Generate one deterministic sequential departure schedule.
+
+    Only rows due at time zero are physical initial state.  Later rows remain
+    offline experiment truth until the Phase 5G clock activates them.
+    """
     if type(count) is not int or count not in SUPPORTED_COUNTS:
-        raise ValueError("supported vehicle counts are exactly 3, 6, and 12")
+        raise ValueError("supported vehicle counts are exactly 3, 4, 5, 6, 7, 8, and 12")
     seed = _seed(seed)
     low, high = _speed_bounds(parameters, speed_min_mps, speed_max_mps)
-    if type(max_attempts) is not int or not 1 <= max_attempts <= 1000:
-        raise ValueError("max_attempts must be an exact integer in [1, 1000]")
+    interval_low, interval_high = _interval_bounds(
+        depart_interval_min_s, depart_interval_max_s,
+    )
     keys = _actor_keys(count, actor_keys)
     rng = random.Random(seed)
-    template = LANE_TEMPLATES[count]
-    last_reasons = []
-    for attempt in range(1, max_attempts + 1):
-        physical_rows = []
-        base_rows = []
-        for lane, lane_count in enumerate(template):
-            bases = _bases(rng, lane_count)
-            for base in bases:
-                x = base + rng.uniform(-4.0, 4.0)
-                speed = rng.uniform(low, high)
-                physical_rows.append((x, LANE_CENTERS_M[lane], speed))
-                base_rows.append(base)
-        initial = {
-            key: asdict(kinematic_state(parameters, x_m=x, y_m=y, vx_mps=speed))
-            for key, (x, y, speed) in zip(keys, physical_rows)
-        }
-        audit = validate_initial(initial, parameters)
-        if audit["passed"]:
-            return _case(
-                f"seeded_{count}_seed{seed}", initial, keys, seed,
-                "Seeded feasible pure-formation input; no generated actor is an obstacle or script.",
-                {"minimum": 0, "target_lane_counts": None},
-                {"seed": seed, "attempts": attempt, "lane_template": list(template),
-                 "longitudinal_bases_m": base_rows, "base_range_m": [80.0, 260.0],
-                 "minimum_base_spacing_m": 36.0, "jitter_range_m": [-4.0, 4.0],
-                 "speed_range_mps": [low, high]},
+    minimum_tick = math.ceil(interval_low / CONTROL_DT_S - 1e-12)
+    maximum_tick = math.floor(interval_high / CONTROL_DT_S + 1e-12)
+    raw_upper = maximum_tick * CONTROL_DT_S
+    scheduled_tick = 0
+    departures = {}
+    for ordinal, key in enumerate(keys):
+        if ordinal:
+            raw_interval = rng.uniform(interval_low, raw_upper)
+            interval_ticks = max(
+                minimum_tick,
+                math.ceil(raw_interval / CONTROL_DT_S - 1e-12),
             )
-        last_reasons = audit["failure_reasons"]
-    raise RuntimeError(
-        f"Phase 5G feasible-set rejection exhausted {max_attempts} attempts for "
-        f"count={count}, seed={seed}; last reasons={last_reasons}"
+            scheduled_tick += interval_ticks
+        lane_center = rng.choice(LANE_CENTERS_M)
+        speed = rng.uniform(low, high)
+        state = asdict(kinematic_state(
+            parameters, x_m=SPAWN_X_M, y_m=lane_center, vx_mps=speed,
+        ))
+        departures[key] = {
+            "scheduled_departure_s": round(scheduled_tick * CONTROL_DT_S, 1),
+            "actual_departure_s": None,
+            "state": state,
+            "physical_ordinal": ordinal,
+        }
+    initial = {
+        key: dict(row["state"])
+        for key, row in departures.items()
+        if row["scheduled_departure_s"] == 0.0
+    }
+    audit = validate_initial(initial, parameters)
+    if not audit["passed"]:
+        raise RuntimeError(
+            "Phase 5G time-zero departure failed its pre-trajectory feasibility audit: "
+            + ",".join(audit["failure_reasons"])
+        )
+    duration = round(
+        max(row["scheduled_departure_s"] for row in departures.values())
+        + FORMATION_DEADLINE_S + FORMATION_HOLD_S,
+        1,
+    )
+    return _case(
+        f"seeded_{count}_seed{seed}", initial, keys, seed,
+        "Seeded sequential pure-formation departures; no actor is an obstacle or script.",
+        {"minimum": 0, "target_lane_counts": None},
+        {"seed": seed, "control_dt_s": CONTROL_DT_S,
+         "departure_interval_range_s": [interval_low, interval_high],
+         "speed_range_mps": [low, high]},
+        duration_s=duration, departures=departures,
     )
 
 
@@ -312,7 +350,7 @@ def _validated_specs(case_specs: Iterable[Sequence[int]]) -> tuple[tuple[int, in
     checked = []
     for count, seed in specs:
         if type(count) is not int or count not in SUPPORTED_COUNTS:
-            raise ValueError("supported vehicle counts are exactly 3, 6, and 12")
+            raise ValueError("supported vehicle counts are exactly 3, 4, 5, 6, 7, 8, and 12")
         checked.append((count, _seed(seed)))
     if len(set(checked)) != len(checked):
         raise ValueError("case_specs must not contain duplicate count/seed pairs")

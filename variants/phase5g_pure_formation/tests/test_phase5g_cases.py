@@ -36,6 +36,9 @@ CASE_KEYS = {
     "initial_memories", "private_rng_provenance", "purpose",
     "expected_lane_changes",
 }
+DEPARTURE_KEYS = {
+    "scheduled_departure_s", "actual_departure_s", "state", "physical_ordinal",
+}
 
 
 def setUpModule():
@@ -72,14 +75,18 @@ def road():
 
 def canonical_physical_memory_rows(case):
     rows = []
-    for key, state in case["initial"].items():
+    ordered = sorted(
+        case["departures"].items(), key=lambda item: item[1]["physical_ordinal"]
+    )
+    for key, departure in ordered:
+        state = departure["state"]
         physical = tuple(state[name] for name in (
             "time_s", "x_m", "y_m", "heading_rad", "vx_mps", "vy_mps",
             "yaw_rate_radps", "a_drive_mps2", "steering_rad",
         ))
         memory = json.dumps(case["initial_memories"][key], sort_keys=True, separators=(",", ":"))
-        rows.append((physical, memory))
-    return tuple(sorted(rows))
+        rows.append((departure["scheduled_departure_s"], physical, memory))
+    return tuple(rows)
 
 
 class Phase5GCaseTests(unittest.TestCase):
@@ -94,7 +101,7 @@ class Phase5GCaseTests(unittest.TestCase):
     def test_registered_seed_sets_counts_and_main_rows_are_exact(self):
         self.assertEqual(self.cases.DEV_SEEDS, (101, 102, 103))
         self.assertEqual(self.cases.HOLDOUT_SEEDS, (5101, 5102, 5103, 5104, 5105))
-        self.assertEqual(self.cases.SUPPORTED_COUNTS, (3, 6, 12))
+        self.assertEqual(self.cases.SUPPORTED_COUNTS, (3, 4, 5, 6, 7, 8, 12))
         self.assertEqual(self.cases.LANE_CENTERS_M, (1.65, 4.95, 8.25))
         self.assertEqual(self.cases.MAIN_SIX, MAIN_SIX_EXPECTED)
 
@@ -125,36 +132,60 @@ class Phase5GCaseTests(unittest.TestCase):
         self.assertTrue(detection["frames"][0]["fleet_failure_reasons"])
         self.assertFalse(detection["success"])
 
-    def test_seeded_counts_are_all_controlled_safe_and_initially_unformed(self):
-        templates = {3: (1, 1, 1), 6: (3, 2, 1), 12: (4, 4, 4)}
-        for count, seed in zip(self.cases.SUPPORTED_COUNTS, self.cases.DEV_SEEDS):
+    def test_seeded_counts_have_bounded_quantized_dynamic_departures(self):
+        state_fields = {field.name for field in fields(VehicleState)}
+        for count in self.cases.SUPPORTED_COUNTS:
+            seed = 100 + count
             with self.subTest(count=count, seed=seed):
                 case = self.cases.seeded_case(self.p, count, seed)
-                self.assertTrue(CASE_KEYS <= set(case))
+                self.assertTrue(CASE_KEYS | {"departures"} <= set(case))
                 self.assertEqual(case["scripts"], {})
-                self.assertEqual(set(case["initial"]), set(case["controlled"]))
-                lane_counts = tuple(sum(state["y_m"] == center for state in case["initial"].values())
-                                    for center in self.cases.LANE_CENTERS_M)
-                self.assertEqual(lane_counts, templates[count])
-                bases = case["sampling"]["longitudinal_bases_m"]
-                self.assertTrue(all(80.0 <= base <= 260.0 for base in bases))
-                offset = 0
-                for lane_count in templates[count]:
-                    lane_bases = bases[offset:offset + lane_count]
-                    self.assertTrue(all(right - left >= 36.0 - 1e-12
-                                        for left, right in zip(lane_bases, lane_bases[1:])))
-                    offset += lane_count
-                for state, base in zip(case["initial"].values(), bases):
-                    self.assertLessEqual(abs(state["x_m"] - base), 4.0 + 1e-12)
+                self.assertEqual(len(case["controlled"]), count)
+                self.assertEqual(set(case["departures"]), set(case["controlled"]))
+                ordered = sorted(
+                    case["departures"].items(),
+                    key=lambda item: item[1]["physical_ordinal"],
+                )
+                self.assertEqual(
+                    [row["physical_ordinal"] for _, row in ordered], list(range(count))
+                )
+                scheduled = [row["scheduled_departure_s"] for _, row in ordered]
+                self.assertEqual(scheduled[0], 0.0)
+                for interval in (right - left for left, right in zip(scheduled, scheduled[1:])):
+                    self.assertTrue(2.5 - 1e-12 <= interval <= 4.0 + 1e-12)
+                    self.assertAlmostEqual(interval * 10.0, round(interval * 10.0))
+                for _, row in ordered:
+                    self.assertEqual(set(row), DEPARTURE_KEYS)
+                    self.assertIsNone(row["actual_departure_s"])
+                    self.assertEqual(set(row["state"]), state_fields)
+                    state = row["state"]
                     self.assertTrue(8.0 <= state["vx_mps"] <= 12.0)
+                    self.assertIn(state["y_m"], self.cases.LANE_CENTERS_M)
+                self.assertEqual(set(case["initial"]), {ordered[0][0]})
+                self.assertEqual(case["initial"][ordered[0][0]], ordered[0][1]["state"])
+                self.assertEqual(set(case["initial_memories"]), set(case["controlled"]))
                 self.assertTrue(self.cases.validate_initial(case["initial"], self.p)["passed"])
-                detection = detect_frames([{"time_s": 0.0, "states": deepcopy(case["initial"])}])
-                self.assertTrue(detection["frames"][0]["fleet_failure_reasons"])
+                self.assertGreaterEqual(case["duration_s"], scheduled[-1] + 40.0 - 1e-12)
 
-    def test_seed_generation_and_canonical_development_bundle_are_byte_identical(self):
+    def test_future_departures_are_not_part_of_the_initial_collision_or_gap_audit(self):
+        case = self.cases.seeded_case(self.p, 3, 101)
+        all_templates = {
+            actor: deepcopy(row["state"])
+            for actor, row in case["departures"].items()
+        }
+        self.assertEqual(len(case["initial"]), 1)
+        self.assertTrue(self.cases.validate_initial(case["initial"], self.p)["passed"])
+        self.assertFalse(self.cases.validate_initial(all_templates, self.p)["passed"])
+
+    def test_seed_generation_is_byte_identical_and_a_different_seed_changes_schedule(self):
         first = self.cases.seeded_case(self.p, 12, 103)
         second = self.cases.seeded_case(self.p, 12, 103)
         self.assertEqual(self.cases.canonical_json_bytes(first), self.cases.canonical_json_bytes(second))
+        changed = self.cases.seeded_case(self.p, 12, 104)
+        self.assertNotEqual(
+            self.cases.canonical_json_bytes(first["departures"]),
+            self.cases.canonical_json_bytes(changed["departures"]),
+        )
         specs = ((3, 101), (6, 102), (12, 103))
         self.assertEqual(
             self.cases.bundle_bytes(self.p, specs),
@@ -196,7 +227,7 @@ class Phase5GCaseTests(unittest.TestCase):
 
     def test_invalid_count_seed_speed_and_actor_keys_fail_before_any_file_is_written(self):
         invalid = (
-            (((5, 101),), 8.0, 12.0),
+            (((2, 101),), 8.0, 12.0),
             (((3, True),), 8.0, 12.0),
             (((3, 101),), True, 12.0),
             (((3, 101),), 12.0, 8.0),
@@ -224,7 +255,9 @@ class Phase5GCaseTests(unittest.TestCase):
             speed_max_mps=maximum,
         )
         self.assertTrue(all(state["vx_mps"] <= maximum
-                            for state in boundary["initial"].values()))
+                            for state in (
+                                row["state"] for row in boundary["departures"].values()
+                            )))
         with tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
             target = Path(temp) / "invalid_speed.json"
             with self.assertRaisesRegex(ValueError, "max_speed_mps"):
@@ -341,7 +374,12 @@ class Phase5GClockTests(unittest.TestCase):
         self.case_module = importlib.import_module("experiments.phase5g_cases")
         self.model, self.p, self.policy = phase5g_parameters()
         self.case = self.case_module.seeded_case(self.p, 3, 101)
-        self.initial = {key: VehicleState(**value) for key, value in self.case["initial"].items()}
+        # Task 6 will make the clock activate these rows dynamically.  Until then,
+        # the memory-restoration tests keep exercising the historical fixed actor set.
+        self.initial = {
+            key: VehicleState(**row["state"])
+            for key, row in self.case["departures"].items()
+        }
 
     def clock(self, memories=None, mode="lane_priority", **changes):
         model, physical, policy = phase5g_parameters(mode)
