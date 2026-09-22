@@ -206,6 +206,179 @@ def _simple_road_stop_required(ego, lane_end_x, p):
     return available <= stopping or capture
 
 
+def _simple_body_overlap(ego, bodies, lane_center, p):
+    """Use measured rigid bodies for present overlap, without prediction."""
+    for body in bodies:
+        lateral_half = (p['width_m'] + abs(math.cos(body.heading))*body.width
+                        + abs(math.sin(body.heading))*body.length)/2
+        longitudinal_half = (p['length_m'] + abs(math.cos(body.heading))*body.length
+                             + abs(math.sin(body.heading))*body.width)/2
+        if (abs(body.y-lane_center) < lateral_half
+                and abs(body.x-ego.x_m) < longitudinal_half):
+            return True
+    return False
+
+
+def _simple_hard_gate(ego, ego_row, rows, centers, next_lane, final_lane, bodies, p):
+    if (final_lane is None or type(final_lane) is not int
+            or not 0 <= final_lane < len(centers)
+            or next_lane is None or not 0 <= next_lane < len(centers)
+            or abs(next_lane-ego_row.lane_index) != 1):
+        return 'road'
+    if ego.vx_mps < p['simple_formation_min_lane_change_speed_mps']:
+        return 'speed'
+    if _simple_body_overlap(ego, bodies, centers[ego_row.lane_index], p):
+        return 'body'
+    if not simple_formation.target_lane_clear(ego_row, rows, next_lane, p):
+        return 'clearance'
+    if _simple_body_overlap(ego, bodies, centers[next_lane], p):
+        return 'body'
+    return 'clear'
+
+
+def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
+                    emergency, end_x, *, completed_simple=False):
+    ego = control.ego
+    detail = diagnostics['simple_formation']
+    rows = simple_formation.local_vehicles(control, road, p)
+    centers = road.centers_m
+    ego_lane = centers.index(road.current_center_m)
+    ego_row = simple_formation.LocalVehicle(0, ego.x_m, ego.y_m, ego.vx_mps, ego_lane)
+    active_plan = memory.plan is not None and memory.lane_change_reason == 'simple_formation_join'
+    next_lane = None
+
+    if memory.join_phase == 'FREE' and not active_plan and not completed_simple:
+        admission = simple_formation.choose_join(ego_row, rows, centers, p)
+        detail['lane_reason'] = admission.reason
+        final = admission.target_lane_index
+        if final is not None:
+            next_lane = ego_lane + (1 if final > ego_lane else -1) if final != ego_lane else None
+            gate = ('clear' if next_lane is None else _simple_hard_gate(
+                ego, ego_row, rows, centers, next_lane, final, bodies, p))
+            detail['hard_gate'] = gate
+            if gate == 'clear':
+                memory = replace(memory, join_phase='JOINING', desired_lane_index=final,
+                                 join_anchor_track_id=admission.anchor_track_id,
+                                 stable_since_s=None)
+    target = simple_formation.choose_formation_target(ego_row, rows, centers, memory, p)
+    if (memory.join_phase in ('JOINING', 'STABILIZING')
+            and memory.join_anchor_track_id is None
+            and memory.desired_lane_index == 2):
+        target = simple_formation.FormationTarget(
+            'upper_leader', None, None, p['noa_target_speed_mps'], 2, None,
+            'founder_target')
+    if memory.join_phase in ('JOINING', 'STABILIZING') and target.reason in (
+            'join_anchor_lost', 'join_anchor_invalid', 'join_state_incomplete'):
+        lost_final = memory.desired_lane_index
+        memory = replace(memory, join_phase='FREE', desired_lane_index=None,
+                         join_anchor_track_id=None, stable_since_s=None,
+                         reference_track_id=None, plan=None, target_y_m=None,
+                         lane_change_reason='')
+        target = simple_formation.FormationTarget(
+            'no_target', None, None, None, None, None, 'join_anchor_lost')
+        active_plan = False
+        detail['lane_reason'] = 'join_anchor_lost'
+        if lost_final is not None and (type(lost_final) is not int
+                                       or not 0 <= lost_final < len(centers)):
+            detail['hard_gate'] = 'road'
+    memory = replace(memory, reference_track_id=target.reference_track_id)
+    requested = simple_formation.formation_acceleration(ego_row, target, p)
+    detail.update(
+        role=target.role, target_x_m=target.target_x_m,
+        position_error_m=(None if target.target_x_m is None
+                          else target.target_x_m-ego.x_m),
+        reference_track_id=target.reference_track_id,
+        reference_reason=target.reason,
+        target_lane_index=target.target_lane_index,
+        reference_lane_index=target.reference_lane_index,
+        requested_acceleration_mps2=requested,
+    )
+    immediate = _simple_immediate_emergency(ego, bodies, road.current_center_m, p)
+    if active_plan:
+        immediate = immediate or _simple_body_overlap(
+            ego, bodies, memory.plan.y_target_m, p)
+    emergency = emergency or immediate
+    state = 'EMERGENCY' if emergency else 'CRUISE'
+    if emergency:
+        accel = min(accel, p['min_accel_mps2'])
+        detail['emergency_override'] = True
+        if not active_plan:
+            detail['lane_reason'] = 'emergency_priority'
+    elif requested is not None:
+        accel = min(accel, requested) if active_plan else requested
+    if end_x is not None and _simple_road_stop_required(ego, end_x, p):
+        road_accel, _, _, road_emergency, road_reason = _longitudinal(
+            ego, (), road.current_center_m, end_x, p)
+        if road_accel < accel:
+            accel = road_accel
+            detail['road_end_override'] = True
+            detail['road_end_reason'] = road_reason
+            diagnostics['reason'] = road_reason
+        if road_emergency:
+            state = 'EMERGENCY'
+            detail['emergency_override'] = True
+            detail['road_end_reason'] = road_reason
+            diagnostics['reason'] = road_reason
+    accel = clip(accel, p['min_accel_mps2'], p['max_accel_mps2'])
+
+    final = memory.desired_lane_index
+    if memory.join_phase in ('JOINING', 'STABILIZING') and not active_plan:
+        if final is None or type(final) is not int or not 0 <= final < len(centers):
+            detail['hard_gate'] = 'road'
+        elif ego_lane == final:
+            aligned = abs(ego.y_m-centers[final]) <= p['noa_completion_lateral_error_m']
+            position_ok = (target.target_x_m is None
+                           or abs(target.target_x_m-ego.x_m) <= 2.0)
+            reference_speed = (p['noa_target_speed_mps'] if target.reference_speed_mps is None
+                               else target.reference_speed_mps)
+            speed_ok = abs(ego.vx_mps-reference_speed) <= 1.0
+            if aligned and position_ok and speed_ok and state != 'EMERGENCY':
+                since = memory.stable_since_s
+                if since is None:
+                    since = ego.time_s
+                phase = ('FORMED' if ego.time_s-since >= p['simple_formation_stable_time_s']
+                         else 'STABILIZING')
+                memory = replace(memory, join_phase=phase, stable_since_s=since)
+                detail['lane_reason'] = 'formed' if phase == 'FORMED' else 'stabilizing'
+            else:
+                memory = replace(memory, join_phase='JOINING', stable_since_s=None)
+                detail['lane_reason'] = 'stability_reset'
+        elif not completed_simple and state != 'EMERGENCY':
+            memory = replace(memory, join_phase='JOINING', stable_since_s=None)
+            next_lane = ego_lane + (1 if final > ego_lane else -1)
+            gate = _simple_hard_gate(ego, ego_row, rows, centers, next_lane, final,
+                                     bodies, p)
+            detail['hard_gate'] = gate
+            if gate == 'clear':
+                plan = QuadraticLaneChange(ego.time_s, ego.y_m, centers[next_lane],
+                                           p['noa_lane_change_duration_s'], ego.vx_mps)
+                memory = replace(memory, plan=plan, target_y_m=centers[next_lane],
+                                 lane_change_reason='simple_formation_join')
+                active_plan = True
+                detail['lane_reason'] = 'simple_formation_join'
+            else:
+                detail['lane_reason'] = 'hard_gate_'+gate
+        elif ego_lane != final:
+            memory = replace(memory, join_phase='JOINING', stable_since_s=None)
+    if memory.join_phase == 'FORMED':
+        detail['lane_reason'] = 'formed_hold'
+    if active_plan:
+        plan = memory.plan
+        next_lane = next((i for i, value in enumerate(centers)
+                          if abs(value-plan.y_target_m) <= p['noa_geometry_tolerance_m']), None)
+        detail['lane_reason'] = ('simple_formation_join' if plan.start_s == ego.time_s
+                                 else 'active_simple_plan')
+        lateral = reference_target(plan, ego.time_s)
+        state = 'EMERGENCY' if state == 'EMERGENCY' else 'EXECUTE_LC'
+    else:
+        lateral = {'y_m': road.current_center_m, 'vy_mps': 0., 'ay_mps2': 0.}
+    detail.update(final_desired_lane_index=memory.desired_lane_index,
+                  next_lane_index=next_lane, join_phase=memory.join_phase,
+                  stable_since_s=memory.stable_since_s)
+    return NoaDecision(Actuation(accel, lateral_command(ego, lateral, p)),
+                       replace(memory, own_behavior=state), diagnostics)
+
+
 def decide(control, parameters):
     _validate(control, parameters)
     if 'r5_waiting_policy' in parameters:
@@ -275,6 +448,11 @@ def decide(control, parameters):
             "road_end_override": False,
             "road_end_reason": None,
             "lane_reason": "local_tail_lane_control_pending",
+            "final_desired_lane_index": memory.desired_lane_index,
+            "next_lane_index": None,
+            "join_phase": memory.join_phase,
+            "stable_since_s": memory.stable_since_s,
+            "hard_gate": None,
             "active_plan_guards": [],
             "guard": None,
         }
@@ -315,11 +493,13 @@ def decide(control, parameters):
         }
     if adaptive:
         diagnostics.update(candidate_evaluations=[], selected_candidate_duration_s=None)
+    completed_simple = False
     if active:
         plan = memory.plan
         reached = ego.time_s >= plan.start_s+plan.duration_s and abs(ego.y_m-plan.y_target_m) <= p['noa_completion_lateral_error_m'] and abs(ego.heading_rad) <= p['noa_completion_heading_rad']
         if reached:
             completed_reason = memory.lane_change_reason
+            completed_simple = simple_active and completed_reason == 'simple_formation_join'
             memory = replace(memory, plan=None, target_y_m=None, prepare_since_s=None,
                              last_lc_end_s=ego.time_s, completed_lane_changes=memory.completed_lane_changes+1,
                              lane_change_reason='')
@@ -341,6 +521,9 @@ def decide(control, parameters):
                                r5_clear_since_s=None,r5_last_time_s=ego.time_s)
             active = False
         else:
+            if simple_active and memory.lane_change_reason == 'simple_formation_join':
+                return _simple_execute(control, p, road, bodies, memory, diagnostics,
+                                       accel, emergency, end_x)
             # Release the source-end stop constraint only for the actual action
             # whose full remaining body sweep clears the observed road/traffic.
             maneuver_accel, _, _, maneuver_emergency, _ = _longitudinal(ego, bodies, ego.y_m, None, p)
@@ -407,51 +590,10 @@ def decide(control, parameters):
         motivation = None
     cooldown = memory.last_lc_end_s is not None and ego.time_s-memory.last_lc_end_s < p['noa_lane_change_cooldown_s']
     state = 'EMERGENCY' if emergency else ('FOLLOW' if lead is not None else 'CRUISE')
-    simple_vehicles = ()
     if simple_active:
-        simple_diagnostic = diagnostics["simple_formation"]
-        simple_vehicles = simple_formation.local_vehicles(control, road, p)
-        ego_lane = road.centers_m.index(road.current_center_m)
-        ego_row = simple_formation.LocalVehicle(
-            0, ego.x_m, ego.y_m, ego.vx_mps, ego_lane
-        )
-        target = simple_formation.choose_formation_target(
-            ego_row, simple_vehicles, road.centers_m, memory, p
-        )
-        memory = replace(memory, reference_track_id=target.reference_track_id)
-        requested = simple_formation.formation_acceleration(ego_row, target, p)
-        simple_diagnostic.update(
-            role=target.role,
-            target_x_m=target.target_x_m,
-            position_error_m=(None if target.target_x_m is None
-                              else target.target_x_m - ego.x_m),
-            reference_track_id=target.reference_track_id,
-            reference_reason=target.reason,
-            target_lane_index=target.target_lane_index,
-            reference_lane_index=target.reference_lane_index,
-            requested_acceleration_mps2=requested,
-        )
-        if emergency:
-            accel = min(accel, p['min_accel_mps2'])
-            simple_diagnostic["lane_reason"] = "emergency_priority"
-        else:
-            if requested is not None:
-                accel = requested
-            if end_x is not None and _simple_road_stop_required(ego, end_x, p):
-                road_accel, _, _, road_emergency, road_reason = _longitudinal(
-                    ego, (), center, end_x, p
-                )
-                if road_accel < accel:
-                    accel = road_accel
-                    simple_diagnostic["road_end_override"] = True
-                    simple_diagnostic["road_end_reason"] = road_reason
-                    diagnostics["reason"] = road_reason
-                if road_emergency:
-                    state = "EMERGENCY"
-                    simple_diagnostic["emergency_override"] = True
-                    simple_diagnostic["road_end_reason"] = road_reason
-                    diagnostics["reason"] = road_reason
-        accel = clip(accel, p['min_accel_mps2'], p['max_accel_mps2'])
+        return _simple_execute(control, p, road, bodies, memory, diagnostics,
+                               accel, emergency, end_x,
+                               completed_simple=completed_simple)
     r5_pending=[]
     if adaptive and motivation and not cooldown and not emergency:
         centers = road.centers_m

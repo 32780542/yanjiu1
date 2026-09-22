@@ -3,7 +3,7 @@
 Track labels in this module are local sensor labels.  They are used only to
 hold a still-visible reference in one vehicle's private memory; they never
 provide identity, priority, communication, global counts, or slot assignment.
-Lane-change safety remains the responsibility of the unchanged NOA controller.
+Formation lane admission uses current local geometry and measured bodies.
 """
 from dataclasses import dataclass, fields
 from collections.abc import Mapping
@@ -162,6 +162,13 @@ def formation_acceleration(ego, target, p):
     else:
         return None
     return max(-3.0, min(2.0, desired_speed - ego.vx_mps))
+
+
+def target_lane_clear(ego, vehicles, target_lane_index, p):
+    """Strict center-distance exclusion for lane-associated visible vehicles."""
+    return all(row.lane_index != target_lane_index
+               or abs(row.x_m - ego.x_m) >= p["simple_formation_target_lane_clearance_m"]
+               for row in vehicles)
 
 
 def _finite_number(value):
