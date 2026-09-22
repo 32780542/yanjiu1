@@ -40,7 +40,7 @@ _OWN_BEHAVIORS = frozenset((
 ))
 _LANE_CHANGE_REASONS = frozenset((
     "", "observed_lane_end", "slower_visible_lead", "formation_geometry",
-    "simple_formation_balance",
+    "simple_formation_balance", "simple_formation_join",
 ))
 _FORMATION_STATES = frozenset((
     "NOA_ONLY", "FALLBACK", "FORMING", "MAINTAINING", "RECONFIGURING",

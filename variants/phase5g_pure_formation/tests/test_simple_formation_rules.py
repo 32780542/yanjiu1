@@ -16,15 +16,25 @@ from noa.simple_formation import (
     memory_from_dict,
     validate_parameters,
 )
+from simulation.phase5g_clock import restore_initial_memories
 
 
 class SimpleFormationRuleTests(unittest.TestCase):
     def setUp(self):
         self.p = {
+            "simple_formation_component_gap_m": 10.0,
+            "simple_formation_middle_offset_m": 3.0,
+            "simple_formation_same_lane_gap_m": 20.0,
+            "simple_formation_position_tolerance_m": 2.0,
+            "simple_formation_speed_tolerance_mps": 0.5,
+            "simple_formation_stable_time_s": 1.0,
+            "simple_formation_reference_switch_gain_m": 5.0,
+            "simple_formation_min_lane_change_speed_mps": 5.0,
+            "simple_formation_target_lane_clearance_m": 15.0,
+            # Temporary compatibility values for the unmodified old rule tests below.
             "simple_formation_local_range_m": 90.0,
             "simple_formation_adjacent_gap_m": 15.0,
             "simple_formation_same_gap_m": 30.0,
-            "simple_formation_position_tolerance_m": 2.0,
             "simple_formation_accel_limit_mps2": 0.5,
             "simple_formation_max_lane_changes": 1,
         }
@@ -34,26 +44,28 @@ class SimpleFormationRuleTests(unittest.TestCase):
     def vehicle(track, x, lane, speed=20.0, y=0.0):
         return LocalVehicle(track, x, y, speed, lane)
 
-    def test_public_parameter_names_are_exactly_the_six_simple_rules(self):
+    def test_public_parameter_names_are_exactly_the_local_tail_contract(self):
         self.assertEqual(
             PARAMETERS,
             (
-                "simple_formation_local_range_m",
-                "simple_formation_adjacent_gap_m",
-                "simple_formation_same_gap_m",
+                "simple_formation_component_gap_m",
+                "simple_formation_middle_offset_m",
+                "simple_formation_same_lane_gap_m",
                 "simple_formation_position_tolerance_m",
-                "simple_formation_accel_limit_mps2",
-                "simple_formation_max_lane_changes",
+                "simple_formation_speed_tolerance_mps",
+                "simple_formation_stable_time_s",
+                "simple_formation_reference_switch_gain_m",
+                "simple_formation_min_lane_change_speed_mps",
+                "simple_formation_target_lane_clearance_m",
             ),
         )
 
-    def test_parameters_accept_only_complete_positive_finite_numbers_and_one_change(self):
+    def test_parameters_accept_only_complete_positive_finite_exact_numbers(self):
         validate_parameters(self.p)
         for key in PARAMETERS:
             with self.subTest(missing=key), self.assertRaises(ValueError):
                 validate_parameters({name: value for name, value in self.p.items() if name != key})
-        numeric = PARAMETERS[:-1]
-        for key in numeric:
+        for key in PARAMETERS:
             for bad in (
                 True,
                 False,
@@ -67,9 +79,6 @@ class SimpleFormationRuleTests(unittest.TestCase):
             ):
                 with self.subTest(key=key, bad=bad), self.assertRaises(ValueError):
                     validate_parameters({**self.p, key: bad})
-        for bad in (True, False, 0, 2, 1.0, math.nan, "1"):
-            with self.subTest(max_changes=bad), self.assertRaises(ValueError):
-                validate_parameters({**self.p, "simple_formation_max_lane_changes": bad})
 
     def test_records_are_frozen_and_slotted(self):
         memory = SimpleFormationMemory((), "CRUISE")
@@ -84,23 +93,55 @@ class SimpleFormationRuleTests(unittest.TestCase):
         restored = memory_from_dict(asdict(NoaMemory((), "CRUISE")))
         self.assertIsInstance(restored, SimpleFormationMemory)
         self.assertIsNone(restored.reference_track_id)
-        self.assertFalse(restored.formation_lane_change_done)
+        self.assertIsNone(restored.join_anchor_track_id)
+        self.assertIsNone(restored.desired_lane_index)
+        self.assertEqual(restored.join_phase, "FREE")
+        self.assertIsNone(restored.stable_since_s)
+        self.assertFalse(hasattr(restored, "formation_lane_change_done"))
         self.assertEqual(restored.own_behavior, "CRUISE")
 
     def test_memory_round_trip_preserves_base_and_private_simple_fields(self):
         original = SimpleFormationMemory(
-            (), "PREPARE", reference_track_id=7, formation_lane_change_done=True
+            (),
+            "PREPARE",
+            reference_track_id=7,
+            join_anchor_track_id=9,
+            desired_lane_index=2,
+            join_phase="STABILIZING",
+            stable_since_s=3.0,
         )
         self.assertEqual(memory_from_dict(asdict(original)), original)
 
-    def test_memory_rejects_nonlocal_reference_schema_and_nonboolean_done(self):
+    def test_memory_rejects_invalid_private_local_tail_fields_and_unknown_schema(self):
         base = asdict(NoaMemory((), "CRUISE"))
-        for bad in (-1, True, 1.0, "1"):
-            with self.subTest(reference=bad), self.assertRaises(ValueError):
-                memory_from_dict({**base, "reference_track_id": bad})
-        for bad in (0, 1, None, "false"):
-            with self.subTest(done=bad), self.assertRaises(ValueError):
-                memory_from_dict({**base, "formation_lane_change_done": bad})
+        for key in ("reference_track_id", "join_anchor_track_id"):
+            for bad in (-1, True, 1.0, "1"):
+                with self.subTest(key=key, bad=bad), self.assertRaises(ValueError):
+                    memory_from_dict({**base, key: bad})
+        for bad in (-1, 3, True, 1.0, "1"):
+            with self.subTest(desired_lane=bad), self.assertRaises(ValueError):
+                memory_from_dict({**base, "desired_lane_index": bad})
+        for bad in (None, True, "joining", "UNKNOWN"):
+            with self.subTest(phase=bad), self.assertRaises(ValueError):
+                memory_from_dict({**base, "join_phase": bad})
+        for bad in (-1, True, math.inf, -math.inf, math.nan, "1"):
+            with self.subTest(stable_since=bad), self.assertRaises(ValueError):
+                memory_from_dict({**base, "stable_since_s": bad})
+        for key in ("formation_lane_change_done", "unexpected"):
+            with self.subTest(extra=key), self.assertRaises(ValueError):
+                memory_from_dict({**base, key: True})
+
+    def test_clock_restores_new_simple_memory_and_accepts_join_reason(self):
+        raw = asdict(NoaMemory((), "CRUISE", lane_change_reason="simple_formation_join"))
+        restored = restore_initial_memories(
+            {"ego": raw},
+            ("ego",),
+            formation_enabled=True,
+            lane_priority_enabled=False,
+            simple_enabled=True,
+        )
+        self.assertEqual(restored["ego"].join_phase, "FREE")
+        self.assertEqual(restored["ego"].lane_change_reason, "simple_formation_join")
 
     def test_reference_is_none_without_a_visible_lane_resolved_front_vehicle(self):
         rows = (

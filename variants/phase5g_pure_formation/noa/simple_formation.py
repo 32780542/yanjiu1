@@ -12,19 +12,25 @@ from noa.contracts import NoaMemory, memory_from_dict as noa_memory_from_dict
 
 
 PARAMETERS = (
-    "simple_formation_local_range_m",
-    "simple_formation_adjacent_gap_m",
-    "simple_formation_same_gap_m",
+    "simple_formation_component_gap_m",
+    "simple_formation_middle_offset_m",
+    "simple_formation_same_lane_gap_m",
     "simple_formation_position_tolerance_m",
-    "simple_formation_accel_limit_mps2",
-    "simple_formation_max_lane_changes",
+    "simple_formation_speed_tolerance_mps",
+    "simple_formation_stable_time_s",
+    "simple_formation_reference_switch_gain_m",
+    "simple_formation_min_lane_change_speed_mps",
+    "simple_formation_target_lane_clearance_m",
 )
 
 
 @dataclass(frozen=True, slots=True)
 class SimpleFormationMemory(NoaMemory):
     reference_track_id: int | None = None
-    formation_lane_change_done: bool = False
+    join_anchor_track_id: int | None = None
+    desired_lane_index: int | None = None
+    join_phase: str = "FREE"
+    stable_since_s: float | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -44,8 +50,8 @@ class LaneDecision:
 
 
 def validate_parameters(p):
-    """Reject anything except the six complete, fixed simple-rule parameters."""
-    for key in PARAMETERS[:-1]:
+    """Require the complete positive finite local-tail parameter contract."""
+    for key in PARAMETERS:
         value = p.get(key)
         try:
             valid = type(value) in (int, float) and math.isfinite(value) and value > 0
@@ -53,26 +59,52 @@ def validate_parameters(p):
             valid = False
         if not valid:
             raise ValueError("Invalid positive finite simple-formation parameter: " + key)
-    key = PARAMETERS[-1]
-    if type(p.get(key)) is not int or p[key] != 1:
-        raise ValueError("Simple formation permits exactly one lane change")
 
 
 def memory_from_dict(data):
-    """Restore the NOA schema plus the two private simple-rule memory fields."""
+    """Restore exact NOA or local-tail memory schemas with neutral defaults."""
     value = dict(data)
-    reference = value.pop("reference_track_id", None)
-    done = value.pop("formation_lane_change_done", False)
-    if reference is not None and (type(reference) is not int or reference < 0):
-        raise ValueError("Invalid local reference track")
-    if type(done) is not bool:
-        raise ValueError("Invalid simple-formation lane-change completion flag")
     base_names = {field.name for field in fields(NoaMemory)}
-    base = noa_memory_from_dict({key: item for key, item in value.items() if key in base_names})
+    private_names = {
+        "reference_track_id",
+        "join_anchor_track_id",
+        "desired_lane_index",
+        "join_phase",
+        "stable_since_s",
+    }
+    unknown = set(value) - base_names - private_names
+    if unknown:
+        raise ValueError("Unexpected SimpleFormationMemory fields")
+    reference = value.pop("reference_track_id", None)
+    anchor = value.pop("join_anchor_track_id", None)
+    desired_lane = value.pop("desired_lane_index", None)
+    join_phase = value.pop("join_phase", "FREE")
+    stable_since = value.pop("stable_since_s", None)
+    for name, track_id in (("reference", reference), ("join anchor", anchor)):
+        if track_id is not None and (type(track_id) is not int or track_id < 0):
+            raise ValueError("Invalid local " + name + " track")
+    if desired_lane is not None and (
+        type(desired_lane) is not int or desired_lane not in (0, 1, 2)
+    ):
+        raise ValueError("Invalid desired local lane")
+    if type(join_phase) is not str or join_phase not in (
+        "FREE", "JOINING", "STABILIZING", "FORMED"
+    ):
+        raise ValueError("Invalid local-tail join phase")
+    if stable_since is not None and (
+        type(stable_since) not in (int, float)
+        or not math.isfinite(stable_since)
+        or stable_since < 0
+    ):
+        raise ValueError("Invalid local-tail stability timestamp")
+    base = noa_memory_from_dict(value)
     return SimpleFormationMemory(
         **{field.name: getattr(base, field.name) for field in fields(NoaMemory)},
         reference_track_id=reference,
-        formation_lane_change_done=done,
+        join_anchor_track_id=anchor,
+        desired_lane_index=desired_lane,
+        join_phase=join_phase,
+        stable_since_s=stable_since,
     )
 
 
