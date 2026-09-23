@@ -12,12 +12,13 @@ import json
 import math
 import os
 from pathlib import Path
-import random
-import sys
 from typing import Iterable, Mapping, Sequence
 from uuid import uuid4
 
 from experiments.phase5_detection import detect_frames
+from experiments.phase5g_schedule import (
+    CONTROL_DT_S, LANE_CENTERS_M, deterministic_schedule_rows,
+)
 from models.geometry import body_from_state
 from models.kinematic import kinematic_state
 from models.vehicle import VehicleState
@@ -30,9 +31,7 @@ SOURCE_PATH = "experiments/phase5g_cases.py"
 SUPPORTED_COUNTS = (3, 4, 5, 6, 7, 8, 12)
 DEV_SEEDS = (101, 102, 103)
 HOLDOUT_SEEDS = (5101, 5102, 5103, 5104, 5105)
-LANE_CENTERS_M = (1.65, 4.95, 8.25)
 DURATION_S = 45.0
-CONTROL_DT_S = 0.1
 DEPART_INTERVAL_MIN_S = 2.5
 DEPART_INTERVAL_MAX_S = 4.0
 FORMATION_DEADLINE_S = 30.0
@@ -292,31 +291,21 @@ def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
         depart_interval_min_s, depart_interval_max_s,
     )
     keys = _actor_keys(count, actor_keys)
-    rng = random.Random(seed)
-    minimum_tick = math.ceil(interval_low / CONTROL_DT_S - 1e-12)
-    maximum_tick = math.floor(interval_high / CONTROL_DT_S + 1e-12)
-    if maximum_tick * max(1, count - 1) > sys.float_info.max:
-        raise ValueError(
-            "departure interval schedule is too large for a 0.1 s control tick"
-        )
-    raw_upper = maximum_tick * CONTROL_DT_S
-    scheduled_tick = 0
     departures = {}
-    for ordinal, key in enumerate(keys):
-        if ordinal:
-            raw_interval = rng.uniform(interval_low, raw_upper)
-            interval_ticks = max(
-                minimum_tick,
-                math.ceil(raw_interval / CONTROL_DT_S - 1e-12),
-            )
-            scheduled_tick += interval_ticks
-        lane_center = rng.choice(LANE_CENTERS_M)
-        speed = rng.uniform(low, high)
+    schedule = deterministic_schedule_rows(
+        count, seed,
+        depart_interval_min_s=interval_low,
+        depart_interval_max_s=interval_high,
+        speed_min_mps=low,
+        speed_max_mps=high,
+    )
+    for ordinal, (key, (departure_s, lane_center, speed)) in enumerate(
+            zip(keys, schedule)):
         state = asdict(kinematic_state(
             parameters, x_m=SPAWN_X_M, y_m=lane_center, vx_mps=speed,
         ))
         departures[key] = {
-            "scheduled_departure_s": round(scheduled_tick * CONTROL_DT_S, 1),
+            "scheduled_departure_s": departure_s,
             "actual_departure_s": None,
             "state": state,
             "physical_ordinal": ordinal,

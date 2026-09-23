@@ -64,6 +64,7 @@ SOURCE_FILES = (
     "configs/phase5g.json",
     "experiments/phase5g.py",
     "experiments/phase5g_cases.py",
+    "experiments/phase5g_schedule.py",
     "experiments/phase5g_replay.py",
     "experiments/phase5_detection.py",
     "noa/controller.py",
@@ -1866,6 +1867,17 @@ def _demo_case(physical: Mapping[str, object], *, vehicle_count: int, seed: int,
         depart_interval_max_s=depart_interval_max_s,
     )
     if not live:
+        minimum_duration = float(seeded["duration_s"])
+        if duration_s + 1e-9 < minimum_duration:
+            last_departure = max(
+                row["scheduled_departure_s"]
+                for row in seeded["departures"].values()
+            )
+            raise ValueError(
+                "duration_s must cover the deterministic final departure "
+                f"({last_departure:g} s), 30 s formation deadline, and 10 s "
+                f"hold ({minimum_duration:g} s minimum)"
+            )
         return {**seeded, "duration_s": duration_s}
     if vehicle_count != 6:
         raise ValueError("live historical execution supports only the fixed six-actor case")
@@ -1915,13 +1927,6 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         "initial_speed_max_mps", initial_speed_max_mps, positive=True)
     if speed_min >= speed_max:
         raise ValueError("initial_speed_min_mps must be less than initial_speed_max_mps")
-    minimum_duration = (vehicle_count - 1) * interval_max + 0.1
-    if duration + 1e-9 < minimum_duration:
-        raise ValueError(
-            "duration_s must include one complete control interval after the "
-            f"latest possible departure ({minimum_duration:g} s minimum); "
-            "scientific acceptance should also retain the 30 s deadline and 10 s hold"
-        )
     if _strict_mode(mode) != "lane_priority" or formal is not False:
         raise ValueError("demo is exactly one non-formal lane_priority case")
     if type(live) is not bool:
@@ -1954,7 +1959,6 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
     if not math.isclose(round(duration / physical["control_sync_dt_s"])
                         * physical["control_sync_dt_s"], duration, abs_tol=1e-9, rel_tol=0.0):
         raise ValueError("duration_s must contain complete control intervals")
-    base = _validated_output_base(output_base)
     case = _demo_case(
         physical, vehicle_count=vehicle_count, seed=seed,
         duration_s=duration, live=live,
@@ -1962,6 +1966,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         depart_interval_min_s=interval_min,
         depart_interval_max_s=interval_max,
     )
+    base = _validated_output_base(output_base)
     memories = _initial_memories(case, mode, simple_rules=True)
     registered_modes = _mode_registry()
     run_metadata = {

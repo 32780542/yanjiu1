@@ -2,6 +2,7 @@
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -28,6 +29,7 @@ EVIDENCE_MANIFEST_SHA256 = (
 )
 SIMPLE_VARIANT_REL = Path('variants/phase5g_pure_formation')
 SIMPLE_OUTPUT_BASE = Path('results/phase5g/simple_gui_sources')
+SIMPLE_SCHEDULE_REL = Path('experiments/phase5g_schedule.py')
 _PLAYBACK_STATE_FIELDS = (
     'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps',
     'yaw_rate_radps', 'a_drive_mps2', 'steering_rad',
@@ -287,11 +289,6 @@ def validate_simple_config(
     if not math.isclose(intervals * 0.1, config.simulation_duration_s,
                         abs_tol=1e-9, rel_tol=0.0):
         raise ValueError('SIMULATION_DURATION_S 必须是 0.1 秒的完整倍数')
-    minimum_duration = (config.vehicle_count - 1) * interval_max + 0.1
-    if config.simulation_duration_s + 1e-9 < minimum_duration:
-        raise ValueError(
-            'SIMULATION_DURATION_S 必须覆盖最晚可能发车后的完整控制周期；'
-            f'至少 {minimum_duration:g} 秒。科学验收建议再保留30秒期限和10秒保持期')
     if type(config.show_gui) is not bool:
         raise ValueError('SHOW_GUI 必须是 True 或 False')
     if type(config.gui_delay_ms) is not int or not 0 <= config.gui_delay_ms <= 1000:
@@ -329,6 +326,7 @@ def validate_simple_config(
     network = root / 'scenarios' / 'cai2024' / 'bottleneck.net.xml'
     variant_root = root / SIMPLE_VARIANT_REL
     variant_run = variant_root / 'run.py'
+    schedule_path = variant_root / SIMPLE_SCHEDULE_REL
     variant_results = variant_root / 'results'
     _require_regular_file(sumo_gui, sumo_home, '登记的SUMO界面程序')
     _require_regular_file(traci_python, sumo_home, 'SUMO TraCI入口')
@@ -336,6 +334,14 @@ def validate_simple_config(
     _resolve_future_directory(
         variant_root, root, 'Phase5G根目录', require_existing=True)
     _require_regular_file(variant_run, root, 'Phase5G入口')
+    _require_regular_file(schedule_path, root, 'Phase5G确定性发车日程')
+    minimum_duration, last_departure = _simple_schedule_minimum_duration(
+        config, schedule_path)
+    if config.simulation_duration_s + 1e-9 < minimum_duration:
+        raise ValueError(
+            'SIMULATION_DURATION_S 必须覆盖实际确定性日程的最后计划发车'
+            f'（{last_departure:g}秒）、30秒形成期限和10秒保持期；'
+            f'至少 {minimum_duration:g} 秒')
     resolved_results = _resolve_future_directory(
         variant_results, variant_root, 'Phase5G结果根目录')
     return SimpleCheckedPaths(
@@ -343,6 +349,28 @@ def validate_simple_config(
         variant_run=variant_run.resolve(), variant_results=resolved_results,
         sumo_home=sumo_home.resolve(), sumo_gui=sumo_gui.resolve(),
         network=network.resolve(), traci_python=traci_python.resolve())
+
+
+def _simple_schedule_minimum_duration(
+        config: SimpleFormationDemoConfig, schedule_path: Path) -> tuple[float, float]:
+    """Load the variant's dependency-light scheduler without copying its RNG."""
+    spec = importlib.util.spec_from_file_location(
+        '_phase5g_demo_schedule', _native_io_path(schedule_path))
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f'无法加载Phase5G确定性发车日程: {schedule_path}')
+    module = importlib.util.module_from_spec(spec)
+    try:
+        spec.loader.exec_module(module)
+        last_departure = module.last_scheduled_departure_s(
+            config.vehicle_count, config.random_seed,
+            depart_interval_min_s=config.depart_interval_min_s,
+            depart_interval_max_s=config.depart_interval_max_s,
+            speed_min_mps=config.initial_speed_min_mps,
+            speed_max_mps=config.initial_speed_max_mps,
+        )
+    except (OSError, TypeError, ValueError) as error:
+        raise ValueError(f'无法计算Phase5G确定性发车日程: {error}') from error
+    return round(float(last_departure) + 40.0, 1), float(last_departure)
 
 
 def simple_generation_timeout_s(duration_s: float, vehicle_count: int) -> int:

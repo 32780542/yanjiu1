@@ -245,7 +245,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def make_short_demo(self, base, *, seed=11, count=3):
         return self.harness.run_phase5g_demo(
             vehicle_count=count, seed=seed, target_speed_mps=10.0,
-            duration_s=count * 0.1,
+            duration_s=40.0 + (count - 1) * 0.1,
             output_base=base, live=False,
             depart_interval_min_s=0.1,
             depart_interval_max_s=0.1,
@@ -386,10 +386,10 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_demo_case_selection_uses_dynamic_offline_and_keeps_fixed_live_history(self):
         _, physical, _ = self.dynamic_parameters()
         offline = self.harness._demo_case(
-            physical, vehicle_count=6, seed=101, duration_s=45.0, live=False,
+            physical, vehicle_count=6, seed=101, duration_s=90.0, live=False,
         )
         live = self.harness._demo_case(
-            physical, vehicle_count=6, seed=101, duration_s=45.0, live=True,
+            physical, vehicle_count=6, seed=101, duration_s=90.0, live=True,
         )
         self.assertIn("departures", offline)
         self.assertEqual(len(offline["initial"]), 1)
@@ -400,7 +400,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "fixed six-actor"):
             self.harness._demo_case(
                 physical, vehicle_count=3, seed=101,
-                duration_s=45.0, live=True,
+                duration_s=90.0, live=True,
             )
 
     def test_dynamic_record_rejects_pending_actor_declared_active_before_schedule(self):
@@ -1059,7 +1059,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             output = Path(temp) / "simple-demo"
             result = self.harness.run_phase5g_demo(
                 vehicle_count=6, seed=7, target_speed_mps=9.5,
-                duration_s=0.6, output_base=output, live=False,
+                duration_s=40.5, output_base=output, live=False,
                 depart_interval_min_s=0.1,
                 depart_interval_max_s=0.1,
                 formation_join_range_m=48.0,
@@ -1083,7 +1083,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertEqual(metadata["vehicle_count"], 6)
             self.assertEqual(metadata["seed"], 7)
             self.assertEqual(metadata["target_speed_mps"], 9.5)
-            self.assertEqual(metadata["duration_s"], 0.6)
+            self.assertEqual(metadata["duration_s"], 40.5)
             self.assertEqual(metadata["simple_parameters"], SIMPLE_NONDEFAULTS)
             run_variant.assert_called_once()
             args = run_variant.call_args.args
@@ -1097,7 +1097,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_demo_rejects_every_invalid_value_before_creating_result_base(self):
         valid = {
             "vehicle_count": 3, "seed": 1, "target_speed_mps": 10.0,
-            "duration_s": 0.3, "live": False,
+            "duration_s": 40.2, "live": False,
             "depart_interval_min_s": 0.1,
             "depart_interval_max_s": 0.1,
             "initial_speed_min_mps": 8.0,
@@ -1143,6 +1143,27 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                     self.harness, "run_variant"
                 ) as runner, self.assertRaises(ValueError):
                     self.harness.run_phase5g_demo(**kwargs)
+                runner.assert_not_called()
+                self.assertFalse(output.exists())
+
+    def test_demo_rejects_duration_before_output_using_actual_seeded_schedule(self):
+        with tempfile.TemporaryDirectory() as temp:
+            for duration in (44.1, 75.4):
+                output = Path(temp) / f"duration-{duration}"
+                with self.subTest(duration=duration), patch.object(
+                    self.harness, "run_variant", return_value={
+                        "status": "completed", "recording_passed": True,
+                        "scientific_passed": None,
+                    }
+                ) as runner, self.assertRaisesRegex(
+                    ValueError, "75.5|30 s|10 s|40 s|deadline|hold"
+                ):
+                    self.harness.run_phase5g_demo(
+                        vehicle_count=12, seed=1, target_speed_mps=10.0,
+                        duration_s=duration, output_base=output, live=False,
+                        depart_interval_min_s=2.5,
+                        depart_interval_max_s=4.0,
+                    )
                 runner.assert_not_called()
                 self.assertFalse(output.exists())
 

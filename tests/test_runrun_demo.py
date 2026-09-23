@@ -147,6 +147,12 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
         for file in (sumo_gui, traci_python, network, variant_run):
             file.parent.mkdir(parents=True, exist_ok=True)
             file.write_text('', encoding='utf-8')
+        schedule = root / gui.SIMPLE_VARIANT_REL / gui.SIMPLE_SCHEDULE_REL
+        schedule.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(
+            gui.PROJECT_ROOT / gui.SIMPLE_VARIANT_REL / gui.SIMPLE_SCHEDULE_REL,
+            schedule,
+        )
         tools = root / 'configs' / 'tools.json'
         tools.parent.mkdir(parents=True)
         tools.write_text(
@@ -236,7 +242,7 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
             with self.subTest(count=count):
                 config = replace(
                     gui.SimpleFormationDemoConfig(), vehicle_count=count,
-                    simulation_duration_s=(count - 1) * 4.0 + 0.1)
+                    simulation_duration_s=(count - 1) * 4.0 + 40.0)
                 gui.validate_simple_config(config, gui.PROJECT_ROOT)
         invalid = (
             replace(gui.SimpleFormationDemoConfig(),
@@ -245,15 +251,29 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                     initial_speed_min_mps=12.1, initial_speed_max_mps=12.0),
             replace(gui.SimpleFormationDemoConfig(),
                     initial_speed_min_mps=12.0, initial_speed_max_mps=12.0),
-            replace(gui.SimpleFormationDemoConfig(), simulation_duration_s=44.0),
         )
         labels = (
             'DEPART_INTERVAL', 'INITIAL_SPEED', 'INITIAL_SPEED',
-            'SIMULATION_DURATION_S',
         )
         for config, label in zip(invalid, labels):
             with self.subTest(label=label), self.assertRaisesRegex(ValueError, label):
                 gui.validate_simple_config(config, gui.PROJECT_ROOT)
+
+    def test_duration_uses_actual_seeded_last_departure_plus_deadline_and_hold(self):
+        for duration in (44.1, 75.4):
+            with self.subTest(duration=duration), self.assertRaisesRegex(
+                    ValueError, '75.5|30秒|10秒|40秒'):
+                gui.validate_simple_config(
+                    replace(gui.SimpleFormationDemoConfig(),
+                            simulation_duration_s=duration),
+                    gui.PROJECT_ROOT,
+                )
+        accepted = gui.validate_simple_config(
+            replace(gui.SimpleFormationDemoConfig(),
+                    simulation_duration_s=75.5),
+            gui.PROJECT_ROOT,
+        )
+        self.assertEqual(accepted.variant_root.name, 'phase5g_pure_formation')
 
     def test_extreme_finite_duration_is_a_named_validation_error(self):
         config = replace(
