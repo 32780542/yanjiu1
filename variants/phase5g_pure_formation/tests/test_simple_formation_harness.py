@@ -1475,9 +1475,11 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         def replay(run_path, *, base):
             replays.append((Path(run_path), Path(base)))
             failed = len(replays) == 3
+            replay_path = Path(base) / f"replay-{len(replays)}"
+            replay_path.mkdir(parents=True)
             return {
                 "passed": not failed,
-                "path": str(Path(base) / f"replay-{len(replays)}"),
+                "path": str(replay_path),
                 "errors": (["semantic replay failure", "semantic replay failure"]
                            if failed else []),
             }
@@ -1549,23 +1551,26 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_matrix_long_gap_is_separate_two_component_case(self):
         matrix = importlib.import_module("experiments.phase5g_matrix")
         calls = []
+
+        def replay(_run_path, *, base):
+            replay_path = Path(base) / "replay"
+            replay_path.mkdir(parents=True)
+            return {"passed": True, "path": str(replay_path), "errors": []}
+
         with tempfile.TemporaryDirectory() as temp:
             result_path = matrix.run_matrix(
                 Path(temp) / "matrix", live=False,
                 demo_runner=self._fake_matrix_demo(calls),
-                replay_runner=lambda run_path, *, base: {
-                    "passed": True, "path": str(Path(base) / "replay"),
-                    "errors": [],
-                },
+                replay_runner=replay,
             )
             aggregate = json.loads(
                 (result_path / "aggregate.json").read_text(encoding="utf-8")
             )
         gap_call = calls[-1]
-        self.assertEqual(gap_call["vehicle_count"], 3)
-        self.assertEqual(gap_call["seed"], 4)
+        self.assertEqual(gap_call["vehicle_count"], 6)
+        self.assertEqual(gap_call["seed"], 1432)
         self.assertEqual(gap_call["depart_interval_min_s"], 2.5)
-        self.assertEqual(gap_call["depart_interval_max_s"], 8.0)
+        self.assertEqual(gap_call["depart_interval_max_s"], 20.0)
         self.assertEqual(gap_call["expected_component_count"], 2)
         self.assertEqual(
             aggregate["gap_case"]["scientific_status"]["expected_component_count"],
@@ -1574,14 +1579,42 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertEqual(aggregate["total_count"], 15)
         self.assertNotIn(aggregate["gap_case"], aggregate["runs"])
 
+    def test_real_gap_run_finishes_with_two_retained_three_vehicle_components(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            run_path = self.harness.run_phase5g_demo(
+                output_base=Path(temp) / "real-gap", **matrix._GAP_RUN,
+            )
+            detection = json.loads(
+                (run_path / "case" / "detection.json").read_text(
+                    encoding="utf-8"
+                )
+            )["default"]
+        self.assertEqual(detection["parameters"]["expected_component_count"], 2)
+        self.assertEqual(
+            detection["expected_component_members"],
+            [["v0", "v1", "v2"], ["v3", "v4", "v5"]],
+        )
+        self.assertEqual(len(detection["final_component_lane_counts"]), 2)
+        self.assertNotIn(
+            "expected_component_count_mismatch", detection["failure_reasons"]
+        )
+        self.assertTrue(all(
+            len(component) == 3
+            for component in detection["expected_component_members"]
+        ))
+
     def test_long_gap_schedule_physically_starts_two_local_components(self):
         detector = importlib.import_module("experiments.phase5_detection")
         schedule = phase5g_schedule.deterministic_schedule_rows(
-            3, 4, depart_interval_min_s=2.5,
-            depart_interval_max_s=8.0, speed_min_mps=8.0,
+            6, 1432, depart_interval_min_s=2.5,
+            depart_interval_max_s=20.0, speed_min_mps=8.0,
             speed_max_mps=12.0,
         )
-        self.assertEqual([row[0] for row in schedule], [0.0, 6.5, 9.4])
+        self.assertEqual(
+            [row[0] for row in schedule],
+            [0.0, 7.9, 13.0, 22.5, 27.1, 31.6],
+        )
         cohort_time = schedule[-1][0]
         rows = {
             f"v{index}": {
@@ -1594,10 +1627,12 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         components = detector._physical_components(rows, 50.0)
         self.assertEqual(
             [[row["key"] for row in component] for component in components],
-            [["v0"], ["v1", "v2"]],
+            [["v0", "v1", "v2"], ["v3", "v4", "v5"]],
         )
-        self.assertGreater(rows["v0"]["x_m"] - rows["v1"]["x_m"], 50.0)
-        self.assertLessEqual(rows["v1"]["x_m"] - rows["v2"]["x_m"], 50.0)
+        self.assertGreater(rows["v2"]["x_m"] - rows["v3"]["x_m"], 50.0)
+        for front, rear in (("v0", "v1"), ("v1", "v2"),
+                            ("v3", "v4"), ("v4", "v5")):
+            self.assertLessEqual(rows[front]["x_m"] - rows[rear]["x_m"], 50.0)
 
     def test_demo_records_explicit_two_component_expectation(self):
         with tempfile.TemporaryDirectory() as temp, patch.object(
@@ -1685,9 +1720,13 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 replayed.append((run_path, base))
                 return {"passed": True, "path": None, "errors": []}
 
+            def outside_demo(**kwargs):
+                Path(kwargs["output_base"]).mkdir(parents=True)
+                return outside
+
             result = matrix.run_matrix(
                 Path(temp) / "matrix", live=False,
-                demo_runner=lambda **_kwargs: outside,
+                demo_runner=outside_demo,
                 replay_runner=replay,
             )
             aggregate = json.loads(
@@ -1723,6 +1762,62 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             scientific["failure_reasons"], ["scientific_evaluation_not_passed"]
         )
         self.assertEqual(replay["errors"], ["replay_not_passed"])
+
+    def test_replay_status_accepts_only_an_existing_direct_nonreparse_child(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            replay_base = root / "replay-base"
+            replay_base.mkdir()
+            valid = replay_base / "valid-run"
+            valid.mkdir()
+            accepted = matrix._replay_status(
+                root / "source", replay_base,
+                lambda *_args, **_kwargs: {
+                    "passed": True, "path": str(valid), "errors": [],
+                },
+            )
+            self.assertTrue(accepted["passed"])
+            self.assertEqual(Path(accepted["path"]), valid)
+
+            outside = root / "outside"
+            outside.mkdir()
+            sibling = root / "sibling"
+            sibling.mkdir()
+            missing = replay_base / "missing"
+            file_path = replay_base / "not-a-directory"
+            file_path.write_text("file", encoding="utf-8")
+            invalid = (outside, root, sibling, missing, file_path)
+            for candidate in invalid:
+                with self.subTest(candidate=candidate):
+                    status = matrix._replay_status(
+                        root / "source", replay_base,
+                        lambda *_args, candidate=candidate, **_kwargs: {
+                            "passed": True, "path": str(candidate), "errors": [],
+                        },
+                    )
+                    self.assertFalse(status["passed"])
+                    self.assertTrue(status["errors"])
+
+            reparse = replay_base / "reparse-run"
+            make_directory_reparse(reparse, outside)
+            status = matrix._replay_status(
+                root / "source", replay_base,
+                lambda *_args, **_kwargs: {
+                    "passed": True, "path": str(reparse), "errors": [],
+                },
+            )
+            self.assertFalse(status["passed"])
+            self.assertTrue(status["errors"])
+
+            no_path = matrix._replay_status(
+                root / "source", replay_base,
+                lambda *_args, **_kwargs: {
+                    "passed": True, "path": None, "errors": [],
+                },
+            )
+            self.assertFalse(no_path["passed"])
+            self.assertTrue(no_path["errors"])
 
     def test_run_variant_reconstructs_nondefault_rules_and_neutral_private_memories(self):
         model, physical, policy = self.simple_parameters()

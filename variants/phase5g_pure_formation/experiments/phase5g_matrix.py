@@ -8,6 +8,7 @@ from uuid import uuid4
 
 from experiments.phase5g import (
     _prepare_output_directory,
+    _require_output_directory,
     _validated_output_base,
     atomic_json,
     run_phase5g_demo,
@@ -44,10 +45,10 @@ _DEFAULT_RUN = {
 
 _GAP_RUN = {
     **_DEFAULT_RUN,
-    "vehicle_count": 3,
-    "seed": 4,
+    "vehicle_count": 6,
+    "seed": 1432,
     "depart_interval_min_s": 2.5,
-    "depart_interval_max_s": 8.0,
+    "depart_interval_max_s": 20.0,
     "expected_component_count": 2,
 }
 
@@ -94,13 +95,25 @@ def _retained_run_path(run_base: Path) -> Path | None:
     return None
 
 
-def _bound_returned_run_path(value: object, run_base: Path) -> Path:
+def _bound_output_child(value: object, base: Path, label: str) -> Path:
     if not isinstance(value, (str, Path)):
-        raise ValueError("demo returned run path must be a path string")
-    candidate = Path(value).resolve()
-    if not candidate.is_dir() or candidate.parent != run_base.resolve():
-        raise ValueError("demo returned run path outside its unique output base")
-    return candidate
+        raise ValueError(f"{label} returned path must be a path string")
+    candidate = Path(value)
+    checked_base = _require_output_directory(base)
+    if candidate.is_absolute():
+        lexical_candidate = Path(candidate)
+    else:
+        lexical_candidate = checked_base / candidate
+    if lexical_candidate.parent != checked_base:
+        raise ValueError(f"{label} returned path outside its unique output base")
+    checked = _require_output_directory(lexical_candidate)
+    if checked.resolve().parent != checked_base.resolve():
+        raise ValueError(f"{label} returned path escaped its unique output base")
+    return checked
+
+
+def _bound_returned_run_path(value: object, run_base: Path) -> Path:
+    return _bound_output_child(value, run_base, "demo")
 
 
 def _scientific_status(run_path: Path | None,
@@ -173,9 +186,16 @@ def _replay_status(run_path: Path | None, replay_base: Path,
         path = result.get("path")
         if path is not None and not isinstance(path, (str, Path)):
             raise ValueError("replay result path must be a path string or null")
+        if path is None:
+            if result["passed"]:
+                raise ValueError("passed replay result requires its retained path")
+            checked_path = None
+        else:
+            checked_path = _bound_output_child(path, replay_base, "replay")
         status.update(
             attempted=True, passed=result["passed"],
-            path=None if path is None else str(path), errors=list(errors),
+            path=None if checked_path is None else str(checked_path),
+            errors=list(errors),
         )
         if not result["passed"] and not status["errors"]:
             status["errors"].append("replay_not_passed")
