@@ -878,7 +878,7 @@ class Phase5GCLITests(unittest.TestCase):
 
     def test_demo_validates_arguments_and_runs_only_lane_priority_nonformal(self):
         invalid = (
-            ["phase5g-demo", "--vehicle-count", "5"],
+            ["phase5g-demo", "--vehicle-count", "2"],
             ["phase5g-demo", "--vehicle-count", "6", "--target-speed-mps", "nan"],
             ["phase5g-demo", "--vehicle-count", "6", "--duration-s", "0"],
         )

@@ -9,14 +9,17 @@
   "formation_lane_backoff_max_s": 2.0,
   "formation_lane_duration_candidates_s": [5.0, 7.5, 10.0],
   "formation_lane_min_relation_gain": 1,
-  "simple_formation_local_range_m": 90.0,
-  "simple_formation_adjacent_gap_m": 15.0,
-  "simple_formation_same_gap_m": 30.0,
+  "simple_formation_component_gap_m": 50.0,
+  "simple_formation_middle_offset_m": 15.0,
+  "simple_formation_same_lane_gap_m": 30.0,
   "simple_formation_position_tolerance_m": 2.0,
-  "simple_formation_accel_limit_mps2": 0.5,
-  "simple_formation_max_lane_changes": 1,
+  "simple_formation_speed_tolerance_mps": 1.0,
+  "simple_formation_stable_time_s": 1.0,
+  "simple_formation_reference_switch_gain_m": 2.0,
+  "simple_formation_min_lane_change_speed_mps": 5.0,
+  "simple_formation_target_lane_clearance_m": 8.0,
   "phase5g_target_speed_mps": 10.0,
   "phase5g_initial_speed_min_mps": 8.0,
   "phase5g_initial_speed_max_mps": 12.0,
-  "phase5g_duration_s": 45.0
+  "phase5g_duration_s": 90.0
 }

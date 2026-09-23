@@ -57,7 +57,7 @@ SUMMARY_KEYS = (
     "collision_count", "geometry_passed", "comfort_passed",
 )
 FORMATION_LANE_REASONS = frozenset((
-    "formation_geometry", "simple_formation_balance",
+    "formation_geometry", "simple_formation_join",
 ))
 SOURCE_FILES = (
     "run.py",
@@ -437,7 +437,7 @@ def parameters(mode: str, target_speed_mps: float = 10.0, *,
     registered = _registered()
     if simple_rules:
         if simple_overrides is None or set(simple_overrides) != set(simple_formation.PARAMETERS):
-            raise ValueError("simple_overrides must contain exactly the six simple parameters")
+            raise ValueError("simple_overrides must contain exactly the nine simple parameters")
         resolved_simple = {
             name: simple_overrides[name] for name in simple_formation.PARAMETERS
         }
@@ -541,10 +541,10 @@ def expected_snapshot_manifests(case_file: str | Path) -> tuple[dict, dict]:
 def seal_directory(path: str | Path) -> None:
     """Seal every current file and replace only the manifest itself."""
     root = _validated_output_base(path)
+    manifest = snapshot_manifest(root, "evidence")
     atomic_json(root / "evidence_hashes.json", {
-        file.relative_to(root).as_posix(): _stream_file_sha256(file)
-        for file in sorted(root.rglob("*"))
-        if file.is_file() and file != root / "evidence_hashes.json"
+        name: entry["sha256"] for name, entry in manifest.items()
+        if name != "evidence_hashes.json"
     })
 
 
@@ -1852,11 +1852,19 @@ def _exact_seed(seed: object) -> int:
 
 
 def _demo_case(physical: Mapping[str, object], *, vehicle_count: int, seed: int,
-               duration_s: float, live: bool) -> dict:
+               duration_s: float, live: bool,
+               speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
+               depart_interval_min_s: float = 2.5,
+               depart_interval_max_s: float = 4.0) -> dict:
     """Use scheduled local execution offline; retain only the historical live six."""
-    from experiments.phase5g_cases import main_six_case, seeded_case
+    from experiments.phase5g_cases import demo_case, main_six_case
 
-    seeded = seeded_case(physical, vehicle_count, seed)
+    seeded = demo_case(
+        physical, vehicle_count, seed,
+        speed_min_mps=speed_min_mps, speed_max_mps=speed_max_mps,
+        depart_interval_min_s=depart_interval_min_s,
+        depart_interval_max_s=depart_interval_max_s,
+    )
     if not live:
         return {**seeded, "duration_s": duration_s}
     if vehicle_count != 6:
@@ -1874,38 +1882,70 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                      duration_s: float, output_base: str | Path,
                      mode: str = "lane_priority", formal: bool = False,
                      live: bool = False,
-                     local_formation_range_m: float = 90.0,
-                     adjacent_lane_gap_m: float = 15.0,
+                     depart_interval_min_s: float = 2.5,
+                     depart_interval_max_s: float = 4.0,
+                     initial_speed_min_mps: float = 8.0,
+                     initial_speed_max_mps: float = 12.0,
+                     formation_join_range_m: float = 50.0,
+                     middle_lane_offset_m: float = 15.0,
                      same_lane_gap_m: float = 30.0,
                      position_tolerance_m: float = 2.0,
-                     formation_accel_limit_mps2: float = 0.5,
-                     max_formation_lane_changes: int = 1) -> Path:
+                     speed_tolerance_mps: float = 1.0,
+                     stable_time_s: float = 1.0,
+                     reference_switch_gain_m: float = 2.0,
+                     min_formation_lane_change_speed_mps: float = 5.0,
+                     hard_lane_change_gap_m: float = 8.0) -> Path:
     """Generate one non-formal lane-priority trace for later SUMO-GUI playback."""
-    from experiments.phase5g_cases import (
-        SUPPORTED_COUNTS, canonical_json_bytes, digest_json, physical_case,
-    )
+    from experiments.phase5g_cases import canonical_json_bytes, digest_json, physical_case
 
-    if type(vehicle_count) is not int or vehicle_count not in SUPPORTED_COUNTS:
-        raise ValueError("vehicle_count must be exactly 3, 6, or 12")
+    if type(vehicle_count) is not int or not 3 <= vehicle_count <= 60:
+        raise ValueError("vehicle_count must be an exact integer from 3 to 60")
     seed = _exact_seed(seed)
     target_speed = _finite("target_speed_mps", target_speed_mps, positive=True)
     duration = _finite("duration_s", duration_s, positive=True)
+    interval_min = _finite(
+        "depart_interval_min_s", depart_interval_min_s, positive=True)
+    interval_max = _finite(
+        "depart_interval_max_s", depart_interval_max_s, positive=True)
+    if interval_min > interval_max:
+        raise ValueError("depart_interval_min_s must not exceed depart_interval_max_s")
+    speed_min = _finite(
+        "initial_speed_min_mps", initial_speed_min_mps, positive=True)
+    speed_max = _finite(
+        "initial_speed_max_mps", initial_speed_max_mps, positive=True)
+    if speed_min >= speed_max:
+        raise ValueError("initial_speed_min_mps must be less than initial_speed_max_mps")
+    minimum_duration = (vehicle_count - 1) * interval_max + 0.1
+    if duration + 1e-9 < minimum_duration:
+        raise ValueError(
+            "duration_s must include one complete control interval after the "
+            f"latest possible departure ({minimum_duration:g} s minimum); "
+            "scientific acceptance should also retain the 30 s deadline and 10 s hold"
+        )
     if _strict_mode(mode) != "lane_priority" or formal is not False:
         raise ValueError("demo is exactly one non-formal lane_priority case")
     if type(live) is not bool:
         raise ValueError("live must be bool")
     resolved_simple = {
-        "simple_formation_local_range_m": _finite(
-            "local_formation_range_m", local_formation_range_m, positive=True),
-        "simple_formation_adjacent_gap_m": _finite(
-            "adjacent_lane_gap_m", adjacent_lane_gap_m, positive=True),
-        "simple_formation_same_gap_m": _finite(
+        "simple_formation_component_gap_m": _finite(
+            "formation_join_range_m", formation_join_range_m, positive=True),
+        "simple_formation_middle_offset_m": _finite(
+            "middle_lane_offset_m", middle_lane_offset_m, positive=True),
+        "simple_formation_same_lane_gap_m": _finite(
             "same_lane_gap_m", same_lane_gap_m, positive=True),
         "simple_formation_position_tolerance_m": _finite(
             "position_tolerance_m", position_tolerance_m, positive=True),
-        "simple_formation_accel_limit_mps2": _finite(
-            "formation_accel_limit_mps2", formation_accel_limit_mps2, positive=True),
-        "simple_formation_max_lane_changes": max_formation_lane_changes,
+        "simple_formation_speed_tolerance_mps": _finite(
+            "speed_tolerance_mps", speed_tolerance_mps, positive=True),
+        "simple_formation_stable_time_s": _finite(
+            "stable_time_s", stable_time_s, positive=True),
+        "simple_formation_reference_switch_gain_m": _finite(
+            "reference_switch_gain_m", reference_switch_gain_m, positive=True),
+        "simple_formation_min_lane_change_speed_mps": _finite(
+            "min_formation_lane_change_speed_mps",
+            min_formation_lane_change_speed_mps, positive=True),
+        "simple_formation_target_lane_clearance_m": _finite(
+            "hard_lane_change_gap_m", hard_lane_change_gap_m, positive=True),
     }
     simple_formation.validate_parameters(resolved_simple)
     model, physical, policy = parameters(
@@ -1918,6 +1958,9 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
     case = _demo_case(
         physical, vehicle_count=vehicle_count, seed=seed,
         duration_s=duration, live=live,
+        speed_min_mps=speed_min, speed_max_mps=speed_max,
+        depart_interval_min_s=interval_min,
+        depart_interval_max_s=interval_max,
     )
     memories = _initial_memories(case, mode, simple_rules=True)
     registered_modes = _mode_registry()
@@ -1927,6 +1970,10 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         "formal": False, "mode": mode, "vehicle_count": vehicle_count,
         "simple_formation_enabled": True,
         "seed": seed, "target_speed_mps": target_speed, "duration_s": duration,
+        "depart_interval_min_s": interval_min,
+        "depart_interval_max_s": interval_max,
+        "initial_speed_min_mps": speed_min,
+        "initial_speed_max_mps": speed_max,
         "simple_parameters": resolved_simple,
     }
     run = RunRecord(base, run_metadata)
@@ -1942,6 +1989,10 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         "case_seed": seed,
         "target_speed_mps": target_speed,
         "duration_s": duration,
+        "depart_interval_min_s": interval_min,
+        "depart_interval_max_s": interval_max,
+        "initial_speed_min_mps": speed_min,
+        "initial_speed_max_mps": speed_max,
         "simple_formation_enabled": True,
         "simple_parameters": resolved_simple,
         "physical_input_sha256": digest_json(physical_case(case)),

@@ -3,6 +3,7 @@
 from contextlib import closing
 from dataclasses import asdict
 import json
+import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -660,6 +661,8 @@ def _validate_simple_source_run(path: Path, anchor: dict, *,
     _exact_fields(metadata, {
         "purpose", "schema", "formal", "mode", "vehicle_count",
         "simple_formation_enabled", "seed", "target_speed_mps", "duration_s",
+        "depart_interval_min_s", "depart_interval_max_s",
+        "initial_speed_min_mps", "initial_speed_max_mps",
         "simple_parameters", "case_file_sha256", "mode_registry", "execution",
         "run_id",
     }, "metadata")
@@ -695,6 +698,8 @@ def _validate_simple_source_run(path: Path, anchor: dict, *,
         "schema", "case_directory", "parent_run_id", "output_nonce",
         "case_name", "mode", "vehicle_count",
         "case_seed", "target_speed_mps", "duration_s",
+        "depart_interval_min_s", "depart_interval_max_s",
+        "initial_speed_min_mps", "initial_speed_max_mps",
         "simple_formation_enabled", "simple_parameters",
         "physical_input_sha256", "case_input_sha256", "parameters_input_sha256",
         "initial_memories_sha256",
@@ -705,6 +710,33 @@ def _validate_simple_source_run(path: Path, anchor: dict, *,
     if not isinstance(simple_parameters, dict) or set(simple_parameters) != set(PARAMETERS):
         raise ValueError("input_snapshot.phase5g_cases.json.execution.simple_parameters: fields differ")
     validate_parameters(simple_parameters)
+    schedule_fields = (
+        "depart_interval_min_s", "depart_interval_max_s",
+        "initial_speed_min_mps", "initial_speed_max_mps",
+    )
+    for name in schedule_fields:
+        value = execution[name]
+        if type(value) not in (int, float) or not math.isfinite(value) or value <= 0:
+            raise ValueError(
+                f"input_snapshot.phase5g_cases.json.execution.{name}: "
+                "must be a positive finite number"
+            )
+    if execution["depart_interval_min_s"] > execution["depart_interval_max_s"]:
+        raise ValueError("input_snapshot execution departure interval order differs")
+    if execution["initial_speed_min_mps"] >= execution["initial_speed_max_mps"]:
+        raise ValueError("input_snapshot execution initial speed order differs")
+    sampling = case.get("sampling")
+    if isinstance(sampling, dict) and "departures" in case:
+        compare_tree(
+            [execution["depart_interval_min_s"], execution["depart_interval_max_s"]],
+            sampling.get("departure_interval_range_s"), 0.0,
+            "input_snapshot case sampling departure_interval_range_s",
+        )
+        compare_tree(
+            [execution["initial_speed_min_mps"], execution["initial_speed_max_mps"]],
+            sampling.get("speed_range_mps"), 0.0,
+            "input_snapshot case sampling speed_range_mps",
+        )
     model, physical, policy = parameters(
         "lane_priority", execution["target_speed_mps"], simple_rules=True,
         simple_overrides=simple_parameters,
@@ -721,6 +753,10 @@ def _validate_simple_source_run(path: Path, anchor: dict, *,
         "case_seed": case.get("private_rng_provenance", {}).get("case_seed"),
         "target_speed_mps": physical["noa_target_speed_mps"],
         "duration_s": case.get("duration_s"),
+        "depart_interval_min_s": execution["depart_interval_min_s"],
+        "depart_interval_max_s": execution["depart_interval_max_s"],
+        "initial_speed_min_mps": execution["initial_speed_min_mps"],
+        "initial_speed_max_mps": execution["initial_speed_max_mps"],
         "simple_formation_enabled": True,
         "simple_parameters": {
             name: physical[name] for name in PARAMETERS
@@ -742,6 +778,10 @@ def _validate_simple_source_run(path: Path, anchor: dict, *,
         ("mode", "mode"), ("vehicle_count", "vehicle_count"),
         ("seed", "case_seed"), ("target_speed_mps", "target_speed_mps"),
         ("duration_s", "duration_s"),
+        ("depart_interval_min_s", "depart_interval_min_s"),
+        ("depart_interval_max_s", "depart_interval_max_s"),
+        ("initial_speed_min_mps", "initial_speed_min_mps"),
+        ("initial_speed_max_mps", "initial_speed_max_mps"),
         ("simple_formation_enabled", "simple_formation_enabled"),
         ("simple_parameters", "simple_parameters"),
     ):

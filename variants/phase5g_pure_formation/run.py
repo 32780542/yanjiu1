@@ -45,6 +45,15 @@ def main():
             raise argparse.ArgumentTypeError('must be an exact uint64 integer')
         return number
 
+    def demo_vehicle_count(value):
+        try:
+            number = int(value, 10)
+        except (TypeError, ValueError) as error:
+            raise argparse.ArgumentTypeError('must be an integer from 3 to 60') from error
+        if str(number) != value.strip() or not 3 <= number <= 60:
+            raise argparse.ArgumentTypeError('must be an integer from 3 to 60')
+        return number
+
     def sha256_hex(value):
         if not re.fullmatch(r'[0-9a-fA-F]{64}', value):
             raise argparse.ArgumentTypeError('must be an exact 64-digit SHA-256 hex digest')
@@ -61,26 +70,41 @@ def main():
                         help='R5 local longitudinal waiting policy, subject to the unchanged guard')
     parser.add_argument('--lane-change-policy', choices=('fixed','adaptive_duration'), default='fixed',
                         help='Phase5F finite measured-speed duration policy; guard remains unchanged')
-    parser.add_argument('--vehicle-count', type=int, choices=(3, 6, 12), default=6,
+    parser.add_argument('--vehicle-count', type=demo_vehicle_count, default=12,
                         help='Phase5G demo controlled vehicle count')
     parser.add_argument('--seed', type=uint64, default=1,
                         help='Phase5G demo exact uint64 seed')
     parser.add_argument('--target-speed-mps', type=positive_finite, default=10.0,
                         help='Phase5G demo target speed')
-    parser.add_argument('--duration-s', type=positive_finite, default=45.0,
+    parser.add_argument('--duration-s', type=positive_finite, default=90.0,
                         help='Phase5G demo duration')
-    parser.add_argument('--local-formation-range-m', type=positive_finite, default=90.0,
-                        help='Simple formation symmetric local observation range')
-    parser.add_argument('--adjacent-lane-gap-m', type=positive_finite, default=15.0,
-                        help='Simple formation desired adjacent-lane gap')
+    parser.add_argument('--depart-interval-min-s', type=positive_finite, default=2.5,
+                        help='Minimum sequential departure interval')
+    parser.add_argument('--depart-interval-max-s', type=positive_finite, default=4.0,
+                        help='Maximum sequential departure interval')
+    parser.add_argument('--initial-speed-min-mps', type=positive_finite, default=8.0,
+                        help='Minimum seeded initial speed')
+    parser.add_argument('--initial-speed-max-mps', type=positive_finite, default=12.0,
+                        help='Maximum seeded initial speed')
+    parser.add_argument('--formation-join-range-m', type=positive_finite, default=50.0,
+                        help='Local connected-component gap')
+    parser.add_argument('--middle-lane-offset-m', type=positive_finite, default=15.0,
+                        help='Middle-lane follower offset behind an upper leader')
     parser.add_argument('--same-lane-gap-m', type=positive_finite, default=30.0,
-                        help='Simple formation desired same/two-outer-lane gap')
+                        help='Simple formation same-lane follower gap')
     parser.add_argument('--position-tolerance-m', type=positive_finite, default=2.0,
                         help='Simple formation longitudinal position tolerance')
-    parser.add_argument('--formation-accel-limit-mps2', type=positive_finite, default=0.5,
-                        help='Simple formation fixed acceleration increment limit')
-    parser.add_argument('--max-formation-lane-changes', type=int, choices=(1,), default=1,
-                        help='Simple formation permits exactly one lane change per vehicle')
+    parser.add_argument('--speed-tolerance-mps', type=positive_finite, default=1.0,
+                        help='Simple formation speed tolerance')
+    parser.add_argument('--stable-time-s', type=positive_finite, default=1.0,
+                        help='Continuous stable time required for FORMED')
+    parser.add_argument('--reference-switch-gain-m', type=positive_finite, default=2.0,
+                        help='Minimum position-error improvement before reference switch')
+    parser.add_argument('--min-formation-lane-change-speed-mps',
+                        type=positive_finite, default=5.0,
+                        help='Minimum speed for starting a formation lane change')
+    parser.add_argument('--hard-lane-change-gap-m', type=positive_finite, default=8.0,
+                        help='Hard target-lane center clearance')
     parser.add_argument('--output-base', default='results/phase5g/demo',
                         help='Phase5G demo append-only result base inside this variant')
     parser.add_argument('--expected-source-sha256', type=sha256_hex,
@@ -118,12 +142,20 @@ def main():
                          target_speed_mps=args.target_speed_mps,
                           duration_s=args.duration_s, output_base=args.output_base,
                           mode='lane_priority', formal=False, live=not args.offline,
-                          local_formation_range_m=args.local_formation_range_m,
-                          adjacent_lane_gap_m=args.adjacent_lane_gap_m,
+                          depart_interval_min_s=args.depart_interval_min_s,
+                          depart_interval_max_s=args.depart_interval_max_s,
+                          initial_speed_min_mps=args.initial_speed_min_mps,
+                          initial_speed_max_mps=args.initial_speed_max_mps,
+                          formation_join_range_m=args.formation_join_range_m,
+                          middle_lane_offset_m=args.middle_lane_offset_m,
                           same_lane_gap_m=args.same_lane_gap_m,
                           position_tolerance_m=args.position_tolerance_m,
-                          formation_accel_limit_mps2=args.formation_accel_limit_mps2,
-                          max_formation_lane_changes=args.max_formation_lane_changes)
+                          speed_tolerance_mps=args.speed_tolerance_mps,
+                          stable_time_s=args.stable_time_s,
+                          reference_switch_gain_m=args.reference_switch_gain_m,
+                          min_formation_lane_change_speed_mps=
+                              args.min_formation_lane_change_speed_mps,
+                          hard_lane_change_gap_m=args.hard_lane_change_gap_m)
         return
     if args.command == 'phase5-r5':
         if not args.case_file or args.case_names:

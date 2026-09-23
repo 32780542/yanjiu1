@@ -2,8 +2,8 @@
 
 # ===================== 用户配置区：直接修改下面这些值 =====================
 
-# 受控车辆总数：只允许 3、6 或 12；默认 6 辆
-VEHICLE_COUNT = 6
+# 受控车辆总数：允许 3–60；默认 12 辆（最终目标是三车道各 4 辆）
+VEHICLE_COUNT = 12
 
 # 编队目标速度，单位 m/s
 TARGET_SPEED_MPS = 10.0
@@ -11,8 +11,16 @@ TARGET_SPEED_MPS = 10.0
 # 每辆车私有随机初态的可重放种子：0 到 2**64-1 的整数
 RANDOM_SEED = 1
 
-# 仿真时长，单位秒；必须是 0.1 秒的完整倍数
-SIMULATION_DURATION_S = 45.0
+# 相邻两辆车的随机发车间隔范围，单位秒
+DEPART_INTERVAL_MIN_S = 2.5
+DEPART_INTERVAL_MAX_S = 4.0
+
+# 每辆车刚出现时的随机初速度范围，单位 m/s
+INITIAL_SPEED_MIN_MPS = 8.0
+INITIAL_SPEED_MAX_MPS = 12.0
+
+# 仿真时长，单位秒；需覆盖最晚发车、30秒形成期限和10秒保持期
+SIMULATION_DURATION_S = 90.0
 
 # True：生成新轨迹后打开 SUMO-GUI；False：只生成轨迹
 SHOW_GUI = True
@@ -26,11 +34,11 @@ AUTO_ZOOM = True
 # 轨迹播放结束后是否等待按 Enter 再关闭窗口
 WAIT_BEFORE_CLOSE = True
 
-# 简单局部规则1：本车前后对称观测范围，单位 m
-LOCAL_FORMATION_RANGE_M = 90.0
+# 简单局部规则1：同一局部编队的连续车距上限，单位 m
+FORMATION_JOIN_RANGE_M = 50.0
 
-# 简单局部规则2：参考车在相邻车道时的期望纵向间距，单位 m
-ADJACENT_LANE_GAP_M = 15.0
+# 简单局部规则2：中间车道车头相对上方车道车头的后移距离，单位 m
+MIDDLE_LANE_OFFSET_M = 15.0
 
 # 简单局部规则3：参考车在同车道或隔一条车道时的期望间距，单位 m
 SAME_LANE_GAP_M = 30.0
@@ -38,11 +46,20 @@ SAME_LANE_GAP_M = 30.0
 # 简单局部规则4：位置误差容差，单位 m
 POSITION_TOLERANCE_M = 2.0
 
-# 简单局部规则5：编队纵向加速度增量上限，单位 m/s²
-FORMATION_ACCEL_LIMIT_MPS2 = 0.5
+# 编队稳定时允许的速度误差，单位 m/s
+SPEED_TOLERANCE_MPS = 1.0
 
-# 简单局部规则6：每辆车最多一次编队换道；当前规则固定为 1
-MAX_FORMATION_LANE_CHANGES = 1
+# 连续满足编队条件多久才记为已形成，单位秒
+STABLE_TIME_S = 1.0
+
+# 更换局部参考车所需的位置误差改善量，单位 m
+REFERENCE_SWITCH_GAIN_M = 2.0
+
+# 低于此速度不发起新的编队换道，单位 m/s
+MIN_FORMATION_LANE_CHANGE_SPEED_MPS = 5.0
+
+# 发起换道时，目标车道可见车辆的最小车头中心间距，单位 m
+HARD_LANE_CHANGE_GAP_M = 8.0
 
 # =========================== 用户配置区结束 =============================
 
@@ -66,17 +83,25 @@ def build_config() -> SimpleFormationDemoConfig:
         vehicle_count=VEHICLE_COUNT,
         target_speed_mps=TARGET_SPEED_MPS,
         random_seed=RANDOM_SEED,
+        depart_interval_min_s=DEPART_INTERVAL_MIN_S,
+        depart_interval_max_s=DEPART_INTERVAL_MAX_S,
+        initial_speed_min_mps=INITIAL_SPEED_MIN_MPS,
+        initial_speed_max_mps=INITIAL_SPEED_MAX_MPS,
         simulation_duration_s=SIMULATION_DURATION_S,
         show_gui=SHOW_GUI,
         gui_delay_ms=GUI_DELAY_MS,
         auto_zoom=AUTO_ZOOM,
         wait_before_close=WAIT_BEFORE_CLOSE,
-        local_formation_range_m=LOCAL_FORMATION_RANGE_M,
-        adjacent_lane_gap_m=ADJACENT_LANE_GAP_M,
+        formation_join_range_m=FORMATION_JOIN_RANGE_M,
+        middle_lane_offset_m=MIDDLE_LANE_OFFSET_M,
         same_lane_gap_m=SAME_LANE_GAP_M,
         position_tolerance_m=POSITION_TOLERANCE_M,
-        formation_accel_limit_mps2=FORMATION_ACCEL_LIMIT_MPS2,
-        max_formation_lane_changes=MAX_FORMATION_LANE_CHANGES,
+        speed_tolerance_mps=SPEED_TOLERANCE_MPS,
+        stable_time_s=STABLE_TIME_S,
+        reference_switch_gain_m=REFERENCE_SWITCH_GAIN_M,
+        min_formation_lane_change_speed_mps=
+            MIN_FORMATION_LANE_CHANGE_SPEED_MPS,
+        hard_lane_change_gap_m=HARD_LANE_CHANGE_GAP_M,
     )
 
 
@@ -99,7 +124,7 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
         _print_check(check_simple_environment(config, PROJECT_ROOT), output_fn)
         return 0
 
-    output_fn('直接运行：生成局部自组织交错编队新轨迹（无通信、简单if/else规则）。')
+    output_fn('直接运行：生成三车道领航者-跟随者编队（无通信、局部自组织、简单if/else规则）。')
     run_simple_formation_demo(
         config, input_fn=input_fn, output_fn=output_fn)
     return 0

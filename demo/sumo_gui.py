@@ -48,20 +48,27 @@ class DemoConfig:
 
 @dataclass(frozen=True, slots=True)
 class SimpleFormationDemoConfig:
-    vehicle_count: int = 6
+    vehicle_count: int = 12
     target_speed_mps: float = 10.0
     random_seed: int = 1
-    simulation_duration_s: float = 45.0
+    depart_interval_min_s: float = 2.5
+    depart_interval_max_s: float = 4.0
+    initial_speed_min_mps: float = 8.0
+    initial_speed_max_mps: float = 12.0
+    simulation_duration_s: float = 90.0
     show_gui: bool = True
     gui_delay_ms: int = 40
     auto_zoom: bool = True
     wait_before_close: bool = True
-    local_formation_range_m: float = 90.0
-    adjacent_lane_gap_m: float = 15.0
+    formation_join_range_m: float = 50.0
+    middle_lane_offset_m: float = 15.0
     same_lane_gap_m: float = 30.0
     position_tolerance_m: float = 2.0
-    formation_accel_limit_mps2: float = 0.5
-    max_formation_lane_changes: int = 1
+    speed_tolerance_mps: float = 1.0
+    stable_time_s: float = 1.0
+    reference_switch_gain_m: float = 2.0
+    min_formation_lane_change_speed_mps: float = 5.0
+    hard_lane_change_gap_m: float = 8.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -245,13 +252,29 @@ def validate_simple_config(
         config: SimpleFormationDemoConfig,
         root: Path = PROJECT_ROOT) -> SimpleCheckedPaths:
     """Validate simple-formation settings without opening legacy results."""
-    if type(config.vehicle_count) is not int or config.vehicle_count not in (3, 6, 12):
-        raise ValueError('VEHICLE_COUNT 必须是整数 3、6 或 12')
+    if type(config.vehicle_count) is not int or not 3 <= config.vehicle_count <= 60:
+        raise ValueError('VEHICLE_COUNT 必须是 3–60 的整数（不接受 bool）')
     _finite_number('TARGET_SPEED_MPS', config.target_speed_mps, 0.0, math.inf)
     if config.target_speed_mps <= 0:
         raise ValueError('TARGET_SPEED_MPS 必须是正的有限数字')
     if type(config.random_seed) is not int or not 0 <= config.random_seed < 2**64:
         raise ValueError('RANDOM_SEED 必须是精确的 uint64 整数（不接受 bool）')
+    interval_min = _finite_number(
+        'DEPART_INTERVAL_MIN_S', config.depart_interval_min_s, 0.0, math.inf)
+    interval_max = _finite_number(
+        'DEPART_INTERVAL_MAX_S', config.depart_interval_max_s, 0.0, math.inf)
+    if interval_min <= 0 or interval_max <= 0:
+        raise ValueError('DEPART_INTERVAL_MIN_S/MAX_S 必须是正的有限数字')
+    if interval_min > interval_max:
+        raise ValueError('DEPART_INTERVAL_MIN_S 不得大于 DEPART_INTERVAL_MAX_S')
+    speed_min = _finite_number(
+        'INITIAL_SPEED_MIN_MPS', config.initial_speed_min_mps, 0.0, math.inf)
+    speed_max = _finite_number(
+        'INITIAL_SPEED_MAX_MPS', config.initial_speed_max_mps, 0.0, math.inf)
+    if speed_min <= 0 or speed_max <= 0:
+        raise ValueError('INITIAL_SPEED_MIN_MPS/MAX_MPS 必须是正的有限数字')
+    if speed_min >= speed_max:
+        raise ValueError('INITIAL_SPEED_MIN_MPS 必须小于 INITIAL_SPEED_MAX_MPS')
     _finite_number(
         'SIMULATION_DURATION_S', config.simulation_duration_s, 0.0, math.inf)
     if config.simulation_duration_s <= 0:
@@ -264,6 +287,11 @@ def validate_simple_config(
     if not math.isclose(intervals * 0.1, config.simulation_duration_s,
                         abs_tol=1e-9, rel_tol=0.0):
         raise ValueError('SIMULATION_DURATION_S 必须是 0.1 秒的完整倍数')
+    minimum_duration = (config.vehicle_count - 1) * interval_max + 0.1
+    if config.simulation_duration_s + 1e-9 < minimum_duration:
+        raise ValueError(
+            'SIMULATION_DURATION_S 必须覆盖最晚可能发车后的完整控制周期；'
+            f'至少 {minimum_duration:g} 秒。科学验收建议再保留30秒期限和10秒保持期')
     if type(config.show_gui) is not bool:
         raise ValueError('SHOW_GUI 必须是 True 或 False')
     if type(config.gui_delay_ms) is not int or not 0 <= config.gui_delay_ms <= 1000:
@@ -273,17 +301,19 @@ def validate_simple_config(
     if type(config.wait_before_close) is not bool:
         raise ValueError('WAIT_BEFORE_CLOSE 必须是 True 或 False')
     for name, value in (
-            ('LOCAL_FORMATION_RANGE_M', config.local_formation_range_m),
-            ('ADJACENT_LANE_GAP_M', config.adjacent_lane_gap_m),
+            ('FORMATION_JOIN_RANGE_M', config.formation_join_range_m),
+            ('MIDDLE_LANE_OFFSET_M', config.middle_lane_offset_m),
             ('SAME_LANE_GAP_M', config.same_lane_gap_m),
             ('POSITION_TOLERANCE_M', config.position_tolerance_m),
-            ('FORMATION_ACCEL_LIMIT_MPS2', config.formation_accel_limit_mps2)):
+            ('SPEED_TOLERANCE_MPS', config.speed_tolerance_mps),
+            ('STABLE_TIME_S', config.stable_time_s),
+            ('REFERENCE_SWITCH_GAIN_M', config.reference_switch_gain_m),
+            ('MIN_FORMATION_LANE_CHANGE_SPEED_MPS',
+             config.min_formation_lane_change_speed_mps),
+            ('HARD_LANE_CHANGE_GAP_M', config.hard_lane_change_gap_m)):
         _finite_number(name, value, 0.0, math.inf)
         if value <= 0:
             raise ValueError(f'{name} 必须是正的有限数字')
-    if type(config.max_formation_lane_changes) is not int \
-            or config.max_formation_lane_changes != 1:
-        raise ValueError('MAX_FORMATION_LANE_CHANGES 必须是整数 1（不接受 bool）')
 
     root = Path(os.path.abspath(root))
     _resolve_future_directory(root, root, '项目根目录', allow_boundary=True)
@@ -317,17 +347,16 @@ def validate_simple_config(
 
 def simple_generation_timeout_s(duration_s: float, vehicle_count: int) -> int:
     """Return the bounded generation budget for one validated simple trace."""
-    if type(vehicle_count) is not int or vehicle_count not in (3, 6, 12):
-        raise ValueError('VEHICLE_COUNT 必须是整数 3、6 或 12')
+    if type(vehicle_count) is not int or not 3 <= vehicle_count <= 60:
+        raise ValueError('VEHICLE_COUNT 必须是 3–60 的整数（不接受 bool）')
     duration = _finite_number(
         'SIMULATION_DURATION_S', duration_s, 0.0, math.inf)
     if duration <= 0:
         raise ValueError('SIMULATION_DURATION_S 必须是正的有限数字')
-    estimate = 90.0 + 0.8 * duration * vehicle_count
-    if not math.isfinite(estimate) or estimate > 3600:
-        raise ValueError(
-            'SIMULATION_DURATION_S 对当前 VEHICLE_COUNT 超过 3600 秒生成预算上限')
-    return max(180, math.ceil(estimate))
+    estimate = 90.0 + 2.0 * duration + 4.0 * vehicle_count
+    if not math.isfinite(estimate):
+        raise ValueError('SIMULATION_DURATION_S 无法换算为有限生成预算')
+    return min(3600, max(180, math.ceil(estimate)))
 
 
 def format_number(value: float) -> str:
@@ -398,9 +427,19 @@ def create_run_directory(root: Path, mode: str, *, stamp: str | None = None,
     return path
 
 
+def _native_io_path(path: Path) -> str:
+    """Use a Windows extended-length spelling only at the filesystem boundary."""
+    absolute = os.path.abspath(path)
+    if os.name != 'nt' or absolute.startswith('\\\\?\\'):
+        return absolute
+    if absolute.startswith('\\\\'):
+        return '\\\\?\\UNC\\' + absolute[2:]
+    return '\\\\?\\' + absolute
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
-    with Path(path).open('rb') as stream:
+    with open(_native_io_path(path), 'rb') as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b''):
             digest.update(block)
     return digest.hexdigest()
@@ -1007,13 +1046,20 @@ _TRACE_STEP_FIELDS = frozenset({
 _TRACE_COMMAND_FIELDS = frozenset({'acceleration_mps2', 'steering_rad'})
 _TRACE_RECORD_CONTAINERS = (
     'inputs', 'decisions', 'actions', 'diagnostics')
+_TRACE_DEPARTURE_FIELDS = frozenset({
+    'scheduled_departure_s', 'actual_departure_s', 'state',
+    'physical_ordinal',
+})
 _SIMPLE_PARAMETER_FIELDS = frozenset({
-    'simple_formation_local_range_m',
-    'simple_formation_adjacent_gap_m',
-    'simple_formation_same_gap_m',
+    'simple_formation_component_gap_m',
+    'simple_formation_middle_offset_m',
+    'simple_formation_same_lane_gap_m',
     'simple_formation_position_tolerance_m',
-    'simple_formation_accel_limit_mps2',
-    'simple_formation_max_lane_changes',
+    'simple_formation_speed_tolerance_mps',
+    'simple_formation_stable_time_s',
+    'simple_formation_reference_switch_gain_m',
+    'simple_formation_min_lane_change_speed_mps',
+    'simple_formation_target_lane_clearance_m',
 })
 
 
@@ -1096,13 +1142,51 @@ def _preflight_simple_trace(
             or type(metadata.get('trace_intervals')) is not int \
             or metadata['trace_intervals'] != expected_intervals:
         raise RuntimeError('case metadata的intervals/trace_intervals与duration不一致')
+    final_actor_set = set(actors)
+    if len(final_actor_set) != len(actors):
+        raise RuntimeError('controlled车辆集合含重复项')
     case_initial = case.get('initial')
-    _trace_frame_time(case_initial, actors, 'case.initial')
+    case_departures = case.get('departures')
+    dynamic = case_departures is not None
+    if dynamic:
+        if not isinstance(case_departures, dict) \
+                or set(case_departures) != final_actor_set:
+            raise RuntimeError('case.departures必须覆盖全部controlled车辆')
+        ordinals = []
+        time_zero = []
+        for actor in actors:
+            row = case_departures[actor]
+            if not isinstance(row, dict) or set(row) != _TRACE_DEPARTURE_FIELDS:
+                raise RuntimeError(f'case.departures.{actor}字段必须精确')
+            scheduled = _trace_number(
+                row['scheduled_departure_s'],
+                f'case.departures.{actor}.scheduled_departure_s')
+            if scheduled < 0 or row['actual_departure_s'] is not None:
+                raise RuntimeError(f'case.departures.{actor}发车时刻无效')
+            if type(row['physical_ordinal']) is not int \
+                    or row['physical_ordinal'] < 0:
+                raise RuntimeError(f'case.departures.{actor}物理序号无效')
+            _trace_state_time(row['state'], f'case.departures.{actor}.state')
+            ordinals.append(row['physical_ordinal'])
+            if scheduled == 0.0:
+                time_zero.append(actor)
+        if sorted(ordinals) != list(range(len(actors))):
+            raise RuntimeError('case.departures物理序号必须唯一且连续')
+        initial_actors = tuple(sorted(
+            time_zero, key=lambda actor: case_departures[actor]['physical_ordinal']))
+        if not initial_actors or set(case_initial or {}) != set(initial_actors):
+            raise RuntimeError('case.initial必须精确包含零时刻发车车辆')
+        _trace_frame_time(case_initial, initial_actors, 'case.initial')
+    else:
+        initial_actors = actors
+        _trace_frame_time(case_initial, actors, 'case.initial')
 
     count = 0
     first_time = None
     previous_final = None
     previous_final_states = None
+    previous_active = frozenset()
+    previous_departures = None
     frames = []
     trace_digest = hashlib.sha256()
     try:
@@ -1130,33 +1214,138 @@ def _preflight_simple_trace(
                 raise RuntimeError(f'trace第{line_number}行必须是JSON对象')
             if record.get('status') != 'completed':
                 raise RuntimeError(f'trace第{line_number}行状态必须是completed')
-            for field in _TRACE_RECORD_CONTAINERS:
-                if not isinstance(record.get(field), dict):
+            initial_states = record.get('initial')
+            if dynamic:
+                declared = record.get('active_actors')
+                departures = record.get('departures')
+                if not isinstance(declared, list) \
+                        or any(type(actor) is not str for actor in declared) \
+                        or len(declared) != len(set(declared)):
                     raise RuntimeError(
-                        f'trace第{line_number}行.{field}必须存在且是JSON对象')
+                        f'trace第{line_number}行active_actors必须是唯一车辆数组')
+                active_actors = tuple(declared)
+                active = frozenset(active_actors)
+                if not active or not active.issubset(final_actor_set):
+                    raise RuntimeError(
+                        f'trace第{line_number}行active_actors不是受控车辆子集')
+                expected_order = tuple(sorted(
+                    active,
+                    key=lambda actor: case_departures[actor]['physical_ordinal']))
+                if active_actors != expected_order:
+                    raise RuntimeError(
+                        f'trace第{line_number}行active_actors物理顺序无效')
+                if not previous_active.issubset(active):
+                    raise RuntimeError(f'trace第{line_number}行出现车辆消失')
+                if not isinstance(departures, dict) \
+                        or set(departures) != final_actor_set:
+                    raise RuntimeError(
+                        f'trace第{line_number}行departures未覆盖全部车辆')
+            else:
+                if 'active_actors' in record or 'departures' in record:
+                    raise RuntimeError(
+                        f'trace第{line_number}行固定case不得含动态发车字段')
+                active_actors = actors
+                active = frozenset(actors)
+                departures = None
+            if not isinstance(initial_states, dict) \
+                    or set(initial_states) != set(active_actors):
+                raise RuntimeError(
+                    f'trace第{line_number}行initial车辆集合与active不一致')
+            initial_time = _trace_frame_time(
+                initial_states, active_actors,
+                f'trace第{line_number}行initial')
+            if dynamic:
+                departed = set()
+                newly_active = active - previous_active
+                for actor in actors:
+                    row = departures[actor]
+                    original = case_departures[actor]
+                    if not isinstance(row, dict) \
+                            or set(row) != _TRACE_DEPARTURE_FIELDS:
+                        raise RuntimeError(
+                            f'trace第{line_number}行departures.{actor}字段必须精确')
+                    for field in ('scheduled_departure_s', 'state',
+                                  'physical_ordinal'):
+                        if type(row[field]) is not type(original[field]) \
+                                or row[field] != original[field]:
+                            raise RuntimeError(
+                                f'trace第{line_number}行departures.{actor}'
+                                f'.{field}与case不一致')
+                    actual = row['actual_departure_s']
+                    if actual is not None:
+                        actual = _trace_number(
+                            actual,
+                            f'trace第{line_number}行departures.{actor}'
+                            '.actual_departure_s')
+                        if actual < float(row['scheduled_departure_s']) \
+                                or actual > initial_time + 1e-9:
+                            raise RuntimeError(
+                                f'trace第{line_number}行departures.{actor}'
+                                '实际发车时刻无效')
+                        departed.add(actor)
+                    if previous_departures is not None:
+                        before = previous_departures[actor]['actual_departure_s']
+                        if before is not None and actual != before:
+                            raise RuntimeError(
+                                f'trace第{line_number}行departures.{actor}'
+                                '重复或改变了实际发车时刻')
+                    if actor in newly_active:
+                        if actual is None or not math.isclose(
+                                actual, initial_time, abs_tol=1e-9, rel_tol=0.0):
+                            raise RuntimeError(
+                                f'trace第{line_number}行departures.{actor}'
+                                '未在首次出现帧记录实际发车')
+                        expected_state = dict(original['state'])
+                        expected_state['time_s'] = initial_time
+                        if initial_states[actor] != expected_state:
+                            raise RuntimeError(
+                                f'trace第{line_number}行新车辆{actor}状态/时间'
+                                '与发车模板不一致')
+                    elif actor not in active and actual is not None:
+                        raise RuntimeError(
+                            f'trace第{line_number}行未出现车辆{actor}已有发车记录')
+                    if actual is None \
+                            and float(row['scheduled_departure_s']) <= initial_time + 1e-9:
+                        raise RuntimeError(
+                            f'trace第{line_number}行到期车辆{actor}尚未发车')
+                if departed != set(active):
+                    raise RuntimeError(
+                        f'trace第{line_number}行active与departure记录不一致')
+            for field in _TRACE_RECORD_CONTAINERS:
+                if not isinstance(record.get(field), dict) \
+                        or dynamic and set(record[field]) != set(active_actors):
+                    raise RuntimeError(
+                        f'trace第{line_number}行.{field}必须精确覆盖active车辆')
             if 'readback' not in record or record['readback'] is not None \
                     and not isinstance(record['readback'], dict):
                 raise RuntimeError(
                     f'trace第{line_number}行.readback必须存在且为null/JSON对象')
-            initial_states = record.get('initial')
-            initial_time = _trace_frame_time(
-                initial_states, actors, f'trace第{line_number}行initial')
             if first_time is None:
                 first_time = initial_time
                 if initial_states != case_initial:
                     raise RuntimeError('trace首行initial与case.initial不连续')
                 frames.append(_freeze_trace_frame(
-                    initial_time, initial_states, actors))
-            elif not math.isclose(
-                    initial_time, previous_final, abs_tol=1e-9, rel_tol=0.0) \
-                    or initial_states != previous_final_states:
-                raise RuntimeError(f'trace第{line_number}行initial状态/时间不连续')
+                    initial_time, initial_states, active_actors))
+            else:
+                if not math.isclose(
+                        initial_time, previous_final,
+                        abs_tol=1e-9, rel_tol=0.0):
+                    raise RuntimeError(
+                        f'trace第{line_number}行initial时间不连续')
+                retained = set(previous_active)
+                if any(initial_states[actor] != previous_final_states[actor]
+                       for actor in retained):
+                    raise RuntimeError(
+                        f'trace第{line_number}行initial既有车辆状态不连续')
+                if active != previous_active:
+                    frames[-1] = _freeze_trace_frame(
+                        initial_time, initial_states, active_actors)
             steps = record.get('steps')
-            if not isinstance(steps, dict) or set(steps) != set(actors):
+            if not isinstance(steps, dict) or set(steps) != set(active_actors):
                 raise RuntimeError(f'trace第{line_number}行steps车辆集合不一致')
             final_states = {}
             sample_times_by_actor = {}
-            for actor in actors:
+            for actor in active_actors:
                 step = steps[actor]
                 if not isinstance(step, dict):
                     raise RuntimeError(
@@ -1214,8 +1403,8 @@ def _preflight_simple_trace(
                     raise RuntimeError(
                         f'trace第{line_number}行steps.{actor}.final'
                         '状态/时间与最后样本不一致')
-            reference_sample_times = sample_times_by_actor[actors[0]]
-            for actor in actors[1:]:
+            reference_sample_times = sample_times_by_actor[active_actors[0]]
+            for actor in active_actors[1:]:
                 candidate_times = sample_times_by_actor[actor]
                 if len(candidate_times) != len(reference_sample_times) or any(
                         not math.isclose(left, right, abs_tol=1e-9, rel_tol=0.0)
@@ -1224,7 +1413,7 @@ def _preflight_simple_trace(
                     raise RuntimeError(
                         f'trace第{line_number}行样本车辆帧时间不一致')
             final_time = _trace_frame_time(
-                final_states, actors, f'trace第{line_number}行final')
+                final_states, active_actors, f'trace第{line_number}行final')
             if final_time <= initial_time or not math.isclose(
                     final_time, initial_time + control_dt,
                     abs_tol=1e-9, rel_tol=0.0):
@@ -1232,7 +1421,10 @@ def _preflight_simple_trace(
                     f'trace第{line_number}行时间未严格递增或不符合控制周期')
             previous_final = final_time
             previous_final_states = final_states
-            frames.append(_freeze_trace_frame(final_time, final_states, actors))
+            previous_active = active
+            previous_departures = departures
+            frames.append(_freeze_trace_frame(
+                final_time, final_states, active_actors))
             count += 1
     trace_sha256 = trace_digest.hexdigest()
     if trace_sha256 != expected_sha256:
@@ -1338,19 +1530,29 @@ def _validate_anchored_simple_input(
     simple = _require_object_field(execution, 'simple_parameters', execution_label)
     if set(simple) != _SIMPLE_PARAMETER_FIELDS:
         raise RuntimeError(f'{execution_label}.simple_parameters字段集不一致')
-    for name in _SIMPLE_PARAMETER_FIELDS - {'simple_formation_max_lane_changes'}:
+    for name in _SIMPLE_PARAMETER_FIELDS:
         _require_positive_number_field(simple, name, f'{execution_label}.simple_parameters')
-    if _require_exact_int_field(
-            simple, 'simple_formation_max_lane_changes',
-            f'{execution_label}.simple_parameters', minimum=1) != 1:
-        raise RuntimeError(
-            f'{execution_label}.simple_parameters.'
-            'simple_formation_max_lane_changes必须为1')
+    interval_min = _require_positive_number_field(
+        execution, 'depart_interval_min_s', execution_label)
+    interval_max = _require_positive_number_field(
+        execution, 'depart_interval_max_s', execution_label)
+    speed_min = _require_positive_number_field(
+        execution, 'initial_speed_min_mps', execution_label)
+    speed_max = _require_positive_number_field(
+        execution, 'initial_speed_max_mps', execution_label)
+    if interval_min > interval_max:
+        raise RuntimeError(f'{execution_label}发车间隔上下界顺序无效')
+    if speed_min >= speed_max:
+        raise RuntimeError(f'{execution_label}初速度上下界顺序无效')
     _require_exact_tree(
         metadata.get('execution'), execution, '新轨迹metadata.execution')
     bindings = {
         'vehicle_count': count, 'seed': seed,
         'target_speed_mps': target, 'duration_s': duration,
+        'depart_interval_min_s': interval_min,
+        'depart_interval_max_s': interval_max,
+        'initial_speed_min_mps': speed_min,
+        'initial_speed_max_mps': speed_max,
         'simple_parameters': simple,
     }
     for name, expected in bindings.items():
@@ -1385,9 +1587,18 @@ def _validate_child_execution_bindings(
     child_initial = case.get('initial')
     if not isinstance(child_controlled, list) \
             or not isinstance(child_initial, dict) \
-            or set(child_initial) != set(child_controlled) \
             or case.get('scripts') != {}:
         raise RuntimeError('case metadata.case必须全量受控且不得含背景或脚本车辆')
+    departures = case.get('departures')
+    controlled_set = set(child_controlled)
+    if departures is None:
+        if set(child_initial) != controlled_set:
+            raise RuntimeError('固定case initial必须包含全量受控车辆')
+    elif not isinstance(departures, dict) \
+            or set(departures) != controlled_set \
+            or not child_initial \
+            or not set(child_initial).issubset(controlled_set):
+        raise RuntimeError('动态case departures/initial与受控车辆不一致')
     input_provenance = input_case['private_rng_provenance']
     child_provenance = _require_object_field(
         case, 'private_rng_provenance', 'case metadata.case')
@@ -1417,13 +1628,7 @@ def _validate_child_execution_bindings(
             execution['target_speed_mps'], label)
         for name in _SIMPLE_PARAMETER_FIELDS:
             expected = simple[name]
-            if name == 'simple_formation_max_lane_changes':
-                actual = _require_exact_int_field(
-                    container, name, label, minimum=1)
-                if actual != expected:
-                    raise RuntimeError(f'{label}.{name}与锚定execution不一致')
-            else:
-                _require_bound_number(container, name, expected, label)
+            _require_bound_number(container, name, expected, label)
 
 
 def _validate_outer_simple_documents(
@@ -1436,31 +1641,29 @@ def _validate_outer_simple_documents(
     _require_exact_field(metadata, 'mode', 'lane_priority', label)
     _require_exact_field(metadata, 'simple_formation_enabled', True, label)
     count = _require_exact_int_field(metadata, 'vehicle_count', label, minimum=1)
-    if count not in (3, 6, 12):
-        raise RuntimeError(f'{label}.vehicle_count必须是3、6或12')
+    if not 3 <= count <= 60:
+        raise RuntimeError(f'{label}.vehicle_count必须是3–60')
     seed = _require_exact_int_field(
         metadata, 'seed', label, maximum=2**64 - 1)
     target_speed = _require_positive_number_field(
         metadata, 'target_speed_mps', label)
     duration = _require_positive_number_field(metadata, 'duration_s', label)
     simple = _require_object_field(metadata, 'simple_parameters', label)
-    expected_simple_names = {
-        'simple_formation_local_range_m',
-        'simple_formation_adjacent_gap_m',
-        'simple_formation_same_gap_m',
-        'simple_formation_position_tolerance_m',
-        'simple_formation_accel_limit_mps2',
-        'simple_formation_max_lane_changes',
-    }
+    expected_simple_names = set(_SIMPLE_PARAMETER_FIELDS)
     if set(simple) != expected_simple_names:
         raise RuntimeError(f'{label}.simple_parameters字段集不一致')
-    for name in expected_simple_names - {'simple_formation_max_lane_changes'}:
+    for name in expected_simple_names:
         _require_positive_number_field(simple, name, f'{label}.simple_parameters')
-    if _require_exact_int_field(
-            simple, 'simple_formation_max_lane_changes',
-            f'{label}.simple_parameters', minimum=1) != 1:
-        raise RuntimeError(
-            f'{label}.simple_parameters.simple_formation_max_lane_changes必须为1')
+    interval_min = _require_positive_number_field(
+        metadata, 'depart_interval_min_s', label)
+    interval_max = _require_positive_number_field(
+        metadata, 'depart_interval_max_s', label)
+    speed_min = _require_positive_number_field(
+        metadata, 'initial_speed_min_mps', label)
+    speed_max = _require_positive_number_field(
+        metadata, 'initial_speed_max_mps', label)
+    if interval_min > interval_max or speed_min >= speed_max:
+        raise RuntimeError(f'{label}发车间隔或初速度上下界顺序无效')
     if not _valid_digest(metadata.get('case_file_sha256')):
         raise RuntimeError(f'{label}.case_file_sha256必须是小写SHA-256')
     _require_object_field(metadata, 'mode_registry', label)
@@ -1484,23 +1687,35 @@ def _validate_outer_simple_documents(
         'seed': config.random_seed,
         'target_speed_mps': config.target_speed_mps,
         'duration_s': config.simulation_duration_s,
+        'depart_interval_min_s': config.depart_interval_min_s,
+        'depart_interval_max_s': config.depart_interval_max_s,
+        'initial_speed_min_mps': config.initial_speed_min_mps,
+        'initial_speed_max_mps': config.initial_speed_max_mps,
     }
     actual = {
         'vehicle_count': count, 'seed': seed,
         'target_speed_mps': target_speed, 'duration_s': duration,
+        'depart_interval_min_s': interval_min,
+        'depart_interval_max_s': interval_max,
+        'initial_speed_min_mps': speed_min,
+        'initial_speed_max_mps': speed_max,
     }
     for name, value in expected.items():
         if actual[name] != value:
             raise RuntimeError(f'{label}.{name}与顶部配置不一致')
     expected_simple = {
-        'simple_formation_local_range_m': config.local_formation_range_m,
-        'simple_formation_adjacent_gap_m': config.adjacent_lane_gap_m,
-        'simple_formation_same_gap_m': config.same_lane_gap_m,
+        'simple_formation_component_gap_m': config.formation_join_range_m,
+        'simple_formation_middle_offset_m': config.middle_lane_offset_m,
+        'simple_formation_same_lane_gap_m': config.same_lane_gap_m,
         'simple_formation_position_tolerance_m': config.position_tolerance_m,
-        'simple_formation_accel_limit_mps2':
-            config.formation_accel_limit_mps2,
-        'simple_formation_max_lane_changes':
-            config.max_formation_lane_changes,
+        'simple_formation_speed_tolerance_mps': config.speed_tolerance_mps,
+        'simple_formation_stable_time_s': config.stable_time_s,
+        'simple_formation_reference_switch_gain_m':
+            config.reference_switch_gain_m,
+        'simple_formation_min_lane_change_speed_mps':
+            config.min_formation_lane_change_speed_mps,
+        'simple_formation_target_lane_clearance_m':
+            config.hard_lane_change_gap_m,
     }
     for name, value in expected_simple.items():
         if simple[name] != value:
@@ -1576,8 +1791,16 @@ def load_simple_trace_source(
     if len(actors) != metadata['vehicle_count']:
         raise RuntimeError('新轨迹controlled车辆数与outer metadata不一致')
     initial = case.get('initial')
-    if not isinstance(initial, dict) or set(initial) != set(actors) \
-            or case.get('scripts') != {}:
+    departures = case.get('departures')
+    valid_initial = isinstance(initial, dict) and bool(initial)
+    if departures is None:
+        valid_initial = valid_initial and set(initial) == set(actors)
+    else:
+        valid_initial = valid_initial \
+            and isinstance(departures, dict) \
+            and set(departures) == set(actors) \
+            and set(initial).issubset(set(actors))
+    if not valid_initial or case.get('scripts') != {}:
         raise RuntimeError('新轨迹case必须全量受控且不得包含背景或脚本车辆')
     if child_metadata['initial'] != initial:
         raise RuntimeError('case metadata.initial与case.initial不一致')
@@ -1623,13 +1846,21 @@ def generate_fresh_simple_trace(
         '--target-speed-mps', format_number(config.target_speed_mps),
         '--duration-s', format_number(config.simulation_duration_s),
         '--output-base', SIMPLE_OUTPUT_BASE.as_posix(),
-        '--local-formation-range-m', format_number(config.local_formation_range_m),
-        '--adjacent-lane-gap-m', format_number(config.adjacent_lane_gap_m),
+        '--depart-interval-min-s', format_number(config.depart_interval_min_s),
+        '--depart-interval-max-s', format_number(config.depart_interval_max_s),
+        '--initial-speed-min-mps', format_number(config.initial_speed_min_mps),
+        '--initial-speed-max-mps', format_number(config.initial_speed_max_mps),
+        '--formation-join-range-m', format_number(config.formation_join_range_m),
+        '--middle-lane-offset-m', format_number(config.middle_lane_offset_m),
         '--same-lane-gap-m', format_number(config.same_lane_gap_m),
         '--position-tolerance-m', format_number(config.position_tolerance_m),
-        '--formation-accel-limit-mps2',
-        format_number(config.formation_accel_limit_mps2),
-        '--max-formation-lane-changes', str(config.max_formation_lane_changes),
+        '--speed-tolerance-mps', format_number(config.speed_tolerance_mps),
+        '--stable-time-s', format_number(config.stable_time_s),
+        '--reference-switch-gain-m',
+        format_number(config.reference_switch_gain_m),
+        '--min-formation-lane-change-speed-mps',
+        format_number(config.min_formation_lane_change_speed_mps),
+        '--hard-lane-change-gap-m', format_number(config.hard_lane_change_gap_m),
     ]
     timeout_s = simple_generation_timeout_s(
         config.simulation_duration_s, config.vehicle_count)
@@ -1742,23 +1973,40 @@ def play_algorithm(connection, source: TraceSource, auto_zoom: bool) -> Playback
     first = next(frames)
     length_m = float(source.metadata.get('parameters', {}).get('length_m', 4.0))
     controlled = set(source.metadata.get('case', {}).get('controlled', []))
-    for actor in source.actors:
-        state = first.states[actor]
-        route_id, lane, position = _initial_route_and_lane(state)
-        connection.vehicle.add(
-            actor, route_id, typeID='external_demo', depart='now',
-            departLane=str(lane), departPos=format_number(max(0.0, position + length_m / 2)),
-            departSpeed=format_number(max(0.0, float(state['vx_mps']))))
-    connection.simulationStep()
-    present = set(connection.vehicle.getIDList())
-    missing = set(source.actors) - present
-    if missing:
-        raise RuntimeError(f'SUMO未能装载算法演示车辆: {sorted(missing)}')
-    for actor in source.actors:
-        connection.vehicle.setSpeedMode(actor, 0)
-        connection.vehicle.setLaneChangeMode(actor, 0)
-        color = (0, 160, 255, 255) if actor in controlled else (255, 150, 40, 255)
-        connection.vehicle.setColor(actor, color)
+    final_actors = set(source.actors)
+    loaded = set()
+
+    def load_first_appearance(frame):
+        frame_actors = set(frame.states)
+        if not loaded.issubset(frame_actors):
+            raise RuntimeError('冻结轨迹播放时出现车辆消失')
+        if not frame_actors.issubset(final_actors):
+            raise RuntimeError('冻结轨迹播放时出现未登记车辆')
+        new_actors = [
+            actor for actor in source.actors
+            if actor in frame_actors and actor not in loaded
+        ]
+        for actor in new_actors:
+            state = frame.states[actor]
+            route_id, lane, position = _initial_route_and_lane(state)
+            connection.vehicle.add(
+                actor, route_id, typeID='external_demo', depart='now',
+                departLane=str(lane),
+                departPos=format_number(max(0.0, position + length_m / 2)),
+                departSpeed=format_number(max(0.0, float(state['vx_mps']))))
+        if new_actors:
+            connection.simulationStep()
+            present = set(connection.vehicle.getIDList())
+            missing = set(new_actors) - present
+            if missing:
+                raise RuntimeError(f'SUMO未能装载算法演示车辆: {sorted(missing)}')
+            for actor in new_actors:
+                connection.vehicle.setSpeedMode(actor, 0)
+                connection.vehicle.setLaneChangeMode(actor, 0)
+                color = ((0, 160, 255, 255) if actor in controlled
+                         else (255, 150, 40, 255))
+                connection.vehicle.setColor(actor, color)
+                loaded.add(actor)
     if auto_zoom:
         view = _view_id(connection)
         if view is not None:
@@ -1768,7 +2016,8 @@ def play_algorithm(connection, source: TraceSource, auto_zoom: bool) -> Playback
     collisions = teleports = frames_played = 0
     final_time = first.time_s
     for frame in chain((first,), frames):
-        for actor in source.actors:
+        load_first_appearance(frame)
+        for actor in frame.states:
             state = frame.states[actor]
             front_x, front_y, angle = to_sumo_pose(state, length_m)
             speed = math.hypot(float(state['vx_mps']), float(state.get('vy_mps', 0.0)))

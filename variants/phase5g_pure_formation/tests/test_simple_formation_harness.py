@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 from dataclasses import asdict, fields
+import hashlib
 import importlib
 import inspect
 import json
@@ -26,22 +27,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SYSTEM_TEMP_ROOT = Path(tempfile.gettempdir())
 
 SIMPLE_DEFAULTS = {
-    "simple_formation_local_range_m": 90.0,
-    "simple_formation_adjacent_gap_m": 15.0,
-    "simple_formation_same_gap_m": 30.0,
-    "simple_formation_position_tolerance_m": 2.0,
-    "simple_formation_accel_limit_mps2": 0.5,
-    "simple_formation_max_lane_changes": 1,
-}
-SIMPLE_NONDEFAULTS = {
-    "simple_formation_local_range_m": 78.0,
-    "simple_formation_adjacent_gap_m": 14.0,
-    "simple_formation_same_gap_m": 28.0,
-    "simple_formation_position_tolerance_m": 1.5,
-    "simple_formation_accel_limit_mps2": 0.4,
-    "simple_formation_max_lane_changes": 1,
-}
-DYNAMIC_SIMPLE_DEFAULTS = {
     "simple_formation_component_gap_m": 50.0,
     "simple_formation_middle_offset_m": 15.0,
     "simple_formation_same_lane_gap_m": 30.0,
@@ -52,6 +37,18 @@ DYNAMIC_SIMPLE_DEFAULTS = {
     "simple_formation_min_lane_change_speed_mps": 5.0,
     "simple_formation_target_lane_clearance_m": 8.0,
 }
+SIMPLE_NONDEFAULTS = {
+    "simple_formation_component_gap_m": 48.0,
+    "simple_formation_middle_offset_m": 14.0,
+    "simple_formation_same_lane_gap_m": 28.0,
+    "simple_formation_position_tolerance_m": 1.5,
+    "simple_formation_speed_tolerance_mps": 0.8,
+    "simple_formation_stable_time_s": 1.2,
+    "simple_formation_reference_switch_gain_m": 2.5,
+    "simple_formation_min_lane_change_speed_mps": 5.5,
+    "simple_formation_target_lane_clearance_m": 9.0,
+}
+DYNAMIC_SIMPLE_DEFAULTS = dict(SIMPLE_DEFAULTS)
 EXPECTED_MODES = {
     "off": {"formation_enabled": False, "formation_lane_change_enabled": False},
     "longitudinal": {"formation_enabled": True, "formation_lane_change_enabled": False},
@@ -248,13 +245,19 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def make_short_demo(self, base, *, seed=11, count=3):
         return self.harness.run_phase5g_demo(
             vehicle_count=count, seed=seed, target_speed_mps=10.0,
-            duration_s=0.1, output_base=base, live=False,
-            local_formation_range_m=78.0,
-            adjacent_lane_gap_m=14.0,
+            duration_s=count * 0.1,
+            output_base=base, live=False,
+            depart_interval_min_s=0.1,
+            depart_interval_max_s=0.1,
+            formation_join_range_m=48.0,
+            middle_lane_offset_m=14.0,
             same_lane_gap_m=28.0,
             position_tolerance_m=1.5,
-            formation_accel_limit_mps2=0.4,
-            max_formation_lane_changes=1,
+            speed_tolerance_mps=0.8,
+            stable_time_s=1.2,
+            reference_switch_gain_m=2.5,
+            min_formation_lane_change_speed_mps=5.5,
+            hard_lane_change_gap_m=9.0,
         )
 
     def copy_demo_with_anchor(self, source, parent):
@@ -550,6 +553,10 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         """Scaled retention test; production 342.30 MiB is verified separately."""
         model, physical, policy = self.simple_parameters()
         case = self.short_case(physical, count=12, duration_s=0.1)
+        first = case["controlled"][0]
+        for ordinal, actor in enumerate(case["controlled"]):
+            if actor != first:
+                case["departures"][actor]["scheduled_departure_s"] = 100.0 + ordinal
         with tempfile.TemporaryDirectory() as temp:
             source = Path(temp) / "large-stream-template"
             self.harness.run_variant(
@@ -926,28 +933,18 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             "lane_priority", 10.0,
             simple_rules=True, simple_overrides=SIMPLE_DEFAULTS,
         )
-        expected_lane_counts = {3: [1, 1, 1], 6: [3, 2, 1], 12: [4, 4, 4]}
         for count in (3, 6, 12):
             with self.subTest(count=count):
                 case = phase5g_cases.seeded_case(physical, count, 1)
-                self.assertEqual(len(case["initial"]), count)
+                self.assertEqual(len(case["initial"]), 1)
                 self.assertEqual(len(case["controlled"]), count)
-                self.assertEqual(set(case["controlled"]), set(case["initial"]))
+                self.assertEqual(set(case["controlled"]), set(case["departures"]))
+                self.assertTrue(set(case["initial"]).issubset(case["controlled"]))
                 self.assertEqual(case["scripts"], {})
-                self.assertEqual(
-                    [
-                        sum(
-                            state["y_m"] == center
-                            for state in case["initial"].values()
-                        )
-                        for center in phase5g_cases.LANE_CENTERS_M
-                    ],
-                    expected_lane_counts[count],
-                )
                 audit = phase5g_cases.validate_initial(case["initial"], physical)
                 self.assertTrue(audit["passed"], audit)
 
-    def test_simple_parameters_change_only_switch_and_six_resolved_values(self):
+    def test_simple_parameters_change_only_switch_and_nine_resolved_values(self):
         base_model, base_physical, base_policy = self.harness.parameters("lane_priority")
         model, physical, policy = self.simple_parameters()
         expected_differences = {
@@ -1027,7 +1024,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "simple_overrides"):
             self.harness.parameters(
                 "lane_priority", simple_rules=False,
-                simple_overrides={"simple_formation_local_range_m": 90.0},
+                simple_overrides={"simple_formation_component_gap_m": 50.0},
             )
         for invalid in (None, [], (), "mapping"):
             with self.subTest(overrides=invalid), self.assertRaisesRegex(
@@ -1041,15 +1038,12 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_simple_overrides_reject_missing_extra_and_invalid_values(self):
         invalid = []
         missing = dict(SIMPLE_NONDEFAULTS)
-        missing.pop("simple_formation_same_gap_m")
+        missing.pop("simple_formation_same_lane_gap_m")
         invalid.append(missing)
         invalid.append({**SIMPLE_NONDEFAULTS, "extra": 1})
-        for key in PARAMETERS[:-1]:
+        for key in PARAMETERS:
             for value in (True, 0, -1.0, float("nan"), float("inf")):
                 invalid.append({**SIMPLE_NONDEFAULTS, key: value})
-        for value in (True, 0, 2, 1.0, float("nan")):
-            invalid.append({**SIMPLE_NONDEFAULTS,
-                            "simple_formation_max_lane_changes": value})
         for overrides in invalid:
             with self.subTest(overrides=overrides), self.assertRaises(ValueError):
                 self.harness.parameters(
@@ -1065,13 +1059,18 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             output = Path(temp) / "simple-demo"
             result = self.harness.run_phase5g_demo(
                 vehicle_count=6, seed=7, target_speed_mps=9.5,
-                duration_s=0.1, output_base=output, live=False,
-                local_formation_range_m=78.0,
-                adjacent_lane_gap_m=14.0,
+                duration_s=0.6, output_base=output, live=False,
+                depart_interval_min_s=0.1,
+                depart_interval_max_s=0.1,
+                formation_join_range_m=48.0,
+                middle_lane_offset_m=14.0,
                 same_lane_gap_m=28.0,
                 position_tolerance_m=1.5,
-                formation_accel_limit_mps2=0.4,
-                max_formation_lane_changes=1,
+                speed_tolerance_mps=0.8,
+                stable_time_s=1.2,
+                reference_switch_gain_m=2.5,
+                min_formation_lane_change_speed_mps=5.5,
+                hard_lane_change_gap_m=9.0,
             )
             self.assertTrue(result.is_dir())
             metadata = json.loads((result / "metadata.json").read_text(encoding="utf-8"))
@@ -1084,7 +1083,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             self.assertEqual(metadata["vehicle_count"], 6)
             self.assertEqual(metadata["seed"], 7)
             self.assertEqual(metadata["target_speed_mps"], 9.5)
-            self.assertEqual(metadata["duration_s"], 0.1)
+            self.assertEqual(metadata["duration_s"], 0.6)
             self.assertEqual(metadata["simple_parameters"], SIMPLE_NONDEFAULTS)
             run_variant.assert_called_once()
             args = run_variant.call_args.args
@@ -1098,30 +1097,44 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_demo_rejects_every_invalid_value_before_creating_result_base(self):
         valid = {
             "vehicle_count": 3, "seed": 1, "target_speed_mps": 10.0,
-            "duration_s": 0.1, "live": False,
-            "local_formation_range_m": 90.0,
-            "adjacent_lane_gap_m": 15.0,
+            "duration_s": 0.3, "live": False,
+            "depart_interval_min_s": 0.1,
+            "depart_interval_max_s": 0.1,
+            "initial_speed_min_mps": 8.0,
+            "initial_speed_max_mps": 12.0,
+            "formation_join_range_m": 50.0,
+            "middle_lane_offset_m": 15.0,
             "same_lane_gap_m": 30.0,
             "position_tolerance_m": 2.0,
-            "formation_accel_limit_mps2": 0.5,
-            "max_formation_lane_changes": 1,
+            "speed_tolerance_mps": 1.0,
+            "stable_time_s": 1.0,
+            "reference_switch_gain_m": 2.0,
+            "min_formation_lane_change_speed_mps": 5.0,
+            "hard_lane_change_gap_m": 8.0,
         }
         invalid = [
-            ("vehicle_count", True), ("vehicle_count", 5),
+            ("vehicle_count", True), ("vehicle_count", 2),
+            ("vehicle_count", 61),
             ("seed", True), ("seed", -1),
             ("target_speed_mps", True), ("target_speed_mps", 0),
             ("target_speed_mps", float("nan")),
             ("duration_s", True), ("duration_s", 0),
             ("duration_s", float("inf")), ("duration_s", 0.15),
+            ("duration_s", 0.2),
+            ("depart_interval_min_s", 0.2),
+            ("initial_speed_min_mps", 12.1),
+            ("initial_speed_min_mps", 12.0),
         ]
         for name in (
-            "local_formation_range_m", "adjacent_lane_gap_m", "same_lane_gap_m",
-            "position_tolerance_m", "formation_accel_limit_mps2",
+            "depart_interval_min_s", "depart_interval_max_s",
+            "initial_speed_min_mps", "initial_speed_max_mps",
+            "formation_join_range_m", "middle_lane_offset_m",
+            "same_lane_gap_m", "position_tolerance_m", "speed_tolerance_mps",
+            "stable_time_s", "reference_switch_gain_m",
+            "min_formation_lane_change_speed_mps", "hard_lane_change_gap_m",
         ):
             invalid.extend((name, value) for value in
                            (True, 0, -1.0, float("nan"), float("inf")))
-        invalid.extend(("max_formation_lane_changes", value)
-                       for value in (True, 0, 2, 1.0))
         with tempfile.TemporaryDirectory() as temp:
             for index, (name, value) in enumerate(invalid):
                 output = Path(temp) / f"invalid-{index}"
@@ -1274,37 +1287,77 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             )
             self.assertFalse(os.path.samefile(victim, target))
 
+    @unittest.skipUnless(os.name == "nt", "Windows extended-length path contract")
+    def test_seal_directory_includes_files_beyond_legacy_max_path(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = (Path(temp) / ("a" * 60) / ("b" * 60) / ("c" * 60))
+            root.mkdir(parents=True)
+            target = root / (("d" * 50) + ".md")
+            self.assertGreater(len(str(target)), 260)
+            payload = b"long sealed path\n"
+            native_target = self.harness.native_io_path(target)
+            with open(native_target, "xb") as stream:
+                stream.write(payload)
+            try:
+                self.harness.seal_directory(root)
+                evidence = json.loads(
+                    (root / "evidence_hashes.json").read_text(encoding="utf-8")
+                )
+                relative = target.relative_to(root).as_posix()
+                self.assertEqual(evidence[relative], hashlib.sha256(payload).hexdigest())
+            finally:
+                os.remove(native_target)
+
     def test_cli_forwards_every_demo_value_exactly_once(self):
         with patch("experiments.phase5g.run_phase5g_demo",
                    return_value=Path("literal-demo")) as demo:
             self.call_cli([
                 "phase5g-demo", "--vehicle-count", "12", "--seed", "9",
-                "--target-speed-mps", "9.5", "--duration-s", "40",
+                "--target-speed-mps", "9.5", "--duration-s", "90",
                 "--output-base", "results/phase5g/custom-demo", "--offline",
-                "--local-formation-range-m", "81",
-                "--adjacent-lane-gap-m", "13",
+                "--depart-interval-min-s", "2.6",
+                "--depart-interval-max-s", "3.9",
+                "--initial-speed-min-mps", "8.1",
+                "--initial-speed-max-mps", "11.9",
+                "--formation-join-range-m", "51",
+                "--middle-lane-offset-m", "13",
                 "--same-lane-gap-m", "29",
                 "--position-tolerance-m", "1.25",
-                "--formation-accel-limit-mps2", "0.35",
-                "--max-formation-lane-changes", "1",
+                "--speed-tolerance-mps", "0.9",
+                "--stable-time-s", "1.2",
+                "--reference-switch-gain-m", "2.5",
+                "--min-formation-lane-change-speed-mps", "5.5",
+                "--hard-lane-change-gap-m", "8.5",
             ])
         demo.assert_called_once_with(
-            vehicle_count=12, seed=9, target_speed_mps=9.5, duration_s=40.0,
+            vehicle_count=12, seed=9, target_speed_mps=9.5, duration_s=90.0,
             output_base="results/phase5g/custom-demo", mode="lane_priority",
-            formal=False, live=False, local_formation_range_m=81.0,
-            adjacent_lane_gap_m=13.0, same_lane_gap_m=29.0,
-            position_tolerance_m=1.25, formation_accel_limit_mps2=0.35,
-            max_formation_lane_changes=1,
+            formal=False, live=False,
+            depart_interval_min_s=2.6, depart_interval_max_s=3.9,
+            initial_speed_min_mps=8.1, initial_speed_max_mps=11.9,
+            formation_join_range_m=51.0, middle_lane_offset_m=13.0,
+            same_lane_gap_m=29.0, position_tolerance_m=1.25,
+            speed_tolerance_mps=0.9, stable_time_s=1.2,
+            reference_switch_gain_m=2.5,
+            min_formation_lane_change_speed_mps=5.5,
+            hard_lane_change_gap_m=8.5,
         )
 
     def test_cli_rejects_invalid_simple_values_without_calling_demo(self):
         invalid = (
-            ("--local-formation-range-m", "0"),
-            ("--adjacent-lane-gap-m", "nan"),
+            ("--depart-interval-min-s", "0"),
+            ("--depart-interval-max-s", "nan"),
+            ("--initial-speed-min-mps", "-1"),
+            ("--initial-speed-max-mps", "inf"),
+            ("--formation-join-range-m", "0"),
+            ("--middle-lane-offset-m", "nan"),
             ("--same-lane-gap-m", "-1"),
             ("--position-tolerance-m", "inf"),
-            ("--formation-accel-limit-mps2", "0"),
-            ("--max-formation-lane-changes", "2"),
+            ("--speed-tolerance-mps", "0"),
+            ("--stable-time-s", "nan"),
+            ("--reference-switch-gain-m", "-1"),
+            ("--min-formation-lane-change-speed-mps", "0"),
+            ("--hard-lane-change-gap-m", "inf"),
         )
         for flag, value in invalid:
             with self.subTest(flag=flag), patch(
@@ -1359,11 +1412,11 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertEqual(restored_policy, metadata["policy_parameters"])
 
         missing = deepcopy(metadata)
-        del missing["parameters"]["simple_formation_same_gap_m"]
+        del missing["parameters"]["simple_formation_same_lane_gap_m"]
         with self.assertRaises(ValueError):
             self.replay._validate_metadata(missing)
         tampered = deepcopy(metadata)
-        tampered["parameters"]["simple_formation_adjacent_gap_m"] = 12.0
+        tampered["parameters"]["simple_formation_middle_offset_m"] = 12.0
         with self.assertRaises(ValueError):
             self.replay._validate_metadata(tampered)
 
@@ -1378,8 +1431,8 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             metadata_path = path / "metadata.json"
             metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
             self.assertIn("parameters_input_sha256", metadata)
-            metadata["parameters"]["simple_formation_local_range_m"] = 79.0
-            metadata["policy_parameters"]["simple_formation_local_range_m"] = 79.0
+            metadata["parameters"]["simple_formation_component_gap_m"] = 49.0
+            metadata["policy_parameters"]["simple_formation_component_gap_m"] = 49.0
             self.harness.atomic_json(metadata_path, metadata)
             self.harness.seal_directory(path)
             replay = self.replay.replay_variant(path)
@@ -1477,7 +1530,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
 
         self.assertEqual(
             self.harness.FORMATION_LANE_REASONS,
-            frozenset({"formation_geometry", "simple_formation_balance"}),
+            frozenset({"formation_geometry", "simple_formation_join"}),
         )
         for reason in self.harness.FORMATION_LANE_REASONS | {"slower_visible_lead"}:
             rows = records(reason)
@@ -1649,11 +1702,11 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         self.assertEqual(report["trust_model"],
                          "sibling_anchor_only_not_whole-package-tamper-resistant")
 
-    def test_demo_scientific_gate_tri_state_is_explicit_for_three_and_six(self):
+    def test_dynamic_demo_scientific_gate_is_explicitly_not_applicable(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             for count, applicable, scientific in (
-                (3, False, None), (6, True, False), (12, False, None),
+                (3, False, None), (6, False, None), (12, False, None),
             ):
                 with self.subTest(count=count):
                     source = self.make_short_demo(
@@ -1674,7 +1727,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                     )
                     if count == 6:
                         self.assertEqual(child_metadata["case"]["name"],
-                                         "main_6_3_2_1")
+                                         "seeded_6_seed11")
                     self.assertIs(child["scientific_gate_applicable"], applicable)
                     self.assertIs(child["scientific_passed"], scientific)
                     self.assertIs(outer["scientific_gate_applicable"], applicable)

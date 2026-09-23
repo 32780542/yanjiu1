@@ -9,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import uuid
 from dataclasses import FrozenInstanceError, replace
 from pathlib import Path
 import xml.etree.ElementTree as ET
@@ -41,6 +42,23 @@ class DemoConfigurationTests(unittest.TestCase):
         result = gui.validate_config(gui.DemoConfig(), gui.PROJECT_ROOT)
         self.assertEqual(result.sumo_gui.name, 'sumo-gui.exe')
         self.assertEqual(result.network.name, 'bottleneck.net.xml')
+
+    @unittest.skipUnless(os.name == 'nt', 'Windows extended-length path contract')
+    def test_sha256_reads_snapshot_files_beyond_legacy_max_path(self):
+        with tempfile.TemporaryDirectory() as temp:
+            folder = (Path(temp) / ('a' * 60) / ('b' * 60) / ('c' * 60))
+            folder.mkdir(parents=True)
+            target = folder / (('d' * 50) + '.md')
+            self.assertGreater(len(str(target)), 260)
+            payload = b'long snapshot path\n'
+            native_target = '\\\\?\\' + str(target)
+            with open(native_target, 'xb') as stream:
+                stream.write(payload)
+            try:
+                self.assertEqual(
+                    gui.sha256_file(target), hashlib.sha256(payload).hexdigest())
+            finally:
+                os.remove(native_target)
 
     def test_native_validation_does_not_require_historical_algorithm_results(self):
         with tempfile.TemporaryDirectory(dir=gui.PROJECT_ROOT / 'tmp') as tmp:
@@ -137,20 +155,27 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
 
     def test_defaults_are_the_approved_immutable_simple_formation_values(self):
         expected = {
-            'vehicle_count': 6,
+            'vehicle_count': 12,
             'target_speed_mps': 10.0,
             'random_seed': 1,
-            'simulation_duration_s': 45.0,
+            'depart_interval_min_s': 2.5,
+            'depart_interval_max_s': 4.0,
+            'initial_speed_min_mps': 8.0,
+            'initial_speed_max_mps': 12.0,
+            'simulation_duration_s': 90.0,
             'show_gui': True,
             'gui_delay_ms': 40,
             'auto_zoom': True,
             'wait_before_close': True,
-            'local_formation_range_m': 90.0,
-            'adjacent_lane_gap_m': 15.0,
+            'formation_join_range_m': 50.0,
+            'middle_lane_offset_m': 15.0,
             'same_lane_gap_m': 30.0,
             'position_tolerance_m': 2.0,
-            'formation_accel_limit_mps2': 0.5,
-            'max_formation_lane_changes': 1,
+            'speed_tolerance_mps': 1.0,
+            'stable_time_s': 1.0,
+            'reference_switch_gain_m': 2.0,
+            'min_formation_lane_change_speed_mps': 5.0,
+            'hard_lane_change_gap_m': 8.0,
         }
         config = gui.SimpleFormationDemoConfig()
         self.assertEqual(
@@ -171,28 +196,33 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
     def test_invalid_simple_values_are_rejected_before_path_resolution(self):
         invalid = [
             ('vehicle_count', True, 'VEHICLE_COUNT'),
-            ('vehicle_count', 5, 'VEHICLE_COUNT'),
+            ('vehicle_count', 2, 'VEHICLE_COUNT'),
+            ('vehicle_count', 61, 'VEHICLE_COUNT'),
             ('target_speed_mps', True, 'TARGET_SPEED_MPS'),
             ('target_speed_mps', math.nan, 'TARGET_SPEED_MPS'),
             ('random_seed', True, 'RANDOM_SEED'),
             ('random_seed', -1, 'RANDOM_SEED'),
             ('random_seed', 2**64, 'RANDOM_SEED'),
+            ('depart_interval_min_s', 0, 'DEPART_INTERVAL_MIN_S'),
+            ('depart_interval_max_s', math.inf, 'DEPART_INTERVAL_MAX_S'),
+            ('initial_speed_min_mps', False, 'INITIAL_SPEED_MIN_MPS'),
+            ('initial_speed_max_mps', math.nan, 'INITIAL_SPEED_MAX_MPS'),
             ('simulation_duration_s', 0.15, 'SIMULATION_DURATION_S'),
             ('show_gui', 1, 'SHOW_GUI'),
             ('gui_delay_ms', True, 'GUI_DELAY_MS'),
             ('gui_delay_ms', -1, 'GUI_DELAY_MS'),
             ('auto_zoom', 1, 'AUTO_ZOOM'),
             ('wait_before_close', 'yes', 'WAIT_BEFORE_CLOSE'),
-            ('local_formation_range_m', 0, 'LOCAL_FORMATION_RANGE_M'),
-            ('adjacent_lane_gap_m', math.inf, 'ADJACENT_LANE_GAP_M'),
+            ('formation_join_range_m', 0, 'FORMATION_JOIN_RANGE_M'),
+            ('middle_lane_offset_m', math.inf, 'MIDDLE_LANE_OFFSET_M'),
             ('same_lane_gap_m', False, 'SAME_LANE_GAP_M'),
             ('position_tolerance_m', -1, 'POSITION_TOLERANCE_M'),
-            ('formation_accel_limit_mps2', math.nan,
-             'FORMATION_ACCEL_LIMIT_MPS2'),
-            ('max_formation_lane_changes', 2,
-             'MAX_FORMATION_LANE_CHANGES'),
-            ('max_formation_lane_changes', 1.0,
-             'MAX_FORMATION_LANE_CHANGES'),
+            ('speed_tolerance_mps', 0, 'SPEED_TOLERANCE_MPS'),
+            ('stable_time_s', math.nan, 'STABLE_TIME_S'),
+            ('reference_switch_gain_m', -1, 'REFERENCE_SWITCH_GAIN_M'),
+            ('min_formation_lane_change_speed_mps', False,
+             'MIN_FORMATION_LANE_CHANGE_SPEED_MPS'),
+            ('hard_lane_change_gap_m', math.inf, 'HARD_LANE_CHANGE_GAP_M'),
         ]
         for field, value, label in invalid:
             with self.subTest(field=field, value=value), \
@@ -200,6 +230,30 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                 gui.validate_simple_config(
                     replace(gui.SimpleFormationDemoConfig(), **{field: value}),
                     gui.PROJECT_ROOT)
+
+    def test_simple_count_range_and_schedule_order_are_validated(self):
+        for count in range(3, 61):
+            with self.subTest(count=count):
+                config = replace(
+                    gui.SimpleFormationDemoConfig(), vehicle_count=count,
+                    simulation_duration_s=(count - 1) * 4.0 + 0.1)
+                gui.validate_simple_config(config, gui.PROJECT_ROOT)
+        invalid = (
+            replace(gui.SimpleFormationDemoConfig(),
+                    depart_interval_min_s=4.1, depart_interval_max_s=4.0),
+            replace(gui.SimpleFormationDemoConfig(),
+                    initial_speed_min_mps=12.1, initial_speed_max_mps=12.0),
+            replace(gui.SimpleFormationDemoConfig(),
+                    initial_speed_min_mps=12.0, initial_speed_max_mps=12.0),
+            replace(gui.SimpleFormationDemoConfig(), simulation_duration_s=44.0),
+        )
+        labels = (
+            'DEPART_INTERVAL', 'INITIAL_SPEED', 'INITIAL_SPEED',
+            'SIMULATION_DURATION_S',
+        )
+        for config, label in zip(invalid, labels):
+            with self.subTest(label=label), self.assertRaisesRegex(ValueError, label):
+                gui.validate_simple_config(config, gui.PROJECT_ROOT)
 
     def test_extreme_finite_duration_is_a_named_validation_error(self):
         config = replace(
@@ -214,11 +268,11 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
         create.assert_not_called()
 
     def test_generation_timeout_budget_is_exact_and_validates_domain(self):
-        self.assertEqual(gui.simple_generation_timeout_s(45.0, 3), 198)
-        self.assertEqual(gui.simple_generation_timeout_s(45.0, 6), 306)
-        self.assertEqual(gui.simple_generation_timeout_s(45.0, 12), 522)
-        self.assertGreater(gui.simple_generation_timeout_s(45.0, 12), 411.375)
-        for count in (True, 2, 5, 13):
+        self.assertEqual(gui.simple_generation_timeout_s(45.0, 3), 192)
+        self.assertEqual(gui.simple_generation_timeout_s(45.0, 6), 204)
+        self.assertEqual(gui.simple_generation_timeout_s(45.0, 12), 228)
+        self.assertLessEqual(gui.simple_generation_timeout_s(3600.0, 60), 3600)
+        for count in (True, 2, 61):
             with self.subTest(count=count), \
                     self.assertRaisesRegex(ValueError, 'VEHICLE_COUNT'):
                 gui.simple_generation_timeout_s(45.0, count)
@@ -226,9 +280,6 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
             with self.subTest(duration=duration), \
                     self.assertRaisesRegex(ValueError, 'SIMULATION_DURATION_S'):
                 gui.simple_generation_timeout_s(duration, 6)
-        with self.assertRaisesRegex(
-                ValueError, 'SIMULATION_DURATION_S.*3600'):
-            gui.simple_generation_timeout_s(411.375, 12)
 
     def test_huge_integer_duration_is_a_named_value_error(self):
         huge = 10**400
@@ -404,6 +455,122 @@ class AlgorithmTraceTests(unittest.TestCase):
             list(gui.iter_trace_frames(source))
 
 
+class DynamicSimplePreflightTests(unittest.TestCase):
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(
+            dir=gui.PROJECT_ROOT / 'tmp')
+        self.root = Path(self.temporary.name)
+
+    def tearDown(self):
+        self.temporary.cleanup()
+
+    @staticmethod
+    def state(time_s, x_m):
+        return {
+            'time_s': time_s, 'x_m': x_m, 'y_m': 1.65,
+            'heading_rad': 0.0, 'vx_mps': 10.0, 'vy_mps': 0.0,
+            'yaw_rate_radps': 0.0, 'a_drive_mps2': 0.0,
+            'steering_rad': 0.0,
+        }
+
+    def step(self, initial, final):
+        actor = next(iter(initial))
+        start = initial[actor]['time_s']
+        samples = [
+            self.state(round(start + index * 0.01, 2),
+                       initial[actor]['x_m'] + index * 0.1)
+            for index in range(1, 10)
+        ]
+        samples.append(final[actor])
+        return {
+            'initial': initial[actor], 'final': final[actor],
+            'samples': samples,
+            'command': {'acceleration_mps2': 0.0, 'steering_rad': 0.0},
+            'dt_s': 0.01,
+        }
+
+    def fixture(self):
+        a0 = {'a': self.state(0.0, 10.0)}
+        a1 = {'a': self.state(0.1, 11.0)}
+        ab1 = {'a': a1['a'], 'b': self.state(0.1, 0.0)}
+        ab2 = {'a': self.state(0.2, 12.0), 'b': self.state(0.2, 1.0)}
+        templates = {
+            'a': {'scheduled_departure_s': 0.0, 'actual_departure_s': None,
+                  'state': self.state(0.0, 10.0), 'physical_ordinal': 0},
+            'b': {'scheduled_departure_s': 0.1, 'actual_departure_s': None,
+                  'state': self.state(0.0, 0.0), 'physical_ordinal': 1},
+        }
+        first_departures = json.loads(json.dumps(templates))
+        first_departures['a']['actual_departure_s'] = 0.0
+        first = {
+            'status': 'completed', 'initial': a0,
+            'inputs': {'a': {}}, 'decisions': {'a': {}},
+            'actions': {'a': {}}, 'diagnostics': {'a': {}}, 'readback': None,
+            'active_actors': ['a'], 'departures': first_departures,
+            'steps': {'a': self.step(a0, a1)},
+        }
+        second_departures = json.loads(json.dumps(templates))
+        second_departures['a']['actual_departure_s'] = 0.0
+        second_departures['b']['actual_departure_s'] = 0.1
+        second = {
+            'status': 'completed', 'initial': ab1,
+            'inputs': {'a': {}, 'b': {}}, 'decisions': {'a': {}, 'b': {}},
+            'actions': {'a': {}, 'b': {}},
+            'diagnostics': {'a': {}, 'b': {}}, 'readback': None,
+            'active_actors': ['a', 'b'], 'departures': second_departures,
+            'steps': {
+                'a': self.step({'a': ab1['a']}, {'a': ab2['a']}),
+                'b': self.step({'b': ab1['b']}, {'b': ab2['b']}),
+            },
+        }
+        case = {
+            'duration_s': 0.2, 'controlled': ['a', 'b'],
+            'initial': a0, 'departures': templates,
+        }
+        metadata = {
+            'case': case, 'intervals': 2, 'trace_intervals': 2,
+            'parameters': {'control_sync_dt_s': 0.1, 'dynamics_dt_s': 0.01},
+        }
+        return metadata, [first, second]
+
+    def preflight(self, metadata, records):
+        path = self.root / f'{uuid.uuid4().hex}.jsonl'
+        payload = ''.join(
+            json.dumps(row, allow_nan=False) + '\n' for row in records)
+        path.write_text(payload, encoding='utf-8')
+        return gui._preflight_simple_trace(
+            path, metadata, ('a', 'b'),
+            hashlib.sha256(path.read_bytes()).hexdigest())
+
+    def test_dynamic_actor_sets_grow_at_the_recorded_departure(self):
+        metadata, records = self.fixture()
+        frames, _ = self.preflight(metadata, records)
+        self.assertEqual(
+            [set(frame.states) for frame in frames],
+            [{'a'}, {'a', 'b'}, {'a', 'b'}])
+        self.assertEqual([frame.time_s for frame in frames], [0.0, 0.1, 0.2])
+
+    def test_dynamic_preflight_rejects_actor_and_departure_corruption(self):
+        mutations = {
+            '消失': lambda rows: rows[1].update(
+                active_actors=['b'], initial={'b': rows[1]['initial']['b']},
+                inputs={'b': {}}, decisions={'b': {}}, actions={'b': {}},
+                diagnostics={'b': {}}, steps={'b': rows[1]['steps']['b']}),
+            '未记录': lambda rows: rows[1]['departures']['b'].update(
+                actual_departure_s=None),
+            '重复': lambda rows: rows[1]['departures']['a'].update(
+                actual_departure_s=0.1),
+            '时间': lambda rows: rows[1]['initial']['a'].update(time_s=0.0),
+            '状态时间': lambda rows: rows[1]['initial']['b'].update(time_s=0.0),
+        }
+        for label, mutate in mutations.items():
+            metadata, records = self.fixture()
+            mutate(records)
+            with self.subTest(label=label), self.assertRaisesRegex(
+                    RuntimeError, '车辆|发车|时间|状态|active|departure'):
+                self.preflight(metadata, records)
+
+
 class _SimpleTraceFixture:
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(dir=gui.PROJECT_ROOT / 'tmp')
@@ -513,17 +680,22 @@ class _SimpleTraceFixture:
             for index, actor in enumerate(actors)
         }
         simple_parameters = {
-            'simple_formation_local_range_m':
-                self.config.local_formation_range_m,
-            'simple_formation_adjacent_gap_m':
-                self.config.adjacent_lane_gap_m,
-            'simple_formation_same_gap_m': self.config.same_lane_gap_m,
+            'simple_formation_component_gap_m':
+                self.config.formation_join_range_m,
+            'simple_formation_middle_offset_m':
+                self.config.middle_lane_offset_m,
+            'simple_formation_same_lane_gap_m': self.config.same_lane_gap_m,
             'simple_formation_position_tolerance_m':
                 self.config.position_tolerance_m,
-            'simple_formation_accel_limit_mps2':
-                self.config.formation_accel_limit_mps2,
-            'simple_formation_max_lane_changes':
-                self.config.max_formation_lane_changes,
+            'simple_formation_speed_tolerance_mps':
+                self.config.speed_tolerance_mps,
+            'simple_formation_stable_time_s': self.config.stable_time_s,
+            'simple_formation_reference_switch_gain_m':
+                self.config.reference_switch_gain_m,
+            'simple_formation_min_lane_change_speed_mps':
+                self.config.min_formation_lane_change_speed_mps,
+            'simple_formation_target_lane_clearance_m':
+                self.config.hard_lane_change_gap_m,
         }
         private_rng_provenance = {
             'algorithm': 'SplitMix64', 'version': 1,
@@ -552,6 +724,10 @@ class _SimpleTraceFixture:
             'case_seed': self.config.random_seed,
             'target_speed_mps': self.config.target_speed_mps,
             'duration_s': self.config.simulation_duration_s,
+            'depart_interval_min_s': self.config.depart_interval_min_s,
+            'depart_interval_max_s': self.config.depart_interval_max_s,
+            'initial_speed_min_mps': self.config.initial_speed_min_mps,
+            'initial_speed_max_mps': self.config.initial_speed_max_mps,
             'simple_formation_enabled': True,
             'simple_parameters': simple_parameters,
             'physical_input_sha256': '2' * 64,
@@ -676,6 +852,10 @@ class _SimpleTraceFixture:
             'seed': self.config.random_seed,
             'target_speed_mps': self.config.target_speed_mps,
             'duration_s': self.config.simulation_duration_s,
+            'depart_interval_min_s': self.config.depart_interval_min_s,
+            'depart_interval_max_s': self.config.depart_interval_max_s,
+            'initial_speed_min_mps': self.config.initial_speed_min_mps,
+            'initial_speed_max_mps': self.config.initial_speed_max_mps,
             'simple_parameters': simple_parameters,
             'case_file_sha256': case_file_sha,
             'mode_registry': mode_registry,
@@ -895,14 +1075,14 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         self.assertEqual(frames[1].states['v0']['x_m'], 101.0)
         self.assertEqual(source.trace_sha256, expected_digest)
 
-    def test_full_duration_source_has_451_frozen_control_frames(self):
+    def test_full_duration_source_has_901_frozen_control_frames(self):
         self.config = gui.SimpleFormationDemoConfig()
         outer = self.make_outer('full-duration-frames')
         source = gui.load_simple_trace_source(outer, self.paths, self.config)
         self.assertIsInstance(source.frames, tuple)
-        self.assertEqual(len(source.frames), 451)
+        self.assertEqual(len(source.frames), 901)
         self.assertEqual(source.frames[0].time_s, 0.0)
-        self.assertEqual(source.frames[-1].time_s, 45.0)
+        self.assertEqual(source.frames[-1].time_s, 90.0)
         self.assertEqual(tuple(source.frames[0].states), source.actors)
 
     def test_trusted_json_files_are_each_opened_once_for_hash_and_parse(self):
@@ -1111,15 +1291,18 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
 
     def test_child_execution_parameters_are_bound_to_anchored_input(self):
         simple_fields = (
-            'simple_formation_local_range_m',
-            'simple_formation_adjacent_gap_m',
-            'simple_formation_same_gap_m',
+            'simple_formation_component_gap_m',
+            'simple_formation_middle_offset_m',
+            'simple_formation_same_lane_gap_m',
             'simple_formation_position_tolerance_m',
-            'simple_formation_accel_limit_mps2',
-            'simple_formation_max_lane_changes',
+            'simple_formation_speed_tolerance_mps',
+            'simple_formation_stable_time_s',
+            'simple_formation_reference_switch_gain_m',
+            'simple_formation_min_lane_change_speed_mps',
+            'simple_formation_target_lane_clearance_m',
         )
         mutations = [
-            (container, field, 2 if field.endswith('lane_changes') else 99.0)
+            (container, field, 99.0)
             for container in ('parameters', 'policy_parameters')
             for field in simple_fields
         ]
@@ -1258,9 +1441,14 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         config = replace(
             self.config, vehicle_count=12, target_speed_mps=9.5,
             random_seed=9, simulation_duration_s=40.0,
-            local_formation_range_m=81.0, adjacent_lane_gap_m=13.0,
+            depart_interval_min_s=2.6, depart_interval_max_s=3.9,
+            initial_speed_min_mps=8.1, initial_speed_max_mps=11.9,
+            formation_join_range_m=51.0, middle_lane_offset_m=13.0,
             same_lane_gap_m=29.0, position_tolerance_m=1.25,
-            formation_accel_limit_mps2=0.35)
+            speed_tolerance_mps=0.9, stable_time_s=1.2,
+            reference_switch_gain_m=2.5,
+            min_formation_lane_change_speed_mps=5.5,
+            hard_lane_change_gap_m=8.5)
         self.config = config
         outer = self.make_outer()
         calls = []
@@ -1285,11 +1473,17 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
             '--vehicle-count': '12', '--seed': '9',
             '--target-speed-mps': '9.5', '--duration-s': '40',
             '--output-base': 'results/phase5g/simple_gui_sources',
-            '--local-formation-range-m': '81',
-            '--adjacent-lane-gap-m': '13', '--same-lane-gap-m': '29',
+            '--depart-interval-min-s': '2.6',
+            '--depart-interval-max-s': '3.9',
+            '--initial-speed-min-mps': '8.1',
+            '--initial-speed-max-mps': '11.9',
+            '--formation-join-range-m': '51',
+            '--middle-lane-offset-m': '13', '--same-lane-gap-m': '29',
             '--position-tolerance-m': '1.25',
-            '--formation-accel-limit-mps2': '0.35',
-            '--max-formation-lane-changes': '1',
+            '--speed-tolerance-mps': '0.9', '--stable-time-s': '1.2',
+            '--reference-switch-gain-m': '2.5',
+            '--min-formation-lane-change-speed-mps': '5.5',
+            '--hard-lane-change-gap-m': '8.5',
         }
         self.assertEqual(command.count('--offline'), 1)
         for flag, value in expected_values.items():
@@ -1298,7 +1492,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
                 self.assertEqual(command[command.index(flag) + 1], value)
         self.assertEqual(kwargs, {
             'cwd': self.variant_root, 'capture_output': True, 'text': True,
-            'encoding': 'utf-8', 'timeout': 474, 'check': False,
+            'encoding': 'utf-8', 'timeout': 218, 'check': False,
             'shell': False,
         })
 
@@ -1309,7 +1503,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         def timeout_runner(command, **kwargs):
             raise subprocess.TimeoutExpired(command, kwargs['timeout'])
 
-        with self.assertRaisesRegex(RuntimeError, '198秒'):
+        with self.assertRaisesRegex(RuntimeError, '192秒'):
             gui.generate_fresh_simple_trace(
                 config, self.paths, process_runner=timeout_runner)
 
@@ -1368,7 +1562,7 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         rules = self.make_outer('wrong-rules')
         metadata_path = rules / 'metadata.json'
         metadata = json.loads(metadata_path.read_text(encoding='utf-8'))
-        metadata['simple_parameters']['simple_formation_adjacent_gap_m'] = 99.0
+        metadata['simple_parameters']['simple_formation_middle_offset_m'] = 99.0
         metadata_path.write_text(json.dumps(metadata), encoding='utf-8')
         self.reseal_trusted(rules)
         with self.assertRaisesRegex(RuntimeError, 'simple_parameters'):
@@ -1449,6 +1643,56 @@ class GuiRuntimeTests(unittest.TestCase):
         self.assertEqual(self.connection.vehicle.setSpeed.call_count, 2)
         self.assertEqual(status.frames_played, 2)
         self.assertAlmostEqual(status.final_time_s, 0.1)
+
+    def test_dynamic_playback_adds_an_actor_only_on_its_first_recorded_frame(self):
+        first_states = {'ego': self.state(0.0, 10.0)}
+        second_states = {
+            'ego': self.state(0.1, 10.5),
+            'joiner': self.state(0.1, 0.0),
+        }
+        frames = (
+            gui._freeze_trace_frame(0.0, first_states, ('ego',)),
+            gui._freeze_trace_frame(0.1, second_states, ('ego', 'joiner')),
+        )
+        source = gui.TraceSource(
+            'dynamic', self.root, self.root / 'unused.jsonl',
+            {
+                'case': {
+                    'controlled': ['ego', 'joiner'],
+                    'departures': {
+                        'ego': {'scheduled_departure_s': 0.0,
+                                'actual_departure_s': None,
+                                'state': self.state(0.0, 10.0),
+                                'physical_ordinal': 0},
+                        'joiner': {'scheduled_departure_s': 0.1,
+                                   'actual_departure_s': None,
+                                   'state': self.state(0.0, 0.0),
+                                   'physical_ordinal': 1},
+                    },
+                },
+                'parameters': {'length_m': 4.0},
+            },
+            {'passed': True}, 'completed', ('ego', 'joiner'), frames=frames,
+        )
+        self.connection.vehicle.getIDList.side_effect = [
+            ('ego',), ('ego', 'joiner')]
+
+        status = gui.play_algorithm(self.connection, source, auto_zoom=False)
+
+        self.assertEqual(
+            [call.args[0] for call in self.connection.vehicle.add.call_args_list],
+            ['ego', 'joiner'])
+        self.assertEqual(self.connection.vehicle.add.call_count, 2)
+        self.assertEqual(self.connection.vehicle.moveToXY.call_count, 3)
+        calls = self.connection.vehicle.method_calls
+        first_joiner_add = next(
+            index for index, call in enumerate(calls)
+            if call[0] == 'add' and call.args[0] == 'joiner')
+        first_ego_move = next(
+            index for index, call in enumerate(calls)
+            if call[0] == 'moveToXY' and call.args[0] == 'ego')
+        self.assertGreater(first_joiner_add, first_ego_move)
+        self.assertEqual(status.frames_played, 2)
 
     def test_native_playback_counts_collisions_and_drains(self):
         self.connection.simulation.getTime.side_effect = [0.0, 0.1]
@@ -1622,7 +1866,7 @@ class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
         self.assertEqual(metadata['frames_played'], 451)
         self.assertEqual(metadata['colliding_vehicle_reports'], 0)
         self.assertEqual(metadata['teleport_starts'], 0)
-        self.assertEqual(snapshot['vehicle_count'], 6)
+        self.assertEqual(snapshot['vehicle_count'], 12)
 
     def test_user_close_keyboard_interrupt_and_startup_failure_are_recorded(self):
         outer = self.make_outer()
@@ -1741,7 +1985,7 @@ class EntrypointTests(unittest.TestCase):
             'variant_root': 'D:/variant', 'variant_run': 'D:/variant/run.py',
             'variant_results': 'D:/variant/results',
             'traci': 'D:/SUMO/tools/traci/__init__.py',
-            'configuration': {'vehicle_count': 6},
+            'configuration': {'vehicle_count': 12},
         }
         output = []
         with patch.object(runrun, 'check_simple_environment', return_value=report), \
@@ -1762,7 +2006,7 @@ class EntrypointTests(unittest.TestCase):
         demo.assert_called_once_with(
             gui.SimpleFormationDemoConfig(), input_fn=unittest.mock.ANY,
             output_fn=unittest.mock.ANY)
-        self.assertTrue(any('局部自组织交错编队' in line for line in output))
+        self.assertTrue(any('三车道领航者-跟随者编队' in line for line in output))
 
     def test_unknown_command_line_option_is_rejected(self):
         with self.assertRaisesRegex(ValueError, '只支持 --check'):

@@ -275,18 +275,17 @@ def main_six_case(parameters: Mapping[str, object],
     )
 
 
-def seeded_case(parameters: Mapping[str, object], count: int, seed: int,
-                *, speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
-                depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
-                depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
-                actor_keys: Sequence[str] | None = None) -> dict:
-    """Generate one deterministic sequential departure schedule.
+def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
+                    *, speed_min_mps: float = 8.0,
+                    speed_max_mps: float = 12.0,
+                    depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
+                    depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
+                    actor_keys: Sequence[str] | None = None) -> dict:
+    """Generate one deterministic sequential schedule after count validation.
 
     Only rows due at time zero are physical initial state.  Later rows remain
     offline experiment truth until the Phase 5G clock activates them.
     """
-    if type(count) is not int or count not in SUPPORTED_COUNTS:
-        raise ValueError("supported vehicle counts are exactly 3, 4, 5, 6, 7, 8, and 12")
     seed = _seed(seed)
     low, high = _speed_bounds(parameters, speed_min_mps, speed_max_mps)
     interval_low, interval_high = _interval_bounds(
@@ -346,6 +345,42 @@ def seeded_case(parameters: Mapping[str, object], count: int, seed: int,
          "departure_interval_range_s": [interval_low, interval_high],
          "speed_range_mps": [low, high]},
         duration_s=duration, departures=departures,
+    )
+
+
+def seeded_case(parameters: Mapping[str, object], count: int, seed: int,
+                *, speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
+                depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
+                depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
+                actor_keys: Sequence[str] | None = None) -> dict:
+    """Generate one preregistered research schedule for the exact matrix counts."""
+    if type(count) is not int or count not in SUPPORTED_COUNTS:
+        raise ValueError(
+            "supported vehicle counts are exactly 3, 4, 5, 6, 7, 8, and 12"
+        )
+    return _scheduled_case(
+        parameters, count, seed,
+        speed_min_mps=speed_min_mps, speed_max_mps=speed_max_mps,
+        depart_interval_min_s=depart_interval_min_s,
+        depart_interval_max_s=depart_interval_max_s,
+        actor_keys=actor_keys,
+    )
+
+
+def demo_case(parameters: Mapping[str, object], count: int, seed: int,
+              *, speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
+              depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
+              depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
+              actor_keys: Sequence[str] | None = None) -> dict:
+    """Generate the editable GUI schedule without widening research counts."""
+    if type(count) is not int or not 3 <= count <= 60:
+        raise ValueError("demo vehicle count must be an exact integer from 3 to 60")
+    return _scheduled_case(
+        parameters, count, seed,
+        speed_min_mps=speed_min_mps, speed_max_mps=speed_max_mps,
+        depart_interval_min_s=depart_interval_min_s,
+        depart_interval_max_s=depart_interval_max_s,
+        actor_keys=actor_keys,
     )
 
 
