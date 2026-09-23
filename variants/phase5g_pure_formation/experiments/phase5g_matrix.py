@@ -60,6 +60,7 @@ _GAP_RUN = {
 _MAX_LATEST_JSON_BYTES = 64 * 1024
 _MAX_DETECTION_JSON_BYTES = 64 * 1024 * 1024
 _MAX_TRUST_JSON_BYTES = 1024 * 1024
+_MAX_ERROR_TEXT_CHARS = 4096
 
 
 def _matrix_directory(base: str | Path) -> Path:
@@ -118,12 +119,35 @@ def _is_json_text(value: object, *, nonempty: bool = False) -> bool:
     return True
 
 
-def _safe_text(value: object) -> str:
-    return str(value).encode("utf-8", "backslashreplace").decode("utf-8")
+def _safe_text(value: object, *, fallback: str = "<unprintable value>") -> str:
+    try:
+        rendered = str(value)
+    except MemoryError:
+        raise
+    except Exception:
+        try:
+            rendered = repr(value)
+        except MemoryError:
+            raise
+        except Exception:
+            rendered = fallback
+    if type(rendered) is not str:
+        rendered = fallback
+    rendered = rendered[:_MAX_ERROR_TEXT_CHARS]
+    return rendered.encode("utf-8", "backslashreplace").decode("utf-8")
+
+
+def _safe_exception_text(error: Exception, *, label: object | None = None) -> str:
+    type_name = _safe_text(type(error).__name__, fallback="Exception")
+    detail = _safe_text(error, fallback="<unprintable exception>")
+    message = type_name + ": " + detail
+    if label is not None:
+        message = _safe_text(label) + ": " + message
+    return message
 
 
 def _recovery_error(errors: list[str], label: str, error: Exception) -> None:
-    errors.append(_safe_text(f"{label}: {type(error).__name__}: {error}"))
+    errors.append(_safe_exception_text(error, label=label))
 
 
 def _trusted_recovery_artifact(run_path: Path, run_base: Path) -> Path:
@@ -300,15 +324,17 @@ def _scientific_status(run_path: Path | None,
             raise ValueError("detection expected_component_count differs")
         component_members = default.get("expected_component_members")
         component_counts = default.get("final_component_lane_counts")
-        if not isinstance(component_members, list) \
-                or len(component_members) != expected_component_count:
+        if not isinstance(component_members, list):
+            raise ValueError("detection component members must be a list")
+        if not isinstance(component_counts, list):
+            raise ValueError("detection lane counts must be a list")
+        if len(component_members) != len(component_counts):
             raise ValueError(
-                "detection component members must match expected component count"
+                "detection component members and lane counts must align"
             )
-        if not isinstance(component_counts, list) \
-                or len(component_counts) != expected_component_count:
+        if success and len(component_members) != expected_component_count:
             raise ValueError(
-                "detection lane counts must match expected component count"
+                "successful detection components must match expected count"
             )
         all_members = []
         for index, (members, counts) in enumerate(zip(
@@ -352,7 +378,7 @@ def _scientific_status(run_path: Path | None,
         raise
     except Exception as error:
         status["failure_reasons"].append(
-            _safe_text(f"{type(error).__name__}: {error}")
+            _safe_exception_text(error)
         )
     return status
 
@@ -400,7 +426,7 @@ def _replay_status(run_path: Path | None, replay_base: Path,
             attempted=True, passed=False,
             errors=[
                 *reported_errors,
-                _safe_text(f"{type(error).__name__}: {error}"),
+                _safe_exception_text(error),
             ],
         )
     return status
@@ -422,16 +448,14 @@ def _attempt(*, count: int, seed: int, run_base: Path, replay_base: Path,
     except MemoryError:
         raise
     except Exception as error:
-        execution_error = _safe_text(f"{type(error).__name__}: {error}")
+        execution_error = _safe_exception_text(error)
         try:
             run_path = _retained_run_path(run_base, recovery_errors)
         except MemoryError:
             raise
         except Exception as recovery_error:
             recovery_errors.append(
-                _safe_text(
-                    f"{type(recovery_error).__name__}: {recovery_error}"
-                )
+                _safe_exception_text(recovery_error)
             )
 
     scientific = _scientific_status(run_path, expected_component_count)

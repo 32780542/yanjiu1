@@ -1947,6 +1947,98 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         )
         self.assertEqual(replay["errors"], ["replay_not_passed"])
 
+    def test_scientific_failure_preserves_reasons_with_actual_component_count(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        original_reasons = [
+            "expected_component_count_mismatch",
+            "same_lane_gap_error",
+        ]
+        members = [["v0", "v1"], ["v2"]]
+        counts = [[1, 1, 0], [0, 0, 1]]
+        with tempfile.TemporaryDirectory() as temp:
+            run_path = Path(temp) / "run"
+            self._write_matrix_detection(
+                run_path, expected_count=1, success=False,
+                reasons=original_reasons, members=members, counts=counts,
+            )
+            scientific = matrix._scientific_status(run_path, 1)
+
+        self.assertTrue(scientific["evaluated"])
+        self.assertFalse(scientific["passed"])
+        self.assertEqual(scientific["failure_reasons"], original_reasons)
+        self.assertEqual(scientific["expected_component_members"], members)
+        self.assertEqual(scientific["final_component_lane_counts"], counts)
+
+    def test_unprintable_ordinary_exceptions_still_finish_matrix_aggregate(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+
+        class Bad(Exception):
+            def __str__(self):
+                raise ValueError("broken exception string")
+
+        class Worse(Bad):
+            def __repr__(self):
+                raise ValueError("broken exception repr")
+
+        calls = []
+
+        def bad_demo(**kwargs):
+            calls.append(dict(kwargs))
+            Path(kwargs["output_base"]).mkdir(parents=True)
+            raise Bad("demo")
+
+        with tempfile.TemporaryDirectory() as temp, patch.object(
+            matrix, "_retained_run_path", side_effect=Bad("recovery"),
+        ):
+            result_path = matrix.run_matrix(
+                Path(temp) / "matrix", live=False, demo_runner=bad_demo,
+                replay_runner=lambda *_args, **_kwargs: self.fail(
+                    "missing run artifacts must not be replayed"
+                ),
+            )
+            aggregate = json.loads(
+                (result_path / "aggregate.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(len(calls), 16)
+        self.assertEqual(len(aggregate["runs"]), 15)
+        self.assertFalse(aggregate["passed"])
+        json.dumps(
+            aggregate, allow_nan=False, ensure_ascii=False
+        ).encode("utf-8")
+        self.assertTrue(all(
+            row["execution_error"].startswith("Bad:")
+            and row["recovery_errors"][0].startswith("Bad:")
+            for row in [*aggregate["runs"], aggregate["gap_case"]]
+        ))
+
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            recovery_errors = []
+            with patch.object(
+                matrix, "_require_output_directory", side_effect=Worse("base"),
+            ):
+                self.assertIsNone(
+                    matrix._retained_run_path(root / "run", recovery_errors)
+                )
+            with patch.object(
+                matrix, "_read_strict_json_object", side_effect=Worse("science"),
+            ):
+                scientific = matrix._scientific_status(root / "run", 1)
+            replay = matrix._replay_status(
+                root / "run", root / "replay",
+                lambda *_args, **_kwargs: (_ for _ in ()).throw(Worse("replay")),
+            )
+
+        self.assertTrue(recovery_errors)
+        self.assertTrue(scientific["failure_reasons"])
+        self.assertTrue(replay["errors"])
+        for value in (recovery_errors, scientific, replay):
+            encoded = json.dumps(
+                value, allow_nan=False, ensure_ascii=False
+            ).encode("utf-8")
+            self.assertIn(b"<unprintable exception>", encoded)
+
     def test_scientific_status_rejects_nonfinite_oversized_and_inconsistent_evidence(self):
         matrix = importlib.import_module("experiments.phase5g_matrix")
         with tempfile.TemporaryDirectory() as temp:
