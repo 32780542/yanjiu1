@@ -318,3 +318,9 @@
 - 回退前的诊断证据保留：12 车/seed 1/90 s 的后续试验 `simple_gui_sources/20260923T111947228100Z_9cffc112` 只出现 1 次编队换道；30 车/seed 6/180 s 的 `simple_gui_sources/20260923T111944383314Z_9648b97e` 虽写满 1800 条轨迹，但最终验收停在 `running`、没有完成锚，不能视作完整通过。后者轨迹中没有换道发起。两者均不是当前恢复版的验收结果。
 - 恢复版的本轮核验：Phase5G 规则 16/16、控制器 48/48、根入口测试 84/84、`python -B runrun.py --check` 通过，`git diff --check` exit 0。未重复运行 12 车真实 GUI；此前当时源码生成的 `20260923T092319151715Z_1cdf6a95` 已有窗口播放及 2 次编队换道的固定证据。
 - 下一入口：用户若要求继续修复长时运行，需从恢复版重新诊断 20 车/200 s 的三车道到两车道路段切换及隐藏的完成锚错误；不要把回退后的代码说成已修复该故障。
+
+## 2026-09-23 20:13 +08:00：恢复版保存至 GitHub
+
+- 用户指定新仓库 `https://github.com/32780542/yanjiu1`。该仓库推送前无分支；本地原 `origin` 仍指向 `32780542/biyesheji1`，另加 `yanjiu1` 远端并将恢复版提交 `0a87512d0e778bf5a6491ac4cc2dffe37e51c051` 推送到新仓库 `main`，远端 SHA 已核对一致。仅提交已有 Git 闭包中 13 个变更文件，未提交未跟踪的实验结果、PDF 或历史资料。
+- 提交前重新运行：根 `test_runrun_demo.py` 84/84、Git 闭包测试 8/8、Phase5G simple 专项 143/143、`runrun.py --check` 与 `git diff --cached --check` 均通过。专项完整日志为 `results/operations/20260923T120013849416Z_github-save-restored-phase5g-tests_bd8e0bf0`。
+- Git CLI 直连 GitHub 曾超时；通过 Windows 系统代理 `127.0.0.1:10997` 重试后正常推送。下一入口为 GitHub `main` 的上述恢复版；未重新宣称长时 20 车案例或科学形成门槛通过。
