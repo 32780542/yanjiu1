@@ -1735,7 +1735,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             )
         gap_call = calls[-1]
         self.assertEqual(gap_call["vehicle_count"], 6)
-        self.assertEqual(gap_call["seed"], 1432)
+        self.assertEqual(gap_call["seed"], 627052)
         self.assertEqual(gap_call["depart_interval_min_s"], 2.5)
         self.assertEqual(gap_call["depart_interval_max_s"], 20.0)
         self.assertEqual(gap_call["expected_component_count"], 2)
@@ -1780,13 +1780,13 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_long_gap_schedule_physically_starts_two_local_components(self):
         detector = importlib.import_module("experiments.phase5_detection")
         schedule = phase5g_schedule.deterministic_schedule_rows(
-            6, 1432, depart_interval_min_s=2.5,
+            6, 627052, depart_interval_min_s=2.5,
             depart_interval_max_s=20.0, speed_min_mps=8.0,
             speed_max_mps=12.0,
         )
         self.assertEqual(
             [row[0] for row in schedule],
-            [0.0, 7.9, 13.0, 22.5, 27.1, 31.6],
+            [0.0, 3.2, 6.7, 24.4, 27.8, 31.2],
         )
         cohort_time = schedule[-1][0]
         rows = {

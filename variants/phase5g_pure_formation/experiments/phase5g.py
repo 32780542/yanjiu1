@@ -1423,6 +1423,7 @@ def _initial_memories(case: Mapping[str, object], mode: str, *,
                 desired_lane_index=None,
                 join_phase="FREE",
                 stable_since_s=None,
+                stable_window_signature=None,
             )
             result[key] = asdict(simple_formation.memory_from_dict(copied))
         return result

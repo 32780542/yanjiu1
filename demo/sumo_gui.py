@@ -1378,7 +1378,9 @@ def _preflight_simple_trace(
                     raise RuntimeError(
                         f'trace第{line_number}行initial时间不连续')
                 retained = set(previous_active)
-                if any(initial_states[actor] != previous_final_states[actor]
+                if any(initial_states[actor] != {
+                        **previous_final_states[actor],
+                        'time_s': initial_states[actor]['time_s']}
                        for actor in retained):
                     raise RuntimeError(
                         f'trace第{line_number}行initial既有车辆状态不连续')

@@ -243,23 +243,62 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
     rows = simple_formation.local_vehicles(control, road, p)
     centers = road.centers_m
     ego_lane = centers.index(road.current_center_m)
-    ego_row = simple_formation.LocalVehicle(0, ego.x_m, ego.y_m, ego.vx_mps, ego_lane)
+    ego_row = simple_formation.LocalVehicle(
+        0, ego.x_m, ego.y_m, ego.vx_mps, ego_lane,
+        ego.vx_mps * math.sin(ego.heading_rad)
+        + ego.vy_mps * math.cos(ego.heading_rad),
+    )
     active_plan = memory.plan is not None and memory.lane_change_reason == 'simple_formation_join'
     next_lane = None
 
-    if memory.join_phase == 'FREE' and not active_plan and not completed_simple:
-        admission = simple_formation.choose_join(ego_row, rows, centers, p)
-        detail['lane_reason'] = admission.reason
-        final = admission.target_lane_index
-        if final is not None:
-            next_lane = ego_lane + (1 if final > ego_lane else -1) if final != ego_lane else None
-            gate = ('clear' if next_lane is None else _simple_hard_gate(
-                ego, ego_row, rows, centers, next_lane, final, bodies, p))
+    if memory.join_phase in ('FREE', 'FORMED') and not active_plan and not completed_simple:
+        previous_reference = memory.reference_track_id
+        following = simple_formation.choose_formation_target(
+            ego_row, rows, centers, memory, p)
+        window = simple_formation.layered_window(ego_row, rows, centers, p)
+        fill = simple_formation.choose_layered_fill(ego_row, rows, centers, p)
+        detail['local_layers'] = tuple(
+            tuple(row is not None for row in layer) for layer in window.layers)
+        detail['layer_stable'] = (window.consistent and not window.crossing
+                                  and window.speed_stable)
+        detail['local_counts'] = fill.local_counts
+        detail['lane_reason'] = fill.reason
+        final = fill.target_lane_index
+        if final is None or emergency:
+            memory = replace(memory, desired_lane_index=None,
+                             join_anchor_track_id=None, stable_since_s=None,
+                             stable_window_signature=None)
+            if emergency:
+                detail['lane_reason'] = 'emergency_priority'
+        else:
+            next_lane = ego_lane + (1 if final > ego_lane else -1)
+            gate = _simple_hard_gate(ego, ego_row, rows, centers, next_lane,
+                                     final, bodies, p)
             detail['hard_gate'] = gate
-            if gate == 'clear':
-                memory = replace(memory, join_phase='JOINING', desired_lane_index=final,
-                                 join_anchor_track_id=admission.anchor_track_id,
-                                 stable_since_s=None)
+            if gate != 'clear':
+                memory = replace(memory, desired_lane_index=None,
+                                 join_anchor_track_id=None, stable_since_s=None,
+                                 stable_window_signature=None)
+                detail['lane_reason'] = 'hard_gate_' + gate
+            else:
+                same = (memory.desired_lane_index == final
+                        and memory.join_anchor_track_id == fill.anchor_track_id
+                        and previous_reference == following.reference_track_id
+                        and memory.stable_window_signature == window.signature
+                        and memory.stable_since_s is not None)
+                since = memory.stable_since_s if same else ego.time_s
+                if ego.time_s - since >= p['simple_formation_stable_time_s']:
+                    memory = replace(memory, join_phase='JOINING',
+                                     desired_lane_index=final,
+                                     join_anchor_track_id=fill.anchor_track_id,
+                                     stable_since_s=None,
+                                     stable_window_signature=None)
+                else:
+                    memory = replace(memory, desired_lane_index=final,
+                                     join_anchor_track_id=fill.anchor_track_id,
+                                     stable_since_s=since,
+                                     stable_window_signature=window.signature)
+                    detail['lane_reason'] = 'layer_stabilizing'
     target = simple_formation.choose_formation_target(ego_row, rows, centers, memory, p)
     if (memory.join_phase in ('JOINING', 'STABILIZING')
             and memory.join_anchor_track_id is None
@@ -274,6 +313,7 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
                                   'join_state_incomplete')):
         memory = replace(memory, join_phase='FREE', desired_lane_index=None,
                          join_anchor_track_id=None, stable_since_s=None,
+                         stable_window_signature=None,
                          reference_track_id=None, plan=None, target_y_m=None,
                          lane_change_reason='')
         target = simple_formation.FormationTarget(
@@ -326,7 +366,7 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
     accel = clip(accel, p['min_accel_mps2'], p['max_accel_mps2'])
 
     final = memory.desired_lane_index
-    if memory.join_phase in ('JOINING', 'STABILIZING') and not active_plan:
+    if memory.join_phase in ('JOINING', 'STABILIZING'):
         if final is None or type(final) is not int or not 0 <= final < len(centers):
             detail['hard_gate'] = 'road'
         elif ego_lane == final:
@@ -349,7 +389,7 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
             else:
                 memory = replace(memory, join_phase='JOINING', stable_since_s=None)
                 detail['lane_reason'] = 'stability_reset'
-        elif not completed_simple and state != 'EMERGENCY':
+        elif not active_plan and not completed_simple and state != 'EMERGENCY':
             memory = replace(memory, join_phase='JOINING', stable_since_s=None)
             next_lane = ego_lane + (1 if final > ego_lane else -1)
             gate = _simple_hard_gate(ego, ego_row, rows, centers, next_lane, final,
@@ -366,8 +406,6 @@ def _simple_execute(control, p, road, bodies, memory, diagnostics, accel,
                 detail['lane_reason'] = 'hard_gate_'+gate
         elif ego_lane != final:
             memory = replace(memory, join_phase='JOINING', stable_since_s=None)
-    if memory.join_phase == 'FORMED':
-        detail['lane_reason'] = 'formed_hold'
     if active_plan:
         plan = memory.plan
         next_lane = next((i for i, value in enumerate(centers)

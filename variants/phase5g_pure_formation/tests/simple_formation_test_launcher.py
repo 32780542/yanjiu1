@@ -14,11 +14,13 @@ if len(sys.argv) != 2 or sys.argv[1] not in {"rules", "controller", "harness", "
     raise SystemExit("usage: simple_formation_test_launcher.py rules|controller|harness|all")
 
 names = {
-    "rules": ("test_simple_formation_rules.SimpleFormationRuleTests",),
+    "rules": ("test_simple_formation_rules.SimpleFormationRuleTests",
+              "test_layered_formation.LayeredFormationTests"),
     "controller": ("test_simple_formation_controller.SimpleFormationControllerTests",),
     "harness": ("test_simple_formation_harness.SimpleFormationHarnessTests",),
     "all": (
         "test_simple_formation_rules.SimpleFormationRuleTests",
+        "test_layered_formation.LayeredFormationTests",
         "test_simple_formation_controller.SimpleFormationControllerTests",
         "test_simple_formation_harness.SimpleFormationHarnessTests",
     ),

@@ -51,7 +51,7 @@ _DEFAULT_RUN = {
 _GAP_RUN = {
     **_DEFAULT_RUN,
     "vehicle_count": 6,
-    "seed": 1432,
+    "seed": 627052,
     "depart_interval_min_s": 2.5,
     "depart_interval_max_s": 20.0,
     "expected_component_count": 2,

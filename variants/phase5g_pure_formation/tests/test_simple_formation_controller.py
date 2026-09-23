@@ -122,18 +122,101 @@ class SimpleFormationControllerTests(unittest.TestCase):
             memory or SimpleFormationMemory((), "CRUISE"),
         )
 
-    def test_no_target_uses_noa_fallback_and_clears_reference(self):
+    def test_layered_fill_waits_one_second_then_moves_unique_upper_actor(self):
+        front = self.neighbor(7, 30.0, 2, relative_y=0.0)
+        first = decide(self.control(lane=2, neighbors=(front,)), self.p)
+        self.assertIsNone(first.memory.plan)
+        self.assertEqual(first.memory.stable_since_s, 0.0)
+        self.assertEqual(first.diagnostics["simple_formation"]["lane_reason"],
+                         "layer_stabilizing")
+        second = decide(self.control(
+            time_s=1.0, x=120.0, lane=2,
+            neighbors=(replace(front, measurement_time_s=1.0),),
+            memory=first.memory,
+        ), self.p)
+        self.assertIsNotNone(second.memory.plan)
+        self.assertEqual(second.memory.desired_lane_index, 0)
+        self.assertEqual(second.diagnostics["simple_formation"]["lane_reason"],
+                         "simple_formation_join")
+
+    def test_layered_stability_resets_on_crossing_vehicle(self):
+        front = self.neighbor(7, 30.0, 2, relative_y=0.0)
+        first = decide(self.control(lane=2, neighbors=(front,)), self.p)
+        crossing = self.neighbor(8, 15.0, 1, relative_y=-4.0)
+        interrupted = decide(self.control(
+            time_s=0.5, lane=2,
+            neighbors=(replace(front, measurement_time_s=0.5),
+                       replace(crossing, measurement_time_s=0.5)),
+            memory=first.memory,
+        ), self.p)
+        self.assertIsNone(interrupted.memory.stable_since_s)
+        self.assertIsNone(interrupted.memory.plan)
+
+    def test_new_visible_layer_member_restarts_one_second_gate(self):
+        front = self.neighbor(7, 30.0, 2, relative_y=0.0)
+        first = decide(self.control(lane=2, neighbors=(front,)), self.p)
+        rear = self.neighbor(8, -30.0, 0,
+                             relative_y=CENTERS_M[0]-CENTERS_M[2])
+        changed = decide(self.control(
+            time_s=0.5, lane=2,
+            neighbors=(replace(front, measurement_time_s=0.5),
+                       replace(rear, measurement_time_s=0.5)),
+            memory=first.memory,
+        ), self.p)
+        self.assertEqual(changed.memory.stable_since_s, 0.5)
+        at_old_deadline = decide(self.control(
+            time_s=1.0, lane=2,
+            neighbors=(replace(front, measurement_time_s=1.0),
+                       replace(rear, measurement_time_s=1.0)),
+            memory=changed.memory,
+        ), self.p)
+        self.assertIsNone(at_old_deadline.memory.plan)
+
+    def test_new_visible_car_outside_four_slots_restarts_gate(self):
+        front = self.neighbor(7, 30.0, 2, relative_y=0.0)
+        first = decide(self.control(lane=2, neighbors=(front,)), self.p)
+        distant = self.neighbor(8, 90.0, 0,
+                                relative_y=CENTERS_M[0]-CENTERS_M[2])
+        changed = decide(self.control(
+            time_s=0.5, lane=2,
+            neighbors=(replace(front, measurement_time_s=0.5),
+                       replace(distant, measurement_time_s=0.5)),
+            memory=first.memory,
+        ), self.p)
+        self.assertEqual(changed.memory.stable_since_s, 0.5)
+        at_old_deadline = decide(self.control(
+            time_s=1.0, lane=2,
+            neighbors=(replace(front, measurement_time_s=1.0),
+                       replace(distant, measurement_time_s=1.0)),
+            memory=changed.memory,
+        ), self.p)
+        self.assertIsNone(at_old_deadline.memory.plan)
+
+    def test_formed_actor_may_reenter_layer_fill_after_new_physical_gap(self):
+        front = self.neighbor(7, 30.0, 2, relative_y=0.0)
+        formed = SimpleFormationMemory((), "CRUISE", join_phase="FORMED",
+                                       desired_lane_index=2)
+        first = decide(self.control(lane=2, neighbors=(front,), memory=formed), self.p)
+        self.assertIsNone(first.memory.plan)
+        second = decide(self.control(
+            time_s=1.0, x=120.0, lane=2,
+            neighbors=(replace(front, measurement_time_s=1.0),),
+            memory=first.memory,
+        ), self.p)
+        self.assertIsNotNone(second.memory.plan)
+
+    def test_isolated_local_head_tracks_target_speed_and_clears_reference(self):
         memory = SimpleFormationMemory((), "CRUISE", reference_track_id=19,
                                        join_phase="FORMED", desired_lane_index=0)
         control = self.control(memory=memory)
         with patch("noa.controller._longitudinal", return_value=(-1.25, None, None, False, "cruise")):
             decision = decide(control, self.p)
-        self.assertEqual(decision.action.acceleration_mps2, -1.25)
+        self.assertEqual(decision.action.acceleration_mps2, 0.0)
         self.assertIsNone(decision.memory.reference_track_id)
         simple = decision.diagnostics["simple_formation"]
-        self.assertEqual(simple["role"], "no_target")
+        self.assertEqual(simple["role"], "local_head")
         self.assertIsNone(simple["target_x_m"])
-        self.assertIsNone(simple["requested_acceleration_mps2"])
+        self.assertEqual(simple["requested_acceleration_mps2"], 0.0)
         self.assertFalse(simple["emergency_override"])
 
     def test_direct_formation_accel_replaces_opposite_base_cruise(self):
@@ -149,7 +232,7 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(simple["position_error_m"], 20.0)
         self.assertEqual(simple["reference_track_id"], 7)
         self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
-        self.assertEqual(simple["lane_reason"], "formed_hold")
+        self.assertEqual(simple["lane_reason"], "layer_not_stable")
 
     def test_distant_lane_end_does_not_cap_direct_request(self):
         road = SimpleNamespace(
@@ -258,7 +341,7 @@ class SimpleFormationControllerTests(unittest.TestCase):
         anchor = self.neighbor(7, 30.0, 1, speed=18.0)
         decision = decide(self.control(neighbors=(anchor,), memory=memory), self.p)
         self.assertEqual(decision.diagnostics["simple_formation"]["role"], "joiner")
-        self.assertEqual(decision.diagnostics["simple_formation"]["target_x_m"], 115.0)
+        self.assertEqual(decision.diagnostics["simple_formation"]["target_x_m"], 145.0)
         self.assertEqual(decision.memory.join_anchor_track_id, 7)
         self.assertEqual(decision.memory.desired_lane_index, 2)
         self.assertEqual(decision.memory.reference_track_id, 7)
@@ -306,15 +389,6 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertIsNone(result.memory.plan)
         self.assertEqual(result.diagnostics["simple_formation"]["hard_gate"], "body")
 
-    def test_current_lane_body_overlap_blocks_free_admission(self):
-        admission = JoinDecision(2, 115.0, 7, "middle_tail", (0, 1, 0))
-        anchor = self.neighbor(7, 30.0, 1)
-        overlap = self.neighbor(8, 0.0, 0)
-        with patch("noa.controller.simple_formation.choose_join", return_value=admission):
-            result = decide(self.control(neighbors=(anchor, overlap)), self.p)
-        self.assertEqual(result.memory.join_phase, "FREE")
-        self.assertIsNone(result.memory.plan)
-        self.assertEqual(result.diagnostics["simple_formation"]["hard_gate"], "body")
 
     def test_final_lane_outside_visible_road_blocks_plan(self):
         anchor = self.neighbor(7, 30.0, 1)
@@ -426,7 +500,7 @@ class SimpleFormationControllerTests(unittest.TestCase):
         narrow = {**self.p, "simple_formation_position_tolerance_m": 1.0,
                   "simple_formation_speed_tolerance_mps": 0.25}
         memory = self.joining(final=2)
-        cases = ((16.5, 20.0), (15.0, 20.5))
+        cases = ((-11.5, 20.0), (-15.0, 20.5))
         for distance, reference_speed in cases:
             with self.subTest(distance=distance, reference_speed=reference_speed):
                 anchor = self.neighbor(7, distance, 1, speed=reference_speed,
@@ -450,36 +524,28 @@ class SimpleFormationControllerTests(unittest.TestCase):
             memory=middle.memory), self.p)
         self.assertIsNotNone(second.memory.plan)
         self.assertAlmostEqual(second.memory.plan.y_target_m, CENTERS_M[2])
-        final = decide(self.control(time_s=10.1, lane=2, neighbors=(self.neighbor(
-            7, 15.0, 1, time_s=10.1, relative_y=CENTERS_M[1]-CENTERS_M[2]),),
+        final = decide(self.control(time_s=10.1, x=130.0, lane=2,
+            neighbors=(self.neighbor(
+            7, -15.0, 1, time_s=10.1, relative_y=CENTERS_M[1]-CENTERS_M[2]),),
             memory=second.memory), self.p)
         self.assertEqual(final.memory.join_phase, "STABILIZING")
 
-    def test_free_admission_uses_join_decision_and_waiter_does_not_plan(self):
-        anchor = self.neighbor(7, 30.0, 1)
-        admission = JoinDecision(2, 130.0, 7, "upper_tail", (0, 0, 1))
-        with patch("noa.controller.simple_formation.choose_join", return_value=admission) as choose:
-            result = decide(self.control(neighbors=(anchor,)), self.p)
-        choose.assert_called_once()
-        self.assertEqual(result.memory.join_phase, "JOINING")
-        self.assertEqual(result.memory.desired_lane_index, 2)
-        self.assertEqual(result.memory.join_anchor_track_id, 7)
-        self.assertIsNotNone(result.memory.plan)
-        waiting = JoinDecision(None, None, None, "wait_not_next", (0, 0, 1))
-        with patch("noa.controller.simple_formation.choose_join", return_value=waiting):
-            result = decide(self.control(neighbors=(anchor,)), self.p)
-        self.assertEqual(result.memory.join_phase, "FREE")
-        self.assertIsNone(result.memory.plan)
+    def test_active_plan_starts_stability_when_final_physical_state_is_ready(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[1], CENTERS_M[2], 5.0, 20.0)
+        memory = replace(
+            self.joining(lane=2, final=2, anchor=None),
+            plan=plan,
+            target_y_m=CENTERS_M[2],
+            lane_change_reason="simple_formation_join",
+        )
+        result = decide(self.control(
+            time_s=4.0, lane=2, speed=20.0, memory=memory,
+        ), self.p)
+        self.assertIs(result.memory.plan, plan)
+        self.assertEqual(result.memory.join_phase, "STABILIZING")
+        self.assertEqual(result.memory.stable_since_s, 4.0)
 
-    def test_count_recovery_lower_anchor_keeps_fixed_target_and_starts_plan(self):
-        lower_anchor = self.neighbor(7, 30.0, 0,
-                                     relative_y=CENTERS_M[0]-CENTERS_M[1])
-        result = decide(self.control(lane=1, neighbors=(lower_anchor,)), self.p)
-        self.assertEqual(result.memory.join_phase, "JOINING")
-        self.assertEqual(result.memory.desired_lane_index, 2)
-        self.assertEqual(result.memory.join_anchor_track_id, 7)
-        self.assertIsNotNone(result.memory.plan)
-        self.assertEqual(result.diagnostics["simple_formation"]["target_x_m"], 115.0)
+
 
     def straddling_control(self, *, neighbors=(), memory=None, time_s=0.0):
         base = self.control(time_s=time_s, lane=1, neighbors=neighbors, memory=memory)
@@ -489,15 +555,6 @@ class SimpleFormationControllerTests(unittest.TestCase):
                            base.observation,
                            road=self.road_observation(time_s, 100.0, 3.5)))
 
-    def test_current_body_overlap_uses_ego_lateral_position_between_centers(self):
-        overlap = self.neighbor(8, 0.0, 0, relative_y=-0.4)
-        admission = JoinDecision(2, None, None, "counts_empty", (0, 0, 0))
-        with patch("noa.controller.simple_formation.choose_join", return_value=admission):
-            result = decide(self.straddling_control(neighbors=(overlap,)), self.p)
-        self.assertIsNone(result.memory.plan)
-        self.assertEqual(result.memory.join_phase, "FREE")
-        self.assertEqual(result.diagnostics["simple_formation"]["hard_gate"], "body")
-        self.assertEqual(result.action.acceleration_mps2, self.p["min_accel_mps2"])
 
     def test_active_straddling_front_body_uses_ego_for_immediate_emergency(self):
         plan = QuadraticLaneChange(0.0, CENTERS_M[1], CENTERS_M[2], 5.0, 20.0)
@@ -513,27 +570,10 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(result.action.acceleration_mps2, self.p["min_accel_mps2"])
         self.assertEqual(result.memory.own_behavior, "EMERGENCY")
 
-    def test_physical_nearest_waiter_acts_while_following_waiter_stays_free(self):
-        near = decide(self.control(x=120.0, lane=0, neighbors=(
-            self.neighbor(1, 25.0, 1),
-            self.neighbor(2, -10.0, 1))), self.p)
-        far = decide(self.control(x=110.0, lane=1, neighbors=(
-            self.neighbor(1, 35.0, 1, relative_y=0.0),
-            self.neighbor(2, 10.0, 0, relative_y=CENTERS_M[0]-CENTERS_M[1]))), self.p)
-        self.assertEqual(near.memory.join_phase, "JOINING")
-        self.assertIsNotNone(near.memory.plan)
-        self.assertEqual(far.memory.join_phase, "FREE")
-        self.assertIsNone(far.memory.plan)
 
-    def test_isolated_founder_keeps_anchor_none_during_adjacent_join(self):
-        first = decide(self.control(lane=0), self.p)
-        self.assertEqual(first.memory.join_phase, "JOINING")
-        self.assertEqual(first.memory.desired_lane_index, 2)
-        self.assertIsNone(first.memory.join_anchor_track_id)
-        self.assertAlmostEqual(first.memory.plan.y_target_m, CENTERS_M[1])
-        active = decide(self.control(time_s=1.0, lane=0, memory=first.memory), self.p)
-        self.assertIsNotNone(active.memory.plan)
-        self.assertIsNone(active.memory.join_anchor_track_id)
+
+
+
 
     def test_completed_change_does_not_limit_later_physical_join_step(self):
         memory = replace(self.joining(lane=1, final=2),
@@ -546,7 +586,7 @@ class SimpleFormationControllerTests(unittest.TestCase):
 
     def test_stability_requires_continuous_position_speed_lane_and_no_emergency(self):
         memory = self.joining(lane=2, final=2)
-        good = self.neighbor(7, 15.0, 1, speed=20.0,
+        good = self.neighbor(7, -15.0, 1, speed=20.0,
                              relative_y=CENTERS_M[1]-CENTERS_M[2])
         first = decide(self.control(lane=2, x=100.0, neighbors=(good,), memory=memory), self.p)
         self.assertEqual(first.memory.stable_since_s, 0.0)
@@ -588,13 +628,6 @@ class SimpleFormationControllerTests(unittest.TestCase):
                                     memory=before.memory), self.p)
         self.assertEqual(after.memory.join_phase, "FORMED")
 
-    def test_formed_vehicle_does_not_start_new_plan(self):
-        memory = SimpleFormationMemory((), "CRUISE", join_phase="FORMED",
-                                       desired_lane_index=2)
-        with patch("noa.controller.simple_formation.choose_join", side_effect=AssertionError("readmission")):
-            result = decide(self.control(lane=2, memory=memory), self.p)
-        self.assertIsNone(result.memory.plan)
-        self.assertEqual(result.memory.join_phase, "FORMED")
 
     def test_join_anchor_loss_uses_noa_fallback_without_retargeting(self):
         memory = SimpleFormationMemory((), "CRUISE", join_phase="STABILIZING",
@@ -693,7 +726,7 @@ class SimpleFormationControllerTests(unittest.TestCase):
                              self.p["min_accel_mps2"])
 
     def test_slow_lead_motivation_does_not_preempt_formation_longitudinal(self):
-        slow = self.neighbor(4, 70.0, 0, speed=10.0)
+        slow = self.neighbor(4, 40.0, 0, speed=10.0)
         decision = decide(self.control(neighbors=(slow,), memory=SimpleFormationMemory(
             (), "CRUISE", join_phase="FORMED", desired_lane_index=0)), self.p)
         self.assertEqual(decision.diagnostics["simple_formation"]["role"],

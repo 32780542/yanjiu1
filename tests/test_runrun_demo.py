@@ -1238,6 +1238,20 @@ class SimpleTraceGenerationTests(_SimpleTraceFixture, unittest.TestCase):
         source = gui.load_simple_trace_source(outer, self.paths, self.config)
         self.assertEqual(source.trace_sha256, gui.sha256_file(source.trace_path))
 
+    def test_control_frame_continuity_accepts_time_roundoff_only(self):
+        self.config = replace(self.config, simulation_duration_s=0.4)
+        outer = self.make_outer('time-roundoff')
+        records = self.trace_records(outer)
+        for actor in records[3]['initial']:
+            records[3]['initial'][actor]['time_s'] = 0.3
+            records[3]['steps'][actor]['initial']['time_s'] = 0.3
+        self.write_trusted_trace(outer, records)
+        try:
+            source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        except RuntimeError as error:
+            self.fail(f'纯时间浮点舍入不应中断GUI预检: {error}')
+        self.assertEqual(len(source.frames), 5)
+
     def test_trace_rejects_incomplete_or_misaligned_dynamics_samples(self):
         missing_sample = self.make_outer('missing-dynamics-sample')
         records = self.trace_records(missing_sample)

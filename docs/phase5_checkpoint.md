@@ -300,3 +300,21 @@
 - 真实 `tracemalloc` 生成后处理测量直接调用真实12车、343.890316 MiB trace的 `evaluate_trace`；`D:\yanjiu1\keyan1\results\operations\20260915T073116628550Z_review-e-memory-real12-generation-field-fix_8324950c` exit 0/141.062 s，峰值11,868,398 bytes = 11.318586 MiB，低于 `64 MiB`。真实重放测量直接调用真实六车、110.655587 MiB trace的 `replay_variant(require_manifest=True)`，不写重放包；`D:\yanjiu1\keyan1\results\operations\20260915T083538368435Z_review-e-memory-real6-replay_dc5b6161` exit 0/1243.297 s，峰值5,631,568 bytes = 5.370682 MiB，低于 `64 MiB`，450区间/27000子步/误差0。两者都是真实trace、真实调用的观测峰值，没有把小夹具或缩放推断冒充测量。
 - 内存负证据保留：组合12车测量 `D:\yanjiu1\keyan1\results\operations\20260915T070624180450Z_review-e-memory-real12_e2fe2b95` 在1200 s timeout、exit 124；首个12车generation-only helper因读取错误字段名 `whole_cohort_formed` 而在完成真实计算后exit 1：`D:\yanjiu1\keyan1\results\operations\20260915T072806185134Z_review-e-memory-real12-generation_ce5cf1a2`；修正为 `whole_cohort_formation_success` 后才得到上述有效峰值。真实12车整包重放 `D:\yanjiu1\keyan1\results\operations\20260915T073423780774Z_review-e-memory-real12-replay_a357da16` 在3600 s timeout、exit 124且无测量输出，所以**没有12车重放峰值结论**；有效重放峰值只适用于字面六车源，不能据此外推12车。
 - 当前行为限制完全保留：有限局部观测、本车私有记忆、每车最多一次编队换道、唯一较少相邻车道与既有安全守卫；守卫拒绝统计是解释性证据，不授权放宽安全或按结果调参。下一步若继续阶段5，应预登记最简单的局部if/else规则分析，并保留本次一次性负结果。
+
+## 2026-09-23 D 盘工作区的分层编队与窗口仿真
+
+- 按用户指定，在 `D:\yanjiu1\keyan1` 集成 Phase5G 分层跟驰、换道及三车道直接观测实现。工作区的 `phase01` 先快进至 `phase5g-local-tail` 提交，再应用该分支未提交的分层规则补丁。原有未跟踪的 `test_phase5_detection.py` 与分支文件重名，原件保存在 `tmp\phase5g_premerge_untracked_test_phase5_detection.py`。没有清理其他历史未跟踪资料。
+- `runrun.py --check` 在 D 盘解析出本目录的 Phase5G 入口与 SUMO GUI。Phase5G 专项 143 项测试通过，日志为 `results\operations\20260923T091013607270Z_d-drive-layered-phase5g-suite_59adec27`。根目录窗口入口 84 项测试通过，日志为 `results\operations\20260923T092243615718Z_d-drive-runrun-after-roundoff_2f45404c`。
+- 首次真实窗口运行在加载第 4 帧时因浮点时间 `0.30000000000000004` 与 `0.3` 的字典精确比较失败，失败源与日志保留。`demo/sumo_gui.py` 仅将前帧时间归一为已通过 `1e-9` 容差检查的当前初始时间，其他车辆状态字段仍精确比较；新增回归测试先失败后通过。先前失败的 901 帧源现可加载。
+- 修复后从 `D:\yanjiu1\keyan1` 直接运行 `python -B runrun.py`，SUMO 1.27.1 窗口打开，12 车、seed 1、90 s 轨迹播放至结束提示；为用户查看保留窗口。新生成源在 `variants\phase5g_pure_formation\results\phase5g\simple_gui_sources\20260923T092319151715Z_1cdf6a95`。
+- 本次新源的 `validation.json` 显示 `engineering_passed=true`，12 车演示的科学门槛不适用；记录了 2 次编队换道、0 次碰撞，但 `whole_cohort_formation_success=false`、形成/保持时间为 null、`speed_recovered=false`。因此窗口中能观察到规则产生的局部跟驰与换道，不能称整队交错编队已经形成。
+- D 盘宽泛 `run.py test` 发现了 348 个额外历史未跟踪测试，619 项中有 2 个失败、34 个错误；失败日志为 `results\operations\20260923T090224436649Z_d-drive-layered-variant-regression_7a01f431`。本次不能据此称全量测试通过。窗口播放证明入口可用，不改变此前阶段五科学验收未通过、阶段六至八尚未开放的判断。
+- 用户再次运行 `runrun.py` 后没有立即看到窗口。现场核查发现入口先同步生成并校验 12 车、90 s 的约 399 MiB 轨迹，成功的这次从 Python 启动到 SUMO 窗口出现约 69 s；重复点击产生了并发生成，其中一次以 `KeyboardInterrupt` 结束，原失败证据保留。已在生成前增加明确提示，说明 SUMO 窗口会在生成校验后打开；相应测试先 RED 后 GREEN，根目录入口 85 项测试通过，日志为 `results\operations\20260923T093946982388Z_d-drive-runrun-status-message_7687319b`。现场 SUMO 进程 PID 114324 在同一桌面会话中，窗口可见且未最小化。
+
+## 2026-09-23 19:40 +08:00：按用户要求恢复到“运行 runrun 未见 SUMO 窗口”时的代码
+
+- 用户明确要求先恢复到该消息时的代码，故停止继续修改分层和换道算法。已核对 `simple_gui_sources/20260923T092319151715Z_1cdf6a95` 与 `20260923T093711449166Z_fca8d545` 两份当时源码快照：9 个需回退的 Phase5G 文件 SHA-256 逐项相同。已从后一快照恢复 `experiments/phase5g.py`、`noa/controller.py`、`noa/road.py`、`noa/simple_formation.py`、`perception/road.py`、`run.py`、`test_layered_formation.py`、`test_simple_formation_controller.py`、`test_simple_formation_harness.py`；恢复后 9 项哈希再次逐项一致。
+- 根入口恢复当时默认配置：12 车、seed 1、90 s、GUI true；移除后来增加的生成等待提示及其测试，保留此前修复的轨迹帧时间浮点舍入兼容。`runrun.py` 当前与 Git HEAD 相同；不删除任何历史运行目录或失败证据。
+- 回退前的诊断证据保留：12 车/seed 1/90 s 的后续试验 `simple_gui_sources/20260923T111947228100Z_9cffc112` 只出现 1 次编队换道；30 车/seed 6/180 s 的 `simple_gui_sources/20260923T111944383314Z_9648b97e` 虽写满 1800 条轨迹，但最终验收停在 `running`、没有完成锚，不能视作完整通过。后者轨迹中没有换道发起。两者均不是当前恢复版的验收结果。
+- 恢复版的本轮核验：Phase5G 规则 16/16、控制器 48/48、根入口测试 84/84、`python -B runrun.py --check` 通过，`git diff --check` exit 0。未重复运行 12 车真实 GUI；此前当时源码生成的 `20260923T092319151715Z_1cdf6a95` 已有窗口播放及 2 次编队换道的固定证据。
+- 下一入口：用户若要求继续修复长时运行，需从恢复版重新诊断 20 车/200 s 的三车道到两车道路段切换及隐藏的完成锚错误；不要把回退后的代码说成已修复该故障。

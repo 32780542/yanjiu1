@@ -175,7 +175,9 @@ def restore_initial_memories(raw: object, controlled: tuple[str, ...], *,
     for key in controlled:
         value = raw[key]
         if simple_enabled:
-            if set(value) not in (base_names, simple_names, expected):
+            old_simple_names = simple_names - {"stable_window_signature"}
+            if set(value) not in (base_names, old_simple_names,
+                                  simple_names, expected):
                 raise ValueError(
                     f"{key}: exact old or SimpleFormationMemory fields required"
                 )
