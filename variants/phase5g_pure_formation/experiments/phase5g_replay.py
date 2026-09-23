@@ -13,7 +13,9 @@ from types import MappingProxyType
 
 from experiments.phase3_replay import compare_tree
 from experiments.phase4_replay import replay_readbacks
-from experiments.phase5g import Phase5GRunRecord as RunRecord
+from experiments.phase5g import (
+    Phase5GRunRecord as RunRecord, snapshot_manifest,
+)
 from models.kinematic import KinematicModel
 from models.vehicle import VehicleState
 from perception.road import VisibleRoad
@@ -25,7 +27,7 @@ from simulation.phase5g_clock import CLOCK_SCHEMA, Phase5GClock, initial_memory_
 
 
 def _file_set(path: Path) -> set[str]:
-    return {file.relative_to(path).as_posix() for file in path.rglob("*") if file.is_file()}
+    return set(snapshot_manifest(path, "evidence"))
 
 
 _UNREAD_MANIFEST = object()
@@ -79,7 +81,7 @@ def _manifest_differences(path: Path, *, manifest=_UNREAD_MANIFEST,
     for name, digest in hashes.items():
         file = (path / name).resolve()
         if (type(name) is not str or Path(name).is_absolute()
-                or not file.is_relative_to(path.resolve()) or not file.is_file()
+                or not file.is_relative_to(path.resolve()) or not regular_file(file)
                 or type(digest) is not str
                 or (name in deferred and (
                     len(digest) != 64

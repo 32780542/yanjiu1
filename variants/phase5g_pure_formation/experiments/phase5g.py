@@ -235,33 +235,34 @@ def _inspect_output_directory(
     relative APIs.  Each existing or newly created component is nevertheless
     lstat-checked and containment-checked immediately before later mutations.
     """
-    resolved_boundary = boundary.resolve(strict=True)
+    resolved_boundary = Path(native_io_path(boundary)).resolve(strict=True)
     current = boundary
     components = (None, *target.relative_to(boundary).parts)
     for index, part in enumerate(components):
         if part is not None:
             current /= part
         existed = True
+        native_current = Path(native_io_path(current))
         try:
-            info = os.lstat(current)
+            info = os.lstat(native_current)
         except FileNotFoundError:
             existed = False
             if not create:
                 if require_existing:
                     raise ValueError(f"output_base directory missing: {current}")
                 return target
-            current.mkdir(exist_ok=False)
-            info = os.lstat(current)
+            os.mkdir(native_current)
+            info = os.lstat(native_current)
         if existed and exclusive and index == len(components) - 1:
             raise FileExistsError(current)
         attributes = getattr(info, "st_file_attributes", 0)
         reparse = bool(
             attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
-        if current.is_symlink() or reparse:
+        if native_current.is_symlink() or reparse:
             raise ValueError(f"output_base reparse point forbidden: {current}")
         if not stat.S_ISDIR(info.st_mode):
             raise ValueError("output_base must be a directory, not a file")
-        resolved_current = current.resolve(strict=True)
+        resolved_current = native_current.resolve(strict=True)
         if resolved_current != resolved_boundary \
                 and not resolved_current.is_relative_to(resolved_boundary):
             raise ValueError("output_base resolved outside its allowed boundary")
@@ -479,12 +480,13 @@ def source_hashes() -> dict[str, str]:
 def snapshot_manifest(path: str | Path, label: str) -> dict[str, dict[str, str]]:
     """Describe an exact regular-file tree without following Windows reparse points."""
     root = Path(os.path.abspath(path))
+    walk_root = Path(native_io_path(root))
     try:
-        root_info = os.lstat(root)
+        root_info = os.lstat(walk_root)
     except OSError as error:
         raise ValueError(f"{label}: missing directory") from error
     root_attributes = getattr(root_info, "st_file_attributes", 0)
-    if root.is_symlink() or bool(
+    if walk_root.is_symlink() or bool(
         root_attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
     ):
         raise ValueError(f"{label}: root reparse point forbidden")
@@ -497,7 +499,7 @@ def snapshot_manifest(path: str | Path, label: str) -> dict[str, dict[str, str]]
         with os.scandir(folder) as entries:
             for entry in sorted(entries, key=lambda item: item.name):
                 candidate = Path(entry.path)
-                relative = candidate.relative_to(root).as_posix()
+                relative = candidate.relative_to(walk_root).as_posix()
                 info = entry.stat(follow_symlinks=False)
                 attributes = getattr(info, "st_file_attributes", 0)
                 reparse = bool(attributes & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
@@ -516,7 +518,7 @@ def snapshot_manifest(path: str | Path, label: str) -> dict[str, dict[str, str]]
                 else:
                     raise ValueError(f"{label}.{relative}: non-regular file forbidden")
 
-    visit(root)
+    visit(walk_root)
     return files
 
 
@@ -1956,6 +1958,15 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
     model, physical, policy = parameters(
         mode, target_speed, simple_rules=True, simple_overrides=resolved_simple,
     )
+    maximum_speed = model.p["max_speed_mps"]
+    if speed_min > maximum_speed:
+        raise ValueError(
+            "initial_speed_min_mps must not exceed model max_speed_mps"
+        )
+    if speed_max > maximum_speed:
+        raise ValueError(
+            "initial_speed_max_mps must not exceed model max_speed_mps"
+        )
     if not math.isclose(round(duration / physical["control_sync_dt_s"])
                         * physical["control_sync_dt_s"], duration, abs_tol=1e-9, rel_tol=0.0):
         raise ValueError("duration_s must contain complete control intervals")

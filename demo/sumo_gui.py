@@ -30,6 +30,7 @@ EVIDENCE_MANIFEST_SHA256 = (
 SIMPLE_VARIANT_REL = Path('variants/phase5g_pure_formation')
 SIMPLE_OUTPUT_BASE = Path('results/phase5g/simple_gui_sources')
 SIMPLE_SCHEDULE_REL = Path('experiments/phase5g_schedule.py')
+SIMPLE_MODEL_MAX_SPEED_MPS = 33.3
 _PLAYBACK_STATE_FIELDS = (
     'time_s', 'x_m', 'y_m', 'heading_rad', 'vx_mps', 'vy_mps',
     'yaw_rate_radps', 'a_drive_mps2', 'steering_rad',
@@ -256,9 +257,13 @@ def validate_simple_config(
     """Validate simple-formation settings without opening legacy results."""
     if type(config.vehicle_count) is not int or not 3 <= config.vehicle_count <= 60:
         raise ValueError('VEHICLE_COUNT 必须是 3–60 的整数（不接受 bool）')
-    _finite_number('TARGET_SPEED_MPS', config.target_speed_mps, 0.0, math.inf)
-    if config.target_speed_mps <= 0:
+    target_speed = _finite_number(
+        'TARGET_SPEED_MPS', config.target_speed_mps, 0.0, math.inf)
+    if target_speed <= 0:
         raise ValueError('TARGET_SPEED_MPS 必须是正的有限数字')
+    if target_speed > SIMPLE_MODEL_MAX_SPEED_MPS:
+        raise ValueError(
+            f'TARGET_SPEED_MPS 不得超过模型上限 {SIMPLE_MODEL_MAX_SPEED_MPS} m/s')
     if type(config.random_seed) is not int or not 0 <= config.random_seed < 2**64:
         raise ValueError('RANDOM_SEED 必须是精确的 uint64 整数（不接受 bool）')
     interval_min = _finite_number(
@@ -269,6 +274,10 @@ def validate_simple_config(
         raise ValueError('DEPART_INTERVAL_MIN_S/MAX_S 必须是正的有限数字')
     if interval_min > interval_max:
         raise ValueError('DEPART_INTERVAL_MIN_S 不得大于 DEPART_INTERVAL_MAX_S')
+    if (not math.isfinite(interval_min / 0.1)
+            or not math.isfinite(interval_max / 0.1)):
+        raise ValueError(
+            'DEPART_INTERVAL_MIN_S/MAX_S 无法换算为有限的 0.1 秒周期数')
     speed_min = _finite_number(
         'INITIAL_SPEED_MIN_MPS', config.initial_speed_min_mps, 0.0, math.inf)
     speed_max = _finite_number(
@@ -277,6 +286,14 @@ def validate_simple_config(
         raise ValueError('INITIAL_SPEED_MIN_MPS/MAX_MPS 必须是正的有限数字')
     if speed_min >= speed_max:
         raise ValueError('INITIAL_SPEED_MIN_MPS 必须小于 INITIAL_SPEED_MAX_MPS')
+    if speed_min > SIMPLE_MODEL_MAX_SPEED_MPS:
+        raise ValueError(
+            'INITIAL_SPEED_MIN_MPS 不得超过模型上限 '
+            f'{SIMPLE_MODEL_MAX_SPEED_MPS} m/s')
+    if speed_max > SIMPLE_MODEL_MAX_SPEED_MPS:
+        raise ValueError(
+            'INITIAL_SPEED_MAX_MPS 不得超过模型上限 '
+            f'{SIMPLE_MODEL_MAX_SPEED_MPS} m/s')
     _finite_number(
         'SIMULATION_DURATION_S', config.simulation_duration_s, 0.0, math.inf)
     if config.simulation_duration_s <= 0:

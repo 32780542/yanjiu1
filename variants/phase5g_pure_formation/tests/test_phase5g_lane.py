@@ -316,7 +316,7 @@ class Phase5GLaneValidationTests(unittest.TestCase):
                  if key != "formation_position_tolerance_m"},
             )
 
-    def test_registration_is_exactly_the_twenty_top_level_parameters(self):
+    def test_registration_is_exactly_the_twenty_three_top_level_parameters(self):
         expected_lane = {
             "formation_lane_change_enabled": True,
             "formation_lane_stable_s": 1.0,
@@ -328,12 +328,15 @@ class Phase5GLaneValidationTests(unittest.TestCase):
             "formation_lane_min_relation_gain": 1,
         }
         expected_simple = {
-            "simple_formation_local_range_m": 90.0,
-            "simple_formation_adjacent_gap_m": 15.0,
-            "simple_formation_same_gap_m": 30.0,
+            "simple_formation_component_gap_m": 50.0,
+            "simple_formation_middle_offset_m": 15.0,
+            "simple_formation_same_lane_gap_m": 30.0,
             "simple_formation_position_tolerance_m": 2.0,
-            "simple_formation_accel_limit_mps2": 0.5,
-            "simple_formation_max_lane_changes": 1,
+            "simple_formation_speed_tolerance_mps": 1.0,
+            "simple_formation_stable_time_s": 1.0,
+            "simple_formation_reference_switch_gain_m": 2.0,
+            "simple_formation_min_lane_change_speed_mps": 5.0,
+            "simple_formation_target_lane_clearance_m": 8.0,
         }
         expected = {
             "phase5g_enabled": True,
@@ -343,13 +346,13 @@ class Phase5GLaneValidationTests(unittest.TestCase):
             "phase5g_target_speed_mps": 10.0,
             "phase5g_initial_speed_min_mps": 8.0,
             "phase5g_initial_speed_max_mps": 12.0,
-            "phase5g_duration_s": 45.0,
+            "phase5g_duration_s": 90.0,
         }
         config_path = Path(__file__).resolve().parents[1] / "configs" / "phase5g.json"
         actual = json.loads(config_path.read_text(encoding="utf-8"))
         self.assertEqual(actual, expected)
         self.assertEqual(set(actual), set(expected))
-        self.assertEqual(len(actual), 20)
+        self.assertEqual(len(actual), 23)
 
         lane_keys = {key for key in actual if key.startswith("formation_lane_")}
         self.assertEqual(lane_keys, set(expected_lane))
@@ -373,8 +376,7 @@ class Phase5GLaneValidationTests(unittest.TestCase):
         )
         self.assertIs(type(actual["simple_formation_enabled"]), bool)
         self.assertTrue(all(type(actual[key]) is float
-                            for key in simple_formation.PARAMETERS[:-1]))
-        self.assertIs(type(actual[simple_formation.PARAMETERS[-1]]), int)
+                            for key in simple_formation.PARAMETERS))
 
         self.assertIs(type(actual["phase5g_enabled"]), bool)
 

@@ -219,7 +219,7 @@ class Phase5GHarnessTests(unittest.TestCase):
 
         def fail_second_interval(instance, *args, **kwargs):
             calls["count"] += 1
-            if calls["count"] == len(case["controlled"]) + 1:
+            if calls["count"] == 2:
                 raise RuntimeError("injected integration boundary")
             return original(instance, *args, **kwargs)
 
@@ -564,7 +564,10 @@ class Phase5GHarnessTests(unittest.TestCase):
                                          ("postcommit", 1)):
             with self.subTest(phase=phase), tempfile.TemporaryDirectory(dir=TEMP_ROOT) as temp:
                 model, physical, policy = self.harness.parameters("lane_priority")
-                case = self.short_case(physical, duration_s=0.1)
+                case = {
+                    **phase5g_cases.main_six_case(physical),
+                    "duration_s": 0.1,
+                }
                 error_text = f"RuntimeError: injected sync {phase} fault"
 
                 class Bridge:
@@ -743,7 +746,9 @@ class Phase5GHarnessTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "output_base"):
                     self.harness.run_phase5g_demo(
                         vehicle_count=3, seed=1, target_speed_mps=10.0,
-                        duration_s=0.1, output_base=value, live=False,
+                        duration_s=40.2, output_base=value, live=False,
+                        depart_interval_min_s=0.1,
+                        depart_interval_max_s=0.1,
                     )
                 record.assert_not_called()
         allowed = self.harness._validated_output_base(ROOT / "tmp" / "safe_task6")
@@ -751,7 +756,9 @@ class Phase5GHarnessTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as external:
             result = self.harness.run_phase5g_demo(
                 vehicle_count=3, seed=1, target_speed_mps=10.0,
-                duration_s=0.1, output_base=Path(external) / "phase5g", live=False,
+                duration_s=40.2, output_base=Path(external) / "phase5g", live=False,
+                depart_interval_min_s=0.1,
+                depart_interval_max_s=0.1,
             )
             self.assertTrue(result.is_relative_to(Path(external)))
 

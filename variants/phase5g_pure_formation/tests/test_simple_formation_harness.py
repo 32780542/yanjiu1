@@ -18,7 +18,7 @@ import uuid
 from types import MappingProxyType
 from unittest.mock import patch
 
-from experiments import phase5g_cases
+from experiments import phase5g_cases, phase5g_schedule
 from models.bezier import QuadraticLaneChange
 from noa.simple_formation import PARAMETERS, SimpleFormationMemory
 
@@ -1167,6 +1167,49 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 runner.assert_not_called()
                 self.assertFalse(output.exists())
 
+    def test_demo_rejects_model_speed_limits_before_output(self):
+        invalid = (
+            ({"target_speed_mps": 100.0}, "target_speed_mps.*max_speed_mps"),
+            ({"initial_speed_min_mps": 40.0,
+              "initial_speed_max_mps": 50.0},
+             "initial_speed_min_mps.*max_speed_mps"),
+            ({"initial_speed_min_mps": 8.0,
+              "initial_speed_max_mps": 50.0},
+             "initial_speed_max_mps.*max_speed_mps"),
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            for index, (changed, message) in enumerate(invalid):
+                output = Path(temp) / f"speed-{index}"
+                kwargs = {
+                    "vehicle_count": 3, "seed": 1,
+                    "target_speed_mps": 10.0, "duration_s": 40.2,
+                    "output_base": output, "live": False,
+                    "depart_interval_min_s": 0.1,
+                    "depart_interval_max_s": 0.1,
+                    "initial_speed_min_mps": 8.0,
+                    "initial_speed_max_mps": 12.0,
+                    **changed,
+                }
+                with self.subTest(changed=changed), patch.object(
+                    self.harness, "RunRecord"
+                ) as record, self.assertRaisesRegex(ValueError, message):
+                    self.harness.run_phase5g_demo(**kwargs)
+                record.assert_not_called()
+                self.assertFalse(output.exists())
+
+    def test_shared_schedule_names_extreme_finite_interval_overflow(self):
+        for low, high in ((1e308, 1e308), (2.5, 1e308)):
+            with self.subTest(low=low, high=high), self.assertRaisesRegex(
+                ValueError, "depart_interval|departure interval|0.1 s control tick"
+            ):
+                phase5g_schedule.deterministic_schedule_rows(
+                    12, 1,
+                    depart_interval_min_s=low,
+                    depart_interval_max_s=high,
+                    speed_min_mps=8.0,
+                    speed_max_mps=12.0,
+                )
+
     def test_demo_creates_missing_safe_output_ancestry_after_validation(self):
         with tempfile.TemporaryDirectory() as temp, patch.object(
             self.harness, "run_variant", return_value={"recording_passed": True},
@@ -1312,7 +1355,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
     def test_seal_directory_includes_files_beyond_legacy_max_path(self):
         with tempfile.TemporaryDirectory() as temp:
             root = (Path(temp) / ("a" * 60) / ("b" * 60) / ("c" * 60))
-            root.mkdir(parents=True)
+            Path(self.harness.native_io_path(root)).mkdir(parents=True)
             target = root / (("d" * 50) + ".md")
             self.assertGreater(len(str(target)), 260)
             payload = b"long sealed path\n"
@@ -1321,13 +1364,18 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 stream.write(payload)
             try:
                 self.harness.seal_directory(root)
-                evidence = json.loads(
-                    (root / "evidence_hashes.json").read_text(encoding="utf-8")
-                )
+                with open(
+                    self.harness.native_io_path(root / "evidence_hashes.json"),
+                    encoding="utf-8",
+                ) as stream:
+                    evidence = json.load(stream)
                 relative = target.relative_to(root).as_posix()
                 self.assertEqual(evidence[relative], hashlib.sha256(payload).hexdigest())
             finally:
-                os.remove(native_target)
+                shutil.rmtree(
+                    self.harness.native_io_path(Path(temp) / ("a" * 60)),
+                    ignore_errors=True,
+                )
 
     def test_cli_forwards_every_demo_value_exactly_once(self):
         with patch("experiments.phase5g.run_phase5g_demo",

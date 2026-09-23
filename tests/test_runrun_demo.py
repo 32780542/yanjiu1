@@ -237,6 +237,28 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                     replace(gui.SimpleFormationDemoConfig(), **{field: value}),
                     gui.PROJECT_ROOT)
 
+    def test_model_speed_limit_is_rejected_before_path_resolution(self):
+        invalid = (
+            (replace(gui.SimpleFormationDemoConfig(), target_speed_mps=100.0),
+             'TARGET_SPEED_MPS'),
+            (replace(gui.SimpleFormationDemoConfig(),
+                     initial_speed_min_mps=40.0,
+                     initial_speed_max_mps=50.0),
+             'INITIAL_SPEED_MIN_MPS'),
+            (replace(gui.SimpleFormationDemoConfig(),
+                     initial_speed_min_mps=8.0,
+                     initial_speed_max_mps=50.0),
+             'INITIAL_SPEED_MAX_MPS'),
+        )
+        for config, label in invalid:
+            with self.subTest(label=label), \
+                    patch.object(gui, '_resolve_future_directory') as resolve, \
+                    patch.object(gui, '_require_regular_file') as require, \
+                    self.assertRaisesRegex(ValueError, f'{label}.*33\\.3'):
+                gui.validate_simple_config(config, gui.PROJECT_ROOT)
+            resolve.assert_not_called()
+            require.assert_not_called()
+
     def test_simple_count_range_and_schedule_order_are_validated(self):
         for count in range(3, 61):
             with self.subTest(count=count):
@@ -2039,6 +2061,21 @@ class EntrypointTests(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', errors='replace'))
         output = result.stdout.decode('utf-8')
         self.assertIn('自检通过：没有启动SUMO GUI。', output)
+
+    def test_debug_entry_names_extreme_interval_without_traceback(self):
+        output = io.StringIO()
+        errors = io.StringIO()
+        with patch.object(runrun, 'DEPART_INTERVAL_MIN_S', 1e308), \
+                patch.object(runrun, 'DEPART_INTERVAL_MAX_S', 1e308), \
+                patch.object(runrun.sys, 'argv', ['runrun.py', '--check']), \
+                patch.object(runrun.sys, 'stdin', io.StringIO()), \
+                patch.object(runrun.sys, 'stdout', output), \
+                patch.object(runrun.sys, 'stderr', errors):
+            status = runrun._debug_friendly_entry()
+        self.assertEqual(status, 1)
+        self.assertIn('启动失败：', output.getvalue())
+        self.assertIn('DEPART_INTERVAL', output.getvalue())
+        self.assertNotIn('Traceback', output.getvalue() + errors.getvalue())
 
 
 if __name__ == '__main__':
