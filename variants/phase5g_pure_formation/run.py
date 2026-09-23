@@ -60,7 +60,7 @@ def main():
         return value.lower()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('command', choices=['registry', 'build', 'verify', 'test', 'environment', 'mcp', 'smoke', 'screenshot', 'phase2', 'phase2-replay', 'phase3', 'phase3-replay', 'phase4', 'phase4-replay', 'phase5', 'phase5-replay', 'phase5-r5', 'phase5-r5-replay', 'phase5g', 'phase5g-replay', 'phase5g-formal', 'phase5g-demo'])
+    parser.add_argument('command', choices=['registry', 'build', 'verify', 'test', 'environment', 'mcp', 'smoke', 'screenshot', 'phase2', 'phase2-replay', 'phase3', 'phase3-replay', 'phase4', 'phase4-replay', 'phase5', 'phase5-replay', 'phase5-r5', 'phase5-r5-replay', 'phase5g', 'phase5g-replay', 'phase5g-formal', 'phase5g-demo', 'phase5g-simple-matrix'])
     parser.add_argument('--run-dir', help='Replay an existing phase2/phase3 run directory inside keyan1')
     parser.add_argument('--case', action='append', dest='case_names', help='Phase5 explicit development case selection')
     parser.add_argument('--offline', action='store_true', help='Phase5 diagnostic only, no SUMO verification')
@@ -136,6 +136,12 @@ def main():
                     'expected_input_sha256': args.expected_input_sha256}
                    if args.expected_source_sha256 else {})
         raise SystemExit(0 if replay_run(args.run_dir, **anchors)['passed'] else 1)
+    if args.command == 'phase5g-simple-matrix':
+        if not args.offline:
+            parser.error('phase5g-simple-matrix requires --offline')
+        from experiments.phase5g_matrix import run_matrix
+        run_matrix(args.output_base, live=False)
+        return
     if args.command == 'phase5g-demo':
         from experiments.phase5g import run_phase5g_demo
         run_phase5g_demo(vehicle_count=args.vehicle_count, seed=args.seed,

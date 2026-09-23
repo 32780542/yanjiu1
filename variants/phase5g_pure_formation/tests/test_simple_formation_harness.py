@@ -1435,6 +1435,295 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                 self.call_cli(["phase5g-demo", flag, value])
             demo.assert_not_called()
 
+    def _fake_matrix_demo(self, calls, *, exception_at=None,
+                          scientific_failure_at=None):
+        def run_demo(**kwargs):
+            calls.append(dict(kwargs))
+            base = Path(kwargs["output_base"])
+            base.mkdir(parents=True, exist_ok=False)
+            run_path = base / "retained-run"
+            (run_path / "case").mkdir(parents=True)
+            (base / "latest.json").write_text(json.dumps({
+                "run_id": run_path.name,
+                "path": str(run_path),
+                "status": "failed" if len(calls) == exception_at else "completed",
+                "passed": len(calls) != exception_at,
+            }), encoding="utf-8")
+            reasons = []
+            if len(calls) == scientific_failure_at:
+                reasons = ["same_lane_gap_error", "same_lane_gap_error"]
+            (run_path / "case" / "detection.json").write_text(json.dumps({
+                "default": {
+                    "success": not reasons,
+                    "failure_reasons": reasons,
+                    "parameters": {
+                        "expected_component_count": kwargs.get(
+                            "expected_component_count", 1),
+                    },
+                },
+            }), encoding="utf-8")
+            if len(calls) == exception_at:
+                raise RuntimeError("retained ordinary failure")
+            return run_path
+        return run_demo
+
+    def test_fixed_matrix_runs_every_case_after_failures_and_retains_all_reasons(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        calls = []
+        replays = []
+
+        def replay(run_path, *, base):
+            replays.append((Path(run_path), Path(base)))
+            failed = len(replays) == 3
+            return {
+                "passed": not failed,
+                "path": str(Path(base) / f"replay-{len(replays)}"),
+                "errors": (["semantic replay failure", "semantic replay failure"]
+                           if failed else []),
+            }
+
+        with tempfile.TemporaryDirectory() as temp:
+            result_path = matrix.run_matrix(
+                Path(temp) / "matrix", live=False,
+                demo_runner=self._fake_matrix_demo(
+                    calls, exception_at=2, scientific_failure_at=4,
+                ),
+                replay_runner=replay,
+            )
+            aggregate = json.loads(
+                (result_path / "aggregate.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(matrix.MATRIX_SPECS, tuple(
+            (count, seed) for count in (3, 6, 12) for seed in range(1, 6)
+        ))
+        self.assertEqual(
+            [(row["count"], row["seed"]) for row in aggregate["runs"]],
+            list(matrix.MATRIX_SPECS),
+        )
+        self.assertEqual(len(calls), 16)
+        self.assertEqual(aggregate["total_count"], 15)
+        self.assertEqual(aggregate["pass_count"], 12)
+        self.assertEqual(aggregate["pass_rate"], 12 / 15)
+        self.assertEqual(len({call["output_base"] for call in calls}), 16)
+        self.assertTrue(all(call["live"] is False for call in calls))
+        for call in calls[:15]:
+            self.assertEqual(call["duration_s"], 90.0)
+            self.assertEqual(call["target_speed_mps"], 10.0)
+            self.assertEqual(call["depart_interval_min_s"], 2.5)
+            self.assertEqual(call["depart_interval_max_s"], 4.0)
+            self.assertEqual(call["initial_speed_min_mps"], 8.0)
+            self.assertEqual(call["initial_speed_max_mps"], 12.0)
+            self.assertEqual(call["formation_join_range_m"], 50.0)
+            self.assertEqual(call["middle_lane_offset_m"], 15.0)
+            self.assertEqual(call["same_lane_gap_m"], 30.0)
+            self.assertEqual(call["position_tolerance_m"], 2.0)
+            self.assertEqual(call["speed_tolerance_mps"], 1.0)
+            self.assertEqual(call["stable_time_s"], 1.0)
+            self.assertEqual(call["reference_switch_gain_m"], 2.0)
+            self.assertEqual(call["min_formation_lane_change_speed_mps"], 5.0)
+            self.assertEqual(call["hard_lane_change_gap_m"], 8.0)
+            schedule = phase5g_schedule.deterministic_schedule_rows(
+                call["vehicle_count"], call["seed"],
+                depart_interval_min_s=call["depart_interval_min_s"],
+                depart_interval_max_s=call["depart_interval_max_s"],
+                speed_min_mps=call["initial_speed_min_mps"],
+                speed_max_mps=call["initial_speed_max_mps"],
+            )
+            self.assertGreaterEqual(
+                call["duration_s"], schedule[-1][0] + 40.0
+            )
+        reasons = aggregate["failure_reasons"]
+        self.assertEqual(
+            sum(row["reason"] == "same_lane_gap_error" for row in reasons), 2
+        )
+        self.assertEqual(
+            sum(row["reason"] == "semantic replay failure" for row in reasons), 2
+        )
+        self.assertTrue(any(
+            row["reason"] == "RuntimeError: retained ordinary failure"
+            for row in reasons
+        ))
+        self.assertIsNotNone(aggregate["runs"][1]["run_path"])
+
+    def test_matrix_long_gap_is_separate_two_component_case(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        calls = []
+        with tempfile.TemporaryDirectory() as temp:
+            result_path = matrix.run_matrix(
+                Path(temp) / "matrix", live=False,
+                demo_runner=self._fake_matrix_demo(calls),
+                replay_runner=lambda run_path, *, base: {
+                    "passed": True, "path": str(Path(base) / "replay"),
+                    "errors": [],
+                },
+            )
+            aggregate = json.loads(
+                (result_path / "aggregate.json").read_text(encoding="utf-8")
+            )
+        gap_call = calls[-1]
+        self.assertEqual(gap_call["vehicle_count"], 3)
+        self.assertEqual(gap_call["seed"], 4)
+        self.assertEqual(gap_call["depart_interval_min_s"], 2.5)
+        self.assertEqual(gap_call["depart_interval_max_s"], 8.0)
+        self.assertEqual(gap_call["expected_component_count"], 2)
+        self.assertEqual(
+            aggregate["gap_case"]["scientific_status"]["expected_component_count"],
+            2,
+        )
+        self.assertEqual(aggregate["total_count"], 15)
+        self.assertNotIn(aggregate["gap_case"], aggregate["runs"])
+
+    def test_long_gap_schedule_physically_starts_two_local_components(self):
+        detector = importlib.import_module("experiments.phase5_detection")
+        schedule = phase5g_schedule.deterministic_schedule_rows(
+            3, 4, depart_interval_min_s=2.5,
+            depart_interval_max_s=8.0, speed_min_mps=8.0,
+            speed_max_mps=12.0,
+        )
+        self.assertEqual([row[0] for row in schedule], [0.0, 6.5, 9.4])
+        cohort_time = schedule[-1][0]
+        rows = {
+            f"v{index}": {
+                "key": f"v{index}",
+                "x_m": phase5g_cases.SPAWN_X_M
+                       + speed * (cohort_time - departure),
+            }
+            for index, (departure, _lane, speed) in enumerate(schedule)
+        }
+        components = detector._physical_components(rows, 50.0)
+        self.assertEqual(
+            [[row["key"] for row in component] for component in components],
+            [["v0"], ["v1", "v2"]],
+        )
+        self.assertGreater(rows["v0"]["x_m"] - rows["v1"]["x_m"], 50.0)
+        self.assertLessEqual(rows["v1"]["x_m"] - rows["v2"]["x_m"], 50.0)
+
+    def test_demo_records_explicit_two_component_expectation(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(
+            self.harness, "run_variant", return_value={
+                "status": "failed", "recording_passed": True,
+                "scientific_passed": None,
+            },
+        ) as runner:
+            self.harness.run_phase5g_demo(
+                vehicle_count=3, seed=4, target_speed_mps=10.0,
+                duration_s=49.4, output_base=Path(temp) / "two-components",
+                live=False, depart_interval_min_s=2.5,
+                depart_interval_max_s=8.0, expected_component_count=2,
+            )
+        case = runner.call_args.args[4]
+        self.assertEqual(case["expected_component_count"], 2)
+
+    def test_demo_rejects_invalid_component_expectation_before_output(self):
+        with tempfile.TemporaryDirectory() as temp:
+            for value in (True, 0, 4):
+                output = Path(temp) / f"invalid-{value}"
+                with self.subTest(value=value), patch.object(
+                    self.harness, "run_variant"
+                ) as runner, self.assertRaisesRegex(
+                    ValueError, "expected_component_count"
+                ):
+                    self.harness.run_phase5g_demo(
+                        vehicle_count=3, seed=4, target_speed_mps=10.0,
+                        duration_s=49.4, output_base=output, live=False,
+                        depart_interval_min_s=2.5,
+                        depart_interval_max_s=8.0,
+                        expected_component_count=value,
+                    )
+                runner.assert_not_called()
+                self.assertFalse(output.exists())
+
+    def test_matrix_rejects_live_and_does_not_swallow_memory_error(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            output = Path(temp) / "matrix"
+            with self.assertRaisesRegex(ValueError, "live.*false"):
+                matrix.run_matrix(output, live=True)
+            self.assertFalse(output.exists())
+
+            def fail(**_kwargs):
+                raise MemoryError("do not swallow")
+
+            with self.assertRaisesRegex(MemoryError, "do not swallow"):
+                matrix.run_matrix(output, live=False, demo_runner=fail)
+            with patch.object(
+                Path, "read_text", side_effect=MemoryError("science memory")
+            ), self.assertRaisesRegex(MemoryError, "science memory"):
+                matrix._scientific_status(Path(temp) / "retained-run", 1)
+
+    def test_matrix_cli_requires_offline_and_forwards_output_base(self):
+        with patch("experiments.phase5g_matrix.run_matrix") as matrix:
+            with self.assertRaises(SystemExit):
+                self.call_cli([
+                    "phase5g-simple-matrix", "--output-base",
+                    "results/phase5g/custom-matrix",
+                ])
+            matrix.assert_not_called()
+            self.call_cli([
+                "phase5g-simple-matrix", "--offline", "--output-base",
+                "results/phase5g/custom-matrix",
+            ])
+        matrix.assert_called_once_with(
+            "results/phase5g/custom-matrix", live=False,
+        )
+
+    def test_matrix_never_replays_a_runner_path_outside_its_unique_base(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        replayed = []
+        with tempfile.TemporaryDirectory() as temp:
+            outside = Path(temp) / "outside-run"
+            (outside / "case").mkdir(parents=True)
+            (outside / "case" / "detection.json").write_text(json.dumps({
+                "default": {
+                    "success": True, "failure_reasons": [],
+                    "parameters": {"expected_component_count": 1},
+                },
+            }), encoding="utf-8")
+
+            def replay(run_path, *, base):
+                replayed.append((run_path, base))
+                return {"passed": True, "path": None, "errors": []}
+
+            result = matrix.run_matrix(
+                Path(temp) / "matrix", live=False,
+                demo_runner=lambda **_kwargs: outside,
+                replay_runner=replay,
+            )
+            aggregate = json.loads(
+                (result / "aggregate.json").read_text(encoding="utf-8")
+            )
+        self.assertEqual(replayed, [])
+        self.assertEqual(aggregate["pass_count"], 0)
+        self.assertTrue(all(row["run_path"] is None for row in aggregate["runs"]))
+        self.assertTrue(any(
+            "outside" in row["reason"] for row in aggregate["failure_reasons"]
+        ))
+
+    def test_matrix_names_false_statuses_that_supply_no_failure_reason(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_path = root / "run"
+            (run_path / "case").mkdir(parents=True)
+            (run_path / "case" / "detection.json").write_text(json.dumps({
+                "default": {
+                    "success": False, "failure_reasons": [],
+                    "parameters": {"expected_component_count": 1},
+                },
+            }), encoding="utf-8")
+            scientific = matrix._scientific_status(run_path, 1)
+            replay = matrix._replay_status(
+                run_path, root / "replay",
+                lambda *_args, **_kwargs: {
+                    "passed": False, "path": None, "errors": [],
+                },
+            )
+        self.assertEqual(
+            scientific["failure_reasons"], ["scientific_evaluation_not_passed"]
+        )
+        self.assertEqual(replay["errors"], ["replay_not_passed"])
+
     def test_run_variant_reconstructs_nondefault_rules_and_neutral_private_memories(self):
         model, physical, policy = self.simple_parameters()
         case = self.short_case(physical)

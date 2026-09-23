@@ -1908,12 +1908,18 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                      stable_time_s: float = 1.0,
                      reference_switch_gain_m: float = 2.0,
                      min_formation_lane_change_speed_mps: float = 5.0,
-                     hard_lane_change_gap_m: float = 8.0) -> Path:
+                     hard_lane_change_gap_m: float = 8.0,
+                     expected_component_count: int = 1) -> Path:
     """Generate one non-formal lane-priority trace for later SUMO-GUI playback."""
     from experiments.phase5g_cases import canonical_json_bytes, digest_json, physical_case
 
     if type(vehicle_count) is not int or not 3 <= vehicle_count <= 60:
         raise ValueError("vehicle_count must be an exact integer from 3 to 60")
+    if type(expected_component_count) is not int \
+            or not 1 <= expected_component_count <= vehicle_count:
+        raise ValueError(
+            "expected_component_count must be an exact integer from 1 to vehicle_count"
+        )
     seed = _exact_seed(seed)
     target_speed = _finite("target_speed_mps", target_speed_mps, positive=True)
     duration = _finite("duration_s", duration_s, positive=True)
@@ -1977,6 +1983,8 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         depart_interval_min_s=interval_min,
         depart_interval_max_s=interval_max,
     )
+    if expected_component_count != 1:
+        case = {**case, "expected_component_count": expected_component_count}
     base = _validated_output_base(output_base)
     memories = _initial_memories(case, mode, simple_rules=True)
     registered_modes = _mode_registry()
