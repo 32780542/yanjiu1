@@ -139,6 +139,18 @@ def main():
     if args.command == 'phase5g-simple-matrix':
         if not args.offline:
             parser.error('phase5g-simple-matrix requires --offline')
+        supplied_options = {
+            token.split('=', 1)[0] for token in sys.argv[1:]
+            if token.startswith('--')
+        }
+        unsupported = sorted(
+            supplied_options - {'--offline', '--output-base'}
+        )
+        if unsupported:
+            parser.error(
+                'phase5g-simple-matrix does not accept: '
+                + ', '.join(unsupported)
+            )
         from experiments.phase5g_matrix import run_matrix
         run_matrix(args.output_base, live=False)
         return

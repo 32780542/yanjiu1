@@ -2,18 +2,23 @@
 
 from datetime import datetime, timezone
 import json
+import math
+import os
 from pathlib import Path
 from typing import Callable, Mapping
 from uuid import uuid4
 
 from experiments.phase5g import (
+    SIMPLE_DEMO_COMPLETION_SCHEMA,
     _prepare_output_directory,
     _require_output_directory,
+    _require_output_regular_file,
     _validated_output_base,
     atomic_json,
     run_phase5g_demo,
 )
 from experiments.phase5g_replay import replay_run
+from research.common import native_io_path, sha256
 
 
 MATRIX_COUNTS = (3, 6, 12)
@@ -52,6 +57,10 @@ _GAP_RUN = {
     "expected_component_count": 2,
 }
 
+_MAX_LATEST_JSON_BYTES = 64 * 1024
+_MAX_DETECTION_JSON_BYTES = 64 * 1024 * 1024
+_MAX_TRUST_JSON_BYTES = 1024 * 1024
+
 
 def _matrix_directory(base: str | Path) -> Path:
     root = _validated_output_base(base)
@@ -63,35 +72,166 @@ def _matrix_directory(base: str | Path) -> Path:
     return _prepare_output_directory(root / run_id, exclusive=True)
 
 
-def _retained_run_path(run_base: Path) -> Path | None:
-    """Locate only a child artifact retained by the attempted demo call."""
-    if not run_base.is_dir():
+def _read_strict_json_object(path: Path, *, limit: int, label: str) -> dict:
+    checked = _require_output_regular_file(path)
+    with open(native_io_path(checked), "rb") as stream:
+        raw = stream.read(limit + 1)
+    if len(raw) > limit:
+        raise ValueError(f"{label} exceeds size limit of {limit} bytes")
+
+    def unique(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"{label} contains duplicate JSON key: {key}")
+            result[key] = value
+        return result
+
+    def reject_constant(token):
+        raise ValueError(f"{label} contains nonfinite JSON constant: {token}")
+
+    def finite_float(token):
+        value = float(token)
+        if not math.isfinite(value):
+            raise ValueError(f"{label} contains nonfinite JSON number: {token}")
+        return value
+
+    try:
+        value = json.loads(
+            raw.decode("utf-8"), object_pairs_hook=unique,
+            parse_constant=reject_constant, parse_float=finite_float,
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"{label} must be valid UTF-8 JSON") from error
+    if not isinstance(value, dict):
+        raise ValueError(f"{label} must be one JSON object")
+    return value
+
+
+def _is_json_text(value: object, *, nonempty: bool = False) -> bool:
+    if type(value) is not str or (nonempty and not value):
+        return False
+    try:
+        value.encode("utf-8")
+    except UnicodeEncodeError:
+        return False
+    return True
+
+
+def _safe_text(value: object) -> str:
+    return str(value).encode("utf-8", "backslashreplace").decode("utf-8")
+
+
+def _recovery_error(errors: list[str], label: str, error: Exception) -> None:
+    errors.append(_safe_text(f"{label}: {type(error).__name__}: {error}"))
+
+
+def _trusted_recovery_artifact(run_path: Path, run_base: Path) -> Path:
+    """Accept a sealed completed or explicitly finalized failed run only."""
+    checked = _bound_output_child(run_path, run_base, "retained demo")
+    trust = _require_output_directory(run_base / ".phase5g-trust")
+    source = _read_strict_json_object(
+        trust / f"{checked.name}.json", limit=_MAX_TRUST_JSON_BYTES,
+        label="retained source anchor",
+    )
+    if source.get("schema") != "phase5g_external_trust_anchor_v2" \
+            or source.get("run_id") != checked.name:
+        raise ValueError("retained source anchor schema/run_id differs")
+
+    validation_path = checked / "validation.json"
+    validation = _read_strict_json_object(
+        validation_path, limit=_MAX_TRUST_JSON_BYTES,
+        label="retained validation",
+    )
+    if validation.get("run_id") != checked.name \
+            or validation.get("status") not in {"completed", "failed"} \
+            or type(validation.get("passed")) is not bool:
+        raise ValueError("retained validation is not explicitly finalized")
+    if validation["status"] == "failed" and validation["passed"] is not False:
+        raise ValueError("failed retained validation must not pass")
+
+    evidence = _read_strict_json_object(
+        checked / "evidence_hashes.json", limit=_MAX_TRUST_JSON_BYTES,
+        label="retained evidence seal",
+    )
+    validation_digest = evidence.get("validation.json")
+    if type(validation_digest) is not str \
+            or validation_digest != sha256(validation_path):
+        raise ValueError("retained evidence seal does not bind validation.json")
+
+    if validation["status"] == "completed":
+        completion = _read_strict_json_object(
+            trust / f"{checked.name}.completion.json",
+            limit=_MAX_TRUST_JSON_BYTES, label="retained completion anchor",
+        )
+        if completion.get("schema") != SIMPLE_DEMO_COMPLETION_SCHEMA \
+                or completion.get("run_id") != checked.name:
+            raise ValueError("retained completion anchor schema/run_id differs")
+    return checked
+
+
+def _retained_run_path(run_base: Path,
+                       errors: list[str] | None = None) -> Path | None:
+    """Best-effort recovery of one safe finalized child; ordinary errors stay local."""
+    diagnostics = [] if errors is None else errors
+    try:
+        checked_base = _require_output_directory(run_base)
+    except MemoryError:
+        raise
+    except Exception as error:
+        _recovery_error(diagnostics, "run base", error)
         return None
-    latest = run_base / "latest.json"
+
     candidates = []
-    if latest.is_file():
+    latest = checked_base / "latest.json"
+    try:
+        os.lstat(native_io_path(latest))
+    except FileNotFoundError:
+        pass
+    except MemoryError:
+        raise
+    except Exception as error:
+        _recovery_error(diagnostics, "latest", error)
+    else:
         try:
-            value = json.loads(latest.read_text(encoding="utf-8"))
-            candidate = Path(value.get("path", ""))
-            if not candidate.is_absolute():
-                candidate = run_base / candidate
-            candidates.append(candidate)
-        except (OSError, ValueError, TypeError, json.JSONDecodeError):
-            pass
-    candidates.extend(sorted(
-        (item for item in run_base.iterdir()
-         if item.is_dir() and item.name != ".phase5g-trust"),
-        key=lambda item: item.name,
-        reverse=True,
-    ))
-    resolved_base = run_base.resolve()
+            value = _read_strict_json_object(
+                latest, limit=_MAX_LATEST_JSON_BYTES, label="latest",
+            )
+            candidate_value = value.get("path")
+            if type(candidate_value) is not str or not candidate_value.strip():
+                raise ValueError("latest.path must be a nonempty string")
+            candidates.append(Path(candidate_value))
+        except MemoryError:
+            raise
+        except Exception as error:
+            _recovery_error(diagnostics, "latest", error)
+
+    try:
+        children = sorted(
+            checked_base.iterdir(), key=lambda item: item.name, reverse=True,
+        )
+    except MemoryError:
+        raise
+    except Exception as error:
+        _recovery_error(diagnostics, "run directory enumeration", error)
+        children = []
+    candidates.extend(
+        item for item in children
+        if item.name not in {".phase5g-trust", "latest.json"}
+    )
+
+    seen = set()
     for candidate in candidates:
-        try:
-            resolved = candidate.resolve()
-        except OSError:
+        key = str(candidate)
+        if key in seen:
             continue
-        if resolved.is_dir() and resolved.parent == resolved_base:
-            return resolved
+        seen.add(key)
+        try:
+            return _trusted_recovery_artifact(candidate, checked_base)
+        except MemoryError:
+            raise
+        except Exception as error:
+            _recovery_error(diagnostics, f"retained candidate {candidate}", error)
     return None
 
 
@@ -130,25 +270,74 @@ def _scientific_status(run_path: Path | None,
         status["failure_reasons"].append("run_artifact_missing")
         return status
     try:
-        detection = json.loads(
-            (run_path / "case" / "detection.json").read_text(encoding="utf-8")
+        detection = _read_strict_json_object(
+            run_path / "case" / "detection.json",
+            limit=_MAX_DETECTION_JSON_BYTES, label="detection",
         )
-        default = detection["default"]
+        default = detection.get("default")
+        if not isinstance(default, dict):
+            raise ValueError("detection.default must be an object")
         success = default["success"]
         reasons = default["failure_reasons"]
-        recorded_count = default["parameters"]["expected_component_count"]
+        parameters = default.get("parameters")
+        if not isinstance(parameters, dict):
+            raise ValueError("detection.default.parameters must be an object")
+        recorded_count = parameters.get("expected_component_count")
         if type(success) is not bool:
             raise ValueError("detection.default.success must be bool")
         if not isinstance(reasons, list) or any(
-                type(reason) is not str for reason in reasons):
-            raise ValueError("detection.default.failure_reasons must be strings")
+                not _is_json_text(reason) for reason in reasons):
+            raise ValueError(
+                "detection.default.failure_reasons must be UTF-8 strings"
+            )
+        if success and reasons:
+            raise ValueError("successful detection must have no failure reasons")
+        if type(recorded_count) is not int or recorded_count <= 0:
+            raise ValueError(
+                "detection expected_component_count must be an exact positive int"
+            )
         if recorded_count != expected_component_count:
             raise ValueError("detection expected_component_count differs")
-        component_members = default.get("expected_component_members", [])
-        component_counts = default.get("final_component_lane_counts", [])
+        component_members = default.get("expected_component_members")
+        component_counts = default.get("final_component_lane_counts")
         if not isinstance(component_members, list) \
-                or not isinstance(component_counts, list):
-            raise ValueError("detection component evidence must be lists")
+                or len(component_members) != expected_component_count:
+            raise ValueError(
+                "detection component members must match expected component count"
+            )
+        if not isinstance(component_counts, list) \
+                or len(component_counts) != expected_component_count:
+            raise ValueError(
+                "detection lane counts must match expected component count"
+            )
+        all_members = []
+        for index, (members, counts) in enumerate(zip(
+                component_members, component_counts)):
+            if not isinstance(members, list) or not members \
+                    or any(not _is_json_text(member, nonempty=True)
+                           for member in members):
+                raise ValueError(
+                    f"detection component {index} members must be nonempty "
+                    "UTF-8 strings"
+                )
+            if len(set(members)) != len(members):
+                raise ValueError(
+                    f"detection component {index} contains duplicate members"
+                )
+            if not isinstance(counts, list) or len(counts) != 3 \
+                    or any(type(count) is not int or count < 0
+                           for count in counts):
+                raise ValueError(
+                    f"detection component {index} lane counts must be "
+                    "three nonnegative exact integers"
+                )
+            if sum(counts) != len(members):
+                raise ValueError(
+                    f"detection component {index} member/lane totals differ"
+                )
+            all_members.extend(members)
+        if len(set(all_members)) != len(all_members):
+            raise ValueError("detection members overlap between components")
         status.update(
             evaluated=True, passed=success,
             expected_component_members=component_members,
@@ -163,7 +352,7 @@ def _scientific_status(run_path: Path | None,
         raise
     except Exception as error:
         status["failure_reasons"].append(
-            f"{type(error).__name__}: {error}"
+            _safe_text(f"{type(error).__name__}: {error}")
         )
     return status
 
@@ -176,13 +365,16 @@ def _replay_status(run_path: Path | None, replay_base: Path,
     if run_path is None:
         status["errors"].append("run_artifact_missing")
         return status
+    reported_errors = []
     try:
         result = replay(run_path, base=replay_base)
         if not isinstance(result, Mapping) or type(result.get("passed")) is not bool:
             raise ValueError("replay result must contain exact bool passed")
         errors = result.get("errors", [])
-        if not isinstance(errors, list) or any(type(error) is not str for error in errors):
-            raise ValueError("replay result errors must be a string list")
+        if not isinstance(errors, list) or any(
+                not _is_json_text(error) for error in errors):
+            raise ValueError("replay result errors must be a UTF-8 string list")
+        reported_errors = list(errors)
         path = result.get("path")
         if path is not None and not isinstance(path, (str, Path)):
             raise ValueError("replay result path must be a path string or null")
@@ -192,10 +384,12 @@ def _replay_status(run_path: Path | None, replay_base: Path,
             checked_path = None
         else:
             checked_path = _bound_output_child(path, replay_base, "replay")
+        if result["passed"] and reported_errors:
+            raise ValueError("passed replay result must have no errors")
         status.update(
             attempted=True, passed=result["passed"],
             path=None if checked_path is None else str(checked_path),
-            errors=list(errors),
+            errors=reported_errors,
         )
         if not result["passed"] and not status["errors"]:
             status["errors"].append("replay_not_passed")
@@ -203,8 +397,11 @@ def _replay_status(run_path: Path | None, replay_base: Path,
         raise
     except Exception as error:
         status.update(
-            attempted=True,
-            errors=[f"{type(error).__name__}: {error}"],
+            attempted=True, passed=False,
+            errors=[
+                *reported_errors,
+                _safe_text(f"{type(error).__name__}: {error}"),
+            ],
         )
     return status
 
@@ -216,6 +413,7 @@ def _attempt(*, count: int, seed: int, run_base: Path, replay_base: Path,
              replay: Callable[..., Mapping[str, object]]) -> dict:
     run_path = None
     execution_error = None
+    recovery_errors = []
     try:
         returned = demo(
             vehicle_count=count, seed=seed, output_base=run_base, **options,
@@ -224,14 +422,24 @@ def _attempt(*, count: int, seed: int, run_base: Path, replay_base: Path,
     except MemoryError:
         raise
     except Exception as error:
-        execution_error = f"{type(error).__name__}: {error}"
-        run_path = _retained_run_path(run_base)
+        execution_error = _safe_text(f"{type(error).__name__}: {error}")
+        try:
+            run_path = _retained_run_path(run_base, recovery_errors)
+        except MemoryError:
+            raise
+        except Exception as recovery_error:
+            recovery_errors.append(
+                _safe_text(
+                    f"{type(recovery_error).__name__}: {recovery_error}"
+                )
+            )
 
     scientific = _scientific_status(run_path, expected_component_count)
     replay_status = _replay_status(run_path, replay_base, replay)
     reasons = []
     if execution_error is not None:
         reasons.append(execution_error)
+    reasons.extend(recovery_errors)
     reasons.extend(scientific["failure_reasons"])
     reasons.extend(replay_status["errors"])
     passed = bool(
@@ -244,6 +452,7 @@ def _attempt(*, count: int, seed: int, run_base: Path, replay_base: Path,
         "seed": seed,
         "run_path": None if run_path is None else str(run_path),
         "execution_error": execution_error,
+        "recovery_errors": recovery_errors,
         "replay_status": replay_status,
         "scientific_status": scientific,
         "passed": passed,
@@ -260,6 +469,11 @@ def _failure_rows(runs: list[dict], gap_case: dict) -> list[dict]:
                 rows.append({
                     "kind": kind, "count": item["count"], "seed": item["seed"],
                     "source": "execution", "reason": execution_error,
+                })
+            for reason in item.get("recovery_errors", []):
+                rows.append({
+                    "kind": kind, "count": item["count"], "seed": item["seed"],
+                    "source": "recovery", "reason": reason,
                 })
             for reason in item["scientific_status"]["failure_reasons"]:
                 rows.append({

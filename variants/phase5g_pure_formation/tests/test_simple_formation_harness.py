@@ -1452,6 +1452,10 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             reasons = []
             if len(calls) == scientific_failure_at:
                 reasons = ["same_lane_gap_error", "same_lane_gap_error"]
+            component_count = kwargs.get("expected_component_count", 1)
+            component_members = [
+                [f"v{index}"] for index in range(component_count)
+            ]
             (run_path / "case" / "detection.json").write_text(json.dumps({
                 "default": {
                     "success": not reasons,
@@ -1460,12 +1464,62 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                         "expected_component_count": kwargs.get(
                             "expected_component_count", 1),
                     },
+                    "expected_component_members": component_members,
+                    "final_component_lane_counts": [
+                        [1, 0, 0] for _ in component_members
+                    ],
                 },
             }), encoding="utf-8")
+            self._mark_matrix_run_finalized(
+                run_path, failed=len(calls) == exception_at,
+            )
             if len(calls) == exception_at:
                 raise RuntimeError("retained ordinary failure")
             return run_path
         return run_demo
+
+    def _mark_matrix_run_finalized(self, run_path, *, failed=False):
+        run_path = Path(run_path)
+        trust = run_path.parent / ".phase5g-trust"
+        trust.mkdir(exist_ok=True)
+        validation = run_path / "validation.json"
+        validation.write_text(json.dumps({
+            "run_id": run_path.name,
+            "status": "failed" if failed else "completed",
+            "passed": False if failed else True,
+        }), encoding="utf-8")
+        (run_path / "evidence_hashes.json").write_text(json.dumps({
+            "validation.json": hashlib.sha256(validation.read_bytes()).hexdigest(),
+        }), encoding="utf-8")
+        (trust / f"{run_path.name}.json").write_text(json.dumps({
+            "schema": "phase5g_external_trust_anchor_v2",
+            "run_id": run_path.name,
+        }), encoding="utf-8")
+        if failed:
+            return
+        (trust / f"{run_path.name}.completion.json").write_text(json.dumps({
+            "schema": "phase5g_simple_demo_completion_anchor_v1",
+            "run_id": run_path.name,
+        }), encoding="utf-8")
+
+    def _write_matrix_detection(self, run_path, *, expected_count=1,
+                                success=True, reasons=None,
+                                members=None, counts=None):
+        run_path = Path(run_path)
+        (run_path / "case").mkdir(parents=True, exist_ok=True)
+        if members is None:
+            members = [[f"v{index}"] for index in range(expected_count)]
+        if counts is None:
+            counts = [[1, 0, 0] for _ in range(expected_count)]
+        (run_path / "case" / "detection.json").write_text(json.dumps({
+            "default": {
+                "success": success,
+                "failure_reasons": [] if reasons is None else reasons,
+                "parameters": {"expected_component_count": expected_count},
+                "expected_component_members": members,
+                "final_component_lane_counts": counts,
+            },
+        }, allow_nan=True), encoding="utf-8")
 
     def test_fixed_matrix_runs_every_case_after_failures_and_retains_all_reasons(self):
         matrix = importlib.import_module("experiments.phase5g_matrix")
@@ -1548,6 +1602,119 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         ))
         self.assertIsNotNone(aggregate["runs"][1]["run_path"])
 
+    def test_matrix_recovery_faults_do_not_abort_any_of_the_sixteen_attempts(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        calls = []
+
+        def demo(**kwargs):
+            calls.append(dict(kwargs))
+            Path(kwargs["output_base"]).mkdir(parents=True)
+            raise RuntimeError("demo failed before returning")
+
+        with tempfile.TemporaryDirectory() as temp, patch.object(
+            matrix, "_retained_run_path",
+            side_effect=PermissionError("recovery denied \ud800"),
+        ):
+            result_path = matrix.run_matrix(
+                Path(temp) / "matrix", live=False, demo_runner=demo,
+                replay_runner=lambda *_args, **_kwargs: self.fail(
+                    "an untrusted recovery path must not be replayed"
+                ),
+            )
+            aggregate = json.loads(
+                (result_path / "aggregate.json").read_text(encoding="utf-8")
+            )
+        self.assertEqual(len(calls), 16)
+        self.assertEqual(len(aggregate["runs"]), 15)
+        self.assertIsNone(aggregate["gap_case"]["run_path"])
+        recovery = [
+            row for row in aggregate["failure_reasons"]
+            if row["source"] == "recovery"
+        ]
+        self.assertEqual(len(recovery), 16)
+        self.assertTrue(all("recovery denied" in row["reason"] for row in recovery))
+
+    def test_retained_path_contains_malformed_and_permission_recovery_errors(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            run_base = Path(temp) / "run-base"
+            run_base.mkdir()
+            (run_base / "latest.json").write_text("[]", encoding="utf-8")
+            errors = []
+            self.assertIsNone(matrix._retained_run_path(run_base, errors))
+            self.assertTrue(any("latest" in error for error in errors))
+
+            (run_base / "latest.json").unlink()
+            errors = []
+            with patch.object(
+                Path, "iterdir", side_effect=PermissionError("iteration denied"),
+            ):
+                self.assertIsNone(matrix._retained_run_path(run_base, errors))
+            self.assertTrue(any("iteration denied" in error for error in errors))
+
+            with patch.object(Path, "iterdir", side_effect=MemoryError("memory")):
+                with self.assertRaisesRegex(MemoryError, "memory"):
+                    matrix._retained_run_path(run_base, [])
+
+            child = run_base / "child"
+            child.mkdir()
+            (run_base / "latest.json").write_text(json.dumps({
+                "path": str(child),
+            }), encoding="utf-8")
+            errors = []
+            with patch.object(
+                matrix, "_trusted_recovery_artifact",
+                side_effect=PermissionError("resolve denied"),
+            ):
+                self.assertIsNone(matrix._retained_run_path(run_base, errors))
+            self.assertTrue(any("resolve denied" in error for error in errors))
+
+    def test_retained_path_requires_safe_child_bounded_latest_and_completion_marker(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_base = root / "run-base"
+            child = run_base / "child"
+            child.mkdir(parents=True)
+            latest = run_base / "latest.json"
+            latest.write_text(json.dumps({"path": str(child)}), encoding="utf-8")
+
+            errors = []
+            self.assertIsNone(matrix._retained_run_path(run_base, errors))
+            self.assertTrue(errors)
+
+            self._mark_matrix_run_finalized(child)
+            self.assertEqual(matrix._retained_run_path(run_base, []), child)
+
+            latest.write_bytes(b" " * (matrix._MAX_LATEST_JSON_BYTES + 1))
+            errors = []
+            self.assertEqual(matrix._retained_run_path(run_base, errors), child)
+            self.assertTrue(any("size limit" in error for error in errors))
+
+            latest.unlink()
+            latest_target = root / "latest-target"
+            latest_target.mkdir()
+            make_directory_reparse(latest, latest_target)
+            errors = []
+            self.assertEqual(matrix._retained_run_path(run_base, errors), child)
+            self.assertTrue(any("reparse" in error for error in errors))
+
+            external = root / "external"
+            external.mkdir()
+            junction_base = root / "junction-base"
+            junction_base.mkdir()
+            junction = junction_base / "child"
+            make_directory_reparse(junction, external)
+            self._mark_matrix_run_finalized(junction)
+            (junction_base / "latest.json").write_text(json.dumps({
+                "path": str(junction),
+            }), encoding="utf-8")
+            replayed = []
+            errors = []
+            self.assertIsNone(matrix._retained_run_path(junction_base, errors))
+            self.assertEqual(replayed, [])
+            self.assertTrue(any("reparse" in error for error in errors))
+
     def test_matrix_long_gap_is_separate_two_component_case(self):
         matrix = importlib.import_module("experiments.phase5g_matrix")
         calls = []
@@ -1585,11 +1752,17 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             run_path = self.harness.run_phase5g_demo(
                 output_base=Path(temp) / "real-gap", **matrix._GAP_RUN,
             )
+            scientific = matrix._scientific_status(run_path, 2)
             detection = json.loads(
                 (run_path / "case" / "detection.json").read_text(
                     encoding="utf-8"
                 )
             )["default"]
+        self.assertTrue(scientific["evaluated"])
+        self.assertEqual(
+            scientific["expected_component_members"],
+            [["v0", "v1", "v2"], ["v3", "v4", "v5"]],
+        )
         self.assertEqual(detection["parameters"]["expected_component_count"], 2)
         self.assertEqual(
             detection["expected_component_members"],
@@ -1683,7 +1856,8 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             with self.assertRaisesRegex(MemoryError, "do not swallow"):
                 matrix.run_matrix(output, live=False, demo_runner=fail)
             with patch.object(
-                Path, "read_text", side_effect=MemoryError("science memory")
+                matrix, "_read_strict_json_object",
+                side_effect=MemoryError("science memory"),
             ), self.assertRaisesRegex(MemoryError, "science memory"):
                 matrix._scientific_status(Path(temp) / "retained-run", 1)
 
@@ -1702,6 +1876,22 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         matrix.assert_called_once_with(
             "results/phase5g/custom-matrix", live=False,
         )
+
+        with patch("experiments.phase5g_matrix.run_matrix") as matrix:
+            with self.assertRaises(SystemExit):
+                self.call_cli([
+                    "phase5g-simple-matrix", "--offline",
+                    "--vehicle-count", "6",
+                ])
+        matrix.assert_not_called()
+
+        with patch("experiments.phase5g_matrix.run_matrix") as matrix:
+            with self.assertRaises(SystemExit):
+                self.call_cli([
+                    "--vehicle-count", "6", "phase5g-simple-matrix",
+                    "--offline",
+                ])
+        matrix.assert_not_called()
 
     def test_matrix_never_replays_a_runner_path_outside_its_unique_base(self):
         matrix = importlib.import_module("experiments.phase5g_matrix")
@@ -1744,13 +1934,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             run_path = root / "run"
-            (run_path / "case").mkdir(parents=True)
-            (run_path / "case" / "detection.json").write_text(json.dumps({
-                "default": {
-                    "success": False, "failure_reasons": [],
-                    "parameters": {"expected_component_count": 1},
-                },
-            }), encoding="utf-8")
+            self._write_matrix_detection(run_path, success=False)
             scientific = matrix._scientific_status(run_path, 1)
             replay = matrix._replay_status(
                 run_path, root / "replay",
@@ -1762,6 +1946,142 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             scientific["failure_reasons"], ["scientific_evaluation_not_passed"]
         )
         self.assertEqual(replay["errors"], ["replay_not_passed"])
+
+    def test_scientific_status_rejects_nonfinite_oversized_and_inconsistent_evidence(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            run_path = root / "run"
+            self._write_matrix_detection(run_path)
+            detection_path = run_path / "case" / "detection.json"
+
+            valid_raw = detection_path.read_text(encoding="utf-8")
+            for constant in ("NaN", "Infinity", "1e400"):
+                with self.subTest(constant=constant):
+                    detection_path.write_text(
+                        valid_raw[:-1] + f', "poison": {constant}}}',
+                        encoding="utf-8",
+                    )
+                    status = matrix._scientific_status(run_path, 1)
+                    self.assertFalse(status["evaluated"])
+                    self.assertTrue(any(
+                        "nonfinite" in reason
+                        for reason in status["failure_reasons"]
+                    ))
+                    json.dumps(status, allow_nan=False)
+
+            with patch.object(matrix, "_MAX_DETECTION_JSON_BYTES", 32):
+                detection_path.write_bytes(b" " * 33)
+                status = matrix._scientific_status(run_path, 1)
+            self.assertFalse(status["evaluated"])
+            self.assertTrue(any("size limit" in reason for reason in status["failure_reasons"]))
+
+            detection_path.unlink()
+            detection_path.mkdir()
+            status = matrix._scientific_status(run_path, 1)
+            self.assertFalse(status["evaluated"])
+            self.assertTrue(status["failure_reasons"])
+            detection_path.rmdir()
+
+            valid = {
+                "default": {
+                    "success": True,
+                    "failure_reasons": [],
+                    "parameters": {"expected_component_count": 1},
+                    "expected_component_members": [["v0"]],
+                    "final_component_lane_counts": [[1, 0, 0]],
+                },
+            }
+            invalid = {
+                "bool_count": lambda value: value["default"]["parameters"].update(
+                    expected_component_count=True
+                ),
+                "float_count": lambda value: value["default"]["parameters"].update(
+                    expected_component_count=1.0
+                ),
+                "success_with_reasons": lambda value: value["default"].update(
+                    failure_reasons=["contradiction"]
+                ),
+                "missing_members": lambda value: value["default"].pop(
+                    "expected_component_members"
+                ),
+                "member_count": lambda value: value["default"].update(
+                    expected_component_members=[["v0"], ["v1"]]
+                ),
+                "member_type": lambda value: value["default"].update(
+                    expected_component_members=[[0]]
+                ),
+                "member_utf8": lambda value: value["default"].update(
+                    expected_component_members=[["\ud800"]]
+                ),
+                "missing_counts": lambda value: value["default"].pop(
+                    "final_component_lane_counts"
+                ),
+                "count_shape": lambda value: value["default"].update(
+                    final_component_lane_counts=[[1, 0]]
+                ),
+                "count_bool": lambda value: value["default"].update(
+                    final_component_lane_counts=[[True, 0, 0]]
+                ),
+                "count_negative": lambda value: value["default"].update(
+                    final_component_lane_counts=[[-1, 1, 1]]
+                ),
+                "membership_total": lambda value: value["default"].update(
+                    final_component_lane_counts=[[2, 0, 0]]
+                ),
+            }
+            for label, mutate in invalid.items():
+                with self.subTest(label=label):
+                    payload = deepcopy(valid)
+                    mutate(payload)
+                    detection_path.write_text(
+                        json.dumps(payload), encoding="utf-8"
+                    )
+                    status = matrix._scientific_status(run_path, 1)
+                    self.assertFalse(status["evaluated"])
+                    self.assertFalse(status["passed"])
+                    self.assertTrue(status["failure_reasons"])
+                    json.dumps(
+                        status, allow_nan=False, ensure_ascii=False
+                    ).encode("utf-8")
+
+    def test_replay_status_rejects_contradictory_pass_and_preserves_false(self):
+        matrix = importlib.import_module("experiments.phase5g_matrix")
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            replay_base = root / "replays"
+            replay_path = replay_base / "one"
+            replay_path.mkdir(parents=True)
+            contradictory = matrix._replay_status(
+                root / "source", replay_base,
+                lambda *_args, **_kwargs: {
+                    "passed": True, "path": str(replay_path),
+                    "errors": ["reported replay error"],
+                },
+            )
+            self.assertFalse(contradictory["passed"])
+            self.assertIn("reported replay error", contradictory["errors"])
+
+            failed = matrix._replay_status(
+                root / "source", replay_base,
+                lambda *_args, **_kwargs: {
+                    "passed": False, "path": str(replay_path), "errors": [],
+                },
+            )
+            self.assertFalse(failed["passed"])
+            self.assertEqual(failed["errors"], ["replay_not_passed"])
+
+            malformed_error = matrix._replay_status(
+                root / "source", replay_base,
+                lambda *_args, **_kwargs: {
+                    "passed": False, "path": str(replay_path),
+                    "errors": ["\ud800"],
+                },
+            )
+            self.assertFalse(malformed_error["passed"])
+            json.dumps(
+                malformed_error, allow_nan=False, ensure_ascii=False
+            ).encode("utf-8")
 
     def test_replay_status_accepts_only_an_existing_direct_nonreparse_child(self):
         matrix = importlib.import_module("experiments.phase5g_matrix")
