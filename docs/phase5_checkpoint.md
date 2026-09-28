@@ -324,3 +324,10 @@
 - 用户指定新仓库 `https://github.com/32780542/yanjiu1`。该仓库推送前无分支；本地原 `origin` 仍指向 `32780542/biyesheji1`，另加 `yanjiu1` 远端并将恢复版提交 `0a87512d0e778bf5a6491ac4cc2dffe37e51c051` 推送到新仓库 `main`，远端 SHA 已核对一致。仅提交已有 Git 闭包中 13 个变更文件，未提交未跟踪的实验结果、PDF 或历史资料。
 - 提交前重新运行：根 `test_runrun_demo.py` 84/84、Git 闭包测试 8/8、Phase5G simple 专项 143/143、`runrun.py --check` 与 `git diff --cached --check` 均通过。专项完整日志为 `results/operations/20260923T120013849416Z_github-save-restored-phase5g-tests_bd8e0bf0`。
 - Git CLI 直连 GitHub 曾超时；通过 Windows 系统代理 `127.0.0.1:10997` 重试后正常推送。下一入口为 GitHub `main` 的上述恢复版；未重新宣称长时 20 车案例或科学形成门槛通过。
+
+## 2026-09-28：当前恢复版研究接续 README
+
+- 应用户要求，将根 `README.md` 改写成新聊天窗口的自包含入口。它按当前被 Git 跟踪的代码、2026-09-23 分层规格、本检查点及当日真实 12 车 `simple_gui_sources/20260923T092319151715Z_1cdf6a95` 证据区分研究目标、实际方法、模块、运行、测试、失败和下一步；没有修改控制算法，也没有重跑科学案例或 GUI。
+- README 明确当前 12 车案例为 2 次完成的编队换道、0 次碰撞、`whole_cohort_formation_success=false`、`speed_recovered=false`，并说明动态 GUI 演示的外层生成成功不等于科学门槛通过。大量本地历史资料仍未跟踪、未上传；阶段五科学验收未通过，阶段 6–8 继续关闭。
+- 本次新鲜验证：`python -B runrun.py --check` exit 0；根入口测试 84/84、Git 闭包测试 8/8，均 exit 0；Phase5G simple 专项 143/143、0 failure/error，日志 `results/operations/20260928T124921411356Z_readme-phase5g-special_7d955346` 中 `result.json` 为 exit 0。README 的 29 个 Markdown 链接逐一核对，仓库内相对目标缺失数为 0；`git diff --check` exit 0。
+- 下一入口仍是 README 末尾的“新聊天窗口如何接续”：从此恢复版诊断形成失败及长时完成锚问题，保留所有旧证据；不要把文档整理或专项测试解释成科学成功。
