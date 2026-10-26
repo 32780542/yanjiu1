@@ -66,7 +66,7 @@ class SimpleFormationRuleTests(unittest.TestCase):
         base = asdict(NoaMemory((), "CRUISE"))
         for extra in (
             {"reference_track_id": True}, {"join_anchor_track_id": -1},
-            {"desired_lane_index": 3}, {"join_phase": "UNKNOWN"},
+            {"desired_lane_index": 4}, {"join_phase": "UNKNOWN"},
             {"stable_since_s": math.nan},
             {"stable_window_signature": ""},
             {"formation_lane_change_done": True},

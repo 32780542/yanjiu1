@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+tmp/
+results/**/fcd.xml
+results/**/state_trace.csv
+results/
+variants/*/results/
+variants/*/tmp/
+.pytest_cache/

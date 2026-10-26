@@ -331,3 +331,46 @@
 - README 明确当前 12 车案例为 2 次完成的编队换道、0 次碰撞、`whole_cohort_formation_success=false`、`speed_recovered=false`，并说明动态 GUI 演示的外层生成成功不等于科学门槛通过。大量本地历史资料仍未跟踪、未上传；阶段五科学验收未通过，阶段 6–8 继续关闭。
 - 本次新鲜验证：`python -B runrun.py --check` exit 0；根入口测试 84/84、Git 闭包测试 8/8，均 exit 0；Phase5G simple 专项 143/143、0 failure/error，日志 `results/operations/20260928T124921411356Z_readme-phase5g-special_7d955346` 中 `result.json` 为 exit 0。README 的 29 个 Markdown 链接逐一核对，仓库内相对目标缺失数为 0；`git diff --check` exit 0。
 - 下一入口仍是 README 末尾的“新聊天窗口如何接续”：从此恢复版诊断形成失败及长时完成锚问题，保留所有旧证据；不要把文档整理或专项测试解释成科学成功。
+
+## 2026-09-28：新阶段五工作，局部补位规则单元
+
+- 用户新要求：取消最后发车后 30 s 形成与 10 s 保持门槛；GUI 与模型逐步同步；检查规则；按 2/3/4 车道、交错 15 m 扩展评价。本次计划见 `docs/superpowers/plans/2026-09-28-phase5g-live-formation-evaluation.md`。工作区为 `D:\yanjiu1\keyan1`，未改旧结果包。
+- 局部规则 RED：`python -m unittest tests.test_layered_formation -v` 共 9 项，2 项失败：偏好目标被占用时停等；独立车群距离 60 m 时被错误纳入局部层窗。
+- 实现：目标车道已占用时从本车可见的前层空位顺序选择；层窗仅纳入以 50 m 连续纵向间距连接的本车车群。GREEN：同命令 9/9 通过。此单元尚未做全套回归，不能据此宣称整队形成成功。
+- 下一入口：检查换道执行期的纵向减速优先级；再移除时限验收、做 GUI 流式化及车道数实验。
+- 纵向规则 RED：活动编队换道、无即时危险时，普通 NOA 的 `-1.0 m/s²` 盖过编队请求 `2.0 m/s²`。改为应用编队请求；即时危险与路端停车分支未移除。相应控制器测试先失败后通过，分层与控制器合跑 58/58 通过。旧“相隔 60 m 的独立车辆重置稳定计时”测试按物理车群边界更新。
+- 下一入口：移除动态演示验收中的 30 s/10 s 时限和生成等待；上述 58 项尚不足以证明长时仿真可形成全队编队。
+- 动态演示不再追加 30 s/10 s 成功门槛；终点需比最后计划发车多一个 0.1 s 控制步，保证末车至少进入一次计算。检测器在动态模式只需连续 1 s 有序几何，另列 `formation_success`、`safety_passed`、`recording_valid`；历史检测器缺省参数仍保留以支持旧证据解释。根配置聚焦测试与检测器 22/22 通过。
+- GUI 流式化：根进程先打开 SUMO-GUI，隔离子进程写完一条物理记录后输出该帧并等待父进程 ACK，父进程每帧仅调用一次 `simulationStep`。根入口 86/86 测试通过；旧生成优先的加载器测试改为直接调用冻结源加载器。
+- 真实短时窗口验证：`results/operations/20260928T134119644919Z_phase5g-live-gui-smoke_ded783b0` exit 0，3 车/15 s/seed 1，GUI记录 `results/demo_runs/20260928T134119891400Z_simple_formation_4c0ca1fe` 为 completed、151 帧、最终 15.0 s、0 GUI 碰撞与传送；封存源 `variants/phase5g_pure_formation/results/phase5g/simple_gui_sources/20260928T134123747143Z_55916217` 被严格加载。测试使用不等待关闭的临时内存配置，不改变 `runrun.py` 默认值。
+- Phase5G harness 第一次完整运行 79 项/283.875 s 有 1 failure、1 error，日志 `results/operations/20260928T133118005580Z_phase5g-duration-harness_00bda0fa`，原因是 `duration_s=0.2` 等于末车发车时刻却被本轮最初的宽松边界接受，mock 跑进序列化。已将最短时长修为末车发车后一个控制步；两个受影响聚焦测试随后通过，尚待完整 harness 重跑。
+- 下一入口：统一参数化车道数和恒定车道路网，实施 2/3/4 车道与车流量矩阵；完善动态指标与 README，保留全部失败包。
+
+## 2026-09-28：2/3/4 车道、参数实验与评价指标
+
+- 用户确认 2、3、4 车道以及相邻车道交错 15 m。实际控制器按最高车道向下 `0,15,0,15 m` 两相位交错；同车道默认 30 m。将局部层窗、补位、同车道跟驰与局部头车参考推广到 2/3/4 车道；2/4 车道真实短时 `run_variant` 和 4 车道封存演示测试通过。恒定车道网络由 `variants/phase5g_pure_formation/scenarios/formation/build_networks.py` 生成，3/4 车道真实 GUI 短时逐帧运行并封存，日志分别为 `results/operations/20260928T135740585221Z_phase5g-straight3-gui-smoke_bec8487e`、`results/operations/20260928T135759856672Z_phase5g-straight4-gui-smoke_9f183ea9`。
+- 当前运行前固定 39 例矩阵：`L=2/3/4` × `q=300/600/900 veh/h/lane` × seeds `1/2/3` 共 27 例；3 车道、`q=600` 下目标速度 `8/12 m/s` 和同车道层距 `24/36 m` 各 3 seeds 共 12 例。每条车道 4 车，末车计划发车后观察 90 s；90 s 不是控制器期限。协议与指标解释写入 `docs/phase5g_evaluation_2026-09-28.md`，每例独立封存、失败不覆盖。
+- 初次启动矩阵因模块路径错误留下两份立即失败的操作日志 `results/operations/20260928T140030541932Z_phase5g-formation-matrix_ab368a43` 和 `results/operations/20260928T140048828264Z_phase5g-formation-matrix_a01b7fe5`。修正命令路径后，完整矩阵操作为 `results/operations/20260928T140117595076Z_phase5g-formation-matrix_322367b4`，批次根为 `variants/phase5g_pure_formation/results/phase5g/formation_matrix/20260928T140117912348Z_f67527d1`；本段记录时仍在运行。前几例显示低需求率有未形成案例，也有较高需求率案例形成，不能在全矩阵结束前下适用性结论。
+- 文档将旧设计规格中的 30 s/10 s 和三车道限定标记为被用户修订覆盖，README 改为 GUI 先开、逐拍计算/显示、新的成功定义与 2/3/4 车道配置。2026-09-28 22:12 +08:00 新鲜受影响测试：variant 87/87，根 GUI 入口 88/88，均 exit 0；`runrun.py --check` 解析默认恒定三车道路网并通过。这里是专项验证，不替代待重跑的完整 harness 和矩阵结论。
+
+## 2026-09-28：收敛诊断、两条纵向规则及观察窗修订
+
+- 首个 39 例矩阵先用末车后 90 s 观察；已完成 14 例，其中 2 车道 `q=300` 的 3 个种子均未形成，`q=900` 的 3 个种子均形成，3 车道低/中流量部分未形成，案例均完整封存。逐帧分析确认，50 m 外的可见独立车群被局部头车忽略，且同一 50 m 链式连通车群内、距自车约 96 m 的同车道前车也被错误的 90 m 换道层窗截断。因评估窗口过短且代码缺规则，主动终止原矩阵；14 个完整结果和第 15 例未完成前缀原样保留。操作 `results/operations/20260928T140117595076Z_phase5g-formation-matrix_322367b4` 返回失败；绝不能当成 39 例全矩阵。
+- 新增纵向规则一：局部头车在本车群内无前方参考、却可直接看到另一独立车群时，按最近可见前车做纵向接近；两群未进入 50 m 连通关系之前，不把前群纳入分层占位。新规则测试先 RED（`upper_leader` 而非接近）后 GREEN。
+- 新增纵向规则二：同一可见连通车群内的同车道前车即使距本车 95 m，也参与纵向跟驰；90 m 仍只截断换道层窗。新规则测试先 RED（错误当头车）后 GREEN。规则 suite 19/19 通过。旧规则 suite 另发现一项三车道私有记忆测试仍把 4 号车道当合法性边界，按本轮 2/3/4 车道输入合同修为 4 号非法。
+- 两规则之后，末车后 90 s 的 2/3/4 车道探针安全但未整队形成；延长观察后，真实封存结果为：2 车道 `q=300` seed1 于 165.3 s 形成、末车后 123.3 s、换道 1 次、最终 `[4,4]`；3 车道 `q=600` seed1 于 164.1 s 形成、末车后 142.1 s、换道 4 次、最终 `[4,4,4]`；4 车道 `q=300` seed1 于 189.0 s 形成、末车后 144.0 s、换道 4 次、最终 `[4,4,4,4]`；4 车道 `q=600` seed1 于 170.1 s 形成、末车后 147.6 s、换道 4 次、最终 `[4,4,4,4]`。四例碰撞 0、安全检测通过，均为单 seed 探针，不代替全矩阵。源在 `variants/phase5g_pure_formation/results/phase5g/approach_probes/extended-*`，操作在 `results/operations/20260928T143935*` 和 `20260928T144333*`。
+- 原 `runrun.py` 默认 12 车、seed1、三车道、2.5–4.0 s 随机间隔，延长到 230 s 后于 158.6 s 首次形成，末车 35.5 s 发车、4 次换道、最终 `[4,4,4]`、无碰撞；操作 `results/operations/20260928T144612612798Z_extended-default-l3_e1124360`。因此入口默认显示时长改为 200 s，而科学成功不设期限。正式矩阵的统一观察窗改为末车后 200 s，39 例保持不变；三工作进程短案例测试 2/2 完成、均封存。评价协议见 `docs/phase5g_evaluation_2026-09-28.md`。
+- 完整 harness 重跑第一次 81 项仅 1 failure，是 CLI 新参数令旧 mock 精确调用预期不一致；已修测试并单项通过。第二次在运行中编辑了被封存的规则/测试源码，导致两项源哈希或语义重放失败；日志分别为 `results/operations/20260928T141427521989Z_phase5g-final-harness_d66a55ec`、`results/operations/20260928T142318165946Z_phase5g-harness-after-cli-test_ad3234a4`。它们是执行过程污染留下的失败证据；最终版必须在源码冻结后重新跑完整 harness，不得宣称已经通过。
+
+
+## 2026-10-26：纯规则代码可读性与存储整理
+
+- 本轮以 D:\yanjiu1\keyan1 的实际工作版本为基准。先核查旧进程、GitHub main、操作日志和磁盘占用；没有仍运行的矩阵进程。当前旧 Phase5G 原始结果目录已不在。第一轮完整矩阵的历史文档记录为 38/39 形成；修复后第二轮日志仅记录到 12 例，缺少结束汇总，按这个状态接续。
+- 固定重构前行为：600 个局部场景；2/3/4 车道分别 200/450/600 拍的闭环记录。原始摘要采集操作为 results/operations/20261026T123934958210Z_readability-baseline_64287be1；重构后等价验证为 results/operations/20261026T124727613299Z_readability-equivalence_11d9b90f，两项测试通过，完整动作、记忆、诊断和轨迹摘要全部相同。
+- 从 noa/controller.py 提取基础纵向计算到 noa/driving.py，提取当前编队执行到 noa/simple_controller.py；公共入口保留原调用和诊断。simple_formation.py 将同车道最近前车改为早返回，合并重复分支，统一代码格式。SOURCE_FILES 增加新模块，Git 运行闭包检查 8/8 通过。
+- 独立复审确认迁移函数与原代码的运算 AST 一致。复审发现历史 test_phase5e_exact_endpoint.py 仍导入 _comfortable_speed，已恢复该兼容重导出；对应 3 项测试通过。
+- 两处新轨迹 JSON 写入采用紧凑分隔符，字段和精度完整保留。历史 results 与 tmp 共约 6.8 GiB，经 NTFS 无损压缩后约占 2.2 GiB，节省约 4.6 GiB。最大 8 份历史轨迹及隔离记录全部符合原证据清单 SHA-256。当前 variant 的 results/tmp 设置压缩属性；.gitignore 明确排除生成物。临时工具与缓存删除被自动审批拦截，原目录保留。
+- 验证：完整编队测试 150 项通过，操作 results/operations/20261026T125057632259Z_readability-formation-suite_adababef；GUI 与审计 91 项通过，操作 results/operations/20261026T125057628253Z_readability-gui-suite_f84155fa；多车道与检测专项 41 项通过。600 场景五次交错计时中位数为重构前 0.2205 s、重构后 0.2195 s。
+- 实际 GUI 检查：三车、15 s、151 帧、碰撞与传送 0，操作 results/operations/20261026T130350482590Z_readability-live-gui_56a023b9；显示记录 results/demo_runs/20261026T130350776510Z_simple_formation_b596cf25；新封存源 variants/phase5g_pure_formation/results/phase5g/simple_gui_sources/20261026T130355497351Z_588469a3。
+- 文档入口改为 docs/纯规则编队系统说明.md；配套 docs/纯规则系统方法索引.md 列出 419 个函数、类和显式类方法，docs/存储整理报告.md 记录空间和 GitHub 安排。README 已改为简明入口。
+- 下一研究入口：沿新说明核对当前规则，在新批次中补齐修复版 39 例矩阵；代码整理本身以重构前后行为一致为验收。GitHub 同步状态在本节后续记录。

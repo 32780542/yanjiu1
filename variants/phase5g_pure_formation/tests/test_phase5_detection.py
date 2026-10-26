@@ -424,6 +424,30 @@ class DynamicComponentDetectorTests(unittest.TestCase):
         self.assertFalse(broken_result["whole_cohort_success"])
         self.assertIn("hold_after_confirmation_too_short", broken_result["failure_reasons"])
 
+    def test_dynamic_formation_needs_only_one_second_without_deadline_or_hold(self):
+        departures = departure_rows(3, 100.0)
+        frames = [frame(time_s, formation(3), departures)
+                  for time_s in (131.0, 132.0)]
+        result = detect_frames(
+            frames, formation_deadline_s=None, hold_s=None,
+            max_sample_gap_s=1.0,
+            incidents={"collision_events": [{"time_s": 132.0, "actors": ["v0", "v1"]}]},
+        )
+        self.assertTrue(result["formation_success"])
+        self.assertFalse(result["safety_passed"])
+        self.assertFalse(result["success"])
+        self.assertEqual(result["formed_time_s"], 132.0)
+        self.assertIsNone(result["held_time_s"])
+
+    def test_scientific_gate_accepts_orderly_formation_without_time_limit(self):
+        summary = {"whole_cohort_formation_success": True,
+                   "formed_time_s": 85.0, "held_time_s": None}
+        self.assertTrue(phase5g.scientific_gate(
+            {"name": "main_6_3_2_1", "controlled": tuple(range(6))},
+            "lane_priority", summary, execution_completed=True,
+            speed_recovery={"speed_recovered": False},
+        ))
+
     def test_sparse_frames_do_not_count_as_continuous_hold(self):
         departures = departure_rows(3)
         rounded_clock = detect_frames([
@@ -442,11 +466,11 @@ class DynamicComponentDetectorTests(unittest.TestCase):
         self.assertEqual(result["sampling_gap_count"], 1)
         self.assertFalse(result["success"])
 
-    def test_conflicting_admission_is_scoped_to_one_component(self):
+    def test_conflicting_admission_requires_overlapping_active_lane_changes(self):
         rows = formation(6)
         diagnostics = {
-            "v4": {"join_phase": "JOINING", "final_desired_lane_index": 0},
-            "v5": {"join_phase": "STABILIZING", "final_desired_lane_index": 1},
+            "v4": {"join_phase": "JOINING", "lane_reason": "active_simple_plan"},
+            "v5": {"join_phase": "JOINING", "lane_reason": "simple_formation_join"},
         }
         result = detect_frames([
             frame(0.0, rows, departure_rows(6), diagnostics),
@@ -454,13 +478,37 @@ class DynamicComponentDetectorTests(unittest.TestCase):
         self.assertEqual(len(result["admission_conflicts"]), 1)
         self.assertIn("simultaneous_admission_conflict", result["failure_reasons"])
 
+        diagnostics["v5"] = {"join_phase": "STABILIZING",
+                             "lane_reason": "stabilizing"}
+        result = detect_frames([
+            frame(0.0, rows, departure_rows(6), diagnostics),
+        ], persistence_s=1.0)
+        self.assertEqual(result["admission_conflicts"], [])
+
+        bridged = {f"b{i}": state(i * 45.0, i % 3) for i in range(7)}
+        bridged_diagnostics = {
+            "b0": {"join_phase": "JOINING", "lane_reason": "active_simple_plan"},
+            "b3": {"join_phase": "JOINING", "lane_reason": "active_simple_plan"},
+        }
+        result = detect_frames([
+            frame(0.0, bridged, departure_rows(7, prefix="b"),
+                  bridged_diagnostics),
+        ], persistence_s=1.0)
+        self.assertEqual(result["admission_conflicts"], [])
+        bridged_diagnostics["b2"] = bridged_diagnostics.pop("b3")
+        result = detect_frames([
+            frame(0.0, bridged, departure_rows(7, prefix="b"),
+                  bridged_diagnostics),
+        ], persistence_s=1.0)
+        self.assertEqual(len(result["admission_conflicts"]), 1)
+
         independent = {
             **formation(3, origin=300.0, prefix="a"),
             **formation(3, origin=100.0, prefix="b"),
         }
         independent_diagnostics = {
-            "a2": {"join_phase": "JOINING"},
-            "b2": {"join_phase": "JOINING"},
+            "a2": {"join_phase": "JOINING", "lane_reason": "active_simple_plan"},
+            "b2": {"join_phase": "JOINING", "lane_reason": "active_simple_plan"},
         }
         result = detect_frames([
             frame(0.0, independent, departure_rows(3, prefix="a") |

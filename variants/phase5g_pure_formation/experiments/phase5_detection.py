@@ -15,9 +15,9 @@ from safety.geometry import collide
 
 _EPS = 1e-8
 _TIME_EPS = 1e-12
-_LANE_COUNT = 3
 _BODY_LENGTH_M = 4.0
 _BODY_WIDTH_M = 1.8
+_ADMISSION_WINDOW_RADIUS_M = 90.0
 _INCIDENT_NAMES = (
     "collision_events", "road_departure_events", "teleport_events",
     "nonphysical_jump_events",
@@ -34,21 +34,21 @@ def _finite(name, value, *, nonnegative=False):
     return float(value)
 
 
-def _lateral_membership(y_m, heading_rad, lane_width_m):
+def _lateral_membership(y_m, heading_rad, lane_width_m, lane_count):
     lateral_half = (0.5 * _BODY_LENGTH_M * abs(math.sin(heading_rad))
                     + 0.5 * _BODY_WIDTH_M * abs(math.cos(heading_rad)))
     body_lower = y_m - lateral_half
     body_upper = y_m + lateral_half
-    on_road = body_lower >= 0.0 and body_upper <= _LANE_COUNT * lane_width_m
+    on_road = body_lower >= 0.0 and body_upper <= lane_count * lane_width_m
     lane = next((
-        index for index in range(_LANE_COUNT)
+        index for index in range(lane_count)
         if body_lower >= index * lane_width_m
         and body_upper <= (index + 1) * lane_width_m
     ), None) if on_road else None
     return lane, on_road
 
 
-def _physical_rows(states, lane_width_m):
+def _physical_rows(states, lane_width_m, lane_count):
     rows = {}
     for key, state in states.items():
         if type(key) is not str or not isinstance(state, Mapping):
@@ -64,7 +64,8 @@ def _physical_rows(states, lane_width_m):
         if not all(math.isfinite(value)
                    for value in (x_m, y_m, vx_mps, vy_mps, heading_rad)):
             raise ValueError(f"{key}: physical state must be finite")
-        lane, on_road = _lateral_membership(y_m, heading_rad, lane_width_m)
+        lane, on_road = _lateral_membership(
+            y_m, heading_rad, lane_width_m, lane_count)
         rows[key] = {
             "key": key,
             "x_m": x_m,
@@ -91,9 +92,15 @@ def _physical_components(rows, component_gap_m):
     return groups
 
 
-def _expected_lane_counts(count):
-    complete, remainder = divmod(count, 3)
-    return [complete + (remainder >= 2), complete, complete + (remainder >= 1)]
+def _expected_lane_counts(count, lane_count):
+    complete, remainder = divmod(count, lane_count)
+    order = [lane for phase in (0, 1)
+             for lane in range(lane_count - 1, -1, -1)
+             if (lane_count - 1 - lane) % 2 == phase]
+    counts = [complete] * lane_count
+    for lane in order[:remainder]:
+        counts[lane] += 1
+    return counts
 
 
 def _maximum(values):
@@ -192,45 +199,54 @@ def _append_incident(events, keys, name, row):
 
 
 def _component_measurement(rows, *, middle_offset_m, same_lane_gap_m,
-                           position_tolerance_m, speed_tolerance_mps):
+                           position_tolerance_m, speed_tolerance_mps,
+                           lane_count):
     members = sorted(row["key"] for row in rows)
     lane_rows = {
         lane: sorted(
             (row for row in rows if row["lane"] == lane),
             key=lambda row: (-row["x_m"], row["key"]),
         )
-        for lane in range(_LANE_COUNT)
+        for lane in range(lane_count)
     }
-    lane_counts = [len(lane_rows[lane]) for lane in range(_LANE_COUNT)]
+    lane_counts = [len(lane_rows[lane]) for lane in range(lane_count)]
     off_road = [row["key"] for row in rows if not row["on_road"]]
     unresolved_lane = [
         row["key"] for row in rows
         if row["on_road"] and row["lane"] is None
     ]
-    upper, middle, lower = lane_rows[2], lane_rows[1], lane_rows[0]
+    phases = [[lane for lane in range(lane_count - 1, -1, -1)
+               if (lane_count - 1 - lane) % 2 == phase]
+              for phase in (0, 1)]
     outer_error = _maximum(
-        abs(upper[index]["x_m"] - lower[index]["x_m"])
-        for index in range(min(len(upper), len(lower)))
+        abs(lane_rows[lanes[0]][index]["x_m"]
+            - lane_rows[lane][index]["x_m"])
+        for lanes in phases if lanes
+        for lane in lanes[1:]
+        for index in range(min(len(lane_rows[lanes[0]]), len(lane_rows[lane])))
     )
     middle_error = _maximum(
-        abs((upper[index]["x_m"] - middle[index]["x_m"]) - middle_offset_m)
-        for index in range(min(len(upper), len(middle)))
+        abs((lane_rows[phases[0][0]][index]["x_m"]
+             - lane_rows[lane][index]["x_m"]) - middle_offset_m)
+        for lane in phases[1]
+        for index in range(min(len(lane_rows[phases[0][0]]),
+                               len(lane_rows[lane])))
     )
     same_lane_error = _maximum(
         abs((front["x_m"] - rear["x_m"]) - same_lane_gap_m)
-        for lane in range(_LANE_COUNT)
+        for lane in range(lane_count)
         for front, rear in zip(lane_rows[lane], lane_rows[lane][1:])
     )
     speeds = [row["speed_mps"] for row in rows]
     speed_spread = max(speeds) - min(speeds) if speeds else 0.0
     reasons = []
-    if len(rows) < 3:
+    if len(rows) < lane_count:
         reasons.append("fewer_than_three_vehicles")
     if off_road:
         reasons.append("road_departure_detected")
     if unresolved_lane:
         reasons.append("lane_association_unresolved")
-    if lane_counts != _expected_lane_counts(len(rows)):
+    if lane_counts != _expected_lane_counts(len(rows), lane_count):
         reasons.append("lane_distribution_invalid")
     if outer_error > position_tolerance_m:
         reasons.append("outer_alignment_error_exceeded")
@@ -246,7 +262,7 @@ def _component_measurement(rows, *, middle_offset_m, same_lane_gap_m,
         "vehicle_count": len(rows),
         "lanes": sorted(lane for lane, items in lane_rows.items() if items),
         "lane_counts": lane_counts,
-        "expected_lane_counts": _expected_lane_counts(len(rows)),
+        "expected_lane_counts": _expected_lane_counts(len(rows), lane_count),
         "max_outer_alignment_error_m": outer_error,
         "max_middle_offset_error_m": middle_error,
         "max_same_lane_gap_error_m": same_lane_error,
@@ -325,13 +341,15 @@ def _collision_pairs(rows):
     ]
 
 
-def _join_phase(detail):
+def _active_join(detail):
     if not isinstance(detail, Mapping):
-        return None
+        return False
     nested = detail.get("simple_formation")
     if isinstance(nested, Mapping):
         detail = nested
-    return detail.get("join_phase")
+    return (detail.get("join_phase") == "JOINING"
+            and detail.get("lane_reason") in
+            ("simple_formation_join", "active_simple_plan"))
 
 
 def _close_interval(active, candidates, keys, end_time_s, reason):
@@ -346,15 +364,21 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
                   formation_deadline_s=30.0, hold_s=10.0,
                   component_gap_m=50.0, max_sample_gap_s=0.1,
                   expected_component_count=1,
-                  incidents=None):
+                  incidents=None, lane_count=3, same_lane_gap_m=None):
     """Evaluate dynamic physical components without controller-derived roles."""
     d = _finite("d", d)
+    if type(lane_count) is not int or lane_count not in (2, 3, 4):
+        raise ValueError("lane_count must be 2, 3, or 4")
+    same_lane_gap_m = (2 * d if same_lane_gap_m is None else
+                       _finite("same_lane_gap_m", same_lane_gap_m))
     lane_width = _finite("lane_width", lane_width)
     position_tolerance = _finite("position_tolerance", position_tolerance)
     speed_tolerance = _finite("speed_tolerance", speed_tolerance)
     persistence_s = _finite("persistence_s", persistence_s, nonnegative=True)
-    formation_deadline_s = _finite("formation_deadline_s", formation_deadline_s)
-    hold_s = _finite("hold_s", hold_s)
+    if formation_deadline_s is not None:
+        formation_deadline_s = _finite("formation_deadline_s", formation_deadline_s)
+    if hold_s is not None:
+        hold_s = _finite("hold_s", hold_s)
     component_gap_m = _finite("component_gap_m", component_gap_m)
     max_sample_gap_s = _finite("max_sample_gap_s", max_sample_gap_s)
     if type(expected_component_count) is not int or expected_component_count <= 0:
@@ -420,7 +444,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
     sampling_gaps = 0
 
     for time_s, frame in zip(times, frames):
-        rows = _physical_rows(frame["states"], lane_width)
+        rows = _physical_rows(frame["states"], lane_width, lane_count)
         expected = {
             key for key, actual in actuals.items()
             if actual is not None and actual <= time_s + _EPS
@@ -475,9 +499,10 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
 
         measurements = [
             _component_measurement(
-                group, middle_offset_m=d, same_lane_gap_m=2 * d,
+                group, middle_offset_m=d, same_lane_gap_m=same_lane_gap_m,
                 position_tolerance_m=position_tolerance,
                 speed_tolerance_mps=speed_tolerance,
+                lane_count=lane_count,
             )
             for group in _physical_components(rows, component_gap_m)
         ]
@@ -488,13 +513,18 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         for measurement in measurements:
             joiners = sorted(
                 key for key in measurement["members"]
-                if _join_phase(diagnostics.get(key)) in ("JOINING", "STABILIZING")
+                if _active_join(diagnostics.get(key))
             )
-            if len(joiners) > 1:
+            pairs = [list(pair) for pair in combinations(joiners, 2)
+                     if abs(rows[pair[0]]["x_m"] - rows[pair[1]]["x_m"])
+                     <= _ADMISSION_WINDOW_RADIUS_M + _EPS]
+            if pairs:
                 admission_conflicts.append({
                     "time_s": time_s,
                     "component_members": measurement["members"],
-                    "joining_actors": joiners,
+                    "joining_actors": sorted({key for pair in pairs
+                                              for key in pair}),
+                    "overlapping_pairs": pairs,
                 })
         current = {
             frozenset(measurement["members"]): measurement
@@ -554,12 +584,12 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         duration = max(0.0, item["end_time_s"] - qualification_start)
         confirmed = duration + _EPS >= persistence_s
         formed = qualification_start + persistence_s if confirmed else None
-        held = (formed + hold_s
-                if confirmed and duration + _EPS >= persistence_s + hold_s else None)
-        by_deadline = bool(
+        held = (formed + hold_s if hold_s is not None and confirmed
+                and duration + _EPS >= persistence_s + hold_s else None)
+        by_deadline = (None if formation_deadline_s is None else bool(
             formed is not None and last_actual is not None
             and formed <= last_actual + formation_deadline_s + _EPS
-        )
+        ))
         item.update(
             physical_start_time_s=physical_start,
             start_time_s=round(qualification_start, 10),
@@ -570,13 +600,14 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
             formation_by_deadline=by_deadline,
             whole_cohort=item["members"] == cohort,
         )
-        item["success"] = bool(by_deadline and held is not None)
+        item["success"] = bool(confirmed and (by_deadline is not False)
+                               and (hold_s is None or held is not None))
         item["failure_reasons"] = []
         if not confirmed:
             item["failure_reasons"].append("persistence_too_short")
-        elif not by_deadline:
+        elif by_deadline is False:
             item["failure_reasons"].append("formation_deadline_missed")
-        if confirmed and held is None:
+        if confirmed and hold_s is not None and held is None:
             item["failure_reasons"].append("hold_after_confirmation_too_short")
         item["max_lattice_error_m"] = max(
             item["max_outer_alignment_error_m"],
@@ -623,7 +654,7 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
     formed_time = (max(item["formed_time_s"] for item in selected_intervals)
                    if selected_milestone_success else None)
     held_time = (max(item["held_time_s"] for item in selected_intervals)
-                 if selected_milestone_success else None)
+                 if selected_milestone_success and hold_s is not None else None)
 
     reasons = []
     if not frames:
@@ -658,10 +689,11 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         ]
         for members in expected_component_members
     }
-    if any(rows and not any(item["formation_by_deadline"] for item in rows)
+    if formation_deadline_s is not None and any(
+            rows and not any(item["formation_by_deadline"] for item in rows)
            for rows in expected_intervals.values()):
         reasons.append("formation_deadline_missed")
-    elif any(rows and not any(
+    elif hold_s is not None and any(rows and not any(
             item["formation_by_deadline"] and item["held_time_s"] is not None
             for item in rows) for rows in expected_intervals.values()):
         reasons.append("hold_after_confirmation_too_short")
@@ -677,10 +709,14 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "teleport_detected",
         "nonphysical_jump_detected", "simultaneous_admission_conflict",
     }
-    success = bool(
-        last_actual is not None and selected_milestone_success
-        and not hazards.intersection(reasons)
-    )
+    formation_success = bool(last_actual is not None and selected_milestone_success)
+    safety_passed = not {"collision_detected", "road_departure_detected",
+                         "teleport_detected", "nonphysical_jump_detected",
+                         "simultaneous_admission_conflict"}.intersection(reasons)
+    recording_valid = not (hazards - {"collision_detected", "road_departure_detected",
+                                      "teleport_detected", "nonphysical_jump_detected",
+                                      "simultaneous_admission_conflict"}).intersection(reasons)
+    success = bool(formation_success and not hazards.intersection(reasons))
     if not success and component_history:
         for component in component_history[-1]["components"]:
             reasons.extend(component["failure_reasons"])
@@ -700,10 +736,11 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         if component_history else []
     )
     final_counts = ([sum(counts[lane] for counts in final_component_counts)
-                     for lane in range(_LANE_COUNT)]
+                     for lane in range(lane_count)]
                     if final_component_counts else None)
     parameters = {
-        "d_m": d, "middle_offset_m": d, "same_lane_gap_m": 2 * d,
+        "d_m": d, "middle_offset_m": d,
+        "same_lane_gap_m": same_lane_gap_m, "lane_count": lane_count,
         "component_gap_m": component_gap_m, "lane_width_m": lane_width,
         "position_tolerance_m": position_tolerance,
         "speed_tolerance_mps": speed_tolerance,
@@ -724,7 +761,9 @@ def detect_frames(frames, d=15.0, lane_width=3.3, position_tolerance=2.0,
         "all_components_success": all_components_success,
         "successful_component_intervals": successful_component_intervals,
         "frame_count": len(frames), "sampling_gap_count": sampling_gaps,
-        "success": success, "whole_cohort_success": whole_cohort_success,
+        "success": success, "formation_success": formation_success,
+        "safety_passed": safety_passed, "recording_valid": recording_valid,
+        "whole_cohort_success": whole_cohort_success,
         "local_success": any(item["success"] for item in intervals),
         "formed_time_s": formed_time,
         "held_time_s": held_time,

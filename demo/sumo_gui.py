@@ -52,6 +52,8 @@ class DemoConfig:
 @dataclass(frozen=True, slots=True)
 class SimpleFormationDemoConfig:
     vehicle_count: int = 12
+    lane_count: int = 3
+    straight_road: bool = False
     target_speed_mps: float = 10.0
     random_seed: int = 1
     depart_interval_min_s: float = 2.5
@@ -257,6 +259,10 @@ def validate_simple_config(
     """Validate simple-formation settings without opening legacy results."""
     if type(config.vehicle_count) is not int or not 3 <= config.vehicle_count <= 60:
         raise ValueError('VEHICLE_COUNT 必须是 3–60 的整数（不接受 bool）')
+    if type(config.lane_count) is not int or config.lane_count not in (2, 3, 4):
+        raise ValueError('LANE_COUNT 必须是 2、3 或 4')
+    if type(config.straight_road) is not bool:
+        raise ValueError('STRAIGHT_ROAD 必须是 True 或 False')
     target_speed = _finite_number(
         'TARGET_SPEED_MPS', config.target_speed_mps, 0.0, math.inf)
     if target_speed <= 0:
@@ -340,7 +346,10 @@ def validate_simple_config(
         raise ValueError(f'无法读取 {tools_path} 中的 sumo_home: {error}') from error
     sumo_gui = sumo_home / 'bin' / 'sumo-gui.exe'
     traci_python = sumo_home / 'tools' / 'traci' / '__init__.py'
-    network = root / 'scenarios' / 'cai2024' / 'bottleneck.net.xml'
+    network = (root / SIMPLE_VARIANT_REL / 'scenarios' / 'formation'
+               / f'straight_{config.lane_count}.net.xml'
+               if config.straight_road or config.lane_count != 3
+               else root / 'scenarios' / 'cai2024' / 'bottleneck.net.xml')
     variant_root = root / SIMPLE_VARIANT_REL
     variant_run = variant_root / 'run.py'
     schedule_path = variant_root / SIMPLE_SCHEDULE_REL
@@ -357,7 +366,7 @@ def validate_simple_config(
     if config.simulation_duration_s + 1e-9 < minimum_duration:
         raise ValueError(
             'SIMULATION_DURATION_S 必须覆盖实际确定性日程的最后计划发车'
-            f'（{last_departure:g}秒）、30秒形成期限和10秒保持期；'
+            f'（{last_departure:g}秒）；'
             f'至少 {minimum_duration:g} 秒')
     resolved_results = _resolve_future_directory(
         variant_results, variant_root, 'Phase5G结果根目录')
@@ -384,10 +393,11 @@ def _simple_schedule_minimum_duration(
             depart_interval_max_s=config.depart_interval_max_s,
             speed_min_mps=config.initial_speed_min_mps,
             speed_max_mps=config.initial_speed_max_mps,
+            lane_count=config.lane_count,
         )
     except (OSError, TypeError, ValueError) as error:
         raise ValueError(f'无法计算Phase5G确定性发车日程: {error}') from error
-    return round(float(last_departure) + 40.0, 1), float(last_departure)
+    return round(float(last_departure) + 0.1, 1), float(last_departure)
 
 
 def simple_generation_timeout_s(duration_s: float, vehicle_count: int) -> int:
@@ -1881,10 +1891,7 @@ def _subprocess_diagnostic(text: str | None) -> str:
     return cleaned[-2000:].replace('\n', ' | ') or '(无stderr)'
 
 
-def generate_fresh_simple_trace(
-        config: SimpleFormationDemoConfig, paths: SimpleCheckedPaths, *,
-        process_runner=None) -> GeneratedSimpleTrace:
-    """Generate an isolated fresh trace and reject any unsealed/escaped result."""
+def _simple_generation_command(config, paths, *, stream=False):
     command = [
         sys.executable, '-I', '-B', '-S', str(paths.variant_run),
         'phase5g-demo', '--offline',
@@ -1909,6 +1916,20 @@ def generate_fresh_simple_trace(
         format_number(config.min_formation_lane_change_speed_mps),
         '--hard-lane-change-gap-m', format_number(config.hard_lane_change_gap_m),
     ]
+    if stream:
+        command.append('--stream-frames')
+    if config.lane_count != 3:
+        command.extend(('--lane-count', str(config.lane_count)))
+    if config.straight_road:
+        command.append('--straight-road')
+    return command
+
+
+def generate_fresh_simple_trace(
+        config: SimpleFormationDemoConfig, paths: SimpleCheckedPaths, *,
+        process_runner=None) -> GeneratedSimpleTrace:
+    """Generate an isolated fresh trace and reject any unsealed/escaped result."""
+    command = _simple_generation_command(config, paths)
     timeout_s = simple_generation_timeout_s(
         config.simulation_duration_s, config.vehicle_count)
     runner = subprocess.run if process_runner is None else process_runner
@@ -1947,6 +1968,67 @@ def generate_fresh_simple_trace(
     return GeneratedSimpleTrace(resolved, source)
 
 
+def stream_fresh_simple_trace(config, paths, connection, run_dir, auto_zoom):
+    """Run the isolated model one completed tick per acknowledged GUI step."""
+    stderr_path = run_dir / 'phase5g_child_stderr.log'
+    result = {}
+    with stderr_path.open('w', encoding='utf-8') as stderr:
+        child = subprocess.Popen(
+            _simple_generation_command(config, paths, stream=True),
+            cwd=paths.variant_root, stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE, stderr=stderr, text=True,
+            encoding='utf-8', shell=False)
+        try:
+            def events():
+                for line in child.stdout:
+                    try:
+                        payload = json.loads(line)
+                    except json.JSONDecodeError as error:
+                        raise RuntimeError('Phase5G流输出不是JSON') from error
+                    if not isinstance(payload, dict):
+                        raise RuntimeError('Phase5G流输出不是对象')
+                    if 'phase5g_stream' in payload:
+                        yield payload['phase5g_stream']
+                    elif isinstance(payload.get('path'), str):
+                        result['path'] = payload['path']
+                    else:
+                        raise RuntimeError('Phase5G流输出包含未知消息')
+
+            def acknowledge(_):
+                child.stdin.write('ACK\n')
+                child.stdin.flush()
+
+            stats = play_streamed_algorithm(
+                connection, events(), acknowledge,
+                tuple(f'v{i}' for i in range(config.vehicle_count)), auto_zoom,
+                straight_road=config.straight_road or config.lane_count != 3,
+                lane_count=config.lane_count)
+            code = child.wait(timeout=simple_generation_timeout_s(
+                config.simulation_duration_s, config.vehicle_count))
+        finally:
+            if child.poll() is None:
+                child.kill()
+                child.wait(timeout=10)
+            child.stdin.close()
+            child.stdout.close()
+    if code != 0:
+        raise RuntimeError(
+            f'Phase5G流式计算失败，exit code {code}；'
+            f'stderr: {_subprocess_diagnostic(stderr_path.read_text(encoding="utf-8"))}')
+    raw_path = result.get('path')
+    if not raw_path:
+        raise RuntimeError('Phase5G流式计算没有返回结果路径')
+    candidate = Path(raw_path)
+    if not candidate.is_absolute():
+        candidate = paths.variant_root / candidate
+    resolved = _resolve_result_directory(candidate, paths.variant_results,
+                                         'Phase5G结果路径')
+    source = load_simple_trace_source(resolved, paths, config)
+    if source.frames is None or stats.frames_played != len(source.frames):
+        raise RuntimeError('Phase5G流式帧数与封存轨迹不一致')
+    return GeneratedSimpleTrace(resolved, source), stats
+
+
 def write_xml(path: Path, root: ET.Element) -> None:
     path = Path(path)
     if not path.parent.is_dir():
@@ -1966,14 +2048,16 @@ def write_json_atomic(path: Path, data: Mapping) -> None:
     os.replace(temporary, path)
 
 
-def algorithm_routes_tree() -> ET.Element:
+def algorithm_routes_tree(straight_road=False) -> ET.Element:
     routes = ET.Element('routes')
     ET.SubElement(
         routes, 'vType', id='external_demo', vClass='passenger', guiShape='passenger',
         length='4', width='1.8', maxSpeed='33.3', accel='5', decel='10',
         emergencyDecel='10', minGap='0', speedFactor='1', speedDev='0')
-    ET.SubElement(routes, 'route', id='demo_full', edges='upstream downstream')
-    ET.SubElement(routes, 'route', id='demo_remaining', edges='downstream')
+    ET.SubElement(routes, 'route', id='demo_full',
+                  edges='upstream' if straight_road else 'upstream downstream')
+    if not straight_road:
+        ET.SubElement(routes, 'route', id='demo_remaining', edges='downstream')
     return routes
 
 
@@ -2080,6 +2164,71 @@ def play_algorithm(connection, source: TraceSource, auto_zoom: bool) -> Playback
     end_reason = ('trace_completed' if source.evidence_status == 'completed'
                   else f'trace_{source.evidence_status}_prefix')
     return PlaybackStats(frames_played, final_time, collisions, teleports, end_reason)
+
+
+def play_streamed_algorithm(connection, events, acknowledge, controlled, auto_zoom,
+                            length_m=4.0, straight_road=False,
+                            lane_count=3) -> PlaybackStats:
+    """Render each completed model event once and unlock only its next tick."""
+    loaded = set()
+    collisions = teleports = frames_played = 0
+    final_time = 0.0
+    allowed = set(controlled)
+    for event in events:
+        if event.get('kind') not in ('initial', 'frame'):
+            raise RuntimeError('Phase5G流中出现无效帧类型')
+        states = event.get('states')
+        if not isinstance(states, dict) or not states or not set(states) <= allowed:
+            raise RuntimeError('Phase5G流中车辆集合无效')
+        if not loaded <= set(states):
+            raise RuntimeError('Phase5G流中车辆消失')
+        time_s = float(event['time_s'])
+        if frames_played and time_s <= final_time:
+            raise RuntimeError('Phase5G流中帧时间未递增')
+        if auto_zoom and frames_played == 0:
+            view = _view_id(connection)
+            if view is not None:
+                xs = [float(state['x_m']) for state in states.values()]
+                connection.gui.setBoundary(view, min(xs) - 35, -8, max(xs) + 75, 18)
+        new_actors = [actor for actor in controlled if actor in states and actor not in loaded]
+        for actor in new_actors:
+            if straight_road:
+                state = states[actor]
+                route_id = 'demo_full'
+                lane = max(0, min(lane_count - 1,
+                                  round((float(state['y_m']) - 1.65) / 3.3)))
+                position = float(state['x_m'])
+            else:
+                route_id, lane, position = _initial_route_and_lane(states[actor])
+            connection.vehicle.add(
+                actor, route_id, typeID='external_demo', depart='now',
+                departLane=str(lane),
+                departPos=format_number(max(0.0, position + length_m / 2)),
+                departSpeed=format_number(max(0.0, float(states[actor]['vx_mps']))))
+        connection.simulationStep()
+        if new_actors:
+            missing = set(new_actors) - set(connection.vehicle.getIDList())
+            if missing:
+                raise RuntimeError(f'SUMO未能装载算法演示车辆: {sorted(missing)}')
+            for actor in new_actors:
+                connection.vehicle.setSpeedMode(actor, 0)
+                connection.vehicle.setLaneChangeMode(actor, 0)
+                connection.vehicle.setColor(actor, (0, 160, 255, 255))
+                loaded.add(actor)
+        for actor, state in states.items():
+            front_x, front_y, angle = to_sumo_pose(state, length_m)
+            speed = math.hypot(float(state['vx_mps']), float(state.get('vy_mps', 0.0)))
+            connection.vehicle.setSpeed(actor, speed)
+            connection.vehicle.moveToXY(
+                actor, '', -1, front_x, front_y, angle=angle, keepRoute=3)
+        collided, teleported = _event_counts(connection)
+        collisions += collided
+        teleports += teleported
+        frames_played += 1
+        final_time = time_s
+        acknowledge('ack')
+    return PlaybackStats(frames_played, final_time, collisions, teleports,
+                         'trace_completed')
 
 
 def play_native(connection, duration_s: float, auto_zoom: bool) -> PlaybackStats:
@@ -2328,6 +2477,60 @@ def run_native_demo(config: DemoConfig, root: Path = PROJECT_ROOT, *,
     return run_dir
 
 
+def _run_live_simple_formation_demo(config, paths, runtime, input_fn, output_fn):
+    run_dir = create_run_directory(paths.root, 'simple_formation')
+    route_path = run_dir / 'simple_formation.rou.xml'
+    config_path = run_dir / 'simple_formation.sumocfg'
+    metadata_path = run_dir / 'run_metadata.json'
+    write_xml(route_path, algorithm_routes_tree(
+        straight_road=config.straight_road or config.lane_count != 3))
+    write_xml(config_path, sumo_config_tree(
+        paths.network, route_path.name, run_dir,
+        config.simulation_duration_s + 5.0))
+    write_json_atomic(run_dir / 'config_snapshot.json', asdict(config))
+    metadata = _base_metadata(
+        'simple_formation', config, run_dir,
+        'Phase5G无通信局部编队逐步计算与SUMO窗口同步显示')
+    metadata.update(network=str(paths.network),
+                    network_sha256=sha256_file(paths.network),
+                    sumocfg=config_path.name, route_file=route_path.name)
+    write_json_atomic(metadata_path, metadata)
+    try:
+        metadata['status'] = 'running'
+        write_json_atomic(metadata_path, metadata)
+        with runtime(paths, config_path, config.gui_delay_ms,
+                     run_dir / 'stdout_stderr.log') as connection:
+            output_fn('SUMO窗口已打开，正在逐步计算并显示编队。')
+            generated, stats = stream_fresh_simple_trace(
+                config, paths, connection, run_dir, config.auto_zoom)
+            source = generated.source
+            metadata.update(
+                generation_source=str(generated.outer_path),
+                source_case=source.case_name,
+                source_status=source.evidence_status,
+                source_trace=str(source.trace_path),
+                source_trace_sha256=source.trace_sha256,
+                controlled_actors=list(source.actors))
+            _wait_if_requested(config, input_fn, output_fn)
+        _finish_metadata(metadata_path, metadata, 'completed',
+                         terminal_status='completed', **asdict(stats))
+    except KeyboardInterrupt:
+        _finish_metadata(metadata_path, metadata, 'interrupted',
+                         terminal_status='interrupted', end_reason='interrupted')
+    except BaseException as error:
+        if _is_user_closed(error):
+            _finish_metadata(metadata_path, metadata, 'user_closed',
+                             terminal_status='user_closed', end_reason='user_closed')
+        else:
+            _finish_metadata(
+                metadata_path, metadata, 'failed', terminal_status='failed',
+                end_reason='exception', error=f'{type(error).__name__}: {error}',
+                traceback=traceback.format_exc())
+            raise
+    output_fn(f'simple formation演示记录已保存: {run_dir}')
+    return run_dir
+
+
 def run_simple_formation_demo(
         config: SimpleFormationDemoConfig, root: Path = PROJECT_ROOT, *,
         generator=None, runtime=start_gui_session, input_fn=input,
@@ -2339,6 +2542,9 @@ def run_simple_formation_demo(
         f'目标速度={format_number(config.target_speed_mps)}m/s，'
         f'seed={config.random_seed}，时长={format_number(config.simulation_duration_s)}s，'
         f'显示GUI={config.show_gui}')
+    if config.show_gui and generator is None:
+        return _run_live_simple_formation_demo(
+            config, paths, runtime, input_fn, output_fn)
     generate = generate_fresh_simple_trace if generator is None else generator
     generated = generate(config, paths)
     if not config.show_gui:
@@ -2352,7 +2558,8 @@ def run_simple_formation_demo(
     route_path = run_dir / 'simple_formation.rou.xml'
     config_path = run_dir / 'simple_formation.sumocfg'
     metadata_path = run_dir / 'run_metadata.json'
-    write_xml(route_path, algorithm_routes_tree())
+    write_xml(route_path, algorithm_routes_tree(
+        straight_road=config.straight_road or config.lane_count != 3))
     write_xml(config_path, sumo_config_tree(
         paths.network, route_path.name, run_dir,
         config.simulation_duration_s + 5.0))

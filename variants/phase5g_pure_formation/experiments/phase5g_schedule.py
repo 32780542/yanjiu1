@@ -24,12 +24,15 @@ def _finite(name: str, value: object) -> float:
 def deterministic_schedule_rows(
         count: int, seed: int, *, depart_interval_min_s: float,
         depart_interval_max_s: float, speed_min_mps: float,
-        speed_max_mps: float) -> tuple[tuple[float, float, float], ...]:
+        speed_max_mps: float, lane_count: int = 3
+        ) -> tuple[tuple[float, float, float], ...]:
     """Return `(departure_s, lane_center_m, speed_mps)` in physical order."""
     if type(count) is not int or not 3 <= count <= 60:
         raise ValueError("vehicle count must be an exact integer from 3 to 60")
     if type(seed) is not int or not 0 <= seed < 2**64:
         raise ValueError("case seed must be an exact uint64 integer, not bool")
+    if type(lane_count) is not int or lane_count not in (2, 3, 4):
+        raise ValueError("lane_count must be 2, 3, or 4")
     interval_low = _finite("depart_interval_min_s", depart_interval_min_s)
     interval_high = _finite("depart_interval_max_s", depart_interval_max_s)
     if interval_low <= 0 or interval_high < interval_low:
@@ -67,7 +70,8 @@ def deterministic_schedule_rows(
                 math.ceil(raw_interval / CONTROL_DT_S - 1e-12),
             )
         departure_s = round(scheduled_tick * CONTROL_DT_S, 1)
-        lane_center_m = rng.choice(LANE_CENTERS_M)
+        centers = (LANE_CENTERS_M + (11.55,))[:lane_count]
+        lane_center_m = rng.choice(centers)
         speed_mps = rng.uniform(speed_low, speed_high)
         rows.append((departure_s, lane_center_m, speed_mps))
     return tuple(rows)
@@ -76,7 +80,7 @@ def deterministic_schedule_rows(
 def last_scheduled_departure_s(
         count: int, seed: int, *, depart_interval_min_s: float,
         depart_interval_max_s: float, speed_min_mps: float,
-        speed_max_mps: float) -> float:
+        speed_max_mps: float, lane_count: int = 3) -> float:
     """Return the exact final scheduled departure for the deterministic case."""
     return deterministic_schedule_rows(
         count, seed,
@@ -84,4 +88,5 @@ def last_scheduled_departure_s(
         depart_interval_max_s=depart_interval_max_s,
         speed_min_mps=speed_min_mps,
         speed_max_mps=speed_max_mps,
+        lane_count=lane_count,
     )[-1][0]

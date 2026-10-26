@@ -4,6 +4,7 @@ from copy import deepcopy
 from dataclasses import asdict, fields
 import hashlib
 import importlib
+import io
 import inspect
 import json
 import os
@@ -225,6 +226,36 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             ).splitlines()
         ]
         return case, rows
+
+    def test_stream_sink_receives_initial_then_only_flushed_completed_frames(self):
+        model, physical, policy = self.dynamic_parameters()
+        case = self.exact_dynamic_case(physical, duration_s=0.1)
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "stream-source"
+            seen = []
+
+            def sink(event):
+                lines = (source / "trace.jsonl").read_text(
+                    encoding="utf-8").splitlines()
+                seen.append((event["kind"], len(lines), event["time_s"]))
+
+            result = self.harness.run_variant(
+                source, model, physical, policy, case, "lane_priority",
+                live=False, frame_sink=sink,
+            )
+        self.assertEqual(result["status"], "completed", result)
+        self.assertEqual(seen, [("initial", 0, 0.0), ("frame", 1, 0.1)])
+
+    def test_stdio_stream_sink_waits_for_one_parent_ack(self):
+        output = io.StringIO()
+        with patch.object(sys, "stdin", io.StringIO("ACK\n")), patch.object(
+                sys, "stdout", output):
+            self.harness._stdio_frame_sink({"kind": "initial", "states": {}})
+        self.assertEqual(json.loads(output.getvalue())["phase5g_stream"]["kind"],
+                         "initial")
+        with patch.object(sys, "stdin", io.StringIO("")), patch.object(
+                sys, "stdout", io.StringIO()), self.assertRaises(RuntimeError):
+            self.harness._stdio_frame_sink({"kind": "frame", "states": {}})
 
     def assert_dynamic_rows_rejected(self, root, case, rows):
         trace = Path(root) / f"malicious-{uuid.uuid4().hex}.jsonl"
@@ -1148,7 +1179,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
 
     def test_demo_rejects_duration_before_output_using_actual_seeded_schedule(self):
         with tempfile.TemporaryDirectory() as temp:
-            for duration in (44.1, 75.4):
+            for duration in (35.4,):
                 output = Path(temp) / f"duration-{duration}"
                 with self.subTest(duration=duration), patch.object(
                     self.harness, "run_variant", return_value={
@@ -1156,7 +1187,7 @@ class SimpleFormationHarnessTests(unittest.TestCase):
                         "scientific_passed": None,
                     }
                 ) as runner, self.assertRaisesRegex(
-                    ValueError, "75.5|30 s|10 s|40 s|deadline|hold"
+                    ValueError, "final departure"
                 ):
                     self.harness.run_phase5g_demo(
                         vehicle_count=12, seed=1, target_speed_mps=10.0,
@@ -1409,7 +1440,8 @@ class SimpleFormationHarnessTests(unittest.TestCase):
             speed_tolerance_mps=0.9, stable_time_s=1.2,
             reference_switch_gain_m=2.5,
             min_formation_lane_change_speed_mps=5.5,
-            hard_lane_change_gap_m=8.5,
+            hard_lane_change_gap_m=8.5, stream_frames=False,
+            lane_count=3, straight_road=False,
         )
 
     def test_cli_rejects_invalid_simple_values_without_calling_demo(self):

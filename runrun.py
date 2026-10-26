@@ -2,8 +2,12 @@
 
 # ===================== 用户配置区：直接修改下面这些值 =====================
 
-# 受控车辆总数：允许 3–60；默认 12 辆（最终目标是三车道各 4 辆）
+# 受控车辆总数：允许 3–60；默认 12 辆
 VEHICLE_COUNT = 12
+
+# 编队道路车道数：2、3、4；恒定车道道路避免瓶颈截断编队
+LANE_COUNT = 3
+STRAIGHT_ROAD = True
 
 # 编队目标速度，单位 m/s
 TARGET_SPEED_MPS = 10.0
@@ -19,10 +23,10 @@ DEPART_INTERVAL_MAX_S = 4.0
 INITIAL_SPEED_MIN_MPS = 8.0
 INITIAL_SPEED_MAX_MPS = 12.0
 
-# 仿真时长，单位秒；需覆盖最晚发车、30秒形成期限和10秒保持期
-SIMULATION_DURATION_S = 90.0
+# 仿真时长，单位秒；至少覆盖末车发车后的一个控制步
+SIMULATION_DURATION_S = 200.0
 
-# True：生成新轨迹后打开 SUMO-GUI；False：只生成轨迹
+# True：先打开 SUMO-GUI，再逐步计算和显示；False：只生成轨迹
 SHOW_GUI = True
 
 # SUMO-GUI 每步播放延迟，单位毫秒（0 最快）
@@ -37,10 +41,10 @@ WAIT_BEFORE_CLOSE = True
 # 简单局部规则1：同一局部编队的连续车距上限，单位 m
 FORMATION_JOIN_RANGE_M = 50.0
 
-# 简单局部规则2：中间车道车头相对上方车道车头的后移距离，单位 m
+# 简单局部规则2：从最高车道向下，相邻车道的交错距离，单位 m
 MIDDLE_LANE_OFFSET_M = 15.0
 
-# 简单局部规则3：参考车在同车道或隔一条车道时的期望间距，单位 m
+# 简单局部规则3：同车道相邻层的期望间距，单位 m
 SAME_LANE_GAP_M = 30.0
 
 # 简单局部规则4：位置误差容差，单位 m
@@ -81,6 +85,8 @@ def build_config() -> SimpleFormationDemoConfig:
     """Copy the editable constants into an immutable runtime configuration."""
     return SimpleFormationDemoConfig(
         vehicle_count=VEHICLE_COUNT,
+        lane_count=LANE_COUNT,
+        straight_road=STRAIGHT_ROAD,
         target_speed_mps=TARGET_SPEED_MPS,
         random_seed=RANDOM_SEED,
         depart_interval_min_s=DEPART_INTERVAL_MIN_S,
@@ -108,7 +114,7 @@ def build_config() -> SimpleFormationDemoConfig:
 def _print_check(report: dict, output_fn) -> None:
     output_fn('自检通过：没有启动SUMO GUI。')
     output_fn(f"  SUMO GUI: {report['sumo_gui']}")
-    output_fn(f"  瓶颈路网: {report['network']}")
+    output_fn(f"  编队路网: {report['network']}")
     output_fn(f"  Phase5G入口: {report['variant_run']}")
     output_fn(f"  Phase5G结果根目录: {report['variant_results']}")
     output_fn(f"  TraCI来源: {report['traci']}")
@@ -124,7 +130,7 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
         _print_check(check_simple_environment(config, PROJECT_ROOT), output_fn)
         return 0
 
-    output_fn('直接运行：生成三车道领航者-跟随者编队（无通信、局部自组织、简单if/else规则）。')
+    output_fn('直接运行：逐步生成领航者-跟随者编队（无通信、局部自组织、简单if/else规则）。')
     run_simple_formation_demo(
         config, input_fn=input_fn, output_fn=output_fn)
     return 0

@@ -154,8 +154,10 @@ def _memories(keys: tuple[str, ...], case_seed: int, vehicle_count: int) -> tupl
     return memories, provenance
 
 
-def _lane_index(y_m: float, tolerance_m: float = 1e-9) -> int | None:
-    matches = [index for index, center in enumerate(LANE_CENTERS_M)
+def _lane_index(y_m: float, tolerance_m: float = 1e-9,
+                lane_count: int = 3) -> int | None:
+    centers = (LANE_CENTERS_M + (11.55,))[:lane_count]
+    matches = [index for index, center in enumerate(centers)
                if abs(y_m - center) <= tolerance_m]
     return matches[0] if len(matches) == 1 else None
 
@@ -169,16 +171,17 @@ def _future_body(state: VehicleState, parameters: Mapping[str, object], horizon_
 
 
 def dynamic_minimum_gap_ok(initial: Mapping[str, Mapping[str, object]],
-                           parameters: Mapping[str, object]) -> bool:
+                           parameters: Mapping[str, object],
+                           lane_count: int = 3) -> bool:
     """Check the inherited standstill-plus-time-headway initial gap."""
     standstill = _finite("noa_standstill_gap_m", parameters["noa_standstill_gap_m"])
     headway = _finite("noa_headway_s", parameters["noa_headway_s"])
     length = _finite("length_m", parameters["length_m"])
     margin = _finite("noa_body_margin_m", parameters.get("noa_body_margin_m", 0.0))
-    by_lane: dict[int, list[VehicleState]] = {lane: [] for lane in range(3)}
+    by_lane: dict[int, list[VehicleState]] = {lane: [] for lane in range(lane_count)}
     for raw in initial.values():
         state = VehicleState(**raw)
-        lane = _lane_index(state.y_m)
+        lane = _lane_index(state.y_m, lane_count=lane_count)
         if lane is None:
             return False
         by_lane[lane].append(state)
@@ -194,7 +197,8 @@ def dynamic_minimum_gap_ok(initial: Mapping[str, Mapping[str, object]],
 
 
 def validate_initial(initial: Mapping[str, Mapping[str, object]],
-                     parameters: Mapping[str, object]) -> dict:
+                     parameters: Mapping[str, object],
+                     lane_count: int = 3) -> dict:
     """Independently reject overlap, near-term swept overlap and unsafe gaps."""
     if not isinstance(initial, dict) or not initial:
         raise ValueError("initial states must be a nonempty actor dictionary")
@@ -224,9 +228,10 @@ def validate_initial(initial: Mapping[str, Mapping[str, object]],
             reasons.append("initial_body_overlap")
         elif swept_collision(bodies[left], future[left], bodies[right], future[right]):
             reasons.append("response_horizon_swept_overlap")
-    if not dynamic_minimum_gap_ok(initial, parameters):
+    if not dynamic_minimum_gap_ok(initial, parameters, lane_count):
         reasons.append("dynamic_minimum_gap_failed")
-    detection = detect_frames([{"time_s": 0.0, "states": json.loads(json.dumps(initial))}])
+    detection = detect_frames([{"time_s": 0.0, "states": json.loads(json.dumps(initial))}],
+                              lane_count=lane_count)
     if not detection["frames"][0]["fleet_failure_reasons"]:
         reasons.append("initial_whole_formation_detected")
     return {"passed": not reasons, "failure_reasons": sorted(set(reasons)),
@@ -279,7 +284,8 @@ def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
                     speed_max_mps: float = 12.0,
                     depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
                     depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
-                    actor_keys: Sequence[str] | None = None) -> dict:
+                    actor_keys: Sequence[str] | None = None,
+                    lane_count: int = 3, straight_road: bool = False) -> dict:
     """Generate one deterministic sequential schedule after count validation.
 
     Only rows due at time zero are physical initial state.  Later rows remain
@@ -298,6 +304,7 @@ def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
         depart_interval_max_s=interval_high,
         speed_min_mps=low,
         speed_max_mps=high,
+        lane_count=lane_count,
     )
     for ordinal, (key, (departure_s, lane_center, speed)) in enumerate(
             zip(keys, schedule)):
@@ -315,7 +322,7 @@ def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
         for key, row in departures.items()
         if row["scheduled_departure_s"] == 0.0
     }
-    audit = validate_initial(initial, parameters)
+    audit = validate_initial(initial, parameters, lane_count)
     if not audit["passed"]:
         raise RuntimeError(
             "Phase 5G time-zero departure failed its pre-trajectory feasibility audit: "
@@ -326,7 +333,7 @@ def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
         + FORMATION_DEADLINE_S + FORMATION_HOLD_S,
         1,
     )
-    return _case(
+    case = _case(
         f"seeded_{count}_seed{seed}", initial, keys, seed,
         "Seeded sequential pure-formation departures; no actor is an obstacle or script.",
         {"minimum": 0, "target_lane_counts": None},
@@ -335,6 +342,9 @@ def _scheduled_case(parameters: Mapping[str, object], count: int, seed: int,
          "speed_range_mps": [low, high]},
         duration_s=duration, departures=departures,
     )
+    if straight_road or lane_count != 3:
+        case.update(lane_count=lane_count, road_kind="straight")
+    return case
 
 
 def seeded_case(parameters: Mapping[str, object], count: int, seed: int,
@@ -360,7 +370,8 @@ def demo_case(parameters: Mapping[str, object], count: int, seed: int,
               *, speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
               depart_interval_min_s: float = DEPART_INTERVAL_MIN_S,
               depart_interval_max_s: float = DEPART_INTERVAL_MAX_S,
-              actor_keys: Sequence[str] | None = None) -> dict:
+              actor_keys: Sequence[str] | None = None,
+              lane_count: int = 3, straight_road: bool = False) -> dict:
     """Generate the editable GUI schedule without widening research counts."""
     if type(count) is not int or not 3 <= count <= 60:
         raise ValueError("demo vehicle count must be an exact integer from 3 to 60")
@@ -370,6 +381,7 @@ def demo_case(parameters: Mapping[str, object], count: int, seed: int,
         depart_interval_min_s=depart_interval_min_s,
         depart_interval_max_s=depart_interval_max_s,
         actor_keys=actor_keys,
+        lane_count=lane_count, straight_road=straight_road,
     )
 
 

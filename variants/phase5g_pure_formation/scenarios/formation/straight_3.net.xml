@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 09/28/26 21:46:55 by SUMO netconvert Version 0.32.0
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="D:\yanjiu1\keyan1\variants\phase5g_pure_formation\scenarios\formation\straight_3.nod.xml"/>
+        <edge-files value="D:\yanjiu1\keyan1\variants\phase5g_pure_formation\scenarios\formation\straight_3.edg.xml"/>
+    </input>
+
+    <output>
+        <output-file value="D:\yanjiu1\keyan1\variants\phase5g_pure_formation\scenarios\formation\straight_3.net.xml"/>
+    </output>
+
+    <processing>
+        <no-turnarounds value="true"/>
+    </processing>
+
+</configuration>
+-->
+
+<net version="0.27" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="0.00,0.00" convBoundary="0.00,0.00,3000.00,0.00" origBoundary="0.00,0.00,3000.00,8.25" projParameter="!"/>
+
+    <edge id="upstream" from="entry" to="exit" priority="-1" spreadType="center" length="3000.00">
+        <lane id="upstream_0" index="0" speed="33.30" length="3000.00" width="3.30" customShape="1" shape="0.00,1.65 3000.00,1.65"/>
+        <lane id="upstream_1" index="1" speed="33.30" length="3000.00" width="3.30" customShape="1" shape="0.00,4.95 3000.00,4.95"/>
+        <lane id="upstream_2" index="2" speed="33.30" length="3000.00" width="3.30" customShape="1" shape="0.00,8.25 3000.00,8.25"/>
+    </edge>
+
+    <junction id="entry" type="dead_end" x="0.00" y="0.00" incLanes="" intLanes="" shape="0.00,9.90 0.00,0.00"/>
+    <junction id="exit" type="dead_end" x="3000.00" y="0.00" incLanes="upstream_0 upstream_1 upstream_2" intLanes="" shape="3000.00,0.00 3000.00,9.90"/>
+
+</net>

@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<edges>
+  <edge id="upstream" from="entry" to="exit" numLanes="3" speed="33.3" width="3.3" length="3000" spreadType="center">
+    <lane index="0" width="3.3" shape="0,1.65 3000,1.65" />
+    <lane index="1" width="3.3" shape="0,4.95 3000,4.95" />
+    <lane index="2" width="3.3" shape="0,8.25 3000,8.25" />
+  </edge>
+</edges>

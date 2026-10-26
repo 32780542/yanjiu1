@@ -8,6 +8,7 @@ from noa.simple_formation import (
     SimpleFormationMemory,
     choose_formation_target,
     choose_layered_fill,
+    formation_acceleration,
     layered_window,
 )
 
@@ -68,10 +69,44 @@ class LayeredFormationTests(unittest.TestCase):
         self.assertNotIn(6, tuple(row.track_id for layer in window.layers
                                   for row in layer if row))
 
-    def test_window_reads_other_lanes_across_a_60_metre_gap(self):
+    def test_window_ignores_a_separate_component_across_a_60_metre_gap(self):
         window = layered_window(
             car(99, 100, 2), (car(1, 160, 0),), CENTERS, P)
-        self.assertEqual(window.layers[0][0].track_id, 1)
+        self.assertIsNone(window.layers[0][0])
+
+    def test_visible_separate_component_is_longitudinal_approach_reference_only(self):
+        ego = car(99, 100, 2)
+        front = car(1, 160, 0)
+        target = choose_formation_target(
+            ego, (front,), CENTERS, SimpleFormationMemory((), "CRUISE"), P)
+        self.assertEqual((target.role, target.target_x_m,
+                          target.reference_track_id),
+                         ("component_approach", 130.0, 1))
+        self.assertEqual(formation_acceleration(ego, target, P), 2.0)
+        self.assertIsNone(layered_window(ego, (front,), CENTERS, P).layers[0][0])
+
+    def test_same_lane_following_uses_visible_component_beyond_layer_window(self):
+        ego = car(99, 100, 2)
+        connector = car(1, 145, 0)
+        same_lane_front = car(2, 195, 2)
+        target = choose_formation_target(
+            ego, (connector, same_lane_front), CENTERS,
+            SimpleFormationMemory((), "CRUISE"), P)
+        self.assertEqual((target.role, target.target_x_m,
+                          target.reference_track_id),
+                         ("upper_follower", 165.0, 2))
+        self.assertNotIn(2, tuple(row.track_id for layer in
+                                   layered_window(ego, (connector, same_lane_front),
+                                                  CENTERS, P).layers
+                                   for row in layer if row))
+
+    def test_upper_vehicle_fills_visible_middle_vacancy_when_lower_is_occupied(self):
+        decision = choose_layered_fill(
+            car(99, 100, 2), (car(1, 130, 2), car(2, 130, 0)),
+            CENTERS, P,
+        )
+        self.assertEqual((decision.target_lane_index, decision.target_x_m),
+                         (1, 115.0))
 
     def test_one_car_rules_fill_outer_lanes_in_physical_order(self):
         cases = (

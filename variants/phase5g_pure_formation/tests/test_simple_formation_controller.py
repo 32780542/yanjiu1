@@ -172,7 +172,7 @@ class SimpleFormationControllerTests(unittest.TestCase):
         ), self.p)
         self.assertIsNone(at_old_deadline.memory.plan)
 
-    def test_new_visible_car_outside_four_slots_restarts_gate(self):
+    def test_separate_visible_car_does_not_restart_local_gate(self):
         front = self.neighbor(7, 30.0, 2, relative_y=0.0)
         first = decide(self.control(lane=2, neighbors=(front,)), self.p)
         distant = self.neighbor(8, 90.0, 0,
@@ -183,14 +183,14 @@ class SimpleFormationControllerTests(unittest.TestCase):
                        replace(distant, measurement_time_s=0.5)),
             memory=first.memory,
         ), self.p)
-        self.assertEqual(changed.memory.stable_since_s, 0.5)
+        self.assertEqual(changed.memory.stable_since_s, 0.0)
         at_old_deadline = decide(self.control(
             time_s=1.0, lane=2,
             neighbors=(replace(front, measurement_time_s=1.0),
                        replace(distant, measurement_time_s=1.0)),
             memory=changed.memory,
         ), self.p)
-        self.assertIsNone(at_old_deadline.memory.plan)
+        self.assertIsNotNone(at_old_deadline.memory.plan)
 
     def test_formed_actor_may_reenter_layer_fill_after_new_physical_gap(self):
         front = self.neighbor(7, 30.0, 2, relative_y=0.0)
@@ -346,6 +346,22 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(decision.memory.desired_lane_index, 2)
         self.assertEqual(decision.memory.reference_track_id, 7)
 
+    def test_joiner_releases_anchor_when_visible_car_occupies_target_slot(self):
+        anchor = self.neighbor(7, 30.0, 1, relative_y=-3.3)
+        occupied = self.neighbor(8, 45.0, 2, relative_y=0.0)
+        memory = self.joining(final=2)
+        result = decide(self.control(lane=2, neighbors=(anchor, occupied),
+                                     memory=memory), self.p)
+        self.assertEqual(result.memory.join_phase, "FREE")
+        self.assertIsNone(result.memory.join_anchor_track_id)
+        self.assertEqual(result.diagnostics["simple_formation"]["reference_reason"],
+                         "join_target_occupied")
+
+        elsewhere = replace(occupied, relative_y_m=-3.3)
+        result = decide(self.control(lane=2, neighbors=(anchor, elsewhere),
+                                     memory=memory), self.p)
+        self.assertEqual(result.memory.join_phase, "JOINING")
+
     def joining(self, lane=0, final=2, anchor=7):
         return SimpleFormationMemory((), "CRUISE", join_phase="JOINING",
                                      desired_lane_index=final,
@@ -410,6 +426,19 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(result.memory.join_anchor_track_id, 7)
         self.assertLess(result.action.acceleration_mps2, 0.0)
         self.assertEqual(result.diagnostics["simple_formation"]["next_lane_index"], 1)
+
+    def test_active_join_uses_formation_acceleration_when_no_immediate_hazard(self):
+        plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
+        memory = replace(self.joining(), plan=plan, target_y_m=CENTERS_M[1],
+                         lane_change_reason="simple_formation_join")
+        anchor = self.neighbor(7, 30.0, 1, time_s=1.0)
+        with patch("noa.controller._longitudinal",
+                   return_value=(-1.0, None, 25.5, False, "routine_headway")):
+            result = decide(self.control(time_s=1.0, neighbors=(anchor,),
+                                         memory=memory), self.p)
+        self.assertFalse(result.diagnostics["simple_formation"]["emergency_override"])
+        self.assertEqual(result.action.acceleration_mps2,
+                         result.diagnostics["simple_formation"]["requested_acceleration_mps2"])
 
     def test_active_simple_plan_brakes_for_present_target_lane_body_overlap(self):
         plan = QuadraticLaneChange(0.0, CENTERS_M[0], CENTERS_M[1], 5.0, 20.0)
@@ -815,7 +844,8 @@ class SimpleFormationControllerTests(unittest.TestCase):
 
     def test_simple_source_has_no_hidden_truth_or_external_state_access(self):
         root = Path(__file__).resolve().parents[1]
-        for relative in ("noa/simple_formation.py", "noa/controller.py"):
+        for relative in ("noa/simple_formation.py", "noa/simple_controller.py",
+                         "noa/driving.py", "noa/controller.py"):
             source = ast.parse((root / relative).read_text(encoding="utf-8"))
             for node in ast.walk(source):
                 if isinstance(node, ast.Attribute):

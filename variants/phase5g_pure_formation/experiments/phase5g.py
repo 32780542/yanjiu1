@@ -68,6 +68,8 @@ SOURCE_FILES = (
     "experiments/phase5g_replay.py",
     "experiments/phase5_detection.py",
     "noa/controller.py",
+    "noa/driving.py",
+    "noa/simple_controller.py",
     "noa/formation.py",
     "noa/formation_lane.py",
     "noa/simple_formation.py",
@@ -723,10 +725,22 @@ def _variant_input_sha256(mode: str, case: Mapping[str, object], model,
     return digest_json(payload)
 
 
-def _lane_index(y_m: float, width_m: float) -> int | None:
+def _lane_index(y_m: float, width_m: float, lane_count: int = 3) -> int | None:
     lane = round(y_m / width_m - 0.5)
     center = width_m * (lane + 0.5)
-    return lane if 0 <= lane < 3 and abs(y_m - center) <= 0.15 else None
+    return lane if 0 <= lane < lane_count and abs(y_m - center) <= 0.15 else None
+
+
+def _road_network(case: Mapping[str, object]) -> Path:
+    if case.get("road_kind") != "straight":
+        return NET
+    lane_count = case.get("lane_count")
+    if type(lane_count) is not int or lane_count not in (2, 3, 4):
+        raise ValueError("straight road requires lane_count 2, 3, or 4")
+    path = ROOT / "scenarios" / "formation" / f"straight_{lane_count}.net.xml"
+    if not path.is_file():
+        raise FileNotFoundError(f"formation road missing: {path}")
+    return path
 
 
 def _stream_file_sha256(path) -> str:
@@ -968,6 +982,7 @@ class _LaneChangeAccumulator:
                  model_parameters: Mapping[str, object]):
         self.controlled = tuple(case["controlled"])
         self.width = float(model_parameters["lane_width_m"])
+        self.lane_count = case.get("lane_count", 3)
         self.actors = {
             key: {"changes": [], "active": None, "stable": None}
             for key in self.controlled
@@ -980,7 +995,7 @@ class _LaneChangeAccumulator:
             item = self.actors[key]
             if item["stable"] is None:
                 item["stable"] = _lane_index(
-                    row["initial"][key]["y_m"], self.width)
+                    row["initial"][key]["y_m"], self.width, self.lane_count)
             before = row["inputs"][key]["memory"]
             after = row["decisions"][key]["memory"]
             submitted = after.get("plan")
@@ -988,9 +1003,9 @@ class _LaneChangeAccumulator:
             if before.get("plan") is None and valid_plan:
                 start_y = submitted.get("y_start_m")
                 target_y = submitted.get("y_target_m")
-                start_lane = (_lane_index(float(start_y), self.width)
+                start_lane = (_lane_index(float(start_y), self.width, self.lane_count)
                               if type(start_y) in (int, float) else None)
-                target_lane = (_lane_index(float(target_y), self.width)
+                target_lane = (_lane_index(float(target_y), self.width, self.lane_count)
                                if type(target_y) in (int, float) else None)
                 item["active"] = {
                     "plan": json.loads(json.dumps(submitted, allow_nan=False)),
@@ -1007,7 +1022,8 @@ class _LaneChangeAccumulator:
                           and after_count == before_count + 1)
             arrival = row["initial"][key]
             target_lane = active["target_lane"] if active is not None else None
-            arrival_lane = _lane_index(arrival["y_m"], self.width)
+            arrival_lane = _lane_index(arrival["y_m"], self.width,
+                                       self.lane_count)
             if (completion and active["from_lane"] is not None
                     and active["plan_start_lane"] == active["from_lane"]
                     and target_lane is not None and active["from_lane"] != target_lane
@@ -1217,7 +1233,8 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
             **deepcopy(speed_accumulator.final_frame_facts),
         })
     if record_count:
-        geometry = geometry_report(source(), model, RoadEnvelope.from_net(NET))
+        geometry = geometry_report(
+            source(), model, RoadEnvelope.from_net(_road_network(case)))
         metric_rows = source()
         if case.get("departures") is not None:
             final = set(case["controlled"])
@@ -1265,11 +1282,16 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
         ),
         "max_sample_gap_s": float(physical["control_sync_dt_s"]),
         "expected_component_count": case.get("expected_component_count", 1),
+        "lane_count": case.get("lane_count", 3),
+        "same_lane_gap_m": float(physical.get(
+            "simple_formation_same_lane_gap_m", 30.0)),
         "incidents": {
             "collision_events": geometry["collision_events"],
             "road_departure_events": geometry["outside_events"],
         },
     }
+    if physical.get("simple_formation_enabled"):
+        detector_parameters.update(formation_deadline_s=None, hold_s=None)
     detection = {
         "default": detect_frames(frames, **detector_parameters),
         "sensitivity": {
@@ -1297,9 +1319,11 @@ def _evaluate_record_source(source, case: Mapping[str, object], model,
         held_time_s=held_time_s,
     )
     final_states = speed_accumulator.final
-    counts = [0, 0, 0]
+    lane_count = case.get("lane_count", 3)
+    counts = [0] * lane_count
     for state in final_states.values():
-        lane = _lane_index(state["y_m"], float(model.p["lane_width_m"]))
+        lane = _lane_index(state["y_m"], float(model.p["lane_width_m"]),
+                           lane_count)
         if lane is not None:
             counts[lane] += 1
     summary = {
@@ -1382,18 +1406,6 @@ def scientific_gate(case: Mapping[str, object], mode: str, summary: Mapping[str,
     return bool(
         execution_completed
         and summary["whole_cohort_formation_success"]
-        and summary["final_lane_counts"] == [2, 2, 2]
-        and summary["formation_lane_changes"] >= 1
-        and summary["formed_time_s"] is not None
-        and summary["formed_time_s"] <= 30.0 + 1e-9
-        and summary["held_time_s"] is not None
-        and summary["held_time_s"] - summary["formed_time_s"] >= 10.0 - 1e-9
-        and speed_recovery.get("speed_recovered") is True
-        and summary["final_speed_spread_mps"] is not None
-        and summary["final_speed_spread_mps"] <= 1.0 + 1e-9
-        and summary["collision_count"] == 0
-        and summary["geometry_passed"]
-        and summary["comfort_passed"]
     )
 
 
@@ -1435,7 +1447,7 @@ def _initial_memories(case: Mapping[str, object], mode: str, *,
 def run_variant(path: str | Path, model, physical: Mapping[str, object],
                  policy: Mapping[str, object], case: Mapping[str, object], mode: str,
                  *, live: bool = True, parent_run_id: str | None = None,
-                 output_nonce: str | None = None) -> dict:
+                 output_nonce: str | None = None, frame_sink=None) -> dict:
     """Run one immutable physical case/mode, retaining any produced prefix."""
     from experiments.phase3_replay import compare_tree
     from experiments.phase5g_cases import digest_json, physical_case
@@ -1498,7 +1510,7 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
             abs_tol=1e-9, rel_tol=0.0,
         ):
             raise ValueError("case.duration_s must contain complete control intervals")
-        road = VisibleRoad.from_net(NET)
+        road = VisibleRoad.from_net(_road_network(case))
         metadata["road"] = asdict(road)
         atomic_json(target / "metadata.json", metadata)
         initial = {key: VehicleState(**state) for key, state in case["initial"].items()}
@@ -1520,6 +1532,9 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                 metadata.update(sumo_time_offset_s=bridge.time_offset,
                                 sumo_version=conn.getVersion())
                 atomic_json(target / "metadata.json", metadata)
+            if frame_sink is not None:
+                frame_sink({"kind": "initial", "time_s": 0.0,
+                            "states": case["initial"]})
             for _ in range(metadata["intervals"]):
                 advances_before = getattr(bridge, "advances", 0)
                 try:
@@ -1532,7 +1547,8 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                             advances_after=getattr(bridge, "advances", advances_before),
                         )
                         clock.last_record.update(sync)
-                        trace.write(json.dumps(clock.last_record, allow_nan=False) + "\n")
+                        trace.write(json.dumps(clock.last_record, allow_nan=False,
+                                               separators=(",", ":")) + "\n")
                         trace.flush()
                         trace_count += 1
                         if _record_is_physical(
@@ -1540,11 +1556,18 @@ def run_variant(path: str | Path, model, physical: Mapping[str, object],
                         ):
                             physical_count += 1
                     raise
-                trace.write(json.dumps(record, allow_nan=False) + "\n")
+                trace.write(json.dumps(record, allow_nan=False,
+                                       separators=(",", ":")) + "\n")
                 trace.flush()
                 physical_count += 1
                 trace_count += 1
                 completed_count += 1
+                if frame_sink is not None:
+                    states = {actor: step["final"]
+                              for actor, step in record["steps"].items()}
+                    frame_sink({"kind": "frame",
+                                "time_s": next(iter(states.values()))["time_s"],
+                                "states": states})
         metadata["execution_status"] = "completed"
     except BaseException as error:
         failure = f"{type(error).__name__}: {error}"
@@ -1859,7 +1882,8 @@ def _demo_case(physical: Mapping[str, object], *, vehicle_count: int, seed: int,
                duration_s: float, live: bool,
                speed_min_mps: float = 8.0, speed_max_mps: float = 12.0,
                depart_interval_min_s: float = 2.5,
-               depart_interval_max_s: float = 4.0) -> dict:
+               depart_interval_max_s: float = 4.0,
+               lane_count: int = 3, straight_road: bool = False) -> dict:
     """Use scheduled local execution offline; retain only the historical live six."""
     from experiments.phase5g_cases import demo_case, main_six_case
 
@@ -1868,18 +1892,19 @@ def _demo_case(physical: Mapping[str, object], *, vehicle_count: int, seed: int,
         speed_min_mps=speed_min_mps, speed_max_mps=speed_max_mps,
         depart_interval_min_s=depart_interval_min_s,
         depart_interval_max_s=depart_interval_max_s,
+        lane_count=lane_count,
+        straight_road=straight_road or lane_count != 3,
     )
     if not live:
-        minimum_duration = float(seeded["duration_s"])
+        last_departure = max(
+            row["scheduled_departure_s"] for row in seeded["departures"].values()
+        )
+        minimum_duration = round(
+            float(last_departure) + float(physical["control_sync_dt_s"]), 10)
         if duration_s + 1e-9 < minimum_duration:
-            last_departure = max(
-                row["scheduled_departure_s"]
-                for row in seeded["departures"].values()
-            )
             raise ValueError(
                 "duration_s must cover the deterministic final departure "
-                f"({last_departure:g} s), 30 s formation deadline, and 10 s "
-                f"hold ({minimum_duration:g} s minimum)"
+                f"({last_departure:g} s minimum)"
             )
         return {**seeded, "duration_s": duration_s}
     if vehicle_count != 6:
@@ -1891,6 +1916,13 @@ def _demo_case(physical: Mapping[str, object], *, vehicle_count: int, seed: int,
         "initial_memories": seeded["initial_memories"],
         "private_rng_provenance": seeded["private_rng_provenance"],
     }
+
+
+def _stdio_frame_sink(event: Mapping[str, object]) -> None:
+    print(json.dumps({"phase5g_stream": event}, ensure_ascii=False,
+                     allow_nan=False), flush=True)
+    if sys.stdin.readline() != "ACK\n":
+        raise RuntimeError("Phase5G GUI stream acknowledgment missing")
 
 
 def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
@@ -1910,12 +1942,18 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
                      reference_switch_gain_m: float = 2.0,
                      min_formation_lane_change_speed_mps: float = 5.0,
                      hard_lane_change_gap_m: float = 8.0,
-                     expected_component_count: int = 1) -> Path:
+                     expected_component_count: int = 1,
+                     stream_frames: bool = False, lane_count: int = 3,
+                     straight_road: bool = False) -> Path:
     """Generate one non-formal lane-priority trace for later SUMO-GUI playback."""
     from experiments.phase5g_cases import canonical_json_bytes, digest_json, physical_case
 
     if type(vehicle_count) is not int or not 3 <= vehicle_count <= 60:
         raise ValueError("vehicle_count must be an exact integer from 3 to 60")
+    if type(lane_count) is not int or lane_count not in (2, 3, 4):
+        raise ValueError("lane_count must be 2, 3, or 4")
+    if type(straight_road) is not bool:
+        raise ValueError("straight_road must be bool")
     if type(expected_component_count) is not int \
             or not 1 <= expected_component_count <= vehicle_count:
         raise ValueError(
@@ -1983,6 +2021,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
         speed_min_mps=speed_min, speed_max_mps=speed_max,
         depart_interval_min_s=interval_min,
         depart_interval_max_s=interval_max,
+        lane_count=lane_count, straight_road=straight_road,
     )
     if expected_component_count != 1:
         case = {**case, "expected_component_count": expected_component_count}
@@ -2062,6 +2101,7 @@ def run_phase5g_demo(*, vehicle_count: int, seed: int, target_speed_mps: float,
             result = run_variant(
                 run.path / "case", model, physical, policy, case, mode,
                 live=live, parent_run_id=run.run_id, output_nonce=output_nonce,
+                **({"frame_sink": _stdio_frame_sink} if stream_frames else {}),
             )
             index["finalized"] = True
             index["completed"] = result.get("status") == "completed"

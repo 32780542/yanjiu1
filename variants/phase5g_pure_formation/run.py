@@ -64,6 +64,8 @@ def main():
     parser.add_argument('--run-dir', help='Replay an existing phase2/phase3 run directory inside keyan1')
     parser.add_argument('--case', action='append', dest='case_names', help='Phase5 explicit development case selection')
     parser.add_argument('--offline', action='store_true', help='Phase5 diagnostic only, no SUMO verification')
+    parser.add_argument('--stream-frames', action='store_true',
+                        help='Phase5G demo: emit each completed frame and wait for GUI ACK')
     parser.add_argument('--no-sampling', action='store_true', help='Phase5 partial development run')
     parser.add_argument('--case-file', help='Explicit previously frozen R5 private/physical initial case JSON')
     parser.add_argument('--waiting-policy', choices=('fixed','minimax','stackelberg'), default='fixed',
@@ -72,6 +74,10 @@ def main():
                         help='Phase5F finite measured-speed duration policy; guard remains unchanged')
     parser.add_argument('--vehicle-count', type=demo_vehicle_count, default=12,
                         help='Phase5G demo controlled vehicle count')
+    parser.add_argument('--lane-count', type=int, choices=(2, 3, 4), default=3,
+                        help='Phase5G demo visible road lane count')
+    parser.add_argument('--straight-road', action='store_true',
+                        help='Phase5G demo constant-width formation road')
     parser.add_argument('--seed', type=uint64, default=1,
                         help='Phase5G demo exact uint64 seed')
     parser.add_argument('--target-speed-mps', type=positive_finite, default=10.0,
@@ -173,7 +179,10 @@ def main():
                           reference_switch_gain_m=args.reference_switch_gain_m,
                           min_formation_lane_change_speed_mps=
                               args.min_formation_lane_change_speed_mps,
-                          hard_lane_change_gap_m=args.hard_lane_change_gap_m)
+                          hard_lane_change_gap_m=args.hard_lane_change_gap_m,
+                          stream_frames=args.stream_frames,
+                          lane_count=args.lane_count,
+                          straight_road=args.straight_road)
         return
     if args.command == 'phase5-r5':
         if not args.case_file or args.case_names:

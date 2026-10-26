@@ -136,6 +136,12 @@ class DemoConfigurationTests(unittest.TestCase):
 
 
 class SimpleFormationConfigurationTests(unittest.TestCase):
+    def test_four_lane_straight_demo_selects_matching_network(self):
+        config = replace(gui.SimpleFormationDemoConfig(),
+                         lane_count=4, straight_road=True)
+        paths = gui.validate_simple_config(config, gui.PROJECT_ROOT)
+        self.assertEqual(paths.network.name, 'straight_4.net.xml')
+
     @staticmethod
     def make_clean_simple_root(path):
         root = Path(path)
@@ -159,7 +165,7 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
             json.dumps({'sumo_home': str(sumo_home)}), encoding='utf-8')
         return root
 
-    def test_defaults_are_the_approved_immutable_simple_formation_values(self):
+    def test_dataclass_defaults_remain_legacy_fixture_values(self):
         expected = {
             'vehicle_count': 12,
             'target_speed_mps': 10.0,
@@ -188,6 +194,10 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
             {name: getattr(config, name) for name in expected}, expected)
         with self.assertRaises(FrozenInstanceError):
             config.vehicle_count = 12
+
+    def test_runrun_entry_uses_observed_formation_duration(self):
+        import runrun
+        self.assertEqual(runrun.build_config().simulation_duration_s, 200.0)
 
     def test_default_simple_config_resolves_only_current_dependencies(self):
         paths = gui.validate_simple_config(
@@ -281,10 +291,10 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
             with self.subTest(label=label), self.assertRaisesRegex(ValueError, label):
                 gui.validate_simple_config(config, gui.PROJECT_ROOT)
 
-    def test_duration_uses_actual_seeded_last_departure_plus_deadline_and_hold(self):
-        for duration in (44.1, 75.4):
+    def test_duration_only_needs_to_cover_actual_seeded_last_departure(self):
+        for duration in (35.4, 35.5):
             with self.subTest(duration=duration), self.assertRaisesRegex(
-                    ValueError, '75.5|30秒|10秒|40秒'):
+                    ValueError, '最后计划发车'):
                 gui.validate_simple_config(
                     replace(gui.SimpleFormationDemoConfig(),
                             simulation_duration_s=duration),
@@ -292,7 +302,7 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
                 )
         accepted = gui.validate_simple_config(
             replace(gui.SimpleFormationDemoConfig(),
-                    simulation_duration_s=75.5),
+                    simulation_duration_s=35.6),
             gui.PROJECT_ROOT,
         )
         self.assertEqual(accepted.variant_root.name, 'phase5g_pure_formation')
@@ -956,8 +966,7 @@ class _SimpleTraceFixture:
                 patch.object(gui, 'create_run_directory') as create, \
                 patch.object(gui.subprocess, 'Popen') as popen, \
                 self.assertRaisesRegex(RuntimeError, pattern):
-            gui.run_simple_formation_demo(
-                self.config, self.root, output_fn=lambda line: None)
+            gui.generate_fresh_simple_trace(self.config, self.paths)
         create.assert_not_called()
         popen.assert_not_called()
 
@@ -969,8 +978,7 @@ class _SimpleTraceFixture:
                 patch.object(gui, 'create_run_directory') as create, \
                 patch.object(gui.subprocess, 'Popen') as popen, \
                 self.assertRaisesRegex(RuntimeError, pattern):
-            gui.run_simple_formation_demo(
-                self.config, self.root, output_fn=lambda line: None)
+            gui.generate_fresh_simple_trace(self.config, self.paths)
         create.assert_not_called()
         popen.assert_not_called()
 
@@ -1692,6 +1700,11 @@ class GuiRuntimeTests(unittest.TestCase):
             {node.get('id'): node.get('edges') for node in root.findall('route')},
             {'demo_full': 'upstream downstream', 'demo_remaining': 'downstream'})
 
+    def test_straight_route_uses_one_edge(self):
+        root = gui.algorithm_routes_tree(straight_road=True)
+        self.assertEqual(root.find("route[@id='demo_full']").get('edges'),
+                         'upstream')
+
     def test_algorithm_playback_moves_every_actor_and_sets_zoom(self):
         status = gui.play_algorithm(self.connection, self.source, auto_zoom=True)
         self.connection.gui.setBoundary.assert_called_once()
@@ -1699,6 +1712,30 @@ class GuiRuntimeTests(unittest.TestCase):
         self.assertEqual(self.connection.vehicle.setSpeed.call_count, 2)
         self.assertEqual(status.frames_played, 2)
         self.assertAlmostEqual(status.final_time_s, 0.1)
+
+    def test_streamed_playback_acknowledges_each_single_visual_step(self):
+        acknowledgments = []
+        self.connection.vehicle.getIDList.side_effect = [
+            ('ego',), ('ego', 'joiner')]
+
+        def events():
+            yield {'kind': 'initial', 'time_s': 0.0,
+                   'states': {'ego': self.state(0.0, 10.0)}}
+            self.assertEqual(acknowledgments, ['ack'])
+            yield {'kind': 'frame', 'time_s': 0.1,
+                   'states': {'ego': self.state(0.1, 10.5),
+                              'joiner': self.state(0.1, 0.0)}}
+
+        stats = gui.play_streamed_algorithm(
+            self.connection, events(), acknowledgments.append,
+            ('ego', 'joiner'), False,
+        )
+        self.assertEqual(self.connection.simulationStep.call_count, 2)
+        self.assertEqual(acknowledgments, ['ack', 'ack'])
+        self.assertEqual(stats.frames_played, 2)
+        self.assertEqual([call.args[0] for call in
+                          self.connection.vehicle.add.call_args_list],
+                         ['ego', 'joiner'])
 
     def test_dynamic_playback_adds_an_actor_only_on_its_first_recorded_frame(self):
         first_states = {'ego': self.state(0.0, 10.0)}
@@ -1866,6 +1903,26 @@ class GuiRuntimeTests(unittest.TestCase):
 
 
 class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
+    def test_default_gui_opens_before_model_stream_starts(self):
+        outer = self.make_outer()
+        source = gui.load_simple_trace_source(outer, self.paths, self.config)
+        generated = gui.GeneratedSimpleTrace(outer.resolve(), source)
+        order = []
+        session = MagicMock()
+        session.__enter__.side_effect = lambda: order.append('gui') or MagicMock()
+        session.__exit__.return_value = False
+
+        def stream(*args):
+            order.append('model')
+            return generated, gui.PlaybackStats(2, 0.1, 0, 0, 'trace_completed')
+
+        with patch.object(gui, 'validate_simple_config', return_value=self.paths), \
+                patch.object(gui, 'stream_fresh_simple_trace', side_effect=stream):
+            gui.run_simple_formation_demo(
+                self.config, self.root, runtime=lambda *args: session,
+                input_fn=lambda prompt: '', output_fn=lambda line: None)
+        self.assertEqual(order, ['gui', 'model'])
+
     def test_trace_only_mode_returns_outer_without_gui_or_demo_directory(self):
         outer = self.make_outer()
         source = gui.load_simple_trace_source(outer, self.paths, self.config)
@@ -2032,7 +2089,9 @@ class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
 
 class EntrypointTests(unittest.TestCase):
     def test_top_level_defaults_build_expected_config(self):
-        self.assertEqual(runrun.build_config(), gui.SimpleFormationDemoConfig())
+        self.assertEqual(runrun.build_config(), replace(
+            gui.SimpleFormationDemoConfig(), straight_road=True,
+            simulation_duration_s=200.0))
         self.assertEqual(runrun.PROJECT_ROOT, gui.PROJECT_ROOT)
 
     def test_check_does_not_start_gui(self):
@@ -2060,9 +2119,11 @@ class EntrypointTests(unittest.TestCase):
             self.assertEqual(runrun.main(
                 [], input_fn=forbidden_input, output_fn=output.append), 0)
         demo.assert_called_once_with(
-            gui.SimpleFormationDemoConfig(), input_fn=unittest.mock.ANY,
+            replace(gui.SimpleFormationDemoConfig(), straight_road=True,
+                    simulation_duration_s=200.0),
+            input_fn=unittest.mock.ANY,
             output_fn=unittest.mock.ANY)
-        self.assertTrue(any('三车道领航者-跟随者编队' in line for line in output))
+        self.assertTrue(any('领航者-跟随者编队' in line for line in output))
 
     def test_unknown_command_line_option_is_rejected(self):
         with self.assertRaisesRegex(ValueError, '只支持 --check'):
