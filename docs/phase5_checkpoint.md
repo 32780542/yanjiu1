@@ -373,4 +373,5 @@
 - 验证：完整编队测试 150 项通过，操作 results/operations/20261026T125057632259Z_readability-formation-suite_adababef；GUI 与审计 91 项通过，操作 results/operations/20261026T125057628253Z_readability-gui-suite_f84155fa；多车道与检测专项 41 项通过。600 场景五次交错计时中位数为重构前 0.2205 s、重构后 0.2195 s。
 - 实际 GUI 检查：三车、15 s、151 帧、碰撞与传送 0，操作 results/operations/20261026T130350482590Z_readability-live-gui_56a023b9；显示记录 results/demo_runs/20261026T130350776510Z_simple_formation_b596cf25；新封存源 variants/phase5g_pure_formation/results/phase5g/simple_gui_sources/20261026T130355497351Z_588469a3。
 - 文档入口改为 docs/纯规则编队系统说明.md；配套 docs/纯规则系统方法索引.md 列出 419 个函数、类和显式类方法，docs/存储整理报告.md 记录空间和 GitHub 安排。README 已改为简明入口。
-- 下一研究入口：沿新说明核对当前规则，在新批次中补齐修复版 39 例矩阵；代码整理本身以重构前后行为一致为验收。GitHub 同步状态在本节后续记录。
+- 下一研究入口：沿新说明核对当前规则，在新批次中补齐修复版 39 例矩阵；代码整理本身以重构前后行为一致为验收。
+- GitHub 同步完成：实现提交 `e9594f5` 已推送到 `https://github.com/32780542/yanjiu1` 的 `main`。同步包含之前保留在工作区的实时 GUI、多车道与实验协议修改，以及本轮重构、测试和说明；大轨迹与临时数据继续由实验目录管理。
