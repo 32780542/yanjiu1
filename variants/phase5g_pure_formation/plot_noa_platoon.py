@@ -13,6 +13,7 @@ import numpy as np
 def plot(directory):
     directory = Path(directory)
     rows = json.loads((directory/'groups.json').read_text(encoding='utf-8'))
+    cases = json.loads((directory/'results.json').read_text(encoding='utf-8'))
     lookup = {(r['flow_veh_h_lane'],r['formation']):r for r in rows if r['kind']=='demand'}
     flows = (1250,1500,1750,2000)
     plt.rcParams.update({'font.sans-serif':['Microsoft YaHei','SimHei','DejaVu Sans'],
@@ -20,14 +21,26 @@ def plot(directory):
     colors = ('#3C5488','#E64B35')
     labels = ('仅NOA','NOA＋编队')
 
-    def curve(ax,metric,ylabel,scale=1.):
+    def curve(ax,metric,ylabel,scale=1.,show_samples=False):
         for on in (False,True):
             values = np.array([lookup[q,on][metric+'_mean'] for q in flows],dtype=float)*scale
             errors = np.array([lookup[q,on][metric+'_sd'] for q in flows],dtype=float)*scale
             ax.plot(flows,values,marker='o',markersize=4,color=colors[on],label=labels[on])
-            valid = np.isfinite(values)&np.isfinite(errors)
-            ax.errorbar(np.array(flows)[valid],values[valid],yerr=errors[valid],
-                        color=colors[on],fmt='none',capsize=3)
+            if show_samples:
+                samples = [r for r in cases if r['kind']=='demand' and r['formation']==on
+                    and r['all_completed'] and not r['collision_pairs'] and not r['road_departure_vehicles']
+                    and r.get(metric) is not None]
+                ax.scatter([r['flow_veh_h_lane'] for r in samples],[scale*r[metric] for r in samples],
+                           color=colors[on],s=13,alpha=.4,zorder=3)
+            else:
+                valid = np.isfinite(values)&np.isfinite(errors)
+                ax.errorbar(np.array(flows)[valid],values[valid],yerr=errors[valid],
+                            color=colors[on],fmt='none',capsize=3)
+            for q,value in zip(flows,values):
+                defined = lookup[q,on][metric+'_n']
+                if np.isfinite(value) and defined < lookup[q,on]['runs']:
+                    ax.annotate(f'n={defined}',(q,value),xytext=(0,7),textcoords='offset points',
+                                ha='center',fontsize=7,color=colors[on])
         ax.set_xlabel('每车道需求率（辆/h）')
         ax.set_ylabel(ylabel)
         ax.set_xticks(flows)
@@ -45,6 +58,7 @@ def plot(directory):
     fig,axes = plt.subplots(1,2,figsize=(9,3.7),layout='constrained')
     curve(axes[0],'mean_travel_time_s','1200 m平均在网行程时间（s）')
     curve(axes[1],'mean_entry_wait_s','平均源端未放行等待（s）')
+    axes[0].set_ylim(bottom=0)
     axes[0].legend(frameon=False)
     fig.suptitle('恒定三车道直路对照：共同应急保护与巡航设定',fontsize=12)
     save(fig,'noa_straight_comparison')
@@ -54,10 +68,12 @@ def plot(directory):
         ('mean_platoon_size','平均局部编队规模（辆）',1.),
         ('max_platoon_size','逐例最大规模的跨种子均值（辆）',1.),
         ('participation_rate','编队参与率（%）',100.),
-        ('stable_participation_rate','连续关系确认5 s后的稳定参与率（%）',100.))):
-        curve(ax,metric,label,scale)
+        ('platoon_stability_rate','已编队成员中持续关系的稳定时间占比（%）',100.))):
+        curve(ax,metric,label,scale,show_samples=scale==100.)
+        if scale==100.:
+            ax.set_ylim(0,100)
     axes[0,0].legend(frameon=False)
-    fig.suptitle('编队规模与稳定参与：3种子均值±样本标准差',fontsize=12)
+    fig.suptitle('编队规模与稳定性：上排均值±SD，下排均值与观测点',fontsize=12)
     save(fig,'platoon_size_stability')
 
     fig,axes = plt.subplots(1,3,figsize=(12,3.8),layout='constrained')
@@ -71,8 +87,9 @@ def plot(directory):
     save(fig,'platoon_quality')
 
     (directory/'figure_sources.json').write_text(json.dumps(dict(
-        source='groups.json',filter=dict(kind='demand'),flows_veh_h_lane=flows,
-        error_bars='sample standard deviation across valid paired seeds',
+        source=['groups.json','results.json'],filter=dict(kind='demand'),flows_veh_h_lane=flows,
+        error_bars='sample standard deviation across non-null metric observations among valid runs',
+        proportion_panels='mean curves and individual valid seed points on 0-100% axes',
         participation_units='percent in figures; fraction in JSON/CSV'),indent=2)+'\n',encoding='utf-8')
 
 

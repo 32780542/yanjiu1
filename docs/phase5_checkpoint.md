@@ -457,3 +457,19 @@
 - 最终冻结138项通过，操作`results/operations/20261028T095941356480Z_noa-platoon-publication-freeze_ae290a56`。完整150项首次为149通过、1项仍断言旧超巡航追赶+2；已改为新封顶0预期。旧操作`20261028T094527404302Z_realistic-formation-harness_f269a65e`保留，完整套件正在新源码下重跑。
 - **当前唯一正式批次**：`results/operations/20261028T100104659374Z_noa-platoon-final-54_ea4eff30`，原始根`variants/phase5g_pure_formation/results/continuous_traffic_v3/20261028T100105100032Z`，16workers、7200s。当前exec会话20978。完整harness操作`results/operations/20261028T100115306188Z_noa-platoon-final-harness_7a595fd8`，exec会话58958。源代码已冻结；最终结果、报告与GitHub发布尚待完成。
 - 新绘图入口`variants/phase5g_pure_formation/plot_noa_platoon.py`位于冻结运行文件夹之外，输出直路对照、规模/稳定参与、几何/速度/内部断裂三组PNG/SVG。README与系统说明已将旧大幅改善率标为历史实现，当前规则见`docs/基础NOA与入口修正规则.md`。
+- 修正与指标单元已提交`5025592`并推送用户GitHub main。完整150项最终套件通过，操作`results/operations/20261028T100115306188Z_noa-platoon-final-harness_7a595fd8`，测试592.109s，外部操作退出0。当前仍需完成54条件与正式结果发布；不能把本段测试通过当作矩阵已经结束。
+- 主三车道24例已全部封存、完整排空且0接触/越界。仅NOA四组在网行程均41.6667s；编队四组均值41.845/41.759/41.733/41.708s。平均局部规模2.30/2.21/2.287/2.471，参与率22.23%/19.77%/32.44%/10.60%。仅NOA参与率7.95%/7.72%/20.48%/0.53%。六个两车道工况也全部完成、0接触，包括旧失败seed2/3。全54例仍未结束。
+- 在保留原稳定参与率的同时，离线汇总派生`platoon_stability_rate=stable_vehicle_seconds/platoon_vehicle_seconds`，作为“已编队成员稳定时间占比”，与内部断裂并列。无编队暴露为空，单例恒等式Pstable=P×H。2项手算测试RED/GREEN分别`20261028T103933595793Z_conditional-stability-red_6013b9ab`、`20261028T104004449115Z_conditional-stability-green_245578a8`；不改冻结识别、轨迹或控制。主四组H为82.79%/85.26%/86.60%/85.10%，仅NOA约87.9%，说明规模/参与增加不等同关系更稳定。
+- 三张主场景图的真实预览在`tmp/noa_platoon_preview_20261028T104425`，已目视检查。占比图给均值和3个种子实际点（0–100%坐标），其他面板给均值±样本SD，避免将超出物理域的对称SD误差条读成负参与率。正式导出将重新从全部54例生成。
+- 已准备`tmp/write_noa_platoon_report.py`和`tmp/noa_platoon_data_readme.md`。54例结束后先运行`summarize_traffic_flow.py 原始根 docs/experiments/2026-10-28-noa-platoon`（输出目录必须尚不存在），再运行`plot_noa_platoon.py`，最后执行该报告生成脚本并复制数据README。生成后必须补写基于实际数字的结论、独立复审和GitHub同步；此时不要结束任务。
+
+### 最终54例结果、直接指标与验收
+
+- 正式54/54全部完成、全部请求排空、接触车辆对0、驶出道路0；源端队列、上游及测量段终点余车均0。操作`results/operations/20261028T100104659374Z_noa-platoon-final-54_ea4eff30`退出0、4161.719s，Job确认active_processes0。原始根`variants/phase5g_pure_formation/results/continuous_traffic_v3/20261028T100105100032Z`，97个运行前源码/配置摘要与当前实际文件逐项相同。
+- 独立复算`results/operations/20261028T111159547289Z_noa-platoon-final-recompute_30a46ba4`退出0，11.875s；54例、378文件摘要、41282条计划台账、54例逐拍累计、30个配对请求表均通过；直接编队指标从物理样本重算。导出`docs/experiments/2026-10-28-noa-platoon`，含54例、18组、30配对、10配对组。
+- 每道1250/1500/1750/2000主场景：仅NOA在网均41.6667s；编队41.845/41.759/41.733/41.708s。平均局部规模2.30/2.21/2.29/2.47，观察最大7/7/8/4辆；参与率22.23%/19.77%/32.44%/10.60%。组织规模和参与增加，直路通行略慢，稳定性未全面改善。
+- 两车道全部6例、四车道全部6例及所有参数变化均安全排空。当前平均队伍仍主要是2辆左右的局部车组；D24/36和速度24/32各3个种子结果完整列在新报告。旧两车道失败seed2/3重跑已安全完成，旧失败原始证据继续保留。
+- 统计审计发现2000需求的仅NOA有两个安全种子没有车组；参与率0保留在3例平均中，条件规模/几何/H只含1个有组样本。已新增每指标`_n`、图中n=1，缺测不填0，避免将1例条件均值写成3例。新增样本数反例RED/GREEN为`20261028T105804245161Z_undefined-platoon-count-red_f8ac1f06`、`20261028T105805828737Z_undefined-platoon-count-green_3cea3829`。
+- 最终相关141项通过：`results/operations/20261028T110109799593Z_noa-platoon-final-statistics-tests_98e37d7a`，29.801s测试；完整链路150项已在`20261028T100115306188Z_noa-platoon-final-harness_7a595fd8`通过。四份CSV/JSON与各组/配对/条件稳定H由独立复审核对一致。
+- 三组300DPI PNG/SVG已目视核对，操作`results/operations/20261028T111256403661Z_noa-platoon-final-figures_23836c37`。复审修正了图说明中的H名称和误差条样本口径；图按各模式非空安全观测分别统计，未强称统一配对3样本。18个便携成果文件共1166526字节，原始gzip只存本机结果目录，源码版本交Git管理。
+- 报告`docs/直路NOA与编队规模稳定度报告.md`，规则`docs/基础NOA与入口修正规则.md`，指标与文献`docs/编队规模与稳定度评价.md`。README、系统说明、方法索引和计划均更新。基础NOA修正与直接编队评价任务已完成，下一研究重点为持续流中的大队增长和关系保持，以及独立的车道减少/合流实验。

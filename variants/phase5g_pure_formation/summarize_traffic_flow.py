@@ -13,6 +13,11 @@ from experiments.formation_study import write_json
 from experiments.platoon_metrics import evaluate_platoons, PLATOON_METRICS
 
 
+def conditional_stability(measured):
+    exposure = measured['platoon_vehicle_seconds']
+    return measured['stable_vehicle_seconds']/exposure if exposure else None
+
+
 def paired_rows(rows):
     key = lambda r:(r["lane_count"],r["flow_veh_h_lane"],r["seed"],r["target_speed_mps"])
     baselines = {key(r):r for r in rows if not r["formation"]}
@@ -88,7 +93,7 @@ def group_rows(rows, paired=False):
                "exit_flow_change_pct") if paired else (
                "requested","completed","mean_entry_wait_s","mean_travel_time_s","mean_system_time_s",
                "exit_flow_veh_h","fuel_g_per_km","mean_fuel_rate_mg_s","total_fuel_kg","network_mean_speed_mps",
-               "mean_upstream_travel_s","mean_entry_delay_s",*PLATOON_METRICS)
+               "mean_upstream_travel_s","mean_entry_delay_s",*PLATOON_METRICS,'platoon_stability_rate')
     output = []
     for key, values in sorted(groups.items()):
         result = dict(zip(fields,key))
@@ -99,6 +104,7 @@ def group_rows(rows, paired=False):
         for metric in metrics:
             population = values if metric in ("requested","completed") else valid_values
             data = [v[metric] for v in population if v.get(metric) is not None]
+            result[metric+'_n'] = len(data)
             result[metric+"_mean"] = mean(data) if data else None
             result[metric+"_sd"] = stdev(data) if len(data)>1 else None
         output.append(result)
@@ -186,6 +192,7 @@ def summarize(root, output, additional_roots=()):
         incidents = json.loads((directory/"incidents.json").read_text(encoding="utf-8"))
         if (directory/'platoon_metrics.json').is_file():
             measured = evaluate_platoons(directory/'positions.jsonl.gz',row['lane_count'],row['same_lane_gap_m'])
+            row['platoon_stability_rate'] = conditional_stability(measured)
             for key in PLATOON_METRICS:
                 a,b = measured[key],row[key]
                 if not (a == b if a is None or b is None else math.isclose(a,b,rel_tol=1e-9,abs_tol=1e-8)):
@@ -214,6 +221,7 @@ def summarize(root, output, additional_roots=()):
     export_csv(output/"pairs.csv",pairs)
     export_csv(output/"pair_groups.csv",group_rows(pairs,paired=True))
     write_json(output/"verification.json",dict(cases=len(rows),file_hashes_checked=checked,
+        postprocessor_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         trips_checked=requests,network_ledger_checks=network_checked,paired_tapes_checked=len(pairs),
         source_directory=str(root),source_snapshot_sha256=snapshots,
         case_sources={name:str(path) for name,path in evidence.items()}))

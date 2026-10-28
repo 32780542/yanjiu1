@@ -6,13 +6,13 @@ import unittest
 from models.vehicle import VehicleState
 from noa.controller import decide
 from noa.simple_formation import FormationTarget, LocalVehicle, formation_acceleration
-from tests.test_phase4_controller import NoaControllerTests
-from tests.test_simple_formation_controller import SimpleFormationControllerTests
+from tests import test_phase4_controller as noa_tests
+from tests import test_simple_formation_controller as formation_tests
 
 
 class RealisticNoaTests(unittest.TestCase):
     def test_equal_speed_at_time_headway_does_not_brake(self):
-        fixture = NoaControllerTests()
+        fixture = noa_tests.NoaControllerTests()
         fixture.setUp()
         p = dict(fixture.p,noa_target_speed_mps=28.8)
         ego = VehicleState(x_m=100.,y_m=1.65,vx_mps=28.8)
@@ -23,7 +23,7 @@ class RealisticNoaTests(unittest.TestCase):
         self.assertAlmostEqual(result.action.acceleration_mps2,0.,places=8)
 
     def test_formation_catchup_respects_common_cruise_setting(self):
-        fixture = SimpleFormationControllerTests()
+        fixture = formation_tests.SimpleFormationControllerTests()
         fixture.setUp()
         p = dict(fixture.p,noa_target_speed_mps=28.8)
         ego = LocalVehicle(0,100.,1.65,28.8,0)
@@ -31,7 +31,7 @@ class RealisticNoaTests(unittest.TestCase):
         self.assertLessEqual(formation_acceleration(ego,target,p),0.)
 
     def test_closing_speed_braking_is_shared_in_both_modes(self):
-        fixture = SimpleFormationControllerTests()
+        fixture = formation_tests.SimpleFormationControllerTests()
         fixture.setUp()
         # 净距大于TTC阈值触发点，但含jerk的闭合停车距离已经不足。
         control = fixture.control(speed=28.8,neighbors=(
@@ -43,7 +43,7 @@ class RealisticNoaTests(unittest.TestCase):
             self.assertEqual(result.memory.own_behavior,'EMERGENCY')
 
     def test_same_position_body_is_an_emergency_in_both_modes(self):
-        fixture = SimpleFormationControllerTests()
+        fixture = formation_tests.SimpleFormationControllerTests()
         fixture.setUp()
         control = fixture.control(neighbors=(fixture.neighbor(7,0.,0),))
         for on in (False,True):
