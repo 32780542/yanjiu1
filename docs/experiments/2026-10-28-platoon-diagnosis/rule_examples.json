@@ -1,0 +1,18 @@
+[
+  {
+    "neighbor_count": 1,
+    "position_error_m": 30.47999999999999,
+    "acceleration_mps2": 0.0,
+    "reference_reason": "visible_component_ahead",
+    "layer_consistent": true,
+    "fill_reason": "head_layer"
+  },
+  {
+    "neighbor_count": 2,
+    "position_error_m": 30.47999999999999,
+    "acceleration_mps2": 0.0,
+    "reference_reason": "nearest_same_lane",
+    "layer_consistent": false,
+    "fill_reason": "layer_not_stable"
+  }
+]

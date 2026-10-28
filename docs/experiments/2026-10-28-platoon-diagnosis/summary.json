@@ -1,0 +1,205 @@
+{
+  "scope": "24 three-lane demand cases; sampled geometry diagnostics, not a new simulation",
+  "sample_interval_s": 1.0,
+  "counters": "vehicle, edge, or group observations summed over frames; repeated entities count again",
+  "reproduction_operation": "results/operations/20261028T120924578198Z_geometry-audit-public-reproduction_878a150b",
+  "source_sha256": {
+    "docs/experiments/2026-10-28-platoon-diagnosis/reproduce_audit.py": "854032d37e1436dfb915e6115d3e90db908c33225eaa5cc651fdf84a21953124",
+    "variants/phase5g_pure_formation/experiments/platoon_metrics.py": "9f1648912518129f1a197f12dbfeafac24a7532bb5de09302af47aeaa3525c1b",
+    "variants/phase5g_pure_formation/experiments/phase5_detection.py": "630ead1a58451a666ed5bb2ee2b4b75de08987144b2c3501818a8de490b7a017",
+    "variants/phase5g_pure_formation/noa/simple_formation.py": "06524d425917b1e71bd32789d212f4e7e2f65f8d2638d27279e4a90e9b1afb38"
+  },
+  "groups": [
+    {
+      "formation_enabled": false,
+      "flow_veh_h_lane": 1250,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 75535,
+        "at_cruise_samples": 75535,
+        "matched_size_2": 2968,
+        "matched_samples": 3009,
+        "matched_vehicle_samples": 6059,
+        "single_layer_samples": 3009,
+        "outer_pair_samples": 621,
+        "cross_lane_edges": 3091,
+        "matched_size_3": 41,
+        "complete_component_samples": 2,
+        "complete_component_size_3": 2,
+        "complete_component_vehicle_samples": 6
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "formation_enabled": false,
+      "flow_veh_h_lane": 1500,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 91844,
+        "at_cruise_samples": 91844,
+        "matched_size_2": 3515,
+        "matched_samples": 3515,
+        "matched_vehicle_samples": 7030,
+        "single_layer_samples": 3515,
+        "cross_lane_edges": 3515,
+        "outer_pair_samples": 1541
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "formation_enabled": false,
+      "flow_veh_h_lane": 1750,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 106869,
+        "at_cruise_samples": 106869,
+        "matched_size_2": 11039,
+        "matched_samples": 11039,
+        "matched_vehicle_samples": 22078,
+        "single_layer_samples": 11039,
+        "outer_pair_samples": 8943,
+        "cross_lane_edges": 11039
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "formation_enabled": false,
+      "flow_veh_h_lane": 2000,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 123140,
+        "at_cruise_samples": 123140,
+        "matched_size_2": 329,
+        "matched_samples": 329,
+        "matched_vehicle_samples": 658,
+        "single_layer_samples": 329,
+        "cross_lane_edges": 329
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "formation_enabled": true,
+      "flow_veh_h_lane": 1250,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 75893,
+        "at_cruise_samples": 66113,
+        "matched_size_2": 5859,
+        "matched_samples": 7387,
+        "matched_vehicle_samples": 16936,
+        "single_layer_samples": 6024,
+        "outer_pair_samples": 1368,
+        "cross_lane_edges": 9062,
+        "matched_size_3": 1116,
+        "same_lane_edges": 1661,
+        "matched_size_4": 224,
+        "complete_component_samples": 113,
+        "complete_component_size_3": 113,
+        "complete_component_vehicle_samples": 339,
+        "matched_size_5": 164,
+        "matched_size_6": 14,
+        "matched_size_7": 10
+      },
+      "completed_lane_changes": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "formation_enabled": true,
+      "flow_veh_h_lane": 1500,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 92098,
+        "at_cruise_samples": 84503,
+        "matched_size_2": 6699,
+        "matched_samples": 8184,
+        "matched_vehicle_samples": 18177,
+        "single_layer_samples": 7480,
+        "outer_pair_samples": 3332,
+        "cross_lane_edges": 10464,
+        "matched_size_3": 1248,
+        "same_lane_edges": 811,
+        "matched_size_4": 163,
+        "complete_component_samples": 58,
+        "complete_component_size_3": 58,
+        "complete_component_vehicle_samples": 174,
+        "matched_size_6": 7,
+        "matched_size_5": 64,
+        "matched_size_7": 3
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "formation_enabled": true,
+      "flow_veh_h_lane": 1750,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 107080,
+        "at_cruise_samples": 98893,
+        "matched_size_2": 12717,
+        "matched_samples": 15822,
+        "matched_vehicle_samples": 34941,
+        "single_layer_samples": 15522,
+        "outer_pair_samples": 9523,
+        "cross_lane_edges": 21676,
+        "matched_size_3": 2996,
+        "matched_size_4": 52,
+        "same_lane_edges": 385,
+        "matched_size_5": 45,
+        "matched_size_7": 8,
+        "matched_size_8": 3,
+        "matched_size_6": 1
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "formation_enabled": true,
+      "flow_veh_h_lane": 2000,
+      "runs": 3,
+      "counts": {
+        "vehicle_samples": 123372,
+        "at_cruise_samples": 115949,
+        "matched_size_2": 1912,
+        "matched_samples": 4875,
+        "matched_vehicle_samples": 12752,
+        "single_layer_samples": 4784,
+        "outer_pair_samples": 931,
+        "cross_lane_edges": 10623,
+        "matched_size_3": 2924,
+        "matched_size_4": 39,
+        "same_lane_edges": 91
+      },
+      "completed_lane_changes": [
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

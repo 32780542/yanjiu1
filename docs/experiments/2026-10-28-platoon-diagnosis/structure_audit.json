@@ -1,0 +1,1253 @@
+[
+  {
+    "name": "demand_L3_q1250_v28.8_d30_s1_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1250,
+    "seed": 1,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 23799,
+      "at_cruise_samples": 23799,
+      "matched_size_2": 660,
+      "matched_samples": 701,
+      "matched_vehicle_samples": 1443,
+      "single_layer_samples": 701,
+      "outer_pair_samples": 208,
+      "cross_lane_edges": 783,
+      "matched_size_3": 41,
+      "complete_component_samples": 2,
+      "complete_component_size_3": 2,
+      "complete_component_vehicle_samples": 6
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 43.0,
+      "states": {
+        "v0_00307": [
+          19.68000000000546,
+          1.65,
+          28.8,
+          0.0
+        ],
+        "v2_00319": [
+          19.68000000000546,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": {
+      "time_s": 214.0,
+      "members": [
+        "v0_02013",
+        "v2_02025",
+        "v1_02030"
+      ],
+      "counts": [
+        1,
+        1,
+        1
+      ]
+    },
+    "source_sha256": {
+      "input.json": "5f0cd618a41a9931e9fb1c3e4964f2e72a061d04de7939efd354cab269970c5e",
+      "positions.jsonl.gz": "1672a30ea7e916ac04489f4cd3df059392a05dff7b1821b847ea19b7c970b786",
+      "trips.json": "c74865297dbcaa61f528c33daf6157ead1b1dd381ea1b04b0dc7e0f5035b85d5"
+    }
+  },
+  {
+    "name": "demand_L3_q1250_v28.8_d30_s1_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1250,
+    "seed": 1,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 23917,
+      "at_cruise_samples": 20893,
+      "matched_size_2": 1712,
+      "matched_samples": 2147,
+      "matched_vehicle_samples": 4901,
+      "single_layer_samples": 1644,
+      "outer_pair_samples": 378,
+      "cross_lane_edges": 2450,
+      "matched_size_3": 324,
+      "same_lane_edges": 591,
+      "matched_size_4": 63,
+      "complete_component_samples": 29,
+      "complete_component_size_3": 29,
+      "complete_component_vehicle_samples": 87,
+      "matched_size_5": 35,
+      "matched_size_6": 13
+    },
+    "same_lane_gap_min_m": 30.00188325379645,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 21.0,
+      "states": {
+        "v0_00028": [
+          217.20419653657737,
+          1.65,
+          28.35248010796192,
+          0.11833741255809035
+        ],
+        "v2_00031": [
+          215.52000000000768,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": {
+      "time_s": 201.0,
+      "members": [
+        "v0_01756",
+        "v2_01757",
+        "v1_01743"
+      ],
+      "counts": [
+        1,
+        1,
+        1
+      ]
+    },
+    "source_sha256": {
+      "input.json": "7b9a213fd1e5d75fce407cf19718b7034e1366560c527d09b03bb9c4b6cee4c5",
+      "positions.jsonl.gz": "f81403d48a26e4afafc77572fae754e7b710a9eed9c8a92cadb8a3ced9e978e5",
+      "trips.json": "deef76d4f6645b4b61862707384ef425da84aef1f487967d86eb98e9ac399e26"
+    }
+  },
+  {
+    "name": "demand_L3_q1250_v28.8_d30_s2_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1250,
+    "seed": 2,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 26323,
+      "at_cruise_samples": 26323,
+      "matched_size_2": 1443,
+      "matched_samples": 1443,
+      "matched_vehicle_samples": 2886,
+      "single_layer_samples": 1443,
+      "cross_lane_edges": 1443,
+      "outer_pair_samples": 289
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 50.0,
+      "states": {
+        "v1_00376": [
+          2.400000000005445,
+          4.949999999999999,
+          28.8,
+          0.0
+        ],
+        "v2_00390": [
+          16.800000000005458,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "7bdd19de97cbdfc570d2a1803d2c6d6bd8d46c664d0c5a1b79f62547a7397ce9",
+      "positions.jsonl.gz": "0372a6959945bd4377991af4e14aaa4b0b7104a5f713b2b1597c1ee01e8fbf33",
+      "trips.json": "3a7bb659d433ebea64cfcd88983bb7c816e442ba78cbc3d7e97e91f8e3fa0179"
+    }
+  },
+  {
+    "name": "demand_L3_q1250_v28.8_d30_s2_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1250,
+    "seed": 2,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 26451,
+      "at_cruise_samples": 22870,
+      "matched_size_2": 2424,
+      "matched_samples": 3061,
+      "matched_vehicle_samples": 6860,
+      "single_layer_samples": 2682,
+      "cross_lane_edges": 3837,
+      "matched_size_3": 561,
+      "same_lane_edges": 449,
+      "matched_size_4": 64,
+      "outer_pair_samples": 661,
+      "matched_size_7": 6,
+      "complete_component_samples": 26,
+      "complete_component_size_3": 26,
+      "complete_component_vehicle_samples": 78,
+      "matched_size_5": 5,
+      "matched_size_6": 1
+    },
+    "same_lane_gap_min_m": 30.002159256364394,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 1,
+    "first_match": {
+      "time_s": 30.0,
+      "states": {
+        "v1_00002": [
+          527.6723361405835,
+          4.949999999999999,
+          28.344493649437744,
+          0.12102333961824564
+        ],
+        "v2_00008": [
+          540.9600000000199,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": {
+      "time_s": 493.0,
+      "members": [
+        "v0_04664",
+        "v2_04668",
+        "v1_04628"
+      ],
+      "counts": [
+        1,
+        1,
+        1
+      ]
+    },
+    "source_sha256": {
+      "input.json": "3ed20c9a8c57b8621f9257c2f7654923126dd968d2952c7283d323df02c686f2",
+      "positions.jsonl.gz": "75c6a22af8b64a07229de5cb91a5ee21de037219efa3944afe328b7daf830f65",
+      "trips.json": "7e7f0aee2a910a1d7bb5aa0f5352d8ced0eef32c66469d6dda31b44ca1e10544"
+    }
+  },
+  {
+    "name": "demand_L3_q1250_v28.8_d30_s3_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1250,
+    "seed": 3,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 25413,
+      "at_cruise_samples": 25413,
+      "matched_size_2": 865,
+      "matched_samples": 865,
+      "matched_vehicle_samples": 1730,
+      "single_layer_samples": 865,
+      "cross_lane_edges": 865,
+      "outer_pair_samples": 124
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 51.0,
+      "states": {
+        "v1_00399": [
+          19.68000000000546,
+          4.949999999999999,
+          28.8,
+          0.0
+        ],
+        "v2_00374": [
+          34.08000000000545,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "0a807c36c807cff7ff0a8f7951aeec0f68f1e82b793722e5455c88a0fba38fd9",
+      "positions.jsonl.gz": "44e940e9d224c6f465049c79c0d18bb0ae8497055e5d148f50aa781da68c25dc",
+      "trips.json": "586de752ad9a1909d19ef132d7a852bc75645ebe4ddc5a29e988ff638e04acc9"
+    }
+  },
+  {
+    "name": "demand_L3_q1250_v28.8_d30_s3_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1250,
+    "seed": 3,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 25525,
+      "at_cruise_samples": 22350,
+      "matched_size_2": 1723,
+      "matched_samples": 2179,
+      "matched_vehicle_samples": 5175,
+      "single_layer_samples": 1698,
+      "cross_lane_edges": 2775,
+      "same_lane_edges": 621,
+      "matched_size_3": 231,
+      "matched_size_5": 124,
+      "outer_pair_samples": 329,
+      "matched_size_4": 97,
+      "matched_size_7": 4,
+      "complete_component_samples": 58,
+      "complete_component_size_3": 58,
+      "complete_component_vehicle_samples": 174
+    },
+    "same_lane_gap_min_m": 30.003764705433014,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 2,
+    "first_match": {
+      "time_s": 22.0,
+      "states": {
+        "v1_00004": [
+          308.60358798200764,
+          4.949999999999999,
+          28.394617018060554,
+          0.10780334925808512
+        ],
+        "v2_00004": [
+          322.0800000000117,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": {
+      "time_s": 415.0,
+      "members": [
+        "v0_03834",
+        "v2_03890",
+        "v1_03856"
+      ],
+      "counts": [
+        1,
+        1,
+        1
+      ]
+    },
+    "source_sha256": {
+      "input.json": "ef97e2957b7ded7068b84a185b41eaacc0250908de7d2932bab1546b208166a8",
+      "positions.jsonl.gz": "c4c517efcec0256ef0200cfee729ccc4fb61bc83332fa1e8cc96277cb0db9ab0",
+      "trips.json": "5c89eb7831dd9d73e7fa601e9b0b8a67591b6142d0990a723e87cc6d351a102c"
+    }
+  },
+  {
+    "name": "demand_L3_q1500_v28.8_d30_s1_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1500,
+    "seed": 1,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 29581,
+      "at_cruise_samples": 29581,
+      "matched_size_2": 1812,
+      "matched_samples": 1812,
+      "matched_vehicle_samples": 3624,
+      "single_layer_samples": 1812,
+      "cross_lane_edges": 1812,
+      "outer_pair_samples": 208
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 57.0,
+      "states": {
+        "v1_00458": [
+          22.560000000005463,
+          4.949999999999999,
+          28.8,
+          0.0
+        ],
+        "v2_00419": [
+          36.960000000005415,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "e3a9f228d82a8232547876f55a32d97b8cddc508bdc79668fd688020ad7a1c14",
+      "positions.jsonl.gz": "b03f7882a722d681b4f5baffda2abe4c0551829cba743bdaf50a4fbb5379ccf1",
+      "trips.json": "1b7f36c764edb5dcfa3e2ed9d70d554088cef8dea20f435b11acd8656d086969"
+    }
+  },
+  {
+    "name": "demand_L3_q1500_v28.8_d30_s1_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1500,
+    "seed": 1,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 29626,
+      "at_cruise_samples": 27980,
+      "matched_size_2": 2619,
+      "matched_samples": 2896,
+      "matched_vehicle_samples": 6155,
+      "single_layer_samples": 2801,
+      "outer_pair_samples": 663,
+      "cross_lane_edges": 3424,
+      "matched_size_3": 205,
+      "same_lane_edges": 103,
+      "matched_size_4": 65,
+      "complete_component_samples": 27,
+      "complete_component_size_3": 27,
+      "complete_component_vehicle_samples": 81,
+      "matched_size_6": 7
+    },
+    "same_lane_gap_min_m": 30.14443490592498,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 21.0,
+      "states": {
+        "v0_00028": [
+          217.20419653657737,
+          1.65,
+          28.35248010796192,
+          0.11833741255809035
+        ],
+        "v2_00031": [
+          215.52000000000768,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": {
+      "time_s": 201.0,
+      "members": [
+        "v0_01756",
+        "v2_01757",
+        "v1_01743"
+      ],
+      "counts": [
+        1,
+        1,
+        1
+      ]
+    },
+    "source_sha256": {
+      "input.json": "cbe773ca46f47f2719bc73ae682aace1dfe9d200e185566f7ee35c640ad69a8c",
+      "positions.jsonl.gz": "394e2a8c87f7ca2bd28babb5c896efbe21085ae863a876c6aa2bf6cd838917cb",
+      "trips.json": "829a158600f739b1289b68d33743c7b80656e5ccb938ca2d944215a4f778ff32"
+    }
+  },
+  {
+    "name": "demand_L3_q1500_v28.8_d30_s2_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1500,
+    "seed": 2,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 30985,
+      "at_cruise_samples": 30985,
+      "matched_size_2": 250,
+      "matched_samples": 250,
+      "matched_vehicle_samples": 500,
+      "single_layer_samples": 250,
+      "cross_lane_edges": 250,
+      "outer_pair_samples": 167
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 122.0,
+      "states": {
+        "v0_01107": [
+          25.440000000005465,
+          1.65,
+          28.8,
+          0.0
+        ],
+        "v1_01112": [
+          11.040000000005453,
+          4.949999999999999,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "193a88907b6abd691ae84049e8bb8f710b00176f43343a4cb823172f9257cfd3",
+      "positions.jsonl.gz": "bf2538c112b6c4011782ad02a8c87d024ec2314655e6dee0efa5f73711284591",
+      "trips.json": "6386dda81cd9d16b21e5715ad7320c7a0497956409040da9f0bdc213e45bb795"
+    }
+  },
+  {
+    "name": "demand_L3_q1500_v28.8_d30_s2_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1500,
+    "seed": 2,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 31125,
+      "at_cruise_samples": 26942,
+      "matched_size_2": 2206,
+      "matched_samples": 3174,
+      "matched_vehicle_samples": 7479,
+      "single_layer_samples": 2768,
+      "cross_lane_edges": 4713,
+      "matched_size_3": 838,
+      "same_lane_edges": 450,
+      "matched_size_4": 97,
+      "outer_pair_samples": 1453,
+      "matched_size_5": 33,
+      "complete_component_samples": 31,
+      "complete_component_size_3": 31,
+      "complete_component_vehicle_samples": 93
+    },
+    "same_lane_gap_min_m": 30.00713864995828,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 30.0,
+      "states": {
+        "v1_00002": [
+          527.6723361405835,
+          4.949999999999999,
+          28.344493649437744,
+          0.12102333961824564
+        ],
+        "v2_00008": [
+          540.9600000000199,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": {
+      "time_s": 539.0,
+      "members": [
+        "v0_05169",
+        "v2_05170",
+        "v1_04895"
+      ],
+      "counts": [
+        1,
+        1,
+        1
+      ]
+    },
+    "source_sha256": {
+      "input.json": "752198424d9877e3feea88ceda74b9f8e584d79d44a6dc84e0c0a2453288beed",
+      "positions.jsonl.gz": "a1ea37bd6c9aef7738d500c0a3f29bb616c0d4da5f38b2d5bf1b060f491a0a57",
+      "trips.json": "05bcb0fe9a73edda2bfb4fe27203e15209ca3df6e560c4de5d84e85d97f318a9"
+    }
+  },
+  {
+    "name": "demand_L3_q1500_v28.8_d30_s3_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1500,
+    "seed": 3,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 31278,
+      "at_cruise_samples": 31278,
+      "matched_size_2": 1453,
+      "matched_samples": 1453,
+      "matched_vehicle_samples": 2906,
+      "single_layer_samples": 1453,
+      "cross_lane_edges": 1453,
+      "outer_pair_samples": 1166
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 51.0,
+      "states": {
+        "v1_00399": [
+          19.68000000000546,
+          4.949999999999999,
+          28.8,
+          0.0
+        ],
+        "v2_00374": [
+          34.08000000000545,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "9a64ce63ecf5e4c67d88d7d03adfb09226db2179dae47e17eba3c305bd679d56",
+      "positions.jsonl.gz": "ca34fa41c44357f519cd61113ed113585f6820098089bad7ee594eedb9ae4c6a",
+      "trips.json": "077a9b776c2a2fb4463621458c5ca421b48fd38de58437dcd090aca1a3ca08f1"
+    }
+  },
+  {
+    "name": "demand_L3_q1500_v28.8_d30_s3_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1500,
+    "seed": 3,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 31347,
+      "at_cruise_samples": 29581,
+      "matched_size_2": 1874,
+      "matched_samples": 2114,
+      "matched_vehicle_samples": 4543,
+      "single_layer_samples": 1911,
+      "cross_lane_edges": 2327,
+      "matched_size_3": 205,
+      "same_lane_edges": 258,
+      "outer_pair_samples": 1216,
+      "matched_size_7": 3,
+      "matched_size_4": 1,
+      "matched_size_5": 31
+    },
+    "same_lane_gap_min_m": 30.004912932927027,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 22.0,
+      "states": {
+        "v1_00004": [
+          308.60358798200764,
+          4.949999999999999,
+          28.394617018060554,
+          0.10780334925808512
+        ],
+        "v2_00004": [
+          322.0800000000117,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "65179fadb60ea43026b5f2dd03988df2d81a5da4c752aa1e356f08b2a8257f0d",
+      "positions.jsonl.gz": "6e76686b0effde33df827567595876dd7a1426d118179a8458c91f97796962fe",
+      "trips.json": "226bd056e071bd5e1140a56d0b8dffeb87de4b00146e8ca504da333e9843f164"
+    }
+  },
+  {
+    "name": "demand_L3_q1750_v28.8_d30_s1_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1750,
+    "seed": 1,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 34530,
+      "at_cruise_samples": 34530,
+      "matched_size_2": 2452,
+      "matched_samples": 2452,
+      "matched_vehicle_samples": 4904,
+      "single_layer_samples": 2452,
+      "outer_pair_samples": 2287,
+      "cross_lane_edges": 2452
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 77.0,
+      "states": {
+        "v0_00663": [
+          8.16000000000545,
+          1.65,
+          28.8,
+          0.0
+        ],
+        "v2_00553": [
+          8.16000000000545,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "1136d3158a84e411aa4bcb05c9b2908165d175af98c4799ab83b2ddb2dc2502c",
+      "positions.jsonl.gz": "c355421507461728e0d74c89c67a1bc612ba1d150f163dd5bade68e15ccb41d8",
+      "trips.json": "e0c1ecf624b87493ee0357897dcb3c8bba84054293cb1ef90bcb22ad32b547be"
+    }
+  },
+  {
+    "name": "demand_L3_q1750_v28.8_d30_s1_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1750,
+    "seed": 1,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 34580,
+      "at_cruise_samples": 32876,
+      "matched_size_2": 2775,
+      "matched_samples": 3382,
+      "matched_vehicle_samples": 7460,
+      "single_layer_samples": 3309,
+      "outer_pair_samples": 2282,
+      "cross_lane_edges": 4569,
+      "matched_size_3": 549,
+      "matched_size_4": 36,
+      "same_lane_edges": 114,
+      "matched_size_5": 18,
+      "matched_size_7": 1,
+      "matched_size_8": 2,
+      "matched_size_6": 1
+    },
+    "same_lane_gap_min_m": 30.090990370793406,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 20.0,
+      "states": {
+        "v0_00004": [
+          254.60044000150134,
+          1.65,
+          28.363637910176358,
+          0.11591569315182396
+        ],
+        "v2_00008": [
+          252.9600000000091,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "0787233fb346b599d8ba273ea8fef95ac9598f0437fdbbeaf44c11378d9db7c3",
+      "positions.jsonl.gz": "c5b5488717b1a7272c03472cef44b114f415d68624f673ad8b210d7f090cc84f",
+      "trips.json": "f5e0eb7d674477c927d5c05545429d256a10a36b4a23c75f7ce411126c68cd31"
+    }
+  },
+  {
+    "name": "demand_L3_q1750_v28.8_d30_s2_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1750,
+    "seed": 2,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 35976,
+      "at_cruise_samples": 35976,
+      "matched_size_2": 246,
+      "matched_samples": 246,
+      "matched_vehicle_samples": 492,
+      "single_layer_samples": 246,
+      "cross_lane_edges": 246
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 32.0,
+      "states": {
+        "v1_00207": [
+          25.440000000005465,
+          4.949999999999999,
+          28.8,
+          0.0
+        ],
+        "v2_00134": [
+          39.84000000000538,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "f605ab6e5f5b9e5266128427262d82bae296be516dd61f5202062f060014cd0f",
+      "positions.jsonl.gz": "74349645943da9ec341892f744c7893dafc722e37ebd52729406f76afafc3b25",
+      "trips.json": "6366688b474bdb76402b8bfe6715e536f8c0720fdc483a87bd14c8d57aea7c7a"
+    }
+  },
+  {
+    "name": "demand_L3_q1750_v28.8_d30_s2_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1750,
+    "seed": 2,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 36098,
+      "at_cruise_samples": 30566,
+      "matched_size_2": 1461,
+      "matched_samples": 3898,
+      "matched_vehicle_samples": 10316,
+      "single_layer_samples": 3744,
+      "cross_lane_edges": 8535,
+      "matched_size_3": 2395,
+      "same_lane_edges": 188,
+      "outer_pair_samples": 540,
+      "matched_size_4": 15,
+      "matched_size_5": 20,
+      "matched_size_7": 7
+    },
+    "same_lane_gap_min_m": 30.12209250253204,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 30.0,
+      "states": {
+        "v1_00002": [
+          527.6723361405835,
+          4.949999999999999,
+          28.344493649437744,
+          0.12102333961824564
+        ],
+        "v2_00008": [
+          540.9600000000199,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "bbe16884ee5aa86b5ed8f6abf5dfdd74d626ba9198560c02af997eb1a823a90c",
+      "positions.jsonl.gz": "285d2661d71dc994f4af54d02b3c8ec36629f4db9d4499524accf4f2818f83bc",
+      "trips.json": "aa66a9b248e1c58f33f689575ceb90e8e79b4ca3490898a826a4094a03f9a319"
+    }
+  },
+  {
+    "name": "demand_L3_q1750_v28.8_d30_s3_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1750,
+    "seed": 3,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 36363,
+      "at_cruise_samples": 36363,
+      "matched_size_2": 8341,
+      "matched_samples": 8341,
+      "matched_vehicle_samples": 16682,
+      "single_layer_samples": 8341,
+      "outer_pair_samples": 6656,
+      "cross_lane_edges": 8341
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 136.0,
+      "states": {
+        "v0_01000": [
+          22.560000000005463,
+          1.65,
+          28.8,
+          0.0
+        ],
+        "v2_01248": [
+          22.560000000005463,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "d28c2020b5454de79e9c154144a1fb58ac57bf595970825d128fadb04523f0c9",
+      "positions.jsonl.gz": "42ec548f78216157003d27d07f8be46aaa36517f6e422ef679c2029a0eeab62e",
+      "trips.json": "1b0dceed72639e52d5de59f06583d9e5de44bba578fb7526a65d4ab7e052eb92"
+    }
+  },
+  {
+    "name": "demand_L3_q1750_v28.8_d30_s3_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 1750,
+    "seed": 3,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 36402,
+      "at_cruise_samples": 35451,
+      "matched_size_2": 8481,
+      "matched_samples": 8542,
+      "matched_vehicle_samples": 17165,
+      "single_layer_samples": 8469,
+      "cross_lane_edges": 8572,
+      "matched_size_3": 52,
+      "same_lane_edges": 83,
+      "outer_pair_samples": 6701,
+      "matched_size_5": 7,
+      "matched_size_8": 1,
+      "matched_size_4": 1
+    },
+    "same_lane_gap_min_m": 30.010701365665454,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 22.0,
+      "states": {
+        "v1_00004": [
+          308.60358798200764,
+          4.949999999999999,
+          28.394617018060554,
+          0.10780334925808512
+        ],
+        "v2_00004": [
+          322.0800000000117,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "f3832f2c36c4d37ae6ffafeac73d31e4420798538f2fcf9e1081a3e83be09180",
+      "positions.jsonl.gz": "5ebd71da5999f333b2d677fa1bf37dc4b48140aa900ae8a2959c2696c980ad59",
+      "trips.json": "7cce1e1c1a67aa72e658d96074aaeea824480032005726a8286959f96e172907"
+    }
+  },
+  {
+    "name": "demand_L3_q2000_v28.8_d30_s1_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 2000,
+    "seed": 1,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 39729,
+      "at_cruise_samples": 39729
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": null,
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "b14ab1cfecc425407bd32be47366e3cbbaadf77a4a9bf8e0803456fb91f0f78d",
+      "positions.jsonl.gz": "c1f28a387923975c12f74e5fa93cdacce6f0d6fcaa01154b14ed4f27550df8e1",
+      "trips.json": "f6306ad82c2497c47ca32e1d3e79948be55613ae5f349ab7ebff20698bdec326"
+    }
+  },
+  {
+    "name": "demand_L3_q2000_v28.8_d30_s1_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 2000,
+    "seed": 1,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 39846,
+      "at_cruise_samples": 34689,
+      "matched_size_2": 1381,
+      "matched_samples": 4145,
+      "matched_vehicle_samples": 11075,
+      "single_layer_samples": 4123,
+      "outer_pair_samples": 799,
+      "cross_lane_edges": 9594,
+      "matched_size_3": 2743,
+      "matched_size_4": 21,
+      "same_lane_edges": 22
+    },
+    "same_lane_gap_min_m": 30.44537939401789,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 20.0,
+      "states": {
+        "v0_00004": [
+          254.60044000150134,
+          1.65,
+          28.363637910176358,
+          0.11591569315182396
+        ],
+        "v2_00008": [
+          252.9600000000091,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "7a7718c551d84300a8927e6146eb0e931d009e4c29f31b1cff02dcc4a636c1af",
+      "positions.jsonl.gz": "5de8c657c63f43de60c34074c0cb6adcf8aaa6ed8c32c552d4202f7b6b3b291a",
+      "trips.json": "c1eb468e0dcb311cfbcfb35d7239901877269078db88ede9654fe1e6139de8ab"
+    }
+  },
+  {
+    "name": "demand_L3_q2000_v28.8_d30_s2_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 2000,
+    "seed": 2,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 41682,
+      "at_cruise_samples": 41682
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": null,
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "cedd57dcf657f457fbe12f12ac08de55a03f84ae1a6ab5aae96e7e80be1e8e35",
+      "positions.jsonl.gz": "4fa39963caf2f636a65b6d1d560ee32de4d095097dceb5b356e79bba370ef65d",
+      "trips.json": "faa5548be80bcee477d39957605d8cf4c56fb5477e70047eae0ab5a1b47d8d9e"
+    }
+  },
+  {
+    "name": "demand_L3_q2000_v28.8_d30_s2_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 2000,
+    "seed": 2,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 41726,
+      "at_cruise_samples": 40433,
+      "matched_size_2": 109,
+      "matched_samples": 277,
+      "matched_vehicle_samples": 740,
+      "single_layer_samples": 230,
+      "cross_lane_edges": 558,
+      "matched_size_3": 150,
+      "same_lane_edges": 47,
+      "outer_pair_samples": 71,
+      "matched_size_4": 18
+    },
+    "same_lane_gap_min_m": 30.18011678983862,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 30.0,
+      "states": {
+        "v1_00002": [
+          527.6723361405835,
+          4.949999999999999,
+          28.344493649437744,
+          0.12102333961824564
+        ],
+        "v2_00008": [
+          540.9600000000199,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "0050736275bc9c3babf1da7ef40eb5ad1306e997a482f83521007a657122ae4b",
+      "positions.jsonl.gz": "48981758217717aae2e3a0462d0e0b6faee31592405589266c9643a819e7170c",
+      "trips.json": "5d8bd987b3cf437c1585dee35e435c2563e990b834c4f13742d1b6b449806cb9"
+    }
+  },
+  {
+    "name": "demand_L3_q2000_v28.8_d30_s3_off",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 2000,
+    "seed": 3,
+    "formation": false,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 41729,
+      "at_cruise_samples": 41729,
+      "matched_size_2": 329,
+      "matched_samples": 329,
+      "matched_vehicle_samples": 658,
+      "single_layer_samples": 329,
+      "cross_lane_edges": 329
+    },
+    "same_lane_gap_min_m": 60.47999999999931,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 47.0,
+      "states": {
+        "v0_00269": [
+          36.960000000005415,
+          1.65,
+          28.8,
+          0.0
+        ],
+        "v1_00358": [
+          22.560000000005463,
+          4.949999999999999,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "4253eedc9b1d4bdf789df635af569fc1531af63b1ca7b24a85ac044833da469c",
+      "positions.jsonl.gz": "9b5c3d6e000f536dc0ebf774253d017c33dc0dc41eb3b5e85dd3192b49d032b0",
+      "trips.json": "6b5e4c9c2459ecfd131d1d0a8af2bbfe2f53a883083910dff807ff91fbc59026"
+    }
+  },
+  {
+    "name": "demand_L3_q2000_v28.8_d30_s3_on",
+    "kind": "demand",
+    "lane_count": 3,
+    "flow_veh_h_lane": 2000,
+    "seed": 3,
+    "formation": true,
+    "target_speed_mps": 28.8,
+    "same_lane_gap_m": 30.0,
+    "demand_duration_s": 600.0,
+    "max_time_s": 2400.0,
+    "counts": {
+      "vehicle_samples": 41800,
+      "at_cruise_samples": 40827,
+      "matched_size_2": 422,
+      "matched_samples": 453,
+      "matched_vehicle_samples": 937,
+      "single_layer_samples": 431,
+      "cross_lane_edges": 471,
+      "outer_pair_samples": 61,
+      "matched_size_3": 31,
+      "same_lane_edges": 22
+    },
+    "same_lane_gap_min_m": 30.345891256539744,
+    "same_lane_gap_median_m": 60.48000000000229,
+    "completed_lane_changes": 0,
+    "first_match": {
+      "time_s": 22.0,
+      "states": {
+        "v1_00004": [
+          308.60358798200764,
+          4.949999999999999,
+          28.394617018060554,
+          0.10780334925808512
+        ],
+        "v2_00004": [
+          322.0800000000117,
+          8.25,
+          28.8,
+          0.0
+        ]
+      }
+    },
+    "first_full": null,
+    "source_sha256": {
+      "input.json": "83a359344a0c9da4f646c3fb630242edc79d2307499e5adf5600c714b3792b06",
+      "positions.jsonl.gz": "4126c849a6ebf929cda47cf7d2c69deef9561c260a9046ce043e820c9cf7a67a",
+      "trips.json": "54e7a881b73b608a926df47d8e7cbf7f09dbf9de0ed45a5aebc6b9df9f6321f2"
+    }
+  }
+]

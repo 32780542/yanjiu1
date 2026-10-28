@@ -1,4 +1,4 @@
-"""直路NOA对照与编队规模、参与率、稳定度的研究图表。"""
+"""直路NOA对照与局部几何匹配图；匹配关系不等于完整编队。"""
 
 import argparse
 import json
@@ -19,7 +19,7 @@ def plot(directory):
     plt.rcParams.update({'font.sans-serif':['Microsoft YaHei','SimHei','DejaVu Sans'],
         'font.size':10,'axes.unicode_minus':False,'svg.fonttype':'none'})
     colors = ('#3C5488','#E64B35')
-    labels = ('仅NOA','NOA＋编队')
+    labels = ('仅NOA','NOA＋编队规则')
 
     def curve(ax,metric,ylabel,scale=1.,show_samples=False):
         for on in (False,True):
@@ -65,32 +65,33 @@ def plot(directory):
 
     fig,axes = plt.subplots(2,2,figsize=(9,7),layout='constrained')
     for ax,(metric,label,scale) in zip(axes.flat,(
-        ('mean_platoon_size','平均局部编队规模（辆）',1.),
+        ('mean_platoon_size','平均局部几何匹配规模（辆）',1.),
         ('max_platoon_size','逐例最大规模的跨种子均值（辆）',1.),
-        ('participation_rate','编队参与率（%）',100.),
-        ('platoon_stability_rate','已编队成员中持续关系的稳定时间占比（%）',100.))):
+        ('participation_rate','局部几何匹配参与率（%）',100.),
+        ('platoon_stability_rate','匹配关系保持时间占比（%）',100.))):
         curve(ax,metric,label,scale,show_samples=scale==100.)
         if scale==100.:
             ax.set_ylim(0,100)
     axes[0,0].legend(frameon=False)
-    fig.suptitle('编队规模与稳定性：上排均值±SD，下排均值与观测点',fontsize=12)
+    fig.suptitle('局部几何匹配统计：不代表完整多层编队已经形成',fontsize=12)
     save(fig,'platoon_size_stability')
 
     fig,axes = plt.subplots(1,3,figsize=(12,3.8),layout='constrained')
     for ax,(metric,label) in zip(axes,(
-        ('geometry_rms_m','已成队关系的几何RMS（m）'),
-        ('speed_rms_mps','队内速度RMS（m/s）'),
-        ('internal_breaks_per_100_platoon_vehicle_s','内部断裂（次/100编队车辆秒）'))):
+        ('geometry_rms_m','匹配关系的几何RMS（m）'),
+        ('speed_rms_mps','匹配车组内速度RMS（m/s）'),
+        ('internal_breaks_per_100_platoon_vehicle_s','关系丢失（次/100匹配车辆秒）'))):
         curve(ax,metric,label)
-    axes[0].legend(frameon=False)
-    fig.suptitle('局部编队质量：边界退出删失，内部关系丢失计断裂',fontsize=12)
+    axes[0].legend(frameon=False,loc='lower left')
+    fig.suptitle('局部匹配关系质量：边界退出删失，内部关系丢失计数',fontsize=12)
     save(fig,'platoon_quality')
 
     (directory/'figure_sources.json').write_text(json.dumps(dict(
         source=['groups.json','results.json'],filter=dict(kind='demand'),flows_veh_h_lane=flows,
         error_bars='sample standard deviation across non-null metric observations among valid runs',
         proportion_panels='mean curves and individual valid seed points on 0-100% axes',
-        participation_units='percent in figures; fraction in JSON/CSV'),indent=2)+'\n',encoding='utf-8')
+        participation_units='percent in figures; fraction in JSON/CSV',
+        metric_scope='local geometric matches; not complete multilayer formation or evidence of active formation control'),indent=2)+'\n',encoding='utf-8')
 
 
 if __name__=='__main__':
