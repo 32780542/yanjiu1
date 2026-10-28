@@ -124,9 +124,9 @@ def summarize(root, output, additional_roots=()):
         row = json.loads((directory/"result.json").read_text(encoding="utf-8"))
         if row["status"] != "completed":
             raise ValueError(f"执行未完成：{row['name']}")
-        for name, expected_hash in json.loads((directory/"hashes.json").read_text(encoding="utf-8")).items():
-            if hashlib.sha256((directory/name).read_bytes()).hexdigest() != expected_hash:
-                raise ValueError(f"文件摘要不符：{row['name']}/{name}")
+        for filename, expected_hash in json.loads((directory/"hashes.json").read_text(encoding="utf-8")).items():
+            if hashlib.sha256((directory/filename).read_bytes()).hexdigest() != expected_hash:
+                raise ValueError(f"文件摘要不符：{row['name']}/{filename}")
             checked += 1
         inputs = json.loads((directory/"input.json").read_text(encoding="utf-8"))
         if inputs["case"] != expected[name]:

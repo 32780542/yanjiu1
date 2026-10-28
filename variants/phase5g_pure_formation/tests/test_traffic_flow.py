@@ -1,8 +1,11 @@
 """持续交通、油耗及统计口径的独立算例。"""
 
 from dataclasses import replace
+import gzip
+import hashlib
 import json
 from pathlib import Path
+from tempfile import TemporaryDirectory
 import unittest
 
 
@@ -173,6 +176,36 @@ class TrafficFlowTests(unittest.TestCase):
         pair = paired_rows([base,dict(base,name="on",formation=True)])[0]
         self.assertFalse(pair["comparison_valid"])
         self.assertIsNone(pair["system_time_reduction_pct"])
+
+    def test_sealed_case_is_verified_and_exported_with_its_protocol_name(self):
+        from summarize_traffic_flow import independent_metrics, summarize
+        case = dict(name="one",kind="demand",lane_count=3,flow_veh_h_lane=1500,
+                    seed=1,target_speed_mps=28.8,same_lane_gap_m=30.,formation=False)
+        trips = [dict(vehicle_id="v",lane=0,requested_s=0.,entered_s=0.,exited_s=1.,
+                      distance_m=10.,onroad_s=1.,fuel_mg=1000.)]
+        row = dict(case,**independent_metrics(trips,1.,1.),status="completed",
+                   demand_duration_s=1.,recording_end_s=1.,collision_pairs=0,
+                   road_departure_vehicles=0)
+        with TemporaryDirectory() as temporary:
+            root = Path(temporary)/"raw"
+            directory = root/case["name"]
+            directory.mkdir(parents=True)
+            (root/"protocol.json").write_text(json.dumps(dict(cases=[case])))
+            (root/"source_snapshot.zip").write_bytes(b"source")
+            files = {"input.json":dict(case=case,arrivals=[{k:trips[0][k] for k in
+                ("vehicle_id","lane","requested_s")}]),"trips.json":trips,
+                "result.json":row,"incidents.json":dict(collision_events=[])}
+            for name, value in files.items():
+                (directory/name).write_text(json.dumps(value))
+            with gzip.open(directory/"network.jsonl.gz","wt") as stream:
+                stream.write(json.dumps(dict(time_s=1.,entered=1,exited=1,active=0,
+                    distance_m=10.,fuel_mg=1000.,vehicle_seconds=1.))+"\n")
+            hashes = {p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in directory.iterdir()}
+            (directory/"hashes.json").write_text(json.dumps(hashes))
+            output = Path(temporary)/"export"
+            summarize(root,output)
+            exported = json.loads((output/"results.json").read_text(encoding="utf-8"))
+            self.assertEqual(exported[0]["name"],case["name"])
 
     def test_road_departure_is_not_an_effectiveness_improvement(self):
         from summarize_traffic_flow import paired_rows,group_rows

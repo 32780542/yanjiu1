@@ -416,3 +416,14 @@
 - 经命令行核对后仅停止本任务拥有的run_logged PID76528，Windows Job关闭清理其全部子进程。原目录和全部前缀只读保留。独立验证已封存的30例文件摘要（包括父结果流尚未来得及登记的1例），不按科学好坏挑选；其余24例在新目录同种子同参数重算。
 - 接续操作 `results/operations/20261028T041744016334Z_continuous-remaining_17127841`，原始根 `variants/phase5g_pure_formation/results/continuous_traffic/20261028T041744709217Z`，16workers；集合索引 `variants/phase5g_pure_formation/results/continuous_collections/20261028T041744706859Z/collection.json`。接续首例L2 seed2在36.7s安全停止，计划502请求、实际释放/入场22、出场0、未来480，碰撞车辆对1。当前剩余条件仍运行。
 - 汇总脚本支持 `--additional-root` 读取两批已封存证据，每个原定条件只出现一次，并核验参数和配对请求一致；旧结果只在导出时补齐兼容字段，原文件不改。源快照分别保留。最终公开结果、图表、README和发布待所有条件封存后完成。
+
+### 持续交通流完整结果与验收
+
+- 接续24/24条件全部结束，操作`results/operations/20261028T041744016334Z_continuous-remaining_17127841`退出0，3071.281s，Windows Job确认剩余进程0。集合目录已写`completed.json`。与原批次30封存条件合为54个唯一预定条件；53例排空，其中1例带接触；52例完整且安全，另2例两车道编队失效。无驶出道路，28/30性能配对有效。
+- 三车道主实验24例全部排空且0接触。每车道1250/1500/1750/2000辆/h四组的系统时间配对减少分别84.28%/86.68%/83.96%/79.18%，g/km油耗减少15.27%/15.26%/13.58%/13.93%。统计以逐种子改善率的均值报告。四车道与参数变化的编队组各3/3安全排空；两车道seed2/3分别36.7/36.2s首次接触，未纳入有效改善率。
+- 独立复算操作`results/operations/20261028T051140597862Z_continuous-final-recompute_c6a566f2`退出0，核验54例、41282条计划台账、324文件摘要、54例逐拍累计、30个同种子请求表。`verification.json`保留每例实际来源及两批源码zip摘要，旧目录没有覆盖修改。
+- 封存到导出的合成端到端测试暴露后处理循环变量覆盖工况名的问题，已用`filename`分离并通过反例。先前两次日志命令因run_logged固定根目录而未找到variant模块，保留其失败日志；改为显式加入variant路径后16项持续流测试全部通过。最终相关回归124/124通过，操作`results/operations/20261028T045914787613Z_continuous-publication-regression_bcb4be47`，10.570s测试时间。
+- 完整编队harness150/150通过，操作`results/operations/20261028T042759794464Z_continuous-formation-harness_99d965b5`。等价优化后的完整短测两模式与旧探针的滚动轨迹/动作摘要及全部逐车台账完全一致，操作`results/operations/20261028T043746460369Z_continuous-representative-equivalence_1c855e73`。
+- 三组图（交通效率、燃油、8张时空速度子图）均输出300DPI PNG与SVG并目视核对，绘图操作`results/operations/20261028T051153159424Z_continuous-final-figures_de8ccdbf`。便携数据17文件约1MiB，含54例、18组、30配对、10配对组；原始gzip留在本机。
+- 独立复审核对表格/CSV/JSON、配对有效性、早停未来请求与图表定义。唯一文字修正为明确速度统计粒度：四个需求组跨3seed均值32.76–33.02m/s；12个逐例32.73–33.06m/s。报告说明后车位置追赶允许高于28.8m/s巡航设定，效率图不等同几何形成判定。未把之前65有限车群形成结果混作持续流结论。
+- 成果入口`docs/持续大交通流验证报告.md`、方法`docs/持续交通流评价方法.md`、数据`docs/experiments/2026-10-28-continuous-traffic`。README、系统说明、28项新增方法索引和计划已更新。任务所需运行、统计、图表与文档完成；下一研究入口为两车道高速持续流的接触原因与规则调整。

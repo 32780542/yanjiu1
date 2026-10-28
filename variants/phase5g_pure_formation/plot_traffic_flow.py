@@ -18,7 +18,7 @@ def speed_grid(path):
             frame = json.loads(line)
             t = frame["time_s"]
             if t >= 600:
-                continue
+                break
             for x, _, speed, _ in frame["states"].values():
                 if 0 <= x < 1200:
                     i, j = int(x/25), int(t/5)
@@ -75,7 +75,12 @@ def plot(directory):
     fig.suptitle("HBEFA3油耗比较（相同请求、相同车辆与在网区间）",y=1.03,fontsize=11)
     fig.tight_layout()
     save(fig,"traffic_fuel")
+    save(speed_maps(rows,sources),"traffic_speed_maps")
 
+
+def speed_maps(rows,sources):
+    flows = (1250,1500,1750,2000)
+    labels = {False:"常规跟驰",True:"纯规则编队"}
     fig, axes = plt.subplots(2,4,figsize=(12.8,5.7),sharex=True,sharey=True,
                               layout="constrained")
     cmap = plt.get_cmap("turbo").copy()
@@ -95,7 +100,7 @@ def plot(directory):
                 axes[i,j].set_xlabel("时间（s）")
     fig.colorbar(image,ax=axes,label="速度（m/s）",shrink=.85,pad=.02)
     fig.suptitle("连续600 s时空速度图（seed 1；5 s×25 m网格，空单元留白）",fontsize=12)
-    save(fig,"traffic_speed_maps")
+    return fig
 
 
 if __name__=="__main__":
