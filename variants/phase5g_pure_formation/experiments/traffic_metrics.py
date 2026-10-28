@@ -15,7 +15,7 @@ def summarize_trips(trips, demand_duration_s, recording_end_s):
     vehicle_seconds = sum(r["onroad_s"] for r in rows)
     exits_in_window = sum(r["exited_s"] <= demand_duration_s for r in completed)
     entries_in_window = sum(r["entered_s"] <= demand_duration_s for r in entered)
-    return dict(requested=len(rows), entered=len(entered), completed=len(completed),
+    result = dict(requested=len(rows), entered=len(entered), completed=len(completed),
         all_completed=all_completed, requested_until_end=released,
         not_yet_requested_final=len(rows)-released, window_complete=window_complete,
         pending_final=released-len(entered),
@@ -34,3 +34,14 @@ def summarize_trips(trips, demand_duration_s, recording_end_s):
         mean_fuel_rate_mg_s=fuel/vehicle_seconds if vehicle_seconds else None,
         clearance_after_600s_s=(max(0., max(r["exited_s"] for r in completed)-demand_duration_s)
                                if all_completed else None))
+    if rows and 'inserted_s' in rows[0]:
+        inserted = [r for r in rows if r['inserted_s'] is not None]
+        source_at_end = sum(r['inserted_s']<=demand_duration_s for r in inserted)
+        result.update(inserted=len(inserted),source_queue_final=released-len(inserted),
+            upstream_final=len(inserted)-len(entered),
+            source_queue_at_600s=len(rows)-source_at_end if window_complete else None,
+            upstream_at_600s=source_at_end-entries_in_window if window_complete else None,
+            mean_entry_wait_s=mean(r['inserted_s']-r['requested_s'] for r in rows) if all_completed else None,
+            mean_upstream_travel_s=mean(r['entered_s']-r['inserted_s'] for r in rows) if all_completed else None,
+            mean_entry_delay_s=mean(r['entered_s']-r['requested_s'] for r in rows) if all_completed else None)
+    return result

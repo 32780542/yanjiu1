@@ -47,16 +47,18 @@ def comfortable_speed(distance, parameters, acceleration=0.0):
     return lower
 
 
-def longitudinal(ego, bodies, center_y, lane_end_x, parameters):
-    """组合巡航、可见前车和道路终点约束，返回加速度与当前安全状态。"""
-    p, speed = parameters, ego.vx_mps
-    half_dt = p["control_sync_dt_s"] / 2
-    feedback_speed = clip(speed + ego.acceleration_mps2 * half_dt, 0.0, p["max_speed_mps"])
-    actuator_upper = actuator_acceleration_upper(ego, p)
-    acceleration = p["noa_speed_gain_per_s"] * (
-        min(p["noa_target_speed_mps"], p["max_speed_mps"]) - feedback_speed
-    )
-    closest, closest_gap, emergency = None, None, False
+def response_emergency(ego, lead_speed, gap, parameters):
+    """按当前闭合速度筛查响应距离；同速运动不会触发虚假停车约束。"""
+    p = parameters
+    closing = max(0.,ego.vx_mps-lead_speed)
+    return gap <= p['noa_standstill_gap_m'] or (closing > 0 and (
+        gap/closing < p['noa_emergency_ttc_s'] or
+        gap < p['noa_standstill_gap_m']+stop_distance(
+            closing,actuator_acceleration_upper(ego,p),abs(p['min_accel_mps2']),p)))
+
+
+def _lead_gaps(ego,bodies,center_y,p):
+    """同一套前向车身及观测到的切入候选，供跟驰与应急共用。"""
     for body in bodies:
         lateral_half = (
             p["width_m"]
@@ -73,39 +75,46 @@ def longitudinal(ego, bodies, center_y, lane_end_x, parameters):
             and max(lateral_now, lateral_future) >= -lateral_half
         )
         overlaps_lane = abs(body.y - center_y) <= lateral_half
-        if body.x <= ego.x_m or not (crosses or overlaps_lane):
+        if body.x < ego.x_m or not (crosses or overlaps_lane):
             continue
         body_half = (
             abs(math.cos(body.heading)) * body.length + abs(math.sin(body.heading)) * body.width
         ) / 2
-        gap = body.x - ego.x_m - p["length_m"] / 2 - body_half
+        yield body,body.x-ego.x_m-p['length_m']/2-body_half
+
+
+def immediate_emergency(ego,bodies,p):
+    return any(response_emergency(ego,max(0.,body.vx),gap,p)
+               for body,gap in _lead_gaps(ego,bodies,ego.y_m,p))
+
+
+def longitudinal(ego, bodies, center_y, lane_end_x, parameters):
+    """组合巡航、可见前车和道路终点约束，返回加速度与当前安全状态。"""
+    p, speed = parameters, ego.vx_mps
+    half_dt = p["control_sync_dt_s"] / 2
+    feedback_speed = clip(speed + ego.acceleration_mps2 * half_dt, 0.0, p["max_speed_mps"])
+    actuator_upper = actuator_acceleration_upper(ego, p)
+    acceleration = p["noa_speed_gain_per_s"] * (
+        min(p["noa_target_speed_mps"], p["max_speed_mps"]) - feedback_speed
+    )
+    closest, closest_gap = None,None
+    emergency = immediate_emergency(ego,bodies,p)
+    for body,gap in _lead_gaps(ego,bodies,center_y,p):
         if closest_gap is None or gap < closest_gap:
             closest, closest_gap = body, gap
     reason = "cruise"
     if closest is not None:
         gap, lead_speed = closest_gap, max(0.0, closest.vx)
-        closing = speed - lead_speed
         feedback_gap = gap + (lead_speed - speed) * half_dt
         desired = p["noa_standstill_gap_m"] + p["noa_headway_s"] * feedback_speed
         follow = p["noa_gap_gain_per_s2"] * (feedback_gap - desired) - p[
             "noa_relative_speed_gain_per_s"
         ] * (feedback_speed - lead_speed)
         acceleration, reason = min(acceleration, follow), "visible_lead"
-        # Assume immediate full-hard braking of the lead. Own stopping includes
-        # control/actuator/jerk allowance. A negative margin is an emergency.
-        lead_stop = lead_speed**2 / (2 * abs(p["min_accel_mps2"]))
-        required_hard = (
-            p["noa_standstill_gap_m"]
-            + stop_distance(speed, actuator_upper, abs(p["min_accel_mps2"]), p)
-            - lead_stop
-        )
-        safe_speed = comfortable_speed(
-            feedback_gap + lead_stop - p["noa_standstill_gap_m"], p, actuator_upper
-        )
-        acceleration = min(acceleration, p["noa_speed_gain_per_s"] * (safe_speed - feedback_speed))
-        emergency = gap < required_hard or (
-            closing > 0 and gap / closing < p["noa_emergency_ttc_s"]
-        )
+        emergency = emergency or response_emergency(ego,lead_speed,gap,p)
+        if lead_speed <= p['noa_stop_release_speed_mps']:
+            safe_speed = comfortable_speed(feedback_gap-p['noa_standstill_gap_m'],p,actuator_upper)
+            acceleration = min(acceleration,p['noa_speed_gain_per_s']*(safe_speed-feedback_speed))
         if (
             speed <= p["noa_stop_release_speed_mps"]
             and lead_speed <= p["noa_stop_release_speed_mps"]

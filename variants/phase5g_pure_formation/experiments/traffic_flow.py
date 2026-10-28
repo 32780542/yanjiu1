@@ -20,6 +20,7 @@ from experiments import phase5g
 from experiments.formation_study import entry_is_clear as headway_entry_clear
 from experiments.formation_study import study_parameters, write_json, substep_incidents
 from experiments.traffic_metrics import summarize_trips
+from experiments.platoon_metrics import evaluate_platoons, PLATOON_METRICS
 from models.fuel import fuel_rate_mg_s
 from models.kinematic import kinematic_state
 from noa.contracts import NoaMemory
@@ -49,14 +50,15 @@ def entry_is_clear(entry, states, p):
     """安全插入同时满足时距与原模型含执行滞后的紧急制动距离。"""
     if not headway_entry_clear(entry, states, p):
         return False
-    own_stop = stop_distance(entry.vx_mps, 0., abs(p["min_accel_mps2"]), p)
     for state in states.values():
         half_y = (p["length_m"]*abs(math.sin(state.heading_rad))
                   + p["width_m"]*abs(math.cos(state.heading_rad)))/2
         if abs(state.y_m-entry.y_m) > half_y+p["width_m"]/2:
             continue
-        front_stop = state.vx_mps**2/(2*abs(p["min_accel_mps2"]))
-        required = p["length_m"]+2*p["noa_body_margin_m"]+p["noa_standstill_gap_m"]+own_stop-front_stop
+        closing = max(0.,entry.vx_mps-state.vx_mps)
+        required = p["length_m"]+2*p["noa_body_margin_m"]+p["noa_standstill_gap_m"]
+        if closing:
+            required += stop_distance(closing,0.,abs(p['min_accel_mps2']),p)
         if state.x_m-entry.x_m < required:
             return False
     return True
@@ -117,15 +119,17 @@ class OpenTraffic:
         # 两组共同采用常规跟驰/车道保持；横向差异仅来自当前编队补位。
         self.p["noa_overtake_speed_deficit_mps"] = 2*self.p["max_speed_mps"]+1
         self.policy["noa_overtake_speed_deficit_mps"] = self.p["noa_overtake_speed_deficit_mps"]
+        self.upstream_policy = dict(self.policy,simple_formation_enabled=False,
+                                    formation_enabled=False,formation_lane_change_enabled=False)
         width = case["lane_count"]*3.3
         # 1200m为测量出口，路面继续延伸，车辆不会把出口误当停车墙。
-        self.road = VisibleRoad((((-300., 0.), (2000., 0.)), ((-300., width), (2000., width))),
-            tuple(((-300., lane*3.3), (2000., lane*3.3)) for lane in range(1, case["lane_count"])))
+        self.road = VisibleRoad((((-700., 0.), (2000., 0.)), ((-700., width), (2000., width))),
+            tuple(((-700., lane*3.3), (2000., lane*3.3)) for lane in range(1, case["lane_count"])))
         self.tick_index, self.cursor = 0, 0
-        self.entered_count, self.exited_count = 0, 0
+        self.inserted_count, self.entered_count, self.exited_count = 0, 0, 0
         self.states, self.sensors, self.memories = {}, {}, {}
         self.queues = [deque() for _ in range(case["lane_count"])]
-        self.trips = {r["vehicle_id"]: dict(r, entered_s=None, exited_s=None,
+        self.trips = {r["vehicle_id"]: dict(r, inserted_s=None,entered_s=None, exited_s=None,
             distance_m=0., onroad_s=0., fuel_mg=0., lane_changes=0) for r in tape}
         self.incidents = {"collision_events": [], "road_departure_events": []}
         self.seen = {"collision": set(), "road": set()}
@@ -144,7 +148,14 @@ class OpenTraffic:
             if not queue:
                 continue
             key = queue[0]
-            entry = kinematic_state(self.p, time_s=self.now, x_m=0., y_m=3.3*(lane+.5), vx_mps=28.8)
+            y = 3.3*(lane+.5)
+            fronts = [s for s in self.states.values() if -300. <= s.x_m <= -100.
+                      and abs(s.y_m-y)<self.p['width_m']]
+            speed = min(28.8,self.p['noa_target_speed_mps'])
+            if fronts:
+                front = min(fronts,key=lambda s:s.x_m)
+                speed = max(0.,min(speed,front.vx_mps))
+            entry = kinematic_state(self.p, time_s=self.now, x_m=-300., y_m=y, vx_mps=speed)
             if not entry_is_clear(entry, self.states, self.p):
                 continue
             queue.popleft()
@@ -152,8 +163,8 @@ class OpenTraffic:
             self.sensors[key] = IdealSensor(self.p, self.road)
             self.memories[key] = (SimpleFormationMemory((), "CRUISE") if self.case["formation"]
                                   else NoaMemory((), "CRUISE"))
-            self.trips[key]["entered_s"] = self.now
-            self.entered_count += 1
+            self.trips[key]["inserted_s"] = self.now
+            self.inserted_count += 1
 
     def tick(self):
         self._admit()
@@ -168,7 +179,8 @@ class OpenTraffic:
         for key in sorted(self.states):
             sample = self.sensors[key].sample(key, index.around(key))
             memory = replace(self.memories[key], observation_history=sample.memory.observation_history)
-            decisions[key] = decide(replace(sample, memory=memory), self.policy)
+            policy = self.upstream_policy if self.states[key].x_m < 0 else self.policy
+            decisions[key] = decide(replace(sample, memory=memory), policy)
         steps = {key: self.model.advance(self.states[key], decision.action, .1, .01)
                  for key, decision in decisions.items()}
         distance, fuel, vehicle_seconds, exited = 0., 0., 0., 0
@@ -176,10 +188,19 @@ class OpenTraffic:
         for key, step in steps.items():
             row, before = self.trips[key], step.initial
             for after in step.samples:
-                fraction = min(1., (1200-before.x_m)/(after.x_m-before.x_m)) if after.x_m >= 1200 else 1.
-                dt = (after.time_s-before.time_s)*fraction
-                end_speed = before.vx_mps+(after.vx_mps-before.vx_mps)*fraction
-                speed = (before.vx_mps+end_speed)/2
+                full_dt = after.time_s-before.time_s
+                dx = after.x_m-before.x_m
+                if after.x_m < 0:
+                    before = after
+                    continue
+                start = max(0.,-before.x_m/dx) if before.x_m < 0 else 0.
+                end = min(1.,(1200-before.x_m)/dx) if after.x_m >= 1200 else 1.
+                if row['entered_s'] is None:
+                    row['entered_s'] = before.time_s+start*full_dt
+                    self.entered_count += 1
+                dt = full_dt*(end-start)
+                dv = after.vx_mps-before.vx_mps
+                speed = before.vx_mps+dv*(start+end)/2
                 acceleration = (after.vx_mps-before.vx_mps)/(after.time_s-before.time_s)
                 consumption = fuel_rate_mg_s(speed, acceleration)*dt
                 row["distance_m"] += speed*dt
@@ -187,7 +208,7 @@ class OpenTraffic:
                 row["fuel_mg"] += consumption
                 distance, fuel, vehicle_seconds = distance+speed*dt, fuel+consumption, vehicle_seconds+dt
                 if after.x_m >= 1200:
-                    row["exited_s"] = before.time_s+dt
+                    row["exited_s"] = before.time_s+end*full_dt
                     exited += 1
                     break
                 before = after
@@ -205,12 +226,16 @@ class OpenTraffic:
         self.tick_index += 1
         self.exited_count += exited
         entered, completed = self.entered_count, self.exited_count
-        pending = sum(map(len, self.queues))
-        if self.cursor != entered+pending or entered != completed+len(self.states):
+        source_pending = sum(map(len, self.queues))
+        active = sum(s.x_m >= 0 for s in self.states.values())
+        upstream = len(self.states)-active
+        pending = source_pending+upstream
+        if (self.cursor != self.inserted_count+source_pending or
+            self.inserted_count != completed+len(self.states) or entered != completed+active):
             raise RuntimeError("持续交通车辆守恒失败")
         return dict(time_s=self.now, distance_m=distance, fuel_mg=fuel,
-            vehicle_seconds=vehicle_seconds, active=len(self.states), pending=pending,
-            entered=entered, exited=completed)
+            vehicle_seconds=vehicle_seconds, active=active, pending=pending,
+            upstream=upstream,source_pending=source_pending,entered=entered, exited=completed)
 
 
 def planned_cases():
@@ -246,7 +271,8 @@ def run_case(case, root):
             network.write(json.dumps(event, separators=(",", ":"))+"\n")
             if clock.tick_index % 10 == 0:
                 positions.write(json.dumps(dict(time_s=clock.now,
-                    states={key: [s.x_m,s.y_m,s.vx_mps,s.a_drive_mps2] for key,s in clock.states.items()}),
+                    states={key: [s.x_m,s.y_m,s.vx_mps,s.a_drive_mps2] for key,s in clock.states.items()
+                            if s.x_m >= 0}),
                     separators=(",", ":"))+"\n")
             if clock.tick_index % 100 == 0:
                 network.flush()
@@ -259,7 +285,10 @@ def run_case(case, root):
     trips = list(clock.trips.values())
     write_json(directory/"trips.json", trips)
     write_json(directory/"incidents.json", clock.incidents)
+    platoons = evaluate_platoons(directory/'positions.jsonl.gz',case['lane_count'],case['same_lane_gap_m'])
+    write_json(directory/'platoon_metrics.json',platoons)
     result = {**case, **summarize_trips(trips, case["demand_duration_s"], clock.now),
+        **{key:platoons[key] for key in PLATOON_METRICS},
         "status": "completed", "collision_pairs":len(clock.seen["collision"]),
         "road_departure_vehicles":len(clock.seen["road"]),
         "trajectory_digest":clock.digest.hexdigest(), "wall_s":time.perf_counter()-started}
@@ -273,7 +302,7 @@ def run_case(case, root):
 
 def run_study(*, cases=None, workers=8, output_base=None):
     cases = planned_cases() if cases is None else cases
-    base = ROOT/"results/continuous_traffic" if output_base is None else Path(output_base)
+    base = ROOT/"results/continuous_traffic_v3" if output_base is None else Path(output_base)
     root = base/datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     root.mkdir(parents=True)
     sources = [p for folder in ("noa","models","perception","simulation","experiments","configs","safety","research")
@@ -281,12 +310,15 @@ def run_study(*, cases=None, workers=8, output_base=None):
     with zipfile.ZipFile(root/"source_snapshot.zip", "x", zipfile.ZIP_DEFLATED) as archive:
         for p in sources:
             archive.write(p, p.relative_to(ROOT).as_posix())
-    write_json(root/"protocol.json", dict(schema="continuous_traffic_v2", cases=cases,
+    write_json(root/"protocol.json", dict(schema="continuous_traffic_v3", cases=cases,
         user_selected_road="MATLAB constant-lane straight road", road_length_m=1200.,
         dt_control_s=.1, dt_physics_s=.01, fuel_model="HBEFA3/PC_G_EU4",
-        workers=workers, entry="lane FIFO; time headway and model emergency stopping distance",
+        workers=workers, entry="physical upstream -300m; local speed matching; shared response protection",
+        measurement_interval_m=[0.,1200.],upstream_control="ordinary NOA in both modes",
         stop_on_first_safety_incident=True,
-        baseline="ordinary car following and lane keeping; spontaneous overtaking disabled in both modes",
+        baseline="CTH ACC and lane keeping; common closing-speed response protection and cruise-speed ceiling",
+        platoon_metrics=dict(position_tolerance_m=2.,speed_tolerance_mps=.5,
+                             lane_center_tolerance_m=.3,stable_duration_s=5.,sample_s=1.),
         source_sha256={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}))
     print(json.dumps(dict(study_root=str(root), cases=len(cases))), flush=True)
     results = []

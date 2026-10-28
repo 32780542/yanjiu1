@@ -188,6 +188,7 @@ def formation_acceleration(ego, target, p):
         desired_speed = target.reference_speed_mps + max(-2.0, min(2.0, error / 5.0))
     else:
         return None
+    desired_speed = min(desired_speed,p['noa_target_speed_mps'])
     return max(-3.0, min(2.0, desired_speed - ego.vx_mps))
 
 

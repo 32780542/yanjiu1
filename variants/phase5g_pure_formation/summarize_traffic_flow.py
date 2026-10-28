@@ -10,6 +10,7 @@ from pathlib import Path
 from statistics import mean, stdev
 
 from experiments.formation_study import write_json
+from experiments.platoon_metrics import evaluate_platoons, PLATOON_METRICS
 
 
 def paired_rows(rows):
@@ -44,7 +45,7 @@ def independent_metrics(trips, duration, recording_end_s):
     distance = math.fsum(r["distance_m"] for r in trips)
     fuel = math.fsum(r["fuel_mg"] for r in trips)
     seconds = math.fsum(r["onroad_s"] for r in trips)
-    return dict(requested=len(trips),entered=len(entered),completed=len(completed),
+    result = dict(requested=len(trips),entered=len(entered),completed=len(completed),
         all_completed=complete,requested_until_end=released,
         not_yet_requested_final=len(trips)-released,window_complete=window_complete,
         pending_final=released-len(entered),
@@ -62,6 +63,18 @@ def independent_metrics(trips, duration, recording_end_s):
         network_mean_speed_mps=distance/seconds if seconds else None,
         exit_flow_veh_h=3600*sum(r["exited_s"]<=duration for r in completed)/duration if window_complete else None,
         clearance_after_600s_s=max(0.,max(r["exited_s"] for r in completed)-duration) if complete else None)
+    if trips and 'inserted_s' in trips[0]:
+        inserted = [r for r in trips if r['inserted_s'] is not None]
+        source_count = sum(r['inserted_s']<=duration for r in inserted)
+        entry_count = sum(r['entered_s']<=duration for r in entered)
+        result.update(inserted=len(inserted),source_queue_final=released-len(inserted),
+            upstream_final=len(inserted)-len(entered),
+            source_queue_at_600s=len(trips)-source_count if window_complete else None,
+            upstream_at_600s=source_count-entry_count if window_complete else None,
+            mean_entry_wait_s=mean(r['inserted_s']-r['requested_s'] for r in trips) if complete else None,
+            mean_upstream_travel_s=mean(r['entered_s']-r['inserted_s'] for r in trips) if complete else None,
+            mean_entry_delay_s=mean(r['entered_s']-r['requested_s'] for r in trips) if complete else None)
+    return result
 
 
 def group_rows(rows, paired=False):
@@ -74,7 +87,8 @@ def group_rows(rows, paired=False):
     metrics = ("system_time_reduction_pct","travel_time_reduction_pct","fuel_reduction_pct",
                "exit_flow_change_pct") if paired else (
                "requested","completed","mean_entry_wait_s","mean_travel_time_s","mean_system_time_s",
-               "exit_flow_veh_h","fuel_g_per_km","mean_fuel_rate_mg_s","total_fuel_kg","network_mean_speed_mps")
+               "exit_flow_veh_h","fuel_g_per_km","mean_fuel_rate_mg_s","total_fuel_kg","network_mean_speed_mps",
+               "mean_upstream_travel_s","mean_entry_delay_s",*PLATOON_METRICS)
     output = []
     for key, values in sorted(groups.items()):
         result = dict(zip(fields,key))
@@ -170,6 +184,12 @@ def summarize(root, output, additional_roots=()):
                 raise ValueError(f"逐拍与逐车累计不符：{row['name']}/{key}")
         network_checked += 1
         incidents = json.loads((directory/"incidents.json").read_text(encoding="utf-8"))
+        if (directory/'platoon_metrics.json').is_file():
+            measured = evaluate_platoons(directory/'positions.jsonl.gz',row['lane_count'],row['same_lane_gap_m'])
+            for key in PLATOON_METRICS:
+                a,b = measured[key],row[key]
+                if not (a == b if a is None or b is None else math.isclose(a,b,rel_tol=1e-9,abs_tol=1e-8)):
+                    raise ValueError(f"编队指标复算不符：{row['name']}/{key}")
         times = [event["time_s"] for events in incidents.values() for event in events]
         row["first_safety_event_s"] = min(times) if times else None
         if "termination_reason" not in row:

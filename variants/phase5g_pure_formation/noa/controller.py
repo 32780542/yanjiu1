@@ -15,9 +15,7 @@ from noa.driving import (
     stop_distance as _stop_distance, comfortable_speed as _comfortable_speed,
     longitudinal as _longitudinal,
 )
-from noa.simple_controller import (
-    execute as execute_simple, immediate_emergency as _simple_immediate_emergency,
-)
+from noa.simple_controller import execute as execute_simple
 from noa.low_speed import (candidate_profiles, peak_reference_lateral_accel,
                            steering_speed_floor, validated_durations)
 from noa.prediction import actuator_acceleration_upper, lateral_command, measured_bodies, reference_target, verify_candidate
@@ -129,8 +127,6 @@ def decide(control, parameters):
     center = memory.target_y_m if active else road.current_center_m
     # Source lane ending is a stop constraint until the maneuver is feasible.
     accel, lead, gap, emergency, reason = _longitudinal(ego, bodies, center, end_x, p)
-    if simple_active and not active:
-        emergency = _simple_immediate_emergency(ego, bodies, p)
     diagnostics = {'reason':reason, 'lead_gap_m':gap,
                    'own_actuator_acceleration_upper_mps2':actuator_acceleration_upper(ego, p),
                    'lane_center_y_m':road.current_center_m,

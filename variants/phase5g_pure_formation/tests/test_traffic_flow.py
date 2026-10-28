@@ -101,7 +101,7 @@ class TrafficFlowTests(unittest.TestCase):
         while clock.trips["one"]["exited_s"] is None:
             clock.tick()
         trip = clock.trips["one"]
-        self.assertAlmostEqual(trip["exited_s"], 1200/28.8, places=6)
+        self.assertAlmostEqual(trip["exited_s"]-trip['entered_s'], 1200/28.8, places=6)
         self.assertAlmostEqual(trip["distance_m"], 1200., places=6)
         self.assertEqual(len(clock.states), 0)
         empty = clock.tick()
@@ -142,7 +142,7 @@ class TrafficFlowTests(unittest.TestCase):
         tape = [dict(vehicle_id=key, requested_s=0., lane=0) for key in ("front", "rear")]
         clock = OpenTraffic(dict(lane_count=3, target_speed_mps=28.8,
             same_lane_gap_m=30., formation=False, demand_duration_s=1., max_time_s=60.), tape)
-        clock.cursor = clock.entered_count = 2
+        clock.cursor = clock.inserted_count = clock.entered_count = 2
         clock.states = {"front":kinematic_state(clock.p,x_m=1199.9,y_m=1.65,vx_mps=28.8),
                         "rear":kinematic_state(clock.p,x_m=1195.8,y_m=1.65,vx_mps=32.)}
         clock.sensors = {key:IdealSensor(clock.p,clock.road) for key in clock.states}

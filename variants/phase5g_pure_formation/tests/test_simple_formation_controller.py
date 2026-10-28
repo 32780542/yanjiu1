@@ -219,19 +219,19 @@ class SimpleFormationControllerTests(unittest.TestCase):
         self.assertEqual(simple["requested_acceleration_mps2"], 0.0)
         self.assertFalse(simple["emergency_override"])
 
-    def test_direct_formation_accel_replaces_opposite_base_cruise(self):
+    def test_direct_formation_request_respects_cruise_speed(self):
         upper = self.neighbor(7, 20.0, 2)
         with patch("noa.controller._longitudinal", return_value=(-2.0, None, None, False, "cruise")):
             decision = decide(self.control(neighbors=(upper,), memory=SimpleFormationMemory(
                 (), "CRUISE", join_phase="FORMED", desired_lane_index=0)), self.p)
-        self.assertEqual(decision.action.acceleration_mps2, 2.0)
+        self.assertEqual(decision.action.acceleration_mps2, 0.0)
         self.assertEqual(decision.memory.reference_track_id, 7)
         simple = decision.diagnostics["simple_formation"]
         self.assertEqual(simple["role"], "lower_aligned")
         self.assertEqual(simple["target_x_m"], 120.0)
         self.assertEqual(simple["position_error_m"], 20.0)
         self.assertEqual(simple["reference_track_id"], 7)
-        self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
+        self.assertEqual(simple["requested_acceleration_mps2"], 0.0)
         self.assertEqual(simple["lane_reason"], "layer_not_stable")
 
     def test_distant_lane_end_does_not_cap_direct_request(self):
@@ -720,9 +720,9 @@ class SimpleFormationControllerTests(unittest.TestCase):
                                            desired_lane_index=2)), self.p)
         simple = decision.diagnostics["simple_formation"]
         self.assertEqual(simple["role"], "upper_follower")
-        self.assertEqual(simple["requested_acceleration_mps2"], 2.0)
+        self.assertEqual(simple["requested_acceleration_mps2"], 0.0)
         self.assertFalse(simple["emergency_override"])
-        self.assertEqual(decision.action.acceleration_mps2, 2.0)
+        self.assertEqual(decision.action.acceleration_mps2, 0.0)
 
     def test_current_bumper_gap_and_closing_ttc_override_direct_request(self):
         cases = ((5.0, 20.0), (40.0, 0.0))

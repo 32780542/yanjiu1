@@ -82,7 +82,7 @@ class LayeredFormationTests(unittest.TestCase):
         self.assertEqual((target.role, target.target_x_m,
                           target.reference_track_id),
                          ("component_approach", 130.0, 1))
-        self.assertEqual(formation_acceleration(ego, target, P), 2.0)
+        self.assertEqual(formation_acceleration(ego, target, P), 0.0)
         self.assertIsNone(layered_window(ego, (front,), CENTERS, P).layers[0][0])
 
     def test_same_lane_following_uses_visible_component_beyond_layer_window(self):

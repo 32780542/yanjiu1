@@ -435,3 +435,25 @@
 - 使用原off参数代入同速28.8m/s、零加速度、净距54.84m（3+1.8v）：`comfortable_speed`仅16.27176m/s，最坏制动所需净距73.272m，会继续要求制动。实际输入SHA与数值保存在便携数据的`baseline_diagnosis.json`。时距目标与额外停车约束在该速度下不一致，是慢行的具体代码原因。
 - 确认两组纵向安全规则不相同：`controller.py`第131–133行在普通编队、无活动计划时将最坏制动距离紧急状态替换为当前净距/TTC判据；`simple_controller.py`再以位置跟踪请求替换常规纵向加速度。加上实际速度32.73–33.06m/s，79%–87%改善包含了控制规则与速度差异，不能作为编队排列本身的独立改善率。
 - 本次补充报告、评价方法、README和系统说明的解释，保留所有原始结果与统计。未修改控制器、实验参数或重新运行。下一步若评价编队独立收益，先统一两组纵向安全与速度条件，再开展配对比较。
+
+## 2026-10-28：基础NOA修正与直接编队评价（执行中）
+
+- 用户明确要求基础NOA实际合理，不把常规车虚假制动和入口等待造成的差异当作编队优势；直接评价编队大小、稳定度等。新计划为`docs/superpowers/plans/2026-10-28-realistic-noa-and-platoon-metrics.md`。
+- 已保留原CTH线性ACC（3m+1.8s、kp0.15、kv0.8），去掉运动前车的瞬间硬刹停车差及舒适停车罩。两模式共用`driving._lead_gaps/immediate_emergency/response_emergency`：统一前向车身、当前/投影切入候选，按当前净距、TTC、闭合速度含响应/jerk停车距离保护。静止前车舒适停车及物理终点停车保留。编队期望速度封顶共同巡航值，不再跟随前车速度逐层抬升。
+- 入口为-300m物理上游段，本车道200m内最近前车匹配速度；两组在上游均用普通NOA。台账增加`inserted_s`，0m跨越时记`entered_s`，1200m记出口；燃油、里程和车辆时间只积分0至1200m。`mean_entry_wait_s`在v3为请求至源端放行等待，`mean_upstream_travel_s`为放行至0m运动时间，`mean_entry_delay_s`为两者合计，队列/上游运动车辆分别记录。
+- 反例先失败：同速时距、速度封顶及共享闭合保护（`20261028T092402247455Z_realistic-noa-red-guard_e55b74b7`）；上游入场三项（`20261028T092808975731Z_upstream-entry-red_537d76b0`）；源端等待分解（`20261028T092950350760Z_upstream-time-split-red_a3bcb911`）。均已GREEN。
+- 独立复审发现常规仅最近车与编队逐车保护的候选分叉，补同中心重叠反例RED（`20261028T093954045164Z_common-body-candidates-red_b259f9b7`），现已统一全部候选。一次整套回归发生原生0xc0000005，日志`20261028T094045043625Z_realistic-noa-common-guards_be6c7896`保留；带faulthandler独立复跑对应阻塞并道例通过（`20261028T094239205812Z_noa-blocked-merge-diagnosis_c5de8f07`），整套125项随后通过（`20261028T094327976892Z_realistic-noa-frozen-regression_7bac9b30`）。未归因为算法碰撞或内存。
+- 四例60s q1250/2000、seed1、on/off探针全部完成、0接触，根`variants/phase5g_pure_formation/results/realistic_noa_probes/20261028T093040310873Z`，操作`results/operations/20261028T093039794876Z_realistic-noa-flow-probe_cfbff5c8`。常规在网41.673s、均速28.795m/s；编队41.765/41.686s。源端等待两组相同。直路不再有原先的数量级优势。
+- 新离线`experiments/platoon_metrics.py`在variant内，只读1s物理位置；6类主指标为平均/最大规模、参与率、几何RMS、队内速度RMS、5s关系稳定参与率、内部断裂率。18项合成测试通过，实际运行路径并入上述125项验收。图组件不重叠，D24/36与offset15独立；边界退出/记录结束删失，不作内部断裂。定义和Su2017/Cai2019/ADEPT2024等原文依据见`docs/编队规模与稳定度评价.md`。
+- 新54例正式批次已启动并冻结仿真源码：操作`results/operations/20261028T094516935685Z_realistic-noa-platoon-54_2c48d5d9`，进程由run_logged私有Job管理，16workers，7200s。原始根`variants/phase5g_pure_formation/results/continuous_traffic_v3/20261028T094517387582Z`。旧54例及其源码、统计保持原样。不得盲目重启；先检查该操作日志和封存案例。
+- 完整simple formation harness也在运行，标签`realistic-formation-harness`。此检查点尚未完成新54例、复算、结果报告与GitHub发布，继续至全部完成。
+
+### 边界低速插入与物理图反例修正后的最终冻结
+
+- 长时检查发现源端还会按短空隙/时距反算很低插入速度：前车−290m、28.8m/s时，新车竟以1.5m/s插在−300m。已新增RED（`results/operations/20261028T095419489882Z_source-short-gap-red_2af270ab`），删除该反算，只匹配实际前车速度，空隙不足则请求留源端，路内车辆照常前进。
+- 因该边界规则影响实际流量，已按命令行核对并停止本任务run_logged supervisor PID77136，私有Job清理全部子进程。先尝试PID65424时识别到它是受管子进程，身份检查拒绝，未操作；原目录`20261028T094517387582Z`无封存案例，保留所有中间前缀，不与最终批次混合。
+- 再次四例60s探针根`variants/phase5g_pure_formation/results/realistic_noa_probes/20261028T095510918986Z`，操作`results/operations/20261028T095510460089Z_moving-source-flow-probe_45467f89`，85s完成，全部0接触、排空。NOA在网41.6667s；编队41.8122/41.6974s。源端等待两组相同，q1250/2000分别1.8746/7.8189s。
+- 评价器出现“缺少同道中间层却被跨道对角边串成大队”的反例。三道各3车、同道距60m而D30，原图误记9车。RED为`results/operations/20261028T095903361055Z_platoon-diagonal-false-positive-red_e4d0b921`。已改为跨道只连同层相位，跨层必须真实同道D邻接支撑；反例为3个双车局部队，D24/30/36的完整三层队仍连通。阈值未改，两组一致使用。独立复审确认定义合理，协议明确同层局部小队不等于完整多层大队。
+- 最终冻结138项通过，操作`results/operations/20261028T095941356480Z_noa-platoon-publication-freeze_ae290a56`。完整150项首次为149通过、1项仍断言旧超巡航追赶+2；已改为新封顶0预期。旧操作`20261028T094527404302Z_realistic-formation-harness_f269a65e`保留，完整套件正在新源码下重跑。
+- **当前唯一正式批次**：`results/operations/20261028T100104659374Z_noa-platoon-final-54_ea4eff30`，原始根`variants/phase5g_pure_formation/results/continuous_traffic_v3/20261028T100105100032Z`，16workers、7200s。当前exec会话20978。完整harness操作`results/operations/20261028T100115306188Z_noa-platoon-final-harness_7a595fd8`，exec会话58958。源代码已冻结；最终结果、报告与GitHub发布尚待完成。
+- 新绘图入口`variants/phase5g_pure_formation/plot_noa_platoon.py`位于冻结运行文件夹之外，输出直路对照、规模/稳定参与、几何/速度/内部断裂三组PNG/SVG。README与系统说明已将旧大幅改善率标为历史实现，当前规则见`docs/基础NOA与入口修正规则.md`。

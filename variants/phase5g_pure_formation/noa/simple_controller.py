@@ -9,31 +9,9 @@ import math
 from models.bezier import QuadraticLaneChange
 from models.vehicle import Actuation, clip
 from noa.contracts import NoaDecision
-from noa.driving import stop_distance
+from noa.driving import stop_distance, immediate_emergency
 from noa.prediction import actuator_acceleration_upper, lateral_command, reference_target
 from noa import simple_formation
-
-
-def immediate_emergency(ego, bodies, p):
-    """根据当前车身净距和接近时间判断是否紧急制动。"""
-    for body in bodies:
-        lateral_half = (
-            p["width_m"]
-            + abs(math.cos(body.heading)) * body.width
-            + abs(math.sin(body.heading)) * body.length
-        ) / 2
-        if body.x < ego.x_m or abs(body.y - ego.y_m) > lateral_half:
-            continue
-        body_half = (
-            abs(math.cos(body.heading)) * body.length + abs(math.sin(body.heading)) * body.width
-        ) / 2
-        gap = body.x - ego.x_m - p["length_m"] / 2 - body_half
-        closing = ego.vx_mps - body.vx
-        if gap <= p["noa_standstill_gap_m"] or (
-            closing > 0 and gap / closing < p["noa_emergency_ttc_s"]
-        ):
-            return True
-    return False
 
 
 def road_stop_required(ego, lane_end_x, p):
@@ -281,7 +259,7 @@ def execute(
         road_accel, _, _, road_emergency, road_reason = longitudinal(
             ego, (), road.current_center_m, end_x, p
         )
-        if road_accel < accel:
+        if road_accel <= accel:
             accel = road_accel
             detail["road_end_override"] = True
             detail["road_end_reason"] = road_reason
