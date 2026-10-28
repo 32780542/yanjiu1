@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<edges>
+  <edge from="entry" to="bottleneck" id="upstream" numLanes="3" speed="33.3" width="3.3" length="1000" spreadType="center">
+    <lane index="0" width="3.3" shape="0,1.65 1000,1.65" />
+    <lane index="1" width="3.3" shape="0,4.949999999999999 1000,4.949999999999999" />
+    <lane index="2" width="3.3" shape="0,8.25 1000,8.25" />
+  </edge>
+  <edge from="bottleneck" to="exit" id="downstream" numLanes="2" speed="33.3" width="3.3" length="200" spreadType="center">
+    <lane index="0" width="3.3" shape="1000,1.65 1200,1.65" />
+    <lane index="1" width="3.3" shape="1000,4.949999999999999 1200,4.949999999999999" />
+  </edge>
+</edges>

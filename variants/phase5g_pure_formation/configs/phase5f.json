@@ -1,0 +1,23 @@
+{
+  "layer": "phase5f",
+  "defaults": {
+    "status": "predeclared_phase5f_development_unvalidated",
+    "source": "docs/phase5f_adaptive_duration_plan.md",
+    "page_or_url": "docs/superpowers/specs/2026-09-13-phase5f-adaptive-duration-design.md",
+    "rationale": "Finite measured-speed candidates; each remains subject to the existing R5 and full swept safety guards."
+  },
+  "parameters": [
+    {
+      "name": "phase5f_enabled",
+      "value": true,
+      "unit": "bool",
+      "rationale": "Explicit experimental switch; applied only with R5 and visible lane priority."
+    },
+    {
+      "name": "phase5f_duration_candidates_s",
+      "value": [5.0, 7.5, 10.0],
+      "unit": "s",
+      "rationale": "Pre-registered ascending finite set. Five seconds is the inherited control; no post-result retuning."
+    }
+  ]
+}

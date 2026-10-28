@@ -1,0 +1,24 @@
+{
+  "layer": "paper_reference",
+  "defaults": {"status":"paper_explicit", "source":"Cai2024", "page_or_url":"PDF p3 Table I; DOI 10.1109/IV55156.2024.10588701", "rationale":"Published reference; does not grant controller access to global state."},
+  "parameters": [
+    {"name":"upstream_length_m", "value":1000, "unit":"m", "page_or_url":"PDF p4 Fig.4 and text (l1+l2)"},
+    {"name":"downstream_length_m", "value":200, "unit":"m", "page_or_url":"PDF p4 Fig.4 and text (l3)"},
+    {"name":"upstream_lanes", "value":3, "unit":"lane", "page_or_url":"PDF p3-4 Fig.4"},
+    {"name":"downstream_lanes", "value":2, "unit":"lane", "page_or_url":"PDF p3-4 Fig.4"},
+    {"name":"lane_drop_side", "value":"left", "unit":"category", "status":"paper_figure_interpretation", "page_or_url":"PDF p4 Fig.4; eastbound upper lane ends"},
+    {"name":"gap_table_m", "value":15, "unit":"m", "rationale":"Table wording safe one-lane following gap; reference-point semantics supplemented by modified source, not equated to net gap."},
+    {"name":"formation_switch_period_s", "value":5, "unit":"s", "rationale":"Structure switching period, never numerical integration dt."},
+    {"name":"desired_speed_mps", "value":28.8, "unit":"m/s"},
+    {"name":"min_speed_mps", "value":0, "unit":"m/s"},
+    {"name":"max_speed_mps", "value":33.3, "unit":"m/s"},
+    {"name":"min_accel_mps2", "value":-10, "unit":"m/s^2"},
+    {"name":"max_accel_mps2", "value":5, "unit":"m/s^2"},
+    {"name":"steering_bound_deg", "value":40, "unit":"deg", "rationale":"Symmetric plus/minus bound; must also respect speed-dependent tire/acceleration constraints."},
+    {"name":"flow_levels_per_lane_hour", "value":[1250,1500,1750,2000], "unit":"veh/(lane*h)", "page_or_url":"PDF p4 text; p5 Fig.5"},
+    {"name":"cav_penetrations", "value":[0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1], "unit":"fraction", "page_or_url":"PDF p4 text", "rationale":"CAV MPR in paper; NOA adoption in the new study has different semantics."},
+    {"name":"paper_matlab", "value":"2023b", "unit":"version"},
+    {"name":"paper_sumo", "value":"0.32.0", "unit":"version"},
+    {"name":"s1_s2_boundary", "value":"not fixed", "unit":"category", "page_or_url":"PDF p4 text", "rationale":"Do not impose the modified-source x=640 m as a paper setting or controller input."}
+  ]
+}

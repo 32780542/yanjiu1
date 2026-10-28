@@ -1,0 +1,1004 @@
+{
+  "inspection_date": "2026-09-10",
+  "source_root": "D:/matlab_huipu_2000",
+  "provenance": "User identifies this as Cai 2024-related MATLAB code partially modified for a later paper; no clean publication-version history established.",
+  "inspection_scope": "Static main-chain/code/XML inspection plus read-only MATLAB whos/load for Parameter.mat, Variables.mat, singleVehicle.mat. No traffic simulation or controller validation run.",
+  "parameter_priority": "Paper explicit values > corresponding verified source behavior for unspecified items > documented supplementary assumptions; source differences remain visible.",
+  "main_chain": [
+    "mainmain.m",
+    "New_Vehicle_frc.m",
+    "formationControl.m",
+    "formationControlNormal.m",
+    "singleVehicleCalculate.m",
+    "trajectory_planning.m",
+    "BrysonDenhamContinuous.m",
+    "BrysonDenhamEvents.m",
+    "mainmain.m: setSpeed/changeLane"
+  ],
+  "source_files": [
+    {
+      "path": "D:/matlab_huipu_2000/mainmain.m",
+      "sha256": "9cea997d1df84aa6ad3d6b971b8232296f7043fd3e6d93460547909877857ef0",
+      "bytes": 50663
+    },
+    {
+      "path": "D:/matlab_huipu_2000/RUN.m",
+      "sha256": "cf55155b4c283049a64df44ea7c3b5a1608820bf6189c69eb4f4d2bd141c2521",
+      "bytes": 24
+    },
+    {
+      "path": "D:/matlab_huipu_2000/RUN_20220530.m",
+      "sha256": "7620e18a8098be4a185f63218557b867866d72ba491c8d5be25ab4795dc0848f",
+      "bytes": 240
+    },
+    {
+      "path": "D:/matlab_huipu_2000/New_Vehicle.m",
+      "sha256": "d04f125a8597d81e6ab25b2a17260960b1fb1905d960f2db09a87418569b1857",
+      "bytes": 2537
+    },
+    {
+      "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+      "sha256": "e4329f4df810d7a697d7c8085d0b391aea7453537e1336a1184eb212fc6e1a4e",
+      "bytes": 3494
+    },
+    {
+      "path": "D:/matlab_huipu_2000/New_Road.m",
+      "sha256": "5a3f2f5746e3bfc331a0c5a23f3ac54b60f2f99af61ce9c8566c68fbfb5b2725",
+      "bytes": 1175
+    },
+    {
+      "path": "D:/matlab_huipu_2000/New_Edge.m",
+      "sha256": "f93fd85c741e463b18514bf22b8133054b8f379e4ba49eac52e596d292699d3e",
+      "bytes": 603
+    },
+    {
+      "path": "D:/matlab_huipu_2000/New_Connections.m",
+      "sha256": "d98145a3b12203ef244f2fbf5c67bfecefe30205e360711e8bb3c014aa48a439",
+      "bytes": 1320
+    },
+    {
+      "path": "D:/matlab_huipu_2000/formationControl.m",
+      "sha256": "deb43b436f5b48747c50370491cecfeac6cd9a82f88cf87a60f693cb4e8069e8",
+      "bytes": 1724
+    },
+    {
+      "path": "D:/matlab_huipu_2000/formationControlNormal.m",
+      "sha256": "df8fef8dfcd7571660a43d903c1dfe079ed276f3e5adc3c1e683069a21c33afd",
+      "bytes": 8905
+    },
+    {
+      "path": "D:/matlab_huipu_2000/singleVehicleCalculate.m",
+      "sha256": "bca76f19b7e8b484bac46e3edfe72258a1d81efa1a2ade08e20799c5e9c6ef50",
+      "bytes": 9891
+    },
+    {
+      "path": "D:/matlab_huipu_2000/trajectory_planning.m",
+      "sha256": "9129237a1d7f0710e6e3924bfbeeba2abbda114c28a36d61fa2f440375181659",
+      "bytes": 468
+    },
+    {
+      "path": "D:/matlab_huipu_2000/BrysonDenhamContinuous.m",
+      "sha256": "eb348bac35aaa2d191cf87e5df9d32f88bcc68285f72e508b889d0bcf898b27b",
+      "bytes": 282
+    },
+    {
+      "path": "D:/matlab_huipu_2000/BrysonDenhamEvents.m",
+      "sha256": "a88125e1af42652ed4f671d3caa1385e9106af725bfba852f0f36d3bb3d80f38",
+      "bytes": 758
+    },
+    {
+      "path": "D:/matlab_huipu_2000/Three_Vehicle_Control.m",
+      "sha256": "66544165d426f7e293fe6034eeac148b2c835cd48217e93110d9e51e69d59abb",
+      "bytes": 3254
+    },
+    {
+      "path": "D:/matlab_huipu_2000/One_Vehicle_Control.m",
+      "sha256": "68708c4709bcd2720aa8798144bca0a3167e061523d1208e4e29e4a23973af9b",
+      "bytes": 8116
+    },
+    {
+      "path": "D:/matlab_huipu_2000/CAV_control.m",
+      "sha256": "e26b54a7a749d482949556ec9423a1674d0fc4c48669c13e3a4eb8015229d5c9",
+      "bytes": 932
+    },
+    {
+      "path": "D:/matlab_huipu_2000/Car_following_model.m",
+      "sha256": "f117814ccee69d478fe0eb17bd96d88a8cd17f214bd27c97e41c956f70278017",
+      "bytes": 4683
+    },
+    {
+      "path": "D:/matlab_huipu_2000/drawCar.m",
+      "sha256": "2b45efb0a924210e7b84fa3e1870a071a406f91a185b5b7aa21b822ccc9b98c3",
+      "bytes": 524
+    },
+    {
+      "path": "D:/matlab_huipu_2000/resultCalculate.m",
+      "sha256": "3435b6df20a39c952c805b923e599a9d210893be1b8869bbda3d26a35ff47226",
+      "bytes": 2357
+    },
+    {
+      "path": "D:/matlab_huipu_2000/traci_tls/data/cross.rou.xml",
+      "sha256": "f49b6647d0319fb8ce948b9ca155b20dc24eb70d4a349c518dbbdba75279dbeb",
+      "bytes": 1641
+    },
+    {
+      "path": "D:/matlab_huipu_2000/traci_tls/data/cross.net.xml",
+      "sha256": "270e6012229bb93ecba4e3e1f0c80b80693cd3ea280e39e5097add880fa52e00",
+      "bytes": 3194
+    },
+    {
+      "path": "D:/matlab_huipu_2000/traci_tls/data/cross.edg.xml",
+      "sha256": "20118ca165740bf4c6092e5ae6407ec9a1db9a07cb9f8fa48231a254309af07a",
+      "bytes": 219
+    },
+    {
+      "path": "D:/matlab_huipu_2000/traci_tls/data/cross.con.xml",
+      "sha256": "3bc23c3ea7bb07ee08f06350b9a8bf40533280ed43c5bb2b0a987a4206b63b9e",
+      "bytes": 263
+    },
+    {
+      "path": "D:/matlab_huipu_2000/traci_tls/data/cross.sumocfg",
+      "sha256": "411bbbacf6d6961634ac82f450b5b762b66fd1f918523823a4a932c97afad18f",
+      "bytes": 515
+    },
+    {
+      "path": "D:/matlab_huipu_2000/traci_tls/data/net.bat",
+      "sha256": "823878fa0aed7e814f4805c60344f3a9dbd08c6f5b252da0e84637dce8cc09a9",
+      "bytes": 138
+    },
+    {
+      "path": "D:/matlab_huipu_2000/Parameter.mat",
+      "sha256": "331751e40ab75605df0afcf8a9f99ba03b41e5126a902ce7f8ee164a8bc958c9",
+      "bytes": 2851
+    },
+    {
+      "path": "D:/matlab_huipu_2000/Variables.mat",
+      "sha256": "d85d1584783d46eae9021111b19aa56c1de84ce5e3b5203e46850748b0ae1ab8",
+      "bytes": 185
+    },
+    {
+      "path": "D:/matlab_huipu_2000/singleVehicle.mat",
+      "sha256": "e93744db11f7564d0e628a9329a81232a591741e9bd2043327665d70364b8d79",
+      "bytes": 340
+    }
+  ],
+  "parameters": [
+    {
+      "name": "CAV_ICV.length",
+      "value": 4.0,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "adopt_4m_length"
+    },
+    {
+      "name": "CAV_ICV.accel",
+      "value": 5.0,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.decel",
+      "value": 10.0,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.emergencyDecel",
+      "value": 30.0,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Source value only; do not adopt 30 m/s^2 as validated physical braking.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.tau",
+      "value": 0.2,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "SUMO desired following headway; not sensor latency or human reaction time.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.minGap",
+      "value": 1.5,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.delta",
+      "value": 4.0,
+      "unit": "dimensionless",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "IDM acceleration exponent; not steering angle.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.stepping",
+      "value": 0.1,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.carFollowModel",
+      "value": "IDM",
+      "unit": "category",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_ICV.guiShape",
+      "value": "passenger",
+      "unit": "category",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 10
+      },
+      "note": "Visual class, not vehicle brand or dimensions.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.length",
+      "value": 4.0,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "adopt_4m_length"
+    },
+    {
+      "name": "CAV_HDV.accel",
+      "value": 3.0,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.decel",
+      "value": 10.0,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.emergencyDecel",
+      "value": 30.0,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Source value only; do not adopt 30 m/s^2 as validated physical braking.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.tau",
+      "value": 0.65,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "SUMO desired following headway; not sensor latency or human reaction time.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.minGap",
+      "value": 2.0,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.delta",
+      "value": 4.0,
+      "unit": "dimensionless",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "IDM acceleration exponent; not steering angle.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.stepping",
+      "value": 0.1,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.carFollowModel",
+      "value": "IDM",
+      "unit": "category",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Explicit vType attribute; runtime commands may alter effective behavior.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "CAV_HDV.guiShape",
+      "value": "passenger",
+      "unit": "category",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Vehicle_frc.m",
+        "line": 12
+      },
+      "note": "Visual class, not vehicle brand or dimensions.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "simulation_step",
+      "value": 0.1,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 71
+      },
+      "note": "Source simulation and planning-output sample interval.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_horizon",
+      "value": 600,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 152
+      },
+      "note": "Fixed cutoff, not a demonstrated warmup or drain protocol.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "X1",
+      "value": 0,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 95
+      },
+      "note": "Entrance coordinate.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "X2",
+      "value": 1000,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 96
+      },
+      "note": "Bottleneck reference coordinate.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "X3",
+      "value": 1200,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 97
+      },
+      "note": "Exit reference coordinate.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "vF",
+      "value": 28.8,
+      "unit": "m/s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 98
+      },
+      "note": "Agrees with Cai 2024 Table I.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "T",
+      "value": 5,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 99
+      },
+      "note": "Formation switching cycle, not numerical integration step.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "planning_lane_width",
+      "value": 3.3,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 100
+      },
+      "note": "Also agrees with adjacent lane center spacing of stored net. Write explicit width in new net.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "formation_gap_reference",
+      "value": 15,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControl.m",
+        "line": 7
+      },
+      "note": "Reference-point grid spacing, not bumper clearance.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "optimizer_a_min",
+      "value": -10,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/singleVehicleCalculate.m",
+        "line": 63
+      },
+      "note": "Longitudinal optimizer lower bound.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "optimizer_a_max",
+      "value": 5,
+      "unit": "m/s^2",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/singleVehicleCalculate.m",
+        "line": 64
+      },
+      "note": "Longitudinal optimizer upper bound.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "optimizer_v_min",
+      "value": 0,
+      "unit": "m/s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/singleVehicleCalculate.m",
+        "line": 65
+      },
+      "note": "Optimizer bound.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "optimizer_v_max",
+      "value": 33.33,
+      "unit": "m/s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/singleVehicleCalculate.m",
+        "line": 66
+      },
+      "note": "Paper says 33.3. Keep both source and paper values distinct.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "group_head_distance_threshold",
+      "value": 50,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 539
+      },
+      "note": "OR with preceding-vehicle threshold; grouping uses global positions and hidden types.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "group_preceding_distance_threshold",
+      "value": 25,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 539
+      },
+      "note": "OR with group-head threshold; not a sensor range.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "group_gap_factor",
+      "value": 1.3,
+      "unit": "dimensionless",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 637
+      },
+      "note": "Group spacing threshold factor times gap.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "reconfiguration_lead_factor",
+      "value": 2.5,
+      "unit": "dimensionless",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControl.m",
+        "line": 50
+      },
+      "note": "Source trigger is X2-vF*T*2.5. Do not attribute fixed S1/S2 boundary to the paper.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "formation_min_speed_gate",
+      "value": 15,
+      "unit": "m/s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControl.m",
+        "line": 57
+      },
+      "note": "Normal optimization only if minimum group speed >15; otherwise zero plan entries handled specially.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "Tflow_effective",
+      "value": 0.042,
+      "unit": "probability_per_lane_per_step",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 37
+      },
+      "note": "Last active assignment overrides earlier lists.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "replan_every_steps",
+      "value": 50,
+      "unit": "steps",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 599
+      },
+      "note": "Global planning schedule in source.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "bezier_scale",
+      "value": 3.5,
+      "unit": "dimensionless",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/trajectory_planning.m",
+        "line": 3
+      },
+      "note": "Endpoint control-point distance scaling.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "optimizer_mesh_tolerance",
+      "value": 0.1,
+      "unit": "solver_setting",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/singleVehicleCalculate.m",
+        "line": 81
+      },
+      "note": "Not a position-tracking error bound in metres.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_road_speed",
+      "value": 41.66,
+      "unit": "m/s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Edge.m",
+        "line": 10
+      },
+      "note": "Road limit differs from optimizer max speed and paper vehicle maximum.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_downstream_lanes",
+      "value": 3,
+      "unit": "lanes",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/New_Edge.m",
+        "line": 11
+      },
+      "note": "Conflicts with paper 3-to-2 physical topology; must rebuild downstream as 2.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_gui_lanechange_duration",
+      "value": 1,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 128
+      },
+      "note": "GUI launch option; non-GUI branch does not carry same option.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_lane_command_duration",
+      "value": 2,
+      "unit": "s",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 940
+      },
+      "note": "Lane-choice command duration, not guaranteed physical maneuver duration.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_completion_x",
+      "value": 1190,
+      "unit": "m",
+      "status": "source_explicit_modified",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 980
+      },
+      "note": "Legacy completion flag; new metrics must use actual 1200 m exit event.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "same_lane_reference_spacing",
+      "value": 30,
+      "unit": "m",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControlNormal.m",
+        "line": 26
+      },
+      "note": "2*gap.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "adjacent_lane_offset",
+      "value": 15,
+      "unit": "m",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControlNormal.m",
+        "line": 26
+      },
+      "note": "gap.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "same_lane_nominal_net_gap_equal_4m_cars",
+      "value": 26,
+      "unit": "m",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControlNormal.m",
+        "line": 26
+      },
+      "note": "30-4 for aligned same-length vehicles; not a safety proof.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "insertion_nominal_front_or_rear_net_gap_equal_4m_cars",
+      "value": 11,
+      "unit": "m",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControlNormal.m",
+        "line": 26
+      },
+      "note": "15-4 after occupying intermediate slot; requires dynamic checks.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_reconfiguration_x",
+      "value": 640,
+      "unit": "m",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/formationControl.m",
+        "line": 50
+      },
+      "note": "1000-28.8*5*2.5; source only.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_group_gap_threshold",
+      "value": 19.5,
+      "unit": "m",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 637
+      },
+      "note": "1.3*15; source only.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_expected_flow_per_lane",
+      "value": 1512,
+      "unit": "veh/(lane*h)",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 291
+      },
+      "note": "3600*0.042/0.1; actual insertion can be lower.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "source_expected_total_flow",
+      "value": 4536,
+      "unit": "veh/h",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 291
+      },
+      "note": "Three independent lane trials per step.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "paper_flow_bernoulli_probabilities",
+      "value": [
+        0.034722222222222224,
+        0.041666666666666664,
+        0.04861111111111111,
+        0.05555555555555555
+      ],
+      "unit": "probability_per_lane_per_step",
+      "status": "derived_from_source",
+      "source": {
+        "path": "D:/matlab_huipu_2000/mainmain.m",
+        "line": 291
+      },
+      "note": "Derived for exact paper demand levels at 0.1 s, not source stored values.",
+      "adoption": "reference_only"
+    },
+    {
+      "name": "vehicle_brand",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "vehicle_width",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "wheelbase",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "front_rear_overhangs",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "mass_kg",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "yaw_inertia",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "front_rear_cornering_stiffness",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "actuator_parameters",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "sensor_specification",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "validated_fuel_coefficient_units",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    },
+    {
+      "name": "explicit_emission_class",
+      "value": null,
+      "unit": "unresolved",
+      "status": "unresolved",
+      "source": null,
+      "note": "Not established by inspected main chain, vehicle files and MAT snapshots. Do not infer from figure line width, the probability variable m, or fuel multiplier 1.2.",
+      "adoption": "must_document_supplement"
+    }
+  ],
+  "mat_snapshot_summary": {
+    "Parameter.mat": {
+      "PRate": 0.8,
+      "Tflow": 0.042,
+      "simulation_step": 0.1,
+      "run_i": 8,
+      "m_approx": 0.1824,
+      "runm_approx": 0.1824,
+      "m_meaning": "probability, not vehicle mass",
+      "snapshot_date_observed": "2026-06-30"
+    },
+    "Variables.mat": "empty ArriveTimePlan",
+    "singleVehicle.mat": "Count_all result table; not a vehicle parameter database"
+  },
+  "legacy_fuel_model": {
+    "source": "D:/matlab_huipu_2000/resultCalculate.m",
+    "lines": [
+      33,
+      54
+    ],
+    "a_clip": [
+      0,
+      3
+    ],
+    "vsp_coefficients": [
+      1.1,
+      0.132,
+      0.000302
+    ],
+    "power_multiplier": 1.2,
+    "quadratic_coefficients": [
+      0.00139,
+      0.0523,
+      0.201
+    ],
+    "zero_at_zero_power": true,
+    "time_step_s": 0.1,
+    "divisors": [
+      0.72,
+      1000
+    ],
+    "final_multiplier": 100,
+    "units_verified": false,
+    "adoption": "Legacy indicator only until units, idle behavior, clipping, distance normalization and sample-selection bias are resolved."
+  },
+  "excluded_main_experiment_modifications": [
+    "CAV_ICV_jiangli",
+    "CAV_ICV_DEGRADED",
+    "CAV_HDV_Aggressive",
+    "aggression/degradation/recovery/safety-field branches",
+    "global type-dependent grouping",
+    "fixed global x=640 trigger as sensor-only control input"
+  ],
+  "warnings": [
+    "Stored source net is 3-to-3, not paper 3-to-2.",
+    "No independently integrated steering/yaw/tire-force model found in traced execution chain.",
+    "New Python TraCI getDeltaT is seconds; do not copy legacy /1000.",
+    "No missing vehicle parameters were filled with implicit library defaults."
+  ],
+  "research_root": "D:/yanjiu1/keyan1",
+  "implementation_policy": "Build from scratch under keyan1. Ignore parent-project abandoned research code. The user-designated MATLAB folder remains a read-only reference; installed SUMO/MCP remain allowed tool dependencies. All new code, temporary analysis, configs, docs and outputs go under keyan1."
+}

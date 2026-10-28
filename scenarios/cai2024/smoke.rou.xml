@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<routes>
+  <vType id="native_probe" vClass="passenger" guiShape="passenger" carFollowModel="IDM" laneChangeModel="LC2013" length="4" width="1.8" mass="1500" maxSpeed="33.3" accel="2" decel="4.5" emergencyDecel="10" tau="1.2" minGap="2.5" delta="4" stepping="0.1" speedFactor="1" speedDev="0" lcStrategic="1" lcCooperative="1" lcSpeedGain="0" lcKeepRight="0" emissionClass="HBEFA3/PC_G_EU4" />
+  <route id="through" edges="upstream downstream" />
+  <vehicle id="veh_1_000022" type="native_probe" route="through" depart="2.2" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000024" type="native_probe" route="through" depart="2.4" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000030" type="native_probe" route="through" depart="3.0" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000032" type="native_probe" route="through" depart="3.2" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000034" type="native_probe" route="through" depart="3.4" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000040" type="native_probe" route="through" depart="4.0" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000049" type="native_probe" route="through" depart="4.9" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000068" type="native_probe" route="through" depart="6.8" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000077" type="native_probe" route="through" depart="7.7" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000094" type="native_probe" route="through" depart="9.4" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000110" type="native_probe" route="through" depart="11.0" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000153" type="native_probe" route="through" depart="15.3" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000157" type="native_probe" route="through" depart="15.7" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000165" type="native_probe" route="through" depart="16.5" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000199" type="native_probe" route="through" depart="19.9" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000208" type="native_probe" route="through" depart="20.8" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000209" type="native_probe" route="through" depart="20.9" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000224" type="native_probe" route="through" depart="22.4" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000231" type="native_probe" route="through" depart="23.1" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000231" type="native_probe" route="through" depart="23.1" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000238" type="native_probe" route="through" depart="23.8" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000238" type="native_probe" route="through" depart="23.8" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000253" type="native_probe" route="through" depart="25.3" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000272" type="native_probe" route="through" depart="27.2" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000289" type="native_probe" route="through" depart="28.9" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000300" type="native_probe" route="through" depart="30.0" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000322" type="native_probe" route="through" depart="32.2" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000324" type="native_probe" route="through" depart="32.4" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000329" type="native_probe" route="through" depart="32.9" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000350" type="native_probe" route="through" depart="35.0" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000359" type="native_probe" route="through" depart="35.9" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000360" type="native_probe" route="through" depart="36.0" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000379" type="native_probe" route="through" depart="37.9" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000380" type="native_probe" route="through" depart="38.0" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000421" type="native_probe" route="through" depart="42.1" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000432" type="native_probe" route="through" depart="43.2" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000459" type="native_probe" route="through" depart="45.9" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000459" type="native_probe" route="through" depart="45.9" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000471" type="native_probe" route="through" depart="47.1" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000495" type="native_probe" route="through" depart="49.5" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000510" type="native_probe" route="through" depart="51.0" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000524" type="native_probe" route="through" depart="52.4" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000555" type="native_probe" route="through" depart="55.5" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000557" type="native_probe" route="through" depart="55.7" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_0_000575" type="native_probe" route="through" depart="57.5" departLane="0" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_1_000591" type="native_probe" route="through" depart="59.1" departLane="1" departPos="4" departSpeed="28.8" />
+  <vehicle id="veh_2_000594" type="native_probe" route="through" depart="59.4" departLane="2" departPos="4" departSpeed="28.8" />
+  <vehicle id="termination_probe" type="native_probe" route="through" depart="62" departLane="2" departPos="850" departSpeed="15" color="1,0.3,0.1" />
+</routes>

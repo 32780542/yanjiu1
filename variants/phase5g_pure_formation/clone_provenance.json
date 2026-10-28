@@ -1,0 +1,42 @@
+{
+  "design_sha256": "233824da02501a844c8254cca2ee5aaa300cfdde34f286a0e850a3df31ae6bde",
+  "formal_source_snapshot": "variants/phase5f_adaptive_duration/results/phase5_r5/runs/20260913T162400649059Z_207be322",
+  "parent_freeze": {
+    "path": "variants/phase5f_adaptive_duration/phase5f_source_freeze.json",
+    "sha256": "4982d94ee84126df5e80dbe4f8c761185926fd1bbd89f4678ebd4999502acddf"
+  },
+  "plan_sha256": "365e441bf2165be04eb988bdc200d0c5302974758a7735bcce089bc18bb63b19",
+  "schema": "phase5g_clone_provenance_v1",
+  "source_files": [
+    {
+      "destination": "scenarios/cai2024/bottleneck.net.xml",
+      "sha256": "2e4092f2e80619ab643556a758b81af17d124c9bbcfa20ac24c2f79ea482f64d",
+      "source": "variants/phase5f_adaptive_duration/results/phase5_r5/runs/20260913T162400649059Z_207be322/input_snapshot/scenarios/cai2024/bottleneck.net.xml"
+    },
+    {
+      "destination": "docs/noa_staggered_formation_research_plan_2026-09-10.md",
+      "sha256": "2c4daf38ce032db5f2ee2a0af286cddd87ba1e01bed388065f08244b951bb61e",
+      "source": "variants/phase5f_adaptive_duration/results/phase5_r5/runs/20260913T162400649059Z_207be322/input_snapshot/docs/noa_staggered_formation_research_plan_2026-09-10.md"
+    },
+    {
+      "destination": "docs/parameter_registry.csv",
+      "sha256": "6a447508707f1591456f036b725c737b001e7b3368d58224aea3087919584fb4",
+      "source": "variants/phase5f_adaptive_duration/results/phase5_r5/runs/20260913T162400649059Z_207be322/input_snapshot/docs/parameter_registry.csv"
+    },
+    {
+      "destination": "docs/phase4_completion_acceptance.md",
+      "sha256": "41dae126a943caf01f560df21ff532564f2fe1024c9ac11cf1aad1fb694b9689",
+      "source": "variants/phase5f_adaptive_duration/results/phase5_r5/runs/20260913T162400649059Z_207be322/input_snapshot/docs/phase4_completion_acceptance.md"
+    },
+    {
+      "destination": "docs/superpowers/specs/2026-09-14-phase5g-pure-formation-design.md",
+      "sha256": "233824da02501a844c8254cca2ee5aaa300cfdde34f286a0e850a3df31ae6bde",
+      "source": "docs/superpowers/specs/2026-09-14-phase5g-pure-formation-design.md"
+    },
+    {
+      "destination": "docs/superpowers/plans/2026-09-14-phase5g-pure-formation.md",
+      "sha256": "365e441bf2165be04eb988bdc200d0c5302974758a7735bcce089bc18bb63b19",
+      "source": "docs/superpowers/plans/2026-09-14-phase5g-pure-formation.md"
+    }
+  ]
+}

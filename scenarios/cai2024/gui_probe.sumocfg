@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+<configuration>
+  <input>
+    <net-file value="bottleneck.net.xml" />
+    <route-files value="empty.rou.xml" />
+  </input>
+  <time>
+    <begin value="0" />
+    <end value="2" />
+    <step-length value="0.1" />
+  </time>
+  <processing>
+    <lanechange.duration value="3" />
+    <time-to-teleport value="-1" />
+    <max-depart-delay value="-1" />
+    <collision.action value="warn" />
+    <collision.check-junctions value="true" />
+  </processing>
+  <random_number>
+    <seed value="20260910" />
+  </random_number>
+  <output>
+    <tripinfo-output value="D:\yanjiu1\keyan1\results\phase1\gui\tripinfo.xml" />
+    <summary-output value="D:\yanjiu1\keyan1\results\phase1\gui\summary.xml" />
+    <fcd-output value="D:\yanjiu1\keyan1\results\phase1\gui\fcd.xml" />
+    <lanechange-output value="D:\yanjiu1\keyan1\results\phase1\gui\lanechanges.xml" />
+    <tripinfo-output.write-unfinished value="true" />
+  </output>
+  <report>
+    <no-step-log value="true" />
+    <log value="D:\yanjiu1\keyan1\results\phase1\gui\sumo.log" />
+  </report>
+</configuration>
