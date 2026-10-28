@@ -5,10 +5,11 @@ velocity vectors expressed along ego heading, not rotating-frame derivatives.
 Each instance belongs to one ego. Only visible keys are retained for identity
 association; neither global ordering nor key spelling allocates local tracks.
 """
-from dataclasses import dataclass, astuple
+from dataclasses import dataclass
 import math
 from types import MappingProxyType
 from models.vehicle import VehicleState
+from models.records import scalar_values
 from perception.contracts import (EgoState, NeighborDetection, LocalObservation,
                                   LocalMemory, ControlInput)
 from perception.road import ego_point, in_box
@@ -36,7 +37,7 @@ class WorldFrame:
         for v in self.vehicles:
             if v.state.time_s != time:
                 raise ValueError('Mixed physical times in frozen frame')
-            if not all(math.isfinite(x) for x in astuple(v.state)+(v.length_m, v.width_m, v.acceleration_mps2)):
+            if not all(math.isfinite(x) for x in scalar_values(v.state)+(v.length_m, v.width_m, v.acceleration_mps2)):
                 raise ValueError('Nonfinite physical truth')
             if min(v.length_m, v.width_m) <= 0:
                 raise ValueError('Invalid body dimensions')
@@ -96,7 +97,7 @@ class IdealSensor:
                 active[key] = token
             detections.append(NeighborDetection(token, *signature))
         self._tracks = active  # exits leave no current truth association
-        observation = LocalObservation(s.time_s, tuple(sorted(detections, key=lambda n: astuple(n)[1:]+(n.track_id,))),
+        observation = LocalObservation(s.time_s, tuple(sorted(detections, key=lambda n: scalar_values(n)[1:]+(n.track_id,))),
                                        self.road.observe(s, self.p))
         history = tuple(o for o in self._history if s.time_s-o.time_s <= self.p['memory_horizon_s']+1e-9)
         ego = EgoState(s.time_s, s.x_m, s.y_m, s.heading_rad, s.vx_mps, s.vy_mps,

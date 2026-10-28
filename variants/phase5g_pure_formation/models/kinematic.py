@@ -4,10 +4,11 @@ The heading is the center path tangent; lateral slip is ignored. Steering is
 an equivalent curvature command using the declared wheelbase. This is a
 trajectory simulation approximation, not a calibrated physical vehicle model.
 """
-from dataclasses import astuple, replace
+from dataclasses import replace
 import math
 from types import MappingProxyType
 from models.vehicle import VehicleState, Actuation, IntegratedStep, clip
+from models.records import scalar_values
 
 
 def kinematic_state(p, **kwargs):
@@ -66,7 +67,7 @@ class KinematicModel:
                 d['kinematic_yaw_rate_radps'],d['a_long_mps2'],0.,0.,da,dd)
 
     def advance(self,initial,command,duration_s,dt_s):
-        if not all(math.isfinite(x) for x in astuple(initial)+astuple(command)+(duration_s,dt_s)):
+        if not all(math.isfinite(x) for x in scalar_values(initial)+scalar_values(command)+(duration_s,dt_s)):
             raise ValueError('Nonfinite state, command or interval')
         if dt_s <= 0 or duration_s <= 0 or dt_s > self.p['max_dynamics_dt_s']:
             raise ValueError('Invalid integration step')
@@ -78,7 +79,7 @@ class KinematicModel:
             raise ValueError('Initial state incompatible with the simplified kinematic model')
         state,samples = initial,[]
         for i in range(count):
-            values = astuple(state)
+            values = scalar_values(state)
             k1 = self._derivative(state,command)
             k2 = self._derivative(VehicleState(*(a+dt_s*b/2 for a,b in zip(values,k1))),command)
             k3 = self._derivative(VehicleState(*(a+dt_s*b/2 for a,b in zip(values,k2))),command)

@@ -59,6 +59,23 @@ class TrafficFlowTests(unittest.TestCase):
         self.assertIsNone(result["mean_system_time_s"])
         self.assertIsNone(result["clearance_after_600s_s"])
 
+    def test_early_safety_stop_distinguishes_future_requests_from_a_queue(self):
+        from experiments.traffic_metrics import summarize_trips
+        trips = [dict(requested_s=0.,entered_s=0.,exited_s=None,
+                      distance_m=20.,onroad_s=10.,fuel_mg=1000.),
+                 dict(requested_s=100.,entered_s=None,exited_s=None,
+                      distance_m=0.,onroad_s=0.,fuel_mg=0.)]
+        result = summarize_trips(trips,600.,10.)
+        self.assertEqual(result["pending_final"],0)
+        self.assertEqual(result["requested_until_end"],1)
+        self.assertEqual(result["not_yet_requested_final"],1)
+        self.assertIsNone(result["exit_flow_veh_h"])
+        from summarize_traffic_flow import independent_metrics
+        recomputed = independent_metrics(trips,600.,10.)
+        self.assertEqual(recomputed["pending_final"],0)
+        self.assertEqual(recomputed["not_yet_requested_final"],1)
+        self.assertIsNone(recomputed["exit_flow_veh_h"])
+
     def test_spatial_candidates_preserve_rotated_sensor_observations(self):
         from experiments.traffic_flow import FrameIndex
         from experiments.formation_study import study_parameters
@@ -167,7 +184,9 @@ class TrafficFlowTests(unittest.TestCase):
         pair = paired_rows([base,treatment])[0]
         self.assertFalse(pair["comparison_valid"])
         self.assertIsNone(pair["fuel_reduction_pct"])
-        self.assertEqual(group_rows([treatment])[0]["valid_runs"],0)
+        group = group_rows([treatment])[0]
+        self.assertEqual(group["valid_runs"],0)
+        self.assertIsNone(group["mean_travel_time_s_mean"])
 
 
 if __name__ == "__main__":

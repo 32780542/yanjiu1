@@ -254,6 +254,8 @@ def run_case(case, root):
             if clock.tick_index % 1000 == 0:
                 print(json.dumps(dict(case=case["name"], simulation_s=clock.now,
                     active=len(clock.states), pending=sum(map(len, clock.queues)))), flush=True)
+            if clock.seen["collision"] or clock.seen["road"]:
+                break
     trips = list(clock.trips.values())
     write_json(directory/"trips.json", trips)
     write_json(directory/"incidents.json", clock.incidents)
@@ -261,6 +263,8 @@ def run_case(case, root):
         "status": "completed", "collision_pairs":len(clock.seen["collision"]),
         "road_departure_vehicles":len(clock.seen["road"]),
         "trajectory_digest":clock.digest.hexdigest(), "wall_s":time.perf_counter()-started}
+    result["termination_reason"] = ("collision" if clock.seen["collision"] else
+        "road_departure" if clock.seen["road"] else "drained" if result["all_completed"] else "time_limit")
     write_json(directory/"result.json", result)
     write_json(directory/"hashes.json", {p.name:hashlib.sha256(p.read_bytes()).hexdigest()
                for p in directory.iterdir() if p.is_file()})
@@ -277,10 +281,11 @@ def run_study(*, cases=None, workers=8, output_base=None):
     with zipfile.ZipFile(root/"source_snapshot.zip", "x", zipfile.ZIP_DEFLATED) as archive:
         for p in sources:
             archive.write(p, p.relative_to(ROOT).as_posix())
-    write_json(root/"protocol.json", dict(schema="continuous_traffic_v1", cases=cases,
+    write_json(root/"protocol.json", dict(schema="continuous_traffic_v2", cases=cases,
         user_selected_road="MATLAB constant-lane straight road", road_length_m=1200.,
         dt_control_s=.1, dt_physics_s=.01, fuel_model="HBEFA3/PC_G_EU4",
         workers=workers, entry="lane FIFO; time headway and model emergency stopping distance",
+        stop_on_first_safety_incident=True,
         baseline="ordinary car following and lane keeping; spontaneous overtaking disabled in both modes",
         source_sha256={p.relative_to(ROOT).as_posix():hashlib.sha256(p.read_bytes()).hexdigest() for p in sources}))
     print(json.dumps(dict(study_root=str(root), cases=len(cases))), flush=True)

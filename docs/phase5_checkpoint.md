@@ -406,3 +406,13 @@
 - 独立复审发现并修复出口后仍审计车体的伪碰撞，以及未排空却输出排空耗时0；均有RED→GREEN反例。新增 `models/fuel.py` 按SUMO1.27.1的HBEFA3/PC_G_EU4瞬时质量流率积分，47个平路官方工具参考点最大差0.005mg/s；证据 `tmp/emissions_audit_20261028T024248Z` 与已保存测试fixture。
 - 正式54例操作：`results/operations/20261028T031206019800Z_continuous-54_3fbc863d`，原始根 `variants/phase5g_pure_formation/results/continuous_traffic/20261028T031206451914Z`，12workers、外部超时7200s。此段记录时仍运行；恢复时先检查该进程和results.jsonl，不能盲目重启。每例保存600s请求表、行程台账、0.1s全网统计、1s位置与接触事实，批次共享源码zip。
 - 冻结前118项相关回归通过，操作 `results/operations/20261028T031037666570Z_continuous-freeze-tests_d2aeefa7`。后续仅补后处理工具与测试，不改已冻结仿真源码。汇总器 `summarize_traffic_flow.py` 独立核验台账、逐拍累计与30个配对请求表；图工具 `plot_traffic_flow.py` 输出效率、燃油和8张时空速度子图。最终结果和GitHub同步待整批结束后完成。
+
+### 安全失效保留与剩余条件接续
+
+- 实验框架与方法提交 `7a77e88` 已推送用户GitHub。新后处理与既有相关回归121项通过，操作 `results/operations/20261028T032548553028Z_continuous-postprocess-tests_cf968a0e`。
+- 原批次两车道seed3编队例出现1次车体接触，首次36.2s；该例虽继续至排空，按安全失效保留且不计有效效率。两车道seed2在跑样本37s已出现重叠，继续积分后的稠密无效车群使计算开销持续上升。
+- 增加“首次安全事件控制拍保存后停止”的记录规则；未来计划请求与真正入口队列分开。性能统计仍要求完整排空且0碰撞/驶出道路；失败、缺测和负改善均保留。未改变跟驰、换道、入口条件、车辆参数和积分运算。
+- 在 `models/records.py` 用缓存attrgetter读取数值冻结dataclass，替代 `models/kinematic.py`、`perception/ideal.py` 中的astuple递归复制。1000随机完整积分摘要优化前后均为 `4aa4173e6fc44a7fece87b88c2c6bf8cafc2cfc179413182388189458b473103`。既有600局部场景、1250闭环完整记录摘要及相关114项测试通过，日志 `results/operations/20261028T040253517582Z_continuous-numeric-equivalence_dc1afc97`。
+- 经命令行核对后仅停止本任务拥有的run_logged PID76528，Windows Job关闭清理其全部子进程。原目录和全部前缀只读保留。独立验证已封存的30例文件摘要（包括父结果流尚未来得及登记的1例），不按科学好坏挑选；其余24例在新目录同种子同参数重算。
+- 接续操作 `results/operations/20261028T041744016334Z_continuous-remaining_17127841`，原始根 `variants/phase5g_pure_formation/results/continuous_traffic/20261028T041744709217Z`，16workers；集合索引 `variants/phase5g_pure_formation/results/continuous_collections/20261028T041744706859Z/collection.json`。接续首例L2 seed2在36.7s安全停止，计划502请求、实际释放/入场22、出场0、未来480，碰撞车辆对1。当前剩余条件仍运行。
+- 汇总脚本支持 `--additional-root` 读取两批已封存证据，每个原定条件只出现一次，并核验参数和配对请求一致；旧结果只在导出时补齐兼容字段，原文件不改。源快照分别保留。最终公开结果、图表、README和发布待所有条件封存后完成。

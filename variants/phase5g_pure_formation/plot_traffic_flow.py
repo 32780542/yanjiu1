@@ -31,7 +31,7 @@ def plot(directory):
     directory = Path(directory)
     groups = json.loads((directory/"groups.json").read_text(encoding="utf-8"))
     rows = json.loads((directory/"results.json").read_text(encoding="utf-8"))
-    source = Path(json.loads((directory/"verification.json").read_text(encoding="utf-8"))["source_directory"])
+    sources = json.loads((directory/"verification.json").read_text(encoding="utf-8"))["case_sources"]
     plt.rcParams.update({"font.sans-serif":["Microsoft YaHei","SimHei","DejaVu Sans"],
         "font.size":10,"axes.unicode_minus":False,"svg.fonttype":"none"})
     colors = {False:"#3C5488",True:"#E64B35"}
@@ -47,10 +47,12 @@ def plot(directory):
         plt.close(fig)
     def curve(ax,metric,ylabel):
         for on in (False,True):
-            means = [lookup[(q,on)][metric+"_mean"] for q in flows]
-            errors = [lookup[(q,on)][metric+"_sd"] for q in flows]
-            ax.errorbar(flows,means,yerr=errors,color=colors[on],marker="o",
-                linewidth=1.5,capsize=3,label=labels[on],markersize=4)
+            means = np.array([lookup[(q,on)][metric+"_mean"] for q in flows],dtype=float)
+            errors = np.array([lookup[(q,on)][metric+"_sd"] for q in flows],dtype=float)
+            ax.plot(flows,means,color=colors[on],marker="o",linewidth=1.5,label=labels[on],markersize=4)
+            measured = np.isfinite(means) & np.isfinite(errors)
+            ax.errorbar(np.array(flows)[measured],means[measured],yerr=errors[measured],
+                color=colors[on],fmt="none",capsize=3)
         ax.set_xlabel("每车道需求率（辆/小时）")
         ax.set_ylabel(ylabel)
         ax.set_xticks(flows)
@@ -82,7 +84,7 @@ def plot(directory):
         for j,q in enumerate(flows):
             row = next(r for r in rows if r["kind"]=="demand" and r["seed"]==1
                        and r["formation"]==on and r["flow_veh_h_lane"]==q)
-            grid = speed_grid(source/row["name"]/"positions.jsonl.gz")
+            grid = speed_grid(Path(sources[row["name"]])/"positions.jsonl.gz")
             image = axes[i,j].imshow(grid,origin="lower",extent=(0,600,0,1200),
                 aspect="auto",cmap=cmap,vmin=0,vmax=33.3,interpolation="none")
             axes[i,j].set_title(f"{q} 辆/小时/车道",fontsize=10)

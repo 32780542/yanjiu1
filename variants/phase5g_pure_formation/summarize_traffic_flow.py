@@ -35,20 +35,24 @@ def paired_rows(rows):
     return pairs
 
 
-def independent_metrics(trips, duration):
+def independent_metrics(trips, duration, recording_end_s):
     entered = [r for r in trips if r["entered_s"] is not None]
     completed = [r for r in entered if r["exited_s"] is not None]
     complete = len(completed) == len(trips) and bool(trips)
+    released = sum(r["requested_s"]<recording_end_s-1e-9 for r in trips)
+    window_complete = recording_end_s>=duration-1e-9
     distance = math.fsum(r["distance_m"] for r in trips)
     fuel = math.fsum(r["fuel_mg"] for r in trips)
     seconds = math.fsum(r["onroad_s"] for r in trips)
     return dict(requested=len(trips),entered=len(entered),completed=len(completed),
-        all_completed=complete,pending_final=len(trips)-len(entered),
+        all_completed=complete,requested_until_end=released,
+        not_yet_requested_final=len(trips)-released,window_complete=window_complete,
+        pending_final=released-len(entered),
         onroad_final=len(entered)-len(completed),
-        entered_by_600s=sum(r["entered_s"]<=duration for r in entered),
-        exited_by_600s=sum(r["exited_s"]<=duration for r in completed),
-        pending_at_600s=len(trips)-sum(r["entered_s"]<=duration for r in entered),
-        onroad_at_600s=sum(r["entered_s"]<=duration for r in entered)-sum(r["exited_s"]<=duration for r in completed),
+        entered_by_600s=sum(r["entered_s"]<=duration for r in entered) if window_complete else None,
+        exited_by_600s=sum(r["exited_s"]<=duration for r in completed) if window_complete else None,
+        pending_at_600s=len(trips)-sum(r["entered_s"]<=duration for r in entered) if window_complete else None,
+        onroad_at_600s=(sum(r["entered_s"]<=duration for r in entered)-sum(r["exited_s"]<=duration for r in completed)) if window_complete else None,
         mean_entry_wait_s=mean(r["entered_s"]-r["requested_s"] for r in entered) if complete else None,
         mean_travel_time_s=mean(r["exited_s"]-r["entered_s"] for r in completed) if complete else None,
         mean_system_time_s=mean(r["exited_s"]-r["requested_s"] for r in completed) if complete else None,
@@ -56,7 +60,7 @@ def independent_metrics(trips, duration):
         fuel_g_per_km=fuel/distance if distance else None,
         mean_fuel_rate_mg_s=fuel/seconds if seconds else None,
         network_mean_speed_mps=distance/seconds if seconds else None,
-        exit_flow_veh_h=3600*sum(r["exited_s"]<=duration for r in completed)/duration,
+        exit_flow_veh_h=3600*sum(r["exited_s"]<=duration for r in completed)/duration if window_complete else None,
         clearance_after_600s_s=max(0.,max(r["exited_s"] for r in completed)-duration) if complete else None)
 
 
@@ -75,10 +79,12 @@ def group_rows(rows, paired=False):
     for key, values in sorted(groups.items()):
         result = dict(zip(fields,key))
         result["runs"] = len(values)
-        result["valid_runs"] = sum(v["comparison_valid"] for v in values) if paired else sum(
-            v["all_completed"] and v["collision_pairs"] == 0 and v["road_departure_vehicles"] == 0 for v in values)
+        valid_values = [v for v in values if (v["comparison_valid"] if paired else
+            v["all_completed"] and v["collision_pairs"] == 0 and v["road_departure_vehicles"] == 0)]
+        result["valid_runs"] = len(valid_values)
         for metric in metrics:
-            data = [v[metric] for v in values if v.get(metric) is not None]
+            population = values if metric in ("requested","completed") else valid_values
+            data = [v[metric] for v in population if v.get(metric) is not None]
             result[metric+"_mean"] = mean(data) if data else None
             result[metric+"_sd"] = stdev(data) if len(data)>1 else None
         output.append(result)
@@ -93,23 +99,38 @@ def export_csv(path, rows):
         writer.writerows(rows)
 
 
-def summarize(root, output):
+def summarize(root, output, additional_roots=()):
     root, output = Path(root).resolve(), Path(output).resolve()
     protocol = json.loads((root/"protocol.json").read_text(encoding="utf-8"))
-    summary = json.loads((root/"summary.json").read_text(encoding="utf-8"))
-    expected = {c["name"] for c in protocol["cases"]}
-    if {r["name"] for r in summary["results"]} != expected:
+    expected = {c["name"]:c for c in protocol["cases"]}
+    batches = [root,*(Path(path).resolve() for path in additional_roots)]
+    evidence, snapshots = {}, {}
+    for batch in batches:
+        batch_protocol = json.loads((batch/"protocol.json").read_text(encoding="utf-8"))
+        snapshots[str(batch)] = hashlib.sha256((batch/"source_snapshot.zip").read_bytes()).hexdigest()
+        for case in batch_protocol["cases"]:
+            directory = batch/case["name"]
+            if not (directory/"hashes.json").is_file():
+                continue
+            if case != expected.get(case["name"]):
+                raise ValueError("接续批次改变了工况参数")
+            if case["name"] in evidence:
+                raise ValueError("同一条件重复进入汇总")
+            evidence[case["name"]] = directory
+    if set(evidence) != set(expected):
         raise ValueError("运行结果与固定工况集合不符")
     rows, tapes, checked, requests, network_checked = [], {}, 0, 0, 0
-    for row in summary["results"]:
+    for name,directory in sorted(evidence.items()):
+        row = json.loads((directory/"result.json").read_text(encoding="utf-8"))
         if row["status"] != "completed":
             raise ValueError(f"执行未完成：{row['name']}")
-        directory = root/row["name"]
         for name, expected_hash in json.loads((directory/"hashes.json").read_text(encoding="utf-8")).items():
             if hashlib.sha256((directory/name).read_bytes()).hexdigest() != expected_hash:
                 raise ValueError(f"文件摘要不符：{row['name']}/{name}")
             checked += 1
         inputs = json.loads((directory/"input.json").read_text(encoding="utf-8"))
+        if inputs["case"] != expected[name]:
+            raise ValueError("实际输入与固定协议不符")
         trips = json.loads((directory/"trips.json").read_text(encoding="utf-8"))
         tape = {r["vehicle_id"]:r for r in inputs["arrivals"]}
         if set(tape) != {r["vehicle_id"] for r in trips}:
@@ -125,8 +146,10 @@ def summarize(root, output):
                 raise ValueError("车辆出入口顺序错误")
             if exit_time is not None and not math.isclose(exit_time-entry,trip["onroad_s"],abs_tol=1e-6):
                 raise ValueError("在网时间积分与出入口时刻不符")
-        recomputed = independent_metrics(trips,row["demand_duration_s"])
+        recomputed = independent_metrics(trips,row["demand_duration_s"],row["recording_end_s"])
         for key,value in recomputed.items():
+            if key not in row and key in ("requested_until_end","not_yet_requested_final","window_complete"):
+                row[key] = value
             previous = row[key]
             equal = (value == previous if value is None or isinstance(value,bool) else
                      math.isclose(value,previous,rel_tol=1e-9,abs_tol=1e-6))
@@ -146,6 +169,12 @@ def summarize(root, output):
             if not math.isclose(totals[key],math.fsum(t[trip_key] for t in trips),rel_tol=1e-9,abs_tol=1e-5):
                 raise ValueError(f"逐拍与逐车累计不符：{row['name']}/{key}")
         network_checked += 1
+        incidents = json.loads((directory/"incidents.json").read_text(encoding="utf-8"))
+        times = [event["time_s"] for events in incidents.values() for event in events]
+        row["first_safety_event_s"] = min(times) if times else None
+        if "termination_reason" not in row:
+            row["termination_reason"] = ("completed_with_incident" if times else
+                "drained" if row["all_completed"] else "time_limit")
         tapes[row["name"]] = inputs["arrivals"]
         rows.append(row)
         requests += row["requested"]
@@ -166,7 +195,8 @@ def summarize(root, output):
     export_csv(output/"pair_groups.csv",group_rows(pairs,paired=True))
     write_json(output/"verification.json",dict(cases=len(rows),file_hashes_checked=checked,
         trips_checked=requests,network_ledger_checks=network_checked,paired_tapes_checked=len(pairs),
-        source_directory=str(root),source_snapshot_sha256=hashlib.sha256((root/"source_snapshot.zip").read_bytes()).hexdigest()))
+        source_directory=str(root),source_snapshot_sha256=snapshots,
+        case_sources={name:str(path) for name,path in evidence.items()}))
     print(json.dumps(dict(output=str(output),cases=len(rows),trips=requests,files=checked)),flush=True)
 
 
@@ -174,5 +204,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root",type=Path)
     parser.add_argument("output",type=Path)
+    parser.add_argument("--additional-root",type=Path,action="append",default=[])
     args = parser.parse_args()
-    summarize(args.root,args.output)
+    summarize(args.root,args.output,args.additional_root)
