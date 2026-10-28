@@ -195,9 +195,9 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
         with self.assertRaises(FrozenInstanceError):
             config.vehicle_count = 12
 
-    def test_runrun_entry_uses_observed_formation_duration(self):
+    def test_runrun_entry_uses_native_demand_duration(self):
         import runrun
-        self.assertEqual(runrun.build_config().simulation_duration_s, 200.0)
+        self.assertEqual(runrun.build_config().demand_duration_s, 600.0)
 
     def test_default_simple_config_resolves_only_current_dependencies(self):
         paths = gui.validate_simple_config(
@@ -2085,72 +2085,6 @@ class SimpleFormationWorkflowTests(_SimpleTraceFixture, unittest.TestCase):
         self.assertEqual(report['variant_run'], str(self.variant_run))
         self.assertEqual(report['traci'], str(self.traci_python))
         self.assertFalse((self.root / 'results' / 'demo_runs').exists())
-
-
-class EntrypointTests(unittest.TestCase):
-    def test_top_level_defaults_build_expected_config(self):
-        self.assertEqual(runrun.build_config(), replace(
-            gui.SimpleFormationDemoConfig(), straight_road=True,
-            simulation_duration_s=200.0))
-        self.assertEqual(runrun.PROJECT_ROOT, gui.PROJECT_ROOT)
-
-    def test_check_does_not_start_gui(self):
-        report = {
-            'sumo_gui': 'D:/SUMO/bin/sumo-gui.exe', 'network': 'bottleneck.net.xml',
-            'variant_root': 'D:/variant', 'variant_run': 'D:/variant/run.py',
-            'variant_results': 'D:/variant/results',
-            'traci': 'D:/SUMO/tools/traci/__init__.py',
-            'configuration': {'vehicle_count': 12},
-        }
-        output = []
-        with patch.object(runrun, 'check_simple_environment', return_value=report), \
-                patch.object(runrun, 'run_simple_formation_demo') as demo:
-            self.assertEqual(runrun.main(['--check'], output_fn=output.append), 0)
-        demo.assert_not_called()
-        self.assertTrue(any('自检通过' in line for line in output))
-
-    def test_main_directly_runs_simple_formation_without_reading_input(self):
-        output = []
-
-        def forbidden_input(prompt):
-            raise AssertionError('入口不应显示菜单或读取输入')
-
-        with patch.object(runrun, 'run_simple_formation_demo') as demo:
-            self.assertEqual(runrun.main(
-                [], input_fn=forbidden_input, output_fn=output.append), 0)
-        demo.assert_called_once_with(
-            replace(gui.SimpleFormationDemoConfig(), straight_road=True,
-                    simulation_duration_s=200.0),
-            input_fn=unittest.mock.ANY,
-            output_fn=unittest.mock.ANY)
-        self.assertTrue(any('领航者-跟随者编队' in line for line in output))
-
-    def test_unknown_command_line_option_is_rejected(self):
-        with self.assertRaisesRegex(ValueError, '只支持 --check'):
-            runrun.main(['--bad'], output_fn=lambda line: None)
-
-    def test_direct_process_emits_utf8_chinese_from_another_working_directory(self):
-        result = subprocess.run(
-            [sys.executable, str(gui.PROJECT_ROOT / 'runrun.py'), '--check'],
-            cwd=gui.PROJECT_ROOT.parent, capture_output=True, timeout=30)
-        self.assertEqual(result.returncode, 0, result.stderr.decode('utf-8', errors='replace'))
-        output = result.stdout.decode('utf-8')
-        self.assertIn('自检通过：没有启动SUMO GUI。', output)
-
-    def test_debug_entry_names_extreme_interval_without_traceback(self):
-        output = io.StringIO()
-        errors = io.StringIO()
-        with patch.object(runrun, 'DEPART_INTERVAL_MIN_S', 1e308), \
-                patch.object(runrun, 'DEPART_INTERVAL_MAX_S', 1e308), \
-                patch.object(runrun.sys, 'argv', ['runrun.py', '--check']), \
-                patch.object(runrun.sys, 'stdin', io.StringIO()), \
-                patch.object(runrun.sys, 'stdout', output), \
-                patch.object(runrun.sys, 'stderr', errors):
-            status = runrun._debug_friendly_entry()
-        self.assertEqual(status, 1)
-        self.assertIn('启动失败：', output.getvalue())
-        self.assertIn('DEPART_INTERVAL', output.getvalue())
-        self.assertNotIn('Traceback', output.getvalue() + errors.getvalue())
 
 
 if __name__ == '__main__':

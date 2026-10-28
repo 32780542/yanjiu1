@@ -1,157 +1,155 @@
-"""可直接点击“运行/调试”的SUMO可视化演示入口。"""
+"""直接运行真实 SUMO 3→2 局部编队变换；窗口随首次计算逐步推进。"""
 
-# ===================== 用户配置区：直接修改下面这些值 =====================
-
-# 受控车辆总数：允许 3–60；默认 12 辆
-VEHICLE_COUNT = 12
-
-# 编队道路车道数：2、3、4；恒定车道道路避免瓶颈截断编队
-LANE_COUNT = 3
-STRAIGHT_ROAD = True
-
-# 编队目标速度，单位 m/s
-TARGET_SPEED_MPS = 10.0
-
-# 每辆车私有随机初态的可重放种子：0 到 2**64-1 的整数
+# ===================== 用户配置区 =====================
+FLOW_VEH_H_LANE = 1250.0  # 每车道每小时请求数，三车道独立来车
+DEMAND_DURATION_S = 600.0  # 来车持续时间；之后最多留 300 秒排空
 RANDOM_SEED = 1
-
-# 相邻两辆车的随机发车间隔范围，单位秒
-DEPART_INTERVAL_MIN_S = 2.5
-DEPART_INTERVAL_MAX_S = 4.0
-
-# 每辆车刚出现时的随机初速度范围，单位 m/s
-INITIAL_SPEED_MIN_MPS = 8.0
-INITIAL_SPEED_MAX_MPS = 12.0
-
-# 仿真时长，单位秒；至少覆盖末车发车后的一个控制步
-SIMULATION_DURATION_S = 200.0
-
-# True：先打开 SUMO-GUI，再逐步计算和显示；False：只生成轨迹
 SHOW_GUI = True
+GUI_DELAY_MS = 40  # 每个 0.1 秒仿真步的 GUI 延时；0 为最快
+AUTO_ZOOM = True  # 600m视野跟随前车，最后固定600–1200m瓶颈与下游
+WAIT_BEFORE_CLOSE = True  # 交互式终端中，运行结束后按 Enter 关闭并封存
+# 共同物理参数固定：巡航 28.8m/s，最高 33.3m/s；1000m 处 3→2。
+# =====================================================
 
-# SUMO-GUI 每步播放延迟，单位毫秒（0 最快）
-GUI_DELAY_MS = 40
-
-# 是否自动调整 SUMO 视野
-AUTO_ZOOM = True
-
-# 轨迹播放结束后是否等待按 Enter 再关闭窗口
-WAIT_BEFORE_CLOSE = True
-
-# 简单局部规则1：同一局部编队的连续车距上限，单位 m
-FORMATION_JOIN_RANGE_M = 50.0
-
-# 简单局部规则2：从最高车道向下，相邻车道的交错距离，单位 m
-MIDDLE_LANE_OFFSET_M = 15.0
-
-# 简单局部规则3：同车道相邻层的期望间距，单位 m
-SAME_LANE_GAP_M = 30.0
-
-# 简单局部规则4：位置误差容差，单位 m
-POSITION_TOLERANCE_M = 2.0
-
-# 编队稳定时允许的速度误差，单位 m/s
-SPEED_TOLERANCE_MPS = 1.0
-
-# 连续满足编队条件多久才记为已形成，单位秒
-STABLE_TIME_S = 1.0
-
-# 更换局部参考车所需的位置误差改善量，单位 m
-REFERENCE_SWITCH_GAIN_M = 2.0
-
-# 低于此速度不发起新的编队换道，单位 m/s
-MIN_FORMATION_LANE_CHANGE_SPEED_MPS = 5.0
-
-# 发起换道时，目标车道可见车辆的最小车头中心间距，单位 m
-HARD_LANE_CHANGE_GAP_M = 8.0
-
-# =========================== 用户配置区结束 =============================
-
-import sys
+import argparse
+from dataclasses import dataclass, replace
+import json
+import math
 from pathlib import Path
+import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+VARIANT_ROOT = PROJECT_ROOT / "variants/phase5g_pure_formation"
+if str(VARIANT_ROOT) not in sys.path:
+    sys.path.insert(0, str(VARIANT_ROOT))
 
-from demo.sumo_gui import (  # noqa: E402 - root must be available for editor debug
-    SimpleFormationDemoConfig,
-    check_simple_environment,
-    run_simple_formation_demo,
-)
+from experiments import native_sumo as native  # noqa: E402
+from experiments.native_sumo import run_case  # noqa: E402
 
 
-def build_config() -> SimpleFormationDemoConfig:
-    """Copy the editable constants into an immutable runtime configuration."""
-    return SimpleFormationDemoConfig(
-        vehicle_count=VEHICLE_COUNT,
-        lane_count=LANE_COUNT,
-        straight_road=STRAIGHT_ROAD,
-        target_speed_mps=TARGET_SPEED_MPS,
-        random_seed=RANDOM_SEED,
-        depart_interval_min_s=DEPART_INTERVAL_MIN_S,
-        depart_interval_max_s=DEPART_INTERVAL_MAX_S,
-        initial_speed_min_mps=INITIAL_SPEED_MIN_MPS,
-        initial_speed_max_mps=INITIAL_SPEED_MAX_MPS,
-        simulation_duration_s=SIMULATION_DURATION_S,
+@dataclass(frozen=True, slots=True)
+class NativeDemoConfig:
+    mode: str = "transform"
+    scenario: str = "lane_drop"
+    flow_veh_h_lane: float = 1250.0
+    demand_duration_s: float = 600.0
+    seed: int = 1
+    show_gui: bool = True
+    gui_delay_ms: int = 40
+    auto_zoom: bool = True
+    wait_before_close: bool = True
+
+
+def build_config() -> NativeDemoConfig:
+    return NativeDemoConfig(
+        flow_veh_h_lane=FLOW_VEH_H_LANE,
+        demand_duration_s=DEMAND_DURATION_S,
+        seed=RANDOM_SEED,
         show_gui=SHOW_GUI,
         gui_delay_ms=GUI_DELAY_MS,
         auto_zoom=AUTO_ZOOM,
         wait_before_close=WAIT_BEFORE_CLOSE,
-        formation_join_range_m=FORMATION_JOIN_RANGE_M,
-        middle_lane_offset_m=MIDDLE_LANE_OFFSET_M,
-        same_lane_gap_m=SAME_LANE_GAP_M,
-        position_tolerance_m=POSITION_TOLERANCE_M,
-        speed_tolerance_mps=SPEED_TOLERANCE_MPS,
-        stable_time_s=STABLE_TIME_S,
-        reference_switch_gain_m=REFERENCE_SWITCH_GAIN_M,
-        min_formation_lane_change_speed_mps=
-            MIN_FORMATION_LANE_CHANGE_SPEED_MPS,
-        hard_lane_change_gap_m=HARD_LANE_CHANGE_GAP_M,
     )
 
 
-def _print_check(report: dict, output_fn) -> None:
-    output_fn('自检通过：没有启动SUMO GUI。')
-    output_fn(f"  SUMO GUI: {report['sumo_gui']}")
-    output_fn(f"  编队路网: {report['network']}")
-    output_fn(f"  Phase5G入口: {report['variant_run']}")
-    output_fn(f"  Phase5G结果根目录: {report['variant_results']}")
-    output_fn(f"  TraCI来源: {report['traci']}")
-    output_fn(f"  已解析顶部配置: {report['configuration']}")
+def _validate(config):
+    if (
+        not isinstance(config.flow_veh_h_lane, (int, float))
+        or isinstance(config.flow_veh_h_lane, bool)
+        or not math.isfinite(config.flow_veh_h_lane)
+        or not 0 <= config.flow_veh_h_lane <= 36000
+    ):
+        raise ValueError("FLOW_VEH_H_LANE 必须在 0–36000 之间")
+    native._ticks(config.demand_duration_s)
+    if type(config.seed) is not int or config.seed < 0:
+        raise ValueError("RANDOM_SEED 必须是非负整数")
+    if type(config.gui_delay_ms) is not int or config.gui_delay_ms < 0:
+        raise ValueError("GUI_DELAY_MS 必须是非负整数")
+    for name, value in (
+        ("SHOW_GUI", config.show_gui),
+        ("AUTO_ZOOM", config.auto_zoom),
+        ("WAIT_BEFORE_CLOSE", config.wait_before_close),
+    ):
+        if type(value) is not bool:
+            raise ValueError(f"{name} 必须是 True 或 False")
+
+
+def _check(config, output_fn):
+    _validate(config)
+    for name in ("sumo-gui" if config.show_gui else "sumo", "netconvert"):
+        path = Path(native.binary(name))
+        if not path.is_file():
+            raise FileNotFoundError(f"未找到 {name}: {path}")
+        output_fn(f"  {name}: {path}")
+    traci = native.lock_traci()
+    output_fn(f"  TraCI: {traci.__file__}")
+    output_fn(f"  真实运行器: {Path(native.__file__).resolve()}")
+    output_fn(f"  运行环境: {native.runtime_metadata()}")
+    output_fn(f"  配置: {config}")
+    output_fn("  巡航 28.8m/s；最高 33.3m/s；1000m 处 3→2，1200m 出口。")
+    output_fn("自检通过：没有启动 SUMO，也没有创建运行目录。")
 
 
 def main(argv=None, *, input_fn=input, output_fn=print) -> int:
-    arguments = list(sys.argv[1:] if argv is None else argv)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--check", action="store_true", help="只检查依赖与配置")
+    parser.add_argument("--headless", action="store_true", help="不打开窗口，不等待输入")
+    parser.add_argument("--duration", type=float, help="来车时长，秒；默认 600")
+    parser.add_argument("--max-time", type=float, help="绝对仿真时间上限，秒")
+    parser.add_argument("--gui-delay-ms", type=int, help="每步 GUI 延时，毫秒")
+    parser.add_argument("--no-wait", action="store_true", help="运行结束后立即封存退出")
+    parser.add_argument("--output-base", type=Path, help="结果根目录；每次新建独立子目录")
+    args = parser.parse_args(argv)
     config = build_config()
-    if arguments:
-        if arguments != ['--check']:
-            raise ValueError('runrun.py 只支持 --check；正常演示无需命令行参数')
-        _print_check(check_simple_environment(config, PROJECT_ROOT), output_fn)
+    config = replace(
+        config,
+        demand_duration_s=args.duration if args.duration is not None else config.demand_duration_s,
+        gui_delay_ms=args.gui_delay_ms if args.gui_delay_ms is not None else config.gui_delay_ms,
+        show_gui=config.show_gui and not args.headless,
+        wait_before_close=config.wait_before_close and not args.no_wait and not args.headless,
+    )
+    _validate(config)
+    if args.check:
+        _check(config, output_fn)
         return 0
-
-    output_fn('直接运行：逐步生成领航者-跟随者编队（无通信、局部自组织、简单if/else规则）。')
-    run_simple_formation_demo(
-        config, input_fn=input_fn, output_fn=output_fn)
-    return 0
+    output_fn(f"直接运行真实 SUMO：{config.flow_veh_h_lane:g}辆/h/车道，局部编队形成与3→2变换。")
+    output_fn("SUMO 负责真实发车和运动，窗口与本次逐步计算同步推进。")
+    directory = run_case(
+        mode=config.mode,
+        scenario=config.scenario,
+        seed=config.seed,
+        flow=config.flow_veh_h_lane,
+        duration=config.demand_duration_s,
+        gui=config.show_gui,
+        gui_delay_ms=config.gui_delay_ms,
+        auto_zoom=config.auto_zoom,
+        wait_before_close=config.wait_before_close,
+        max_time=args.max_time,
+        output_base=args.output_base,
+        input_fn=input_fn,
+        output_fn=output_fn,
+    )
+    result = json.loads((directory / "result.json").read_text(encoding="utf-8"))
+    output_fn(f"结果: {directory}")
+    output_fn(
+        f"状态 {result['status']}；请求/发车/完成 "
+        f"{result['requested']}/{result['departed']}/{result['completed']}；"
+        f"接触 {result['collisions']}，瞬移 {result['teleports']}。"
+    )
+    return 1 if result["status"] in ("error", "unsafe") else 0
 
 
 def _debug_friendly_entry() -> int:
     for stream in (sys.stdout, sys.stderr):
-        reconfigure = getattr(stream, 'reconfigure', None)
+        reconfigure = getattr(stream, "reconfigure", None)
         if reconfigure is not None:
-            reconfigure(encoding='utf-8', errors='replace')
+            reconfigure(encoding="utf-8", errors="replace")
     try:
         return main()
     except (ValueError, FileNotFoundError, RuntimeError) as error:
-        print(f'启动失败：{error}')
-        if sys.stdin.isatty():
-            try:
-                input('按 Enter 结束...')
-            except (EOFError, KeyboardInterrupt):
-                pass
+        print(f"启动失败：{error}")
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(_debug_friendly_entry())

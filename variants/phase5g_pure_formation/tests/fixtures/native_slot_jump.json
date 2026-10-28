@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "source_native_rules_sha256": "99ff0e821d2f0dfdc08adc0e05751bc779a1cf48af56c063394d40cb87a9286b",
+  "source_snapshot": "variants/phase5g_pure_formation/results/native_probe_v8/20261028T185706763499Z_lane_drop_transform_s1_6f353a/source/noa/native_rules.py",
+  "source_diagnostic": "variants/phase5g_pure_formation/results/native_v8_collision_diagnostic/20261028T190251461371Z_lane_drop_transform_s1_341f5a/diagnostic.jsonl.gz",
+  "observation_scope_m": {
+    "behind": 100.0,
+    "ahead": 200.0
+  },
+  "notes": [
+    "All Vehicle fields are exact values from the native diagnostic, including SUMO lane and lateral speed; no finite-difference reconstruction is used.",
+    "Neighbors contain every physical lane in the complete ego-local observation window, ordered as the original adapter.",
+    "Track labels reconstruct the original ego-private observation history. source_vehicle_id is audit metadata only and must never enter controller input.",
+    "The fill frames exactly match the ego physical states of the v8 seed-1 100-second probe; the diagnostic run is the identical seed-1 300-second prefix.",
+    "old_command and old_memory_after are verified against the immutable source snapshot and are failure witnesses, not desired fixed outputs."
+  ],
+  "cases": [
+    {
+      "id": "fill_to_execution",
+      "source_vehicle_id": "v0_00242",
+      "mode": "transform",
+      "drop_x": 1000.0,
+      "source_times_s": [
+        29.2,
+        29.3
+      ],
+      "frames": [
+        {
+          "time_s": 29.2,
+          "ego": {"track":0,"x":154.82671352235727,"y":4.949999999999999,"speed":32.085095817114414,"lane":1,"vy":0.0,"acceleration":-0.274516351965417,"time":29.2},
+          "neighbors": [
+            {"track":10,"x":106.27526838061696,"y":1.65,"speed":32.568887468809905,"lane":0,"vy":0.0,"acceleration":0.40168535670865424,"time":29.2},
+            {"track":9,"x":147.8136521310293,"y":8.25,"speed":32.424277474379544,"lane":2,"vy":0.0,"acceleration":0.15615593348869083,"time":29.2},
+            {"track":1,"x":190.27041493442456,"y":8.25,"speed":31.49078272156127,"lane":2,"vy":0.0,"acceleration":1.0085574154116372,"time":29.2},
+            {"track":3,"x":232.7431590959282,"y":4.949999999999999,"speed":21.59620504728968,"lane":1,"vy":0.0,"acceleration":3.8862176464489195,"time":29.2},
+            {"track":2,"x":256.467033776407,"y":8.25,"speed":32.62238267457265,"lane":2,"vy":0.0,"acceleration":-0.08067315375534179,"time":29.2},
+            {"track":4,"x":263.2881659565864,"y":4.949999999999999,"speed":21.24832832772064,"lane":1,"vy":0.0,"acceleration":3.5434817582838107,"time":29.2},
+            {"track":5,"x":288.4858989558818,"y":4.949999999999999,"speed":24.31360513668101,"lane":1,"vy":0.0,"acceleration":1.5869220929899797,"time":29.2},
+            {"track":6,"x":314.5902779428462,"y":4.949999999999999,"speed":26.800149983050357,"lane":1,"vy":0.0,"acceleration":-0.00020452234139156644,"time":29.2},
+            {"track":7,"x":329.4808912375404,"y":1.65,"speed":26.86999304200531,"lane":0,"vy":0.0,"acceleration":-0.044814867855507146,"time":29.2},
+            {"track":8,"x":329.51932368748453,"y":8.25,"speed":26.845461690977128,"lane":2,"vy":0.0,"acceleration":-0.029156558688576695,"time":29.2}
+          ],
+          "memory_before": {
+            "lane_target": null,
+            "gap": null
+          },
+          "old_command": {
+            "speed": 23.658288635343734,
+            "lane": 0,
+            "reason": "fill_layer",
+            "target_x": 149.59027794284623,
+            "reference": null
+          },
+          "old_memory_after": {
+            "lane_target": 0,
+            "gap": null
+          }
+        },
+        {
+          "time_s": 29.3,
+          "ego": {"track":0,"x":157.9352231040687,"y":4.619999999999999,"speed":31.085095817114414,"lane":1,"vy":-3.3,"acceleration":-10.0,"time":29.3},
+          "neighbors": [
+            {"track":10,"x":109.53594074390887,"y":1.65,"speed":32.606723632919014,"lane":0,"vy":0.0,"acceleration":0.3783616410910895,"time":29.3},
+            {"track":9,"x":151.05766964166992,"y":8.25,"speed":32.440175106406066,"lane":2,"vy":0.0,"acceleration":0.158976320265225,"time":29.3},
+            {"track":1,"x":193.42906011359906,"y":8.25,"speed":31.586451791745105,"lane":2,"vy":0.0,"acceleration":0.9566907018383475,"time":29.3},
+            {"track":3,"x":234.93400122504832,"y":4.949999999999999,"speed":21.908421291201172,"lane":1,"vy":0.0,"acceleration":3.1221624391149305,"time":29.3},
+            {"track":2,"x":259.7284392964784,"y":8.25,"speed":32.61405520071438,"lane":2,"vy":0.0,"acceleration":-0.08327473858265932,"time":29.3},
+            {"track":4,"x":265.44630767406704,"y":4.949999999999999,"speed":21.581417174806255,"lane":1,"vy":0.0,"acceleration":3.3308884708561592,"time":29.3},
+            {"track":5,"x":290.9321766934047,"y":4.949999999999999,"speed":24.462777375229017,"lane":1,"vy":0.0,"acceleration":1.491722385480081,"time":29.3},
+            {"track":6,"x":317.2702911413547,"y":4.949999999999999,"speed":26.800131985084313,"lane":1,"vy":0.0,"acceleration":-0.00017997966043736824,"time":29.3},
+            {"track":7,"x":332.1674694381638,"y":1.65,"speed":26.86578200623386,"lane":0,"vy":0.0,"acceleration":-0.042110357714477686,"time":29.3},
+            {"track":8,"x":332.20359594111125,"y":8.25,"speed":26.842722536267377,"lane":2,"vy":0.0,"acceleration":-0.02739154709750835,"time":29.3}
+          ],
+          "memory_before": {
+            "lane_target": 0,
+            "gap": null
+          },
+          "old_command": {
+            "speed": 33.3,
+            "lane": 0,
+            "reason": "executing",
+            "target_x": 302.2702911413547,
+            "reference": 6
+          },
+          "old_memory_after": {
+            "lane_target": 0,
+            "gap": null
+          }
+        }
+      ],
+      "old_target_jump_m": 152.68001319850845,
+      "old_behavior_violates": "The selected nearby physical formation position should persist during lateral execution; changing only maneuver stage must not replace it with a distant layer."
+    },
+    {
+      "id": "prepare_boundary",
+      "source_vehicle_id": "v2_01435",
+      "mode": "transform",
+      "drop_x": 1000.0,
+      "source_times_s": [
+        165.6,
+        165.7
+      ],
+      "frames": [
+        {
+          "time_s": 165.6,
+          "ego": {"track":0,"x":638.8811993310213,"y":8.25,"speed":27.53782877226481,"lane":2,"vy":0.0,"acceleration":-1.6980050013092196,"time":165.6},
+          "neighbors": [
+            {"track":13,"x":588.9437627225773,"y":4.949999999999999,"speed":24.67075467579419,"lane":1,"vy":0.0,"acceleration":2.1160678597499682,"time":165.6},
+            {"track":12,"x":589.4683022908325,"y":1.65,"speed":30.17733684221723,"lane":0,"vy":0.0,"acceleration":1.1614807227177693,"time":165.6},
+            {"track":14,"x":596.6256437899389,"y":8.25,"speed":31.602032101447413,"lane":2,"vy":0.0,"acceleration":0.03396751603489179,"time":165.6},
+            {"track":1,"x":604.8206634675544,"y":4.949999999999999,"speed":24.60596987544534,"lane":1,"vy":0.0,"acceleration":1.2380715357910788,"time":165.6},
+            {"track":2,"x":637.7292078261512,"y":1.65,"speed":27.10557271691585,"lane":0,"vy":0.0,"acceleration":2.5829237140345995,"time":165.6},
+            {"track":7,"x":653.9636331624539,"y":4.949999999999999,"speed":9.230709214413826,"lane":1,"vy":0.0,"acceleration":-6.533262259612425,"time":165.6},
+            {"track":5,"x":670.8284487952506,"y":8.25,"speed":16.551039661564886,"lane":2,"vy":0.0,"acceleration":-10.0,"time":165.6},
+            {"track":4,"x":673.0073370589787,"y":1.65,"speed":26.414893739456126,"lane":0,"vy":0.0,"acceleration":0.24581039588394304,"time":165.6},
+            {"track":3,"x":678.7536425417203,"y":4.949999999999999,"speed":22.956850189498336,"lane":1,"vy":0.0,"acceleration":3.912406704373801,"time":165.6},
+            {"track":6,"x":701.5665287771827,"y":4.949999999999999,"speed":27.14858123689715,"lane":1,"vy":0.0,"acceleration":2.8749376537867377,"time":165.6},
+            {"track":10,"x":705.6697408604033,"y":1.65,"speed":24.715487057695714,"lane":0,"vy":0.0,"acceleration":1.330538065092135,"time":165.6},
+            {"track":9,"x":732.4039998155295,"y":1.65,"speed":26.800002286549052,"lane":0,"vy":0.0,"acceleration":-3.1180214321580024e-06,"time":165.6},
+            {"track":8,"x":742.8079663444338,"y":4.949999999999999,"speed":29.7336410040592,"lane":1,"vy":0.0,"acceleration":-1.8725389219481414,"time":165.6}
+          ],
+          "memory_before": {
+            "lane_target": null,
+            "gap": null
+          },
+          "old_command": {
+            "speed": 33.3,
+            "lane": null,
+            "reason": "formation_follow",
+            "target_x": 727.8079663444338,
+            "reference": 8
+          },
+          "old_memory_after": {
+            "lane_target": null,
+            "gap": null
+          }
+        },
+        {
+          "time_s": 165.7,
+          "ego": {"track":0,"x":641.6099609139065,"y":8.25,"speed":27.287615828852104,"lane":2,"vy":0.0,"acceleration":-2.502129434127056,"time":165.7},
+          "neighbors": [
+            {"track":13,"x":591.4305808503032,"y":4.949999999999999,"speed":24.868181277258845,"lane":1,"vy":0.0,"acceleration":1.9742660146465596,"time":165.7},
+            {"track":12,"x":592.4972465753916,"y":1.65,"speed":30.28944284559048,"lane":0,"vy":0.0,"acceleration":1.1210600337324905,"time":165.7},
+            {"track":14,"x":599.7855306989044,"y":8.25,"speed":31.598869089655565,"lane":2,"vy":0.0,"acceleration":-0.031630117918481915,"time":165.7},
+            {"track":1,"x":607.2893554591841,"y":4.949999999999999,"speed":24.68691991629719,"lane":1,"vy":0.0,"acceleration":0.8095004085184954,"time":165.7},
+            {"track":2,"x":640.4643412156264,"y":1.65,"speed":27.35133389475218,"lane":0,"vy":0.0,"acceleration":2.4576117783632867,"time":165.7},
+            {"track":7,"x":654.8306260665781,"y":4.949999999999999,"speed":8.669929041242876,"lane":1,"vy":0.0,"acceleration":-5.6078017317095075,"time":165.7},
+            {"track":5,"x":672.383552761407,"y":8.25,"speed":15.551039661564886,"lane":2,"vy":0.0,"acceleration":-10.0,"time":165.7},
+            {"track":4,"x":675.6511370530267,"y":1.65,"speed":26.437999940479514,"lane":0,"vy":0.0,"acceleration":0.2310620102338845,"time":165.7},
+            {"track":3,"x":681.0877158397909,"y":4.949999999999999,"speed":23.340732980705955,"lane":1,"vy":0.0,"acceleration":3.8388279120761837,"time":165.7},
+            {"track":6,"x":704.30915810603,"y":4.949999999999999,"speed":27.426293288472742,"lane":1,"vy":0.0,"acceleration":2.777120515755911,"time":165.7},
+            {"track":10,"x":708.1537966263658,"y":1.65,"speed":24.84055765962475,"lane":0,"vy":0.0,"acceleration":1.2507060192903552,"time":165.7},
+            {"track":9,"x":735.0840000167458,"y":1.65,"speed":26.800002012163166,"lane":0,"vy":0.0,"acceleration":-2.7438588645622985e-06,"time":165.7},
+            {"track":8,"x":745.7637285813545,"y":4.949999999999999,"speed":29.557622369206452,"lane":1,"vy":0.0,"acceleration":-1.7601863485274905,"time":165.7}
+          ],
+          "memory_before": {
+            "lane_target": null,
+            "gap": null
+          },
+          "old_command": {
+            "speed": 1.8844254738667132,
+            "lane": null,
+            "reason": "ending_follower",
+            "target_x": 600.0840000167458,
+            "reference": 9
+          },
+          "old_memory_after": {
+            "lane_target": null,
+            "gap": null
+          }
+        }
+      ],
+      "old_target_jump_m": -127.723966327688,
+      "old_behavior_violates": "Entering the preparation region must not virtually collapse lanes 2 and 1 into one ranked queue before the ego physically changes lanes."
+    }
+  ]
+}
