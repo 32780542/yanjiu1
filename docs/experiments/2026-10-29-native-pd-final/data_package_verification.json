@@ -1,0 +1,42 @@
+{
+  "candidate_disposition": "D main-data candidate; final validation outcomes retained",
+  "cases": 40,
+  "eligible_pairs": 60,
+  "source_snapshots": 240,
+  "recovery_compact_exactly_preserves_run_statistics": true,
+  "recovery_counts_balanced": true,
+  "zero_recovery_conditional_means_undefined": true,
+  "straight_control_exact_for_five_seeds": true,
+  "protocol_file_matches_audited_hash": true,
+  "TT_candidate_minus_NOA_by_seed_s": [
+    -1.5646853146853132,
+    -1.18515007898894,
+    -1.034369885433719,
+    -0.9905901116427458,
+    -0.48650406504064847
+  ],
+  "TT_candidate_minus_NOA_mean_s": -1.052259891158272,
+  "TT_change_percent": -2.503979229797788,
+  "fuel_change_percent": 31.926340891611193,
+  "artifacts_sha256": {
+    "protocol.json": "18b2442f25b6cf1368f66c836a30ae52c22a7799ff3b561e85eb2e375b2fee64",
+    "manifest.json": "f9a54a5208149f57f6d9efe2b3cd8690f1d00b552e60fdfd28984b992ae9b4f5",
+    "run_status.json": "2777c7b81823b54edf135b8e81320b9829716c8ec58a893101fe5188b87ed371",
+    "source_audit.json": "9b9bc408b3e7681a7fbfa697b1c869209b6887a749102d2d68826f5c85a2d99e",
+    "analysis_summary.json": "b1e1a40577b3d4ff72bb2fbe81557288a77df8d642f2489c43d32cf2b7bff3d0",
+    "mode_summary.csv": "0cfff27a29b549913c582b5c1815b18921f19af04635aeff3af791fac01a5bdf",
+    "tt_seed_differences.csv": "02d61506b881c5d290c1e63f135e95ab9291cfd5d9bb11359155f98d10c6d8df",
+    "recovery_counts.csv": "445db1a8991e83421cbc7b6a07286a9fa67ca8ebb42dd0241191044a9d8efa20",
+    "straight_control.json": "aa9911ef5834bac2c98a296ed8576bee487085e1b4c05f4bbbf8cb177c5f322a",
+    "comparison_verified/summary.json": "411c7b17a99a5507be797c7c53f522f15b05f782b034ef207e983a8bac96316f",
+    "recovery/summary_compact.json": "8424e5a0d0435437528eab7e3f8ac5e0a31efe704a25e5b938ad0cda4ae5086d"
+  },
+  "main_runtime_source_matches_protocol": {
+    "experiments/native_sumo.py": true,
+    "experiments/global_reference.py": true,
+    "experiments/complete_layers.py": true,
+    "noa/native_rules.py": true,
+    "run_native_flow.py": true,
+    "research/common.py": true
+  }
+}

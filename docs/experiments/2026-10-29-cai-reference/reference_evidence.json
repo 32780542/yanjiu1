@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-29",
+  "status": "paper_reference_and_readonly_audit_only_no_traffic_simulation",
+  "paper": "Cai et al. (2024), Multi-lane Formation Control in Mixed Traffic Environment, IEEE IV, pp.2283-2288",
+  "pdf": "docs/Cai et al_2024_Multi-lane Formation Control in Mixed Traffic Environment.pdf",
+  "paper_doi": "10.1109/IV55156.2024.10588701",
+  "absent_published_data": [
+    "fuel_consumption_figure_or_numeric_table",
+    "scalar_average_travel_time_table",
+    "1250_100pct_CAV_nonformation_NOA_ablation",
+    "shared_condition_three_controller_comparison"
+  ],
+  "render": {
+    "pages_5_6_png_prefix": "tmp/cai2024_design_20261029/render",
+    "pages_5_6_dpi": 160,
+    "digitized_image": "tmp/cai2024_design_20261029/detail1250-5.png",
+    "digitized_image_size_px": [2700, 800],
+    "digitized_image_command": "pdftoppm -f 5 -l 5 -r 400 -x 360 -y 400 -W 2700 -H 800 -png <pdf> tmp/cai2024_design_20261029/detail1250"
+  },
+  "digitization": {
+    "sampling": "Median of each RGB channel in a 5x5 pixel block centered at CSV x,y; nearest colorbar interior RGB by squared Euclidean RGB distance; linear interpolation between labelled 0 and 30 m/s tick positions; round final result to nearest 1 m/s",
+    "cav100_palette_x": 2607,
+    "cav100_palette_y_search_inclusive": [406, 613],
+    "cav100_palette_tick_y_0_mps": 615,
+    "cav100_palette_tick_y_30_mps": 423,
+    "cav0_palette_x": 545,
+    "cav0_palette_y_search_inclusive": [56, 262],
+    "cav0_palette_tick_y_0_mps": 264,
+    "cav0_palette_tick_y_30_mps": 72,
+    "speed_conversion": "(tick_y_0 - matched_y) * 30 / (tick_y_0 - tick_y_30)",
+    "reading_uncertainty_mps": 2,
+    "uncertainty_interpretation": "Conservative approximate image reading tolerance; not a simulation confidence interval",
+    "limitations": "Spot values of the displayed spatiotemporal average speed field, not roadwide vehicle mean speed, trip time, outflow or fuel. The 0 percent CAV panel is all HDV and cannot serve as a same-CAV pure NOA baseline. Unrounded color estimates are retained only for reproducibility, not numerical precision."
+  },
+  "matlab_probe": {
+    "matlab_version": "24.1.0.2537033 (R2024a)",
+    "matlab_license_test": 1,
+    "architecture": "PCWIN64",
+    "mex_extension": "mexw64",
+    "gpops2": "D:/matlab_huipu_2000/lib/gpopsCommon/gpops2.m",
+    "snoptcmex": "D:/matlab_huipu_2000/nlp/snopt/snoptcmex.mexw64",
+    "traci_init": "D:/traci4matlab/+traci/init.m",
+    "sumo_home": "D:/yanjiu1/SUMO/sumo-1.27.1",
+    "snopt_direct_call_error": "Invalid SNOPT Mex File",
+    "snopt_valid_query": "sngeti('Major iterations limit')",
+    "snopt_valid_query_error": "Invalid SNOPT Mex File",
+    "snopt_valid_query_stack": "sngeti:11",
+    "probe_exit_status_note": "Outer commands exit 0 because MATLAB try/catch records the dependency error. This does not mean SNOPT passed.",
+    "source_file_mutations": false,
+    "gpops_solve_executed": false,
+    "sumo_started": false,
+    "operation_logs": [
+      "results/operations/20261028T165700827185Z_cai_matlab_readonly_probe_f6e59763",
+      "results/operations/20261028T165916612569Z_cai_snopt_query_5043487b"
+    ]
+  },
+  "render_operation_logs": [
+    "results/operations/20261028T165548122494Z_cai_pdf_pages56_4bd7c113",
+    "results/operations/20261028T165816031367Z_cai_pdf1250_detail_af6cda44"
+  ],
+  "verification_operation_log": "results/operations/20261028T170536928224Z_cai_reference_verify_34fbb739",
+  "original_matlab_effective_flow_probability_per_0p1s": 0.042,
+  "original_matlab_effective_demand_per_lane_hour": 1512,
+  "exact_1250_probability_per_0p1s": 0.034722222222222224,
+  "recommended_comparator_label": "Cai-inspired centralized target assignment reference (local adaptation), not a full reproduction of Cai2024"
+}

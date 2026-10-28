@@ -8,3 +8,6 @@ results/
 variants/*/results/
 variants/*/tmp/
 .pytest_cache/
+# Publish compact recovery summaries and a lossless gzip ledger.
+docs/experiments/2026-10-29-*/recovery/summary.json
+docs/experiments/2026-10-29-*/recovery/per_vehicle.csv

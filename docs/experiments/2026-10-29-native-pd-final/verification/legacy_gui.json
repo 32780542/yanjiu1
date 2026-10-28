@@ -1,0 +1,41 @@
+{
+  "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261028T224308461768Z_native-pd-legacy-gui-regression_4a8d54f9",
+  "original_result_sha256": "1279b3a441699c786d3cf9d0b371dc2c527d040ede620ee649568866f911716b",
+  "result": {
+    "command": [
+      "python",
+      "-B",
+      "-m",
+      "unittest",
+      "tests.test_runrun_demo",
+      "-v"
+    ],
+    "cwd": "D:\\yanjiu1\\keyan1",
+    "timeout_s": 180.0,
+    "started_utc": "2026-10-28T22:43:08.461768+00:00",
+    "status": "completed",
+    "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+    "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "tree_policy": "private_windows_job",
+    "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "pid": 110584,
+    "execution_status": "completed",
+    "tree_cleanup": {
+      "method": "windows_job",
+      "confirmed": true,
+      "active_processes": 0
+    },
+    "returncode": 0,
+    "child_returncode": 0,
+    "elapsed_s": 19.657,
+    "ended_utc": "2026-10-28T22:43:28.116616+00:00",
+    "archive_status": "complete",
+    "log_hashes": {
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr.log": "b5e7a650a984431b8e836298be25c786d3154db950d18e06ff32209d770ffc7e"
+    },
+    "archive_errors": {}
+  },
+  "stdout": "",
+  "stderr_tail": "ed_once_for_hash_and_parse (tests.test_runrun_demo.SimpleTraceGenerationTests.test_trusted_json_files_are_each_opened_once_for_hash_and_parse) ... ok\n\n----------------------------------------------------------------------\nRan 83 tests in 19.125s\n\nOK\n"
+}

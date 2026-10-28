@@ -1,0 +1,84 @@
+{
+  "created_utc": "2026-10-28T20:52:00Z",
+  "flow_veh_h_lane": 1250.0,
+  "demand_duration_s": 600.0,
+  "max_time_s": 900.0,
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "modes": [
+    "noa",
+    "formation",
+    "transform",
+    "global"
+  ],
+  "scenarios": [
+    "lane_drop",
+    "straight3"
+  ],
+  "planned_cases": 40,
+  "cruise_mps": 28.8,
+  "max_speed_mps": 33.3,
+  "position_gain_per_s": 0.3,
+  "step_s": 0.1,
+  "lane_change_duration_s": 1.0,
+  "observation_m": [
+    -100,
+    200
+  ],
+  "road_length_m": 1200.0,
+  "drop_x_m": 1000.0,
+  "preparation_x_m": 640.0,
+  "common_vehicle": "IDM CAV_ICV; length4 width1.8 minGap1.5 tau0.2 accel5 decel10 emergency30 speedFactor1 speedDev0",
+  "source_sha256": {
+    "experiments/native_sumo.py": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "bdbd68bc5191bf9c50a61c27b863c21f973fd666e25f2abbc6a28831cfa2a0e8",
+    "run_native_flow.py": "49ae608a2c0bf0f8c14301cb3876a8649df84fb595f530dbf255862aaec71f21",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "evaluation": {
+    "position_tolerance_m": 2.0,
+    "speed_tolerance_mps": 0.5,
+    "center_tolerance_m": 0.3,
+    "confirmation_s": 1.0,
+    "stable_hold_s": 5.0,
+    "sampling_s": 0.1,
+    "regions": {
+      "upstream": [
+        0,
+        640
+      ],
+      "downstream": [
+        1000,
+        1200
+      ],
+      "straight": [
+        0,
+        1200
+      ]
+    }
+  },
+  "comparison": "All cases retained. Traffic pairs require safe, drained, identical arrivals and common conditions.",
+  "raw_root": "variants/phase5g_pure_formation/results/native_validation_20261029T0452",
+  "cai_evidence": "Published speed heatmap and common-condition adapted global reference are separate evidence.",
+  "notes": [
+    "Calibration used seeds1-3 at300s; seeds4-5 are new validation seeds.",
+    "Formation and transform must have identical physical outputs on straight3.",
+    "No Python entry gate; requested arrivals are submitted directly to SUMO."
+  ],
+  "initial_comparison_sha256": "7858f76fd0f6930952577842b6d52c12eae8a88c8b07197b6ab62064e5c0f2f2",
+  "analysis_updated_utc": "2026-10-28T21:18:05.541633+00:00",
+  "analysis_sha256": {
+    "experiments/native_comparison.py": "b797c2a7f3a900d1915bdc606ae4b5335ba1e53d7bf24bcd78925c1227a30b20",
+    "experiments/native_recovery.py": "ccd260728657ca44c662ab044d24cb2c7bcaf569895d315030c393fae7844e80",
+    "experiments/plot_native_comparison.py": "1051b94a4f5c500f6a3ffb27a2ea62139d0e8b2a4075a2e4cbc05fe8291835f9"
+  },
+  "analysis_revision": "Added trajectory coverage audit, recovery-time evaluation and figures; control and SUMO sources remained frozen.",
+  "operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261028T205326163579Z_native-final-600s-forty-cases_00845490"
+}

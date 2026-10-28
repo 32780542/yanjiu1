@@ -1,0 +1,34 @@
+{
+  "candidate_disposition": "C candidate-rejected; method comparison only, not final selected data",
+  "cases": 40,
+  "eligible_pairs": 60,
+  "source_snapshots": 240,
+  "recovery_compact_exactly_preserves_run_statistics": true,
+  "recovery_counts_balanced": true,
+  "zero_recovery_conditional_means_undefined": true,
+  "straight_control_exact_for_five_seeds": true,
+  "protocol_file_matches_audited_hash": true,
+  "TT_candidate_minus_NOA_by_seed_s": [
+    -2.014685314685309,
+    7.915165876777252,
+    -1.3163666121112882,
+    -1.2130781499202499,
+    -1.6452032520325304
+  ],
+  "TT_candidate_minus_NOA_mean_s": 0.34516650960557627,
+  "TT_change_percent": 0.815556703120358,
+  "fuel_change_percent": 24.55670528599436,
+  "artifacts_sha256": {
+    "protocol.json": "dc6cb1e3b8d687cb0017bcceade88480222b3664bfe24b5d52b7bb3cfc5beaae",
+    "manifest.json": "d4c45cdb7322d18b99f26a89bc6f31340ac11f95910ce725b1d7df766bc6cd54",
+    "run_status.json": "1916ecb3567c560bc4864d3cf5e8c72708dcbe7e3fb419cdd48445b3b20be0e6",
+    "source_audit.json": "943d4f7c63cf96d5333f028ce2e68c2c8b863e05d8077eb224d8fb791ed62df1",
+    "analysis_summary.json": "5cb208488a59d1c2a88fc178199b19f079e71299a138477cb0edb94c8aac7d9c",
+    "mode_summary.csv": "214316d9cd4cfbbdfd8ee4c5ea2e9399186bc7638406c435874b65d8297e7c86",
+    "tt_seed_differences.csv": "6e11190ce004b6375730dc73f54f3977f082816c18cf36f549418322a3dff65c",
+    "recovery_counts.csv": "1846144f25216d4200dd236a3aec306d764a14f51603d4d1d3b32f9621ee380a",
+    "straight_control.json": "ba08110eb1a6173198147a1934cbe392caadb786c0e602ca4712aade717abefd",
+    "comparison_verified/summary.json": "b1cee51254d6e174940fda32abc69067d7c304d569c6b7c389ac91edf69ef008",
+    "recovery/summary_compact.json": "c517da4932e3c53aff62f63d8a92598208c10411f2e2e446db205864a3be08a7"
+  }
+}

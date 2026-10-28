@@ -1,0 +1,38 @@
+{
+  "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261028T230122030231Z_native-final-release-evidence_7129a700",
+  "original_result_sha256": "bb6e4a866362be8e0c62456e4b72e9177cdb06d1084d10c84bc23819031538bc",
+  "result": {
+    "command": [
+      "python",
+      "-B",
+      "tmp/verify_native_final_release.py"
+    ],
+    "cwd": "D:\\yanjiu1\\keyan1",
+    "timeout_s": 120.0,
+    "started_utc": "2026-10-28T23:01:22.030231+00:00",
+    "status": "completed",
+    "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+    "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "tree_policy": "private_windows_job",
+    "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "pid": 91164,
+    "execution_status": "completed",
+    "tree_cleanup": {
+      "method": "windows_job",
+      "confirmed": true,
+      "active_processes": 0
+    },
+    "returncode": 0,
+    "child_returncode": 0,
+    "elapsed_s": 0.844,
+    "ended_utc": "2026-10-28T23:01:22.871194+00:00",
+    "archive_status": "complete",
+    "log_hashes": {
+      "stdout.log": "3f22a1a0992e6d1bdf9e6070339e5f16b6ab35e4300156fe167ce832da063457",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "archive_errors": {}
+  },
+  "stdout": "{\"cases\": 40, \"vehicle_runs\": 24464, \"eligible_pairs\": 60, \"matching_control_sources\": 6, \"regression_checks\": 248, \"figures\": 4, \"compressed_recovery_ledgers\": 3, \"installed_and_frozen_six_equal\": true}\n",
+  "stderr_tail": ""
+}

@@ -1,0 +1,391 @@
+{
+  "summary_path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-native-pd-final\\comparison_verified\\summary.json",
+  "summary_sha256": "411c7b17a99a5507be797c7c53f522f15b05f782b034ef207e983a8bac96316f",
+  "plot_script_sha256": "6299212211a4990c3acb770bfebe4b6ad968197c6d116af9fd6baed88e74bce4",
+  "font": "Microsoft YaHei",
+  "dpi": 300,
+  "run_count": 40,
+  "label": "D版 · 原生SUMO · 600s需求 · 五种子",
+  "figures": [
+    {
+      "name": "performance_by_seed",
+      "files": [
+        "performance_by_seed.png",
+        "performance_by_seed.svg"
+      ]
+    },
+    {
+      "name": "downstream_geometry_by_seed",
+      "files": [
+        "downstream_geometry_by_seed.png",
+        "downstream_geometry_by_seed.svg"
+      ]
+    },
+    {
+      "name": "six_vehicle_trajectories",
+      "files": [
+        "six_vehicle_trajectories.png",
+        "six_vehicle_trajectories.svg"
+      ]
+    },
+    {
+      "name": "six_vehicle_snapshots",
+      "files": [
+        "six_vehicle_snapshots.png",
+        "six_vehicle_snapshots.svg"
+      ]
+    }
+  ],
+  "skipped": [],
+  "mean_decisions": [
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 42.02350716955621,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 40.95561613457763,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 40.97124727839794,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "global",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 41.29442748102035,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 61.63580269980214,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 83.42982131809102,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 81.31385918102187,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "global",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 69.65550082422736,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "noa",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 41.71673594896639,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "formation",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 39.944089425181275,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "transform",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 39.944089425181275,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "global",
+      "metric": "mean_travel_time_s",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 40.51753778619787,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "noa",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 59.89405407576569,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "formation",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 71.68003871356402,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "transform",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 71.68003871356402,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "straight3",
+      "mode": "global",
+      "metric": "fuel_g_per_km",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 62.058237769022426,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "metric": "downstream_formation_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.0,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "metric": "downstream_formation_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.00442420382709049,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "metric": "downstream_formation_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.25253717271860143,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "global",
+      "metric": "downstream_formation_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.4947041443526752,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "metric": "downstream_mean_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 0,
+      "mean": null,
+      "suppressed_reasons": [
+        "undefined_metric"
+      ]
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "metric": "downstream_mean_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 4.088014311270125,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "metric": "downstream_mean_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 5.4088412371111065,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "global",
+      "metric": "downstream_mean_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 5.899697751557779,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "metric": "downstream_stable_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.0,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "metric": "downstream_stable_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 7.567516435699341e-05,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "metric": "downstream_stable_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.013894217048099433,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "global",
+      "metric": "downstream_stable_participation_rate",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 0.051482312247438176,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "metric": "downstream_peak_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 0,
+      "mean": null,
+      "suppressed_reasons": [
+        "undefined_metric"
+      ]
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "metric": "downstream_peak_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 4.8,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "metric": "downstream_peak_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 12.0,
+      "suppressed_reasons": []
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "global",
+      "metric": "downstream_peak_multilayer_size",
+      "attempted_n": 5,
+      "expected_n": 5,
+      "defined_n": 5,
+      "mean": 12.0,
+      "suppressed_reasons": []
+    }
+  ],
+  "interpretation": "NOA: detected geometry only; global: Cai-style centralized reference, not full paper reproduction",
+  "mean_policy": "All scenario seeds must exist, pass audit/safety/completion, have matching per-seed provenance, and have defined metrics; otherwise no mean",
+  "ratio_policy": "Rates in [0,1] are multiplied by 100 only on percentage axes",
+  "six_case": {
+    "case_dir": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_pd_functional\\20261028T222440975492Z_lane_drop_transform_s1_188982",
+    "input_sha256": "87dd20b665a31733a22e320f364ee9f9ea013af3814ec0f9c99798e0559b75e6",
+    "positions_sha256": "b5df78f11ad54956169e71e12a6bb14c78dc82f14ced6a2a1bf7a2cb5bd2514e",
+    "result_sha256": "57ce60d40b3decc77cb630c5536cf6e047a630891b9372b4a2bb2a7b482cce9b",
+    "safe_complete": true,
+    "frame_count": 408,
+    "first_time_s": 0.1,
+    "last_time_s": 40.8,
+    "vehicle_ids": [
+      "A1",
+      "A2",
+      "B1",
+      "B2",
+      "C1",
+      "C2"
+    ],
+    "snapshot_times_s": [
+      18.8,
+      33.8
+    ]
+  }
+}

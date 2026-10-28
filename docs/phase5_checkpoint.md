@@ -496,3 +496,96 @@
 - 六车示意为三道各2辆→两道各3辆，2辆A并入中道、1辆B向另一个保留车道让位，其余只纵向调整。手算脚本验证：期望600s请求625辆、触发640m、车辆守恒、3次相邻换道、同道30m/跨道15m；此为设计几何核对，不是轨迹仿真通过。
 - 审核后先做真实入口与三车道形成，再做少车变换，最后1250/600s/seeds1–5三组比较：纯NOA、编队+普通合流、编队+本变换。正常NOA保留提前必要合流与择道；效率收益从同种子结果检验。完整连续层的规模/参与、变换完成和上下游稳定分开评价。
 - 当前下一入口是用户审核上述设计，尤其SUMO真实推进和中道让位方案。未批准前不进入实施计划或代码修改；已确认的28.8/33.3无需再次询问。
+
+## 2026-10-29：用户批准实施，真实SUMO与局部方法迭代中
+
+- 用户要求先云端保存，随后实施、检验、改进，最后比较纯NOA/分布式编队/Cai全局；未成功时持续至北京时间10月29日08:00。开始时本地为00:47，有约7小时。不要因中间失败提前结束，也不能把测试通过当成研究成功。
+- 已将304个原有未跟踪源码/配置/研究文档（约3.4MB）完整备份提交`26a3de5`并推main，云端标签`backup/pre-lane-drop-20261029`。未跟踪PDF与MagicMock测试残留未上传。仍在D:\yanjiu1\keyan1、phase01就地修改；没有另建worktree。
+- 实施计划`docs/superpowers/plans/2026-10-29-native-lane-drop-implementation.md`。新主规则`noa/native_rules.py`，真实运行器`experiments/native_sumo.py`与`run_native_flow.py`，完整层`experiments/complete_layers.py`，集中式适配参考`experiments/global_reference.py`，均在variant目录。现有runrun尚未切换，等方法验证后集成。
+- 独立任务完成真实SUMO入口/3→2几何、每车私有track、全局策略隔离、油耗/车辆账本；完整层识别与24项手算测试；Cai原图与MATLAB依赖核对；全局匈牙利参考15项测试。Python312新增scipy1.18.1；安装日志`results/operations/20261028T171412469766Z_global-reference-scipy-install_22a03487`。
+- Cai原文PDF5/6页仅热图Fig.5和截图Fig.6，1250/100%CAV瓶颈采样约29±2m/s；没有可直接三方案排名的平均行程或油耗数字，0%CAV是HDV。MATLAB R2024a可启动，但SNOPT合法查询报Invalid SNOPT Mex File，不能声称原样复现。报告`docs/Cai2024全局方案对照依据.md`与6点/依赖/摘要在`docs/experiments/2026-10-29-cai-reference`。
+- 首版六车`native_flow/20261028T170554015549Z_lane_drop_transform_s1_1fbe10`全排空且0接触，出现2:4而非3:3。方法更新详见`docs/2026-10-29-编队变换方法更新.md`，包括目标道纵向跟踪、每车负荷一次、物理锚点延续、已有安全空间不等待他车计划、恢复上游补位与平衡约束、相位参考保持、增益0.6/0.5。
+- 独立复审发现speedFactor1未关闭默认speedDev，实际有.88；现已统一speedDev0并核对实际全1。发现1s轨迹混叠连续保持，现记录0.1s；索引翻转是横移中点，另加真实完成事件。首次unsafe停机；status改drained/time_limit/unsafe/error；未排空时整体均值为空、子集另列。复审记录`docs/2026-10-29-native-integration-review.md`。运行器17项GREEN操作`20261028T173144463683Z_native-physical-evidence-green_ea0355d7`。
+- 旧v1四探针操作`20261028T172109321812Z_native-method-v1-four-probes_c768bfef`，变换流出现接触，纯NOA92/93；全部保留。v2六探针`20261028T173343741373Z_native-method-v2-six-probes_9c270cbc`：六车3:3但下游未恢复，100s直路未完整多层；NOA和编队普通合流92/93、time_limit，transform93/93且0接触，global93/93且0接触。不能据未完成NOA比较收益。
+- NOA残车v2_00319停x1000，preparing的x<drop误清合流义务。独立诊断`native_noa_stall_diagnostic/20261028T174115416269Z_lane_drop_noa_s1_ab735e`及零速能力探针确认有空间时native可换，是规则错误。已改实际lane2未退出则继续必要合流；几何门15m目标/8m必要条件与更快位置收敛改善实际可执行性。
+- v3六探针操作`20261028T175402646999Z_native-method-v3-six-probes_1af57a19`部分完成后因2道恢复仍观察到后方lane2导致_fill数组越界而失败，保留所有前缀。其六车已真实恢复6车两道3层（下游参与约58.85%），100s直路首次完整6车（上游参与约1.87%），NOA93/93、0接触、41.7688s。后续transform案例错误不是安全/性能失败统计，已新增反例并修恢复成员/物理障碍分离。
+- 最新规则反例22项左右全部GREEN，联合运行器/完整层/全局参考套件已通过；最新边界RED/GREEN为`20261028T175834922772Z_native-boundary-observation-red_23e01385`/`20261028T175848512106Z_native-boundary-observation-green_1bfd14f5`。原13项功能RED、闭合/实际运动、相位/进度等日志均独立保留。
+- v4至v8六探针均已结束，汇总在tmp/native_probe_v4至v8_summary.json。v4下游连续流无完整编队；v5移动参考改善到6.75%但长期追远群；v6引入50m连通的局部单元但高道参考让前方低道车减速，行程57.44s。v7改实际投影前沿后93/93安全排空，行程41.286s对NOA41.917s，上游参与3.96%、下游27.20%，峰值9/10。v8允许保留道在准备区实际补位，下游29.30%、行程41.815s，仍需多种子检验。小六车各版已能两道3层恢复，不等同连续流成功。
+- 新增规则反例30项、集中式15项GREEN；最近RED/GREEN为native-frontier-phase、native-early-restoration系列。当前形成参考不再存memory.reference，以实车前沿为共同相位；跟随实测参考速度+.6位置误差。50m仅分形成单元，不缩小安全视野。方法更新文档已同步当前规则。
+- **当前运行**：v8三种子300s探针`tmp/native_explore_v8.py`，run_logged标签native-v8-three-seed-300s，timeout1200；输出根native_explore_v8，逐case汇总tmp/native_explore_v8_summary.json。另有独立只读方法诊断、GUI入口实现和配对汇总工具三个子任务，不改主规则。
+- **下一步**：依据多种子探针和真实轨迹诊断更新方法；冻结源码后做1250/600s/seeds1–5矩阵、独立复算、图表/人类说明与runrun GUI集成，测试/独立审查后推GitHub。尚未进行正式600s矩阵，不能终止为完成。用户只在成功或08:00截止后才接收最终结果。
+
+### 03:38继续点（覆盖上面的运行状态）
+
+- v8三种子300s已结束。种子1在168.9s追尾v2_01470→v2_01435，118/260完成，不能参与性能均值；种子2/3虽安全仍不合格。精确原生重现`native_v8_collision_diagnostic/20261028T190251461371Z_lane_drop_transform_s1_341f5a`。安全公式原来只用相对闭合速度，现已改同10m/s²前后车停止位置与0.2s响应；真实40步反例RED/GREEN，v9与v10种子1/300均260安全排空。
+- 独立诊断给出149.59→302.27m补位目标丢失、640m虚拟合并名次导致727.81→600.08m急刹、45次刚完成就反向换道。证据tmp/local_method_diagnosis_report.json、local_method_replay_report.json和tests/fixtures/native_slot_jump.json（原生两帧）。
+- 当前规则Memory保存lane_target、gap(F/R)、phase(近处实车track,相对整层差k)；无邻车意图。跟随实际对应层而非永久原始偏移。v11原始偏移法失败（49.40s/down0.13%），v12精确相位改善（41.50s/down13.46%），当前v13继续验证。相位按当前2/3道及实测横向位置连续变化；自由领航自身参考0偏移；物理间隙边界与安全1s预测占用分开。
+- 规格复审确认并修复自由领航正offset自追、已换道边界不失效、过640仍执行未开始的lane2补位、两侧争同空位各自窗口不同而同时发令。改为空位中心固定窗口。规则43项左右+global15项GREEN；最近日志native-relative-layer-phase、native-local-corridor-priority、native-current-gap-boundary。
+- GUI子单元已完成：根runrun.py默认q1250/600s/transform/3→2实时SUMO；--check、--headless、--no-wait、--gui-delay-ms。Python显式仅GUI逐帧延时，600m视角跟前车最终固定600–1200m，交互结束Enter后封存。109项受影响GREEN；真实45sGUI450帧、0接触/teleport（刻意time_limit，非性能通过）。证据tmp/native_gui_evidence_20261029.json。runner已冻结；含complete_layers快照及Python/SciPy版本。
+- 新配对汇总模块experiments/native_comparison.py及15测试已完成；支持manifest路径数组/{cases:paths}，输出runs/pairs/run_means/pair_means/summary；重核源快照与随机需求，失败组不平均，g/km油耗真实账本重算，真实完成事件合流率。39项含完整层GREEN，旧v6真实解析通过。使用python -B -S -m experiments.native_comparison manifest --output新目录（variant cwd）。
+- **当前运行**：v13六探针重试（首次straight案例因current/predicted边界不一致TypeError中断已修），run_logged native-method-v13-six-probes-retry，exec39284，timeout900。先查，不重复。成功后tmp/native_probe_v13_summary.json，随后已准备tmp/native_explore_v13.py（三种子300s）尚未启动。距离08:00约4h20；正式600s矩阵仍未跑。
+
+### 04:33继续点（覆盖前面的运行状态）
+
+- v13三种子300均safe/drained但transform TT42.16/68.16/80.41s（NOA约41.8），未成功。独立原生重放证实283.7s负层差循环：A持久phase要求A=B+15，B普通frontier要求B=A−45，两车均0速但A实际同道前车60m外在行驶，A safe cap33.3。51引用环、35有负有效差；2992动作精确重放0差异。报告tmp/native_v13_reference_audit_report.json、native_v13_reference_memory_report.json。
+- 因此删除了失败的Memory.phase/_remember_cell/_cell_following与frontier计数跟驰，改成现行实际同道最近前车D30；头车固定巡航28.8±2加其他车道实际头车raw相位误差均值（不取模、不复制跨道速度），实际y连续相位。仍用50m连通单元，短单元可接近组件外可见前车（30.8上限），完整单元巡航。速度引用前车链按实际x单向，不再有跨道低速反馈环。
+- v14取模/最近邻头车会让首行错一层，六车仅4车闭合；v15改真正各道头车、未取模相位后六车恢复6车，但300s TT40.97/53.50/58.26，仍未成功。
+- v15诊断证明未横移就追目标道F−30会追到R位置：63.4s实际F/R31.897m，本车在中点前1.463m、v11.587，原request0而cap22.29；中点目标request11.580。180596动作重放0差异。因此v16加入_join_speed，Memory.gap保存真实F/R，横移前/中保持中点，居中后入列D30，joining物理收敛后才自由补位。无时间冷却。v16 seed3/300 improved49.89仍不足。
+- v17允许ending后排已有独立_clear间隙时并入，不必等head；v18/_mandatory_priority针对同走廊的0→1非必要补位给准备区lane2必要合流让行，解决六车19.9s C2(x638)与A2(x640.3)争同gap额外两次LC；v18六车下游peak6、参与54.07%、TT39.383，100s流TT41.108 vsNOA41.820。v19连未开始的pending自由变道也让行，三种子300 TT41.02/42.00/47.31，仍未成功。
+- 控制对照：v19 straight seed3/300 TT39.936（262实际LC，无<1速度或>=2s停车），drop47.31（513LC、39段长停）；不能把所有问题归因于自由补位或pending时长。真正几何bug：held gap仅检查F/R可见，未检查E仍在区间；88.5s E684.284已越过F660.209/R643.585，却带651.897目标零速横移（cap33.3），当前位置实际间隙目标676.579可请求7.875。drop961越界拍/30次越界横移接受；straight仅102拍approach且无这种停车。报告tmp/native_v19_gap_audit_report.json、native_v19_first_delay_report.json。
+- **现行v20**：_merge_target local held有效条件增加R.x<=E.x<=F.x，越界重新绑定当前间隙；NOA normal_overtake也使用同一必要合流优先过滤，与pending取消一致。最近RED/GREEN native-current-gap-reselection、native-common-overtake-priority等，规则43+physical_following11+global15左右GREEN。原始失败快照都保留，不用测试通过替代性能。
+- **当前运行**：v20三种子300s，tmp/native_explore_v20.py，run_logged native-v20-three-seed-300s；exec26849；日志results/operations/20261028T202911635602Z_native-v20-three-seed-300s_065c9059；输出根native_explore_v20、逐case汇总tmp/native_explore_v20_summary.json。源代码在此批次内冻结，不在多case Python进程运行时编辑被快照文件，以免缓存与磁盘快照不一致。
+- 正式600s矩阵仍未跑，截止08:00还有约3.5h。若本批次好：精简/格式整理（临时black已装在tmp/native_formatter，工作后可仅清此临时工具目录）、完整相关回归、少车最终验收、冻结30case配对矩阵（4×5 lane_drop + NOA/transform×5 straight3）、native_comparison独立复算、图表/报告、复审、push Github。若不好继续查原生证据，不加任意时间门或恶化NOA。
+- docs/原生SUMO编队变换系统说明.md 已独立写成6345汉字，覆盖现行v20全规则/方法/运行/指标，无虚假效果数；只待最终结果链接。README仍描述旧12车/10m/s/200s及旧模型，需要最终重写入口/结构/进展。Cai报告与GUI已完成。black安装操作20261028T202938650511Z_native-python-formatter-install_47a2b152。
+
+### 05:55继续点（覆盖前面的运行状态）
+
+- 正式A40已完成：1250/600s、5种子、4模式×直路/3→2，24,464车次全部安全排空、碰撞/teleport均0。原始根native_validation_20261029T0452；运行日志20261028T205326163579Z_native-final-600s-forty-cases_00845490，1352.547s。当前源码native_rules κ=.3，实际前车与头车raw相位，不再持久phase。
+- 成果包docs/experiments/2026-10-29-native-lane-drop：protocol/manifest、comparison_verified、recovery、functional_six和figures。40例独立审计、60配对全有效。A3→2 TT均值NOA41.8786、formation40.9714、transform40.8392、global适配41.2986s；transform较NOA快2.48%，但fuel88.5104对61.9175g/km（+42.95%），不能称节油。
+- A下游transform完整多层参与22.52%、平均5.35辆、各种子峰值均10.8辆；原上游已形成243辆中210辆在调整后恢复两道多层（86.42%），普通合流47/243。所有车辆1308/3058观察到两道恢复。六车最终真实3次横移、6/6恢复，平均恢复13.78s。NOA未测到确认完整多层。
+- 比较器P2已补轨迹覆盖审计（空/截断/丢帧不可入均值），恢复时间独立模块15反例，完整variant150项GREEN，root8项GREEN；最终规格/质量复审无未处理控制阻碍。图已生成，最新样式在tmp/native_plot_style_refine_20261029_equal_v2，正式旧A图保留。
+- 由于A油耗代价大，继续简洁方法检验。只限正加速度1m/s²导致3个transform种子未排空，2m/s²seed3行程73.52s，拒绝。记录tmp/native_acceleration_probe_summary.json，原始native_acceleration_probe保留。
+- 当前引擎native_sumo为候选B：常规速度请求对称±2m/s²，安全速度下限直接优先，不延迟制动；四模式共同执行，物理SUMO仍5/10/30。不是A源码。单seed3/300已310/310安全排空，TT40.9635、fuel76.0119；对应A同seed TT40.8294、fuel89.717。需结构复核及其他种子。
+- 当前运行B五探针tmp/native_symmetric_probe.py，exec78340，标签native-symmetric-speed-five-controls，输出根native_symmetric_speed_probe、摘要tmp/native_symmetric_probe_summary.json。禁止运行中改六个被快照源码，先查日志再继续。
+- A引擎恢复来源：A40 manifest第一case/source/experiments/native_sumo.py，sha27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31。当前B增加test_native_actuation4项，若拒绝需同步恢复或适配。controller Asha bdbd68bc5191bf9c50a61c27b863c21f973fd666e25f2abbc6a28831cfa2a0e8。
+- 现行说明docs/原生SUMO编队变换系统说明.md和README已写好A接口，最终报告由独立任务按A起草，可能B正式结果后替换。所有本轮新源码/文档/结果尚未提交（仅修改前备份26a3de5已云端）。最终须冻结选定版本、重跑必要正式40（若选B）、独立复算、最终图目检、补全报告/说明/计划、完整测试及push yanjiu1 HEAD:main。
+- 北京时间05:55，距用户08:00限时约2小时。不得停止在未完成交付；不得把Cai适配参考写成原论文重现或原文精确TT/油耗。
+
+### 06:12继续点：C40冻结运行，代码已再次云端保存
+
+- 新common对称±2候选B的transform三种子300均安全排空，TT40.304/40.533/40.964s、fuel71.819/74.162/76.012g/km；NOA42.078、global41.300正常。但普通formation seed3为61.70s，不能忽略。
+- 真实物理帧和冻结规则重放指出普通_merge_target会排除不足30m的当前间隙，并跨多个gap跳目标。RED反例E718/F730/R706同速、_clear真，旧target745而非中点718；实际重放见tmp/native_symB_formation_findings.json，重构非全动作精确重现，原日志无actions，不能把重放推算称原生指令。
+- 当前C删除普通跨gap搜索分支：NOA/formation/transform必要合流统一实际当前位置F/R、有效区间保持和中点；_merge_target不再有local参数。93相关检查GREEN，C六车6/6安全、3次实际LC、TT39.317、下游参与60.1%。formationseed3/300改善41.165，但seed2仍56.276，真实保留。NOAseed3/300为42.153。
+- C正式40已启动：exec18263，操作results/operations/20261028T220241899295Z_native-current-gap-final-forty-cases_f58e6ba7，timeout3600；root variants/phase5g_pure_formation/results/native_current_gap_validation_20261029T0604。4模式×5种子×lane_drop/straight3，600s需求/max900。请查已有进程日志，不重复启动。当前刚完成前5例，ordinary seed2运行中，队列使其比主模式更慢。
+- C协议及六车在docs/experiments/2026-10-29-native-current-gap。六源码运行期间冻结：native_rules f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5；native_sumo d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132。不得在多case Python进程内改这些被快照文件。
+- 新执行参数已补入comparison的case/result一致性和配对哈希（4反例RED/GREEN）；比较器现sha b39dd54cadbefa28116ea46f7135f56863b1b0356f5702bfdb07832df897804c。C全variant159项GREEN（20261028T220555135158Z_native-current-gap-final-all-tests_c07b644a），root窗口9项GREEN（d8339dcd）。增量独立规格9项+150属性通过（20261028T220744935319Z_native-c-spec-incremental_ec124144），无新阻碍。
+- 当前代码21个文件已提交1112697并push yanjiu1 HEAD:main成功，云端main从26a3de5前进。README/说明/报告/成果尚未提交，待C结果独立复算。
+- A40报告已另存docs/experiments/2026-10-29-native-lane-drop/A40方法对照.md（4423字），主报告docs/2026-10-29-原生编队变换验证报告.md已改成C骨架（2850字）。不得把A数值对应C源码。现行系统说明已更新统一gap、common±2与恢复定义。A40完整源/原始/旧图仍保留。
+- 接续：等待C40→验证全部源码快照/状态并导出manifest/run_status→新版comparison独立复算+recovery→生成新版图（使用C sixcase）/目检→按实测填主报告，A敏感性和Cai原图分栏→文档计划/README/检查点同步→小成果与文档push。可为Git生成compact recovery summary（不含重复per_vehicle数组）和CSV，原大文件只读保留。已有A旧完整复算后可用最新版comparison另新输出一次，但不要覆盖旧尝试。
+
+### 06:33继续点：D速度差阻尼候选已安装，D40运行中
+
+- C40已全部结束，40/40 safe/drained，外层退出0。transform seed2/600为50.110s，对应NOA42.195s，拒绝C为最终方法；即使全部排空也不能声称通行成功。C完整证据由complete_layer_metrics独立复算comparison/recovery/compact，原始不删。
+- 恢复MATLAB原物理执行5/10/30后测试κ=.15/.2（tmp/native_physical_gain_calibration_summary.json）：均安全，但.15参与仅约4.9–5.6%，.2约14.8–19.4%，以小幅节油交换明显组织损失。位置修正饱和±2也做3seed600（tmp/native_bounded_feedback_probe_summary.json），TT40.88–41.15、fuel83.28–87.44、参与20–22%，未作为首选。其首次测试因临时包缺init导致导入失败，属于探针基础设施错误，重试严格确认RED是AssertionError。
+- 最终D候选采用速度差阻尼：_request为desired=reference_speed+.3*(target−ego.x)，request=clip(ego.speed+SPEED_RELAXATION*(desired−ego.speed))，SPEED_RELAXATION=.2。0.1s步长相当于a=.6位置误差+2参考速度差、名义响应.5s。头车有界相位仍原规则；global也共享_request。删除失败的共同±2执行层，原生车型边界保持；安全cap仍直接min。
+- D3seed600全部安全：seeds1/2/3 TT40.617/40.796/40.879s，fuel77.794/81.510/80.747g/km，下游参与30.1/24.6/24.7%，峰值均12。不是最终5seed结论。
+- D正式40正在执行：exec46391，操作results/operations/20261028T222456580783Z_native-pd-final-forty-cases_a8ef7a48，timeout3600；root variants/phase5g_pure_formation/results/native_pd_final_validation_20261029T0624。代码先在仅80KB的六模块冻结包tmp/native_final_pd_package_20261029运行，避免污染并行C源码。协议docs/experiments/2026-10-29-native-pd-final/protocol.json。禁止改这六源码，当前完成约10例，种子1/2各主模式均安全，transform40.617/40.796。
+- C40结束后已将D六源码逐字复制到main variant并逐SHA核对。安装证据integration_evidence.json。旧test_native_actuation.py仅测被删除限制的4测试已删除；新增PD反例RED确认23!=20.6（20261028T222342092602Z_native-relative-speed-response-red_f5635519）。D冻结包156测试GREEN（20261028T222414778117Z_native-pd-final-package-green_c05fa1d1）。Main安装后156完整核心复测exec4822/label native-pd-installed-final-core-tests待查，root9项GREEN（20261028T223128265508Z_native-pd-installed-final-gui-tests_a8527570）。
+- D六车6/6安全恢复、真实3LC、TT39.3667、down参与59.81%、峰值6、平均恢复12.333s，functional_six_verified/independent.json两份逐项一致。Main同六车另跑后解压轨迹与逐车账本和D冻结包逐字节/字段相等，证据native_pd_installed_verification/20261028T223103...，已加入integration_evidence.json，用户指定目录安装已实际核实。
+- cloud main当前仍1112697(C候选源码)。D main变更尚未提交；156+9验证后可代码先commit/push，再待D40全部结束复算、图/文档发布。最终报告已改为D骨架，A40另方法对照，C长时失败在方法更新末尾。系统说明/README已更新PD定义但正式数值尚待。
+- 下一步：检查核心测试→D代码云端；D40等待全40（失败全部保留）→complete_layer_metrics负责D comparison_verified/recovery+compact→native_result_figures生成D4图与元数据并目检→主报告按正式数值填表+同seedTT/直路/恢复/A代价/C失败/Cai原图分离→所有文档计划检查点同步→精确stage小成果（recovery compact，不Git重复6MB原JSON）→push最终文档与结果。北京时间06:33，08:00前任务不提前结束为未完成。
+
+## 2026-10-29 07:08：D40实现、正式验证与说明文档完成
+
+- 用户指定目录D:\yanjiu1\keyan1中的D方法已实现。当前控制规则e1704882...、运行器27e2de09...与协议及冻结运行包逐字节一致，方法代码931a005已在云端main；窗口与首次计算逐步同步，已无轨迹预生成/完成锚点链路。`python -B runrun.py --check`再次退出0，路径为该目录的native_sumo及SUMO1.27.1。
+- 最终方法只保留真实前车链、头车有界相位、局部补位、当前F/R间隙、局部让位/接收开隙与位置/速度差阻尼。_request两行，κ=.3、SPEED_RELAXATION=.2（dt.1、名义响应.5s）。物理5/10/30，无失败的±2执行限幅。没有全局意图或通信；global仅是独立对照。
+- D40 operation `20261028T222456580783Z_native-pd-final-forty-cases_a8ef7a48` completed/0，1395.343s。40/40全部safe/drained/all_completed，24,464车次全部请求/发车/离场，0碰撞/teleport，最终源端/在网0。独立60/60配对、240/240源码快照、0.1秒轨迹覆盖均通过。5个直路formation/transform账本及解压轨迹完全一致。
+- 主数据docs/experiments/2026-10-29-native-pd-final；原始native_pd_final_validation_20261029T0624只读保留。独立比较日志`20261028T224853076772Z...d8bd71f6`、恢复`20261028T224853075270Z...d2ae3101`、最终包验证`20261028T225341980054Z_cd40-final-package-verification_aacca377`在variant/results/operations。
+- 3→2五seed均值：NOA TT42.023507/fuel61.635803；formation40.955616/83.429821；transform40.971247/81.313859；Cai式适配global41.294427/69.655501。D较NOA时间少2.50398%、燃油多31.92634%；5seed TT差[-1.564685,-1.185150,-1.034370,-.990590,-.486500]s。对普通形成均值慢.015631s，不能写额外交通收益。出口流量3428.4对3418.8，只是有限600s窗口，非容量。
+- D下游完整多层参与25.2537%、条件平均5.4088辆、每seed峰值12、5秒稳定参与1.3894%。上游曾形成279辆中243恢复、36出口删失，条件平均12.4864s；普通形成29/288，两个实际形成集合不同。全3058辆里1410观察到两道结构。5秒指标需结合200m下游观察窗与边界删失解释。
+- D六车3次实际LC均在675m前，6/6恢复、mean12.333s；安装目录再次实跑的账本与解压轨迹和冻结包完全相同，integration_evidence.json可查。直路D平均TT39.9441、fuel71.6800、参与12.4169%、最大15辆，NOA41.7167。
+- 156核心+9当前GUI+83历史GUI=248项通过；独立质量60项与核心重叠不另加。根控最终证据`20261028T230122030231Z_native-final-release-evidence_7129a700`退出0，另核main/Git HEAD六源码、4图300DPI有效PNG/SVG及3批无损gzip账本和compact一致性。便携证据在D/verification。
+- A40是无阻尼历史对照；D燃油比A下降8.13073%，仍高于NOA。C40完整保留且明确否决：seed2 TT50.110对NOA42.195，整体42.668对42.323，失败未剔除。37条校准中34排空、3未排空，均有真实source hash与路径。
+- 四组D图已生成并逐张目检，plot62992122...、summary411c7b17...。新主报告4398字与现行系统说明（含全部规则/方法和正式进展）、README、方法更新、计划/规格已同步。Cai原Fig5的29±2m/s读数与本机适配中央参考分开；原SNOPT查询Invalid Mex记录保留，不冒充原论文完整重现。
+- 小成果A/C/D与Cai数据图约5.8MB随Git提交；恢复逐车CSV无损gzip压到约185KB/批，compact约90KB。旧展开JSON/CSV及大轨迹留本机并ignore，不复制整个项目存版本。临时格式化工具目录清理被自动审批以blocked by policy拒绝，目录保留；其代码无运行依赖。
+- 当前研究实现与验证工作已完成，正将报告/数据推云端；推送后补最终发布记录。后续新窗口先读README、docs/原生SUMO编队变换系统说明.md第9节及本节，再读实际规则；不要回退到被拒绝C或旧Python运动链路。后续研究可在此配对证据基础上降低燃油代价，并扩展原生工况。

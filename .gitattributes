@@ -1,0 +1,5 @@
+# Preserve recorded source and evidence hashes on Windows checkouts.
+*.py text eol=lf
+docs/experiments/2026-10-29-*/**/*.json text eol=lf
+# Matplotlib emits valid path whitespace; retain its generated SVG bytes.
+docs/experiments/2026-10-29-*/**/*.svg text eol=lf -whitespace

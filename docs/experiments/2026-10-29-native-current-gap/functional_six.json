@@ -1,0 +1,323 @@
+{
+  "case_dir": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_probe\\20261028T215937520713Z_lane_drop_transform_s1_0f2e35",
+  "result": {
+    "error": null,
+    "cleanup_error": null,
+    "tripinfo_error": null,
+    "mode": "transform",
+    "seed": 1,
+    "flow_veh_h_lane": 1250.0,
+    "demand_duration_s": 1.0,
+    "scenario": "lane_drop",
+    "max_time_s": 80.0,
+    "step_s": 0.1,
+    "lane_change_duration_s": 1.0,
+    "request_acceleration_limit_mps2": 2.0,
+    "request_deceleration_limit_mps2": 2.0,
+    "gui": false,
+    "diagnostic": true,
+    "gui_delay_ms": null,
+    "gui_auto_zoom": null,
+    "gui_wait_before_close": false,
+    "runtime": {
+      "python_version": "3.12.9",
+      "python_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "scipy_version": "1.18.1"
+    },
+    "observation_scope": "private local tracks: 200m ahead, 100m behind",
+    "reference_is_full_paper_reproduction": null,
+    "reference_description": null,
+    "actual_end_s": 40.8,
+    "wall_time_s": 1.498,
+    "status": "drained",
+    "all_completed": true,
+    "safe": true,
+    "performance_comparison_eligible": true,
+    "requested": 6,
+    "requested_until_end": 6,
+    "departed": 6,
+    "completed": 6,
+    "pending_final": 0,
+    "not_yet_requested_final": 0,
+    "onroad_final": 0,
+    "completion_fraction": 1.0,
+    "mean_entry_wait_s": 0.0,
+    "mean_travel_time_s": 39.31666666666667,
+    "mean_system_time_s": 39.31666666666667,
+    "completed_subset_mean_travel_time_s": 39.31666666666667,
+    "completed_subset_mean_system_time_s": 39.31666666666667,
+    "departed_subset_mean_entry_wait_s": 0.0,
+    "completed_subset_fuel_g_per_km": 66.22438541666666,
+    "exit_flow_veh_h": 0.0,
+    "completed_fuel_mg": 445027.87,
+    "all_fuel_mg": 445027.87,
+    "fuel_g_per_km": 66.22438541666666,
+    "clearance_after_demand_s": 39.7,
+    "collisions": 0,
+    "collision_events": [],
+    "teleports": 0,
+    "teleport_events": [],
+    "lane_changes": 3,
+    "lane_transitions": {
+      "2->1": 2,
+      "1->0": 1
+    },
+    "lane_index_events_are_lateral_midpoints": true,
+    "lane_change_completions": 3,
+    "lane_completion_events": [
+      {
+        "vehicle_id": "A1",
+        "time_s": 20.0,
+        "x": 673.1207134693832,
+        "y": 4.949999999999999,
+        "vy": 0.0,
+        "from_lane": 2,
+        "to_lane": 1,
+        "requested_s": 18.9
+      },
+      {
+        "vehicle_id": "A2",
+        "time_s": 21.2,
+        "x": 676.2100902263817,
+        "y": 4.949999999999999,
+        "vy": 0.0,
+        "from_lane": 2,
+        "to_lane": 1,
+        "requested_s": 19.9
+      },
+      {
+        "vehicle_id": "B1",
+        "time_s": 20.5,
+        "x": 670.7286912840233,
+        "y": 1.65,
+        "vy": 0.0,
+        "from_lane": 1,
+        "to_lane": 0,
+        "requested_s": 19.4
+      }
+    ],
+    "ending_lane_observed_vehicles": 2,
+    "ending_lane_completed_before_drop": 2,
+    "ending_lane_completion_before_drop_rate": 1.0,
+    "action_reasons": {
+      "formation_follow": 2140,
+      "merge": 2,
+      "executing": 32,
+      "make_room": 1,
+      "join_follow": 183,
+      "open_gap": 1
+    },
+    "execution": {
+      "lane_requested_ticks": 17,
+      "native_lane_requests": 3,
+      "lane_motion_in_progress": 14
+    },
+    "sumo_version": "SUMO 1.27.1",
+    "source_sha256": {
+      "experiments/native_sumo.py": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "fuel_source": "SUMO emissions-device fuel_abs, mg",
+    "last_states": {}
+  },
+  "layers": {
+    "downstream": {
+      "observation_seconds": 40.699999999999996,
+      "vehicle_seconds": 41.60000000000001,
+      "formed_vehicle_seconds": 24.999999999999986,
+      "multilayer_group_seconds": 4.599999999999994,
+      "raw_single_layer_vehicle_seconds": 2.20000000000001,
+      "stable_vehicle_seconds": 1.5999999999999943,
+      "stable_multilayer_group_seconds": 0.3999999999999986,
+      "raw_unassigned_vehicle_seconds": 8.400000000000013,
+      "internal_relation_breaks": 3,
+      "boundary_censored_relations": 2,
+      "end_censored_relations": 0,
+      "mean_multilayer_size": 5.434782608695656,
+      "peak_multilayer_size": 6,
+      "formation_participation_rate": 0.600961538461538,
+      "stable_participation_rate": 0.03846153846153832,
+      "geometry_rms_m": 0.25820841598008537,
+      "speed_rms_mps": 0.05573120585528905,
+      "confirmation_seconds": 1.0,
+      "stability_hold_seconds": 5.0,
+      "region_m": [
+        1000,
+        1200
+      ],
+      "lane_count": 2,
+      "internal_breaks_per_100_formed_vehicle_s": 12.000000000000007
+    }
+  },
+  "trips": [
+    {
+      "vehicle_id": "A1",
+      "requested_s": 0.0,
+      "lane": 2,
+      "x": 100.0,
+      "speed": 28.8,
+      "entered_s": 0.0,
+      "exited_s": 38.0,
+      "distance_m": 1100.0,
+      "onroad_s": 38.0,
+      "fuel_mg": 66355.39,
+      "lane_changes": 1,
+      "lane_events": [
+        {
+          "time_s": 19.4,
+          "x": 655.8407134693832,
+          "from_lane": 2,
+          "to_lane": 1
+        }
+      ],
+      "lane_completion_events": [
+        {
+          "time_s": 20.0,
+          "x": 673.1207134693832,
+          "y": 4.949999999999999,
+          "vy": 0.0,
+          "from_lane": 2,
+          "to_lane": 1,
+          "requested_s": 18.9
+        }
+      ],
+      "speed_factor": 1.0,
+      "speed_factor_tripinfo": 1.0,
+      "waiting_s": 0.0,
+      "time_loss_s": 4.95
+    },
+    {
+      "vehicle_id": "A2",
+      "requested_s": 0.0,
+      "lane": 2,
+      "x": 70.0,
+      "speed": 28.8,
+      "entered_s": 0.0,
+      "exited_s": 39.0,
+      "distance_m": 1130.0,
+      "onroad_s": 39.0,
+      "fuel_mg": 76181.59,
+      "lane_changes": 1,
+      "lane_events": [
+        {
+          "time_s": 20.6,
+          "x": 660.2519046198112,
+          "from_lane": 2,
+          "to_lane": 1
+        }
+      ],
+      "lane_completion_events": [
+        {
+          "time_s": 21.2,
+          "x": 676.2100902263817,
+          "y": 4.949999999999999,
+          "vy": 0.0,
+          "from_lane": 2,
+          "to_lane": 1,
+          "requested_s": 19.9
+        }
+      ],
+      "speed_factor": 1.0,
+      "speed_factor_tripinfo": 1.0,
+      "waiting_s": 0.0,
+      "time_loss_s": 5.07
+    },
+    {
+      "vehicle_id": "B1",
+      "requested_s": 0.0,
+      "lane": 1,
+      "x": 85.0,
+      "speed": 28.8,
+      "entered_s": 0.0,
+      "exited_s": 39.6,
+      "distance_m": 1115.0,
+      "onroad_s": 39.6,
+      "fuel_mg": 74205.51,
+      "lane_changes": 1,
+      "lane_events": [
+        {
+          "time_s": 19.9,
+          "x": 654.6797134695378,
+          "from_lane": 1,
+          "to_lane": 0
+        }
+      ],
+      "lane_completion_events": [
+        {
+          "time_s": 20.5,
+          "x": 670.7286912840233,
+          "y": 1.65,
+          "vy": 0.0,
+          "from_lane": 1,
+          "to_lane": 0,
+          "requested_s": 19.4
+        }
+      ],
+      "speed_factor": 1.0,
+      "speed_factor_tripinfo": 1.0,
+      "waiting_s": 0.0,
+      "time_loss_s": 6.1
+    },
+    {
+      "vehicle_id": "B2",
+      "requested_s": 0.0,
+      "lane": 1,
+      "x": 55.0,
+      "speed": 28.8,
+      "entered_s": 0.0,
+      "exited_s": 40.0,
+      "distance_m": 1145.0,
+      "onroad_s": 40.0,
+      "fuel_mg": 79663.82,
+      "lane_changes": 0,
+      "lane_events": [],
+      "lane_completion_events": [],
+      "speed_factor": 1.0,
+      "speed_factor_tripinfo": 1.0,
+      "waiting_s": 0.0,
+      "time_loss_s": 5.62
+    },
+    {
+      "vehicle_id": "C1",
+      "requested_s": 0.0,
+      "lane": 0,
+      "x": 100.0,
+      "speed": 28.8,
+      "entered_s": 0.0,
+      "exited_s": 38.6,
+      "distance_m": 1100.0,
+      "onroad_s": 38.6,
+      "fuel_mg": 68227.28,
+      "lane_changes": 0,
+      "lane_events": [],
+      "lane_completion_events": [],
+      "speed_factor": 1.0,
+      "speed_factor_tripinfo": 1.0,
+      "waiting_s": 0.0,
+      "time_loss_s": 5.49
+    },
+    {
+      "vehicle_id": "C2",
+      "requested_s": 0.0,
+      "lane": 0,
+      "x": 70.0,
+      "speed": 28.8,
+      "entered_s": 0.0,
+      "exited_s": 40.7,
+      "distance_m": 1130.0,
+      "onroad_s": 40.7,
+      "fuel_mg": 80394.28,
+      "lane_changes": 0,
+      "lane_events": [],
+      "lane_completion_events": [],
+      "speed_factor": 1.0,
+      "speed_factor_tripinfo": 1.0,
+      "waiting_s": 0.0,
+      "time_loss_s": 6.7
+    }
+  ]
+}

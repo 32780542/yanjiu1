@@ -1,0 +1,2175 @@
+{
+  "candidate_disposition": "C candidate-rejected; method comparison only",
+  "operation_result_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261028T220241899295Z_native-current-gap-final-forty-cases_f58e6ba7\\result.json",
+  "operation_result_sha256": "18cd82d9e698a6f9c04cf71b4dc124ceebbb4b857f031bc0f0ca7df925d8f705",
+  "operation_status": "completed",
+  "operation_returncode": 0,
+  "protocol_sha256": "dc6cb1e3b8d687cb0017bcceade88480222b3664bfe24b5d52b7bb3cfc5beaae",
+  "cases": 40,
+  "expected_cases": 40,
+  "source_snapshots_checked": 240,
+  "source_snapshots_matched": 240,
+  "issues": [],
+  "checks": [
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220242249469Z_lane_drop_noa_s1_0d9afb",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220242249469Z_lane_drop_noa_s1_0d9afb",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220242249469Z_lane_drop_noa_s1_0d9afb",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220242249469Z_lane_drop_noa_s1_0d9afb",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220242249469Z_lane_drop_noa_s1_0d9afb",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220242249469Z_lane_drop_noa_s1_0d9afb",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220310253502Z_lane_drop_formation_s1_9b465f",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220310253502Z_lane_drop_formation_s1_9b465f",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220310253502Z_lane_drop_formation_s1_9b465f",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220310253502Z_lane_drop_formation_s1_9b465f",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220310253502Z_lane_drop_formation_s1_9b465f",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220310253502Z_lane_drop_formation_s1_9b465f",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220347607723Z_lane_drop_transform_s1_784747",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220347607723Z_lane_drop_transform_s1_784747",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220347607723Z_lane_drop_transform_s1_784747",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220347607723Z_lane_drop_transform_s1_784747",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220347607723Z_lane_drop_transform_s1_784747",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220347607723Z_lane_drop_transform_s1_784747",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220423705171Z_lane_drop_global_s1_38d91c",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220423705171Z_lane_drop_global_s1_38d91c",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220423705171Z_lane_drop_global_s1_38d91c",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220423705171Z_lane_drop_global_s1_38d91c",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220423705171Z_lane_drop_global_s1_38d91c",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220423705171Z_lane_drop_global_s1_38d91c",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220446275538Z_lane_drop_noa_s2_d26507",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220446275538Z_lane_drop_noa_s2_d26507",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220446275538Z_lane_drop_noa_s2_d26507",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220446275538Z_lane_drop_noa_s2_d26507",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220446275538Z_lane_drop_noa_s2_d26507",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220446275538Z_lane_drop_noa_s2_d26507",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220515917927Z_lane_drop_formation_s2_cec271",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220515917927Z_lane_drop_formation_s2_cec271",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220515917927Z_lane_drop_formation_s2_cec271",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220515917927Z_lane_drop_formation_s2_cec271",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220515917927Z_lane_drop_formation_s2_cec271",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220515917927Z_lane_drop_formation_s2_cec271",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220813437801Z_lane_drop_transform_s2_f1743c",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220813437801Z_lane_drop_transform_s2_f1743c",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220813437801Z_lane_drop_transform_s2_f1743c",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220813437801Z_lane_drop_transform_s2_f1743c",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220813437801Z_lane_drop_transform_s2_f1743c",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220813437801Z_lane_drop_transform_s2_f1743c",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220917328754Z_lane_drop_global_s2_1aec31",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220917328754Z_lane_drop_global_s2_1aec31",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220917328754Z_lane_drop_global_s2_1aec31",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220917328754Z_lane_drop_global_s2_1aec31",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220917328754Z_lane_drop_global_s2_1aec31",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220917328754Z_lane_drop_global_s2_1aec31",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220941549992Z_lane_drop_noa_s3_ca44b7",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220941549992Z_lane_drop_noa_s3_ca44b7",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220941549992Z_lane_drop_noa_s3_ca44b7",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220941549992Z_lane_drop_noa_s3_ca44b7",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220941549992Z_lane_drop_noa_s3_ca44b7",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T220941549992Z_lane_drop_noa_s3_ca44b7",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221009354495Z_lane_drop_formation_s3_2e700f",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221009354495Z_lane_drop_formation_s3_2e700f",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221009354495Z_lane_drop_formation_s3_2e700f",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221009354495Z_lane_drop_formation_s3_2e700f",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221009354495Z_lane_drop_formation_s3_2e700f",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221009354495Z_lane_drop_formation_s3_2e700f",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221108048983Z_lane_drop_transform_s3_91dd45",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221108048983Z_lane_drop_transform_s3_91dd45",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221108048983Z_lane_drop_transform_s3_91dd45",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221108048983Z_lane_drop_transform_s3_91dd45",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221108048983Z_lane_drop_transform_s3_91dd45",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221108048983Z_lane_drop_transform_s3_91dd45",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221148522005Z_lane_drop_global_s3_670fef",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221148522005Z_lane_drop_global_s3_670fef",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221148522005Z_lane_drop_global_s3_670fef",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221148522005Z_lane_drop_global_s3_670fef",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221148522005Z_lane_drop_global_s3_670fef",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221148522005Z_lane_drop_global_s3_670fef",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221212064395Z_lane_drop_noa_s4_afeb03",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221212064395Z_lane_drop_noa_s4_afeb03",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221212064395Z_lane_drop_noa_s4_afeb03",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221212064395Z_lane_drop_noa_s4_afeb03",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221212064395Z_lane_drop_noa_s4_afeb03",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221212064395Z_lane_drop_noa_s4_afeb03",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221241441277Z_lane_drop_formation_s4_3744e7",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221241441277Z_lane_drop_formation_s4_3744e7",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221241441277Z_lane_drop_formation_s4_3744e7",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221241441277Z_lane_drop_formation_s4_3744e7",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221241441277Z_lane_drop_formation_s4_3744e7",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221241441277Z_lane_drop_formation_s4_3744e7",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221401871379Z_lane_drop_transform_s4_747abd",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221401871379Z_lane_drop_transform_s4_747abd",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221401871379Z_lane_drop_transform_s4_747abd",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221401871379Z_lane_drop_transform_s4_747abd",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221401871379Z_lane_drop_transform_s4_747abd",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221401871379Z_lane_drop_transform_s4_747abd",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221446354558Z_lane_drop_global_s4_0d96c8",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221446354558Z_lane_drop_global_s4_0d96c8",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221446354558Z_lane_drop_global_s4_0d96c8",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221446354558Z_lane_drop_global_s4_0d96c8",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221446354558Z_lane_drop_global_s4_0d96c8",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221446354558Z_lane_drop_global_s4_0d96c8",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221512622444Z_lane_drop_noa_s5_1b0bc7",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221512622444Z_lane_drop_noa_s5_1b0bc7",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221512622444Z_lane_drop_noa_s5_1b0bc7",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221512622444Z_lane_drop_noa_s5_1b0bc7",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221512622444Z_lane_drop_noa_s5_1b0bc7",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221512622444Z_lane_drop_noa_s5_1b0bc7",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221543301042Z_lane_drop_formation_s5_c809fb",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221543301042Z_lane_drop_formation_s5_c809fb",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221543301042Z_lane_drop_formation_s5_c809fb",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221543301042Z_lane_drop_formation_s5_c809fb",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221543301042Z_lane_drop_formation_s5_c809fb",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221543301042Z_lane_drop_formation_s5_c809fb",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221709940274Z_lane_drop_transform_s5_76a67f",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221709940274Z_lane_drop_transform_s5_76a67f",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221709940274Z_lane_drop_transform_s5_76a67f",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221709940274Z_lane_drop_transform_s5_76a67f",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221709940274Z_lane_drop_transform_s5_76a67f",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221709940274Z_lane_drop_transform_s5_76a67f",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221757062972Z_lane_drop_global_s5_c4ef84",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221757062972Z_lane_drop_global_s5_c4ef84",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221757062972Z_lane_drop_global_s5_c4ef84",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221757062972Z_lane_drop_global_s5_c4ef84",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221757062972Z_lane_drop_global_s5_c4ef84",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221757062972Z_lane_drop_global_s5_c4ef84",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221824317378Z_straight3_noa_s1_58dade",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221824317378Z_straight3_noa_s1_58dade",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221824317378Z_straight3_noa_s1_58dade",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221824317378Z_straight3_noa_s1_58dade",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221824317378Z_straight3_noa_s1_58dade",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221824317378Z_straight3_noa_s1_58dade",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221852344611Z_straight3_formation_s1_de3c71",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221852344611Z_straight3_formation_s1_de3c71",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221852344611Z_straight3_formation_s1_de3c71",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221852344611Z_straight3_formation_s1_de3c71",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221852344611Z_straight3_formation_s1_de3c71",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221852344611Z_straight3_formation_s1_de3c71",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221931636829Z_straight3_transform_s1_846de2",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221931636829Z_straight3_transform_s1_846de2",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221931636829Z_straight3_transform_s1_846de2",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221931636829Z_straight3_transform_s1_846de2",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221931636829Z_straight3_transform_s1_846de2",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T221931636829Z_straight3_transform_s1_846de2",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222009993197Z_straight3_global_s1_fe2ed7",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222009993197Z_straight3_global_s1_fe2ed7",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222009993197Z_straight3_global_s1_fe2ed7",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222009993197Z_straight3_global_s1_fe2ed7",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222009993197Z_straight3_global_s1_fe2ed7",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222009993197Z_straight3_global_s1_fe2ed7",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222031747922Z_straight3_noa_s2_3beaeb",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222031747922Z_straight3_noa_s2_3beaeb",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222031747922Z_straight3_noa_s2_3beaeb",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222031747922Z_straight3_noa_s2_3beaeb",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222031747922Z_straight3_noa_s2_3beaeb",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222031747922Z_straight3_noa_s2_3beaeb",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222101450151Z_straight3_formation_s2_512e41",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222101450151Z_straight3_formation_s2_512e41",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222101450151Z_straight3_formation_s2_512e41",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222101450151Z_straight3_formation_s2_512e41",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222101450151Z_straight3_formation_s2_512e41",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222101450151Z_straight3_formation_s2_512e41",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222149353508Z_straight3_transform_s2_270650",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222149353508Z_straight3_transform_s2_270650",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222149353508Z_straight3_transform_s2_270650",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222149353508Z_straight3_transform_s2_270650",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222149353508Z_straight3_transform_s2_270650",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222149353508Z_straight3_transform_s2_270650",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222237124678Z_straight3_global_s2_8dc943",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222237124678Z_straight3_global_s2_8dc943",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222237124678Z_straight3_global_s2_8dc943",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222237124678Z_straight3_global_s2_8dc943",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222237124678Z_straight3_global_s2_8dc943",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222237124678Z_straight3_global_s2_8dc943",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222303701372Z_straight3_noa_s3_2b40d2",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222303701372Z_straight3_noa_s3_2b40d2",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222303701372Z_straight3_noa_s3_2b40d2",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222303701372Z_straight3_noa_s3_2b40d2",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222303701372Z_straight3_noa_s3_2b40d2",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222303701372Z_straight3_noa_s3_2b40d2",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222332040743Z_straight3_formation_s3_b71899",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222332040743Z_straight3_formation_s3_b71899",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222332040743Z_straight3_formation_s3_b71899",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222332040743Z_straight3_formation_s3_b71899",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222332040743Z_straight3_formation_s3_b71899",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222332040743Z_straight3_formation_s3_b71899",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222414607804Z_straight3_transform_s3_a21ac4",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222414607804Z_straight3_transform_s3_a21ac4",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222414607804Z_straight3_transform_s3_a21ac4",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222414607804Z_straight3_transform_s3_a21ac4",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222414607804Z_straight3_transform_s3_a21ac4",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222414607804Z_straight3_transform_s3_a21ac4",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222458064276Z_straight3_global_s3_553b0c",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222458064276Z_straight3_global_s3_553b0c",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222458064276Z_straight3_global_s3_553b0c",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222458064276Z_straight3_global_s3_553b0c",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222458064276Z_straight3_global_s3_553b0c",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222458064276Z_straight3_global_s3_553b0c",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222522659372Z_straight3_noa_s4_124bec",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222522659372Z_straight3_noa_s4_124bec",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222522659372Z_straight3_noa_s4_124bec",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222522659372Z_straight3_noa_s4_124bec",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222522659372Z_straight3_noa_s4_124bec",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222522659372Z_straight3_noa_s4_124bec",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222553303369Z_straight3_formation_s4_be52a8",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222553303369Z_straight3_formation_s4_be52a8",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222553303369Z_straight3_formation_s4_be52a8",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222553303369Z_straight3_formation_s4_be52a8",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222553303369Z_straight3_formation_s4_be52a8",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222553303369Z_straight3_formation_s4_be52a8",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222639933091Z_straight3_transform_s4_903ed4",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222639933091Z_straight3_transform_s4_903ed4",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222639933091Z_straight3_transform_s4_903ed4",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222639933091Z_straight3_transform_s4_903ed4",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222639933091Z_straight3_transform_s4_903ed4",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222639933091Z_straight3_transform_s4_903ed4",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222726335262Z_straight3_global_s4_63b313",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222726335262Z_straight3_global_s4_63b313",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222726335262Z_straight3_global_s4_63b313",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222726335262Z_straight3_global_s4_63b313",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222726335262Z_straight3_global_s4_63b313",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222726335262Z_straight3_global_s4_63b313",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222752221194Z_straight3_noa_s5_e75ba5",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222752221194Z_straight3_noa_s5_e75ba5",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222752221194Z_straight3_noa_s5_e75ba5",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222752221194Z_straight3_noa_s5_e75ba5",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222752221194Z_straight3_noa_s5_e75ba5",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222752221194Z_straight3_noa_s5_e75ba5",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222822624607Z_straight3_formation_s5_8c631d",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222822624607Z_straight3_formation_s5_8c631d",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222822624607Z_straight3_formation_s5_8c631d",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222822624607Z_straight3_formation_s5_8c631d",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222822624607Z_straight3_formation_s5_8c631d",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222822624607Z_straight3_formation_s5_8c631d",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222907769907Z_straight3_transform_s5_ace128",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222907769907Z_straight3_transform_s5_ace128",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222907769907Z_straight3_transform_s5_ace128",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222907769907Z_straight3_transform_s5_ace128",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222907769907Z_straight3_transform_s5_ace128",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222907769907Z_straight3_transform_s5_ace128",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222953663024Z_straight3_global_s5_b9b556",
+      "path": "experiments/native_sumo.py",
+      "expected_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "snapshot_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "input_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "result_sha256": "d6aff77f818f87fbc212e2f3104c80f8447fcccd2d755996b06138149a9a2132",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222953663024Z_straight3_global_s5_b9b556",
+      "path": "experiments/global_reference.py",
+      "expected_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "snapshot_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "input_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "result_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222953663024Z_straight3_global_s5_b9b556",
+      "path": "experiments/complete_layers.py",
+      "expected_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "snapshot_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "input_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "result_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222953663024Z_straight3_global_s5_b9b556",
+      "path": "noa/native_rules.py",
+      "expected_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "snapshot_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "input_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "result_sha256": "f8dea7b717b0d3292d29e888285951810b90140cf0932ede29616a1fe7a3c5b5",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222953663024Z_straight3_global_s5_b9b556",
+      "path": "run_native_flow.py",
+      "expected_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "snapshot_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "input_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "result_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "matches": true
+    },
+    {
+      "case": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_current_gap_validation_20261029T0604\\20261028T222953663024Z_straight3_global_s5_b9b556",
+      "path": "research/common.py",
+      "expected_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "snapshot_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "input_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "result_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "matches": true
+    }
+  ]
+}
