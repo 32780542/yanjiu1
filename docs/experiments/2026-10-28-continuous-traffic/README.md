@@ -10,6 +10,7 @@
 | `pairs.json`、`pairs.csv` | 30个同种子配对及改善率。 |
 | `pair_groups.json`、`pair_groups.csv` | 10组配对统计。 |
 | `verification.json` | 324文件摘要、41282条车辆台账、54例逐拍累计及30个请求表配对的核验。另含每例原始目录与两批源码zip摘要。 |
+| `baseline_diagnosis.json` | 常规组实际参数的同速跟驰诊断：时距目标、制动距离、舒适速度上限及原输入摘要。 |
 | `traffic_efficiency.*` | 系统时间、在网行程时间、实际出口流量，PNG/SVG。 |
 | `traffic_fuel.*` | 距离归一化油耗及每车燃油流率，PNG/SVG。 |
 | `traffic_speed_maps.*` | seed 1的四档需求、两模式600 s时空速度图，PNG/SVG。 |

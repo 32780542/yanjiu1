@@ -1,0 +1,14 @@
+{
+  "source_input": "variants\\phase5g_pure_formation\\results\\continuous_traffic\\20261028T031206451914Z\\demand_L3_q1500_v28.8_d30_s1_off\\input.json",
+  "source_input_sha256": "e3a9f228d82a8232547876f55a32d97b8cddc508bdc79668fd688020ad7a1c14",
+  "nominal_speed_mps": 28.8,
+  "steady_acceleration_mps2": 0.0,
+  "same_speed_leader_mps": 28.8,
+  "desired_net_gap_m": 54.84,
+  "leader_instant_hard_stop_m": 41.472,
+  "own_lag_and_jerk_hard_stop_m": 111.744,
+  "hard_required_net_gap_m": 73.27199999999999,
+  "hard_emergency": true,
+  "comfortable_speed_cap_mps": 16.27175660133362,
+  "cap_feedback_acceleration_mps2": -7.516946039199827
+}
