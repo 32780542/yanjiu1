@@ -6,6 +6,7 @@ from math import sqrt
 
 CRUISE, MAX_SPEED, GAP = 28.8, 33.3, 30.0
 POSITION_GAIN = 0.3
+SPEED_RELAXATION = 0.2  # 0.1 s step / 0.5 s following response
 WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.0
 LENGTH, STANDSTILL, BRAKING, RESPONSE = 4.0, 1.5, 10.0, 0.2
 
@@ -60,7 +61,8 @@ def _clear(ego, rows, lane):
 
 
 def _request(ego, target, reference_speed):
-    return max(0.0, min(MAX_SPEED, reference_speed + POSITION_GAIN * (target - ego.x)))
+    desired = reference_speed + POSITION_GAIN * (target - ego.x)
+    return max(0.0, min(MAX_SPEED, ego.speed + SPEED_RELAXATION * (desired - ego.speed)))
 
 
 def _phase(lane, lanes):

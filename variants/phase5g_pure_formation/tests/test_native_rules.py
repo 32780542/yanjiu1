@@ -95,6 +95,12 @@ class NativeRulesTests(unittest.TestCase):
                 self.assertAlmostEqual(command.target_x, 718.0)
                 self.assertAlmostEqual(command.speed, 28.8)
 
+    def test_position_and_relative_speed_feedback_has_a_gradual_response(self):
+        ego = self.car(0, 100.0, 0, 20.0)
+        self.assertAlmostEqual(self.r._request(ego, 110.0, 20.0), 20.6)
+        self.assertAlmostEqual(self.r._request(ego, 100.0, 15.0), 19.0)
+        self.assertAlmostEqual(self.r._request(ego, 100.0, 20.0), 20.0)
+
     def test_upstream_extra_car_fills_the_nearby_missing_middle_slot(self):
         ego = self.car(0, 285.0, 0)
         others = [

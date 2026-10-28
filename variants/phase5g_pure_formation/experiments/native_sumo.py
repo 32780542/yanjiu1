@@ -26,8 +26,6 @@ import xml.etree.ElementTree as ET
 from research.common import ROOT, binary, lock_traci, tool_env
 
 STEP = 0.1
-REQUEST_ACCELERATION = 2.0
-REQUEST_DECELERATION = 2.0
 LANE_WIDTH = 3.3
 MODES = ("noa", "formation", "transform", "global")
 SCENARIOS = ("lane_drop", "straight3")
@@ -50,18 +48,8 @@ PHYSICAL = dict(
 
 def write_json(path, value):
     Path(path).write_text(
-        json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
-        encoding="utf-8",
+        json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8"
     )
-
-
-def execution_speed(speed, requested_speed, safety_cap):
-    """Shape normal acceleration/braking equally; apply lower safety speeds directly."""
-    normal = max(
-        speed - REQUEST_DECELERATION * STEP,
-        min(requested_speed, speed + REQUEST_ACCELERATION * STEP),
-    )
-    return min(33.3, max(0.0, min(normal, safety_cap)))
 
 
 def _ticks(duration):
@@ -79,13 +67,7 @@ def arrival_tape(seed=1, flow=1250.0, duration=600.0):
         raise ValueError("per-lane flow must be in [0, 36000] vehicles/hour")
     streams = [random.Random(f"continuous-arrival:{seed}:{lane}") for lane in range(3)]
     return [
-        dict(
-            vehicle_id=f"v{lane}_{tick:05d}",
-            requested_s=tick / 10.0,
-            lane=lane,
-            x=0.0,
-            speed=28.8,
-        )
+        dict(vehicle_id=f"v{lane}_{tick:05d}", requested_s=tick / 10.0, lane=lane, x=0.0, speed=28.8)
         for tick in range(ticks)
         for lane in range(3)
         if streams[lane].random() < probability
@@ -128,11 +110,7 @@ def build_network(directory, scenario="lane_drop"):
         raise ValueError(f"unknown scenario: {scenario}")
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
-    nodes, edges, connections = (
-        ET.Element("nodes"),
-        ET.Element("edges"),
-        ET.Element("connections"),
-    )
+    nodes, edges, connections = ET.Element("nodes"), ET.Element("edges"), ET.Element("connections")
     for name, x in (("entry", 0), ("bottleneck", 1000), ("exit", 1200)):
         ET.SubElement(nodes, "node", id=name, x=str(x), y="0", type="priority", radius="0")
     retained = 2 if scenario == "lane_drop" else 3
@@ -153,13 +131,7 @@ def build_network(directory, scenario="lane_drop"):
         )
         for lane in range(count):
             center = LANE_WIDTH * (lane + 0.5)
-            ET.SubElement(
-                edge,
-                "lane",
-                index=str(lane),
-                width="3.3",
-                shape=f"{x0},{center} {x1},{center}",
-            )
+            ET.SubElement(edge, "lane", index=str(lane), width="3.3", shape=f"{x0},{center} {x1},{center}")
     for lane in range(retained):
         ET.SubElement(
             connections,
@@ -202,10 +174,7 @@ def build_network(directory, scenario="lane_drop"):
     write_json(
         directory / "netconvert.json",
         dict(
-            command=command,
-            returncode=completed.returncode,
-            stdout=completed.stdout,
-            stderr=completed.stderr,
+            command=command, returncode=completed.returncode, stdout=completed.stdout, stderr=completed.stderr
         ),
     )
     if completed.returncode:
@@ -215,12 +184,7 @@ def build_network(directory, scenario="lane_drop"):
 
 def write_routes(directory, requests):
     root = ET.Element("routes")
-    ET.SubElement(
-        root,
-        "vType",
-        id="CAV_ICV",
-        **{key: str(value) for key, value in PHYSICAL.items()},
-    )
+    ET.SubElement(root, "vType", id="CAV_ICV", **{key: str(value) for key, value in PHYSICAL.items()})
     ET.SubElement(root, "route", id="through", edges="upstream downstream")
     for row in requests:
         ET.SubElement(
@@ -264,10 +228,7 @@ class LocalTracks:
     def observe(self, ego_id, states, ordered=None, xs=None):
         ego = states[ego_id]
         if ordered is None:
-            ordered = sorted(
-                states,
-                key=lambda key: (states[key].x, states[key].y, states[key].speed),
-            )
+            ordered = sorted(states, key=lambda key: (states[key].x, states[key].y, states[key].speed))
             xs = [states[key].x for key in ordered]
         candidates = ordered[bisect_left(xs, ego.x - 100.0) : bisect_right(xs, ego.x + 200.0)]
         private = self.tracks.setdefault(ego_id, {})
@@ -411,10 +372,7 @@ def _summary(trips, now, duration, *, collisions=0, teleports=0, error=None):
         all_fuel_mg=sum(row["fuel_mg"] for row in trips),
         fuel_g_per_km=fuel_per_km if eligible else None,
         clearance_after_demand_s=(
-            max(
-                0.0,
-                max((row["exited_s"] for row in completed), default=duration) - duration,
-            )
+            max(0.0, max((row["exited_s"] for row in completed), default=duration) - duration)
             if len(completed) == len(trips)
             else None
         ),
@@ -496,8 +454,6 @@ def run_case(
         max_time_s=max_time,
         step_s=STEP,
         lane_change_duration_s=1.0,
-        request_acceleration_limit_mps2=REQUEST_ACCELERATION,
-        request_deceleration_limit_mps2=REQUEST_DECELERATION,
         gui=gui,
         diagnostic=diagnostic,
         gui_delay_ms=gui_delay_ms if gui else None,
@@ -548,10 +504,7 @@ def run_case(
             lateral_coordinate="1.65 + 3.3*lane + measured lane offset",
         ),
     )
-    write_json(
-        directory / "result.json",
-        dict(status="starting", **config, source_sha256=source_sha),
-    )
+    write_json(directory / "result.json", dict(status="starting", **config, source_sha256=source_sha))
     conn = None
     now, states, memories = 0.0, {}, {}
     reasons, execution, lane_transitions = Counter(), Counter(), Counter()
@@ -618,34 +571,15 @@ def run_case(
             str(directory / "sumo_warnings.log"),
         ]
         if gui:
-            command += [
-                "--start",
-                "true",
-                "--quit-on-end",
-                "true",
-                "--delay",
-                str(gui_delay_ms),
-            ]
+            command += ["--start", "true", "--quit-on-end", "true", "--delay", str(gui_delay_ms)]
         write_json(directory / "sumo_command.json", command)
         with (
             (directory / "sumo_stdout.log").open("w", encoding="utf-8") as stdout,
-            gzip.open(
-                directory / "positions.jsonl.gz",
-                "wt",
-                encoding="utf-8",
-                compresslevel=3,
-            ) as positions,
-            gzip.open(
-                directory / "events.jsonl.gz", "wt", encoding="utf-8", compresslevel=3
-            ) as events,
+            gzip.open(directory / "positions.jsonl.gz", "wt", encoding="utf-8", compresslevel=3) as positions,
+            gzip.open(directory / "events.jsonl.gz", "wt", encoding="utf-8", compresslevel=3) as events,
         ):
             diagnostic_stream = (
-                gzip.open(
-                    directory / "diagnostic.jsonl.gz",
-                    "wt",
-                    encoding="utf-8",
-                    compresslevel=3,
-                )
+                gzip.open(directory / "diagnostic.jsonl.gz", "wt", encoding="utf-8", compresslevel=3)
                 if diagnostic
                 else None
             )
@@ -693,9 +627,7 @@ def run_case(
                         lane_attempts.pop(key, None)
                         lane_motions.pop(key, None)
                         previous_lanes.pop(key, None)
-                        events.write(
-                            json.dumps(dict(time_s=now, kind="arrived", vehicle_id=key)) + "\n"
-                        )
+                        events.write(json.dumps(dict(time_s=now, kind="arrived", vehicle_id=key)) + "\n")
                     states = {}
                     for key, data in conn.vehicle.getAllSubscriptionResults().items():
                         if key in arrived:
@@ -728,14 +660,7 @@ def run_case(
                             )
                             trips[key]["lane_completion_events"].append(complete)
                             events.write(
-                                json.dumps(
-                                    dict(
-                                        kind="lane_completion",
-                                        vehicle_id=key,
-                                        **complete,
-                                    )
-                                )
-                                + "\n"
+                                json.dumps(dict(kind="lane_completion", vehicle_id=key, **complete)) + "\n"
                             )
                             lane_motions.pop(key)
                         trips[key]["distance_m"] = data[tc.VAR_DISTANCE]
@@ -748,8 +673,7 @@ def run_case(
                             trips[key]["lane_events"].append(transition)
                             lane_transitions[f"{old}->{lane}"] += 1
                             events.write(
-                                json.dumps(dict(kind="lane_change", vehicle_id=key, **transition))
-                                + "\n"
+                                json.dumps(dict(kind="lane_change", vehicle_id=key, **transition)) + "\n"
                             )
                         previous_lanes[key] = lane
                     if gui_views and states:
@@ -782,8 +706,7 @@ def run_case(
                                 dict(
                                     time_s=now,
                                     states={
-                                        key: [s.x, s.y, s.speed, s.acceleration]
-                                        for key, s in states.items()
+                                        key: [s.x, s.y, s.speed, s.acceleration] for key, s in states.items()
                                     },
                                     unsafe=True,
                                 ),
@@ -806,12 +729,7 @@ def run_case(
                             )
                         break
                     ordered = sorted(
-                        states,
-                        key=lambda key: (
-                            states[key].x,
-                            states[key].y,
-                            states[key].speed,
-                        ),
+                        states, key=lambda key: (states[key].x, states[key].y, states[key].speed)
                     )
                     xs = [states[key].x for key in ordered]
                     actions = {}
@@ -831,9 +749,7 @@ def run_case(
                             for index, (key, state) in enumerate(states.items())
                         }
                         global_commands = planner.commands(
-                            global_states,
-                            now,
-                            1000.0 if scenario == "lane_drop" else None,
+                            global_states, now, 1000.0 if scenario == "lane_drop" else None
                         )
                     for key in ordered:
                         # This view is used by the common execution guard in all
@@ -854,7 +770,7 @@ def run_case(
                         safety_cap = safe_speed(ego, neighbors)
                         if not math.isfinite(safety_cap):
                             raise ValueError("non-finite common safe speed")
-                        executed_speed = execution_speed(ego.speed, command.speed, safety_cap)
+                        executed_speed = min(33.3, max(0.0, min(command.speed, safety_cap)))
                         conn.vehicle.setSpeed(key, executed_speed)
                         if command.speed > safety_cap + 1e-9:
                             execution["safe_speed_limited_ticks"] += 1
@@ -896,8 +812,7 @@ def run_case(
                             dict(
                                 time_s=now,
                                 states={
-                                    key: [s.x, s.y, s.speed, s.acceleration]
-                                    for key, s in states.items()
+                                    key: [s.x, s.y, s.speed, s.acceleration] for key, s in states.items()
                                 },
                             ),
                             separators=(",", ":"),
@@ -925,12 +840,8 @@ def run_case(
                                     run_dir=str(directory),
                                     simulation_s=now,
                                     active=len(states),
-                                    departed=sum(
-                                        t["entered_s"] is not None for t in trips.values()
-                                    ),
-                                    completed=sum(
-                                        t["exited_s"] is not None for t in trips.values()
-                                    ),
+                                    departed=sum(t["entered_s"] is not None for t in trips.values()),
+                                    completed=sum(t["exited_s"] is not None for t in trips.values()),
                                 )
                             ),
                             flush=True,
@@ -979,9 +890,7 @@ def run_case(
             if event["from_lane"] == 2 and event["to_lane"] == 1 and event["x"] < 1000.0
         }
         write_json(directory / "trips.json", trip_rows)
-        with gzip.open(
-            directory / "trips.jsonl.gz", "wt", encoding="utf-8", compresslevel=3
-        ) as stream:
+        with gzip.open(directory / "trips.jsonl.gz", "wt", encoding="utf-8", compresslevel=3) as stream:
             for trip in trip_rows:
                 stream.write(json.dumps(trip, separators=(",", ":")) + "\n")
         result = dict(
@@ -1011,9 +920,7 @@ def run_case(
             ending_lane_observed_vehicles=len(ending_lane_seen),
             ending_lane_completed_before_drop=len(ending_completed & ending_lane_seen),
             ending_lane_completion_before_drop_rate=(
-                len(ending_completed & ending_lane_seen) / len(ending_lane_seen)
-                if ending_lane_seen
-                else None
+                len(ending_completed & ending_lane_seen) / len(ending_lane_seen) if ending_lane_seen else None
             ),
             action_reasons=dict(reasons),
             execution=dict(execution),
