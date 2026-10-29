@@ -1,0 +1,67 @@
+{
+  "records": 53,
+  "reading_depth": {
+    "metadata": 2,
+    "abstract": 40,
+    "full_text": 11
+  },
+  "information_requirements": {
+    "unclear": 1,
+    "mixed": 9,
+    "sensing_only": 43
+  },
+  "unique_normalized_titles": 53,
+  "nonempty_unique_dois": 50,
+  "errors": [],
+  "text_snapshot_manifest": {
+    "core22.txt": {
+      "bytes": 74963,
+      "sha256": "aa9e058159bdd6ff4746ef8824f1eb4b00017a1a8b7bd6beca80a7a2492ce7ab"
+    },
+    "cui17.txt": {
+      "bytes": 31682,
+      "sha256": "fd0573cbf365594b9a3b31ddd5948cf63fc8cff838920cfd1e324ed7c35b756c"
+    },
+    "gunter19.txt": {
+      "bytes": 54735,
+      "sha256": "3fc8bd3f5eeac25c18c44716338678a08d7f4ed7917b07cb9199888178138c3a"
+    },
+    "gunter21.txt": {
+      "bytes": 65724,
+      "sha256": "46295e1b08b0f66461da88eab89b773850bb3648ac808057993d057d154491b1"
+    },
+    "hdm06.txt": {
+      "bytes": 51812,
+      "sha256": "954c5ccac984e47bd295f5d571dac26c383cc1f41b049613f69b1ded450bc329"
+    },
+    "idm10.txt": {
+      "bytes": 60646,
+      "sha256": "717cb0da74d7e321a7c1c785f998dc0cffe579c14cd6aeb9321334b56a7742cd"
+    },
+    "li_fd21.txt": {
+      "bytes": 71957,
+      "sha256": "74be711061e7de545c2ed5f73da7d7cfabed7fab0d84f94ebd64da22b3f6fe8e"
+    },
+    "liang00.txt": {
+      "bytes": 374,
+      "sha256": "d3a8fac1aa865544b8ab03c1867f48472cf6aa07486fa9b5ab2b69575f8a55c4"
+    },
+    "limits21.txt": {
+      "bytes": 50770,
+      "sha256": "0bf59a17757753afc80ec494a451383781656d5b00216d52fb2e275e6db90d8c"
+    },
+    "lowlevel21.txt": {
+      "bytes": 87320,
+      "sha256": "473b05b1c4d1a97a512dbbc7367c266dd1ba4285fb39751d10affeace5a08eb8"
+    },
+    "multi_exp24.txt": {
+      "bytes": 78292,
+      "sha256": "fbb95d115a14d6a621c0d8e85e82ada2775267bb516759b1818b657916ad5120"
+    },
+    "trr07.txt": {
+      "bytes": 37840,
+      "sha256": "bfd23fdecefa9a0d4be23ba9eb1ea61eb7c995e1c047e667590727db30f1b775"
+    }
+  },
+  "scope": "Only A_acc research outputs written; no production/test/old research files intentionally modified; no Git or simulation run."
+}

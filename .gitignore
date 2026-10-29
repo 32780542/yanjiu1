@@ -15,3 +15,9 @@ docs/experiments/2026-10-29-*/recovery/per_vehicle.csv
 docs/experiments/2026-10-29-four-flow-attribution/D_baseline/
 docs/experiments/2026-10-29-four-flow-attribution/H_analysis/
 docs/experiments/2026-10-29-four-flow-attribution/P_analysis/
+
+# Literature reading caches stay local; publish notes, metadata and provenance.
+docs/research/2026-10-30-literature-review/**/*.pdf
+docs/research/2026-10-30-literature-review/A_acc/*.txt
+docs/research/2026-10-30-literature-review/A_acc/metadata_candidates.json
+docs/research/2026-10-30-literature-review/C_merge/*_text.txt

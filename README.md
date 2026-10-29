@@ -15,6 +15,7 @@
 4. [方法迭代记录](docs/2026-10-29-编队变换方法更新.md)：保留失败轨迹和被替换的方法，不作为现行规则定义。
 5. [MATLAB 控制调用链](docs/2026-10-29-MATLAB车辆控制调用链核查.md)与[Cai文献依据](docs/Cai2024全局方案对照依据.md)：完整代码的活跃控制链、可借鉴机制及原图记录。
 6. [前期方法诊断](docs/experiments/2026-10-29-four-flow-attribution/method_diagnostics/README.md)与[R/S候选档案](docs/experiments/2026-10-29-four-flow-attribution/R_S_diagnostics/README.md)：被否决方法的源码、对照与失败证据。
+7. [2026-10-30文献检索与方法建议](docs/research/2026-10-30-literature-review/README.md)：去重150篇，含可筛选目录、BibTeX、阅读深度及对形成/变换的具体建议。本轮为文献分析，固定时距等候选尚未写入控制代码。
 
 ## 在这个文件夹打开窗口
 

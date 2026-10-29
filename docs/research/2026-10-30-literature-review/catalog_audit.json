@@ -1,0 +1,57 @@
+{
+  "unique_papers": 150,
+  "input_records": 153,
+  "duplicates_removed": 3,
+  "duplicate_groups": [
+    {
+      "retained_id": "L026",
+      "source_ids": [
+        "A026",
+        "C002"
+      ],
+      "title": "Congested Traffic States in Empirical Observations and Microscopic Simulations"
+    },
+    {
+      "retained_id": "L027",
+      "source_ids": [
+        "A027",
+        "C003"
+      ],
+      "title": "Enhanced intelligent driver model to access the impact of driving strategies on traffic capacity"
+    },
+    {
+      "retained_id": "L099",
+      "source_ids": [
+        "B046",
+        "C034"
+      ],
+      "title": "Flow-Aware Platoon Formation of Connected Automated Vehicles in a Mixed Traffic with Human-Driven Vehicles"
+    }
+  ],
+  "input_files": {
+    "A_acc": {
+      "records": 53,
+      "sha256": "7682f637cc088ce62661cd6b88adfe3a5eb9e73f09d20da56b0db45bef36fc55"
+    },
+    "B_formation": {
+      "records": 50,
+      "sha256": "5051e265ed078d83066ab71aa6c7695e9b0068356a3c6fc80a418335c76eae56"
+    },
+    "C_merge": {
+      "records": 50,
+      "sha256": "9a058ae357d6d7467ab6fec141b4ba357261ac6bb51d212d2c314328dd9b515d"
+    }
+  },
+  "reading_levels": {
+    "metadata": 3,
+    "abstract": 116,
+    "full_text": 31
+  },
+  "with_DOI": 141,
+  "metadata_only": [
+    "L001",
+    "L002",
+    "L066"
+  ],
+  "crossref_resolved": 140
+}
