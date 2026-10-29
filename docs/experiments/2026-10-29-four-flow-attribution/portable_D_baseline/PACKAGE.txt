@@ -1,0 +1,31 @@
+Portable D100 evidence bundle
+
+Start with tables/TT.txt, traffic_and_attribution.csv, formation_quality.csv,
+recovery_counts.csv and straight_controls.csv. Column meanings and limitations
+are defined in tables/column_definitions.json. All tables preserve the frozen
+evaluation measures and the original five-seed grouping.
+
+Run: python -B recompute_tables.py
+Verify: python -B verify_portable.py
+This regenerates compact tables using only Python's standard library and the
+losslessly compressed original evaluator JSON files in data/.
+
+data/vehicles.csv.gz retains the exact original gate/censor CSV bytes.
+data/region_steps.csv.gz is the original exact compressed step CSV.
+data/recovery_flow_*.json.gz retains original per-vehicle recovery and censoring
+without duplicating the equivalent recovery CSV. data/raw_case_json.tar.gz
+retains all 100 original input/result/trips JSON files (300 exact files).
+The archive entries and external position traces are bound in
+provenance/case_index.json. Every stored compressed original was decoded and
+verified against its original SHA256. Source modules common to all 100 cases
+are stored once under source/, with the six D hashes and evaluator hashes.
+
+The 374.5 MB original positions.jsonl.gz files are not duplicated here.
+Gate/layer re-evaluation requires those external raw traces referenced by the
+case index. The bundled gate records, regional step records, original trips,
+and evaluator output retain the evidence needed to recompute reported tables,
+travel/fuel measures and all five-seed summaries without a SUMO rerun.
+
+bundle_hashes.json binds every bundle artifact except itself and its root
+checksum file. bundle_sha256.txt is SHA256(bundle_hashes.json). The lossless
+and original-readonly checks are saved in verification.json.

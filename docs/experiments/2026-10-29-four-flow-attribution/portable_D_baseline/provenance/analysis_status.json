@@ -1,0 +1,57 @@
+{
+  "status": "completed",
+  "started_utc": "2026-10-29T01:11:57.909446+00:00",
+  "evaluator_sha256": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+  "units": [
+    {
+      "unit": "bottleneck_attribution",
+      "runs": 100,
+      "eligible": 100
+    },
+    {
+      "unit": "flow_500_native_comparison",
+      "runs": 25,
+      "eligible": 25
+    },
+    {
+      "unit": "flow_500_recovery",
+      "runs": 25,
+      "subjects": 3654,
+      "recovered": 424
+    },
+    {
+      "unit": "flow_750_native_comparison",
+      "runs": 25,
+      "eligible": 25
+    },
+    {
+      "unit": "flow_750_recovery",
+      "runs": 25,
+      "subjects": 5442,
+      "recovered": 937
+    },
+    {
+      "unit": "flow_1000_native_comparison",
+      "runs": 25,
+      "eligible": 25
+    },
+    {
+      "unit": "flow_1000_recovery",
+      "runs": 25,
+      "subjects": 7329,
+      "recovered": 1551
+    },
+    {
+      "unit": "flow_1500_native_comparison",
+      "runs": 25,
+      "eligible": 25
+    },
+    {
+      "unit": "flow_1500_recovery",
+      "runs": 25,
+      "subjects": 11049,
+      "recovered": 1123
+    }
+  ],
+  "completed_utc": "2026-10-29T01:16:19.890128+00:00"
+}

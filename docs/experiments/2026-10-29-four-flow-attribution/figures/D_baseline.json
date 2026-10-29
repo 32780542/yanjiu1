@@ -1,0 +1,14 @@
+{
+  "label": "原D版",
+  "aggregation": "Five paired seeds, equal run weight",
+  "input_sha256": {
+    "docs\\experiments\\2026-10-29-four-flow-attribution\\portable_D_baseline\\tables\\traffic_and_attribution.csv": "b9a20558216f8e4be4e82fae3d2182057cc32ea194285f9332e2dbf8b1f60341",
+    "docs\\experiments\\2026-10-29-four-flow-attribution\\portable_D_baseline\\tables\\formation_quality.csv": "b03d7081535250775ac4835eee4a723764f2b629b53b526c84bbc6269beb6857"
+  },
+  "source_sha256": "bf8f5f01ff9676be39af67ece4a91d4173dc2fddd549b5f1bd6bab8e481dd0bf",
+  "output_sha256": {
+    "D_baseline.png": "a5b8689704f835d4808cd856019890f03600b4128e863d5bc9115e0bb08b4de4",
+    "D_baseline.svg": "669e2490323ca58040147c7c43a57a331972b0622a324a24ecbf8cedda883484"
+  },
+  "dpi": 300
+}

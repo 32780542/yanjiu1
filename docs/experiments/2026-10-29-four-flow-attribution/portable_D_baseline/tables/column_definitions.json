@@ -1,0 +1,23 @@
+{
+  "scope": "D baseline: 4 flows x 5 seeds x (straight NOA/transform + lane-drop NOA/formation/transform), 100 cases. Main tables describe lane_drop.",
+  "modes": {
+    "noa": "NOA; detected geometry is not controlled formation",
+    "formation": "Formation plus ordinary merge ablation",
+    "transform": "Distributed formation plus lane-drop transform"
+  },
+  "averaging": "Traffic, fuel and participation rows reuse the original arithmetic mean of five per-seed values. Every run is safe/completed/audit eligible. Geometry means retain original per-metric n; undefined geometry is not zero.",
+  "speed": "region_window_speed_mps is measured vehicle-time-weighted speed in 800<=x<1000 m over [100,600) s, averaged across seeds. It is not whole-route mean speed.",
+  "TT": "drop_TT_s / TT_s: entered-to-exited travel time; excludes entry waiting. Seconds, averaged across five run means.",
+  "fuel": "drop_fuel_g_km / fuel_g_km: original SUMO fuel_abs mg / actual route distance m, numerically g/km. Five run ratios averaged; no aerodynamic fuel assumption.",
+  "main_segment": "640–1100 m duration from measured first crossings interpolated only across normal adjacent 0.1s frames. main_drop_minus_straight_s is same-mode drop minus straight, positive is added delay.",
+  "reduction": "main_NOA_minus_transform_reduction_s appears only on transform rows: (NOA drop-straight) minus (transform drop-straight). Positive is reduction; negative is worse. Reuses existing attribution metric.",
+  "formation_missing_straight": "The D100 design has no formation straight cases; same-mode straight time and main difference are undefined for formation and remain blank/null.",
+  "low_speed": "region_low_speed_vehicle_s: integral of count(v<5m/s) in 800<=x<1000 m over [100,600) s; mean of five runs. region_low_speed_fraction divides by regional vehicle-seconds.",
+  "flow": "flow_1000m_veh_h: first measured 1000m crossings in inclusive [100,600] s / 500 s * 3600. An observed count, not saturation capacity.",
+  "regions": "Lane-drop upstream: 3 lanes, [0,640) m; downstream: 2 lanes, [1000,1200) m. Straight whole: 3 lanes, [0,1200) m. No fixed lane-count whole-road metric spans the lane drop.",
+  "participation": "formation_participation_rate_mean is mean confirmed multilayer vehicle-seconds / all region vehicle-seconds; confirmed >=2 full layers. Fractions 0–1 (multiply by 100 for percent). Stable participation adds the frozen 5s stability hold.",
+  "mean_size": "mean_multilayer_size_mean is the original mean of defined per-run group-time conditional mean sizes. It conditions on actual confirmed multilayer group seconds; n reports seeds with a defined group mean.",
+  "peak": "peak_multilayer_size_mean is the original mean of defined per-run peaks; n is its number of defined seeds. peak_by_seed preserves the actual original peaks in seed order 1–5; null means no qualifying structure, not zero-sized formation.",
+  "recovery": "Counts sum the existing five per-run records. all_adjusting_subjects is the denominator; recovered is observed two-lane confirmed membership; censored remains explicit. upstream_formed_* restricts to previously confirmed three-lane membership before adjustment; it distinguishes recovery from new formation. NOA remains detected geometry only.",
+  "recomputation": "recompute_tables.py reproduces the compact tables from exact compressed original evaluator JSON. The raw case archive also preserves exact input/result/trips JSON for independent travel/fuel/request checks. Recomputing gates/layers from positions requires the original 0.1s position files bound by hashes in case_index.json and audits; those 374.5MB traces are not duplicated here."
+}

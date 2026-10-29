@@ -3,3 +3,7 @@
 docs/experiments/2026-10-29-*/**/*.json text eol=lf
 # Matplotlib emits valid path whitespace; retain its generated SVG bytes.
 docs/experiments/2026-10-29-*/**/*.svg text eol=lf -whitespace
+# Frozen portable records retain exact bytes, including CSV line endings.
+docs/experiments/2026-10-29-four-flow-attribution/portable_*/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/experiments/2026-10-29-four-flow-attribution/figures/** -text
+docs/experiments/2026-10-29-four-flow-attribution/figures/*.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

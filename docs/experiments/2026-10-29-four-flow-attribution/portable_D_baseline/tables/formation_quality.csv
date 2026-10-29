@@ -1,0 +1,13 @@
+﻿flow_veh_h_lane,mode,attempted_seeds,eligible_seeds,upstream_formation_participation_rate_mean,upstream_formation_participation_rate_n,upstream_stable_participation_rate_mean,upstream_stable_participation_rate_n,upstream_mean_multilayer_size_mean,upstream_mean_multilayer_size_n,upstream_peak_multilayer_size_mean,upstream_peak_multilayer_size_n,upstream_peak_by_seed,downstream_formation_participation_rate_mean,downstream_formation_participation_rate_n,downstream_stable_participation_rate_mean,downstream_stable_participation_rate_n,downstream_mean_multilayer_size_mean,downstream_mean_multilayer_size_n,downstream_peak_multilayer_size_mean,downstream_peak_multilayer_size_n,downstream_peak_by_seed
+500,noa,5,5,0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]",0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]"
+500,formation,5,5,0.003232436099527092,5,0.0022746772552227684,5,6.0,1,6.0,1,"[null, 6, null, null, null]",0.00682493685712324,5,0.00018014974947925974,5,4.0,5,4.0,5,"[4, 4, 4, 4, 4]"
+500,transform,5,5,0.0032320491590686748,5,0.0022744049637890675,5,6.0,1,6.0,1,"[null, 6, null, null, null]",0.16964541966075508,5,0.010334477566342499,5,4.316318308322565,5,6.8,5,"[8, 6, 6, 6, 8]"
+750,noa,5,5,0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]",0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]"
+750,formation,5,5,0.006111122155671028,5,0.002668024188288268,5,6.0,3,6.0,3,"[6, 6, null, null, 6]",0.00523921693251988,5,0.0,5,4.0,4,4.0,4,"[4, 4, 4, 4, null]"
+750,transform,5,5,0.006110176286862684,5,0.002667638617602656,5,6.0,3,6.0,3,"[6, 6, null, null, 6]",0.24711126250492432,5,0.013861021423308407,5,4.828151175735664,5,9.2,5,"[10, 10, 10, 8, 8]"
+1000,noa,5,5,0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]",0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]"
+1000,formation,5,5,0.01596232947837181,5,0.004689037419063529,5,6.090625973501408,5,8.4,5,"[9, 9, 6, 9, 9]",0.0096246919921358,5,2.5553390615523224e-05,5,4.019607843137255,5,4.4,5,"[4, 4, 4, 6, 4]"
+1000,transform,5,5,0.015814297953966147,5,0.004652518554912907,5,6.091646440151493,5,8.4,5,"[9, 9, 6, 9, 9]",0.2961078669181714,5,0.016224890748215898,5,5.21661515863212,5,11.6,5,"[10, 12, 12, 12, 12]"
+1500,noa,5,5,0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]",0.0,5,0.0,5,,0,,0,"[null, null, null, null, null]"
+1500,formation,5,5,0.013643440310683003,5,0.004295906859597633,5,6.586032827411444,5,9.0,5,"[9, 12, 6, 9, 9]",0.0022381065543127217,5,6.42080340302543e-05,5,4.18840579710145,4,5.0,4,"[4, 4, null, 8, 4]"
+1500,transform,5,5,0.011386084044771453,5,0.0037615609065652193,5,6.681957958363403,5,9.0,5,"[9, 12, 6, 9, 9]",0.14580258995098824,5,0.007521053293777,5,5.6226128077812305,5,12.0,5,"[12, 12, 12, 12, 12]"
