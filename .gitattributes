@@ -9,3 +9,5 @@ docs/experiments/2026-10-29-four-flow-attribution/figures/** -text
 docs/experiments/2026-10-29-four-flow-attribution/figures/*.json whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 variants/phase5g_pure_formation/tests/fixtures/own_lane_request_race.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 variants/phase5g_pure_formation/tests/fixtures/e10_actual_34_7s.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Unified diffs contain single-space context lines by definition.
+docs/experiments/2026-10-29-four-flow-attribution/portable_*/source/*.patch -whitespace

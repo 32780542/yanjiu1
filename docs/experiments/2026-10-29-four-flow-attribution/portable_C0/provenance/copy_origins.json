@@ -1,0 +1,946 @@
+[
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\experiments\\native_sumo.py",
+    "bundle_path": "source/core/experiments/native_sumo.py",
+    "gzip_wrapped": false,
+    "original_sha256": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3",
+    "original_bytes": 40033,
+    "bundle_sha256": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\experiments\\global_reference.py",
+    "bundle_path": "source/core/experiments/global_reference.py",
+    "gzip_wrapped": false,
+    "original_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "original_bytes": 5758,
+    "bundle_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\experiments\\complete_layers.py",
+    "bundle_path": "source/core/experiments/complete_layers.py",
+    "gzip_wrapped": false,
+    "original_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "original_bytes": 11426,
+    "bundle_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\noa\\native_rules.py",
+    "bundle_path": "source/core/noa/native_rules.py",
+    "gzip_wrapped": false,
+    "original_sha256": "5a4986470fbb15d77ca6bab95c87fc152ff63f1da3dbe74e3f8c4a3a5241300c",
+    "original_bytes": 17655,
+    "bundle_sha256": "5a4986470fbb15d77ca6bab95c87fc152ff63f1da3dbe74e3f8c4a3a5241300c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\run_native_flow.py",
+    "bundle_path": "source/core/run_native_flow.py",
+    "gzip_wrapped": false,
+    "original_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "original_bytes": 2941,
+    "bundle_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\research\\common.py",
+    "bundle_path": "source/core/research/common.py",
+    "gzip_wrapped": false,
+    "original_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+    "original_bytes": 4600,
+    "bundle_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\kinematic.json",
+    "bundle_path": "source/configs/kinematic.json",
+    "gzip_wrapped": false,
+    "original_sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+    "original_bytes": 677,
+    "bundle_sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\no_comm_main.json",
+    "bundle_path": "source/configs/no_comm_main.json",
+    "gzip_wrapped": false,
+    "original_sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+    "original_bytes": 6386,
+    "bundle_sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\paper_reference.json",
+    "bundle_path": "source/configs/paper_reference.json",
+    "gzip_wrapped": false,
+    "original_sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+    "original_bytes": 2300,
+    "bundle_sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase2.json",
+    "bundle_path": "source/configs/phase2.json",
+    "gzip_wrapped": false,
+    "original_sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+    "original_bytes": 9792,
+    "bundle_sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase3.json",
+    "bundle_path": "source/configs/phase3.json",
+    "gzip_wrapped": false,
+    "original_sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+    "original_bytes": 1434,
+    "bundle_sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase4.json",
+    "bundle_path": "source/configs/phase4.json",
+    "gzip_wrapped": false,
+    "original_sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+    "original_bytes": 5053,
+    "bundle_sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase4_experiments.json",
+    "bundle_path": "source/configs/phase4_experiments.json",
+    "gzip_wrapped": false,
+    "original_sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+    "original_bytes": 1732,
+    "bundle_sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase5.json",
+    "bundle_path": "source/configs/phase5.json",
+    "gzip_wrapped": false,
+    "original_sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+    "original_bytes": 2275,
+    "bundle_sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase5f.json",
+    "bundle_path": "source/configs/phase5f.json",
+    "gzip_wrapped": false,
+    "original_sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+    "original_bytes": 822,
+    "bundle_sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase5g.json",
+    "bundle_path": "source/configs/phase5g.json",
+    "gzip_wrapped": false,
+    "original_sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+    "original_bytes": 988,
+    "bundle_sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase5_experiments.json",
+    "bundle_path": "source/configs/phase5_experiments.json",
+    "gzip_wrapped": false,
+    "original_sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+    "original_bytes": 1138,
+    "bundle_sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\phase5_r5.json",
+    "bundle_path": "source/configs/phase5_r5.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+    "original_bytes": 2003,
+    "bundle_sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\sensitivity.json",
+    "bundle_path": "source/configs/sensitivity.json",
+    "gzip_wrapped": false,
+    "original_sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+    "original_bytes": 977,
+    "bundle_sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\tools.json",
+    "bundle_path": "source/configs/tools.json",
+    "gzip_wrapped": false,
+    "original_sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+    "original_bytes": 157,
+    "bundle_sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\configs\\topology_smoke.json",
+    "bundle_path": "source/configs/topology_smoke.json",
+    "gzip_wrapped": false,
+    "original_sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+    "original_bytes": 4431,
+    "bundle_sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\experiments\\bottleneck_attribution.py",
+    "bundle_path": "source/evaluators/experiments/bottleneck_attribution.py",
+    "gzip_wrapped": false,
+    "original_sha256": "1254953a5dae40809ea38f09a03c79e18ac5bd57cb36c16649e27e9ba07625ce",
+    "original_bytes": 24492,
+    "bundle_sha256": "1254953a5dae40809ea38f09a03c79e18ac5bd57cb36c16649e27e9ba07625ce"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\experiments\\complete_layers.py",
+    "bundle_path": "source/evaluators/experiments/complete_layers.py",
+    "gzip_wrapped": false,
+    "original_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "original_bytes": 11426,
+    "bundle_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\experiments\\native_comparison.py",
+    "bundle_path": "source/evaluators/experiments/native_comparison.py",
+    "gzip_wrapped": false,
+    "original_sha256": "5618a41584c7643a23af2a22470b2207dffc1eab14b27c9c2d2517ad566fef7d",
+    "original_bytes": 19450,
+    "bundle_sha256": "5618a41584c7643a23af2a22470b2207dffc1eab14b27c9c2d2517ad566fef7d"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\experiments\\native_recovery.py",
+    "bundle_path": "source/evaluators/experiments/native_recovery.py",
+    "gzip_wrapped": false,
+    "original_sha256": "ccd260728657ca44c662ab044d24cb2c7bcaf569895d315030c393fae7844e80",
+    "original_bytes": 12400,
+    "bundle_sha256": "ccd260728657ca44c662ab044d24cb2c7bcaf569895d315030c393fae7844e80"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\experiments\\__init__.py",
+    "bundle_path": "source/evaluators/experiments/__init__.py",
+    "gzip_wrapped": false,
+    "original_sha256": "eaf1a3f7eca911b7d8ba2605eb8c5b1d359fbc0b6942ac0a913b6d92fe5f4a0f",
+    "original_bytes": 74,
+    "bundle_sha256": "eaf1a3f7eca911b7d8ba2605eb8c5b1d359fbc0b6942ac0a913b6d92fe5f4a0f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\four_flow_D_analysis_frozen\\experiments\\native_comparison.py",
+    "bundle_path": "source/evaluator_parent/experiments/native_comparison.py",
+    "gzip_wrapped": false,
+    "original_sha256": "b39dd54cadbefa28116ea46f7135f56863b1b0356f5702bfdb07832df897804c",
+    "original_bytes": 18911,
+    "bundle_sha256": "b39dd54cadbefa28116ea46f7135f56863b1b0356f5702bfdb07832df897804c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\four_flow_D_analysis_frozen\\experiments\\bottleneck_attribution.py",
+    "bundle_path": "source/evaluator_parent/experiments/bottleneck_attribution.py",
+    "gzip_wrapped": false,
+    "original_sha256": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "original_bytes": 24035,
+    "bundle_sha256": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\freeze.json",
+    "bundle_path": "provenance/evaluator_freeze.json",
+    "gzip_wrapped": false,
+    "original_sha256": "0a77902ce4833effddfb1ef4b949103a437b277db8a60bc0141c0de2f627e06d",
+    "original_bytes": 1493,
+    "bundle_sha256": "0a77902ce4833effddfb1ef4b949103a437b277db8a60bc0141c0de2f627e06d"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_source\\enum_label_only.patch",
+    "bundle_path": "source/evaluator_enum_label_only.patch",
+    "gzip_wrapped": false,
+    "original_sha256": "b8372c66baa7dd51e6156882a0e44b05b093f6434478a6385c7d47d86c7304f7",
+    "original_bytes": 1096,
+    "bundle_sha256": "b8372c66baa7dd51e6156882a0e44b05b093f6434478a6385c7d47d86c7304f7"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\run_flow_study.py",
+    "bundle_path": "source/experiment_scripts/run_flow_study.py",
+    "gzip_wrapped": false,
+    "original_sha256": "bde8f21a7250a326aa4bfa67eb38478279d388b215c74036d0ca14796cc33c47",
+    "original_bytes": 5677,
+    "bundle_sha256": "bde8f21a7250a326aa4bfa67eb38478279d388b215c74036d0ca14796cc33c47"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\test_cooperative_rules.py",
+    "bundle_path": "source/experiment_scripts/test_cooperative_rules.py",
+    "gzip_wrapped": false,
+    "original_sha256": "e812f383b785c94cbc6912a564eadc914d4ec925deb1b246e1b0099baf34eebd",
+    "original_bytes": 4416,
+    "bundle_sha256": "e812f383b785c94cbc6912a564eadc914d4ec925deb1b246e1b0099baf34eebd"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\verify_straight_equivalence.py",
+    "bundle_path": "source/experiment_scripts/verify_straight_equivalence.py",
+    "gzip_wrapped": false,
+    "original_sha256": "1f5a5d53df0a960065be2c90d0515f7e6cf5055c6857545ea1abc98d08bf27e1",
+    "original_bytes": 2922,
+    "bundle_sha256": "1f5a5d53df0a960065be2c90d0515f7e6cf5055c6857545ea1abc98d08bf27e1"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\prepare_freeze.py",
+    "bundle_path": "source/experiment_scripts/prepare_freeze.py",
+    "gzip_wrapped": false,
+    "original_sha256": "b22cd6412a9e8b4fed2777be07a1d3d08cdadbcac383d782b675ca6eb3230727",
+    "original_bytes": 5032,
+    "bundle_sha256": "b22cd6412a9e8b4fed2777be07a1d3d08cdadbcac383d782b675ca6eb3230727"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\prepare_analysis_source.py",
+    "bundle_path": "source/experiment_scripts/prepare_analysis_source.py",
+    "gzip_wrapped": false,
+    "original_sha256": "a92c083e6fbaaa9ec146ae3554cafa5cc6f790b6762a75906e3b024455215d4b",
+    "original_bytes": 2601,
+    "bundle_sha256": "a92c083e6fbaaa9ec146ae3554cafa5cc6f790b6762a75906e3b024455215d4b"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\analyze_cooperative.source.py",
+    "bundle_path": "source/analysis_scripts/analyze_cooperative_v2.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28d36ca2d41658f5ccdac7ebdaf2c4f6eef19c5f47ff01ac5d4b74f5855dd43c",
+    "original_bytes": 13129,
+    "bundle_sha256": "28d36ca2d41658f5ccdac7ebdaf2c4f6eef19c5f47ff01ac5d4b74f5855dd43c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\postverify_analysis.py",
+    "bundle_path": "source/analysis_scripts/postverify_analysis.py",
+    "gzip_wrapped": false,
+    "original_sha256": "664ae1d6dfdfd30c54aab1c72de13a17e45a2ae044898c3dc19ee4f714e6c2aa",
+    "original_bytes": 6099,
+    "bundle_sha256": "664ae1d6dfdfd30c54aab1c72de13a17e45a2ae044898c3dc19ee4f714e6c2aa"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\freeze.json",
+    "bundle_path": "provenance/freeze.json",
+    "gzip_wrapped": false,
+    "original_sha256": "63b4116b0113e85a0151914c5a5af2c9743a38db062ed73ef4cfff5ff038cbba",
+    "original_bytes": 3513,
+    "bundle_sha256": "63b4116b0113e85a0151914c5a5af2c9743a38db062ed73ef4cfff5ff038cbba"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\base_manifest.json",
+    "bundle_path": "provenance/base_manifest.json",
+    "gzip_wrapped": false,
+    "original_sha256": "6adff8b26e4f66916cfc1792f87293598f464adba854f8ca77e3e7e58ebd2835",
+    "original_bytes": 3029,
+    "bundle_sha256": "6adff8b26e4f66916cfc1792f87293598f464adba854f8ca77e3e7e58ebd2835"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\brief_summary.json",
+    "bundle_path": "provenance/brief_summary.json",
+    "gzip_wrapped": false,
+    "original_sha256": "2d28a11d861d0cab9b6446ef105383b52047001df5cc01281584a77d39e312ce",
+    "original_bytes": 32038,
+    "bundle_sha256": "2d28a11d861d0cab9b6446ef105383b52047001df5cc01281584a77d39e312ce"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence_report.json",
+    "bundle_path": "provenance/straight_equivalence_report.json",
+    "gzip_wrapped": false,
+    "original_sha256": "bf1df5ded826112780c641a4699a08a214aa1019c07a359983c41fdc7978b168",
+    "original_bytes": 2809,
+    "bundle_sha256": "bf1df5ded826112780c641a4699a08a214aa1019c07a359983c41fdc7978b168"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\source_diff.patch",
+    "bundle_path": "source/cooperative_vs_H.patch",
+    "gzip_wrapped": false,
+    "original_sha256": "e7b0e2cddf7f2083991c69cd78c0ecd16e653555453f4cef3c11845a9c6a2ea2",
+    "original_bytes": 3718,
+    "bundle_sha256": "e7b0e2cddf7f2083991c69cd78c0ecd16e653555453f4cef3c11845a9c6a2ea2"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\head_group_H_release\\freeze.json",
+    "bundle_path": "provenance/H_release_freeze.json",
+    "gzip_wrapped": false,
+    "original_sha256": "e96d4994b3242d6d0d6c550cbccc0e26d88f5f27d52cc6eeccc0ff6a40692a5b",
+    "original_bytes": 1668,
+    "bundle_sha256": "e96d4994b3242d6d0d6c550cbccc0e26d88f5f27d52cc6eeccc0ff6a40692a5b"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_method_independent_review.json",
+    "bundle_path": "provenance/H_method_independent_review.json",
+    "gzip_wrapped": false,
+    "original_sha256": "cc18165dcf18df700431bf4320cceb430f4c0b51e61f11ad8f123293c0d11deb",
+    "original_bytes": 15892,
+    "bundle_sha256": "cc18165dcf18df700431bf4320cceb430f4c0b51e61f11ad8f123293c0d11deb"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\protocol.json",
+    "bundle_path": "provenance/study/protocol.json",
+    "gzip_wrapped": false,
+    "original_sha256": "6f9c08f3f58b18f0e1e45c0860bc6ab47f2e26e8f3475a92facc7c46d89a63c1",
+    "original_bytes": 1403,
+    "bundle_sha256": "6f9c08f3f58b18f0e1e45c0860bc6ab47f2e26e8f3475a92facc7c46d89a63c1"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\manifest.json",
+    "bundle_path": "provenance/study/manifest.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c53116dc8b542a7917f35d843d70ee7e34826ebd14a3d055003c9f3cec87d533",
+    "original_bytes": 3154,
+    "bundle_sha256": "c53116dc8b542a7917f35d843d70ee7e34826ebd14a3d055003c9f3cec87d533"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\run_status.json",
+    "bundle_path": "provenance/study/run_status.json",
+    "gzip_wrapped": false,
+    "original_sha256": "37228390bd86b25b42624f1048269d697c8b5f18b861b340e86040877bc9dfd4",
+    "original_bytes": 9587,
+    "bundle_sha256": "37228390bd86b25b42624f1048269d697c8b5f18b861b340e86040877bc9dfd4"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\run_flow_study.py",
+    "bundle_path": "provenance/study/run_flow_study.py",
+    "gzip_wrapped": false,
+    "original_sha256": "bde8f21a7250a326aa4bfa67eb38478279d388b215c74036d0ca14796cc33c47",
+    "original_bytes": 5677,
+    "bundle_sha256": "bde8f21a7250a326aa4bfa67eb38478279d388b215c74036d0ca14796cc33c47"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\flow_500_manifest.json",
+    "bundle_path": "provenance/study/flow_500_manifest.json",
+    "gzip_wrapped": false,
+    "original_sha256": "bf4ce949c5c51605b404d0b8331bc367d5d4101137c61c488dbcba412de4f8b6",
+    "original_bytes": 804,
+    "bundle_sha256": "bf4ce949c5c51605b404d0b8331bc367d5d4101137c61c488dbcba412de4f8b6"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\flow_750_manifest.json",
+    "bundle_path": "provenance/study/flow_750_manifest.json",
+    "gzip_wrapped": false,
+    "original_sha256": "cfd7f69d5877631e56b6c179dbdcc4337c14bfdee4bfcd5df69f720c9be00f8b",
+    "original_bytes": 804,
+    "bundle_sha256": "cfd7f69d5877631e56b6c179dbdcc4337c14bfdee4bfcd5df69f720c9be00f8b"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\flow_1000_manifest.json",
+    "bundle_path": "provenance/study/flow_1000_manifest.json",
+    "gzip_wrapped": false,
+    "original_sha256": "e12b34b8836933c723826d57051607fcabc729c1baeb35661f95683ebb0abe7a",
+    "original_bytes": 809,
+    "bundle_sha256": "e12b34b8836933c723826d57051607fcabc729c1baeb35661f95683ebb0abe7a"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\results\\20261029T022813241044Z\\flow_1500_manifest.json",
+    "bundle_path": "provenance/study/flow_1500_manifest.json",
+    "gzip_wrapped": false,
+    "original_sha256": "9ea5bb94f21e99941e0aac16f4a778cda3272cd5b733490928b9eebe64c4026d",
+    "original_bytes": 809,
+    "bundle_sha256": "9ea5bb94f21e99941e0aac16f4a778cda3272cd5b733490928b9eebe64c4026d"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\analysis_status.json",
+    "bundle_path": "provenance/analysis_v2/analysis_status.json",
+    "gzip_wrapped": false,
+    "original_sha256": "b36937e9e188ae8935f8dbf9b99263d37d3e4fbba390db5df12ae76cedcdd58f",
+    "original_bytes": 78,
+    "bundle_sha256": "b36937e9e188ae8935f8dbf9b99263d37d3e4fbba390db5df12ae76cedcdd58f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\artifact_hashes.json",
+    "bundle_path": "provenance/analysis_v2/artifact_hashes.json",
+    "gzip_wrapped": false,
+    "original_sha256": "3d9f85b02d804197056e31d743f579936d4cb60e008164dae38b4613bb4ccdac",
+    "original_bytes": 2808,
+    "bundle_sha256": "3d9f85b02d804197056e31d743f579936d4cb60e008164dae38b4613bb4ccdac"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\postverification.json",
+    "bundle_path": "provenance/analysis_v2/postverification.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c0d96b9e48c1985f72445826495b96d6849d0810beaed81812e1a086a043392f",
+    "original_bytes": 9411,
+    "bundle_sha256": "c0d96b9e48c1985f72445826495b96d6849d0810beaed81812e1a086a043392f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\runs.csv",
+    "bundle_path": "tables/runs.csv",
+    "gzip_wrapped": false,
+    "original_sha256": "fff0a0ff0c36bc06dadd49635d1afc1e19ab3db092b56c7aced81893834fa6a4",
+    "original_bytes": 47838,
+    "bundle_sha256": "fff0a0ff0c36bc06dadd49635d1afc1e19ab3db092b56c7aced81893834fa6a4"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\pairs.csv",
+    "bundle_path": "tables/pairs.csv",
+    "gzip_wrapped": false,
+    "original_sha256": "bf649e560285c43558b29719a07b3f3142862861fc2860f830ae766edb74e489",
+    "original_bytes": 36770,
+    "bundle_sha256": "bf649e560285c43558b29719a07b3f3142862861fc2860f830ae766edb74e489"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\attributions.csv",
+    "bundle_path": "tables/attributions.csv",
+    "gzip_wrapped": false,
+    "original_sha256": "cdd53452673e765e15dee1db69aaf155f6d1098edd283e3c21cf6367872475c6",
+    "original_bytes": 32759,
+    "bundle_sha256": "cdd53452673e765e15dee1db69aaf155f6d1098edd283e3c21cf6367872475c6"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\flow_means.csv",
+    "bundle_path": "tables/flow_means.csv",
+    "gzip_wrapped": false,
+    "original_sha256": "7b253a93591ecdf32c2fa52e62158c8259e4292810c1f6e5f70add93f1e53e2c",
+    "original_bytes": 10941,
+    "bundle_sha256": "7b253a93591ecdf32c2fa52e62158c8259e4292810c1f6e5f70add93f1e53e2c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\summary.json",
+    "bundle_path": "data/analysis_summary.json.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "18a48715a8d13783ca89794125e79b642d6a8310f38b3ab674535c9b697a531e",
+    "original_bytes": 300126,
+    "bundle_sha256": "c4a202e9cc988e2c2276b7247a82b0f307cf0958900ee53ead38149fe32947b6"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1000_s1.json.gz",
+    "bundle_path": "data/case_evidence/flow1000_s1.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "4a0ee028e33e3616779021b3709d4cbfb12729aa42dddda2d6e2e45a9aebb3bf",
+    "original_bytes": 136410,
+    "bundle_sha256": "4a0ee028e33e3616779021b3709d4cbfb12729aa42dddda2d6e2e45a9aebb3bf"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1000_s2.json.gz",
+    "bundle_path": "data/case_evidence/flow1000_s2.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "f742f01963c6323e97a283146c484241b50ddd22023391a5c13e2904830cf13a",
+    "original_bytes": 137180,
+    "bundle_sha256": "f742f01963c6323e97a283146c484241b50ddd22023391a5c13e2904830cf13a"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1000_s3.json.gz",
+    "bundle_path": "data/case_evidence/flow1000_s3.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "ca3b4332c83f55f7fb342429a09db25c302386d8bdf8cd63a57bd3cb153c9694",
+    "original_bytes": 139031,
+    "bundle_sha256": "ca3b4332c83f55f7fb342429a09db25c302386d8bdf8cd63a57bd3cb153c9694"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1000_s4.json.gz",
+    "bundle_path": "data/case_evidence/flow1000_s4.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "913e16061bafd28111817ad88b5e8f17fac7410f36e52422624a957410a430c2",
+    "original_bytes": 130372,
+    "bundle_sha256": "913e16061bafd28111817ad88b5e8f17fac7410f36e52422624a957410a430c2"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1000_s5.json.gz",
+    "bundle_path": "data/case_evidence/flow1000_s5.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "4e3c2194b546c0f2fef66533b5a5e15d7428561dd6b79fab4bab184a4b0ca02a",
+    "original_bytes": 144831,
+    "bundle_sha256": "4e3c2194b546c0f2fef66533b5a5e15d7428561dd6b79fab4bab184a4b0ca02a"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1500_s1.json.gz",
+    "bundle_path": "data/case_evidence/flow1500_s1.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "3b11d3dcb0f65e6716833c0b47613e0633bce63e871c34cea4f3250399cc2d41",
+    "original_bytes": 247002,
+    "bundle_sha256": "3b11d3dcb0f65e6716833c0b47613e0633bce63e871c34cea4f3250399cc2d41"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1500_s2.json.gz",
+    "bundle_path": "data/case_evidence/flow1500_s2.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "2ee01eabdd18805ee16699c380cb3914086ef5c09ee7a8a5c84288013c9d8d3d",
+    "original_bytes": 197973,
+    "bundle_sha256": "2ee01eabdd18805ee16699c380cb3914086ef5c09ee7a8a5c84288013c9d8d3d"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1500_s3.json.gz",
+    "bundle_path": "data/case_evidence/flow1500_s3.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "5b83c2614a62495bd3520841469371553740e5860797a7a596e1e4b575a5fc62",
+    "original_bytes": 201306,
+    "bundle_sha256": "5b83c2614a62495bd3520841469371553740e5860797a7a596e1e4b575a5fc62"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1500_s4.json.gz",
+    "bundle_path": "data/case_evidence/flow1500_s4.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "0598e9b312e2bb28952ea9abec28108ed4d3e0ea3994e59a230bdc086cf660d5",
+    "original_bytes": 201679,
+    "bundle_sha256": "0598e9b312e2bb28952ea9abec28108ed4d3e0ea3994e59a230bdc086cf660d5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow1500_s5.json.gz",
+    "bundle_path": "data/case_evidence/flow1500_s5.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "b4d6b3ea3992a52871e7ddba7db091b546d03dff0ed0affcb6447848382f986b",
+    "original_bytes": 208403,
+    "bundle_sha256": "b4d6b3ea3992a52871e7ddba7db091b546d03dff0ed0affcb6447848382f986b"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow500_s1.json.gz",
+    "bundle_path": "data/case_evidence/flow500_s1.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "184684ff3a3afa05d7e142721cdc19620cafe4675486aa4987952037f9a248c8",
+    "original_bytes": 76584,
+    "bundle_sha256": "184684ff3a3afa05d7e142721cdc19620cafe4675486aa4987952037f9a248c8"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow500_s2.json.gz",
+    "bundle_path": "data/case_evidence/flow500_s2.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "270a0f8efea45fc7071abb41fae98243a48cbf89e8be1a434deb7dfe91aae5cf",
+    "original_bytes": 79283,
+    "bundle_sha256": "270a0f8efea45fc7071abb41fae98243a48cbf89e8be1a434deb7dfe91aae5cf"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow500_s3.json.gz",
+    "bundle_path": "data/case_evidence/flow500_s3.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "c0ea9070f6a84ea954eb7380897d081f89f7cbcefbc8bb7e003a6b06f1cad6f3",
+    "original_bytes": 80829,
+    "bundle_sha256": "c0ea9070f6a84ea954eb7380897d081f89f7cbcefbc8bb7e003a6b06f1cad6f3"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow500_s4.json.gz",
+    "bundle_path": "data/case_evidence/flow500_s4.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "96f404b1b23e427a5ccf9bbf19056e69af31209f965008817c27a0a0aea4f561",
+    "original_bytes": 78421,
+    "bundle_sha256": "96f404b1b23e427a5ccf9bbf19056e69af31209f965008817c27a0a0aea4f561"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow500_s5.json.gz",
+    "bundle_path": "data/case_evidence/flow500_s5.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "cc2d219589379a5e5fc8a4383a6b006b98d009d79a801fec592d158f889790fc",
+    "original_bytes": 84863,
+    "bundle_sha256": "cc2d219589379a5e5fc8a4383a6b006b98d009d79a801fec592d158f889790fc"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow750_s1.json.gz",
+    "bundle_path": "data/case_evidence/flow750_s1.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "96e808613f086eec83152384f905e5ab87c60a53cdff755dcb94c6d4e007402f",
+    "original_bytes": 95008,
+    "bundle_sha256": "96e808613f086eec83152384f905e5ab87c60a53cdff755dcb94c6d4e007402f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow750_s2.json.gz",
+    "bundle_path": "data/case_evidence/flow750_s2.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "c65daae25e9a747d786ebbcf1cd0b13ea309e2755c64c88b3b7a4f22cbb1d90f",
+    "original_bytes": 99109,
+    "bundle_sha256": "c65daae25e9a747d786ebbcf1cd0b13ea309e2755c64c88b3b7a4f22cbb1d90f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow750_s3.json.gz",
+    "bundle_path": "data/case_evidence/flow750_s3.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "8106eace6c00de2326c8bcccc3c5dad54fbf2a6ea3e0e3140c8fd925c043fafa",
+    "original_bytes": 107530,
+    "bundle_sha256": "8106eace6c00de2326c8bcccc3c5dad54fbf2a6ea3e0e3140c8fd925c043fafa"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow750_s4.json.gz",
+    "bundle_path": "data/case_evidence/flow750_s4.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "8df414abb0ef1f8f53ef7d142cd6fc90abe072dc4367a65ac2fd6432dea311c8",
+    "original_bytes": 98943,
+    "bundle_sha256": "8df414abb0ef1f8f53ef7d142cd6fc90abe072dc4367a65ac2fd6432dea311c8"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\case_evidence\\flow750_s5.json.gz",
+    "bundle_path": "data/case_evidence/flow750_s5.json.gz",
+    "gzip_wrapped": false,
+    "original_sha256": "6f6fe31ab890cfdf71efdf2b0c85679a1d37cab4e35011fead95b2074975e303",
+    "original_bytes": 102494,
+    "bundle_sha256": "6f6fe31ab890cfdf71efdf2b0c85679a1d37cab4e35011fead95b2074975e303"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022208125393Z_H-cooperative-ablation-red_7493b35a\\result.json",
+    "bundle_path": "provenance/operations/static_red_expected/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "fe6069d018bcfad8b5b72e93294b1c99bc90e15994428a8ab1687eca0b32ef3e",
+    "original_bytes": 1115,
+    "bundle_sha256": "fe6069d018bcfad8b5b72e93294b1c99bc90e15994428a8ab1687eca0b32ef3e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022208125393Z_H-cooperative-ablation-red_7493b35a\\started.json",
+    "bundle_path": "provenance/operations/static_red_expected/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "06b65a2dbbf24eec65b46fb72bca7305d7c12b92022ca96391566625c1c68fa2",
+    "original_bytes": 599,
+    "bundle_sha256": "06b65a2dbbf24eec65b46fb72bca7305d7c12b92022ca96391566625c1c68fa2"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022208125393Z_H-cooperative-ablation-red_7493b35a\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/static_red_expected/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022208125393Z_H-cooperative-ablation-red_7493b35a\\stdout.log",
+    "bundle_path": "provenance/operations/static_red_expected/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022208125393Z_H-cooperative-ablation-red_7493b35a\\stderr.log",
+    "bundle_path": "provenance/operations/static_red_expected/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "2d188f4ad2c6f74156bc8ed5d23d530a1331da1ca92ac31ae1bbf9d7ec62ebbb",
+    "original_bytes": 13984,
+    "bundle_sha256": "a5e60826c2791778917a08d61fb2dd7559728dcf4a4d93ad64f2302db73fb7d9"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022257262254Z_H-cooperative-ablation-green_cdb704db\\result.json",
+    "bundle_path": "provenance/operations/static_green/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "0a4684a9dd50946cdb6c65791ce3956db02523c324497325d0a3145499068279",
+    "original_bytes": 1121,
+    "bundle_sha256": "0a4684a9dd50946cdb6c65791ce3956db02523c324497325d0a3145499068279"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022257262254Z_H-cooperative-ablation-green_cdb704db\\started.json",
+    "bundle_path": "provenance/operations/static_green/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "7ba6afd64a4f169fdecfb078bc62d0cf7df1f140a1dd3f217b7670de71fe0082",
+    "original_bytes": 598,
+    "bundle_sha256": "7ba6afd64a4f169fdecfb078bc62d0cf7df1f140a1dd3f217b7670de71fe0082"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022257262254Z_H-cooperative-ablation-green_cdb704db\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/static_green/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022257262254Z_H-cooperative-ablation-green_cdb704db\\stdout.log",
+    "bundle_path": "provenance/operations/static_green/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022257262254Z_H-cooperative-ablation-green_cdb704db\\stderr.log",
+    "bundle_path": "provenance/operations/static_green/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "a7525df0d64de1b1a2ce2770e85514440d38856cce1b2f333d7ee0f92f9698ff",
+    "original_bytes": 1400,
+    "bundle_sha256": "0de857d0084ddc672486bd24e289b251ca8b90bfbdffcf2df4488835a9f93cd0"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022657229924Z_H-cooperative-straight-equivalence_e141ea41\\result.json",
+    "bundle_path": "provenance/operations/actual_straight_equivalence/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "26188ca4a77eb3aef7b7459948d5a2ea35e4c8148f830f73ba282277579aeec8",
+    "original_bytes": 1128,
+    "bundle_sha256": "26188ca4a77eb3aef7b7459948d5a2ea35e4c8148f830f73ba282277579aeec8"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022657229924Z_H-cooperative-straight-equivalence_e141ea41\\started.json",
+    "bundle_path": "provenance/operations/actual_straight_equivalence/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c22485fa1325c5c465a657478a2ebd04f3062c5721cf5613ed1874f4ce62f5c0",
+    "original_bytes": 605,
+    "bundle_sha256": "c22485fa1325c5c465a657478a2ebd04f3062c5721cf5613ed1874f4ce62f5c0"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022657229924Z_H-cooperative-straight-equivalence_e141ea41\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/actual_straight_equivalence/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022657229924Z_H-cooperative-straight-equivalence_e141ea41\\stdout.log",
+    "bundle_path": "provenance/operations/actual_straight_equivalence/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "ad16e7fd058f84fde868edb7a6238327fac134833974bb777a5dc017a0576adb",
+    "original_bytes": 2357,
+    "bundle_sha256": "6621eba9aa18d5528773eb0a90748d6a3926269f8397e7e803dad0d2344f2509"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022657229924Z_H-cooperative-straight-equivalence_e141ea41\\stderr.log",
+    "bundle_path": "provenance/operations/actual_straight_equivalence/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022812793749Z_H-cooperative-ablation-twenty-drop_14d16679\\result.json",
+    "bundle_path": "provenance/operations/twenty_drop_batch/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c0486d8b9d32a46716b08603c1db523a845a9a1ea3b434733e0a79b61b66ab13",
+    "original_bytes": 1371,
+    "bundle_sha256": "c0486d8b9d32a46716b08603c1db523a845a9a1ea3b434733e0a79b61b66ab13"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022812793749Z_H-cooperative-ablation-twenty-drop_14d16679\\started.json",
+    "bundle_path": "provenance/operations/twenty_drop_batch/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "756835f1f40e52d0c04893c64796723824adc88ea137db058e8370e111a9f147",
+    "original_bytes": 846,
+    "bundle_sha256": "756835f1f40e52d0c04893c64796723824adc88ea137db058e8370e111a9f147"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022812793749Z_H-cooperative-ablation-twenty-drop_14d16679\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/twenty_drop_batch/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022812793749Z_H-cooperative-ablation-twenty-drop_14d16679\\stdout.log",
+    "bundle_path": "provenance/operations/twenty_drop_batch/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "78031b86988d4c0665ebb12b0229b115bd7cbaf0b663d25d249458f3dc970a5c",
+    "original_bytes": 36543,
+    "bundle_sha256": "874b450786252336cca74c1896f51a0899a96ca7b2e228d78d213d59bc8500fd"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022812793749Z_H-cooperative-ablation-twenty-drop_14d16679\\stderr.log",
+    "bundle_path": "provenance/operations/twenty_drop_batch/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024414396343Z_H-cooperative-analysis-paired-H_1c430fa5\\result.json",
+    "bundle_path": "provenance/operations/analysis_v1_failed/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c52497eed1a4ab0fce496b8fafb00b6daa15d41b5b76ff1bc93a673d60aade1f",
+    "original_bytes": 1115,
+    "bundle_sha256": "c52497eed1a4ab0fce496b8fafb00b6daa15d41b5b76ff1bc93a673d60aade1f"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024414396343Z_H-cooperative-analysis-paired-H_1c430fa5\\started.json",
+    "bundle_path": "provenance/operations/analysis_v1_failed/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "8f8fc098f6b5433d3e8453c3aa55681064fdc1e65ed6b91aa585558cc582ff99",
+    "original_bytes": 598,
+    "bundle_sha256": "8f8fc098f6b5433d3e8453c3aa55681064fdc1e65ed6b91aa585558cc582ff99"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024414396343Z_H-cooperative-analysis-paired-H_1c430fa5\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/analysis_v1_failed/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024414396343Z_H-cooperative-analysis-paired-H_1c430fa5\\stdout.log",
+    "bundle_path": "provenance/operations/analysis_v1_failed/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024414396343Z_H-cooperative-analysis-paired-H_1c430fa5\\stderr.log",
+    "bundle_path": "provenance/operations/analysis_v1_failed/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "0496bdcd479dfe000e59ed402da40d1044f5c2aec8cc222e4739d25eda66769b",
+    "original_bytes": 287,
+    "bundle_sha256": "3ce98de91cdcb24eaa7cc4d00937a6058347f71e19288ef98abc1da3c545351c"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024615605143Z_H-cooperative-analysis-paired-H-v2_b0bd3b4e\\result.json",
+    "bundle_path": "provenance/operations/analysis_v2_corrected/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "6836869b88ede01e82745265184a7eacf3952c629421e410722db4822bc48853",
+    "original_bytes": 1122,
+    "bundle_sha256": "6836869b88ede01e82745265184a7eacf3952c629421e410722db4822bc48853"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024615605143Z_H-cooperative-analysis-paired-H-v2_b0bd3b4e\\started.json",
+    "bundle_path": "provenance/operations/analysis_v2_corrected/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "0b78a294e0d5ce8ca7618ba563a188d2dc72797307cc766dd57ba948c474b388",
+    "original_bytes": 598,
+    "bundle_sha256": "0b78a294e0d5ce8ca7618ba563a188d2dc72797307cc766dd57ba948c474b388"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024615605143Z_H-cooperative-analysis-paired-H-v2_b0bd3b4e\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/analysis_v2_corrected/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024615605143Z_H-cooperative-analysis-paired-H-v2_b0bd3b4e\\stdout.log",
+    "bundle_path": "provenance/operations/analysis_v2_corrected/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "6026a516797b4890d6675f34c881835a64eb2d2cae05c374bccf1f89660a1d97",
+    "original_bytes": 33754,
+    "bundle_sha256": "f6fc28bd15958f2236fb2e887618774a5c7fcfdb6d3c2551fa6e071269f502be"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024615605143Z_H-cooperative-analysis-paired-H-v2_b0bd3b4e\\stderr.log",
+    "bundle_path": "provenance/operations/analysis_v2_corrected/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024945921142Z_H-cooperative-analysis-postverify_4b30cffb\\result.json",
+    "bundle_path": "provenance/operations/analysis_v2_postverify/result.json",
+    "gzip_wrapped": false,
+    "original_sha256": "8c4b69f0d8283caa81b152a8f02428958281fcacfc2c584cdd0572e7427804e8",
+    "original_bytes": 1120,
+    "bundle_sha256": "8c4b69f0d8283caa81b152a8f02428958281fcacfc2c584cdd0572e7427804e8"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024945921142Z_H-cooperative-analysis-postverify_4b30cffb\\started.json",
+    "bundle_path": "provenance/operations/analysis_v2_postverify/started.json",
+    "gzip_wrapped": false,
+    "original_sha256": "a504cde51377e10f0eb9f86ead23499c5a27d9ee4dbe328b2cc8d22fe6555887",
+    "original_bytes": 597,
+    "bundle_sha256": "a504cde51377e10f0eb9f86ead23499c5a27d9ee4dbe328b2cc8d22fe6555887"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024945921142Z_H-cooperative-analysis-postverify_4b30cffb\\runner_snapshot.py",
+    "bundle_path": "provenance/operations/analysis_v2_postverify/runner_snapshot.py",
+    "gzip_wrapped": false,
+    "original_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+    "original_bytes": 14611,
+    "bundle_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024945921142Z_H-cooperative-analysis-postverify_4b30cffb\\stdout.log",
+    "bundle_path": "provenance/operations/analysis_v2_postverify/stdout.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "a10c060f1090e22e3bcb9ae325953e1b332eb976ec688f2cc4489747606be6cb",
+    "original_bytes": 465,
+    "bundle_sha256": "56e620143e775384c32b1cba66411f5e75e7837f0de9dc0625f422e527a59851"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024945921142Z_H-cooperative-analysis-postverify_4b30cffb\\stderr.log",
+    "bundle_path": "provenance/operations/analysis_v2_postverify/stderr.log.gz",
+    "gzip_wrapped": true,
+    "original_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_bytes": 0,
+    "bundle_sha256": "46b50c321b39e89a491b6727a01628c34245605a30beb3e7414c5e01cff90e6e"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis\\analysis_status.json",
+    "bundle_path": "provenance/analysis_v1_failed/analysis_status.json",
+    "gzip_wrapped": false,
+    "original_sha256": "5983f9c0c7f69f329e09c8127309a788c897893c75da81960a5ea0cb6532fed1",
+    "original_bytes": 62,
+    "bundle_sha256": "5983f9c0c7f69f329e09c8127309a788c897893c75da81960a5ea0cb6532fed1"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis\\analyze_cooperative.source.py",
+    "bundle_path": "provenance/analysis_v1_failed/analyze_cooperative.source.py",
+    "gzip_wrapped": false,
+    "original_sha256": "81c0a9497a8a59fb774e04ca4a7148e96207ff3f1ac0a3b27c01adec3dac4855",
+    "original_bytes": 11894,
+    "bundle_sha256": "81c0a9497a8a59fb774e04ca4a7148e96207ff3f1ac0a3b27c01adec3dac4855"
+  },
+  {
+    "source_path": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\analysis_v2\\postverification.json",
+    "bundle_path": "provenance/parameter_correction_postverification.json",
+    "gzip_wrapped": false,
+    "original_sha256": "c0d96b9e48c1985f72445826495b96d6849d0810beaed81812e1a086a043392f",
+    "original_bytes": 9411,
+    "bundle_sha256": "c0d96b9e48c1985f72445826495b96d6849d0810beaed81812e1a086a043392f"
+  }
+]

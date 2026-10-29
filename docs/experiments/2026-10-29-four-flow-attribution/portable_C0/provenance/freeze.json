@@ -1,0 +1,53 @@
+{
+  "label": "cooperative: H cooperation and execution, no formation following or layer fill",
+  "source_parent": "D:\\yanjiu1\\keyan1\\tmp\\head_group_H_release",
+  "source_sha256": {
+    "experiments/native_sumo.py": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "5a4986470fbb15d77ca6bab95c87fc152ff63f1da3dbe74e3f8c4a3a5241300c",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "H_source_sha256": {
+    "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "configs_sha256": {
+    "configs/kinematic.json": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+    "configs/no_comm_main.json": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+    "configs/paper_reference.json": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+    "configs/phase2.json": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+    "configs/phase3.json": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+    "configs/phase4.json": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+    "configs/phase4_experiments.json": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+    "configs/phase5.json": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+    "configs/phase5f.json": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+    "configs/phase5g.json": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+    "configs/phase5_experiments.json": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+    "configs/phase5_r5.json": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+    "configs/sensitivity.json": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+    "configs/tools.json": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+    "configs/topology_smoke.json": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a"
+  },
+  "changed_AST_nodes": {
+    "experiments/native_sumo.py": [
+      "MODES"
+    ],
+    "noa/native_rules.py": [
+      "_decide"
+    ]
+  },
+  "wrapper_sha256": "bde8f21a7250a326aa4bfa67eb38478279d388b215c74036d0ca14796cc33c47",
+  "tests": {
+    "red": "20261029T022208125393Z_H-cooperative-ablation-red_7493b35a",
+    "red_failures": 9,
+    "green": "20261029T022257262254Z_H-cooperative-ablation-green_cdb704db",
+    "green_tests": 9
+  },
+  "main_source_write_policy": "No writes; another authorized agent may install main concurrently"
+}

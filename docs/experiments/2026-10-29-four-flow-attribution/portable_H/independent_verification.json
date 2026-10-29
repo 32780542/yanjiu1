@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "bundle_artifacts_checked": 47,
+  "archived_original_JSON_files_checked": 300,
+  "raw_trip_cases_checked": 100,
+  "original_H_metadata_files_checked": 8,
+  "gzip_compressed_and_decoded_SHA_verified": 15,
+  "H_release_and_jobs4_parallel_evidence_verified": true,
+  "traffic_measure_cells_checked_from_raw_trips_gates_steps": 72,
+  "recovery_count_cells_checked_from_per_vehicle_events": 72,
+  "six_controlled_sources_match_protocol": true,
+  "position_trace_recomputation": "External original positions remain required for gate/layer reruns; package table checks use exact bundled measured gate/step records",
+  "artifact_checksum_check_passed_before_final_manifest": true
+}

@@ -1,0 +1,15 @@
+{
+  "layer":"sensitivity",
+  "defaults":{"status":"proposed_not_run", "source":"This study sensitivity candidates", "page_or_url":"docs/phase2_entry.md", "rationale":"Not an authorized batch run; validate low-dimensional cases after foundation gates."},
+  "parameters":[
+    {"name":"width_m","value":[1.7,1.8,1.9],"unit":"m"},
+    {"name":"mass_kg","value":[1200,1500,1800],"unit":"kg"},
+    {"name":"wheelbase_m","value":[2.5,2.7,2.9],"unit":"m","rationale":"Keep total length 4 m; regenerate consistent CG/axle/overhang geometry."},
+    {"name":"axle_cornering_stiffness_N_per_rad","value":[60000,80000,100000],"unit":"N/rad"},
+    {"name":"yaw_inertia_kgm2","value":[2000,2500,3000],"unit":"kg*m^2"},
+    {"name":"road_friction_coefficient","value":[0.6,0.9],"unit":"1"},
+    {"name":"dynamics_dt_s","value":[0.01,0.005],"unit":"s"},
+    {"name":"control_sync_dt_s","value":[0.1,0.05],"unit":"s"},
+    {"name":"perception_range_scale","value":[0.5,1,1.5],"unit":"1"}
+  ]
+}

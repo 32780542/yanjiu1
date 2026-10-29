@@ -1,0 +1,78 @@
+--- H_frozen/experiments/native_sumo.py
++++ cooperative_only/experiments/native_sumo.py
+@@ -27,7 +27,7 @@
+ 
+ STEP = 0.1
+ LANE_WIDTH = 3.3
+-MODES = ("noa", "formation", "transform", "global")
++MODES = ("noa", "formation", "transform", "global", "cooperative")
+ SCENARIOS = ("lane_drop", "straight3")
+ PHYSICAL = dict(
+     length=4.0,
+--- H_frozen/noa/native_rules.py
++++ cooperative_only/noa/native_rules.py
+@@ -293,13 +293,16 @@
+ 
+ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
+     """所有分支只输出本车动作，横移前后沿用目标车道实际跟驰。"""
+-    if mode not in ("noa", "formation", "transform"):
++    if mode not in ("noa", "formation", "transform", "cooperative"):
+         raise ValueError("Unknown driving mode: " + mode)
++    if mode == "cooperative" and drop_x is None:
++        return _decide(ego, neighbors, memory, "noa", drop_x)
+     rows = tuple(c for c in neighbors if -100.0 <= c.x - ego.x <= 200.0)
+     preparing = drop_x is not None and ego.x >= drop_x - 360.0 and (ego.x < drop_x or ego.lane == 2)
+     lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
+     organized = mode != "noa"
+-    future_lanes = 2 if preparing and mode == "transform" else lanes
++    forming = mode != "cooperative"
++    future_lanes = 2 if preparing and mode in ("transform", "cooperative") else lanes
+     moving = abs(ego.vy) > 0.1 or abs(ego.y - (ego.lane + 0.5) * LANE_WIDTH) > 0.15
+     # Own submitted actuation can precede measured lateral motion by one frame.
+     if ego.pending_lane is not None and memory.lane_target != ego.pending_lane:
+@@ -338,7 +341,7 @@
+             return Command(speed, None, "approach_join", target), memory
+     following_lanes = lanes if ego.lane == 2 else future_lanes
+     speed, target, reference = (
+-        _following(ego, rows, following_lanes) if organized else (CRUISE, None, None)
++        _following(ego, rows, following_lanes) if organized and forming else (CRUISE, None, None)
+     )
+     if memory.joining and (
+         not organized
+@@ -347,7 +350,7 @@
+     ):
+         memory = replace(memory, joining=False)
+ 
+-    if preparing and mode == "transform":
++    if preparing and mode in ("transform", "cooperative"):
+         head, helper = _make_room(ego, rows)
+         if helper is not None and helper.track == ego.track:
+             memory = Memory(lane_target=0, joining=True)
+@@ -380,7 +383,7 @@
+             )
+         return Command(speed, None, "approach_gap", target), memory
+ 
+-    if organized and not memory.joining:
++    if organized and forming and not memory.joining:
+         lane = _fill(ego, rows, 2 if preparing else lanes)
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):
+@@ -388,7 +391,7 @@
+                 speed, target, memory = _join_speed(ego, rows, memory, lane)
+                 return Command(speed, lane, "fill_layer", target), memory
+ 
+-    if mode == "noa":
++    if mode in ("noa", "cooperative"):
+         front = min(
+             (c for c in rows if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x, default=None
+         )
+@@ -412,7 +415,8 @@
+                 if free_distance(lane) > front.x - ego.x + 15.0:
+                     return Command(speed, lane, "normal_overtake"), Memory(lane_target=lane)
+     reason = (
+-        "join_follow" if memory.joining else "formation_follow" if organized else "normal_follow"
++        "cooperative_follow" if mode == "cooperative"
++        else "join_follow" if memory.joining else "formation_follow" if organized else "normal_follow"
+     )
+     return Command(speed, None, reason, target, reference), memory
+ 

@@ -1,0 +1,36 @@
+{
+  "sibling_bundle": "../portable_H",
+  "raw_case_json_archive": "../portable_H/data/raw_case_json.tar.gz",
+  "raw_archive_sha256": "6d119e221e86e982e085ffbc059ef79be4470fc39b1016f426d9405311f568ea",
+  "H_input_members": [
+    "cases/f500_s1_lane_drop_transform/input.json",
+    "cases/f500_s2_lane_drop_transform/input.json",
+    "cases/f500_s3_lane_drop_transform/input.json",
+    "cases/f500_s4_lane_drop_transform/input.json",
+    "cases/f500_s5_lane_drop_transform/input.json",
+    "cases/f750_s1_lane_drop_transform/input.json",
+    "cases/f750_s2_lane_drop_transform/input.json",
+    "cases/f750_s3_lane_drop_transform/input.json",
+    "cases/f750_s4_lane_drop_transform/input.json",
+    "cases/f750_s5_lane_drop_transform/input.json",
+    "cases/f1000_s1_lane_drop_transform/input.json",
+    "cases/f1000_s2_lane_drop_transform/input.json",
+    "cases/f1000_s3_lane_drop_transform/input.json",
+    "cases/f1000_s4_lane_drop_transform/input.json",
+    "cases/f1000_s5_lane_drop_transform/input.json",
+    "cases/f1500_s1_lane_drop_transform/input.json",
+    "cases/f1500_s2_lane_drop_transform/input.json",
+    "cases/f1500_s3_lane_drop_transform/input.json",
+    "cases/f1500_s4_lane_drop_transform/input.json",
+    "cases/f1500_s5_lane_drop_transform/input.json"
+  ],
+  "H_source_sha256": {
+    "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "note": "H control raw JSONs are in the separate already-published H portable cohort; not duplicated or relabeled as C0"
+}

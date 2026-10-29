@@ -1,0 +1,31 @@
+{
+  "label": "H actual local group heads",
+  "source_parent": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase",
+  "frozen_utc": "2026-10-29T02:11:05.079929+00:00",
+  "formatting": {
+    "noa/native_rules.py": {
+      "ast_identical": true,
+      "before_sha256": "575db9bed381a2ba726bc770118b061aca10c701899aaff70f903fa1e0a1851a",
+      "after_sha256": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2"
+    },
+    "run_flow_study.py": {
+      "ast_identical": true,
+      "before_sha256": "a422c8e10918307943e8a6ccd7b76d712c59f7cb5da5a6b9c8855783851cdca6",
+      "after_sha256": "cf7a371677a08dd312ae904f410d26070452d464314b12b0a2b5943f0b2d1385"
+    },
+    "test_head_group_rules.py": {
+      "ast_identical": true,
+      "before_sha256": "5ce1bbbeadec5d0e8c2e109c68b13c097534d1f988fe81b00805f6dc221150d7",
+      "after_sha256": "66c0c98d7376e0a8bde560733a6e4f4a484a8d7060246c943f5be1bb48283e84"
+    }
+  },
+  "source_sha256": {
+    "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "wrapper_sha256": "cf7a371677a08dd312ae904f410d26070452d464314b12b0a2b5943f0b2d1385"
+}

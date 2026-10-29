@@ -1,0 +1,61 @@
+{
+  "rows": [
+    {
+      "flow": 500,
+      "seed": 1,
+      "duration_s": 10,
+      "cooperative_case": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q500_cooperative\\20261029T022657934966Z_straight3_cooperative_s1_50403e",
+      "H_noa_case": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q500_noa\\20261029T022659957052Z_straight3_noa_s1_439503",
+      "comparisons": {
+        "native.rou.xml": {
+          "strict_equal": true,
+          "cooperative_sha256": "c3c382c2595186f2a7ccd96244b7548b699fa1c5cdf06107992617ec263c6047",
+          "H_noa_sha256": "c3c382c2595186f2a7ccd96244b7548b699fa1c5cdf06107992617ec263c6047",
+          "decompressed": false
+        },
+        "trips.json": {
+          "strict_equal": true,
+          "cooperative_sha256": "887e711ae0e91940a8eef1f54e1002c626b29d4fe90bc1ae7c6f64fed3ad0c44",
+          "H_noa_sha256": "887e711ae0e91940a8eef1f54e1002c626b29d4fe90bc1ae7c6f64fed3ad0c44",
+          "decompressed": false
+        },
+        "positions.jsonl.gz": {
+          "strict_equal": true,
+          "cooperative_sha256": "0d4f47a97ef30db134d80810a995fb332134b8073729009a562fd38e8ca37ae6",
+          "H_noa_sha256": "0d4f47a97ef30db134d80810a995fb332134b8073729009a562fd38e8ca37ae6",
+          "decompressed": true
+        }
+      },
+      "strict_equal": true
+    },
+    {
+      "flow": 1500,
+      "seed": 1,
+      "duration_s": 10,
+      "cooperative_case": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q1500_cooperative\\20261029T022701837273Z_straight3_cooperative_s1_9ff763",
+      "H_noa_case": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q1500_noa\\20261029T022704244215Z_straight3_noa_s1_31942c",
+      "comparisons": {
+        "native.rou.xml": {
+          "strict_equal": true,
+          "cooperative_sha256": "86983deaf0b5b7604fb8446d16678319dd7400ea8b60533e45fb7c6760927060",
+          "H_noa_sha256": "86983deaf0b5b7604fb8446d16678319dd7400ea8b60533e45fb7c6760927060",
+          "decompressed": false
+        },
+        "trips.json": {
+          "strict_equal": true,
+          "cooperative_sha256": "d8e7acbb6210c4fc798ed38efe265fbefbdf365eea5b90148794396743ec6767",
+          "H_noa_sha256": "d8e7acbb6210c4fc798ed38efe265fbefbdf365eea5b90148794396743ec6767",
+          "decompressed": false
+        },
+        "positions.jsonl.gz": {
+          "strict_equal": true,
+          "cooperative_sha256": "c3a8b7b57c22830edc8a153d3a20945afcf3adf66b8481db2c8d970d9c71ffd1",
+          "H_noa_sha256": "c3a8b7b57c22830edc8a153d3a20945afcf3adf66b8481db2c8d970d9c71ffd1",
+          "decompressed": true
+        }
+      },
+      "strict_equal": true
+    }
+  ],
+  "reuse_H_noa_straight": true
+}

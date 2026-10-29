@@ -1,0 +1,42 @@
+Portable C0 cooperative-only ablation evidence
+
+This bundle preserves 20 lane-drop cooperative runs (four flows, five seeds,
+600 s demand, max 900 s), 9,158 requests, and the explicit H-versus-C0 policy
+contrast. It is an archive, not a new simulation or metric calculation.
+
+data/raw_case_json.tar.gz contains exactly 60 losslessly copied original JSON
+files: input/result/trips for each C0 case. Source is deduplicated to six core
+files under source/core. The 20 original saved gate/region evidence files are
+retained; no full positions trace is copied. Original trace paths and SHA256
+values remain in provenance/trace_index.json.
+
+data/short_straight_raw.tar.gz preserves four short straight-run input/result/
+trips JSONs and route XMLs. The actual 500/1500 seed-1 strict equivalence report
+is preserved. Full short trajectories are indexed by compressed and decompressed
+SHA256 rather than duplicated.
+
+tables contains all four-flow and per-seed paired tables. data/analysis_summary
+is the original v2 summary compressed without rewriting JSON. The independent
+postverification and evaluator enum/label-only source changes are retained.
+
+The original parameter digests are NOT equal. C0 explicitly supplied flow as
+JSON float (500.0 etc.), whereas H defaulted to JSON integers (500 etc.). The
+old strict-hash analysis failure is retained under provenance/analysis_v1_failed.
+The v2 audit preserves both raw SHA values and original numeric forms, and
+checks common physical/control values for exact numeric equality. Neither raw
+input nor original evaluation source was rewritten to conceal that difference.
+
+H is a separate policy/source cohort. H original data remains in sibling
+portable_H; its archive SHA and member references are recorded. Never pool H
+and C0 as the same source version. This ablation includes the explicit ordinary
+overtake policy and the disabling of formation following/layer fill; it does not
+prove that already formed complete platoons caused a traffic benefit.
+
+Run: python -B verify_portable.py --output independent_verification.json
+Verification only checks archives, hashes, grids, source/parameter bindings and
+copied evidence. It never imports a controller, calls SUMO, or recomputes metrics.
+
+bundle_hashes.json covers the payload and verification/build scripts.
+bundle_sha256.txt binds that manifest. Verification output files are explicitly
+excluded to avoid recursive self-hashing. Original tmp, H, main and Git are not
+modified by this package workflow.

@@ -1,0 +1,53 @@
+{
+  "layer": "phase5_r5",
+  "defaults": {
+    "status": "predeclared_r5_development_unvalidated",
+    "source": "Original study specification section 9.5; explicit independent completion version",
+    "page_or_url": "docs/phase5_r5_completion_plan.md",
+    "rationale": "Private local contention handling. No change to A/B selection, physical model, sensing, predictor or safety bounds."
+  },
+  "parameters": [
+    {
+      "name": "r5_enabled",
+      "value": true,
+      "unit": "bool",
+      "rationale": "Separate version enabling local contention handling; never a third candidate in the frozen A/B comparison."
+    },
+    {
+      "name": "r5_front_margin_m",
+      "value": 2.0,
+      "unit": "m",
+      "rationale": "Predeclared geometric front-priority margin; equality remains ambiguous, with no label tie-break."
+    },
+    {
+      "name": "r5_visible_inward_speed_mps",
+      "value": 0.05,
+      "unit": "m/s",
+      "rationale": "Strictly greater measured inward inertial lateral speed is a conservative cue; independent m/s threshold, not hidden intent."
+    },
+    {
+      "name": "r5_yield_deceleration_mps2",
+      "value": 0.5,
+      "unit": "m/s^2",
+      "rationale": "Additional yielding request magnitude; actual final request still uses inherited longitudinal and swept safety checks."
+    },
+    {
+      "name": "r5_backoff_min_s",
+      "value": 0.5,
+      "unit": "s",
+      "rationale": "Lower endpoint of one private draw per persistent ambiguous episode; sealed before vehicle experiments."
+    },
+    {
+      "name": "r5_backoff_max_s",
+      "value": 2.0,
+      "unit": "s",
+      "rationale": "Exclusive upper endpoint of the same private draw; different deadlines may share a behavior tick."
+    },
+    {
+      "name": "r5_clear_stable_s",
+      "value": 1.0,
+      "unit": "s",
+      "rationale": "Consecutive visible no-competition duration before clearing an episode; missing time is not confirmation."
+    }
+  ]
+}

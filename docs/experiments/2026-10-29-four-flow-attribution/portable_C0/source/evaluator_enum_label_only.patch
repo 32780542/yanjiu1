@@ -1,0 +1,27 @@
+--- frozen/experiments/native_comparison.py
++++ cooperative_enum_only/experiments/native_comparison.py
+@@ -30,11 +30,12 @@
+     "run_native_flow.py",
+     "research/common.py",
+ )
+-MODES = ("noa", "formation", "transform", "global")
++MODES = ("noa", "formation", "transform", "global", "cooperative")
+ LABELS = dict(
+     noa="NOA (detected geometry only)",
+     formation="Formation + ordinary merge",
+     transform="Distributed formation + lane-drop transform",
++    cooperative="Cooperative merge only; grouping and layer fill disabled",
+     global_="Cai-style centralized reference (not full paper reproduction)",
+ )
+ TRAFFIC = (
+--- frozen/experiments/bottleneck_attribution.py
++++ cooperative_enum_only/experiments/bottleneck_attribution.py
+@@ -28,7 +28,7 @@
+ STEP_S = 0.1
+ TOLERANCE = 1e-6
+ WINDOW = (100.0, 600.0)
+-MODES = ("noa", "formation", "transform")
++MODES = ("noa", "formation", "transform", "cooperative")
+ TIME_METRICS = (
+     "mean_travel_time_s", "mean_system_time_s", "mean_entry_wait_s",
+     *(f"mean_segment_{a}_{b}_s" for a, b in SEGMENTS),

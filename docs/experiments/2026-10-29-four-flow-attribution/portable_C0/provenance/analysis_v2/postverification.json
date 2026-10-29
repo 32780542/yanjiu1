@@ -1,0 +1,275 @@
+{
+  "passed": true,
+  "cases_checked": 20,
+  "requested": 9158,
+  "artifacts_checked": 27,
+  "all_cases_safe_completed": true,
+  "original_H_sources_unchanged": true,
+  "cooperative_sources_unchanged": true,
+  "raw_inputs_never_rewritten": true,
+  "same_source_pooling": false,
+  "strict_source_contrast_retained": true,
+  "first_analysis_guard_failure": "Preserved: only protocol flow JSON int vs float representation; exact common field values matched; original raw digests retained",
+  "checks": [
+    {
+      "flow": 500.0,
+      "seed": 1,
+      "requested": 238,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 500.0,
+      "seed": 2,
+      "requested": 233,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 500.0,
+      "seed": 3,
+      "requested": 260,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 500.0,
+      "seed": 4,
+      "requested": 235,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 500.0,
+      "seed": 5,
+      "requested": 252,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 750.0,
+      "seed": 1,
+      "requested": 343,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 750.0,
+      "seed": 2,
+      "requested": 355,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 750.0,
+      "seed": 3,
+      "requested": 383,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 750.0,
+      "seed": 4,
+      "requested": 365,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 750.0,
+      "seed": 5,
+      "requested": 368,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1000.0,
+      "seed": 1,
+      "requested": 459,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1000.0,
+      "seed": 2,
+      "requested": 495,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1000.0,
+      "seed": 3,
+      "requested": 501,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1000.0,
+      "seed": 4,
+      "requested": 494,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1000.0,
+      "seed": 5,
+      "requested": 494,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1500.0,
+      "seed": 1,
+      "requested": 711,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1500.0,
+      "seed": 2,
+      "requested": 745,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1500.0,
+      "seed": 3,
+      "requested": 752,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1500.0,
+      "seed": 4,
+      "requested": 753,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    },
+    {
+      "flow": 1500.0,
+      "seed": 5,
+      "requested": 722,
+      "all_raw_trip_metrics_match": true,
+      "primary_segment_from_all_request_gates_matches": true,
+      "fixed_window_low_speed_matches_raw_trace": true,
+      "flow_from_all_request_gates_matches": true,
+      "common_parameter_numeric_type_difference_only": [
+        "/case/flow_veh_h_lane"
+      ],
+      "pair_sign_and_DID_identity_match": true
+    }
+  ]
+}

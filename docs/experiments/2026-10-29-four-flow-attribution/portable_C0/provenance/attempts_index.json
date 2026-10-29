@@ -1,0 +1,56 @@
+{
+  "attempts": [
+    {
+      "label": "static_red_expected",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022208125393Z_H-cooperative-ablation-red_7493b35a",
+      "status": "failed",
+      "returncode": 1,
+      "result_path": "provenance/operations/static_red_expected/result.json"
+    },
+    {
+      "label": "static_green",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022257262254Z_H-cooperative-ablation-green_cdb704db",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/static_green/result.json"
+    },
+    {
+      "label": "actual_straight_equivalence",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022657229924Z_H-cooperative-straight-equivalence_e141ea41",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/actual_straight_equivalence/result.json"
+    },
+    {
+      "label": "twenty_drop_batch",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T022812793749Z_H-cooperative-ablation-twenty-drop_14d16679",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/twenty_drop_batch/result.json"
+    },
+    {
+      "label": "analysis_v1_failed",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024414396343Z_H-cooperative-analysis-paired-H_1c430fa5",
+      "status": "failed",
+      "returncode": 1,
+      "result_path": "provenance/operations/analysis_v1_failed/result.json"
+    },
+    {
+      "label": "analysis_v2_corrected",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024615605143Z_H-cooperative-analysis-paired-H-v2_b0bd3b4e",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/analysis_v2_corrected/result.json"
+    },
+    {
+      "label": "analysis_v2_postverify",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T024945921142Z_H-cooperative-analysis-postverify_4b30cffb",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/analysis_v2_postverify/result.json"
+    }
+  ],
+  "failed_v1_preserved": true,
+  "v1_last_status_file": "Original analysis_status.json says running because the strict guard raised before the next update; the original outer result.json is failed/returncode1 and is authoritative.",
+  "correction": "Raw parameter hashes remain different. Only exact numeric common field equality, with explicit flow float/int representation, permits this intentional policy contrast."
+}
