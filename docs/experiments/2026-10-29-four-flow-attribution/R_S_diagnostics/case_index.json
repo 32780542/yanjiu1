@@ -1,0 +1,294 @@
+[
+  {
+    "method": "R",
+    "label": "six_scrambled",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_scrambled\\20261029T043419599085Z_straight3_transform_s1_288aa5",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "R/six_scrambled",
+    "requested": 6,
+    "completed": 6,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json",
+      "positions.jsonl.gz"
+    ]
+  },
+  {
+    "method": "R",
+    "label": "six_drop",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_drop\\20261029T043419597587Z_lane_drop_transform_s1_12e570",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "R/six_drop",
+    "requested": 6,
+    "completed": 6,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json",
+      "positions.jsonl.gz"
+    ]
+  },
+  {
+    "method": "R",
+    "label": "q1500_seed1_straight3",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523823948Z_straight3_transform_s1_6e1dae",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "R/q1500_seed1_straight3",
+    "requested": 711,
+    "completed": 711,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "R",
+    "label": "q1500_seed1_lane_drop",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523835062Z_lane_drop_transform_s1_e443bf",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "R/q1500_seed1_lane_drop",
+    "requested": 711,
+    "completed": 711,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "R",
+    "label": "q1500_seed4_straight3",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523850579Z_straight3_transform_s4_4e44b9",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "R/q1500_seed4_straight3",
+    "requested": 753,
+    "completed": 753,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "R",
+    "label": "q1500_seed4_lane_drop",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523855229Z_lane_drop_transform_s4_d7bd46",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "R/q1500_seed4_lane_drop",
+    "requested": 753,
+    "completed": 753,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "S",
+    "label": "six_scrambled",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "S/six_scrambled",
+    "requested": 6,
+    "completed": 6,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json",
+      "positions.jsonl.gz"
+    ]
+  },
+  {
+    "method": "S",
+    "label": "six_drop",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "S/six_drop",
+    "requested": 6,
+    "completed": 6,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json",
+      "positions.jsonl.gz"
+    ]
+  },
+  {
+    "method": "S",
+    "label": "q1500_seed1_straight3",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724853767Z_straight3_transform_s1_155011",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "S/q1500_seed1_straight3",
+    "requested": 711,
+    "completed": 711,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "S",
+    "label": "q1500_seed1_lane_drop",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724864155Z_lane_drop_transform_s1_19889b",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "S/q1500_seed1_lane_drop",
+    "requested": 711,
+    "completed": 711,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "S",
+    "label": "q1500_seed4_straight3",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724871755Z_straight3_transform_s4_98260e",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "S/q1500_seed4_straight3",
+    "requested": 753,
+    "completed": 753,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  },
+  {
+    "method": "S",
+    "label": "q1500_seed4_lane_drop",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724879232Z_lane_drop_transform_s4_dbeb18",
+    "archive": "case_evidence.tar.gz",
+    "prefix": "S/q1500_seed4_lane_drop",
+    "requested": 753,
+    "completed": 753,
+    "status": "drained",
+    "safe": true,
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "files": [
+      "input.json",
+      "result.json",
+      "trips.json"
+    ]
+  }
+]

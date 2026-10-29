@@ -1,0 +1,58 @@
+[
+  {
+    "label": "q500_cooperative_straight10s",
+    "flow": 500,
+    "seed": 1,
+    "mode": "cooperative",
+    "original_case_dir": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q500_cooperative\\20261029T022657934966Z_straight3_cooperative_s1_50403e",
+    "archive": "data/short_straight_raw.tar.gz",
+    "members": {
+      "input.json": "short/q500_cooperative_straight10s/input.json",
+      "result.json": "short/q500_cooperative_straight10s/result.json",
+      "trips.json": "short/q500_cooperative_straight10s/trips.json",
+      "native.rou.xml": "short/q500_cooperative_straight10s/native.rou.xml"
+    }
+  },
+  {
+    "label": "q500_H_noa_straight10s",
+    "flow": 500,
+    "seed": 1,
+    "mode": "noa",
+    "original_case_dir": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q500_noa\\20261029T022659957052Z_straight3_noa_s1_439503",
+    "archive": "data/short_straight_raw.tar.gz",
+    "members": {
+      "input.json": "short/q500_H_noa_straight10s/input.json",
+      "result.json": "short/q500_H_noa_straight10s/result.json",
+      "trips.json": "short/q500_H_noa_straight10s/trips.json",
+      "native.rou.xml": "short/q500_H_noa_straight10s/native.rou.xml"
+    }
+  },
+  {
+    "label": "q1500_cooperative_straight10s",
+    "flow": 1500,
+    "seed": 1,
+    "mode": "cooperative",
+    "original_case_dir": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q1500_cooperative\\20261029T022701837273Z_straight3_cooperative_s1_9ff763",
+    "archive": "data/short_straight_raw.tar.gz",
+    "members": {
+      "input.json": "short/q1500_cooperative_straight10s/input.json",
+      "result.json": "short/q1500_cooperative_straight10s/result.json",
+      "trips.json": "short/q1500_cooperative_straight10s/trips.json",
+      "native.rou.xml": "short/q1500_cooperative_straight10s/native.rou.xml"
+    }
+  },
+  {
+    "label": "q1500_H_noa_straight10s",
+    "flow": 1500,
+    "seed": 1,
+    "mode": "noa",
+    "original_case_dir": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence\\q1500_noa\\20261029T022704244215Z_straight3_noa_s1_31942c",
+    "archive": "data/short_straight_raw.tar.gz",
+    "members": {
+      "input.json": "short/q1500_H_noa_straight10s/input.json",
+      "result.json": "short/q1500_H_noa_straight10s/result.json",
+      "trips.json": "short/q1500_H_noa_straight10s/trips.json",
+      "native.rou.xml": "short/q1500_H_noa_straight10s/native.rou.xml"
+    }
+  }
+]

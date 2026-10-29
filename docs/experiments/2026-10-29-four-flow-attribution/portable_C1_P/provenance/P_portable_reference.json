@@ -1,0 +1,36 @@
+{
+  "sibling_bundle": "../portable_P",
+  "raw_case_json_archive": "../portable_P/data/raw_case_json.tar.gz",
+  "raw_archive_sha256": "26c9a75290bb92fe898f0729467a5b7b33001f2493cc626879f72697828f18c3",
+  "P_input_members": [
+    "cases/f500_s6_lane_drop_transform/input.json",
+    "cases/f500_s7_lane_drop_transform/input.json",
+    "cases/f500_s8_lane_drop_transform/input.json",
+    "cases/f500_s9_lane_drop_transform/input.json",
+    "cases/f500_s10_lane_drop_transform/input.json",
+    "cases/f750_s6_lane_drop_transform/input.json",
+    "cases/f750_s7_lane_drop_transform/input.json",
+    "cases/f750_s8_lane_drop_transform/input.json",
+    "cases/f750_s9_lane_drop_transform/input.json",
+    "cases/f750_s10_lane_drop_transform/input.json",
+    "cases/f1000_s6_lane_drop_transform/input.json",
+    "cases/f1000_s7_lane_drop_transform/input.json",
+    "cases/f1000_s8_lane_drop_transform/input.json",
+    "cases/f1000_s9_lane_drop_transform/input.json",
+    "cases/f1000_s10_lane_drop_transform/input.json",
+    "cases/f1500_s6_lane_drop_transform/input.json",
+    "cases/f1500_s7_lane_drop_transform/input.json",
+    "cases/f1500_s8_lane_drop_transform/input.json",
+    "cases/f1500_s9_lane_drop_transform/input.json",
+    "cases/f1500_s10_lane_drop_transform/input.json"
+  ],
+  "P_source_sha256": {
+    "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "note": "Only heldout P seed6–10 comparator data are referenced; no old H/C1_H outcomes are pooled."
+}

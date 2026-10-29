@@ -1,0 +1,11 @@
+--- C0/noa/native_rules.py
++++ C1/noa/native_rules.py
+@@ -391,7 +391,7 @@
+                 speed, target, memory = _join_speed(ego, rows, memory, lane)
+                 return Command(speed, lane, "fill_layer", target), memory
+ 
+-    if mode in ("noa", "cooperative"):
++    if mode == "noa":
+         front = min(
+             (c for c in rows if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x, default=None
+         )

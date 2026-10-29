@@ -1,0 +1,250 @@
+[
+  {
+    "role": "H",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021259335560Z_straight3_transform_s1_f59aad",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "transform",
+    "seed": 1,
+    "scenario": "straight3",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021259335560Z_straight3_transform_s1_f59aad\\input.json",
+      "size": 96522,
+      "sha256": "3b53b9f8d08fa15d9103765cf4492d063c6ecfd7e34d4b5701c4d982d0094b72"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021259335560Z_straight3_transform_s1_f59aad\\result.json",
+      "size": 144235,
+      "sha256": "93b3c7f4731932a0fe25a91cbdbe0b0eac89931864c51c4ccb80f89edae04082"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021259335560Z_straight3_transform_s1_f59aad\\positions.jsonl.gz",
+      "size": 9111377,
+      "sha256": "920c058aecfa4f2ae3aab6cd57744a535520d51960407a02b78536b20c5c0182"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "NOA",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021257009694Z_straight3_noa_s1_9b24e5",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "noa",
+    "seed": 1,
+    "scenario": "straight3",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021257009694Z_straight3_noa_s1_9b24e5\\input.json",
+      "size": 96516,
+      "sha256": "1735608a99f2fb005916845141db8b676ef1719c997d5712b2e389a95b0758c7"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021257009694Z_straight3_noa_s1_9b24e5\\result.json",
+      "size": 2870,
+      "sha256": "7a418c8964239a609b0892e372dd7fa2f3b5817a9c99c8aa571e7e3168d0e678"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021257009694Z_straight3_noa_s1_9b24e5\\positions.jsonl.gz",
+      "size": 3167594,
+      "sha256": "6131a04afa53c5998f88370108dcb62cd1edd9e31de1dacc707913711394caa2"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "H",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021343404200Z_lane_drop_transform_s1_0b56df",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "transform",
+    "seed": 1,
+    "scenario": "lane_drop",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021343404200Z_lane_drop_transform_s1_0b56df\\input.json",
+      "size": 96522,
+      "sha256": "90a2e647371e7bdda36e100af9399aff96979a52887651249df84dd284a32055"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021343404200Z_lane_drop_transform_s1_0b56df\\result.json",
+      "size": 199933,
+      "sha256": "ea401ca0e4bf109ede920059279da222928c4dcd8392182a28f83d1db82a7b62"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021343404200Z_lane_drop_transform_s1_0b56df\\positions.jsonl.gz",
+      "size": 9502341,
+      "sha256": "cef806862302d82a2cfed4c0941a64dcb9b7febe51365378d9cf73f129bbe57d"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "NOA",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021312766134Z_lane_drop_noa_s1_1f2ca3",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "noa",
+    "seed": 1,
+    "scenario": "lane_drop",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021312766134Z_lane_drop_noa_s1_1f2ca3\\input.json",
+      "size": 96516,
+      "sha256": "5d1da26f9e2c4b3b5cee187c49d07a5e81e1732f1db27f84e2c7d4e8fc34dc65"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021312766134Z_lane_drop_noa_s1_1f2ca3\\result.json",
+      "size": 66501,
+      "sha256": "e2c2dfe0898f9377689683717d243c1b1fce7cf4e9f61be96fb0958e02bc1d6c"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021312766134Z_lane_drop_noa_s1_1f2ca3\\positions.jsonl.gz",
+      "size": 3818538,
+      "sha256": "b5b463828563b1fe21d2ef175829cdd47ee318198c4cf3bb054443a02ebb5924"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "H",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022223419888Z_straight3_transform_s4_065978",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "transform",
+    "seed": 4,
+    "scenario": "straight3",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022223419888Z_straight3_transform_s4_065978\\input.json",
+      "size": 102109,
+      "sha256": "b88eb5ad62b8a960122506ee0fbe0276140ab2648a660519b9c1a0600294a730"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022223419888Z_straight3_transform_s4_065978\\result.json",
+      "size": 162555,
+      "sha256": "71c3726e276b645a6c5c21527ffdb211af6289800b9f4b2ea7531cfef53eba5f"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022223419888Z_straight3_transform_s4_065978\\positions.jsonl.gz",
+      "size": 9882023,
+      "sha256": "09cc717adf77a1ec96065b0020efedfe312d8031a6eb1910cc51bac4f936f1ad"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "NOA",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022216181134Z_straight3_noa_s4_ce04c0",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "noa",
+    "seed": 4,
+    "scenario": "straight3",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022216181134Z_straight3_noa_s4_ce04c0\\input.json",
+      "size": 102103,
+      "sha256": "3b029ca428cf6303718f6ea562feef7c075e131e16dcefdd7d15fe9bee01e6b6"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022216181134Z_straight3_noa_s4_ce04c0\\result.json",
+      "size": 2880,
+      "sha256": "54fb098309241cb897a24d684e5d91bc7b1528201e654489d02b106e0883233c"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022216181134Z_straight3_noa_s4_ce04c0\\positions.jsonl.gz",
+      "size": 3770441,
+      "sha256": "8cb0b1b14c84655e7737f8c0231a768623039dd36f1ad248381197e8dcbf2647"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "H",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022307271474Z_lane_drop_transform_s4_310c4c",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "transform",
+    "seed": 4,
+    "scenario": "lane_drop",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022307271474Z_lane_drop_transform_s4_310c4c\\input.json",
+      "size": 102109,
+      "sha256": "8c5b528841d20589acac3269cd434e5a87e8a1c31eeca458bf22205001ba8553"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022307271474Z_lane_drop_transform_s4_310c4c\\result.json",
+      "size": 244035,
+      "sha256": "6d39a3e639a0656c6c2cb0a04c071e47023697e01cdb3ec3e40f783d76e9e4ae"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022307271474Z_lane_drop_transform_s4_310c4c\\positions.jsonl.gz",
+      "size": 10716942,
+      "sha256": "777cc278cf85e16124e4ee6badfa5b59f7ff79270a8689403eb75f5370fea577"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  },
+  {
+    "role": "NOA",
+    "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022235958340Z_lane_drop_noa_s4_9c6f18",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "mode": "noa",
+    "seed": 4,
+    "scenario": "lane_drop",
+    "input": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022235958340Z_lane_drop_noa_s4_9c6f18\\input.json",
+      "size": 102103,
+      "sha256": "2d875dd512f395c6225aabedada6cb94a30fd39cf7a11f9ebc6b2ae191aad4d3"
+    },
+    "result": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022235958340Z_lane_drop_noa_s4_9c6f18\\result.json",
+      "size": 68563,
+      "sha256": "f76cbd77894671348bb2ec72da40b1d3788a908724e772ca980ef7256d1eb1f4"
+    },
+    "positions": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022235958340Z_lane_drop_noa_s4_9c6f18\\positions.jsonl.gz",
+      "size": 4350667,
+      "sha256": "601e50932d62014f8eb6d98555007a41694c048f645cb678d340f6b971591727"
+    },
+    "status": "Equal-demand H-freeze diagnostic only; not formal same-source R/S pairing and not P100."
+  }
+]

@@ -1,0 +1,110 @@
+[
+  {
+    "method": "R",
+    "case": "six_scrambled",
+    "archived": true,
+    "archive_member": "R/six_scrambled/positions.jsonl.gz",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_scrambled\\20261029T043419599085Z_straight3_transform_s1_288aa5\\positions.jsonl.gz",
+    "size": 64938,
+    "sha256": "bf78e72919b8636a657ff2c2b459bef5d9ee2f986377ad3fea6560946fa2ee5c"
+  },
+  {
+    "method": "R",
+    "case": "six_drop",
+    "archived": true,
+    "archive_member": "R/six_drop/positions.jsonl.gz",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_drop\\20261029T043419597587Z_lane_drop_transform_s1_12e570\\positions.jsonl.gz",
+    "size": 41476,
+    "sha256": "882665f186d6d2594c94561700f17acd13357181ebdb2a4c94f4fd9db4e7b7ed"
+  },
+  {
+    "method": "R",
+    "case": "q1500_seed1_straight3",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523823948Z_straight3_transform_s1_6e1dae\\positions.jsonl.gz",
+    "size": 7919039,
+    "sha256": "9ef2b41c401c4a77f9565c6e8afe496b88e4c4cc6f6f8c3025f69a61192a922b"
+  },
+  {
+    "method": "R",
+    "case": "q1500_seed1_lane_drop",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523835062Z_lane_drop_transform_s1_e443bf\\positions.jsonl.gz",
+    "size": 8670210,
+    "sha256": "b9bb8069ce8ca322fc1192ec979bc8599a1dfc9ec891da963fdade29e3f2e7c4"
+  },
+  {
+    "method": "R",
+    "case": "q1500_seed4_straight3",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523850579Z_straight3_transform_s4_4e44b9\\positions.jsonl.gz",
+    "size": 8621066,
+    "sha256": "506095fa142e03844a48cf052b828fc9d70de2e4f8028cb0f73c0dd91e08ef1b"
+  },
+  {
+    "method": "R",
+    "case": "q1500_seed4_lane_drop",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523855229Z_lane_drop_transform_s4_d7bd46\\positions.jsonl.gz",
+    "size": 9349178,
+    "sha256": "f397485b86d8f65eebad5e24e7d13e6b1d053e96a1ce6f3e4dcd5fd6c7319eac"
+  },
+  {
+    "method": "S",
+    "case": "six_scrambled",
+    "archived": true,
+    "archive_member": "S/six_scrambled/positions.jsonl.gz",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb\\positions.jsonl.gz",
+    "size": 65260,
+    "sha256": "b63f6748583e46155218add045e54847fcac4f1015602495cd3d5d8d211d65ab"
+  },
+  {
+    "method": "S",
+    "case": "six_drop",
+    "archived": true,
+    "archive_member": "S/six_drop/positions.jsonl.gz",
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e\\positions.jsonl.gz",
+    "size": 41703,
+    "sha256": "0fb6514a6217bb4ad867d4176f590f2ab09094c959ece4bd4e08fa5cdb721b01"
+  },
+  {
+    "method": "S",
+    "case": "q1500_seed1_straight3",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724853767Z_straight3_transform_s1_155011\\positions.jsonl.gz",
+    "size": 8176607,
+    "sha256": "a4c9498e5e3b1d0efef5b6a016c1cb2279eb7a85ce4edd05d076ce3b4fddb0e4"
+  },
+  {
+    "method": "S",
+    "case": "q1500_seed1_lane_drop",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724864155Z_lane_drop_transform_s1_19889b\\positions.jsonl.gz",
+    "size": 8849437,
+    "sha256": "2c1836cfdb76ef8ea8557fcd9d00d751a3aae2880e792991c05dd9eb45d09718"
+  },
+  {
+    "method": "S",
+    "case": "q1500_seed4_straight3",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724871755Z_straight3_transform_s4_98260e\\positions.jsonl.gz",
+    "size": 8811796,
+    "sha256": "0692de500131a3f0cb3cc80025a6806b2ed703939b606a26abdba5d51b1149e2"
+  },
+  {
+    "method": "S",
+    "case": "q1500_seed4_lane_drop",
+    "archived": false,
+    "archive_member": null,
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724879232Z_lane_drop_transform_s4_dbeb18\\positions.jsonl.gz",
+    "size": 9854240,
+    "sha256": "972014abb418bbadb425e687fb489d66dc5ec86a729b02bb5478bacf843fb693"
+  }
+]

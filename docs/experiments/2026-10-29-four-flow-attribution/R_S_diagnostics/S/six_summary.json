@@ -1,0 +1,106 @@
+{
+  "six": {
+    "six_scrambled": {
+      "case": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb",
+      "status": "drained",
+      "safe": true,
+      "requested": 6,
+      "completed": 6,
+      "mean_travel_time_s": 38.56666666666666,
+      "metrics": {
+        "straight": {
+          "observation_seconds": 39.4,
+          "vehicle_seconds": 231.4000000000005,
+          "formed_vehicle_seconds": 115.8,
+          "multilayer_group_seconds": 19.3,
+          "raw_single_layer_vehicle_seconds": 24.89999999999998,
+          "stable_vehicle_seconds": 91.8,
+          "stable_multilayer_group_seconds": 15.3,
+          "raw_unassigned_vehicle_seconds": 84.69999999999993,
+          "internal_relation_breaks": 1,
+          "boundary_censored_relations": 2,
+          "end_censored_relations": 0,
+          "mean_multilayer_size": 6.0,
+          "peak_multilayer_size": 6,
+          "formation_participation_rate": 0.5004321521175443,
+          "stable_participation_rate": 0.3967156439066543,
+          "geometry_rms_m": 0.42028691204271657,
+          "speed_rms_mps": 0.03789042673525003,
+          "confirmation_seconds": 1.0,
+          "stability_hold_seconds": 5.0,
+          "region_m": [
+            0,
+            1200
+          ],
+          "lane_count": 3,
+          "internal_breaks_per_100_formed_vehicle_s": 0.8635578583765112
+        }
+      }
+    },
+    "six_drop": {
+      "case": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e",
+      "status": "drained",
+      "safe": true,
+      "requested": 6,
+      "completed": 6,
+      "mean_travel_time_s": 39.0,
+      "metrics": {
+        "upstream": {
+          "observation_seconds": 40.3,
+          "vehicle_seconds": 116.99999999999977,
+          "formed_vehicle_seconds": 106.79999999999976,
+          "multilayer_group_seconds": 17.799999999999997,
+          "raw_single_layer_vehicle_seconds": 2.1000000000000085,
+          "stable_vehicle_seconds": 82.79999999999984,
+          "stable_multilayer_group_seconds": 13.799999999999999,
+          "raw_unassigned_vehicle_seconds": 2.0999999999999943,
+          "internal_relation_breaks": 1,
+          "boundary_censored_relations": 2,
+          "end_censored_relations": 0,
+          "mean_multilayer_size": 5.999999999999988,
+          "peak_multilayer_size": 6,
+          "formation_participation_rate": 0.9128205128205125,
+          "stable_participation_rate": 0.7076923076923077,
+          "geometry_rms_m": 3.648555044428405e-14,
+          "speed_rms_mps": 1.1632614208768657e-14,
+          "confirmation_seconds": 1.0,
+          "stability_hold_seconds": 5.0,
+          "region_m": [
+            0,
+            640
+          ],
+          "lane_count": 3,
+          "internal_breaks_per_100_formed_vehicle_s": 0.9363295880149834
+        },
+        "downstream": {
+          "observation_seconds": 40.3,
+          "vehicle_seconds": 41.39999999999999,
+          "formed_vehicle_seconds": 25.0,
+          "multilayer_group_seconds": 4.600000000000001,
+          "raw_single_layer_vehicle_seconds": 3.5999999999999943,
+          "stable_vehicle_seconds": 1.1999999999999886,
+          "stable_multilayer_group_seconds": 0.29999999999999716,
+          "raw_unassigned_vehicle_seconds": 6.799999999999997,
+          "internal_relation_breaks": 3,
+          "boundary_censored_relations": 2,
+          "end_censored_relations": 0,
+          "mean_multilayer_size": 5.4347826086956506,
+          "peak_multilayer_size": 6,
+          "formation_participation_rate": 0.603864734299517,
+          "stable_participation_rate": 0.02898550724637654,
+          "geometry_rms_m": 0.13903758331589802,
+          "speed_rms_mps": 0.04103248930909041,
+          "confirmation_seconds": 1.0,
+          "stability_hold_seconds": 5.0,
+          "region_m": [
+            1000,
+            1200
+          ],
+          "lane_count": 2,
+          "internal_breaks_per_100_formed_vehicle_s": 12.0
+        }
+      }
+    }
+  },
+  "full_flow_gate_passed": true
+}

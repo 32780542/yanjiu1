@@ -1,0 +1,59 @@
+test_common_frame_and_actual_ending_lane_pair_geometry_are_retained (test_leader_following.LeaderFollowingTests.test_common_frame_and_actual_ending_lane_pair_geometry_are_retained) ... ok
+test_forward_projected_head_keeps_cruise_and_rear_head_accelerates (test_leader_following.LeaderFollowingTests.test_forward_projected_head_keeps_cruise_and_rear_head_accelerates) ... FAIL
+test_free_fill_does_not_relocate_a_head_but_body_can_fill (test_leader_following.LeaderFollowingTests.test_free_fill_does_not_relocate_a_head_but_body_can_fill) ... FAIL
+test_front_following_body_and_NOA_stay_P_equivalent (test_leader_following.LeaderFollowingTests.test_front_following_body_and_NOA_stay_P_equivalent) ... ok
+test_moving_same_corridor_front_still_controls_following_and_safety (test_leader_following.LeaderFollowingTests.test_moving_same_corridor_front_still_controls_following_and_safety) ... ok
+test_necessary_helper_and_merge_remain_available_to_heads (test_leader_following.LeaderFollowingTests.test_necessary_helper_and_merge_remain_available_to_heads) ... ok
+test_only_nearest_positive_projected_actual_head_is_selected (test_leader_following.LeaderFollowingTests.test_only_nearest_positive_projected_actual_head_is_selected) ... FAIL
+test_phase_anchor_must_be_centered_and_laterally_stable (test_leader_following.LeaderFollowingTests.test_phase_anchor_must_be_centered_and_laterally_stable) ... FAIL
+
+======================================================================
+FAIL: test_forward_projected_head_keeps_cruise_and_rear_head_accelerates (test_leader_following.LeaderFollowingTests.test_forward_projected_head_keeps_cruise_and_rear_head_accelerates)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\tmp\R_leader_following\tests\test_leader_following.py", line 22, in test_forward_projected_head_keeps_cruise_and_rear_head_accelerates
+    self.assertEqual(leader,(r.CRUISE,b.x,None))
+AssertionError: Tuples differ: (28.400000000000002, 93.33333333333333, None) != (28.8, 100, None)
+
+First differing element 0:
+28.400000000000002
+28.8
+
+- (28.400000000000002, 93.33333333333333, None)
++ (28.8, 100, None)
+
+======================================================================
+FAIL: test_free_fill_does_not_relocate_a_head_but_body_can_fill (test_leader_following.LeaderFollowingTests.test_free_fill_does_not_relocate_a_head_but_body_can_fill)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\tmp\R_leader_following\tests\test_leader_following.py", line 48, in test_free_fill_does_not_relocate_a_head_but_body_can_fill
+    self.assertIsNone(r._fill(ego,head_rows,3))
+AssertionError: 1 is not None
+
+======================================================================
+FAIL: test_only_nearest_positive_projected_actual_head_is_selected (test_leader_following.LeaderFollowingTests.test_only_nearest_positive_projected_actual_head_is_selected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\tmp\R_leader_following\tests\test_leader_following.py", line 27, in test_only_nearest_positive_projected_actual_head_is_selected
+    self.assertAlmostEqual(target,102.5)
+AssertionError: 106.66666666666667 != 102.5 within 7 places (4.166666666666671 difference)
+
+======================================================================
+FAIL: test_phase_anchor_must_be_centered_and_laterally_stable (test_leader_following.LeaderFollowingTests.test_phase_anchor_must_be_centered_and_laterally_stable)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\tmp\R_leader_following\tests\test_leader_following.py", line 33, in test_phase_anchor_must_be_centered_and_laterally_stable
+    self.assertEqual(r._following(ego,(invalid,),3),(r.CRUISE,ego.x,None))
+AssertionError: Tuples differ: (29.2, 106.66666666666667, None) != (28.8, 100, None)
+
+First differing element 0:
+29.2
+28.8
+
+- (29.2, 106.66666666666667, None)
++ (28.8, 100, None)
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.063s
+
+FAILED (failures=4)

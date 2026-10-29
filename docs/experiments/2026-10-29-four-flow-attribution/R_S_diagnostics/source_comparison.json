@@ -1,0 +1,95 @@
+{
+  "parent_rule_sha256": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+  "comparisons": {
+    "P_parent_to_R": {
+      "changed_definitions": [
+        "_front",
+        "_settled",
+        "_following",
+        "_fill"
+      ],
+      "unchanged_definitions": [
+        "Vehicle",
+        "Command",
+        "Memory",
+        "_occupies",
+        "_clear",
+        "_request",
+        "_phase",
+        "_physical_phase",
+        "_component",
+        "_pair_error",
+        "_merge_target",
+        "_join_speed",
+        "_make_room",
+        "_receiving_distance",
+        "_receiving",
+        "_mandatory_priority",
+        "_decide",
+        "safe_speed",
+        "decide"
+      ]
+    },
+    "R_to_S": {
+      "changed_definitions": [
+        "_following"
+      ],
+      "unchanged_definitions": [
+        "Vehicle",
+        "Command",
+        "Memory",
+        "_occupies",
+        "_clear",
+        "_request",
+        "_phase",
+        "_physical_phase",
+        "_component",
+        "_pair_error",
+        "_front",
+        "_settled",
+        "_merge_target",
+        "_join_speed",
+        "_make_room",
+        "_fill",
+        "_receiving_distance",
+        "_receiving",
+        "_mandatory_priority",
+        "_decide",
+        "safe_speed",
+        "decide"
+      ]
+    },
+    "P_parent_to_S": {
+      "changed_definitions": [
+        "_front",
+        "_settled",
+        "_following",
+        "_fill"
+      ],
+      "unchanged_definitions": [
+        "Vehicle",
+        "Command",
+        "Memory",
+        "_occupies",
+        "_clear",
+        "_request",
+        "_phase",
+        "_physical_phase",
+        "_component",
+        "_pair_error",
+        "_merge_target",
+        "_join_speed",
+        "_make_room",
+        "_receiving_distance",
+        "_receiving",
+        "_mandatory_priority",
+        "_decide",
+        "safe_speed",
+        "decide"
+      ]
+    }
+  },
+  "new_parameters": 0,
+  "new_memory_fields": 0,
+  "common_five_source_files_identical": true
+}

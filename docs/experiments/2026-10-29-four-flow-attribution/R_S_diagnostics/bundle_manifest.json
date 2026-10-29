@@ -1,0 +1,777 @@
+{
+  "format_version": 1,
+  "scope": "R/S diagnostic archive only; no simulations, Git, controller or prior-data changes.",
+  "archives": {
+    "R_sources.tar.gz": {
+      "size": 23266,
+      "sha256": "6608ffd8afc4472b63b2f147055f26e0666d826e02160ff1cc6865af30da083c",
+      "members": [
+        {
+          "path": "experiments/native_sumo.py",
+          "size": 40018,
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\experiments\\native_sumo.py"
+        },
+        {
+          "path": "experiments/global_reference.py",
+          "size": 5758,
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\experiments\\global_reference.py"
+        },
+        {
+          "path": "experiments/complete_layers.py",
+          "size": 11426,
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\experiments\\complete_layers.py"
+        },
+        {
+          "path": "noa/native_rules.py",
+          "size": 17819,
+          "sha256": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\noa\\native_rules.py"
+        },
+        {
+          "path": "run_native_flow.py",
+          "size": 2941,
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\run_native_flow.py"
+        },
+        {
+          "path": "research/common.py",
+          "size": 4600,
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\research\\common.py"
+        }
+      ]
+    },
+    "S_sources.tar.gz": {
+      "size": 23371,
+      "sha256": "5c0a8f7aa25c99528843bfb20b7d50e3876233237b4452cddf6d6654b5c76f2a",
+      "members": [
+        {
+          "path": "experiments/native_sumo.py",
+          "size": 40018,
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\experiments\\native_sumo.py"
+        },
+        {
+          "path": "experiments/global_reference.py",
+          "size": 5758,
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\experiments\\global_reference.py"
+        },
+        {
+          "path": "experiments/complete_layers.py",
+          "size": 11426,
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\experiments\\complete_layers.py"
+        },
+        {
+          "path": "noa/native_rules.py",
+          "size": 18523,
+          "sha256": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\noa\\native_rules.py"
+        },
+        {
+          "path": "run_native_flow.py",
+          "size": 2941,
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\run_native_flow.py"
+        },
+        {
+          "path": "research/common.py",
+          "size": 4600,
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\research\\common.py"
+        }
+      ]
+    },
+    "case_evidence.tar.gz": {
+      "size": 761968,
+      "sha256": "905b63d73399348f602a223c6f684d6be7a7f7906e0aa1bf27e1ca1b3f83bcba",
+      "members": [
+        {
+          "path": "R/six_scrambled/input.json",
+          "size": 2857,
+          "sha256": "e11e27fb718831294758d056668c564fcc06535b19eb206e494247ea149ab137",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_scrambled\\20261029T043419599085Z_straight3_transform_s1_288aa5\\input.json"
+        },
+        {
+          "path": "R/six_scrambled/result.json",
+          "size": 2838,
+          "sha256": "5b0877235549ae8ca995fbefb2aee993daac1bacdc63d0c301cd1b5ef2a0ad50",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_scrambled\\20261029T043419599085Z_straight3_transform_s1_288aa5\\result.json"
+        },
+        {
+          "path": "R/six_scrambled/trips.json",
+          "size": 2580,
+          "sha256": "21fc1de6f4c7d95a38d66bbe59ace96235ad6bb9c18178e4872e535862c5cf1f",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_scrambled\\20261029T043419599085Z_straight3_transform_s1_288aa5\\trips.json"
+        },
+        {
+          "path": "R/six_scrambled/positions.jsonl.gz",
+          "size": 64938,
+          "sha256": "bf78e72919b8636a657ff2c2b459bef5d9ee2f986377ad3fea6560946fa2ee5c",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_scrambled\\20261029T043419599085Z_straight3_transform_s1_288aa5\\positions.jsonl.gz"
+        },
+        {
+          "path": "R/six_drop/input.json",
+          "size": 2845,
+          "sha256": "b0344bf2c50d8711808e1d313ee97937c0aabb31c1a7f9032bc075dc1ee208e7",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_drop\\20261029T043419597587Z_lane_drop_transform_s1_12e570\\input.json"
+        },
+        {
+          "path": "R/six_drop/result.json",
+          "size": 3619,
+          "sha256": "bd6c01be2e64aaae98a1ed2851a9354269d44bab96789ccc62519b2bdd01bf1f",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_drop\\20261029T043419597587Z_lane_drop_transform_s1_12e570\\result.json"
+        },
+        {
+          "path": "R/six_drop/trips.json",
+          "size": 3579,
+          "sha256": "e8d579ca633502ea6dbb7f0b667ad980c124d8ca2d320cd19b5259bed71dffd2",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_drop\\20261029T043419597587Z_lane_drop_transform_s1_12e570\\trips.json"
+        },
+        {
+          "path": "R/six_drop/positions.jsonl.gz",
+          "size": 41476,
+          "sha256": "882665f186d6d2594c94561700f17acd13357181ebdb2a4c94f4fd9db4e7b7ed",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\six_drop\\20261029T043419597587Z_lane_drop_transform_s1_12e570\\positions.jsonl.gz"
+        },
+        {
+          "path": "R/q1500_seed1_straight3/input.json",
+          "size": 96520,
+          "sha256": "1bb0cb2319b32e31e62d48777a20deec8f30a4fe8f8b864fd61afa585f4233b0",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523823948Z_straight3_transform_s1_6e1dae\\input.json"
+        },
+        {
+          "path": "R/q1500_seed1_straight3/result.json",
+          "size": 102516,
+          "sha256": "822614896dc429e95bff7e2094d337d07c5e9dcef74e99dd36145f5e72f63aa7",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523823948Z_straight3_transform_s1_6e1dae\\result.json"
+        },
+        {
+          "path": "R/q1500_seed1_straight3/trips.json",
+          "size": 463084,
+          "sha256": "5fa30020c751a7b5e0c97e8990f1db9488da9a731961ab027e0464be73543d62",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523823948Z_straight3_transform_s1_6e1dae\\trips.json"
+        },
+        {
+          "path": "R/q1500_seed1_lane_drop/input.json",
+          "size": 96520,
+          "sha256": "bcd17f32f58bd679e84d1006b15cfc1c2a6d1eb41e95f8774ac2897d826df10e",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523835062Z_lane_drop_transform_s1_e443bf\\input.json"
+        },
+        {
+          "path": "R/q1500_seed1_lane_drop/result.json",
+          "size": 170943,
+          "sha256": "4108ad6bbf520bf704e9b1b3c74e423c2ddf0d9f97aa2502b406e41c43b1c7ac",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523835062Z_lane_drop_transform_s1_e443bf\\result.json"
+        },
+        {
+          "path": "R/q1500_seed1_lane_drop/trips.json",
+          "size": 567589,
+          "sha256": "dd42e21e0e02b9f309b1115f03420948e9031be5b755ef64deaf92df7ab0364d",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523835062Z_lane_drop_transform_s1_e443bf\\trips.json"
+        },
+        {
+          "path": "R/q1500_seed4_straight3/input.json",
+          "size": 102107,
+          "sha256": "7810a334203d66e7244b52b00151792f229cb8f4ecfef0c287436f2646d0ad0d",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523850579Z_straight3_transform_s4_4e44b9\\input.json"
+        },
+        {
+          "path": "R/q1500_seed4_straight3/result.json",
+          "size": 118245,
+          "sha256": "2df652a871460b42b5241aa47bbd5d3f625eb370ed4d791182443a469499ac45",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523850579Z_straight3_transform_s4_4e44b9\\result.json"
+        },
+        {
+          "path": "R/q1500_seed4_straight3/trips.json",
+          "size": 506300,
+          "sha256": "4aece6fc04632b3ea22a8379f8f53e0556c4c07fa17c93777c36fec6a52ed4e4",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523850579Z_straight3_transform_s4_4e44b9\\trips.json"
+        },
+        {
+          "path": "R/q1500_seed4_lane_drop/input.json",
+          "size": 102107,
+          "sha256": "12a9308a56904d40926da2471f84dde4ee9589169492142e77993ed3bbe7bc32",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523855229Z_lane_drop_transform_s4_d7bd46\\input.json"
+        },
+        {
+          "path": "R/q1500_seed4_lane_drop/result.json",
+          "size": 184383,
+          "sha256": "2831926ab9bd8fb651db0efb0dd5a4dcb301124c066bef91dc047cd2dc1b19cc",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523855229Z_lane_drop_transform_s4_d7bd46\\result.json"
+        },
+        {
+          "path": "R/q1500_seed4_lane_drop/trips.json",
+          "size": 606501,
+          "sha256": "7adbf643ded3bbeb291cc1811eaa98fa26726a3b33cd2918a78f4927f1562a7c",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523855229Z_lane_drop_transform_s4_d7bd46\\trips.json"
+        },
+        {
+          "path": "S/six_scrambled/input.json",
+          "size": 2857,
+          "sha256": "da56aae1d771c30523b097ee8920889088c2ae906bc7e0e4c06bcd79a7e14a04",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb\\input.json"
+        },
+        {
+          "path": "S/six_scrambled/result.json",
+          "size": 2822,
+          "sha256": "4ee9618b8c3f4af9cf5899ee5f4053bc7a357e8e613f7ddcbc64e9bd9c44f287",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb\\result.json"
+        },
+        {
+          "path": "S/six_scrambled/trips.json",
+          "size": 2580,
+          "sha256": "64abaf63a750db953287fb7a8129d923bac16ced773f032ac2d0422c6958516b",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb\\trips.json"
+        },
+        {
+          "path": "S/six_scrambled/positions.jsonl.gz",
+          "size": 65260,
+          "sha256": "b63f6748583e46155218add045e54847fcac4f1015602495cd3d5d8d211d65ab",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb\\positions.jsonl.gz"
+        },
+        {
+          "path": "S/six_drop/input.json",
+          "size": 2845,
+          "sha256": "446905d89592e238586e9c4aad6d03ae76fbac60f770cd5175ca019217516a93",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e\\input.json"
+        },
+        {
+          "path": "S/six_drop/result.json",
+          "size": 3631,
+          "sha256": "b9d0810171fa8624f3b6f24ecc98d3f50f46ef96cc63ae3b490a56c8116720ee",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e\\result.json"
+        },
+        {
+          "path": "S/six_drop/trips.json",
+          "size": 3579,
+          "sha256": "b0dfa72adbfd1c49bac79229d67e70a91c5cabe6b0373cc811ac46ea560446d6",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e\\trips.json"
+        },
+        {
+          "path": "S/six_drop/positions.jsonl.gz",
+          "size": 41703,
+          "sha256": "0fb6514a6217bb4ad867d4176f590f2ab09094c959ece4bd4e08fa5cdb721b01",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e\\positions.jsonl.gz"
+        },
+        {
+          "path": "S/q1500_seed1_straight3/input.json",
+          "size": 96520,
+          "sha256": "9205b915f14f16cd3e9e9dad2a3b837981897d31872b68e2a0655db2bac75274",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724853767Z_straight3_transform_s1_155011\\input.json"
+        },
+        {
+          "path": "S/q1500_seed1_straight3/result.json",
+          "size": 95356,
+          "sha256": "d5b2b9208fd84685401e339921f27c0f4bca2df87ffe8cc67fafd302cea39ad2",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724853767Z_straight3_transform_s1_155011\\result.json"
+        },
+        {
+          "path": "S/q1500_seed1_straight3/trips.json",
+          "size": 452542,
+          "sha256": "9efef6f99034f569dc7307242bb50efbd0e8f6c573e9354d6b29dca70b49cb48",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724853767Z_straight3_transform_s1_155011\\trips.json"
+        },
+        {
+          "path": "S/q1500_seed1_lane_drop/input.json",
+          "size": 96520,
+          "sha256": "38c0e30fd35860ba086e9cc3e735842f2417b5e2c7888891a977f80cd3f311af",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724864155Z_lane_drop_transform_s1_19889b\\input.json"
+        },
+        {
+          "path": "S/q1500_seed1_lane_drop/result.json",
+          "size": 163036,
+          "sha256": "12add270c4e43f96d6e49f03868dc0896fd46604da1b1dbc9372c4c3a83dc894",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724864155Z_lane_drop_transform_s1_19889b\\result.json"
+        },
+        {
+          "path": "S/q1500_seed1_lane_drop/trips.json",
+          "size": 555533,
+          "sha256": "1ee2f70eb4e2a95b09d161a9ffcd82015081b164274c0dc6ae27685717eeb989",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724864155Z_lane_drop_transform_s1_19889b\\trips.json"
+        },
+        {
+          "path": "S/q1500_seed4_straight3/input.json",
+          "size": 102107,
+          "sha256": "6a8f7cee674aeaf5031ee8c51735b55ffaf600b7e57b70b4cecf34b5c1ecfdea",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724871755Z_straight3_transform_s4_98260e\\input.json"
+        },
+        {
+          "path": "S/q1500_seed4_straight3/result.json",
+          "size": 115214,
+          "sha256": "e325bc3c8b422878e15b0ef92172449fe70dbbf82a8719af857c43ab60d63cc1",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724871755Z_straight3_transform_s4_98260e\\result.json"
+        },
+        {
+          "path": "S/q1500_seed4_straight3/trips.json",
+          "size": 501831,
+          "sha256": "e1bb1d0fb3fb6410a086e6ddaa188081d917db37e336b4ad125bc030e10a0d1e",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724871755Z_straight3_transform_s4_98260e\\trips.json"
+        },
+        {
+          "path": "S/q1500_seed4_lane_drop/input.json",
+          "size": 102107,
+          "sha256": "f736fd80435be46816f5ea2d7e3c31f53320ee427893109bc52e3d61de4ba515",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724879232Z_lane_drop_transform_s4_dbeb18\\input.json"
+        },
+        {
+          "path": "S/q1500_seed4_lane_drop/result.json",
+          "size": 205748,
+          "sha256": "dd0e2dfde34d10934c162bab9c6fda0c31bbdb16b6f2dc2553bc69b06c9b6faf",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724879232Z_lane_drop_transform_s4_dbeb18\\result.json"
+        },
+        {
+          "path": "S/q1500_seed4_lane_drop/trips.json",
+          "size": 639290,
+          "sha256": "aabaf2efe3e7b4c4d5deb0b29ecc700f28b79aba7b453b399bb665543e594367",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724879232Z_lane_drop_transform_s4_dbeb18\\trips.json"
+        }
+      ]
+    },
+    "shared_configs.tar.gz": {
+      "size": 10844,
+      "sha256": "512bb232bb8368153468c51d5d4318ce458630b302754460e68a4a22879f68b5",
+      "members": [
+        {
+          "path": "configs/kinematic.json",
+          "size": 677,
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\kinematic.json"
+        },
+        {
+          "path": "configs/no_comm_main.json",
+          "size": 6386,
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\no_comm_main.json"
+        },
+        {
+          "path": "configs/paper_reference.json",
+          "size": 2300,
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\paper_reference.json"
+        },
+        {
+          "path": "configs/phase2.json",
+          "size": 9792,
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase2.json"
+        },
+        {
+          "path": "configs/phase3.json",
+          "size": 1434,
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase3.json"
+        },
+        {
+          "path": "configs/phase4.json",
+          "size": 5053,
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase4.json"
+        },
+        {
+          "path": "configs/phase4_experiments.json",
+          "size": 1732,
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase4_experiments.json"
+        },
+        {
+          "path": "configs/phase5.json",
+          "size": 2275,
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase5.json"
+        },
+        {
+          "path": "configs/phase5_experiments.json",
+          "size": 1138,
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase5_experiments.json"
+        },
+        {
+          "path": "configs/phase5_r5.json",
+          "size": 2003,
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase5_r5.json"
+        },
+        {
+          "path": "configs/phase5f.json",
+          "size": 822,
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase5f.json"
+        },
+        {
+          "path": "configs/phase5g.json",
+          "size": 988,
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\phase5g.json"
+        },
+        {
+          "path": "configs/sensitivity.json",
+          "size": 977,
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\sensitivity.json"
+        },
+        {
+          "path": "configs/tools.json",
+          "size": 157,
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\tools.json"
+        },
+        {
+          "path": "configs/topology_smoke.json",
+          "size": 4431,
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "original": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\configs\\topology_smoke.json"
+        }
+      ]
+    }
+  },
+  "files": {
+    "build_bundle.py": {
+      "size": 12417,
+      "sha256": "425dd492095b71578f561cc7259f4a7e6e3bd8c25d41d2c775c4fcd3c606d74b"
+    },
+    "case_evidence.tar.gz": {
+      "size": 761968,
+      "sha256": "905b63d73399348f602a223c6f684d6be7a7f7906e0aa1bf27e1ca1b3f83bcba"
+    },
+    "case_index.json": {
+      "size": 13185,
+      "sha256": "4aaa78ac50feaeab1920746794c92737f9f574e0d7cff712b0d97cc344bd8119"
+    },
+    "diagnostic_baselines.json": {
+      "size": 16266,
+      "sha256": "f2d6529035193c7b64491ba9e2649b7ebfbcc078f44e1b1043a90b33eb44f4be"
+    },
+    "original_file_references.json": {
+      "size": 35183,
+      "sha256": "a422d065f0f6defe519c27d116c102730da2c3908f89b2573c104476d03c5601"
+    },
+    "P_parent/freeze.json": {
+      "size": 1819,
+      "sha256": "96fa935f9cc4623686a4801d7e74c1ebfc87f8533268251f768438b0027446da"
+    },
+    "P_parent/native_rules.py": {
+      "size": 17864,
+      "sha256": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864"
+    },
+    "P_parent_to_R.patch": {
+      "size": 2915,
+      "sha256": "4720cf51790bfc22cf3937ae7aab47b4e01b254e287d9a8986fe52ffaf776055"
+    },
+    "P_parent_to_S.patch": {
+      "size": 3630,
+      "sha256": "eb7c476e23f2a4a26390fa2958fe94bebc3c3305add27924ba233fed9599e108"
+    },
+    "positions_references.json": {
+      "size": 4657,
+      "sha256": "f8f097f2684775d4446b2cbb9662514e1339d9a15e75c136763d6d3ad4bd32bd"
+    },
+    "R/analysis_operation/result.json": {
+      "size": 1134,
+      "sha256": "2dafd24440cdd1a74abd90d7df8cef4393e5fab637d7e3d91025da8c626a903f"
+    },
+    "R/analysis_operation/started.json": {
+      "size": 610,
+      "sha256": "88e69eed30cc4a16734b2f6e68a04527613a02071e3c5d3cd3c4462387e5adb6"
+    },
+    "R/analysis_operation/stderr.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "R/analysis_operation/stdout.log": {
+      "size": 3021,
+      "sha256": "ff0503efa4ea6d4351a4cb17969e3310d7b28f948533a7d0a3f0b5fe58bf925f"
+    },
+    "R/candidate_manifest.json": {
+      "size": 1188,
+      "sha256": "63c4f63ac6d5a1c314a376e7392ee13dde8f8ebf51f1e192645c48f7c21931e1"
+    },
+    "R/full_run_operation/result.json": {
+      "size": 1131,
+      "sha256": "d0ed79026e524955b0bf2166483d5a978ca79cf90c11e773c14905f0be35117f"
+    },
+    "R/full_run_operation/started.json": {
+      "size": 607,
+      "sha256": "f7bfd91ca805c2dca4839fd0691ff4e2812effdc33e0fa7b1f334848c6ff5022"
+    },
+    "R/full_run_operation/stderr.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "R/full_run_operation/stdout.log": {
+      "size": 9700,
+      "sha256": "66275c51efac30018ad5e61d84326d571b8b002c5c5d46992940bb8a0636d4ba"
+    },
+    "R/report.json": {
+      "size": 43347,
+      "sha256": "3b98b0fb9a9cc970b129622862a55e8a19870a4847e14352bc84d829fe3cf9e6"
+    },
+    "R/six_summary.json": {
+      "size": 4236,
+      "sha256": "79f096316750bc246dc3f88a82e4af5c09d47d01a7b4957fd5f52cc246c13f62"
+    },
+    "R/static_green/result.json": {
+      "size": 1227,
+      "sha256": "92ad60627427ac1198baed4ee1b8460118cbf323e24319eda35737bfaa9414a1"
+    },
+    "R/static_green/started.json": {
+      "size": 704,
+      "sha256": "249423fb47154e09181a3a116e6ce1a88566d8b4a25e5dbb93c8d7896046f0f4"
+    },
+    "R/static_green/stderr.log": {
+      "size": 1503,
+      "sha256": "4fa6de8d4529c2004efa044a06bf789a491f7d27acea8495ff8cc429c2fd12ca"
+    },
+    "R/static_green/stdout.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "R/static_red/result.json": {
+      "size": 1220,
+      "sha256": "bc268309f55c831ef094d6310006187eb376b2c2fd23c943a776b14229ebac87"
+    },
+    "R/static_red/started.json": {
+      "size": 703,
+      "sha256": "767ae682084b7044041ff95b5a72394bd41e0b9a1115db5b1e7a8113c3534095"
+    },
+    "R/static_red/stderr.log": {
+      "size": 4324,
+      "sha256": "21e1ffa9bd80bd04b359f9f5c4c0bd4a4e4ec16fd1bf113cc64372d22a3183c5"
+    },
+    "R/static_red/stdout.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "R/tests/test_leader_following.py": {
+      "size": 4687,
+      "sha256": "c800eb6a0706e31be665a17d8a8cfdc16c25928006520a93d63c17d35353a6ef"
+    },
+    "R_sources.tar.gz": {
+      "size": 23266,
+      "sha256": "6608ffd8afc4472b63b2f147055f26e0666d826e02160ff1cc6865af30da083c"
+    },
+    "R_to_S.patch": {
+      "size": 1357,
+      "sha256": "fa218deeee9135a501e2c86f7f2902d929bce49b1af67ac22c1ab74d700a17cf"
+    },
+    "README.md": {
+      "size": 2797,
+      "sha256": "cbc5d2bf7a54b9ce0aba0af5bd85f0f0d26cd6730054dade290fa234061f029a"
+    },
+    "S/analysis_operation/result.json": {
+      "size": 1125,
+      "sha256": "23ecf2b135c11198cbe12077f752afec53b450d15df6d0418161838720089efb"
+    },
+    "S/analysis_operation/started.json": {
+      "size": 601,
+      "sha256": "6c9446537b73ed954f2e51765b46b420c794b02709fb337071da2966d9f9c1d6"
+    },
+    "S/analysis_operation/stderr.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "S/analysis_operation/stdout.log": {
+      "size": 2706,
+      "sha256": "034cc22b21240d3cb84773e07a859626c1b56767061c371708d621eb8d94b8ba"
+    },
+    "S/candidate_manifest.json": {
+      "size": 1108,
+      "sha256": "036c677ac3b06e48abefbc22e214b93de77b89d3e1e0d3746de59b53a789a7db"
+    },
+    "S/full_run_operation/result.json": {
+      "size": 1126,
+      "sha256": "5497108c9796c6ab66ca617db175c02c977d6e04d6da5a45960073bc1d892084"
+    },
+    "S/full_run_operation/started.json": {
+      "size": 603,
+      "sha256": "f6f241c413c5ac15973e10bb978ab300aa3cd6eeffd55bab71ab69ef49e4c566"
+    },
+    "S/full_run_operation/stderr.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "S/full_run_operation/stdout.log": {
+      "size": 9583,
+      "sha256": "4da64ec6a79f62dd860bad5eaa05694a941b28aa294791c67b5754e93f7cff97"
+    },
+    "S/report.json": {
+      "size": 57595,
+      "sha256": "a40d53e6ccde66f2636567f9d43ca1d8fd3250acb24752dceb3a6626a33433b6"
+    },
+    "S/six_summary.json": {
+      "size": 4202,
+      "sha256": "09065df3fad636ca07ebb2902b291fdd10d93f734c9077facdb6e62dd01e060d"
+    },
+    "S/static_green/result.json": {
+      "size": 1219,
+      "sha256": "928274758f45607ef5b15ec0ba770208b19f885868159edfb02ebe1c6fecbed5"
+    },
+    "S/static_green/started.json": {
+      "size": 696,
+      "sha256": "16cc802d5e4e4337d3f9ce0e24bbc681de6010716b60e7705d553b2c47ff573e"
+    },
+    "S/static_green/stderr.log": {
+      "size": 1477,
+      "sha256": "7519e69c5196123de9d0c7315173737e88a220f58059a1d5785d070b9b5624a2"
+    },
+    "S/static_green/stdout.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "S/static_red/result.json": {
+      "size": 1213,
+      "sha256": "179d754c28f8c8ccd95b7e077c93e696960853db617c1776edb55629056c31e4"
+    },
+    "S/static_red/started.json": {
+      "size": 696,
+      "sha256": "fd46fe8c1f9197fd15c782e087f46b05edca023362f8fc6a20cd14ad8ec3dc91"
+    },
+    "S/static_red/stderr.log": {
+      "size": 2801,
+      "sha256": "7cf249c11847116b96ebc6c650006af6867581c23a2042c4e27ef25f2bdf664b"
+    },
+    "S/static_red/stdout.log": {
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "S/tests/test_layer_anchor.py": {
+      "size": 4372,
+      "sha256": "604cbeee160d511fa5323b3d890b12fc9d60e19fc6240a23467eb1538ea00b6b"
+    },
+    "S_sources.tar.gz": {
+      "size": 23371,
+      "sha256": "5c0a8f7aa25c99528843bfb20b7d50e3876233237b4452cddf6d6654b5c76f2a"
+    },
+    "shared_configs.tar.gz": {
+      "size": 10844,
+      "sha256": "512bb232bb8368153468c51d5d4318ce458630b302754460e68a4a22879f68b5"
+    },
+    "source_comparison.json": {
+      "size": 2018,
+      "sha256": "5472a120aa8da54c25b7a4e270a0b1643a174698711edd63d13a743062c8774a"
+    },
+    "verify_bundle.py": {
+      "size": 5719,
+      "sha256": "b2867bf2fa39ff536085960a70bac938f743c3f5ca20bcdef07f6c2fce2ab4ca"
+    }
+  },
+  "source_views": {
+    "P_parent": {
+      "source_sha256": {
+        "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+        "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+        "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+        "noa/native_rules.py": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+        "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+        "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+      },
+      "files": {
+        "experiments/native_sumo.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "experiments/native_sumo.py"
+        },
+        "experiments/global_reference.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "experiments/global_reference.py"
+        },
+        "experiments/complete_layers.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "experiments/complete_layers.py"
+        },
+        "noa/native_rules.py": {
+          "file": "P_parent/native_rules.py"
+        },
+        "run_native_flow.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "run_native_flow.py"
+        },
+        "research/common.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "research/common.py"
+        }
+      }
+    },
+    "R": {
+      "source_sha256": {
+        "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+        "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+        "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+        "noa/native_rules.py": "13d19d7f01eb5c957428db6733a61a8dc77f4065a95fdf05506fddd69b75e12f",
+        "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+        "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+      },
+      "files": {
+        "experiments/native_sumo.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "experiments/native_sumo.py"
+        },
+        "experiments/global_reference.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "experiments/global_reference.py"
+        },
+        "experiments/complete_layers.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "experiments/complete_layers.py"
+        },
+        "noa/native_rules.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "noa/native_rules.py"
+        },
+        "run_native_flow.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "run_native_flow.py"
+        },
+        "research/common.py": {
+          "archive": "R_sources.tar.gz",
+          "member": "research/common.py"
+        }
+      }
+    },
+    "S": {
+      "source_sha256": {
+        "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+        "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+        "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+        "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+        "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+        "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+      },
+      "files": {
+        "experiments/native_sumo.py": {
+          "archive": "S_sources.tar.gz",
+          "member": "experiments/native_sumo.py"
+        },
+        "experiments/global_reference.py": {
+          "archive": "S_sources.tar.gz",
+          "member": "experiments/global_reference.py"
+        },
+        "experiments/complete_layers.py": {
+          "archive": "S_sources.tar.gz",
+          "member": "experiments/complete_layers.py"
+        },
+        "noa/native_rules.py": {
+          "archive": "S_sources.tar.gz",
+          "member": "noa/native_rules.py"
+        },
+        "run_native_flow.py": {
+          "archive": "S_sources.tar.gz",
+          "member": "run_native_flow.py"
+        },
+        "research/common.py": {
+          "archive": "S_sources.tar.gz",
+          "member": "research/common.py"
+        }
+      }
+    }
+  },
+  "case_count": 12,
+  "six_case_count": 4,
+  "high_case_count": 8,
+  "large_positions_copied": false,
+  "original_reference_count": 141,
+  "baseline_status": "H equal-demand diagnostics, not same-source formal pairing; P100/C1_P separate."
+}

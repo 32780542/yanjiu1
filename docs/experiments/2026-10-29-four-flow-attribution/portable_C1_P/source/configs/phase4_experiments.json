@@ -1,0 +1,12 @@
+{
+  "layer": "phase4_experiments",
+  "defaults": {"source":"This study phase4 development protocol","page_or_url":"docs/phase4_implementation_plan.md","status":"declared_development_protocol","rationale":"Predeclared small cases and audit settings; no traffic benefit claim or parameter fit."},
+  "parameters": [
+    {"name":"sumo_external_min_gap_m","value":0.0,"unit":"m","source":"SUMO native external-carrier platform setting; this study initialization probe","page_or_url":"https://sumo.dlr.de/docs/Simulation/Safety.html; results/phase4/continuation/bootstrap/direct_place_results.json","rationale":"The prescribed dense queue has positive 2m body gaps. Native minGap=2.5 blocks insertion or reports a car-following gap violation despite no body overlap. Explicit zero applies only to the SUMO carrier; physical collisions remain enabled and tested. NOA margins, following gaps and independent geometry thresholds are unchanged."},
+    {"name":"phase4_seed","value":20260911,"unit":"seed"},
+    {"name":"phase4_isolation_stride","value":10,"unit":"control intervals","rationale":"Sample counterfactual decisions every ten control intervals and at final interval; sensor histories rebuilt at every interval."},
+    {"name":"phase4_tracking_max_m","value":0.5,"unit":"m","rationale":"Research spec section8 initial engineering maximum; also report stricter phase3 0.35m benchmark separately."},
+    {"name":"phase4_tracking_p95_m","value":0.3,"unit":"m","rationale":"Research spec section8 initial engineering P95 threshold."},
+    {"name":"phase4_numeric_slack","value":0.000001,"unit":"numerical tolerance","rationale":"Small float allowance for physical bounds and comfort comparisons; not a measurement uncertainty."}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "analysis_sha256": {
+    "analyze_cooperative.py": "80ebbab46eea81a20048753d9152c8f25953eed9a722fc26e7a8cc3072937fa3",
+    "postverify_analysis.py": "ea4b73433ee8e0286115288af6aef1748f4d8e01ab4ea2f7585722a16e2bf5cf",
+    "wait_and_analyze.py": "86c3f8e2a96430af86adb878d1a2711b846738444566f9aa1d8ae4b7ecb70449"
+  },
+  "source_freeze_sha256": "da06ceb205452f52321f1d7464e8744c0a726bf59446a14b3c1ed4581b75ff6b",
+  "P_expected_anchor_sha256": "5a628e4135fb1e1680ff8c4ffa700342f71d85528990cc94251185bc4e2e3cac",
+  "seed_set": [
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "raw_parameters_sha256_must_equal": true
+}

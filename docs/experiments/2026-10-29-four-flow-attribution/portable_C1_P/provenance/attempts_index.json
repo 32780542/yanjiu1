@@ -1,0 +1,56 @@
+{
+  "attempts": [
+    {
+      "label": "static_red_expected",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T034234279474Z_C1_P-static-red_8fdf1985",
+      "status": "failed",
+      "returncode": 1,
+      "result_path": "provenance/operations/static_red_expected/result.json"
+    },
+    {
+      "label": "static_green",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T034309864908Z_C1_P-static-green_fe0820d5",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/static_green/result.json"
+    },
+    {
+      "label": "C1_P_source_freeze",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T034543115460Z_C1_P-source-freeze_b9a38a0c",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/C1_P_source_freeze/result.json"
+    },
+    {
+      "label": "twenty_drop_batch",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T034544274513Z_C1_P-heldout-twenty-drop_3fd04f54",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/twenty_drop_batch/result.json"
+    },
+    {
+      "label": "guarded_analysis_and_postverify",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T035246835677Z_C1_P-guarded-P-paired-analysis_c062564a",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/guarded_analysis_and_postverify/result.json"
+    },
+    {
+      "label": "portable_build_v1_failed",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T041905151466Z_portable-C1_P-lossless-build_0b5cae1a",
+      "status": "failed",
+      "returncode": 1,
+      "result_path": "provenance/operations/portable_build_v1_failed/result.json"
+    }
+  ],
+  "seeds": [
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "old_seed_cases_reused": false,
+  "formal_attempts": 1,
+  "common_parameters": "P and C1_P explicit float flows: original parameter SHA exactly equal; no numeric-type exception or normalization."
+}

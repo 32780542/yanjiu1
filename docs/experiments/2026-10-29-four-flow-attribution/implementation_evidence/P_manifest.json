@@ -1,0 +1,41 @@
+{
+  "archive_sha256": "3887239493dd18b0551a6aeebcda78f6fb531ce5ba55d26b6dcbf90f34d073b7",
+  "members": {
+    "P_freeze.json": "96fa935f9cc4623686a4801d7e74c1ebfc87f8533268251f768438b0027446da",
+    "P_main_integration_evidence.json": "2aba70fa273874ce6120b6dc3aecf3a71c9e36a9eb516f7bdc9d61776fffde54",
+    "core/result.json": "c3b9fbbc094c1295782f66c50514538d01c5ec5f49b42f3017dcbbc07363c5f3",
+    "core/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "core/stdout.log": "63eac8db4a1755aaf2075e26e3d915e8788110e997fc766322f040a77e3aec11",
+    "original_P_scope_RED/result.json": "75d7bef4f1d90e6d047b01de00487b95282ee36bfb086738823ec96e188c7e31",
+    "original_P_scope_RED/stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "original_P_scope_RED/stdout.log": "4a18a349323066282210915315f2569a2e69dd202a28c410e269a20ee4553a73",
+    "root_GUI/result.json": "e98883221546f61b0dab12d7fd66f079712205e04d644710c1431b9070e39ab4",
+    "root_GUI/stderr.log": "e1659516db146d382ee3a9b9e393a29d3b38b4a01cc08118fc073faa8294ae93",
+    "root_GUI/stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "scope_green.log": "05969f68db42c0d80b5f203b4c913fe621ff8643af5b714630e061a4653df4b3",
+    "scope_red.log": "0c81ac52f56f38b23deba3d3ba75133652c7ad5f842cc3bab51bae4ffba467c4",
+    "six_0/input.json": "96442d49656a873088cc896aa35c95cecf249d16d98e96dd49972414178a4232",
+    "six_0/positions.jsonl.gz": "0469630b307c04e76989ebffbbf5b1856b89e56a79b634c66967df9ffb798ec6",
+    "six_0/result.json": "0bfb7fae052347fe74d56865154c4161b4482c8787a7eb920f163bb86ef85379",
+    "six_0/trips.json": "9db8858f87bbf8b814d8ed5258aaaa770b4076af210efb8a29f8223d0dd793e9",
+    "six_1/input.json": "caa031069b991006d8e1cc0112da0e553a06e79f63540c51c0d6466cf4c1fc18",
+    "six_1/positions.jsonl.gz": "514f6dbfce2657cb6e34c70308d7af63d1853991288933af2337df32d8431bd5",
+    "six_1/result.json": "5df9faa0faf96eaa0e6d6959a97b39f245d007da77bab1d614ad1e365096b6f8",
+    "six_1/trips.json": "d0007c79d28596053ca6d451babe46f22ae3d9194ec0a772cb8b5f5294daa324",
+    "six_verification.json": "9e18a512acd2e20fea57d6986af6f535f39a90de06c5edfaafe2755a6710ec9d",
+    "tests/test_common_pair.py": "9576f3117b5b1d58c8ae4f19e6bba6d7423129ad35da3c7731192eeb93c941ff",
+    "tests/test_ending_pair_scope.py": "5adb387ad5b9f05ed10fafe7b550e4d8e52997894e98c3e920dfb57f8892d07b"
+  },
+  "source_sha256": {
+    "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "core_tests": 187,
+  "subtests": 29,
+  "root_GUI_tests": 9,
+  "scope": "Implementation and two actual six-car gates; traffic conclusions use frozen P100 and C1_P20."
+}

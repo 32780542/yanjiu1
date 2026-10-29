@@ -1,0 +1,26 @@
+--- R/noa/native_rules.py
++++ S/noa/native_rules.py
+@@ -114,11 +114,22 @@
+     front = _front(ego, rows)
+     if front is not None:
+         target = front.x - GAP
++        if ego.lane != lanes - 1:
++            anchors = [c for c in rows if c.lane == lanes - 1 and _settled(c)]
++            anchor = min(anchors,
++                         key=lambda c: (abs(_pair_error(ego, c, lanes, phase_boundary)[0]),
++                                        _pair_error(ego, c, lanes, phase_boundary)[0],
++                                        c.x, c.y, c.speed, c.vy), default=None)
++            if anchor is not None:
++                layer_error, _ = _pair_error(ego, anchor, lanes, phase_boundary)
++                if abs(layer_error) <= GAP / 2.0:
++                    layer_speed = max(-2.0, min(2.0, POSITION_GAIN * layer_error))
++                    target += layer_speed / POSITION_GAIN
+         return _request(ego, target, front.speed), target, front.track
+     cars = (ego, *rows)
+ 
+     candidates = [c for c in rows
+-                  if abs(c.lane - ego.lane) == 1 and 0 <= c.lane < lanes
++                  if c.lane != ego.lane and 0 <= c.lane < lanes
+                   and abs(c.x - ego.x) <= 50.0 and _settled(c) and _front(c, cars) is None
+                   and _pair_error(ego, c, lanes, phase_boundary)[0] > 0.0]
+     peer = min(candidates,

@@ -1,0 +1,29 @@
+test_NOA_600_general_local_states_keep_R_actions_and_memory (test_layer_anchor.LayerAnchorTests.test_NOA_600_general_local_states_keep_R_actions_and_memory) ... ok
+test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference (test_layer_anchor.LayerAnchorTests.test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference) ... FAIL
+test_extra_rear_counts_never_invent_an_observed_same_layer (test_layer_anchor.LayerAnchorTests.test_extra_rear_counts_never_invent_an_observed_same_layer) ... ok
+test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane (test_layer_anchor.LayerAnchorTests.test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane) ... FAIL
+test_perfect_lattices_remain_steady_in_three_and_two_lanes (test_layer_anchor.LayerAnchorTests.test_perfect_lattices_remain_steady_in_three_and_two_lanes) ... ok
+test_root_lane_body_receives_no_other_body_phase_feedback (test_layer_anchor.LayerAnchorTests.test_root_lane_body_receives_no_other_body_phase_feedback) ... ok
+test_root_vehicle_one_layer_away_is_not_a_same_layer_anchor (test_layer_anchor.LayerAnchorTests.test_root_vehicle_one_layer_away_is_not_a_same_layer_anchor) ... ok
+test_unsettled_root_is_not_an_anchor_but_moving_actual_front_is_followed (test_layer_anchor.LayerAnchorTests.test_unsettled_root_is_not_an_anchor_but_moving_actual_front_is_followed) ... ok
+
+======================================================================
+FAIL: test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference (test_layer_anchor.LayerAnchorTests.test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\tmp\S_layer_anchor\tests\test_layer_anchor.py", line 21, in test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference
+    self.assertAlmostEqual(target,front.x-r.GAP+2/r.POSITION_GAIN)
+AssertionError: 100.0 != 106.66666666666667 within 7 places (6.666666666666671 difference)
+
+======================================================================
+FAIL: test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane (test_layer_anchor.LayerAnchorTests.test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\tmp\S_layer_anchor\tests\test_layer_anchor.py", line 53, in test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane
+    self.assertAlmostEqual(target,105)
+AssertionError: 100.0 != 105 within 7 places (5.0 difference)
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.039s
+
+FAILED (failures=2)

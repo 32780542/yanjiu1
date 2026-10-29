@@ -1,0 +1,59 @@
+{
+  "attempts": [
+    {
+      "label": "static_red_expected",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T030315478767Z_C1-strict-formation-red_66c672e0",
+      "status": "failed",
+      "returncode": 1,
+      "result_path": "provenance/operations/static_red_expected/result.json"
+    },
+    {
+      "label": "static_green",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T030333367524Z_C1-strict-formation-green_8eb7b997",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/static_green/result.json"
+    },
+    {
+      "label": "C1_source_freeze",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T030659854847Z_C1-source-freeze-v2_0bb4be25",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/C1_source_freeze/result.json"
+    },
+    {
+      "label": "twenty_drop_batch",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T030700735515Z_C1-strict-formation-twenty-drop-v2_7c5221ed",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/twenty_drop_batch/result.json"
+    },
+    {
+      "label": "analysis",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T031130022133Z_C1-analysis-paired-H_a86899a6",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/analysis/result.json"
+    },
+    {
+      "label": "independent_postverify",
+      "original_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T031411615846Z_C1-analysis-independent-postverify_9a5586b0",
+      "status": "completed",
+      "returncode": 0,
+      "result_path": "provenance/operations/independent_postverify/result.json"
+    }
+  ],
+  "retired_metadata_attempt": {
+    "operation": "D:/yanjiu1/keyan1/results/operations/20261029T030503672406Z_C1-strict-formation-twenty-drop_d7d6b1d2",
+    "study": "D:/yanjiu1/keyan1/tmp/H_strict_formation_ablation/results/20261029T030504010845Z",
+    "disposition": "Retired before official C1 run; incomplete records preserved read-only",
+    "reason": "PowerShell label-edit command failed; first wrapper retained C0 protocol wording although C1 rule guard was already correct",
+    "owned_runner_pid": 113248,
+    "termination": "Stopped only verified owned run_logged runner; its private Windows job closes all owned workers/SUMO",
+    "excluded_from_official_C1_analysis": true
+  },
+  "retired_raw_files": 51,
+  "retirement_was_not_outcome_filtering": true,
+  "reason": "An initial wrapper-label edit failed before the first run; the already-correct C1 control attempt was stopped and preserved. Official v2 changed protocol labels only and used a fresh study directory.",
+  "common_parameters": "Original raw float/int forms and distinct hashes retained; numeric common parameter equality is explicit, not same-source pooling."
+}

@@ -1,0 +1,508 @@
+{
+  "generated_utc": "2026-10-29T05:08:17.231850+00:00",
+  "scope": "Publication handoff only: links, wording and existing figure reference. No metric recomputation or table edits.",
+  "old_report_sha256": "fc4bfb195d49b95bf594421046d70ec2c5a5f0121e8a563f73d1ffc98753b980",
+  "new_report_sha256": "8f4956327f6b62ef5ef3c95724ea6ac1be34ebcf564d9f615171237ee73b8af8",
+  "report": "docs/2026-10-29-P独立验收报告.md",
+  "tables_identical": true,
+  "markdown_table_count": 14,
+  "old_and_new_table_sha256": [
+    "217358ffa8a790a005dbe2e791db01686a365f0bc2c8a79f3ec6d8daac384947",
+    "4d57c1b32499c8cc1936f4986c983bfe5182f55b300cff9843eb581e411153d6",
+    "f4378035783c2948085916236934235161a0551ce732d14f6827e0cc73bfc170",
+    "8781a0660de89d477d1d96b252bd6ded33b664777c7f8745f7984eb89e11fa8a",
+    "e3cf3194a7156ea083e25c06cda55c144f8c085e4185efda2aaefa9b16930d0c",
+    "746e66df91dc9bd6a98c8f2230118a7f6ade16ff074f8aa51b93581b93254d05",
+    "0b43955b74bac6e78b86dfec7542d3c09d14549bd65e90c5ab7ed4842980e3bd",
+    "e98c3aff363bd197e1af9aa0058d5563f0068731b9095c53b52683adfe5949be",
+    "f73e9d9b892ffd192232cfc7be18278bbcc66128970ab9c86ada50bda01928b7",
+    "dd3471cd3f47b55b676806c743af9520923e63bf812a5e259f0d8461ea0beeb6",
+    "612b266e4c719cdd9985e072515327a7e7df210a2b409d2a4e5114f00881fe3b",
+    "db7c6248b8ab05cf6fe43c9973e4bb6231e4cc8e66c580130e2429e5466931da",
+    "056fc30059d173bd5c70d4fdad951c3cf7c55621d1adb6a58e8312d98ef7e694",
+    "f64bfedbf58aa65cca53fef1ef363ed0a7c08f5268639c03d40bff82bf2c3b35"
+  ],
+  "original_51_source_numeric_hashes": {
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/tables/traffic_and_attribution.csv": {
+      "bytes": 2452,
+      "sha256": "b51d98e042c8936df183c4234c0dd8e6495377b2de527fd315bd36dfd79dd36a"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/tables/formation_quality.csv": {
+      "bytes": 2640,
+      "sha256": "aa4d29bd8355b834cf2ed14a2f28d0d656d6877dbed3e8911720a462334cfe16"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/tables/straight_controls.csv": {
+      "bytes": 1642,
+      "sha256": "d653ee9cb86937357b3d1b7a2047a9436e44f6e127969f4d4a65fcbbc0966256"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/tables/recovery_counts.csv": {
+      "bytes": 608,
+      "sha256": "7691ca129d465589e64c644ca0466d3c7c2ce0c5285b442b97ea614b7bd8c8b0"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/tables/column_definitions.json": {
+      "bytes": 3729,
+      "sha256": "f230f9ce5995e98b1ea7da886805c84c11f01e914a57f4ea68d974df36102362"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/attribution_summary.json.gz": {
+      "bytes": 64349,
+      "sha256": "5aa44f51fb687eddf00ca38563ce5102561a3255f2a877b6f352d39dd4d5ecbd",
+      "decoded_sha256": "f9ebd229f78b86d762a1455b5defb08ccd55ef62829ac15d024e4612d32757cd"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_500.json.gz": {
+      "bytes": 14594,
+      "sha256": "0faed246c976874c916cc91f7bb5d7399b028e7dfc9cdcbc7a1be4e1ad95ba68",
+      "decoded_sha256": "436afc00a0ee6d97acbbc97c5ae32c73a958ee4db6f46300f8e0ca542960ada1"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_750.json.gz": {
+      "bytes": 16168,
+      "sha256": "fc3a9624e0ea6536ceb516db106a3c027705ac3ab216331fe2e7cd42d73671d0",
+      "decoded_sha256": "f951f3731dc837a18750a0b0d4c03d41d8be92dd5cf81f5c4feee21fe8d33186"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_1000.json.gz": {
+      "bytes": 17022,
+      "sha256": "a330dc051f28b4dced0a98126c09746f8f3abe41f7da1a395c4630237cf9aae8",
+      "decoded_sha256": "922e5505ac23cb73641185935906d37d04b98e32e75e0bc72544603a08dc222e"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_1500.json.gz": {
+      "bytes": 18906,
+      "sha256": "e871ffc035feefb5fa4ce9b639dfc1b858d7be5ce27f1ad8db7b42eb2800c416",
+      "decoded_sha256": "8e09a97bdd240650cae6c7d0eb517616125c614c82dc7576375dac0b4e1536dd"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_500.json.gz": {
+      "bytes": 90378,
+      "sha256": "b7d15185119937a00d86f7813ce9555ed8de4a5789611376b4baaec61b6af797",
+      "decoded_sha256": "5440d957657477fcc023c3f833fc759e22391818c6b10df0e2bd31ca08391894"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_750.json.gz": {
+      "bytes": 124107,
+      "sha256": "2a389ccdd43c7a4e7033fc4a5eb71c34fbe73ffe8d528157526f09cfdc75c4f5",
+      "decoded_sha256": "3370157f5870f33003ad552f858e8676a56d2964bf1d0f5d8822a45d56765b70"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_1000.json.gz": {
+      "bytes": 157181,
+      "sha256": "53f93b0874b89c8d1d64df8774eb7b118ca4b2999867e332afa7cd7eca14a21c",
+      "decoded_sha256": "69de30118b0541922afd16c4807f558f027f611274d02d4b664333ad8e24dde9"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_1500.json.gz": {
+      "bytes": 223573,
+      "sha256": "722b09f283def42ae10bb6b6df101936cf0d2427c736610fb478d9ac8986ce6b",
+      "decoded_sha256": "81257a3074b13cddce605a00ba95a46ee6cb093367f6c2bf60c70f61d5742f5a"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/tables/flow_means.csv": {
+      "bytes": 10974,
+      "sha256": "42f52ec507b215a544e4776b6ed3cdc19a77be85f5136a754ddf88d3ba490e07"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/tables/pairs.csv": {
+      "bytes": 36335,
+      "sha256": "9d205c4bb2aa1b59f7b5851583944f67a741245d250bd128ad7a38eadd59c62a"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/tables/runs.csv": {
+      "bytes": 48429,
+      "sha256": "ace10c7a0e57b6e9e045e7e14a95acf8876fd0f8cbfb35880caaec9c6682a539"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/recovery_summary.json.gz": {
+      "bytes": 190863,
+      "sha256": "7d613f8891072afe2c75c0d989df7430dcc84bf2de6f418455429294df09c066",
+      "decoded_sha256": "03ecb9922ed356ddfdc6538224c0b142a4155e5abf726def561712c42391de3d"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1000_s10.json.gz": {
+      "bytes": 149185,
+      "sha256": "4e64b256f3fe854b5dfb222c838de48f7e9cf8bdc11947a8b9abef009637f377",
+      "decoded_sha256": "ae762d65e341f2e8db8f1c9c173ebdd1d262168850ab85721cddefa6c59b4386"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1000_s6.json.gz": {
+      "bytes": 150326,
+      "sha256": "dd9440678768a8b55f125fcef6081ea00a8fbbc9428351d252ca7d4fc4eaaea2",
+      "decoded_sha256": "6871d07d6496447b050b1af56cf14de474f5da02a2a1c4c28e9be980dc8faee0"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1000_s7.json.gz": {
+      "bytes": 148073,
+      "sha256": "27da1789504bce1722f5e7b7341853a946570fc68f5200fde6b9d9e9ed8fae88",
+      "decoded_sha256": "ed7b658841c23ae346cdb0618cbf55d89ba7fbbbab4b4fba1def4410b4398163"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1000_s8.json.gz": {
+      "bytes": 146772,
+      "sha256": "824ce666f0dc2b633299212691536dffa44d590a46ec3ad6b6ebbe1871bf12fa",
+      "decoded_sha256": "5d12e5e80604c10e997abadbb8c948645ff7b496594e6b1dc90066e9c169a005"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1000_s9.json.gz": {
+      "bytes": 145552,
+      "sha256": "7007d947bbf6f1da8adc8ca3fc17ebb0d2c6e0b12f8da90723f1634fd2bfb7c9",
+      "decoded_sha256": "1cf9d6e96eec437cf9769aaf9321b01080a9e2f58a1f997003ae8194b8c63f54"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1500_s10.json.gz": {
+      "bytes": 221575,
+      "sha256": "ef238aec131dae2ad282eb10ad8e64d540d1228be01f54d23eeb137f7fc79902",
+      "decoded_sha256": "08991ad4fcaf65e3b6ef744f063c90c8eecbba729f61651304e5b8b0fbf40cf2"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1500_s6.json.gz": {
+      "bytes": 226305,
+      "sha256": "638d650faf0a2f57990837d6bf20beb48138863617f597cb9d05b5868a5a70f5",
+      "decoded_sha256": "110f5840636b7ade7361bdd4e003cb5eb42b1b38ea61118e9b85748f7ddd9818"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1500_s7.json.gz": {
+      "bytes": 222638,
+      "sha256": "d4f2aa275438b64da3c4b1ae54193f0118bfe2ad95912c9b9354b00ffab8e486",
+      "decoded_sha256": "ec59e23c850ac8d7f5ab1cfb2efd2116fea371878a72b04d4a1de6547f324c90"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1500_s8.json.gz": {
+      "bytes": 207201,
+      "sha256": "5c1273389ea5eb4af5a503e3470953d95a8d6dd1656b8529dc8c5e359d4bdef9",
+      "decoded_sha256": "b64372623833db16daad45236ee9a755ae44e2fd0185ccc778bcc365045fab17"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow1500_s9.json.gz": {
+      "bytes": 215924,
+      "sha256": "83d44c620d6e856a5ca0db94f5e475d0617edadb59947443e60fede63c0f3b64",
+      "decoded_sha256": "21a1cb6074d4362757392e5bdb9ede0a86a7d3525eddb6ed402a39ad7d1749f2"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow500_s10.json.gz": {
+      "bytes": 76530,
+      "sha256": "7087940f8b58efd21b0b8b4acbe979eabf783d0838c6f6134327b368728782a3",
+      "decoded_sha256": "2d618f603d315a6e7937bfbda833649436414af49f3acc8eb5ff2eaf22774ff6"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow500_s6.json.gz": {
+      "bytes": 91065,
+      "sha256": "544403cf51f1f456f36487e1bb9a6d4c0fc9d58cdd37a5878276947d775da47c",
+      "decoded_sha256": "9f734d14b7ed359bac4e10af3bdd25e0aa5cabd5062eb16105577204fe07782e"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow500_s7.json.gz": {
+      "bytes": 79535,
+      "sha256": "72bcbfa4ace8990dd619bd3e546ed980772b3411357dd072b8826d123874d4ff",
+      "decoded_sha256": "ea25f1b4daaa70532f2983d17771bb318c465ffc9bcbf383798d78b058cc3d65"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow500_s8.json.gz": {
+      "bytes": 83893,
+      "sha256": "21aa73d8902a5363a74330f1b783cd10cfb58541d7cac03432ab17457fa2f874",
+      "decoded_sha256": "4d57ff5cd8a457db50791890b0392601f566e9532a028a5d0f327e1d78afe0cc"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow500_s9.json.gz": {
+      "bytes": 90191,
+      "sha256": "7757a5e47ade57b3cdfc7569e059efb9777073b80f3baf4a2b8816be82fd2e33",
+      "decoded_sha256": "3b954ab0bece8b9a9d1849b1030fa1de746143b1a107d4f4e99ead3c737f1f40"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow750_s10.json.gz": {
+      "bytes": 118221,
+      "sha256": "166c45b17eb84cbfb761ae0212c64ea8ba0b8501c7d6ddf06105523a0ce5ee47",
+      "decoded_sha256": "438db8e496fdc3e7054e7a5485ba225399e80c5f6ac04a530684f18abe570e02"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow750_s6.json.gz": {
+      "bytes": 120666,
+      "sha256": "c3e8551e5f1dcc7aee335c98a4b32b387e564c668086f16cb7cfc8f0b8466f94",
+      "decoded_sha256": "34301b76017b15d2d8a9cb7b4c22a53258deaa71c78a8fafa5aaa489a8ab9eb6"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow750_s7.json.gz": {
+      "bytes": 116604,
+      "sha256": "652e1cba7118e183f48cebc42417c3f7193dc47b386ba11f0dcabccbf8c3b6d9",
+      "decoded_sha256": "9db4024179162d90c4b003007c40126e1eb17042df99f411525fc7cd81a5ddbe"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow750_s8.json.gz": {
+      "bytes": 108511,
+      "sha256": "e769fcb55872ea349f03efb3adb1a9da5cc2a0312a42bf6a2eeb1a0017fc7421",
+      "decoded_sha256": "5ea60954f844edc22a4683d1c1778bdb9935946d114f6ab9f3044ea5169de5dc"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/case_evidence/flow750_s9.json.gz": {
+      "bytes": 110731,
+      "sha256": "3477f801ef597a9b1dd37a17d28523c3078009190053f062dfa13cfd0ee9ffc5",
+      "decoded_sha256": "04002fc4a0b41fb84f8909524d59e784ba2fcb337642686bb179616d478f39e5"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/provenance/freeze.json": {
+      "bytes": 5593,
+      "sha256": "da06ceb205452f52321f1d7464e8744c0a726bf59446a14b3c1ed4581b75ff6b"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/provenance/protocol.json": {
+      "bytes": 1136,
+      "sha256": "f1ef462345a063e5f3a529079682e5e48385dc0f88c57bfd5263e48cd0f5ab24"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_P/independent_verification.json": {
+      "bytes": 710,
+      "sha256": "d2f61e347a7c9ad1101a37d856f2cd254cfcfd2d3171a33c5bb33e5a4a1b92fd"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/portable_C1_P/independent_verification.json": {
+      "bytes": 3213,
+      "sha256": "d71a8210101ef163e75e34753202b387d7deafb2c0d2666d53a604ff3ea67178"
+    },
+    "tmp/P_main_integration_evidence.json": {
+      "bytes": 7370,
+      "sha256": "2aba70fa273874ce6120b6dc3aecf3a71c9e36a9eb516f7bdc9d61776fffde54"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/P_analysis/flow_1500/native_comparison/pairs.csv": {
+      "bytes": 16211,
+      "sha256": "2a42105af8dafcc937aec68a64e1e22dd6aadf8bdea8095a6646486fb69bacc3"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/P_analysis/flow_1500/native_comparison/runs.csv": {
+      "bytes": 29371,
+      "sha256": "d50ece2aa0c7f5db29367c0069dcfb4f4e1cb9c0b1bcbdabaf843ae991bb6e76"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/P_analysis/four_flow_results.csv": {
+      "bytes": 4964,
+      "sha256": "e907dd69e178e917f7c9dea7021f4121de8c61e0cb81b9b12b4d4189610e45d4"
+    },
+    "docs/experiments/2026-10-29-four-flow-attribution/P_protocol.md": {
+      "bytes": 2507,
+      "sha256": "9076d030082fc9a61335927bf70eced74ad81ef76c18d7e280f5debd9dd2feaa"
+    },
+    "docs/纯规则编队系统说明.md": {
+      "bytes": 28147,
+      "sha256": "a317e0c380f66d5bab7405379e236e06955eab84ff71f588a12c0158f798b9b8"
+    },
+    "docs/原生SUMO编队变换系统说明.md": {
+      "bytes": 30878,
+      "sha256": "905e54a0eddaf1331df3a414f74780a80c770278ca061caaf8eb011fc6082e3a"
+    },
+    "docs/2026-10-29-MATLAB车辆控制调用链核查.md": {
+      "bytes": 18020,
+      "sha256": "5f1df227a95b979383a48b7b41839363c7d52e4418010ce741060cd9c642b133"
+    },
+    "docs/2026-10-29-四流量瓶颈归因报告.md": {
+      "bytes": 13188,
+      "sha256": "2cef45688aac76847b806994a2fda3c95c2e8a04e790fa79f90c5cfc9687c2ee"
+    }
+  },
+  "original_numeric_audit_sha256": "0f9feefb2fb58bb1e262cad31397b287d4612cfdaa0c2f18cbd51fbeabbbda55",
+  "original_numeric_verification": {
+    "passed": true,
+    "report_sha256": "fc4bfb195d49b95bf594421046d70ec2c5a5f0121e8a563f73d1ffc98753b980",
+    "source_files_checked": 51,
+    "markdown_tables_checked": 14,
+    "P_mode_flow_cells_checked": 12,
+    "P_1500_seed_pairs_checked": 5,
+    "C1_P_raw_parameter_pairs_checked": 20,
+    "links_checked": 33,
+    "missing_links": [],
+    "existing_metrics_only": true
+  },
+  "numeric_evidence_archive": {
+    "path": "docs/experiments/2026-10-29-four-flow-attribution/implementation_evidence/P_report_numeric_evidence.tar.gz",
+    "sha256": "1b97c5a9c7e1415b9374ba4ef1411137a2a45b0893497c57ebf45a938f3b4a23",
+    "bytes": 32475,
+    "members": {
+      "original/P_independent_acceptance_fc4bfb19.md": {
+        "sha256": "fc4bfb195d49b95bf594421046d70ec2c5a5f0121e8a563f73d1ffc98753b980",
+        "bytes": 23566
+      },
+      "original/P_report_audit.json": {
+        "sha256": "0f9feefb2fb58bb1e262cad31397b287d4612cfdaa0c2f18cbd51fbeabbbda55",
+        "bytes": 44769
+      },
+      "scripts/write_P_acceptance_report.py": {
+        "sha256": "03544d6cbc4a73c3e55d929cb79bb5fdccde5c974c33328d73b3e42abae50883",
+        "bytes": 32077
+      },
+      "scripts/verify_P_report_numbers.py": {
+        "sha256": "98791cfb07194d77b4caaf17af9315ed6d48deafbe0c081b2908f90e77b66d5a",
+        "bytes": 7186
+      },
+      "original_report_sha256.txt": {
+        "sha256": "1481e43d6fde01437322bfeb49045d664ec8e89cbbdc34d81a1dae3d5698ef40",
+        "bytes": 112
+      },
+      "manifest.json": {
+        "sha256": "01b69d0a1b0ca84b5941cd4ee923cef60eff86fa30fce5e1b5df4e00163fcb04",
+        "bytes": 1609
+      }
+    }
+  },
+  "reviewed_implementation": {
+    "manifest": "docs/experiments/2026-10-29-four-flow-attribution/implementation_evidence/P_manifest.json",
+    "manifest_sha256": "d7535c6d984c7318a85beb74702e130753951630ed363015c74ad20f074d3880",
+    "archive_sha256": "3887239493dd18b0551a6aeebcda78f6fb531ce5ba55d26b6dcbf90f34d073b7",
+    "manifest_members_verified": 24
+  },
+  "publication_editor_sha256": "f282799631187338bf26df1b167ed60604d82fcbd698f90aba8456a3e540d34c",
+  "public_links": [
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/P_protocol.md",
+      "exists": true,
+      "sha256": "9076d030082fc9a61335927bf70eced74ad81ef76c18d7e280f5debd9dd2feaa"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/PACKAGE.txt",
+      "exists": true,
+      "sha256": "6de3f6c690642695f34eebed0f4609769bb2a00225ed6291e262a90a1a36e671"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/PACKAGE.txt",
+      "exists": true,
+      "sha256": "1db99c2e8949f8b8aacc04e08ad2aa9d99617726ab04507375ae60544c987ec8"
+    },
+    {
+      "href": "原生SUMO编队变换系统说明.md",
+      "exists": true,
+      "sha256": "905e54a0eddaf1331df3a414f74780a80c770278ca061caaf8eb011fc6082e3a"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/figures/P.png",
+      "exists": true,
+      "sha256": "a19f45b3837f428a9fc3d6f3af19009b0e022f3d2d18c01e5da3ef7e739c28c1"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/tables/traffic_and_attribution.csv",
+      "exists": true,
+      "sha256": "b51d98e042c8936df183c4234c0dd8e6495377b2de527fd315bd36dfd79dd36a"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/tables/results.json",
+      "exists": true,
+      "sha256": "12222384b32b6dbd53d9d1fa4789d183f1a6946f6765631a10fb7fde589e6ee3"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/attribution_summary.json.gz",
+      "exists": true,
+      "sha256": "5aa44f51fb687eddf00ca38563ce5102561a3255f2a877b6f352d39dd4d5ecbd"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/tables/straight_controls.csv",
+      "exists": true,
+      "sha256": "d653ee9cb86937357b3d1b7a2047a9436e44f6e127969f4d4a65fcbbc0966256"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_1500.json.gz",
+      "exists": true,
+      "sha256": "e871ffc035feefb5fa4ce9b639dfc1b858d7be5ce27f1ad8db7b42eb2800c416"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/tables/traffic_and_attribution.csv",
+      "exists": true,
+      "sha256": "b51d98e042c8936df183c4234c0dd8e6495377b2de527fd315bd36dfd79dd36a"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/tables/formation_quality.csv",
+      "exists": true,
+      "sha256": "aa4d29bd8355b834cf2ed14a2f28d0d656d6877dbed3e8911720a462334cfe16"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_500.json.gz",
+      "exists": true,
+      "sha256": "0faed246c976874c916cc91f7bb5d7399b028e7dfc9cdcbc7a1be4e1ad95ba68"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_750.json.gz",
+      "exists": true,
+      "sha256": "fc3a9624e0ea6536ceb516db106a3c027705ac3ab216331fe2e7cd42d73671d0"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_1000.json.gz",
+      "exists": true,
+      "sha256": "a330dc051f28b4dced0a98126c09746f8f3abe41f7da1a395c4630237cf9aae8"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/native_flow_1500.json.gz",
+      "exists": true,
+      "sha256": "e871ffc035feefb5fa4ce9b639dfc1b858d7be5ce27f1ad8db7b42eb2800c416"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/tables/recovery_counts.csv",
+      "exists": true,
+      "sha256": "7691ca129d465589e64c644ca0466d3c7c2ce0c5285b442b97ea614b7bd8c8b0"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_500.json.gz",
+      "exists": true,
+      "sha256": "b7d15185119937a00d86f7813ce9555ed8de4a5789611376b4baaec61b6af797"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_750.json.gz",
+      "exists": true,
+      "sha256": "2a389ccdd43c7a4e7033fc4a5eb71c34fbe73ffe8d528157526f09cfdc75c4f5"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_1000.json.gz",
+      "exists": true,
+      "sha256": "53f93b0874b89c8d1d64df8774eb7b118ca4b2999867e332afa7cd7eca14a21c"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_P/data/recovery_flow_1500.json.gz",
+      "exists": true,
+      "sha256": "722b09f283def42ae10bb6b6df101936cf0d2427c736610fb478d9ac8986ce6b"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/tables/pairs.csv",
+      "exists": true,
+      "sha256": "9d205c4bb2aa1b59f7b5851583944f67a741245d250bd128ad7a38eadd59c62a"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/provenance/freeze.json",
+      "exists": true,
+      "sha256": "da06ceb205452f52321f1d7464e8744c0a726bf59446a14b3c1ed4581b75ff6b"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/independent_verification.json",
+      "exists": true,
+      "sha256": "d71a8210101ef163e75e34753202b387d7deafb2c0d2666d53a604ff3ea67178"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/tables/flow_means.csv",
+      "exists": true,
+      "sha256": "42f52ec507b215a544e4776b6ed3cdc19a77be85f5136a754ddf88d3ba490e07"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/tables/runs.csv",
+      "exists": true,
+      "sha256": "ace10c7a0e57b6e9e045e7e14a95acf8876fd0f8cbfb35880caaec9c6682a539"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/portable_C1_P/data/recovery_summary.json.gz",
+      "exists": true,
+      "sha256": "7d613f8891072afe2c75c0d989df7430dcc84bf2de6f418455429294df09c066"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/implementation_evidence/P_implementation_evidence.tar.gz",
+      "exists": true,
+      "sha256": "3887239493dd18b0551a6aeebcda78f6fb531ce5ba55d26b6dcbf90f34d073b7"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/implementation_evidence/P_manifest.json",
+      "exists": true,
+      "sha256": "d7535c6d984c7318a85beb74702e130753951630ed363015c74ad20f074d3880"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/implementation_evidence/P_report_numeric_evidence.tar.gz",
+      "exists": true,
+      "sha256": "1b97c5a9c7e1415b9374ba4ef1411137a2a45b0893497c57ebf45a938f3b4a23"
+    },
+    {
+      "href": "experiments/2026-10-29-four-flow-attribution/implementation_evidence/P_report_public_audit.json",
+      "exists": true,
+      "sha256": null
+    },
+    {
+      "href": "2026-10-29-四流量瓶颈归因报告.md",
+      "exists": true,
+      "sha256": "2cef45688aac76847b806994a2fda3c95c2e8a04e790fa79f90c5cfc9687c2ee"
+    },
+    {
+      "href": "原生SUMO编队变换系统说明.md",
+      "exists": true,
+      "sha256": "905e54a0eddaf1331df3a414f74780a80c770278ca061caaf8eb011fc6082e3a"
+    },
+    {
+      "href": "纯规则编队系统说明.md",
+      "exists": true,
+      "sha256": "a317e0c380f66d5bab7405379e236e06955eab84ff71f588a12c0158f798b9b8"
+    },
+    {
+      "href": "2026-10-29-MATLAB车辆控制调用链核查.md",
+      "exists": true,
+      "sha256": "5f1df227a95b979383a48b7b41839363c7d52e4418010ce741060cd9c642b133"
+    }
+  ],
+  "all_links_exist": true,
+  "no_tmp_or_P_analysis_links": true,
+  "frozen_package_files_unchanged": 185,
+  "passed": true,
+  "independent_public_verification": {
+    "passed": true,
+    "old_report_sha256": "fc4bfb195d49b95bf594421046d70ec2c5a5f0121e8a563f73d1ffc98753b980",
+    "new_report_sha256": "8f4956327f6b62ef5ef3c95724ea6ac1be34ebcf564d9f615171237ee73b8af8",
+    "markdown_tables_byte_identical": 14,
+    "all_public_links_exist": 35,
+    "forbidden_local_links": 0,
+    "original_51_source_hashes_retained": true,
+    "archived_original_report_and_audit_byte_identical": true,
+    "numeric_archive_members_checked": 6,
+    "engineering_archive_members_checked": 24,
+    "package_manifest_pins_unchanged": true,
+    "metrics_recomputed": false,
+    "verifier_sha256": "35cff498253424cf9fa0773a9047876882880cee5b1fd764a8530a91beaac384"
+  }
+}

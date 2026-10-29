@@ -1,0 +1,32 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "D:/yanjiu1/keyan1/tmp/R_leader_following/analyze_four_cases.py"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 600.0,
+  "started_utc": "2026-10-29T04:37:54.942802+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 108372,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 15.141,
+  "ended_utc": "2026-10-29T04:38:10.082744+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "ff0503efa4ea6d4351a4cb17969e3310d7b28f948533a7d0a3f0b5fe58bf925f",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archive_errors": {}
+}

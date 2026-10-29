@@ -1,0 +1,1307 @@
+{
+  "manifest": {
+    "frozen_utc": "2026-10-29T05:06:17.286795+00:00",
+    "source_sha256": {
+      "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+      "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "changed_definitions": [
+      "_following"
+    ],
+    "new_parameters": 0,
+    "new_memory_fields": 0,
+    "static_tests": 8,
+    "scope": "R base; all-other-valid-lane head anchors; nonroot follower adds bounded same-layer error from nearest settled actual root-lane car only when abs(pair_error)<=GAP/2. Root followers keep real-front30m only. All R protections, mandatory actions, physical safety and NOA unchanged."
+  },
+  "six": {
+    "six": {
+      "six_scrambled": {
+        "case": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_scrambled\\20261029T050618354224Z_straight3_transform_s1_401fcb",
+        "status": "drained",
+        "safe": true,
+        "requested": 6,
+        "completed": 6,
+        "mean_travel_time_s": 38.56666666666666,
+        "metrics": {
+          "straight": {
+            "observation_seconds": 39.4,
+            "vehicle_seconds": 231.4000000000005,
+            "formed_vehicle_seconds": 115.8,
+            "multilayer_group_seconds": 19.3,
+            "raw_single_layer_vehicle_seconds": 24.89999999999998,
+            "stable_vehicle_seconds": 91.8,
+            "stable_multilayer_group_seconds": 15.3,
+            "raw_unassigned_vehicle_seconds": 84.69999999999993,
+            "internal_relation_breaks": 1,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.0,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.5004321521175443,
+            "stable_participation_rate": 0.3967156439066543,
+            "geometry_rms_m": 0.42028691204271657,
+            "speed_rms_mps": 0.03789042673525003,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 0.8635578583765112
+          }
+        }
+      },
+      "six_drop": {
+        "case": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\six_drop\\20261029T050618352112Z_lane_drop_transform_s1_16f76e",
+        "status": "drained",
+        "safe": true,
+        "requested": 6,
+        "completed": 6,
+        "mean_travel_time_s": 39.0,
+        "metrics": {
+          "upstream": {
+            "observation_seconds": 40.3,
+            "vehicle_seconds": 116.99999999999977,
+            "formed_vehicle_seconds": 106.79999999999976,
+            "multilayer_group_seconds": 17.799999999999997,
+            "raw_single_layer_vehicle_seconds": 2.1000000000000085,
+            "stable_vehicle_seconds": 82.79999999999984,
+            "stable_multilayer_group_seconds": 13.799999999999999,
+            "raw_unassigned_vehicle_seconds": 2.0999999999999943,
+            "internal_relation_breaks": 1,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 5.999999999999988,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.9128205128205125,
+            "stable_participation_rate": 0.7076923076923077,
+            "geometry_rms_m": 3.648555044428405e-14,
+            "speed_rms_mps": 1.1632614208768657e-14,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 0.9363295880149834
+          },
+          "downstream": {
+            "observation_seconds": 40.3,
+            "vehicle_seconds": 41.39999999999999,
+            "formed_vehicle_seconds": 25.0,
+            "multilayer_group_seconds": 4.600000000000001,
+            "raw_single_layer_vehicle_seconds": 3.5999999999999943,
+            "stable_vehicle_seconds": 1.1999999999999886,
+            "stable_multilayer_group_seconds": 0.29999999999999716,
+            "raw_unassigned_vehicle_seconds": 6.799999999999997,
+            "internal_relation_breaks": 3,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 5.4347826086956506,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.603864734299517,
+            "stable_participation_rate": 0.02898550724637654,
+            "geometry_rms_m": 0.13903758331589802,
+            "speed_rms_mps": 0.04103248930909041,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 12.0
+          }
+        }
+      }
+    },
+    "full_flow_gate_passed": true
+  },
+  "cases": [
+    {
+      "seed": 1,
+      "scenario": "straight3",
+      "S": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724853767Z_straight3_transform_s1_155011",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "departed": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "actual_end_s": 641.1,
+          "mean_travel_time_s": 40.85316455696202,
+          "fuel_g_per_km": 67.95222511720581,
+          "all_fuel_mg": 57976838.47,
+          "source_sha256": {
+            "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+            "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+            "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+            "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+            "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+            "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+          }
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 641.0,
+            "vehicle_seconds": 29046.60000000016,
+            "formed_vehicle_seconds": 492.60000000000014,
+            "multilayer_group_seconds": 82.10000000000002,
+            "raw_single_layer_vehicle_seconds": 1902.0000000000227,
+            "stable_vehicle_seconds": 322.2000000000003,
+            "stable_multilayer_group_seconds": 53.700000000000045,
+            "raw_unassigned_vehicle_seconds": 26604.0,
+            "internal_relation_breaks": 10,
+            "boundary_censored_relations": 14,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.0,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.01695895560926227,
+            "stable_participation_rate": 0.011092520294974232,
+            "geometry_rms_m": 0.38931577434059844,
+            "speed_rms_mps": 0.04997061139243764,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 2.030044660982541
+          }
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 16.854131122294397,
+          "mean_segment_640_1100_s": 15.707938936330887,
+          "mean_segment_800_1100_s": 10.255130513511999
+        },
+        "positions_sha256": "a4c9498e5e3b1d0efef5b6a016c1cb2279eb7a85ce4edd05d076ce3b4fddb0e4"
+      },
+      "R": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523823948Z_straight3_transform_s1_6e1dae",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 40.98888888888889,
+          "fuel_g_per_km": 67.2740620018753
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 16.923887023519896,
+          "mean_segment_640_1100_s": 15.750713592123441,
+          "mean_segment_800_1100_s": 10.29077055162325
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 639.8,
+            "vehicle_seconds": 29143.100000000155,
+            "formed_vehicle_seconds": 537.6000000000006,
+            "multilayer_group_seconds": 81.0000000000001,
+            "raw_single_layer_vehicle_seconds": 1349.1000000000263,
+            "stable_vehicle_seconds": 405.6000000000006,
+            "stable_multilayer_group_seconds": 61.0000000000001,
+            "raw_unassigned_vehicle_seconds": 27222.800000000072,
+            "internal_relation_breaks": 7,
+            "boundary_censored_relations": 10,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.637037037037036,
+            "peak_multilayer_size": 9,
+            "formation_participation_rate": 0.018446905099320173,
+            "stable_participation_rate": 0.013917531079397813,
+            "geometry_rms_m": 0.3854555836751722,
+            "speed_rms_mps": 0.048486367279135405,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 1.302083333333332
+          }
+        },
+        "positions_sha256": "9ef2b41c401c4a77f9565c6e8afe496b88e4c4cc6f6f8c3025f69a61192a922b"
+      },
+      "NOA": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021257009694Z_straight3_noa_s1_9b24e5",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.71659634317862,
+          "fuel_g_per_km": 59.894439627285514
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.368495218925396,
+          "mean_segment_640_1100_s": 15.972279656645586,
+          "mean_segment_800_1100_s": 10.416679800570561
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 641.5,
+            "vehicle_seconds": 29660.500000000124,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 123.2999999999999,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 29537.200000000114,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          }
+        },
+        "positions_sha256": "6131a04afa53c5998f88370108dcb62cd1edd9e31de1dacc707913711394caa2"
+      },
+      "H": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021259335560Z_straight3_transform_s1_f59aad",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.84275668073136,
+          "fuel_g_per_km": 69.95160298874825
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.40671685420875,
+          "mean_segment_640_1100_s": 15.963952542216186,
+          "mean_segment_800_1100_s": 10.418757023512779,
+          "region_mean_n": 8.17779999999995,
+          "region_mean_speed_mps": 28.81850595665303,
+          "region_low_speed_fraction": 0.0,
+          "flow_1000m_veh_h": 4226.4
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 641.0,
+            "vehicle_seconds": 29750.200000000128,
+            "formed_vehicle_seconds": 1307.6999999999975,
+            "multilayer_group_seconds": 216.7999999999999,
+            "raw_single_layer_vehicle_seconds": 3361.50000000007,
+            "stable_vehicle_seconds": 961.1999999999991,
+            "stable_multilayer_group_seconds": 160.19999999999987,
+            "raw_unassigned_vehicle_seconds": 24982.00000000013,
+            "internal_relation_breaks": 17,
+            "boundary_censored_relations": 30,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.031826568265674,
+            "peak_multilayer_size": 9,
+            "formation_participation_rate": 0.04395600701843994,
+            "stable_participation_rate": 0.032309026493939366,
+            "geometry_rms_m": 0.33891125017507656,
+            "speed_rms_mps": 0.045232682044611804,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 1.2999923529861614
+          }
+        }
+      },
+      "demand_and_physical_equal": true,
+      "S_minus_R": {
+        "mean_segment_100_600_s": -0.06975590122549846,
+        "mean_segment_640_1100_s": -0.04277465579255413,
+        "mean_segment_800_1100_s": -0.035640038111251826,
+        "mean_travel_time_s": -0.13572433192686617
+      },
+      "S_minus_H": {
+        "mean_segment_100_600_s": -0.5525857319143519,
+        "mean_segment_640_1100_s": -0.25601360588529865,
+        "mean_segment_800_1100_s": -0.1636265100007801,
+        "mean_travel_time_s": -0.9895921237693415
+      },
+      "S_minus_NOA": {
+        "mean_segment_100_600_s": -0.5143640966309988,
+        "mean_segment_640_1100_s": -0.26434072031469924,
+        "mean_segment_800_1100_s": -0.16154928705856264,
+        "mean_travel_time_s": -0.8634317862166014
+      }
+    },
+    {
+      "seed": 1,
+      "scenario": "lane_drop",
+      "S": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724864155Z_lane_drop_transform_s1_19889b",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "departed": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "actual_end_s": 640.2,
+          "mean_travel_time_s": 41.59198312236287,
+          "fuel_g_per_km": 77.62804697609002,
+          "all_fuel_mg": 66232249.68,
+          "source_sha256": {
+            "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+            "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+            "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+            "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+            "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+            "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+          }
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 640.1,
+            "vehicle_seconds": 15695.800000000014,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 178.79999999999976,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 15517.00000000004,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          },
+          "downstream": {
+            "observation_seconds": 640.1,
+            "vehicle_seconds": 4812.499999999985,
+            "formed_vehicle_seconds": 501.60000000000025,
+            "multilayer_group_seconds": 107.80000000000001,
+            "raw_single_layer_vehicle_seconds": 617.8000000000009,
+            "stable_vehicle_seconds": 20.400000000000375,
+            "stable_multilayer_group_seconds": 5.100000000000094,
+            "raw_unassigned_vehicle_seconds": 3470.4999999999436,
+            "internal_relation_breaks": 95,
+            "boundary_censored_relations": 44,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 4.6530612244897975,
+            "peak_multilayer_size": 10,
+            "formation_participation_rate": 0.1042285714285718,
+            "stable_participation_rate": 0.00423896103896113,
+            "geometry_rms_m": 0.3018146169743039,
+            "speed_rms_mps": 0.06862255074050189,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 18.93939393939393
+          }
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.04177493965877,
+          "mean_segment_640_1100_s": 16.14113301324781,
+          "mean_segment_800_1100_s": 10.149427630813003
+        },
+        "positions_sha256": "2c1836cfdb76ef8ea8557fcd9d00d751a3aae2880e792991c05dd9eb45d09718"
+      },
+      "R": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523835062Z_lane_drop_transform_s1_e443bf",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.538396624472576,
+          "fuel_g_per_km": 76.08313691983122
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 16.945425428012143,
+          "mean_segment_640_1100_s": 16.240410146212643,
+          "mean_segment_800_1100_s": 10.28428379026963
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 640.1999999999999,
+            "vehicle_seconds": 15585.000000000098,
+            "formed_vehicle_seconds": 19.199999999999932,
+            "multilayer_group_seconds": 3.1999999999999886,
+            "raw_single_layer_vehicle_seconds": 157.80000000000018,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 15396.600000000108,
+            "internal_relation_breaks": 1,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.0,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.001231953801732423,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": 0.5863616811590966,
+            "speed_rms_mps": 0.08203061364729233,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 5.208333333333352
+          },
+          "downstream": {
+            "observation_seconds": 640.1999999999999,
+            "vehicle_seconds": 4834.0999999999785,
+            "formed_vehicle_seconds": 417.9999999999993,
+            "multilayer_group_seconds": 87.39999999999986,
+            "raw_single_layer_vehicle_seconds": 400.4000000000012,
+            "stable_vehicle_seconds": 18.399999999999523,
+            "stable_multilayer_group_seconds": 4.599999999999881,
+            "raw_unassigned_vehicle_seconds": 3851.8999999999673,
+            "internal_relation_breaks": 81,
+            "boundary_censored_relations": 38,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 4.782608695652174,
+            "peak_multilayer_size": 10,
+            "formation_participation_rate": 0.08646904284148056,
+            "stable_participation_rate": 0.0038062927949358938,
+            "geometry_rms_m": 0.3308320238370399,
+            "speed_rms_mps": 0.07391363085376443,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 19.37799043062204
+          }
+        },
+        "positions_sha256": "b9bb8069ce8ca322fc1192ec979bc8599a1dfc9ec891da963fdade29e3f2e7c4"
+      },
+      "NOA": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021312766134Z_lane_drop_noa_s1_1f2ca3",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 42.79142053445851,
+          "fuel_g_per_km": 64.04780736052508
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.368495218925396,
+          "mean_segment_640_1100_s": 17.041150608302303,
+          "mean_segment_800_1100_s": 11.467789411881967
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 649.8,
+            "vehicle_seconds": 15864.799999999948,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 65.09999999999997,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 15799.700000000004,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          },
+          "downstream": {
+            "observation_seconds": 649.8,
+            "vehicle_seconds": 5330.500000000015,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 224.0000000000002,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 5106.500000000044,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          }
+        },
+        "positions_sha256": "b5b463828563b1fe21d2ef175829cdd47ee318198c4cf3bb054443a02ebb5924"
+      },
+      "H": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T021343404200Z_lane_drop_transform_s1_0b56df",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 711,
+          "completed": 711,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 42.255696202531645,
+          "fuel_g_per_km": 77.40770022269105
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.450042276428913,
+          "mean_segment_640_1100_s": 16.264031759128265,
+          "mean_segment_800_1100_s": 10.28437765927128,
+          "region_mean_n": 8.032599999999858,
+          "region_mean_speed_mps": 29.24582695274534,
+          "region_low_speed_fraction": 0.0,
+          "flow_1000m_veh_h": 4226.4
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 641.1999999999999,
+            "vehicle_seconds": 16024.699999999955,
+            "formed_vehicle_seconds": 224.99999999999957,
+            "multilayer_group_seconds": 37.49999999999993,
+            "raw_single_layer_vehicle_seconds": 545.9999999999987,
+            "stable_vehicle_seconds": 104.99999999999957,
+            "stable_multilayer_group_seconds": 17.49999999999993,
+            "raw_unassigned_vehicle_seconds": 15223.700000000028,
+            "internal_relation_breaks": 13,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.0,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.014040824477213314,
+            "stable_participation_rate": 0.006552384756032866,
+            "geometry_rms_m": 0.42551241830568,
+            "speed_rms_mps": 0.060121287383079335,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 5.777777777777788
+          },
+          "downstream": {
+            "observation_seconds": 641.1999999999999,
+            "vehicle_seconds": 4902.199999999959,
+            "formed_vehicle_seconds": 697.6,
+            "multilayer_group_seconds": 141.70000000000002,
+            "raw_single_layer_vehicle_seconds": 532.199999999998,
+            "stable_vehicle_seconds": 39.199999999999676,
+            "stable_multilayer_group_seconds": 9.799999999999919,
+            "raw_unassigned_vehicle_seconds": 3476.3999999999487,
+            "internal_relation_breaks": 97,
+            "boundary_censored_relations": 62,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 4.9230769230769225,
+            "peak_multilayer_size": 12,
+            "formation_participation_rate": 0.14230345559136834,
+            "stable_participation_rate": 0.00799640977520297,
+            "geometry_rms_m": 0.3187943154435674,
+            "speed_rms_mps": 0.058989943648189276,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 13.904816513761467
+          }
+        }
+      },
+      "demand_and_physical_equal": true,
+      "S_minus_R": {
+        "mean_segment_100_600_s": 0.09634951164662553,
+        "mean_segment_640_1100_s": -0.09927713296483276,
+        "mean_segment_800_1100_s": -0.13485615945662666,
+        "mean_travel_time_s": 0.05358649789029357
+      },
+      "S_minus_H": {
+        "mean_segment_100_600_s": -0.4082673367701446,
+        "mean_segment_640_1100_s": -0.12289874588045535,
+        "mean_segment_800_1100_s": -0.13495002845827742,
+        "mean_travel_time_s": -0.6637130801687761
+      },
+      "S_minus_NOA": {
+        "mean_segment_100_600_s": -0.3267202792666275,
+        "mean_segment_640_1100_s": -0.9000175950544929,
+        "mean_segment_800_1100_s": -1.3183617810689636,
+        "mean_travel_time_s": -1.1994374120956408
+      }
+    },
+    {
+      "seed": 4,
+      "scenario": "straight3",
+      "S": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724871755Z_straight3_transform_s4_98260e",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "departed": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "actual_end_s": 639.6,
+          "mean_travel_time_s": 40.899203187251,
+          "fuel_g_per_km": 69.36221419876051,
+          "all_fuel_mg": 62675696.75,
+          "source_sha256": {
+            "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+            "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+            "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+            "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+            "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+            "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+          }
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 639.5,
+            "vehicle_seconds": 30797.099999999613,
+            "formed_vehicle_seconds": 1053.0000000000005,
+            "multilayer_group_seconds": 175.50000000000006,
+            "raw_single_layer_vehicle_seconds": 2131.8000000000134,
+            "stable_vehicle_seconds": 676.8000000000003,
+            "stable_multilayer_group_seconds": 112.80000000000004,
+            "raw_unassigned_vehicle_seconds": 27510.299999999814,
+            "internal_relation_breaks": 19,
+            "boundary_censored_relations": 32,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.000000000000001,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.034191531020778376,
+            "stable_participation_rate": 0.02197609515181653,
+            "geometry_rms_m": 0.38879295786119983,
+            "speed_rms_mps": 0.04805531988702326,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 1.8043684710351369
+          }
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 16.85893713324591,
+          "mean_segment_640_1100_s": 15.726363382011117,
+          "mean_segment_800_1100_s": 10.280782546944142
+        },
+        "positions_sha256": "0692de500131a3f0cb3cc80025a6806b2ed703939b606a26abdba5d51b1149e2"
+      },
+      "R": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523850579Z_straight3_transform_s4_4e44b9",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.036786188579015,
+          "fuel_g_per_km": 68.34750858787073
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 16.93676445912337,
+          "mean_segment_640_1100_s": 15.760834261328586,
+          "mean_segment_800_1100_s": 10.285744230365577
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 639.5,
+            "vehicle_seconds": 30900.69999999974,
+            "formed_vehicle_seconds": 607.5000000000005,
+            "multilayer_group_seconds": 100.20000000000007,
+            "raw_single_layer_vehicle_seconds": 1682.100000000033,
+            "stable_vehicle_seconds": 351.0000000000001,
+            "stable_multilayer_group_seconds": 58.500000000000014,
+            "raw_unassigned_vehicle_seconds": 28536.099999999922,
+            "internal_relation_breaks": 16,
+            "boundary_censored_relations": 22,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.062874251497006,
+            "peak_multilayer_size": 9,
+            "formation_participation_rate": 0.019659748808279604,
+            "stable_participation_rate": 0.0113589659781171,
+            "geometry_rms_m": 0.5458919065696389,
+            "speed_rms_mps": 0.06285256768624244,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 2.6337448559670764
+          }
+        },
+        "positions_sha256": "506095fa142e03844a48cf052b828fc9d70de2e4f8028cb0f73c0dd91e08ef1b"
+      },
+      "NOA": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022216181134Z_straight3_noa_s4_ce04c0",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.724037184594955,
+          "fuel_g_per_km": 59.9042891434263
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.371907380650136,
+          "mean_segment_640_1100_s": 15.972334834523025,
+          "mean_segment_800_1100_s": 10.41669501702801
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 640.8,
+            "vehicle_seconds": 31418.199999999695,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 117.2999999999999,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 31300.89999999967,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          }
+        },
+        "positions_sha256": "8cb0b1b14c84655e7737f8c0231a768623039dd36f1ad248381197e8dcbf2647"
+      },
+      "H": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022223419888Z_straight3_transform_s4_065978",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.853652058432935,
+          "fuel_g_per_km": 70.59636954404604
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.359302807008856,
+          "mean_segment_640_1100_s": 16.011245552451154,
+          "mean_segment_800_1100_s": 10.441682900299966,
+          "region_mean_n": 8.862799999999988,
+          "region_mean_speed_mps": 28.74353077086856,
+          "region_low_speed_fraction": 0.0,
+          "flow_1000m_veh_h": 4572.0
+        },
+        "layers": {
+          "straight": {
+            "observation_seconds": 640.6,
+            "vehicle_seconds": 31515.799999999734,
+            "formed_vehicle_seconds": 738.6000000000007,
+            "multilayer_group_seconds": 95.20000000000005,
+            "raw_single_layer_vehicle_seconds": 3449.700000000002,
+            "stable_vehicle_seconds": 490.2000000000006,
+            "stable_multilayer_group_seconds": 61.800000000000054,
+            "raw_unassigned_vehicle_seconds": 27255.499999999807,
+            "internal_relation_breaks": 20,
+            "boundary_censored_relations": 18,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 7.758403361344541,
+            "peak_multilayer_size": 12,
+            "formation_participation_rate": 0.023435863915877337,
+            "stable_participation_rate": 0.015554103021341827,
+            "geometry_rms_m": 0.39233277117088217,
+            "speed_rms_mps": 0.053659422323527405,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              1200
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 2.707825616030325
+          }
+        }
+      },
+      "demand_and_physical_equal": true,
+      "S_minus_R": {
+        "mean_segment_100_600_s": -0.0778273258774611,
+        "mean_segment_640_1100_s": -0.03447087931746928,
+        "mean_segment_800_1100_s": -0.0049616834214347705,
+        "mean_travel_time_s": -0.13758300132801793
+      },
+      "S_minus_H": {
+        "mean_segment_100_600_s": -0.5003656737629463,
+        "mean_segment_640_1100_s": -0.28488217044003683,
+        "mean_segment_800_1100_s": -0.16090035335582442,
+        "mean_travel_time_s": -0.9544488711819383
+      },
+      "S_minus_NOA": {
+        "mean_segment_100_600_s": -0.5129702474042261,
+        "mean_segment_640_1100_s": -0.24597145251190788,
+        "mean_segment_800_1100_s": -0.1359124700838681,
+        "mean_travel_time_s": -0.8248339973439585
+      }
+    },
+    {
+      "seed": 4,
+      "scenario": "lane_drop",
+      "S": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\S_layer_anchor\\results\\four_20261029T050724427601Z\\20261029T050724879232Z_lane_drop_transform_s4_dbeb18",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "departed": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "actual_end_s": 640.6,
+          "mean_travel_time_s": 42.974236387782206,
+          "fuel_g_per_km": 84.19154831783976,
+          "all_fuel_mg": 76075483.06,
+          "source_sha256": {
+            "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+            "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+            "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+            "noa/native_rules.py": "05c12c818ed91c461fda66053547b6c96f6bbb770fa63707d406e8666afb39c4",
+            "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+            "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+          }
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 640.5,
+            "vehicle_seconds": 17479.89999999999,
+            "formed_vehicle_seconds": 4.800000000000068,
+            "multilayer_group_seconds": 0.8000000000000114,
+            "raw_single_layer_vehicle_seconds": 277.1999999999997,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 17191.899999999932,
+            "internal_relation_breaks": 1,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.0,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 0.00027460111327868414,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": 0.6855523533691875,
+            "speed_rms_mps": 0.12579553780238362,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 20.833333333333037
+          },
+          "downstream": {
+            "observation_seconds": 640.5,
+            "vehicle_seconds": 5102.900000000025,
+            "formed_vehicle_seconds": 425.4000000000001,
+            "multilayer_group_seconds": 86.80000000000001,
+            "raw_single_layer_vehicle_seconds": 535.7999999999997,
+            "stable_vehicle_seconds": 18.40000000000009,
+            "stable_multilayer_group_seconds": 4.600000000000023,
+            "raw_unassigned_vehicle_seconds": 3907.6999999999452,
+            "internal_relation_breaks": 84,
+            "boundary_censored_relations": 52,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 4.900921658986175,
+            "peak_multilayer_size": 10,
+            "formation_participation_rate": 0.08336436144153285,
+            "stable_participation_rate": 0.0036057927844950913,
+            "geometry_rms_m": 0.31221425118366647,
+            "speed_rms_mps": 0.07208404638824892,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 19.74612129760225
+          }
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 18.023049102604045,
+          "mean_segment_640_1100_s": 16.383104602989178,
+          "mean_segment_800_1100_s": 10.134332587519491
+        },
+        "positions_sha256": "972014abb418bbadb425e687fb489d66dc5ec86a729b02bb5478bacf843fb693"
+      },
+      "R": {
+        "path": "D:\\yanjiu1\\keyan1\\tmp\\R_leader_following\\results\\four_20261029T043523404858Z\\20261029T043523855229Z_lane_drop_transform_s4_d7bd46",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 41.60756972111554,
+          "fuel_g_per_km": 77.03076221779548
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.018304163555797,
+          "mean_segment_640_1100_s": 16.171080573283955,
+          "mean_segment_800_1100_s": 10.141482382042845
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 638.9,
+            "vehicle_seconds": 16608.400000000016,
+            "formed_vehicle_seconds": 0.6000000000001364,
+            "multilayer_group_seconds": 0.10000000000002274,
+            "raw_single_layer_vehicle_seconds": 301.4999999999993,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 16300.300000000056,
+            "internal_relation_breaks": 1,
+            "boundary_censored_relations": 2,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 6.0,
+            "peak_multilayer_size": 6,
+            "formation_participation_rate": 3.612629753619469e-05,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": 0.9259156095579737,
+            "speed_rms_mps": 0.10494583294369352,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": 166.66666666662877
+          },
+          "downstream": {
+            "observation_seconds": 638.9,
+            "vehicle_seconds": 5100.400000000029,
+            "formed_vehicle_seconds": 530.3999999999999,
+            "multilayer_group_seconds": 107.39999999999992,
+            "raw_single_layer_vehicle_seconds": 372.6,
+            "stable_vehicle_seconds": 23.60000000000025,
+            "stable_multilayer_group_seconds": 5.9000000000000625,
+            "raw_unassigned_vehicle_seconds": 4007.5999999999513,
+            "internal_relation_breaks": 95,
+            "boundary_censored_relations": 52,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 4.938547486033522,
+            "peak_multilayer_size": 10,
+            "formation_participation_rate": 0.10399184377695805,
+            "stable_participation_rate": 0.004627088071523825,
+            "geometry_rms_m": 0.29090676276087485,
+            "speed_rms_mps": 0.06870454533773848,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 17.911010558069385
+          }
+        },
+        "positions_sha256": "f397485b86d8f65eebad5e24e7d13e6b1d053e96a1ce6f3e4dcd5fd6c7319eac"
+      },
+      "NOA": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022235958340Z_lane_drop_noa_s4_9c6f18",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 42.98260292164675,
+          "fuel_g_per_km": 63.673359473218234
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 17.371907380807716,
+          "mean_segment_640_1100_s": 17.226628606258515,
+          "mean_segment_800_1100_s": 11.651065938147942
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 640.8,
+            "vehicle_seconds": 16806.400000000103,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 59.099999999999966,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 16747.30000000007,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          },
+          "downstream": {
+            "observation_seconds": 640.8,
+            "vehicle_seconds": 5573.5000000000255,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 312.99999999999983,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 5260.50000000004,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          }
+        },
+        "positions_sha256": "601e50932d62014f8eb6d98555007a41694c048f645cb678d340f6b971591727"
+      },
+      "H": {
+        "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\flow_attribution_H_final\\20261029T021127615583Z\\flow_1500\\20261029T022307271474Z_lane_drop_transform_s4_310c4c",
+        "result": {
+          "status": "drained",
+          "safe": true,
+          "requested": 753,
+          "completed": 753,
+          "collisions": 0,
+          "teleports": 0,
+          "mean_travel_time_s": 44.24966799468792,
+          "fuel_g_per_km": 86.01250421646746
+        },
+        "attribution": {
+          "attribution_eligible": true,
+          "audit_issues": [],
+          "mean_segment_100_600_s": 18.83718294982209,
+          "mean_segment_640_1100_s": 16.58148820469475,
+          "mean_segment_800_1100_s": 10.238978378522507,
+          "region_mean_n": 8.557399999999882,
+          "region_mean_speed_mps": 29.392218540051527,
+          "region_low_speed_fraction": 0.0,
+          "flow_1000m_veh_h": 4514.4
+        },
+        "layers": {
+          "upstream": {
+            "observation_seconds": 641.0,
+            "vehicle_seconds": 18233.499999999996,
+            "formed_vehicle_seconds": 0.0,
+            "multilayer_group_seconds": 0.0,
+            "raw_single_layer_vehicle_seconds": 514.1999999999998,
+            "stable_vehicle_seconds": 0.0,
+            "stable_multilayer_group_seconds": 0.0,
+            "raw_unassigned_vehicle_seconds": 17719.29999999989,
+            "internal_relation_breaks": 0,
+            "boundary_censored_relations": 0,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": null,
+            "peak_multilayer_size": null,
+            "formation_participation_rate": 0.0,
+            "stable_participation_rate": 0.0,
+            "geometry_rms_m": null,
+            "speed_rms_mps": null,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              0,
+              640
+            ],
+            "lane_count": 3,
+            "internal_breaks_per_100_formed_vehicle_s": null
+          },
+          "downstream": {
+            "observation_seconds": 641.0,
+            "vehicle_seconds": 5191.600000000017,
+            "formed_vehicle_seconds": 679.0000000000005,
+            "multilayer_group_seconds": 140.30000000000007,
+            "raw_single_layer_vehicle_seconds": 450.80000000000064,
+            "stable_vehicle_seconds": 38.39999999999998,
+            "stable_multilayer_group_seconds": 9.599999999999994,
+            "raw_unassigned_vehicle_seconds": 3830.999999999932,
+            "internal_relation_breaks": 91,
+            "boundary_censored_relations": 72,
+            "end_censored_relations": 0,
+            "mean_multilayer_size": 4.839629365645047,
+            "peak_multilayer_size": 12,
+            "formation_participation_rate": 0.13078819631712735,
+            "stable_participation_rate": 0.007396563679790403,
+            "geometry_rms_m": 0.2834409092355438,
+            "speed_rms_mps": 0.06481736235150193,
+            "confirmation_seconds": 1.0,
+            "stability_hold_seconds": 5.0,
+            "region_m": [
+              1000,
+              1200
+            ],
+            "lane_count": 2,
+            "internal_breaks_per_100_formed_vehicle_s": 13.402061855670095
+          }
+        }
+      },
+      "demand_and_physical_equal": true,
+      "S_minus_R": {
+        "mean_segment_100_600_s": 1.0047449390482477,
+        "mean_segment_640_1100_s": 0.21202402970522272,
+        "mean_segment_800_1100_s": -0.007149794523353847,
+        "mean_travel_time_s": 1.3666666666666671
+      },
+      "S_minus_H": {
+        "mean_segment_100_600_s": -0.814133847218045,
+        "mean_segment_640_1100_s": -0.19838360170557223,
+        "mean_segment_800_1100_s": -0.10464579100301563,
+        "mean_travel_time_s": -1.2754316069057126
+      },
+      "S_minus_NOA": {
+        "mean_segment_100_600_s": 0.6511417217963285,
+        "mean_segment_640_1100_s": -0.8435240032693372,
+        "mean_segment_800_1100_s": -1.516733350628451,
+        "mean_travel_time_s": -0.008366533864546
+      }
+    }
+  ],
+  "static_tests": {
+    "count": 8,
+    "NOA_equivalent_states": 600,
+    "red": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T050444567235Z_S-layer-anchor-static-red_8b3c1f8e",
+    "green": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T050616415267Z_S-layer-anchor-static-green_71c1c528"
+  },
+  "information_review": "Only observed physical root-lane cars can anchor a follower. Nearest shared-frame absolute error must be<=GAP/2; vehicle counts never infer layers. Highest effective-lane bodies only follow their actual fronts, removing direct cross-body reciprocal references. Head/role/topology switches remain and there is no global stability proof.",
+  "optional_q500_runs": {
+    "run": false,
+    "reason": "Optional extension not pursued: high-flow upstream complete-layer formation remains0%/0.02746%, stable0; safety/completion is not formation success."
+  },
+  "conclusion": "All four calibration runs are safe and drained, but this observable-layer hypothesis does not establish large-scale physical formation. Straight participation1.696%/3.419%, drop upstream0%/0.02746%, downstream10.423%/8.336%, with very low stable participation. Rare confirmed6/10 peaks and travel timing do not override low participation. Retain the negative result; no next candidate, fallback or parameter tuning.",
+  "source_scope": "Only S following changed from frozenR; no main/R/P/H source or old raw result edit, no Git.",
+  "full_run_operation": "D:\\yanjiu1\\keyan1\\results\\operations\\20261029T050724084153Z_S-four-full-cases-seeds1-4_9553fdbb",
+  "limitations": "Calibration seeds1/4 only. Frozen equal-demand H/NOA/R controls are diagnostic, not a same-freeze independent matrix; method success is not claimed."
+}

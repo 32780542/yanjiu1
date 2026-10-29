@@ -1,0 +1,79 @@
+--- P_parent/noa/native_rules.py
++++ S/noa/native_rules.py
+@@ -100,36 +100,45 @@
+     ), pair_lanes
+ 
+ 
++def _front(ego, rows):
++    fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
++    return min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
++
++
++def _settled(car):
++    return abs(car.vy) <= 0.1 and abs(car.y - (car.lane + 0.5) * LANE_WIDTH) <= 0.15
++
++
+ def _following(ego, rows, lanes, phase_boundary=None):
+-    """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
+-    fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
+-    front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
++    """实际前车沿用30m跟车；自由队首只追随投影在前的稳定局部队首。"""
++    front = _front(ego, rows)
+     if front is not None:
+         target = front.x - GAP
++        if ego.lane != lanes - 1:
++            anchors = [c for c in rows if c.lane == lanes - 1 and _settled(c)]
++            anchor = min(anchors,
++                         key=lambda c: (abs(_pair_error(ego, c, lanes, phase_boundary)[0]),
++                                        _pair_error(ego, c, lanes, phase_boundary)[0],
++                                        c.x, c.y, c.speed, c.vy), default=None)
++            if anchor is not None:
++                layer_error, _ = _pair_error(ego, anchor, lanes, phase_boundary)
++                if abs(layer_error) <= GAP / 2.0:
++                    layer_speed = max(-2.0, min(2.0, POSITION_GAIN * layer_error))
++                    target += layer_speed / POSITION_GAIN
+         return _request(ego, target, front.speed), target, front.track
+     cars = (ego, *rows)
+ 
+-    def is_head(car):
+-        return not any(
+-            0.0 < other.x - car.x <= 50.0 and _occupies(other, car.lane, 0.0) for other in cars
+-        )
+-
+-    def nearest(car, lane):
+-        candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0 and is_head(c)]
+-
+-        def order(c):
+-            difference, _ = _pair_error(car, c, lanes, phase_boundary)
+-            return abs(difference), difference, c.x, c.y, c.speed, c.vy
+-
+-        return min(candidates, key=order, default=None)
+-
++    candidates = [c for c in rows
++                  if c.lane != ego.lane and 0 <= c.lane < lanes
++                  and abs(c.x - ego.x) <= 50.0 and _settled(c) and _front(c, cars) is None
++                  and _pair_error(ego, c, lanes, phase_boundary)[0] > 0.0]
++    peer = min(candidates,
++               key=lambda c: (_pair_error(ego, c, lanes, phase_boundary)[0], c.x, c.y, c.speed, c.vy),
++               default=None)
+     error = 0.0
+-    for lane in (ego.lane - 1, ego.lane + 1):
+-        if 0 <= lane < lanes:
+-            peer = nearest(ego, lane)
+-            if peer is not None and nearest(peer, ego.lane) is ego:
+-                difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+-                error += difference / max(1, pair_lanes - 1)
++    if peer is not None:
++        difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
++        error = difference / max(1, pair_lanes - 1)
+     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+     target = ego.x + phase_speed / POSITION_GAIN
+     return _request(ego, target, CRUISE), target, None
+@@ -226,6 +235,7 @@
+         for c in members
+         if c.track != anchor.track
+         and abs(c.vy) < 0.1
++        and _front(c, cars) is not None
+         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+     ]
+     choices = []

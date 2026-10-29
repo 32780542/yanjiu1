@@ -1,0 +1,14 @@
+{
+  "label": "P版独立种子6至10",
+  "aggregation": "Five paired seeds, equal run weight",
+  "input_sha256": {
+    "docs\\experiments\\2026-10-29-four-flow-attribution\\portable_P\\tables\\traffic_and_attribution.csv": "b51d98e042c8936df183c4234c0dd8e6495377b2de527fd315bd36dfd79dd36a",
+    "docs\\experiments\\2026-10-29-four-flow-attribution\\portable_P\\tables\\formation_quality.csv": "aa4d29bd8355b834cf2ed14a2f28d0d656d6877dbed3e8911720a462334cfe16"
+  },
+  "source_sha256": "bf8f5f01ff9676be39af67ece4a91d4173dc2fddd549b5f1bd6bab8e481dd0bf",
+  "output_sha256": {
+    "P.png": "a19f45b3837f428a9fc3d6f3af19009b0e022f3d2d18c01e5da3ef7e739c28c1",
+    "P.svg": "9461d67977c2347b2e7207f4598d0d9b70b92795dd254c22618c990dada058db"
+  },
+  "dpi": 300
+}

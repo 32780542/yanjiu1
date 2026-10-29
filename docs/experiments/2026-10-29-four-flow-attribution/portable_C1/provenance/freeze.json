@@ -1,0 +1,84 @@
+{
+  "label": "C1 strict formation ablation",
+  "source_parent": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation",
+  "C0_source_sha256": {
+    "experiments/native_sumo.py": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "5a4986470fbb15d77ca6bab95c87fc152ff63f1da3dbe74e3f8c4a3a5241300c",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "source_sha256": {
+    "experiments/native_sumo.py": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "d59e565794f02cdfdad45f1ac895c4a0a20223928fc6de76304e4d1a467bee60",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "H_source_sha256": {
+    "experiments/native_sumo.py": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "H_source_root": "D:\\yanjiu1\\keyan1\\tmp\\head_group_H_release",
+  "configs_sha256": {
+    "configs/kinematic.json": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+    "configs/no_comm_main.json": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+    "configs/paper_reference.json": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+    "configs/phase2.json": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+    "configs/phase3.json": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+    "configs/phase4.json": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+    "configs/phase4_experiments.json": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+    "configs/phase5.json": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+    "configs/phase5f.json": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+    "configs/phase5g.json": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+    "configs/phase5_experiments.json": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+    "configs/phase5_r5.json": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+    "configs/sensitivity.json": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+    "configs/tools.json": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+    "configs/topology_smoke.json": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a"
+  },
+  "changed_AST_nodes": {
+    "experiments/native_sumo.py": [
+      "MODES"
+    ],
+    "noa/native_rules.py": [
+      "_decide"
+    ]
+  },
+  "C0_to_C1_changed_AST_nodes": {
+    "noa/native_rules.py": [
+      "_decide"
+    ]
+  },
+  "C0_to_C1_change": "Only _decide normal-overtake guard: cooperative removed; NOA retains it",
+  "normal_overtake": false,
+  "mode": "cooperative",
+  "group_following": false,
+  "layer_fill": false,
+  "engine_enum_exact_C0": true,
+  "helper_receiving_merge_join_functions_exact_H": true,
+  "straight_equivalence_inheritance": {
+    "label": "C1 straight proof inherited from C0; no new short simulations",
+    "reuse_H_noa_straight": true,
+    "C0_report": "D:\\yanjiu1\\keyan1\\tmp\\H_cooperative_ablation\\straight_equivalence_report.json",
+    "C0_report_sha256": "bf1df5ded826112780c641a4699a08a214aa1019c07a359983c41fdc7978b168",
+    "copied_report_sha256": "bf1df5ded826112780c641a4699a08a214aa1019c07a359983c41fdc7978b168",
+    "complete_straight_delegation_AST_identical": true,
+    "NOA_overtake_guard_truth_unchanged": true
+  },
+  "wrapper_sha256": "406d613c843d678ce508345262159274e16dcc8e5361898976dbe7e63a08f881",
+  "tests": {
+    "red": "20261029T030315478767Z_C1-strict-formation-red_66c672e0",
+    "red_failures": 1,
+    "green": "20261029T030333367524Z_C1-strict-formation-green_8eb7b997",
+    "green_tests": 13
+  },
+  "evaluator_source_exact_C0": true,
+  "C0_freeze_sha256": "63b4116b0113e85a0151914c5a5af2c9743a38db062ed73ef4cfff5ff038cbba"
+}

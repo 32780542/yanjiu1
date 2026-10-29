@@ -1,0 +1,49 @@
+C1 strict formation ablation: four flows, five paired seeds, 20 lane-drop cases
+
+Policy mode remains cooperative. C1 is copied from frozen C0. The only behavior
+change is in rules._decide: the ordinary-overtake branch now accepts only NOA,
+as in H. C1 still disables formation following and layer fill. Helper, receiving,
+merge, joining and pending-execution behavior remain H-identical. The engine and
+configs are exactly C0. Core hashes, the one-guard diff, and 13 passing static
+tests (after the required red counterexample) are retained.
+
+The complete straight-road cooperative-to-NOA delegation is unchanged. The
+existing bound C0 route/trip/trajectory-equivalence evidence is reused and
+identified as C0 evidence; no new short simulations were performed for C1.
+Twenty new 600s-request / 900s-limit lane-drop cases ran with four process jobs.
+The formal C1 study is results/20261029T030701105309Z. A prior metadata-label
+attempt was stopped, preserved and explicitly retired before this formal run;
+its data are archived separately and were not filtered according to outcomes.
+
+Start with tables/flow_means.csv, runs.csv, pairs.csv and attributions.csv.
+Legacy field prefixes cooperative_ identify C1 here, never C0. The explicit
+label and source SHA in provenance/freeze.json and data/analysis_summary.json.gz
+are authoritative. Negative cooperative_minus_H time/fuel means C1 is lower.
+H_incremental_reduction_over_cooperative_* compares H and C1 additional-time
+reductions: positive means H's reduction is larger. Both use the frozen metric
+definitions, first measured gates, 0.1s adjacency checks and full requested
+cohorts. No new metric or threshold is introduced. Recovery retains censoring.
+
+At flow1500, C1 TT is 43.532916s and H TT is 42.939205s; H's main-segment
+additional-time reduction exceeds C1's by 1.314624s. At flows500/750, C1 TT is
+slightly lower than H. H uses more fuel in every flow. This following/fill
+policy contrast alone does not prove that physically formed complete groups
+caused the difference, and does not establish H as universally better than NOA.
+
+All raw policy hashes remain different. Common physical/demand parameters are
+checked by exact numeric equality; H's flow is JSON int and C1's explicit CLI
+flow is JSON float. Original bytes, original parameter hashes and the explicit
+type-only difference are retained rather than rewritten or pooled as one source.
+
+data/raw_case_json.tar.gz retains 60 exact original JSON files for 20 C1 cases.
+data/short_straight_raw.tar.gz retains the 16 bound C0/H proof JSON/route files.
+data/retired_metadata_attempt_json.tar.gz retains the prior interrupted label
+attempt's existing JSON and protocol records. data/case_evidence preserves the
+exact compressed independent gate/region/native evidence for all 20 cases.
+data/recovery_* retains existing recovery events and censoring. Large original
+0.1s positions remain external, identified by exact byte SHA in trace_index.json.
+The H comparator remains in sibling ../portable_H, bound by its archive hash.
+
+verify_portable.py independently checks all bound bytes, gzip/archive losslessness,
+raw trip/gate/window metrics, H pair signs and flow means using only stdlib.
+Original C0/H/D/main/J/K sources and earlier outputs were never overwritten.

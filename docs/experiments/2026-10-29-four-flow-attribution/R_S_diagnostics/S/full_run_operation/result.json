@@ -1,0 +1,32 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "D:/yanjiu1/keyan1/tmp/S_layer_anchor/run_four_cases.py"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 1800.0,
+  "started_utc": "2026-10-29T05:07:24.084153+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 104412,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 79.11,
+  "ended_utc": "2026-10-29T05:08:43.193650+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "4da64ec6a79f62dd860bad5eaa05694a941b28aa294791c67b5754e93f7cff97",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archive_errors": {}
+}

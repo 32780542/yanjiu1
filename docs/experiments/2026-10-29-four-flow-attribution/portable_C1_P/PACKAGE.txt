@@ -1,0 +1,47 @@
+C1_P strict formation ablation: four flows, heldout seeds6–10, 20 new cases
+
+Actual mode remains cooperative; label is C1_P. The source is copied from the
+final P release (rule8d112d79...), adding only the engine mode enum and the
+_decide ablation selectors. Formation following and layer fill are disabled;
+ordinary overtaking remains NOA-only. Helper, receive, gap, merge, joining,
+pending, safety and common guards are unchanged. The new P pair-error and
+following definitions are preserved but never executed in cooperative mode.
+Eight static tests after the expected red failures establish fixed local action
+and Memory equality with old C1_H; no old C1_H simulation result is reused.
+
+Twenty fresh 600s-request/900s-limit lane-drop cases ran with jobs2 and explicit
+float flows500/750/1000/1500, seeds6–10 only. All 9,612 requests safely completed.
+Ordinary-overtake actions are zero. Pairing uses only the matching heldout P100
+cohort in sibling ../portable_P. Raw common parameter SHA256 values match
+exactly, including JSON types; no float/int normalization or exception is used.
+
+The complete straight cooperative-to-NOA delegation is unchanged. The old bound
+C1_H/C0 straight proof is explicitly inherited after fixed-state equality and
+unexecuted pair/follow/fill profiling. Its four old short proof cases are stored
+only as inherited evidence, never as part of these 20 new heldout cases.
+
+Start with tables/flow_means.csv, pairs.csv, runs.csv and attributions.csv.
+Legacy cooperative_ fields identify C1_P here. P_transform_ fields identify the
+separate final P policy. Negative cooperative_minus_P time/fuel means C1_P is
+lower. P_incremental_reduction_over_cooperative_* positive means P has a larger
+same-mode straight-adjusted reduction. All metric formulas, measured gates,
+regions, speed threshold, windows, physical layer definitions and censoring
+rules reuse the independently frozen evaluator. No new metric is added.
+
+Results are not universally favorable to P: C1_P TT at flows500/750/1000/1500
+is41.767300/41.925911/42.047930/43.494615s, versus P's
+41.769688/41.853895/41.970283/43.596960s. P's main-segment incremental reduction
+is+.021191/+.125468/+.135442/+.987646s, while P uses more fuel in every flow.
+At1500, P's whole-trip TT remains longer than both C1_P and NOA. This policy
+contrast alone does not prove that complete physically formed groups caused it.
+
+data/raw_case_json.tar.gz contains 60 exact original JSON files from these20
+new cases. data/case_evidence preserves the compressed independent measured
+gate/region/native evidence; data/recovery_* preserves recovery and censoring.
+Large .1s original position files remain external with exact trace hashes.
+All source/config/evaluator bytes, inheritance and operation logs are retained.
+verify_portable.py independently checks bytes, archives, raw trip/gate/window
+metrics, exact parameter hashes, P pair signs and all five-seed means using
+only the standard library plus the explicitly bound sibling portable_P data.
+
+Original P/H/D/C0/C1_H/main/J/K sources and prior outputs were not overwritten.

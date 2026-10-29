@@ -1,0 +1,13 @@
+test_common_frame_and_actual_ending_lane_pair_geometry_are_retained (test_leader_following.LeaderFollowingTests.test_common_frame_and_actual_ending_lane_pair_geometry_are_retained) ... ok
+test_forward_projected_head_keeps_cruise_and_rear_head_accelerates (test_leader_following.LeaderFollowingTests.test_forward_projected_head_keeps_cruise_and_rear_head_accelerates) ... ok
+test_free_fill_does_not_relocate_a_head_but_body_can_fill (test_leader_following.LeaderFollowingTests.test_free_fill_does_not_relocate_a_head_but_body_can_fill) ... ok
+test_front_following_body_and_NOA_stay_P_equivalent (test_leader_following.LeaderFollowingTests.test_front_following_body_and_NOA_stay_P_equivalent) ... ok
+test_moving_same_corridor_front_still_controls_following_and_safety (test_leader_following.LeaderFollowingTests.test_moving_same_corridor_front_still_controls_following_and_safety) ... ok
+test_necessary_helper_and_merge_remain_available_to_heads (test_leader_following.LeaderFollowingTests.test_necessary_helper_and_merge_remain_available_to_heads) ... ok
+test_only_nearest_positive_projected_actual_head_is_selected (test_leader_following.LeaderFollowingTests.test_only_nearest_positive_projected_actual_head_is_selected) ... ok
+test_phase_anchor_must_be_centered_and_laterally_stable (test_leader_following.LeaderFollowingTests.test_phase_anchor_must_be_centered_and_laterally_stable) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.059s
+
+OK

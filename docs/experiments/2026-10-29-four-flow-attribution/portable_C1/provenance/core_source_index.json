@@ -1,0 +1,26 @@
+{
+  "experiments/native_sumo.py": {
+    "path": "source/core/experiments/native_sumo.py",
+    "sha256": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3"
+  },
+  "experiments/global_reference.py": {
+    "path": "source/core/experiments/global_reference.py",
+    "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+  },
+  "experiments/complete_layers.py": {
+    "path": "source/core/experiments/complete_layers.py",
+    "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+  },
+  "noa/native_rules.py": {
+    "path": "source/core/noa/native_rules.py",
+    "sha256": "d59e565794f02cdfdad45f1ac895c4a0a20223928fc6de76304e4d1a467bee60"
+  },
+  "run_native_flow.py": {
+    "path": "source/core/run_native_flow.py",
+    "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+  },
+  "research/common.py": {
+    "path": "source/core/research/common.py",
+    "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  }
+}

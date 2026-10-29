@@ -1,0 +1,23 @@
+{
+  "parent": "D:\\yanjiu1\\keyan1\\tmp\\four_flow_D_analysis_frozen",
+  "parent_source_sha256": {
+    "experiments/bottleneck_attribution.py": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "experiments/native_comparison.py": "b39dd54cadbefa28116ea46f7135f56863b1b0356f5702bfdb07832df897804c",
+    "experiments/native_recovery.py": "ccd260728657ca44c662ab044d24cb2c7bcaf569895d315030c393fae7844e80",
+    "experiments/__init__.py": "eaf1a3f7eca911b7d8ba2605eb8c5b1d359fbc0b6942ac0a913b6d92fe5f4a0f"
+  },
+  "source_sha256": {
+    "experiments/bottleneck_attribution.py": "1254953a5dae40809ea38f09a03c79e18ac5bd57cb36c16649e27e9ba07625ce",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "experiments/native_comparison.py": "5618a41584c7643a23af2a22470b2207dffc1eab14b27c9c2d2517ad566fef7d",
+    "experiments/native_recovery.py": "ccd260728657ca44c662ab044d24cb2c7bcaf569895d315030c393fae7844e80",
+    "experiments/__init__.py": "eaf1a3f7eca911b7d8ba2605eb8c5b1d359fbc0b6942ac0a913b6d92fe5f4a0f"
+  },
+  "changed_source_files": [
+    "experiments/native_comparison.py",
+    "experiments/bottleneck_attribution.py"
+  ],
+  "all_function_and_class_AST_identical": true,
+  "changes": "cooperative enum/label only; no evaluation formula or threshold changes; no runtime monkeypatch"
+}

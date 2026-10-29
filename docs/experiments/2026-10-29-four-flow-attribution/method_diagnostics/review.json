@@ -1,0 +1,50 @@
+{
+  "scope": "Read-only independent method review of frozen common_pair_P_release. No simulation, controller execution, parameter search or traffic metric recalculation. P100/C1_P analysis belongs to the separate formal evaluation.",
+  "source": {
+    "package": "D:/yanjiu1/keyan1/tmp/common_pair_P_release",
+    "rule_sha256": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+    "engine_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+    "calibration_P_rule_sha256": "d72154c245bddb572bc33aceb9e406b04484012a4e4cbbbe94705471fe15a69e",
+    "changed_functions_vs_calibration_P": ["_pair_error"],
+    "changed_functions_vs_E11_H_equivalent": ["_decide", "_following", "_pair_error"],
+    "no_new_method_parameter_or_memory_field": true
+  },
+  "local_information": {
+    "input": "Same private local physical tracks in ego[-100,+200]m; own pending_lane only. No other vehicle intention, true SUMO ID, global rank, shared slot assignment or central schedule enters the rules.",
+    "complete_head_search_bound": "A peer within±50m, its reverse-nearest candidates within another±50m, and their forward50m head tests require only ego[-100,+150]m, contained in the declared sensor window.",
+    "identity": "Private tracks are compared for identity/gap continuity; head order uses projected geometric error and physical x,y,v,vy, not ID priority. The rules import only dataclasses and sqrt.",
+    "geometry": "drop_x and the existing360m preparation distance are road geometry already available to H. P adds no demand-flow threshold, timer, new gain or memory state. The50m formation link is distinct from200m safety sensing and from existing90m local helper/fill geometry."
+  },
+  "pair_geometry": {
+    "rule": "With a boundary, pair_lanes=2 iff max(car.lane,peer.lane)<2 and min(car.x,peer.x)>=boundary; otherwise3. With boundaryNone, retain supplied lane count.",
+    "dispatch": "Transform uses drop_x−360m; ordinary formation uses actual drop_x; straight road has no boundary. nearest ordering and the applied error both call the same _pair_error, including pair-specific denominator max(1,pair_lanes−1).",
+    "corrected_counterexample": "The archived P_ending_lane_geometry_audit concerns calibration d72154c2, which returned a two-lane zero error for an actually measured lane2/1 pair after640m, while three-lane error was15m. Release8d112d79 adds the lane-scope guard; its saved scope log records two RED failures then two GREEN passes. Old calibration results remain bound to d72154c2.",
+    "static_reciprocity": "The boundary predicate is symmetric in the two measured cars. With the same boundary, raw_pair_error(a,b) is the negative of raw_pair_error(b,a), and both obtain the same pair lane count/weight.",
+    "claim_limit": "This is a pair-definition fact, not a whole-system zero-sum or stability theorem. Actual head eligibility, lane-range loops, executing/receiving branches, nearest switches, safety clipping and entry/exit can differ. Ending-lane and retained cars need not actually execute reciprocal phase commands on the same frame."
+  },
+  "measured_lane_scope_limit": {
+    "fact": "The ending-lane guard tests measured car.lane, not _occupies(car,2) and not strict lane-change completion. SUMO lane index can flip near the lateral midpoint while the vehicle still straddles the old lane.",
+    "allowed_statement": "Every pair containing a car whose measured lane index is2 keeps three-lane pair geometry.",
+    "unsupported_statement": "Pair geometry remains three-lane until the entire body has physically exited lane2 or the lane change is fully completed.",
+    "physical_projection": "For each fixed pair lane count, _physical_phase uses measured y continuously and agrees with discrete phase at lane centers. The common discrete3→2 switch, graph membership and lane-index eligibility can still switch; full-controller continuity is not established."
+  },
+  "following_and_safety": {
+    "body": "An actual front within50m is followed at front.x−30 using front.speed; no body phase, rear assistance or cruise reset is added to that branch. Outside a local front link, a head uses the existing cruise reference and bounded phase contribution.",
+    "excluded_failed_terms": "No N positive-rear reference assistance; no J spatial phase field; no K spatial Jacobian/velocity correction. _phase/_physical_phase and _request remain H/E11 definitions.",
+    "shared_execution": "Engine6a5300 and shared safe_speed, _clear, target-lane guard, own-pending lifecycle and vehicle physics are unchanged from H/E11. Insertion reserve remains max(8,4+1.5+.2*v_rear+max(v_rear²−v_incoming²,0)/20), distinct from final30m formation spacing.",
+    "physics": "tau.2,minGap1.5,accel5,decel10,emergencyDecel30,maxSpeed33.3,dt.1. All modes share native execution constraints. No global safety theorem follows from the formula; formal safety/completion audit is still required."
+  },
+  "saved_functional_evidence_only": {
+    "release_six_source_ok": true,
+    "scrambled_straight": {"completed":6,"safe":true,"confirmed_participation":0.6083690987124469,"peak":6,"region_m":[100,1000]},
+    "original_organized_six_drop": {"completed":6,"safe":true,"confirmed_participation":0.5995203836930451,"peak":6,"region_m":[1000,1200]},
+    "interpretation": "The scrambled case demonstrates formation in that small scene; the original already-organized case demonstrates transformation/recovery. Neither establishes continuous-flow traffic benefit or whole-fleet formation coverage."
+  },
+  "formal_claim_requirements": [
+    "Bind all P100 observations to release8d112d79, not calibrationd72154c2; keep held-out seeds6–10 distinct from calibration seeds1/4.",
+    "Same-source NOA, straight/drop differences, fixed640–1100m segment measures, low-speed accumulation/flow, fuel and source audits must decide traffic claims. This method review supplies no new P100 result.",
+    "Use same-overtaking C1_P as the explicitly source-bound strategy ablation. With weak upstream complete formation, ordinary cooperative merging or local spacing regulation must not be described as proven benefit of preformed full multilayer platoons.",
+    "Preserve negative/mixed E/J/K/N/P-calibration outcomes and uncompleted/execution failures; do not fit all E1–E7 failures into the same three mechanisms."
+  ],
+  "verdict": "No new privileged information path or weakened shared guard found. The release corrects the documented measured-lane2 pair-scope defect while preserving local H body following. Static geometric consistency and the saved six-car checks are valid limited facts; global stability, full-occupancy phase gating and traffic improvement remain unproven by this review."
+}

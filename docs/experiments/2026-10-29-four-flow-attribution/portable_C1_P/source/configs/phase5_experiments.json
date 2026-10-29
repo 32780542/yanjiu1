@@ -1,0 +1,11 @@
+{
+  "layer":"phase5_experiments",
+  "defaults":{"status":"frozen_development_setting_unvalidated","source":"This study stage5 predeclared cases","page_or_url":"docs/phase5_implementation_plan.md; experiments/phase5_cases.py","rationale":"Paired on/off low-speed development only; no safety limit changes or successful-seed selection."},
+  "parameters":[
+    {"name":"phase5_target_speed_mps","value":5.0,"unit":"m/s","rationale":"Both switches use the same target; phase4 default remains20. CTH at20 incompatible with30m center spacing."},
+    {"name":"phase5_isolation_stride","value":10,"unit":"control intervals","rationale":"Reconstruct sensor histories every frame, sample same-own-memory counterfactual decisions every10 and final frame."},
+    {"name":"phase5_random_seeds","value":[5101,5102,5201,5202,5301,5302],"unit":"seed","rationale":"Two fixed seeds per3/6/12 vehicles, all retained."},
+    {"name":"phase5_random_duration_s","value":45.0,"unit":"s"},
+    {"name":"phase5_min_initial_same_lane_center_gap_m","value":30.0,"unit":"m","rationale":"Continuous rejection sampling initial spacing only; no global lattice."}
+  ]
+}

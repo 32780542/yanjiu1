@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-c",
+    "import sys,runpy; sys.path.insert(0,'D:/yanjiu1/keyan1/tmp/H_strict_formation_ablation'); runpy.run_path('D:/yanjiu1/keyan1/tmp/H_strict_formation_ablation/test_strict_formation_rules.py',run_name='__main__')"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 120.0,
+  "started_utc": "2026-10-29T03:03:15.480275+00:00",
+  "status": "failed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 99888,
+  "execution_status": "failed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 1,
+  "child_returncode": 1,
+  "elapsed_s": 0.375,
+  "ended_utc": "2026-10-29T03:03:15.863153+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "9a4c0ac13fb9d459edeacb3a01e10e12b6cd3de34aac52c5051b939eaf8184d4"
+  },
+  "archive_errors": {}
+}

@@ -1,0 +1,3518 @@
+{
+  "format_version": 1,
+  "archive": "method_diagnostics.tar.gz",
+  "archive_sha256": "7ec0756aaaebd63b0fa3d86de896f255f56c83e2b9def5ce6c511b65bcf9f826",
+  "archive_bytes": 357420,
+  "member_count": 134,
+  "members": {
+    "aggregate_evidence/E_candidate_quality_review__summary.json": {
+      "sha256": "18de6e87b1d0b9a7bb11c9effc31cdd4bc6f18d5458e20e8be6285fffeb54d97",
+      "bytes": 120141,
+      "category": "explicitly allowed aggregate evidence",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E_candidate_quality_review\\summary.json"
+      ]
+    },
+    "aggregate_evidence/H_method_independent_review.json": {
+      "sha256": "cc18165dcf18df700431bf4320cceb430f4c0b51e61f11ad8f123293c0d11deb",
+      "bytes": 15892,
+      "category": "explicitly allowed aggregate evidence",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\H_method_independent_review.json"
+      ]
+    },
+    "aggregate_evidence/P_ending_lane_geometry_audit.json": {
+      "sha256": "d0444c461a0630be7683b82c54ac5fd86b3d60f0bc0a0edb7a4931837ca6e701",
+      "bytes": 893,
+      "category": "explicitly allowed aggregate evidence",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_ending_lane_geometry_audit.json"
+      ]
+    },
+    "blobs/078087ac54a3250de88d1dfb4ea48ed61997b4fef60c687d82f9d4154cf59325": {
+      "sha256": "078087ac54a3250de88d1dfb4ea48ed61997b4fef60c687d82f9d4154cf59325",
+      "bytes": 17456,
+      "category": "E5_balanced_phase_execution core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/0c06a6fde92fa18ce498a5643288801f18c7923a08a1a641a1e32ce22fdb356d": {
+      "sha256": "0c06a6fde92fa18ce498a5643288801f18c7923a08a1a641a1e32ce22fdb356d",
+      "bytes": 16202,
+      "category": "E1_full_gain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695": {
+      "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+      "bytes": 44,
+      "category": "E1_full_gain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\configs\\tools.json"
+      ]
+    },
+    "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f": {
+      "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+      "bytes": 2300,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\paper_reference.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\paper_reference.json"
+      ]
+    },
+    "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786": {
+      "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+      "bytes": 1732,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase4_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase4_experiments.json"
+      ]
+    },
+    "blobs/1f663cd900d6bcef2b7565f649f5cc37a38a735ab7f7715ea9246b8172787685": {
+      "sha256": "1f663cd900d6bcef2b7565f649f5cc37a38a735ab7f7715ea9246b8172787685",
+      "bytes": 17069,
+      "category": "E6_neighbor_velocity core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/2203d7c8fef5c4348455d74516dbfc0eb315319c180159183a4bd98a82ac0cff": {
+      "sha256": "2203d7c8fef5c4348455d74516dbfc0eb315319c180159183a4bd98a82ac0cff",
+      "bytes": 16674,
+      "category": "E3_balanced_phase_safe_gap core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/265ae337f5e52fb699ef0f9af8c24d7cfe3d07fce425f1e5c130b5c7c18d924e": {
+      "sha256": "265ae337f5e52fb699ef0f9af8c24d7cfe3d07fce425f1e5c130b5c7c18d924e",
+      "bytes": 17156,
+      "category": "E10_bounded_group core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31": {
+      "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+      "bytes": 39489,
+      "category": "E1_full_gain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\experiments\\native_sumo.py"
+      ]
+    },
+    "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516": {
+      "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+      "bytes": 9792,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase2.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase2.json"
+      ]
+    },
+    "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a": {
+      "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+      "bytes": 4431,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\topology_smoke.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\topology_smoke.json"
+      ]
+    },
+    "blobs/35df64d6235eb2db74d27a749b2b48adea5e2797086095e4b657468c9e9ee9b2": {
+      "sha256": "35df64d6235eb2db74d27a749b2b48adea5e2797086095e4b657468c9e9ee9b2",
+      "bytes": 17056,
+      "category": "E7_symmetric_velocity core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825": {
+      "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+      "bytes": 2941,
+      "category": "E1_full_gain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\run_native_flow.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\run_native_flow.py"
+      ]
+    },
+    "blobs/49fbe090936195a6c39e902f933ca81a7f4a95d6cb10b06388f1174b36c5d4fa": {
+      "sha256": "49fbe090936195a6c39e902f933ca81a7f4a95d6cb10b06388f1174b36c5d4fa",
+      "bytes": 16419,
+      "category": "E2_full_gain_safe_gap core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/4c5c92df52757473005b4dae79d6af3d57f27fb6a3fbe07f574e234000d62c7e": {
+      "sha256": "4c5c92df52757473005b4dae79d6af3d57f27fb6a3fbe07f574e234000d62c7e",
+      "bytes": 39895,
+      "category": "E3_own_execution_feedback core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\experiments\\native_sumo.py"
+      ]
+    },
+    "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60": {
+      "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "bytes": 11426,
+      "category": "E1_full_gain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\experiments\\complete_layers.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\experiments\\complete_layers.py"
+      ]
+    },
+    "blobs/53dca9026bd0650865fa8d8400befcc10d032b0fbeaa1e54946ea60c804658c6": {
+      "sha256": "53dca9026bd0650865fa8d8400befcc10d032b0fbeaa1e54946ea60c804658c6",
+      "bytes": 16459,
+      "category": "E2_cruise_cap_ablation core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97": {
+      "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+      "bytes": 5053,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase4.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase4.json"
+      ]
+    },
+    "blobs/575db9bed381a2ba726bc770118b061aca10c701899aaff70f903fa1e0a1851a": {
+      "sha256": "575db9bed381a2ba726bc770118b061aca10c701899aaff70f903fa1e0a1851a",
+      "bytes": 17351,
+      "category": "E11_actual_head_phase core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09": {
+      "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+      "bytes": 157,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\tools.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\tools.json"
+      ]
+    },
+    "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0": {
+      "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+      "bytes": 40018,
+      "category": "E6_neighbor_velocity core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\experiments\\native_sumo.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\experiments\\native_sumo.py"
+      ]
+    },
+    "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517": {
+      "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+      "bytes": 977,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\sensitivity.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\sensitivity.json"
+      ]
+    },
+    "blobs/80e3ee1c3fab0cb60ed6420b2d34fcd6d1dcc0709121a5050f55d1c3bd903048": {
+      "sha256": "80e3ee1c3fab0cb60ed6420b2d34fcd6d1dcc0709121a5050f55d1c3bd903048",
+      "bytes": 17134,
+      "category": "E9_local_pair_phase core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/83de119879ea940cd2455a3626b1a576ab9d4ff170895cd70b1a0606b64d5412": {
+      "sha256": "83de119879ea940cd2455a3626b1a576ab9d4ff170895cd70b1a0606b64d5412",
+      "bytes": 18208,
+      "category": "K_spatial_velocity core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81": {
+      "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+      "bytes": 1434,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase3.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase3.json"
+      ]
+    },
+    "blobs/8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864": {
+      "sha256": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+      "bytes": 17864,
+      "category": "common_pair_P_release core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52": {
+      "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+      "bytes": 822,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase5f.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase5f.json"
+      ]
+    },
+    "blobs/a5e3afd6e65463509495cf01c92eb2fc757428a667ffe9afdeddf5b1deef7754": {
+      "sha256": "a5e3afd6e65463509495cf01c92eb2fc757428a667ffe9afdeddf5b1deef7754",
+      "bytes": 16801,
+      "category": "E8_front_chain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9": {
+      "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+      "bytes": 2275,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase5.json"
+      ]
+    },
+    "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc": {
+      "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+      "bytes": 6386,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\no_comm_main.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\no_comm_main.json"
+      ]
+    },
+    "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279": {
+      "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "bytes": 5758,
+      "category": "E1_full_gain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\experiments\\global_reference.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\experiments\\global_reference.py"
+      ]
+    },
+    "blobs/c08f8149bbbc42123e1aa445d6f688ceff66b18bced2cb423caed4517feb84c4": {
+      "sha256": "c08f8149bbbc42123e1aa445d6f688ceff66b18bced2cb423caed4517feb84c4",
+      "bytes": 17959,
+      "category": "J_spatial_phase core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95": {
+      "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+      "bytes": 2003,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase5_r5.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase5_r5.json"
+      ]
+    },
+    "blobs/d3e3f9410a0f202d218f9ba32e2934cb708bfe3be4a7c93c295395bfabd96438": {
+      "sha256": "d3e3f9410a0f202d218f9ba32e2934cb708bfe3be4a7c93c295395bfabd96438",
+      "bytes": 16457,
+      "category": "E3_balanced_lane_phase core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/d72154c245bddb572bc33aceb9e406b04484012a4e4cbbbe94705471fe15a69e": {
+      "sha256": "d72154c245bddb572bc33aceb9e406b04484012a4e4cbbbe94705471fe15a69e",
+      "bytes": 17749,
+      "category": "P_common_pair core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/ddd0e595d28fcd61840b1727110862eff7fceab938a6adb6c02ec009930ebd2e": {
+      "sha256": "ddd0e595d28fcd61840b1727110862eff7fceab938a6adb6c02ec009930ebd2e",
+      "bytes": 17081,
+      "category": "E3_own_execution_feedback core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c": {
+      "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+      "bytes": 4600,
+      "category": "E1_full_gain core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\research\\common.py",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\research\\common.py"
+      ]
+    },
+    "blobs/e1f067381bf6d81af3ab6acd216a5d322cf7b1928832e4bfee3055fda6276ff2": {
+      "sha256": "e1f067381bf6d81af3ab6acd216a5d322cf7b1928832e4bfee3055fda6276ff2",
+      "bytes": 18007,
+      "category": "N_common_pair_head core source",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\noa\\native_rules.py"
+      ]
+    },
+    "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941": {
+      "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+      "bytes": 677,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\kinematic.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\kinematic.json"
+      ]
+    },
+    "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6": {
+      "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+      "bytes": 988,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase5g.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase5g.json"
+      ]
+    },
+    "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c": {
+      "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+      "bytes": 1138,
+      "category": "E8_front_chain config",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\configs\\phase5_experiments.json",
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\configs\\phase5_experiments.json"
+      ]
+    },
+    "indices/collection_scope.json": {
+      "sha256": "e523a891ef2134b58e5bc88572087060d19362fc24b67b38dddffc5c4a919e02",
+      "bytes": 1068,
+      "category": "generated index",
+      "original_paths": []
+    },
+    "indices/reported_R_G_case_protocol_hash_references.json": {
+      "sha256": "141b284140d25c1594f020ec975eaf3780c7e748e9ec0b87fdec389f3862479d",
+      "bytes": 195905,
+      "category": "generated index",
+      "original_paths": []
+    },
+    "indices/versions.json": {
+      "sha256": "57428bfb24908509608746ba3d8392813ae79d4a9dd76e950c39f4b647d403cc",
+      "bytes": 103684,
+      "category": "generated index",
+      "original_paths": []
+    },
+    "package_provenance/README.md": {
+      "sha256": "d99408a5f0db1c9ea708078dc877a5565e2d5d44b9481565f269f6db4beeaaa6",
+      "bytes": 3694,
+      "category": "archive sidecar snapshot",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-four-flow-attribution\\method_diagnostics\\README.md"
+      ]
+    },
+    "package_provenance/build_archive.py": {
+      "sha256": "ed1fe7863fd79ac1c9dee25f98a2210be31021459df2938534ba5256a3c53aa2",
+      "bytes": 9780,
+      "category": "archive sidecar snapshot",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-four-flow-attribution\\method_diagnostics\\build_archive.py"
+      ]
+    },
+    "package_provenance/review.json": {
+      "sha256": "a15860dcf8dc2add1fdb15c02ce75a53471ae1d5da5bafddde08de058878810b",
+      "bytes": 6745,
+      "category": "archive sidecar snapshot",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-four-flow-attribution\\method_diagnostics\\review.json"
+      ]
+    },
+    "package_provenance/verify_archive.py": {
+      "sha256": "c6665876c88cae3aac58c4871f94f81f38ec368859f7c450eb1ea97ddcf270ed",
+      "bytes": 7151,
+      "category": "archive sidecar snapshot",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-four-flow-attribution\\method_diagnostics\\verify_archive.py"
+      ]
+    },
+    "versions/E10_bounded_group/base_manifest.json": {
+      "sha256": "b9ce4915f91df7a0ad044bc554bbacf4a3393f51f9779ea8a901c51345f062ff",
+      "bytes": 2954,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\base_manifest.json"
+      ]
+    },
+    "versions/E10_bounded_group/brief_summary.json": {
+      "sha256": "d2b4095e1d25dfc90157f33273ef4de5d843e098baa30fc86c4cc56ffe87eaa4",
+      "bytes": 11140,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\brief_summary.json"
+      ]
+    },
+    "versions/E10_bounded_group/candidate.diff": {
+      "sha256": "6784fd81723ced2bc857a6b5c49859642baad3893c7fc656e129a49bf864dc4e",
+      "bytes": 1363,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\candidate.diff"
+      ]
+    },
+    "versions/E10_bounded_group/candidate_manifest.json": {
+      "sha256": "f85f44ab73847ab2c868ac988a3c1fc7cfd302bc0f9ae6b866b48b3c1bdea9cc",
+      "bytes": 2957,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\candidate_manifest.json"
+      ]
+    },
+    "versions/E10_bounded_group/probe_summary.json": {
+      "sha256": "65e83e306dbe6e336e3db7014ad495792714ae4f3cd6bf0479799500380cbd7c",
+      "bytes": 514793,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\probe_summary.json"
+      ]
+    },
+    "versions/E10_bounded_group/run_e10_probes.py": {
+      "sha256": "86e9c575160f8cedeb24c1d311dbce4d10ec020bc9f446052cf11f0a608584a4",
+      "bytes": 7095,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\run_e10_probes.py"
+      ]
+    },
+    "versions/E10_bounded_group/six_drop_alignment_diagnostic.json": {
+      "sha256": "aafb4e90ad1b6973b06ea81fd76019906feb736067d6c45c3c7d19c6177bcae4",
+      "bytes": 1775,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\six_drop_alignment_diagnostic.json"
+      ]
+    },
+    "versions/E10_bounded_group/six_vehicle_scrambled_initial.json": {
+      "sha256": "49d9466bb62132b5a40d206cfc292a5050a211743b82f12f8c68d2b515e84260",
+      "bytes": 667,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\six_vehicle_scrambled_initial.json"
+      ]
+    },
+    "versions/E10_bounded_group/six_vehicle_transform_initial.json": {
+      "sha256": "48c77b2d57b4c91e38d5d715adca2c20633c080c87acdd067dfa1756eb8643d9",
+      "bytes": 589,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\six_vehicle_transform_initial.json"
+      ]
+    },
+    "versions/E10_bounded_group/test_e10_rules.py": {
+      "sha256": "600a1d3cb5c7e5bed2f2446e24fec3bf6253a290697fc6b2c157286440011fd7",
+      "bytes": 3683,
+      "category": "E10_bounded_group metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\test_e10_rules.py"
+      ]
+    },
+    "versions/E11_actual_head_phase/base_manifest.json": {
+      "sha256": "38d5e83a9aafbc95ed300853388a2ee78f8109c52749030114ee900f0db589e4",
+      "bytes": 2952,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\base_manifest.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/brief_summary.json": {
+      "sha256": "45d13532032a802b5f08fc777ecded8c2b92adbbe8e5029ef7d66d435bb22304",
+      "bytes": 11613,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\brief_summary.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/candidate.diff": {
+      "sha256": "a013ce9545b7f1fd9124a2bd86a6c58152c59d67e956e943cbe741c14dfdab3f",
+      "bytes": 1953,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\candidate.diff"
+      ]
+    },
+    "versions/E11_actual_head_phase/candidate_manifest.json": {
+      "sha256": "50d7696a2cfb9d61c3db848d2efc1acf9562232f42e1c704c6dd0813ef0d4105",
+      "bytes": 2985,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\candidate_manifest.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/probe_summary.json": {
+      "sha256": "3fd5326f8ef4fcb342227e50e4af9ee8b4b0582f7c33acc576da1f5b588f10c5",
+      "bytes": 528229,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\probe_summary.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/run_e11_probes.py": {
+      "sha256": "6ccda4ac4b90a06218ae99298157932792dc6a40f1b091b7d72e2175142e12f9",
+      "bytes": 7268,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\run_e11_probes.py"
+      ]
+    },
+    "versions/E11_actual_head_phase/six_vehicle_scrambled_initial.json": {
+      "sha256": "49d9466bb62132b5a40d206cfc292a5050a211743b82f12f8c68d2b515e84260",
+      "bytes": 667,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\six_vehicle_scrambled_initial.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/six_vehicle_transform_initial.json": {
+      "sha256": "48c77b2d57b4c91e38d5d715adca2c20633c080c87acdd067dfa1756eb8643d9",
+      "bytes": 589,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\six_vehicle_transform_initial.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/summarize_e11.py": {
+      "sha256": "0410debe86fa5691189a242e647fe0e4abcfb1cb966cd0194d9564f2e234e827",
+      "bytes": 4822,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\summarize_e11.py"
+      ]
+    },
+    "versions/E11_actual_head_phase/test_e11_rules.py": {
+      "sha256": "5ce1bbbeadec5d0e8c2e109c68b13c097534d1f988fe81b00805f6dc221150d7",
+      "bytes": 3419,
+      "category": "E11_actual_head_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\test_e11_rules.py"
+      ]
+    },
+    "versions/E11_actual_head_phase/tests/fixtures/e10_actual_34_7s.json": {
+      "sha256": "aafb4e90ad1b6973b06ea81fd76019906feb736067d6c45c3c7d19c6177bcae4",
+      "bytes": 1775,
+      "category": "E11_actual_head_phase small test fixture",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\tests\\fixtures\\e10_actual_34_7s.json"
+      ]
+    },
+    "versions/E11_actual_head_phase/tests/fixtures/provenance.json": {
+      "sha256": "56b058af7f35d0a0519e1b7bcf7ff64e651e5229c772d9c9c98d7df9b59f3f88",
+      "bytes": 484,
+      "category": "E11_actual_head_phase small test fixture",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\tests\\fixtures\\provenance.json"
+      ]
+    },
+    "versions/E3_balanced_phase_safe_gap/run_flow_study.py": {
+      "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+      "bytes": 3022,
+      "category": "E3_balanced_phase_safe_gap metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\run_flow_study.py"
+      ]
+    },
+    "versions/E3_own_execution_feedback/run_flow_study.py": {
+      "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+      "bytes": 3022,
+      "category": "E3_own_execution_feedback metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\run_flow_study.py"
+      ]
+    },
+    "versions/E5_balanced_phase_execution/run_flow_study.py": {
+      "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+      "bytes": 3022,
+      "category": "E5_balanced_phase_execution metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\run_flow_study.py"
+      ]
+    },
+    "versions/E6_neighbor_velocity/run_flow_study.py": {
+      "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+      "bytes": 3022,
+      "category": "E6_neighbor_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\run_flow_study.py"
+      ]
+    },
+    "versions/E7_symmetric_velocity/run_flow_study.py": {
+      "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+      "bytes": 3022,
+      "category": "E7_symmetric_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\run_flow_study.py"
+      ]
+    },
+    "versions/E8_front_chain/base_manifest.json": {
+      "sha256": "755cd19f404f656e918e771937aeebc360a22f2cd07f79924a96956f315095e4",
+      "bytes": 711,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\base_manifest.json"
+      ]
+    },
+    "versions/E8_front_chain/brief_summary.json": {
+      "sha256": "1cc7d462397da94c2f8f7b381c272966f59cd7fb1bd5d7f27b343a0ff9bed7ff",
+      "bytes": 11431,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\brief_summary.json"
+      ]
+    },
+    "versions/E8_front_chain/candidate.diff": {
+      "sha256": "f6146addae35894cdbb70035da795fd157b2c8c528cf016c4306d12cd6ccf43b",
+      "bytes": 1827,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\candidate.diff"
+      ]
+    },
+    "versions/E8_front_chain/candidate_manifest.json": {
+      "sha256": "7cf8c3161cabe3442722ae37704780b4fde4ff968ca1d92ed432b99d88e57ccd",
+      "bytes": 1272,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\candidate_manifest.json"
+      ]
+    },
+    "versions/E8_front_chain/probe_summary.json": {
+      "sha256": "6c1c8983208b712ed2edfdc973a3a9b7e8f0769bae6d9128234e3cab44f3c160",
+      "bytes": 479901,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\probe_summary.json"
+      ]
+    },
+    "versions/E8_front_chain/run_e8_probes.py": {
+      "sha256": "88aabbfd9ff5a5ad9862d330a7ad5f675e9867a049115ef8b32972ed234a3794",
+      "bytes": 6594,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\run_e8_probes.py"
+      ]
+    },
+    "versions/E8_front_chain/six_vehicle_scrambled_initial.json": {
+      "sha256": "49d9466bb62132b5a40d206cfc292a5050a211743b82f12f8c68d2b515e84260",
+      "bytes": 667,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\six_vehicle_scrambled_initial.json"
+      ]
+    },
+    "versions/E8_front_chain/six_vehicle_transform_initial.json": {
+      "sha256": "48c77b2d57b4c91e38d5d715adca2c20633c080c87acdd067dfa1756eb8643d9",
+      "bytes": 589,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\six_vehicle_transform_initial.json"
+      ]
+    },
+    "versions/E8_front_chain/test_e8_rules.py": {
+      "sha256": "0d6c2bce60d6c7a9d22fc942e8656805117cbdbf934d9d365b913d17d6d071f9",
+      "bytes": 2590,
+      "category": "E8_front_chain metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\test_e8_rules.py"
+      ]
+    },
+    "versions/E9_local_pair_phase/analyze_evaluation.py": {
+      "sha256": "6b84c0f0b92051ae415835c9eeab89f6e36671db12001fd55051e7675dccee02",
+      "bytes": 4227,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\analyze_evaluation.py"
+      ]
+    },
+    "versions/E9_local_pair_phase/baseline_sha256.json": {
+      "sha256": "90646200e60a13ac0558b974bebd99b1c1cc22a03b13ee879cd7f26c2230a91e",
+      "bytes": 597,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\baseline_sha256.json"
+      ]
+    },
+    "versions/E9_local_pair_phase/candidate_manifest.json": {
+      "sha256": "0daf3336c99967fde7ef64a5f61f14dfda6f9f27b901182af796b5acfe7ca4e4",
+      "bytes": 2434,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\candidate_manifest.json"
+      ]
+    },
+    "versions/E9_local_pair_phase/report.json": {
+      "sha256": "fe9d8ca420e5e85d1e7e0d33af1ea118cc93410b01b5b691e45a67a172449568",
+      "bytes": 27906,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\report.json"
+      ]
+    },
+    "versions/E9_local_pair_phase/run_evaluation.py": {
+      "sha256": "b2b6fdc754509bb4847b0bb6e6ef76d7b1619cb0fc0735832b3f9e5558b4a879",
+      "bytes": 2599,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\run_evaluation.py"
+      ]
+    },
+    "versions/E9_local_pair_phase/scrambled_six.json": {
+      "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+      "bytes": 589,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\scrambled_six.json"
+      ]
+    },
+    "versions/E9_local_pair_phase/six_summary.json": {
+      "sha256": "cb5257ac5b89d806276fb7cfd7797eab1c1bbaf6d56abcce797e393d6169c68a",
+      "bytes": 4153,
+      "category": "E9_local_pair_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\six_summary.json"
+      ]
+    },
+    "versions/E9_local_pair_phase/tests/test_local_pair_phase.py": {
+      "sha256": "c7a297d8e882813c085432a7177a070d1bc5860126a12f5ef43abca6b5c2384e",
+      "bytes": 3241,
+      "category": "E9_local_pair_phase core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\tests\\test_local_pair_phase.py"
+      ]
+    },
+    "versions/J_spatial_phase/H_parent_freeze.json": {
+      "sha256": "e96d4994b3242d6d0d6c550cbccc0e26d88f5f27d52cc6eeccc0ff6a40692a5b",
+      "bytes": 1668,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\H_parent_freeze.json"
+      ]
+    },
+    "versions/J_spatial_phase/analyze_four_cases.py": {
+      "sha256": "7965e9dd4c5bab09185d0583297a40a810f7318b43aaa11bf36120e2e191b6e0",
+      "bytes": 5896,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\analyze_four_cases.py"
+      ]
+    },
+    "versions/J_spatial_phase/candidate_manifest.json": {
+      "sha256": "78140ea32d5d973e53f8989972c254d9d1208a8a0a8847d3a5c6fac49e65054f",
+      "bytes": 1076,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\candidate_manifest.json"
+      ]
+    },
+    "versions/J_spatial_phase/report.json": {
+      "sha256": "c1c703b2d12ef881bd4bb2491ef54b37bb005919be74fbfc4a5b22721a26de7c",
+      "bytes": 34348,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\report.json"
+      ]
+    },
+    "versions/J_spatial_phase/run_four_cases.py": {
+      "sha256": "70d1f32269b8e3527377e566ed4579c6a72852d4e9388808ed606503aa4287e0",
+      "bytes": 2004,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\run_four_cases.py"
+      ]
+    },
+    "versions/J_spatial_phase/scrambled_six.json": {
+      "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+      "bytes": 589,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\scrambled_six.json"
+      ]
+    },
+    "versions/J_spatial_phase/six_summary.json": {
+      "sha256": "12c60b95de4986490f8a308372d55fa82e73926622dbc90cde20115c7094ed66",
+      "bytes": 4471,
+      "category": "J_spatial_phase metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\six_summary.json"
+      ]
+    },
+    "versions/J_spatial_phase/tests/test_spatial_phase.py": {
+      "sha256": "edcc315414adffbf86ef0d2bfbe32952c8b317c265dbdfa9ebf7176fd58a6f54",
+      "bytes": 5004,
+      "category": "J_spatial_phase core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\tests\\test_spatial_phase.py"
+      ]
+    },
+    "versions/K_spatial_velocity/J_parent_manifest.json": {
+      "sha256": "78140ea32d5d973e53f8989972c254d9d1208a8a0a8847d3a5c6fac49e65054f",
+      "bytes": 1076,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\J_parent_manifest.json"
+      ]
+    },
+    "versions/K_spatial_velocity/analyze_four_cases.py": {
+      "sha256": "8fc82ab1f8cf965ab6d71da46d6b63cc7e51dca149cff3c91cc1d069de0aa80e",
+      "bytes": 5844,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\analyze_four_cases.py"
+      ]
+    },
+    "versions/K_spatial_velocity/candidate_manifest.json": {
+      "sha256": "1602a072ec856c192fb091c2eff446d8fa163041778b47438133d6b274e55be5",
+      "bytes": 1107,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\candidate_manifest.json"
+      ]
+    },
+    "versions/K_spatial_velocity/report.json": {
+      "sha256": "faf27e9c072b66d2c8f36ff916b5d7622015c3d67e80d6f2834801f46e5d2a3e",
+      "bytes": 46676,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\report.json"
+      ]
+    },
+    "versions/K_spatial_velocity/run_four_cases.py": {
+      "sha256": "5644a66a10e5820fa87d85645c603ac2ea826e56c38659437e2cd2bdc2b478d7",
+      "bytes": 2041,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\run_four_cases.py"
+      ]
+    },
+    "versions/K_spatial_velocity/scrambled_six.json": {
+      "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+      "bytes": 589,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\scrambled_six.json"
+      ]
+    },
+    "versions/K_spatial_velocity/six_summary.json": {
+      "sha256": "62b33b0060ca6f9f7ab15c7060e3d30b8405e6d89f4ddccbf8a802ec05fbceaf",
+      "bytes": 4397,
+      "category": "K_spatial_velocity metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\six_summary.json"
+      ]
+    },
+    "versions/K_spatial_velocity/tests/test_spatial_velocity.py": {
+      "sha256": "901c160e2ecaa83bdef67efb4076344dce890486b4c0b18232ec3a507039b8e1",
+      "bytes": 4492,
+      "category": "K_spatial_velocity core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\tests\\test_spatial_velocity.py"
+      ]
+    },
+    "versions/N_common_pair_head/H_parent_freeze.json": {
+      "sha256": "e96d4994b3242d6d0d6c550cbccc0e26d88f5f27d52cc6eeccc0ff6a40692a5b",
+      "bytes": 1668,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\H_parent_freeze.json"
+      ]
+    },
+    "versions/N_common_pair_head/analyze_four_cases.py": {
+      "sha256": "dc4181efb12862c297da5efc5b5d09513e5976b91b65677def527b0df1fe00d8",
+      "bytes": 5164,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\analyze_four_cases.py"
+      ]
+    },
+    "versions/N_common_pair_head/candidate_manifest.json": {
+      "sha256": "d886d76e1e9904706c6084473cfead06126b71f2adbc8742b98fcd315bdbebe9",
+      "bytes": 1065,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\candidate_manifest.json"
+      ]
+    },
+    "versions/N_common_pair_head/report.json": {
+      "sha256": "579216f916c71a82b63845da39dc5ed1144b53e8cec5a6de4b966dfbc04fe3a3",
+      "bytes": 43230,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\report.json"
+      ]
+    },
+    "versions/N_common_pair_head/run_four_cases.py": {
+      "sha256": "9e4e5b88f4cd736eb0d23ac4ce2e5c8f06fafd526a07856cc90f6503d78e0bb1",
+      "bytes": 2041,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\run_four_cases.py"
+      ]
+    },
+    "versions/N_common_pair_head/scrambled_six.json": {
+      "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+      "bytes": 589,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\scrambled_six.json"
+      ]
+    },
+    "versions/N_common_pair_head/six_summary.json": {
+      "sha256": "136297ccfa66eb5d067c26088bd39f7bf61fe835c43ab660ef177d61250d26dc",
+      "bytes": 4307,
+      "category": "N_common_pair_head metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\six_summary.json"
+      ]
+    },
+    "versions/N_common_pair_head/tests/test_common_pair_head.py": {
+      "sha256": "a804aca7d16e4d380e59b6935fc525425ef12964e1e3820633db8de2ba72b3dc",
+      "bytes": 5188,
+      "category": "N_common_pair_head core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\tests\\test_common_pair_head.py"
+      ]
+    },
+    "versions/P_common_pair/N_parent_manifest.json": {
+      "sha256": "d886d76e1e9904706c6084473cfead06126b71f2adbc8742b98fcd315bdbebe9",
+      "bytes": 1065,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\N_parent_manifest.json"
+      ]
+    },
+    "versions/P_common_pair/analyze_four_cases.py": {
+      "sha256": "c45e22d245715f2ebf40d4c627d0fee0e1b91aaec060a6a05ca5e79e06bc9bde",
+      "bytes": 5284,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\analyze_four_cases.py"
+      ]
+    },
+    "versions/P_common_pair/candidate_manifest.json": {
+      "sha256": "77292a161dac5ba9241a0592994f161823792536eba2ca2f85888337a2cc95d5",
+      "bytes": 1064,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\candidate_manifest.json"
+      ]
+    },
+    "versions/P_common_pair/report.json": {
+      "sha256": "5a766c9aff2e2e0545f681a549a5b58b716c1c7133a7f16c889e16cfa30b33fe",
+      "bytes": 56721,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\report.json"
+      ]
+    },
+    "versions/P_common_pair/run_four_cases.py": {
+      "sha256": "e7be0cd2858bf901ca00cc16d9410425addfce8811a02135e649ffa54475fa03",
+      "bytes": 2041,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\run_four_cases.py"
+      ]
+    },
+    "versions/P_common_pair/scrambled_six.json": {
+      "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+      "bytes": 589,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\scrambled_six.json"
+      ]
+    },
+    "versions/P_common_pair/six_summary.json": {
+      "sha256": "b8095911e9267a17b4224312bf7e41b45a96be8dfd3c4a82bd0bd64eafcda4d4",
+      "bytes": 4338,
+      "category": "P_common_pair metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\six_summary.json"
+      ]
+    },
+    "versions/P_common_pair/tests/test_common_pair.py": {
+      "sha256": "59502096467645abff52148a979254fcb6025215bd8d51bde7b68981ad1eaea4",
+      "bytes": 5744,
+      "category": "P_common_pair core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\tests\\test_common_pair.py"
+      ]
+    },
+    "versions/common_pair_P_release/freeze.json": {
+      "sha256": "96fa935f9cc4623686a4801d7e74c1ebfc87f8533268251f768438b0027446da",
+      "bytes": 1819,
+      "category": "common_pair_P_release metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\freeze.json"
+      ]
+    },
+    "versions/common_pair_P_release/run_flow_study.py": {
+      "sha256": "cf7a371677a08dd312ae904f410d26070452d464314b12b0a2b5943f0b2d1385",
+      "bytes": 4604,
+      "category": "common_pair_P_release metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\run_flow_study.py"
+      ]
+    },
+    "versions/common_pair_P_release/scope_green.log": {
+      "sha256": "05969f68db42c0d80b5f203b4c913fe621ff8643af5b714630e061a4653df4b3",
+      "bytes": 98,
+      "category": "common_pair_P_release metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\scope_green.log"
+      ]
+    },
+    "versions/common_pair_P_release/scope_red.log": {
+      "sha256": "0c81ac52f56f38b23deba3d3ba75133652c7ad5f842cc3bab51bae4ffba467c4",
+      "bytes": 1633,
+      "category": "common_pair_P_release metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\scope_red.log"
+      ]
+    },
+    "versions/common_pair_P_release/six_verification.json": {
+      "sha256": "9e18a512acd2e20fea57d6986af6f535f39a90de06c5edfaafe2755a6710ec9d",
+      "bytes": 2675,
+      "category": "common_pair_P_release metadata or source script",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\six_verification.json"
+      ]
+    },
+    "versions/common_pair_P_release/tests/test_common_pair.py": {
+      "sha256": "59502096467645abff52148a979254fcb6025215bd8d51bde7b68981ad1eaea4",
+      "bytes": 5744,
+      "category": "common_pair_P_release core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\tests\\test_common_pair.py"
+      ]
+    },
+    "versions/common_pair_P_release/tests/test_ending_pair_scope.py": {
+      "sha256": "5adb387ad5b9f05ed10fafe7b550e4d8e52997894e98c3e920dfb57f8892d07b",
+      "bytes": 696,
+      "category": "common_pair_P_release core tests",
+      "original_paths": [
+        "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\tests\\test_ending_pair_scope.py"
+      ]
+    }
+  },
+  "versions": [
+    {
+      "version": "E1_full_gain",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "bytes": 39489,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/0c06a6fde92fa18ce498a5643288801f18c7923a08a1a641a1e32ce22fdb356d",
+          "sha256": "0c06a6fde92fa18ce498a5643288801f18c7923a08a1a641a1e32ce22fdb356d",
+          "bytes": 16202,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E1_full_gain\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E2_full_gain_safe_gap",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "bytes": 39489,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/49fbe090936195a6c39e902f933ca81a7f4a95d6cb10b06388f1174b36c5d4fa",
+          "sha256": "49fbe090936195a6c39e902f933ca81a7f4a95d6cb10b06388f1174b36c5d4fa",
+          "bytes": 16419,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_full_gain_safe_gap\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E2_cruise_cap_ablation",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "bytes": 39489,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/53dca9026bd0650865fa8d8400befcc10d032b0fbeaa1e54946ea60c804658c6",
+          "sha256": "53dca9026bd0650865fa8d8400befcc10d032b0fbeaa1e54946ea60c804658c6",
+          "bytes": 16459,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E2_cruise_cap_ablation\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E3_balanced_phase_safe_gap",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "bytes": 39489,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/2203d7c8fef5c4348455d74516dbfc0eb315319c180159183a4bd98a82ac0cff",
+          "sha256": "2203d7c8fef5c4348455d74516dbfc0eb315319c180159183a4bd98a82ac0cff",
+          "bytes": 16674,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_phase_safe_gap\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E3_balanced_phase_safe_gap/run_flow_study.py",
+          "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+          "bytes": 3022
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E3_balanced_lane_phase",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+          "bytes": 39489,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/d3e3f9410a0f202d218f9ba32e2934cb708bfe3be4a7c93c295395bfabd96438",
+          "sha256": "d3e3f9410a0f202d218f9ba32e2934cb708bfe3be4a7c93c295395bfabd96438",
+          "bytes": 16457,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_balanced_lane_phase\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E3_own_execution_feedback",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/4c5c92df52757473005b4dae79d6af3d57f27fb6a3fbe07f574e234000d62c7e",
+          "sha256": "4c5c92df52757473005b4dae79d6af3d57f27fb6a3fbe07f574e234000d62c7e",
+          "bytes": 39895,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/ddd0e595d28fcd61840b1727110862eff7fceab938a6adb6c02ec009930ebd2e",
+          "sha256": "ddd0e595d28fcd61840b1727110862eff7fceab938a6adb6c02ec009930ebd2e",
+          "bytes": 17081,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E3_own_execution_feedback\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E3_own_execution_feedback/run_flow_study.py",
+          "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+          "bytes": 3022
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E5_balanced_phase_execution",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/4c5c92df52757473005b4dae79d6af3d57f27fb6a3fbe07f574e234000d62c7e",
+          "sha256": "4c5c92df52757473005b4dae79d6af3d57f27fb6a3fbe07f574e234000d62c7e",
+          "bytes": 39895,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/078087ac54a3250de88d1dfb4ea48ed61997b4fef60c687d82f9d4154cf59325",
+          "sha256": "078087ac54a3250de88d1dfb4ea48ed61997b4fef60c687d82f9d4154cf59325",
+          "bytes": 17456,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E5_balanced_phase_execution\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E5_balanced_phase_execution/run_flow_study.py",
+          "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+          "bytes": 3022
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E6_neighbor_velocity",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/1f663cd900d6bcef2b7565f649f5cc37a38a735ab7f7715ea9246b8172787685",
+          "sha256": "1f663cd900d6bcef2b7565f649f5cc37a38a735ab7f7715ea9246b8172787685",
+          "bytes": 17069,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E6_neighbor_velocity\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E6_neighbor_velocity/run_flow_study.py",
+          "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+          "bytes": 3022
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E7_symmetric_velocity",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\experiments\\native_sumo.py",
+          "declared_sha256": null
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\experiments\\global_reference.py",
+          "declared_sha256": null
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\experiments\\complete_layers.py",
+          "declared_sha256": null
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/35df64d6235eb2db74d27a749b2b48adea5e2797086095e4b657468c9e9ee9b2",
+          "sha256": "35df64d6235eb2db74d27a749b2b48adea5e2797086095e4b657468c9e9ee9b2",
+          "bytes": 17056,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\noa\\native_rules.py",
+          "declared_sha256": null
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\run_native_flow.py",
+          "declared_sha256": null
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E7_symmetric_velocity\\research\\common.py",
+          "declared_sha256": null
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E7_symmetric_velocity/run_flow_study.py",
+          "sha256": "01cf9d32a14d1cd38fc82387e49bc956bab82caa4d0542b7ba5b9ac4562c1f28",
+          "bytes": 3022
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "tools.json": {
+          "member": "blobs/11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "sha256": "11de89d95020f23d05ea9495bec730840fde09a85581f89744bb532ef4948695",
+          "bytes": 44
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": false,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "package_summary_present": false,
+      "evidence_gap": "No dedicated summary in the allowed candidate directory; preserve source bytes and explicitly provided aggregate review only, do not invent run outcomes or source-to-run binding."
+    },
+    {
+      "version": "E8_front_chain",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/a5e3afd6e65463509495cf01c92eb2fc757428a667ffe9afdeddf5b1deef7754",
+          "sha256": "a5e3afd6e65463509495cf01c92eb2fc757428a667ffe9afdeddf5b1deef7754",
+          "bytes": 16801,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\noa\\native_rules.py",
+          "declared_sha256": "a5e3afd6e65463509495cf01c92eb2fc757428a667ffe9afdeddf5b1deef7754"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E8_front_chain\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E8_front_chain/base_manifest.json",
+          "sha256": "755cd19f404f656e918e771937aeebc360a22f2cd07f79924a96956f315095e4",
+          "bytes": 711
+        },
+        {
+          "member": "versions/E8_front_chain/brief_summary.json",
+          "sha256": "1cc7d462397da94c2f8f7b381c272966f59cd7fb1bd5d7f27b343a0ff9bed7ff",
+          "bytes": 11431
+        },
+        {
+          "member": "versions/E8_front_chain/candidate.diff",
+          "sha256": "f6146addae35894cdbb70035da795fd157b2c8c528cf016c4306d12cd6ccf43b",
+          "bytes": 1827
+        },
+        {
+          "member": "versions/E8_front_chain/candidate_manifest.json",
+          "sha256": "7cf8c3161cabe3442722ae37704780b4fde4ff968ca1d92ed432b99d88e57ccd",
+          "bytes": 1272
+        },
+        {
+          "member": "versions/E8_front_chain/probe_summary.json",
+          "sha256": "6c1c8983208b712ed2edfdc973a3a9b7e8f0769bae6d9128234e3cab44f3c160",
+          "bytes": 479901
+        },
+        {
+          "member": "versions/E8_front_chain/run_e8_probes.py",
+          "sha256": "88aabbfd9ff5a5ad9862d330a7ad5f675e9867a049115ef8b32972ed234a3794",
+          "bytes": 6594
+        },
+        {
+          "member": "versions/E8_front_chain/six_vehicle_scrambled_initial.json",
+          "sha256": "49d9466bb62132b5a40d206cfc292a5050a211743b82f12f8c68d2b515e84260",
+          "bytes": 667
+        },
+        {
+          "member": "versions/E8_front_chain/six_vehicle_transform_initial.json",
+          "sha256": "48c77b2d57b4c91e38d5d715adca2c20633c080c87acdd067dfa1756eb8643d9",
+          "bytes": 589
+        },
+        {
+          "member": "versions/E8_front_chain/test_e8_rules.py",
+          "sha256": "0d6c2bce60d6c7a9d22fc942e8656805117cbdbf934d9d365b913d17d6d071f9",
+          "bytes": 2590
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "E9_local_pair_phase",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/80e3ee1c3fab0cb60ed6420b2d34fcd6d1dcc0709121a5050f55d1c3bd903048",
+          "sha256": "80e3ee1c3fab0cb60ed6420b2d34fcd6d1dcc0709121a5050f55d1c3bd903048",
+          "bytes": 17134,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\noa\\native_rules.py",
+          "declared_sha256": "80e3ee1c3fab0cb60ed6420b2d34fcd6d1dcc0709121a5050f55d1c3bd903048"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E9_local_pair_phase\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E9_local_pair_phase/analyze_evaluation.py",
+          "sha256": "6b84c0f0b92051ae415835c9eeab89f6e36671db12001fd55051e7675dccee02",
+          "bytes": 4227
+        },
+        {
+          "member": "versions/E9_local_pair_phase/baseline_sha256.json",
+          "sha256": "90646200e60a13ac0558b974bebd99b1c1cc22a03b13ee879cd7f26c2230a91e",
+          "bytes": 597
+        },
+        {
+          "member": "versions/E9_local_pair_phase/candidate_manifest.json",
+          "sha256": "0daf3336c99967fde7ef64a5f61f14dfda6f9f27b901182af796b5acfe7ca4e4",
+          "bytes": 2434
+        },
+        {
+          "member": "versions/E9_local_pair_phase/report.json",
+          "sha256": "fe9d8ca420e5e85d1e7e0d33af1ea118cc93410b01b5b691e45a67a172449568",
+          "bytes": 27906
+        },
+        {
+          "member": "versions/E9_local_pair_phase/run_evaluation.py",
+          "sha256": "b2b6fdc754509bb4847b0bb6e6ef76d7b1619cb0fc0735832b3f9e5558b4a879",
+          "bytes": 2599
+        },
+        {
+          "member": "versions/E9_local_pair_phase/scrambled_six.json",
+          "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+          "bytes": 589
+        },
+        {
+          "member": "versions/E9_local_pair_phase/six_summary.json",
+          "sha256": "cb5257ac5b89d806276fb7cfd7797eab1c1bbaf6d56abcce797e393d6169c68a",
+          "bytes": 4153
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/E9_local_pair_phase/tests/test_local_pair_phase.py",
+          "sha256": "c7a297d8e882813c085432a7177a070d1bc5860126a12f5ef43abca6b5c2384e",
+          "bytes": 3241
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "E10_bounded_group",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/265ae337f5e52fb699ef0f9af8c24d7cfe3d07fce425f1e5c130b5c7c18d924e",
+          "sha256": "265ae337f5e52fb699ef0f9af8c24d7cfe3d07fce425f1e5c130b5c7c18d924e",
+          "bytes": 17156,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\noa\\native_rules.py",
+          "declared_sha256": "265ae337f5e52fb699ef0f9af8c24d7cfe3d07fce425f1e5c130b5c7c18d924e"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E10_bounded_group\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E10_bounded_group/base_manifest.json",
+          "sha256": "b9ce4915f91df7a0ad044bc554bbacf4a3393f51f9779ea8a901c51345f062ff",
+          "bytes": 2954
+        },
+        {
+          "member": "versions/E10_bounded_group/brief_summary.json",
+          "sha256": "d2b4095e1d25dfc90157f33273ef4de5d843e098baa30fc86c4cc56ffe87eaa4",
+          "bytes": 11140
+        },
+        {
+          "member": "versions/E10_bounded_group/candidate.diff",
+          "sha256": "6784fd81723ced2bc857a6b5c49859642baad3893c7fc656e129a49bf864dc4e",
+          "bytes": 1363
+        },
+        {
+          "member": "versions/E10_bounded_group/candidate_manifest.json",
+          "sha256": "f85f44ab73847ab2c868ac988a3c1fc7cfd302bc0f9ae6b866b48b3c1bdea9cc",
+          "bytes": 2957
+        },
+        {
+          "member": "versions/E10_bounded_group/probe_summary.json",
+          "sha256": "65e83e306dbe6e336e3db7014ad495792714ae4f3cd6bf0479799500380cbd7c",
+          "bytes": 514793
+        },
+        {
+          "member": "versions/E10_bounded_group/run_e10_probes.py",
+          "sha256": "86e9c575160f8cedeb24c1d311dbce4d10ec020bc9f446052cf11f0a608584a4",
+          "bytes": 7095
+        },
+        {
+          "member": "versions/E10_bounded_group/six_drop_alignment_diagnostic.json",
+          "sha256": "aafb4e90ad1b6973b06ea81fd76019906feb736067d6c45c3c7d19c6177bcae4",
+          "bytes": 1775
+        },
+        {
+          "member": "versions/E10_bounded_group/six_vehicle_scrambled_initial.json",
+          "sha256": "49d9466bb62132b5a40d206cfc292a5050a211743b82f12f8c68d2b515e84260",
+          "bytes": 667
+        },
+        {
+          "member": "versions/E10_bounded_group/six_vehicle_transform_initial.json",
+          "sha256": "48c77b2d57b4c91e38d5d715adca2c20633c080c87acdd067dfa1756eb8643d9",
+          "bytes": 589
+        },
+        {
+          "member": "versions/E10_bounded_group/test_e10_rules.py",
+          "sha256": "600a1d3cb5c7e5bed2f2446e24fec3bf6253a290697fc6b2c157286440011fd7",
+          "bytes": 3683
+        }
+      ],
+      "tests": [],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "E11_actual_head_phase",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/575db9bed381a2ba726bc770118b061aca10c701899aaff70f903fa1e0a1851a",
+          "sha256": "575db9bed381a2ba726bc770118b061aca10c701899aaff70f903fa1e0a1851a",
+          "bytes": 17351,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\noa\\native_rules.py",
+          "declared_sha256": "575db9bed381a2ba726bc770118b061aca10c701899aaff70f903fa1e0a1851a"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\E11_actual_head_phase\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/E11_actual_head_phase/base_manifest.json",
+          "sha256": "38d5e83a9aafbc95ed300853388a2ee78f8109c52749030114ee900f0db589e4",
+          "bytes": 2952
+        },
+        {
+          "member": "versions/E11_actual_head_phase/brief_summary.json",
+          "sha256": "45d13532032a802b5f08fc777ecded8c2b92adbbe8e5029ef7d66d435bb22304",
+          "bytes": 11613
+        },
+        {
+          "member": "versions/E11_actual_head_phase/candidate.diff",
+          "sha256": "a013ce9545b7f1fd9124a2bd86a6c58152c59d67e956e943cbe741c14dfdab3f",
+          "bytes": 1953
+        },
+        {
+          "member": "versions/E11_actual_head_phase/candidate_manifest.json",
+          "sha256": "50d7696a2cfb9d61c3db848d2efc1acf9562232f42e1c704c6dd0813ef0d4105",
+          "bytes": 2985
+        },
+        {
+          "member": "versions/E11_actual_head_phase/probe_summary.json",
+          "sha256": "3fd5326f8ef4fcb342227e50e4af9ee8b4b0582f7c33acc576da1f5b588f10c5",
+          "bytes": 528229
+        },
+        {
+          "member": "versions/E11_actual_head_phase/run_e11_probes.py",
+          "sha256": "6ccda4ac4b90a06218ae99298157932792dc6a40f1b091b7d72e2175142e12f9",
+          "bytes": 7268
+        },
+        {
+          "member": "versions/E11_actual_head_phase/six_vehicle_scrambled_initial.json",
+          "sha256": "49d9466bb62132b5a40d206cfc292a5050a211743b82f12f8c68d2b515e84260",
+          "bytes": 667
+        },
+        {
+          "member": "versions/E11_actual_head_phase/six_vehicle_transform_initial.json",
+          "sha256": "48c77b2d57b4c91e38d5d715adca2c20633c080c87acdd067dfa1756eb8643d9",
+          "bytes": 589
+        },
+        {
+          "member": "versions/E11_actual_head_phase/summarize_e11.py",
+          "sha256": "0410debe86fa5691189a242e647fe0e4abcfb1cb966cd0194d9564f2e234e827",
+          "bytes": 4822
+        },
+        {
+          "member": "versions/E11_actual_head_phase/test_e11_rules.py",
+          "sha256": "5ce1bbbeadec5d0e8c2e109c68b13c097534d1f988fe81b00805f6dc221150d7",
+          "bytes": 3419
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/E11_actual_head_phase/tests/fixtures/e10_actual_34_7s.json",
+          "sha256": "aafb4e90ad1b6973b06ea81fd76019906feb736067d6c45c3c7d19c6177bcae4",
+          "bytes": 1775
+        },
+        {
+          "member": "versions/E11_actual_head_phase/tests/fixtures/provenance.json",
+          "sha256": "56b058af7f35d0a0519e1b7bcf7ff64e651e5229c772d9c9c98d7df9b59f3f88",
+          "bytes": 484
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "J_spatial_phase",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/c08f8149bbbc42123e1aa445d6f688ceff66b18bced2cb423caed4517feb84c4",
+          "sha256": "c08f8149bbbc42123e1aa445d6f688ceff66b18bced2cb423caed4517feb84c4",
+          "bytes": 17959,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\noa\\native_rules.py",
+          "declared_sha256": "c08f8149bbbc42123e1aa445d6f688ceff66b18bced2cb423caed4517feb84c4"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\J_spatial_phase\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/J_spatial_phase/analyze_four_cases.py",
+          "sha256": "7965e9dd4c5bab09185d0583297a40a810f7318b43aaa11bf36120e2e191b6e0",
+          "bytes": 5896
+        },
+        {
+          "member": "versions/J_spatial_phase/candidate_manifest.json",
+          "sha256": "78140ea32d5d973e53f8989972c254d9d1208a8a0a8847d3a5c6fac49e65054f",
+          "bytes": 1076
+        },
+        {
+          "member": "versions/J_spatial_phase/H_parent_freeze.json",
+          "sha256": "e96d4994b3242d6d0d6c550cbccc0e26d88f5f27d52cc6eeccc0ff6a40692a5b",
+          "bytes": 1668
+        },
+        {
+          "member": "versions/J_spatial_phase/report.json",
+          "sha256": "c1c703b2d12ef881bd4bb2491ef54b37bb005919be74fbfc4a5b22721a26de7c",
+          "bytes": 34348
+        },
+        {
+          "member": "versions/J_spatial_phase/run_four_cases.py",
+          "sha256": "70d1f32269b8e3527377e566ed4579c6a72852d4e9388808ed606503aa4287e0",
+          "bytes": 2004
+        },
+        {
+          "member": "versions/J_spatial_phase/scrambled_six.json",
+          "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+          "bytes": 589
+        },
+        {
+          "member": "versions/J_spatial_phase/six_summary.json",
+          "sha256": "12c60b95de4986490f8a308372d55fa82e73926622dbc90cde20115c7094ed66",
+          "bytes": 4471
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/J_spatial_phase/tests/test_spatial_phase.py",
+          "sha256": "edcc315414adffbf86ef0d2bfbe32952c8b317c265dbdfa9ebf7176fd58a6f54",
+          "bytes": 5004
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "K_spatial_velocity",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/83de119879ea940cd2455a3626b1a576ab9d4ff170895cd70b1a0606b64d5412",
+          "sha256": "83de119879ea940cd2455a3626b1a576ab9d4ff170895cd70b1a0606b64d5412",
+          "bytes": 18208,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\noa\\native_rules.py",
+          "declared_sha256": "83de119879ea940cd2455a3626b1a576ab9d4ff170895cd70b1a0606b64d5412"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\K_spatial_velocity\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/K_spatial_velocity/analyze_four_cases.py",
+          "sha256": "8fc82ab1f8cf965ab6d71da46d6b63cc7e51dca149cff3c91cc1d069de0aa80e",
+          "bytes": 5844
+        },
+        {
+          "member": "versions/K_spatial_velocity/candidate_manifest.json",
+          "sha256": "1602a072ec856c192fb091c2eff446d8fa163041778b47438133d6b274e55be5",
+          "bytes": 1107
+        },
+        {
+          "member": "versions/K_spatial_velocity/J_parent_manifest.json",
+          "sha256": "78140ea32d5d973e53f8989972c254d9d1208a8a0a8847d3a5c6fac49e65054f",
+          "bytes": 1076
+        },
+        {
+          "member": "versions/K_spatial_velocity/report.json",
+          "sha256": "faf27e9c072b66d2c8f36ff916b5d7622015c3d67e80d6f2834801f46e5d2a3e",
+          "bytes": 46676
+        },
+        {
+          "member": "versions/K_spatial_velocity/run_four_cases.py",
+          "sha256": "5644a66a10e5820fa87d85645c603ac2ea826e56c38659437e2cd2bdc2b478d7",
+          "bytes": 2041
+        },
+        {
+          "member": "versions/K_spatial_velocity/scrambled_six.json",
+          "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+          "bytes": 589
+        },
+        {
+          "member": "versions/K_spatial_velocity/six_summary.json",
+          "sha256": "62b33b0060ca6f9f7ab15c7060e3d30b8405e6d89f4ddccbf8a802ec05fbceaf",
+          "bytes": 4397
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/K_spatial_velocity/tests/test_spatial_velocity.py",
+          "sha256": "901c160e2ecaa83bdef67efb4076344dce890486b4c0b18232ec3a507039b8e1",
+          "bytes": 4492
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "N_common_pair_head",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/e1f067381bf6d81af3ab6acd216a5d322cf7b1928832e4bfee3055fda6276ff2",
+          "sha256": "e1f067381bf6d81af3ab6acd216a5d322cf7b1928832e4bfee3055fda6276ff2",
+          "bytes": 18007,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\noa\\native_rules.py",
+          "declared_sha256": "e1f067381bf6d81af3ab6acd216a5d322cf7b1928832e4bfee3055fda6276ff2"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\N_common_pair_head\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/N_common_pair_head/analyze_four_cases.py",
+          "sha256": "dc4181efb12862c297da5efc5b5d09513e5976b91b65677def527b0df1fe00d8",
+          "bytes": 5164
+        },
+        {
+          "member": "versions/N_common_pair_head/candidate_manifest.json",
+          "sha256": "d886d76e1e9904706c6084473cfead06126b71f2adbc8742b98fcd315bdbebe9",
+          "bytes": 1065
+        },
+        {
+          "member": "versions/N_common_pair_head/H_parent_freeze.json",
+          "sha256": "e96d4994b3242d6d0d6c550cbccc0e26d88f5f27d52cc6eeccc0ff6a40692a5b",
+          "bytes": 1668
+        },
+        {
+          "member": "versions/N_common_pair_head/report.json",
+          "sha256": "579216f916c71a82b63845da39dc5ed1144b53e8cec5a6de4b966dfbc04fe3a3",
+          "bytes": 43230
+        },
+        {
+          "member": "versions/N_common_pair_head/run_four_cases.py",
+          "sha256": "9e4e5b88f4cd736eb0d23ac4ce2e5c8f06fafd526a07856cc90f6503d78e0bb1",
+          "bytes": 2041
+        },
+        {
+          "member": "versions/N_common_pair_head/scrambled_six.json",
+          "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+          "bytes": 589
+        },
+        {
+          "member": "versions/N_common_pair_head/six_summary.json",
+          "sha256": "136297ccfa66eb5d067c26088bd39f7bf61fe835c43ab660ef177d61250d26dc",
+          "bytes": 4307
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/N_common_pair_head/tests/test_common_pair_head.py",
+          "sha256": "a804aca7d16e4d380e59b6935fc525425ef12964e1e3820633db8de2ba72b3dc",
+          "bytes": 5188
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "P_common_pair",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/d72154c245bddb572bc33aceb9e406b04484012a4e4cbbbe94705471fe15a69e",
+          "sha256": "d72154c245bddb572bc33aceb9e406b04484012a4e4cbbbe94705471fe15a69e",
+          "bytes": 17749,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\noa\\native_rules.py",
+          "declared_sha256": "d72154c245bddb572bc33aceb9e406b04484012a4e4cbbbe94705471fe15a69e"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\P_common_pair\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/P_common_pair/analyze_four_cases.py",
+          "sha256": "c45e22d245715f2ebf40d4c627d0fee0e1b91aaec060a6a05ca5e79e06bc9bde",
+          "bytes": 5284
+        },
+        {
+          "member": "versions/P_common_pair/candidate_manifest.json",
+          "sha256": "77292a161dac5ba9241a0592994f161823792536eba2ca2f85888337a2cc95d5",
+          "bytes": 1064
+        },
+        {
+          "member": "versions/P_common_pair/N_parent_manifest.json",
+          "sha256": "d886d76e1e9904706c6084473cfead06126b71f2adbc8742b98fcd315bdbebe9",
+          "bytes": 1065
+        },
+        {
+          "member": "versions/P_common_pair/report.json",
+          "sha256": "5a766c9aff2e2e0545f681a549a5b58b716c1c7133a7f16c889e16cfa30b33fe",
+          "bytes": 56721
+        },
+        {
+          "member": "versions/P_common_pair/run_four_cases.py",
+          "sha256": "e7be0cd2858bf901ca00cc16d9410425addfce8811a02135e649ffa54475fa03",
+          "bytes": 2041
+        },
+        {
+          "member": "versions/P_common_pair/scrambled_six.json",
+          "sha256": "901fa159d1b45c7e9704ee1c1a9f6186f3cbdacc524b404ae9e2a969b99ee1e0",
+          "bytes": 589
+        },
+        {
+          "member": "versions/P_common_pair/six_summary.json",
+          "sha256": "b8095911e9267a17b4224312bf7e41b45a96be8dfd3c4a82bd0bd64eafcda4d4",
+          "bytes": 4338
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/P_common_pair/tests/test_common_pair.py",
+          "sha256": "59502096467645abff52148a979254fcb6025215bd8d51bde7b68981ad1eaea4",
+          "bytes": 5744
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "candidate_manifest.json",
+      "package_summary_present": true
+    },
+    {
+      "version": "common_pair_P_release",
+      "original_directory": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release",
+      "source_files": {
+        "experiments/native_sumo.py": {
+          "member": "blobs/6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0",
+          "bytes": 40018,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\experiments\\native_sumo.py",
+          "declared_sha256": "6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0"
+        },
+        "experiments/global_reference.py": {
+          "member": "blobs/b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+          "bytes": 5758,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\experiments\\global_reference.py",
+          "declared_sha256": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279"
+        },
+        "experiments/complete_layers.py": {
+          "member": "blobs/4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+          "bytes": 11426,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\experiments\\complete_layers.py",
+          "declared_sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60"
+        },
+        "noa/native_rules.py": {
+          "member": "blobs/8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+          "sha256": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+          "bytes": 17864,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\noa\\native_rules.py",
+          "declared_sha256": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864"
+        },
+        "run_native_flow.py": {
+          "member": "blobs/3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+          "bytes": 2941,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\run_native_flow.py",
+          "declared_sha256": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825"
+        },
+        "research/common.py": {
+          "member": "blobs/de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c",
+          "bytes": 4600,
+          "original_path": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_release\\research\\common.py",
+          "declared_sha256": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+        }
+      },
+      "metadata_files": [
+        {
+          "member": "versions/common_pair_P_release/freeze.json",
+          "sha256": "96fa935f9cc4623686a4801d7e74c1ebfc87f8533268251f768438b0027446da",
+          "bytes": 1819
+        },
+        {
+          "member": "versions/common_pair_P_release/run_flow_study.py",
+          "sha256": "cf7a371677a08dd312ae904f410d26070452d464314b12b0a2b5943f0b2d1385",
+          "bytes": 4604
+        },
+        {
+          "member": "versions/common_pair_P_release/scope_green.log",
+          "sha256": "05969f68db42c0d80b5f203b4c913fe621ff8643af5b714630e061a4653df4b3",
+          "bytes": 98
+        },
+        {
+          "member": "versions/common_pair_P_release/scope_red.log",
+          "sha256": "0c81ac52f56f38b23deba3d3ba75133652c7ad5f842cc3bab51bae4ffba467c4",
+          "bytes": 1633
+        },
+        {
+          "member": "versions/common_pair_P_release/six_verification.json",
+          "sha256": "9e18a512acd2e20fea57d6986af6f535f39a90de06c5edfaafe2755a6710ec9d",
+          "bytes": 2675
+        }
+      ],
+      "tests": [
+        {
+          "member": "versions/common_pair_P_release/tests/test_common_pair.py",
+          "sha256": "59502096467645abff52148a979254fcb6025215bd8d51bde7b68981ad1eaea4",
+          "bytes": 5744
+        },
+        {
+          "member": "versions/common_pair_P_release/tests/test_ending_pair_scope.py",
+          "sha256": "5adb387ad5b9f05ed10fafe7b550e4d8e52997894e98c3e920dfb57f8892d07b",
+          "bytes": 696
+        }
+      ],
+      "configs": {
+        "kinematic.json": {
+          "member": "blobs/e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "sha256": "e3033152b504a3fd700683c3f8017d444e6ee1f1e2520d2d86203d47bdf85941",
+          "bytes": 677
+        },
+        "no_comm_main.json": {
+          "member": "blobs/b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "sha256": "b00d4b72aee55ec8c5406eb6ea371c733ed2aba06aaab38fa014273a0f5ce2bc",
+          "bytes": 6386
+        },
+        "paper_reference.json": {
+          "member": "blobs/18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "sha256": "18b7e7d827446bb60d1c9f62508f135786d3cafa7cd8903a22359b9cb31b1b4f",
+          "bytes": 2300
+        },
+        "phase2.json": {
+          "member": "blobs/2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "sha256": "2810c93a23a6d5cbb1dc95fb280b8e7a65e369a268a9676fb8c94d95fa585516",
+          "bytes": 9792
+        },
+        "phase3.json": {
+          "member": "blobs/88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "sha256": "88ff3312055f9d343e0fa8b746f74adb7708699302da251648ba86a10a2e1f81",
+          "bytes": 1434
+        },
+        "phase4.json": {
+          "member": "blobs/5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "sha256": "5659fa79aec1b8a684f3dde23945425c09fc7b89233372790d13f131c923ea97",
+          "bytes": 5053
+        },
+        "phase4_experiments.json": {
+          "member": "blobs/1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "sha256": "1bacc15bbd1446b9be77fc20a054b43ccd8c0b2510967ab60ebde5a5884e1786",
+          "bytes": 1732
+        },
+        "phase5.json": {
+          "member": "blobs/a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "sha256": "a968438237be5cd27e674c92cfa353098a5176bb376ec0cd6a1ae410498dffe9",
+          "bytes": 2275
+        },
+        "phase5_experiments.json": {
+          "member": "blobs/fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "sha256": "fa6abc0529733466c3935062e5c087d561cc24cb314f92a0dfba33a494b6729c",
+          "bytes": 1138
+        },
+        "phase5_r5.json": {
+          "member": "blobs/c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "sha256": "c828ecd82e6a36b91d5526f42072b969ad772da708cc2fb83b162dd67a99ed95",
+          "bytes": 2003
+        },
+        "phase5f.json": {
+          "member": "blobs/9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "sha256": "9b1f135feca11a5b24af2b66e442e50af863e7c9ac5ed719bfd742598bceda52",
+          "bytes": 822
+        },
+        "phase5g.json": {
+          "member": "blobs/f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "sha256": "f85fd388dd7c4048476b54dc8170a473ddb0f55d08a06576735585c1fb241db6",
+          "bytes": 988
+        },
+        "sensitivity.json": {
+          "member": "blobs/7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "sha256": "7f573141834e63b2293b5ce558ea2075ce262be30b2585113817936e87a27517",
+          "bytes": 977
+        },
+        "tools.json": {
+          "member": "blobs/61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "sha256": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+          "bytes": 157
+        },
+        "topology_smoke.json": {
+          "member": "blobs/34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "sha256": "34968b5b9e7372b0cfb4b35679a4167a6708c9a56885a7ec736ac10c06055e9a",
+          "bytes": 4431
+        }
+      },
+      "missing": [],
+      "declared_freeze_present": true,
+      "declared_hash_mismatches": [],
+      "no_recursive_results_scan": true,
+      "declared_freeze_file": "freeze.json",
+      "package_summary_present": true
+    }
+  ],
+  "source_reference_count": 108,
+  "deduplicated_blob_count": 41,
+  "sidecars": {
+    "README.md": {
+      "sha256": "d99408a5f0db1c9ea708078dc877a5565e2d5d44b9481565f269f6db4beeaaa6",
+      "bytes": 3694
+    },
+    "review.json": {
+      "sha256": "a15860dcf8dc2add1fdb15c02ce75a53471ae1d5da5bafddde08de058878810b",
+      "bytes": 6745
+    },
+    "build_archive.py": {
+      "sha256": "ed1fe7863fd79ac1c9dee25f98a2210be31021459df2938534ba5256a3c53aa2",
+      "bytes": 9780
+    },
+    "verify_archive.py": {
+      "sha256": "c6665876c88cae3aac58c4871f94f81f38ec368859f7c450eb1ea97ddcf270ed",
+      "bytes": 7151
+    }
+  },
+  "all_collected_original_files_byte_unchanged": true,
+  "original_files_verified": 342,
+  "no_simulation_or_metric_recalculation": true,
+  "no_recursive_results_scan": true,
+  "no_positions_or_large_region_csv": true,
+  "missing_summaries_not_fabricated": true,
+  "verification_outputs_excluded": [
+    "verification.json"
+  ],
+  "skipped_files": []
+}

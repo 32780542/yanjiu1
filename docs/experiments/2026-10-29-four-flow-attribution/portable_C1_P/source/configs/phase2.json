@@ -1,0 +1,259 @@
+{
+  "layer": "phase2",
+  "defaults": {
+    "status": "supplementary_phase2_development_setting",
+    "source": "This study phase 2 implementation",
+    "page_or_url": "docs/phase2_model.md",
+    "rationale": "Declared numerical/model validation setting; not an identified Cai publication or branded vehicle parameter."
+  },
+  "parameters": [
+    {
+      "name": "low_speed_relaxation_s",
+      "value": 0.1,
+      "unit": "s",
+      "rationale": "Relax lateral velocity and yaw rate to kinematic targets below the dynamic model blend speed."
+    },
+    {
+      "name": "actuator_jerk_limit_mps3",
+      "value": 2,
+      "unit": "m/s^3",
+      "rationale": "Development actuator jerk bound equal to the previously registered comfort value; no emergency policy implemented."
+    },
+    {
+      "name": "steering_lateral_envelope_mps2",
+      "value": 2,
+      "unit": "m/s^2",
+      "rationale": "Speed-dependent target steering envelope; tire force saturation independently enforces friction circle. Transient actual lateral acceleration is measured separately."
+    },
+    {
+      "name": "linear_tire_slip_limit_rad",
+      "value": 0.1,
+      "unit": "rad",
+      "rationale": "Operational small-slip validity warning threshold; not a tire calibration."
+    },
+    {
+      "name": "max_dynamics_dt_s",
+      "value": 0.02,
+      "unit": "s",
+      "rationale": "Reject excessively coarse RK4 calls; tested actual dt values are0.01/0.005."
+    },
+    {
+      "name": "tracking_kp_per_s2",
+      "value": 0.6,
+      "unit": "1/s^2",
+      "rationale": "Single-vehicle bench lateral tracking gain; not a NOA decision rule."
+    },
+    {
+      "name": "tracking_kd_per_s",
+      "value": 1.5,
+      "unit": "1/s"
+    },
+    {
+      "name": "speed_tracking_gain_per_s",
+      "value": 0.8,
+      "unit": "1/s"
+    },
+    {
+      "name": "maneuver_duration_s",
+      "value": 5,
+      "unit": "s",
+      "rationale": "Bench quintic reference duration only; may equal paper structure period numerically but does not redefine that period as an integration/control step."
+    },
+    {
+      "name": "max_lane_change_error_m",
+      "value": 0.35,
+      "unit": "m",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "terminal_lane_error_m",
+      "value": 0.1,
+      "unit": "m",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "integration_position_tolerance_m",
+      "value": 0.02,
+      "unit": "m",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "integration_heading_tolerance_rad",
+      "value": 0.002,
+      "unit": "rad",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "control_position_tolerance_m",
+      "value": 0.15,
+      "unit": "m",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "control_heading_tolerance_rad",
+      "value": 0.02,
+      "unit": "rad",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "sync_position_tolerance_m",
+      "value": 1e-06,
+      "unit": "m",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "sync_speed_tolerance_mps",
+      "value": 1e-06,
+      "unit": "m/s",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "sync_heading_tolerance_rad",
+      "value": 1e-06,
+      "unit": "rad",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "replay_absolute_tolerance",
+      "value": 1e-10,
+      "unit": "per-field SI",
+      "status": "predeclared_acceptance_threshold"
+    },
+    {
+      "name": "sweep_max_depth",
+      "value": 12,
+      "unit": "integer",
+      "rationale": "Adaptive conservative swept-body check: unresolved leaf means potential collision/outside, never declared safe."
+    },
+    {
+      "name": "sumo_speed_mode",
+      "value": 0,
+      "unit": "bitset",
+      "rationale": "External control bench; SUMO speed safety disabled, own continuous geometry audit remains required."
+    },
+    {
+      "name": "sumo_lane_change_mode",
+      "value": 0,
+      "unit": "bitset",
+      "rationale": "Disable native autonomous lane changes; all lateral movement is integrated."
+    },
+    {
+      "name": "sumo_move_keep_route",
+      "value": 3,
+      "unit": "bitset",
+      "rationale": "Keep original route and exact XY instead of lane-center snapping; off-road faults are checked independently."
+    },
+    {
+      "name": "analytic_position_tolerance_m",
+      "value": 1e-07,
+      "unit": "m",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "analytic_speed_tolerance_mps",
+      "value": 1e-09,
+      "unit": "m/s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "straight_heading_tolerance_rad",
+      "value": 1e-09,
+      "unit": "rad",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "straight_yaw_rate_tolerance_radps",
+      "value": 1e-09,
+      "unit": "rad/s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "steady_steering_tolerance_rad",
+      "value": 1e-05,
+      "unit": "rad",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "steady_yaw_relative_tolerance",
+      "value": 0.05,
+      "unit": "fraction",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "stopped_speed_tolerance_mps",
+      "value": 1e-06,
+      "unit": "m/s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "minimum_speed_gain_mps",
+      "value": 1.0,
+      "unit": "m/s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "minimum_restart_speed_mps",
+      "value": 1.0,
+      "unit": "m/s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "terminal_heading_tolerance_rad",
+      "value": 0.02,
+      "unit": "rad",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "terminal_yaw_rate_tolerance_radps",
+      "value": 0.02,
+      "unit": "rad/s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "sync_time_tolerance_s",
+      "value": 1e-09,
+      "unit": "s",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "sync_acceleration_tolerance_mps2",
+      "value": 1e-06,
+      "unit": "m/s^2",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "force_comparison_tolerance_N",
+      "value": 1e-07,
+      "unit": "N",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "rate_comparison_tolerance",
+      "value": 1e-08,
+      "unit": "per-field SI",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    },
+    {
+      "name": "lateral_acceleration_comparison_tolerance_mps2",
+      "value": 1e-06,
+      "unit": "m/s^2",
+      "status": "predeclared_acceptance_threshold",
+      "rationale": "Extracted unchanged from the first phase2 bench/audit implementation; numerical or engineering verification tolerance, not a paper parameter."
+    }
+  ]
+}

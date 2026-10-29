@@ -1,0 +1,13 @@
+test_NOA_600_general_local_states_keep_R_actions_and_memory (test_layer_anchor.LayerAnchorTests.test_NOA_600_general_local_states_keep_R_actions_and_memory) ... ok
+test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference (test_layer_anchor.LayerAnchorTests.test_body_uses_real_same_layer_root_anchor_without_dropping_front_reference) ... ok
+test_extra_rear_counts_never_invent_an_observed_same_layer (test_layer_anchor.LayerAnchorTests.test_extra_rear_counts_never_invent_an_observed_same_layer) ... ok
+test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane (test_layer_anchor.LayerAnchorTests.test_head_can_see_a_forward_actual_head_in_a_nonadjacent_lane) ... ok
+test_perfect_lattices_remain_steady_in_three_and_two_lanes (test_layer_anchor.LayerAnchorTests.test_perfect_lattices_remain_steady_in_three_and_two_lanes) ... ok
+test_root_lane_body_receives_no_other_body_phase_feedback (test_layer_anchor.LayerAnchorTests.test_root_lane_body_receives_no_other_body_phase_feedback) ... ok
+test_root_vehicle_one_layer_away_is_not_a_same_layer_anchor (test_layer_anchor.LayerAnchorTests.test_root_vehicle_one_layer_away_is_not_a_same_layer_anchor) ... ok
+test_unsettled_root_is_not_an_anchor_but_moving_actual_front_is_followed (test_layer_anchor.LayerAnchorTests.test_unsettled_root_is_not_an_anchor_but_moving_actual_front_is_followed) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.038s
+
+OK

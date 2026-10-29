@@ -89,7 +89,18 @@ def _component(ego, rows):
     return tuple(cars[low : high + 1])
 
 
-def _following(ego, rows, lanes):
+def _pair_error(car, peer, lanes, phase_boundary=None):
+    pair_lanes = (
+        lanes
+        if phase_boundary is None
+        else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
+    )
+    return (
+        (peer.x + _physical_phase(peer, pair_lanes)) - (car.x + _physical_phase(car, pair_lanes))
+    ), pair_lanes
+
+
+def _following(ego, rows, lanes, phase_boundary=None):
     """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
     fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
     front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
@@ -104,11 +115,10 @@ def _following(ego, rows, lanes):
         )
 
     def nearest(car, lane):
-        q = car.x + _physical_phase(car, lanes)
         candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0 and is_head(c)]
 
         def order(c):
-            difference = c.x + _physical_phase(c, lanes) - q
+            difference, _ = _pair_error(car, c, lanes, phase_boundary)
             return abs(difference), difference, c.x, c.y, c.speed, c.vy
 
         return min(candidates, key=order, default=None)
@@ -118,8 +128,8 @@ def _following(ego, rows, lanes):
         if 0 <= lane < lanes:
             peer = nearest(ego, lane)
             if peer is not None and nearest(peer, ego.lane) is ego:
-                error += peer.x + _physical_phase(peer, lanes) - ego.x - _physical_phase(ego, lanes)
-    error /= max(1, lanes - 1)
+                difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+                error += difference / max(1, pair_lanes - 1)
     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
     target = ego.x + phase_speed / POSITION_GAIN
     return _request(ego, target, CRUISE), target, None
@@ -338,7 +348,14 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             return Command(speed, None, "approach_join", target), memory
     following_lanes = lanes if ego.lane == 2 else future_lanes
     speed, target, reference = (
-        _following(ego, rows, following_lanes) if organized else (CRUISE, None, None)
+        _following(
+            ego,
+            rows,
+            following_lanes,
+            drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
+        )
+        if organized
+        else (CRUISE, None, None)
     )
     if memory.joining and (
         not organized

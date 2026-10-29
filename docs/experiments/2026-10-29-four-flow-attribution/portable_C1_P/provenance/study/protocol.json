@@ -1,0 +1,39 @@
+{
+  "flows": [
+    500.0,
+    750.0,
+    1000.0,
+    1500.0
+  ],
+  "seeds": [
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "duration_s": 600.0,
+  "max_time_s": 900.0,
+  "source_sha256": {
+    "experiments/native_sumo.py": "1c60ff94ed757b3ed28aade8201eb5b1b04093b1cf1a220ce121b3b4c135a3e3",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "bbd5857e6f951183743f51ed280c8a7a58de666c541f2232222fefd34672d0aa",
+    "run_native_flow.py": "3fca746409b5584c668f2d7ac12ae420d04e167044871bb5155d36325199a825",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "wrapper_sha256": "3987d16cca22e9ebf2c7267b7c8f1419c208c1efe6d0fadf8e63d6372bb4cd18",
+  "jobs": 2,
+  "case_order": "seed, flow, lane_drop:cooperative; optional straight3:cooperative if actual short equivalence failed",
+  "case_count": 20,
+  "cases_per_seed_flow": "lane_drop:cooperative",
+  "label": "C1_P strict formation ablation",
+  "policy": "C1_P_strict_formation_ablation",
+  "normal_overtake": false,
+  "straight_evidence": "Inherited bound C1_H/C0 strict equivalence; fixed local states equal C1_H; complete NOA delegation unchanged; no repeated old seeds",
+  "group_following": false,
+  "layer_fill": false,
+  "straight_delegation": "complete current NOA decision",
+  "reuse_H_noa_straight": true,
+  "equivalence_report": "D:\\yanjiu1\\keyan1\\tmp\\common_pair_P_strict_ablation\\straight_equivalence_report.json"
+}
