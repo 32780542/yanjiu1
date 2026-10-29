@@ -31,6 +31,7 @@ class Command:
     reason: str = ""
     target_x: float | None = None
     reference: int | None = None
+    formation_state: int = 0
 
 
 @dataclass(frozen=True, slots=True)
@@ -106,7 +107,7 @@ def _following(ego, rows, lanes, phase_boundary=None):
     front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
     if front is not None:
         target = front.x - GAP
-        return _request(ego, target, front.speed), target, front.track
+        return _request(ego, target, front.speed), target, front.track, 1
     cars = (ego, *rows)
 
     def is_head(car):
@@ -123,16 +124,18 @@ def _following(ego, rows, lanes, phase_boundary=None):
 
         return min(candidates, key=order, default=None)
 
+    linked = any(-50.0 <= c.x - ego.x < 0.0 and _occupies(c, ego.lane, 0.0) for c in rows)
     error = 0.0
     for lane in (ego.lane - 1, ego.lane + 1):
         if 0 <= lane < lanes:
             peer = nearest(ego, lane)
             if peer is not None and nearest(peer, ego.lane) is ego:
+                linked = True
                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
                 error += difference / max(1, pair_lanes - 1)
     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
     target = ego.x + phase_speed / POSITION_GAIN
-    return _request(ego, target, CRUISE), target, None
+    return _request(ego, target, CRUISE), target, None, int(linked)
 
 
 def _merge_target(ego, rows, lane, held=None):
@@ -310,6 +313,21 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
     lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
     organized = mode != "noa"
     future_lanes = 2 if preparing and mode == "transform" else lanes
+    following_lanes = lanes if ego.lane == 2 else future_lanes
+    speed, target, reference, formation_state = (
+        _following(
+            ego,
+            rows,
+            following_lanes,
+            drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
+        )
+        if organized
+        else (CRUISE, None, None, 0)
+    )
+
+    def action(speed, lane, reason, target_x=None, reference=None):
+        return Command(speed, lane, reason, target_x, reference, formation_state)
+
     moving = abs(ego.vy) > 0.1 or abs(ego.y - (ego.lane + 0.5) * LANE_WIDTH) > 0.15
     # Own submitted actuation can precede measured lateral motion by one frame.
     if ego.pending_lane is not None and memory.lane_target != ego.pending_lane:
@@ -344,19 +362,8 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
                 else (CRUISE, None, memory)
             )
             if moving or _clear(ego, rows, memory.lane_target):
-                return Command(speed, memory.lane_target, "executing", target), memory
-            return Command(speed, None, "approach_join", target), memory
-    following_lanes = lanes if ego.lane == 2 else future_lanes
-    speed, target, reference = (
-        _following(
-            ego,
-            rows,
-            following_lanes,
-            drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
-        )
-        if organized
-        else (CRUISE, None, None)
-    )
+                return action(speed, memory.lane_target, "executing", target), memory
+            return action(speed, None, "approach_join", target), memory
     if memory.joining and (
         not organized
         or (target is None or abs(target - ego.x) <= 2.0)
@@ -371,31 +378,31 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             speed, target, memory = _join_speed(ego, rows, memory, 0)
             lane = 0 if _clear(ego, rows, 0) else None
             return (
-                Command(speed, lane, "make_room" if lane is not None else "prepare_room", target),
+                action(speed, lane, "make_room" if lane is not None else "prepare_room", target),
                 memory,
             )
         receiving = _receiving(ego, rows, helper)
         if receiving is not None:
             target = receiving.x - _receiving_distance(ego, receiving)
             speed = min(speed, _request(ego, target, receiving.speed))
-            return Command(speed, None, "open_gap", target, receiving.track), memory
+            return action(speed, None, "open_gap", target, receiving.track), memory
         if (
             ego.lane == 2
             and head is not None
             and head.track != ego.track
             and not _clear(ego, rows, 1)
         ):
-            return Command(speed, None, "ending_follower", target, reference), memory
+            return action(speed, None, "ending_follower", target, reference), memory
 
     if preparing and ego.lane == 2:
         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
         memory = replace(memory, gap=gap)
         speed = _request(ego, target, gap_speed)
         if _clear(ego, rows, 1):
-            return Command(speed, 1, "merge", target), replace(
+            return action(speed, 1, "merge", target), replace(
                 memory, lane_target=1, joining=organized
             )
-        return Command(speed, None, "approach_gap", target), memory
+        return action(speed, None, "approach_gap", target), memory
 
     if organized and not memory.joining:
         lane = _fill(ego, rows, 2 if preparing else lanes)
@@ -403,7 +410,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             if not _mandatory_priority(ego, rows, lane, drop_x):
                 memory = Memory(lane_target=lane, joining=True)
                 speed, target, memory = _join_speed(ego, rows, memory, lane)
-                return Command(speed, lane, "fill_layer", target), memory
+                return action(speed, lane, "fill_layer", target), memory
 
     if mode == "noa":
         front = min(
@@ -427,11 +434,11 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             if options:
                 lane = max(options, key=free_distance)
                 if free_distance(lane) > front.x - ego.x + 15.0:
-                    return Command(speed, lane, "normal_overtake"), Memory(lane_target=lane)
+                    return action(speed, lane, "normal_overtake"), Memory(lane_target=lane)
     reason = (
         "join_follow" if memory.joining else "formation_follow" if organized else "normal_follow"
     )
-    return Command(speed, None, reason, target, reference), memory
+    return action(speed, None, reason, target, reference), memory
 
 
 def safe_speed(ego, neighbors):

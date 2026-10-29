@@ -31,12 +31,12 @@ class NativeRulesTests(unittest.TestCase):
     def test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed(self):
         ego = self.car(0, 100.0, 2)
         near = self.car(1, 145.0, 2)
-        speed, target, reference = self.r._following(ego, [near], 3)
+        speed, target, reference, _ = self.r._following(ego, [near], 3)
         self.assertEqual(reference, near.track)
         self.assertAlmostEqual(target, near.x - self.r.GAP)
         self.assertGreater(speed, self.r.CRUISE)
         far = self.car(2, 170.0, 2)
-        speed, target, reference = self.r._following(ego, [far], 3)
+        speed, target, reference, _ = self.r._following(ego, [far], 3)
         self.assertIsNone(reference)
         self.assertEqual(target, ego.x)
         self.assertAlmostEqual(speed, self.r.CRUISE)
@@ -247,7 +247,7 @@ class NativeRulesTests(unittest.TestCase):
         rear, far = self.car(1, 70.0, 2), self.car(2, 230.0, 2)
         actual = self.r._following(ego, [rear, far], 3)
         self.assertEqual(actual, self.r._following(ego, [rear], 3))
-        self.assertEqual(actual, (self.r.CRUISE, ego.x, None))
+        self.assertEqual(actual, (self.r.CRUISE, ego.x, None, 1))
 
     def test_a_head_keeps_cruise_without_a_cross_lane_position_error(self):
         ego = self.car(0, 100.0, 2)

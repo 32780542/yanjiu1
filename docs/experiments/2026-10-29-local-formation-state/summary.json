@@ -1,0 +1,233 @@
+{
+  "passed": true,
+  "source_sha256": {
+    "experiments/native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d",
+    "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "case_pairs": 5,
+  "baseline": "frozen P 8d112d79",
+  "duration_s": 60,
+  "flow_veh_h_lane": 1500,
+  "seed": 6,
+  "source_unchanged_during_run": true,
+  "cases": [
+    {
+      "scenario": "straight3",
+      "mode": "noa",
+      "baseline": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T092956976494Z_straight3_noa_s6_f1678f",
+      "current": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093005935151Z_straight3_noa_s6_f58a63",
+      "frames": 1004,
+      "trips_byte_identical": true,
+      "physical_frames_identical": true,
+      "requested": 80,
+      "completed": 80,
+      "travel_time_s": 41.72,
+      "formation_state": {
+        "vehicle_seconds": 3337.599999999995,
+        "participating_vehicle_seconds": 0.0,
+        "participation_rate": 0.0,
+        "mean_participants": 0.0,
+        "peak_participants": 0,
+        "episodes": 0,
+        "mean_episode_s": null,
+        "max_episode_s": null
+      },
+      "direct_state_audit_passed": true
+    },
+    {
+      "scenario": "straight3",
+      "mode": "transform",
+      "baseline": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093015042413Z_straight3_transform_s6_530d9a",
+      "current": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093028359732Z_straight3_transform_s6_7939ec",
+      "frames": 992,
+      "trips_byte_identical": true,
+      "physical_frames_identical": true,
+      "requested": 80,
+      "completed": 80,
+      "travel_time_s": 41.769999999999996,
+      "formation_state": {
+        "vehicle_seconds": 3341.599999999996,
+        "participating_vehicle_seconds": 3187.800000000013,
+        "participation_rate": 0.9539741441225811,
+        "mean_participants": 32.167507568113145,
+        "peak_participants": 60,
+        "episodes": 106,
+        "mean_episode_s": 30.073584905660375,
+        "max_episode_s": 43.7
+      },
+      "direct_state_audit_passed": true
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "baseline": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093041819052Z_lane_drop_noa_s6_102982",
+      "current": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093050842887Z_lane_drop_noa_s6_63cf2f",
+      "frames": 1004,
+      "trips_byte_identical": true,
+      "physical_frames_identical": true,
+      "requested": 80,
+      "completed": 80,
+      "travel_time_s": 41.90125,
+      "formation_state": {
+        "vehicle_seconds": 3352.0999999999926,
+        "participating_vehicle_seconds": 0.0,
+        "participation_rate": 0.0,
+        "mean_participants": 0.0,
+        "peak_participants": 0,
+        "episodes": 0,
+        "mean_episode_s": null,
+        "max_episode_s": null
+      },
+      "direct_state_audit_passed": true
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "baseline": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093100060678Z_lane_drop_formation_s6_f8c727",
+      "current": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093112681894Z_lane_drop_formation_s6_c039d3",
+      "frames": 1010,
+      "trips_byte_identical": true,
+      "physical_frames_identical": true,
+      "requested": 80,
+      "completed": 80,
+      "travel_time_s": 42.095,
+      "formation_state": {
+        "vehicle_seconds": 3367.5999999999976,
+        "participating_vehicle_seconds": 3227.8000000000056,
+        "participation_rate": 0.9584867561468131,
+        "mean_participants": 31.99008919722503,
+        "peak_participants": 61,
+        "episodes": 110,
+        "mean_episode_s": 29.34363636363636,
+        "max_episode_s": 44.0
+      },
+      "direct_state_audit_passed": true
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "baseline": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093125949830Z_lane_drop_transform_s6_0e9cf7",
+      "current": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093139007714Z_lane_drop_transform_s6_889e85",
+      "frames": 999,
+      "trips_byte_identical": true,
+      "physical_frames_identical": true,
+      "requested": 80,
+      "completed": 80,
+      "travel_time_s": 41.96375,
+      "formation_state": {
+        "vehicle_seconds": 3357.099999999998,
+        "participating_vehicle_seconds": 3211.1000000000104,
+        "participation_rate": 0.9565100831074476,
+        "mean_participants": 32.175350701402905,
+        "peak_participants": 61,
+        "episodes": 112,
+        "mean_episode_s": 28.670535714285712,
+        "max_episode_s": 44.4
+      },
+      "direct_state_audit_passed": true
+    }
+  ],
+  "scope": "Recording and statistics regression; no new efficiency or physical-formation claim",
+  "core_tests": 206,
+  "subtests": 29,
+  "root_GUI_tests": 9,
+  "randomized_local_cases": 900,
+  "positions_references": [
+    {
+      "scenario": "straight3",
+      "mode": "noa",
+      "version": "baseline",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T092956976494Z_straight3_noa_s6_f1678f\\positions.jsonl.gz",
+      "bytes": 366167,
+      "sha256": "16bdb70a3b4c6ffdd2bf5066ff47453db5561527e06df2eeed779706e1c46585",
+      "included": false
+    },
+    {
+      "scenario": "straight3",
+      "mode": "noa",
+      "version": "current",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093005935151Z_straight3_noa_s6_f58a63\\positions.jsonl.gz",
+      "bytes": 388147,
+      "sha256": "8dac984b98d9889a3644603133c4a6e645fa4638a2a9c35748da5878a7d31033",
+      "included": false
+    },
+    {
+      "scenario": "straight3",
+      "mode": "transform",
+      "version": "baseline",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093015042413Z_straight3_transform_s6_530d9a\\positions.jsonl.gz",
+      "bytes": 1048509,
+      "sha256": "cf1e4b57ddf9ac99575716439e9291f55eb931818e381f04fca99f5049e8811c",
+      "included": false
+    },
+    {
+      "scenario": "straight3",
+      "mode": "transform",
+      "version": "current",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093028359732Z_straight3_transform_s6_7939ec\\positions.jsonl.gz",
+      "bytes": 1083375,
+      "sha256": "d4c002efd8ae25325f7428416af12ef8ee77e0f337de5fdadd7604ad431140df",
+      "included": false
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "version": "baseline",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093041819052Z_lane_drop_noa_s6_102982\\positions.jsonl.gz",
+      "bytes": 450036,
+      "sha256": "246b63a900bd418f5d22b872b4a65505a5df6bbe05d1bdad4e22a32e9a36ec72",
+      "included": false
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "version": "current",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093050842887Z_lane_drop_noa_s6_63cf2f\\positions.jsonl.gz",
+      "bytes": 471952,
+      "sha256": "c25f61d8f9315492a171264bdebb99c6c147de636fc28957d278bfd39bb0194b",
+      "included": false
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "version": "baseline",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093100060678Z_lane_drop_formation_s6_f8c727\\positions.jsonl.gz",
+      "bytes": 1082605,
+      "sha256": "7e07623b9e8c7a1424a3b49f3074e9a53b8cd7b1538d87685713fe8d97258260",
+      "included": false
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "formation",
+      "version": "current",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093112681894Z_lane_drop_formation_s6_c039d3\\positions.jsonl.gz",
+      "bytes": 1117932,
+      "sha256": "0e47176f5557d3e355984fdf3527af6415dcfb168a5ef4a0df4fdf46e54e9ebb",
+      "included": false
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "version": "baseline",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\frozen_P\\20261029T093125949830Z_lane_drop_transform_s6_0e9cf7\\positions.jsonl.gz",
+      "bytes": 1076688,
+      "sha256": "929d7b89df8d510978b6fcf31f4f2c08189200e75382e43f3c9f106a52c31173",
+      "included": true
+    },
+    {
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "version": "current",
+      "original_path": "D:\\yanjiu1\\keyan1\\tmp\\formation_state_validation_20261029T092956361074Z\\state_output\\20261029T093139007714Z_lane_drop_transform_s6_889e85\\positions.jsonl.gz",
+      "bytes": 1111571,
+      "sha256": "d08b60af987fd92298f6ef96891d609937d92eadc7a988f40d0a498fe0322361",
+      "included": true
+    }
+  ],
+  "all_five_pairs_physically_identical": true,
+  "metric_definition": "Controller local-relation state; not historical complete-layer geometry"
+}

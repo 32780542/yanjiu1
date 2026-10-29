@@ -52,6 +52,56 @@ def write_json(path, value):
     )
 
 
+class FormationStateStats:
+    """Direct integral of local 0/1 reports; no geometry or holding threshold."""
+
+    def __init__(self):
+        self.first_time = self.time = None
+        self.previous = {}
+        self.active = {}
+        self.episodes = []
+        self.vehicle_seconds = self.participating_seconds = 0.0
+        self.peak = 0
+
+    def update(self, time_s, flags):
+        if any(type(value) is not int or value not in (0, 1) for value in flags.values()):
+            raise ValueError("formation_state must be an integer 0 or 1")
+        if self.time is not None:
+            dt = time_s - self.time
+            if dt < 0:
+                raise ValueError("formation state times must be nondecreasing")
+            self.vehicle_seconds += dt * len(self.previous)
+            self.participating_seconds += dt * sum(self.previous.values())
+            for key in self.active:
+                self.active[key] += dt
+        else:
+            self.first_time = time_s
+        for key in tuple(self.active):
+            if not flags.get(key):
+                self.episodes.append(self.active.pop(key))
+        for key, value in flags.items():
+            if value:
+                self.active.setdefault(key, 0.0)
+        self.peak = max(self.peak, sum(flags.values()))
+        self.time, self.previous = time_s, dict(flags)
+
+    def summary(self):
+        duration = self.time - self.first_time if self.time is not None else 0.0
+        episodes = self.episodes + list(self.active.values())
+        return dict(
+            vehicle_seconds=self.vehicle_seconds,
+            participating_vehicle_seconds=self.participating_seconds,
+            participation_rate=(
+                self.participating_seconds / self.vehicle_seconds if self.vehicle_seconds else None
+            ),
+            mean_participants=self.participating_seconds / duration if duration else None,
+            peak_participants=self.peak,
+            episodes=len(episodes),
+            mean_episode_s=sum(episodes) / len(episodes) if episodes else None,
+            max_episode_s=max(episodes) if episodes else None,
+        )
+
+
 def _ticks(duration):
     ticks = round(duration / STEP)
     if not math.isfinite(duration) or ticks <= 0 or abs(ticks * STEP - duration) > 1e-8:
@@ -511,6 +561,7 @@ def run_case(
             positions_step_s=STEP,
             insertion="SUMO native route departures; no Python entry gate",
             positions_schema="time_s, states[id]=[x,y,speed,acceleration]",
+            formation_state_schema="formation_states[id]=0|1" if mode != "global" else None,
             longitudinal_coordinate="SUMO lane position + upstream edge offset; vehicle front",
             lateral_coordinate="1.65 + 3.3*lane + measured lane offset",
         ),
@@ -525,6 +576,7 @@ def run_case(
     lane_attempts, lane_motions, previous_lanes = {}, {}, {}
     ending_lane_seen = set()
     local = LocalTracks()
+    formation_stats = FormationStateStats() if mode != "global" else None
     try:
         planner = None
         if mode == "global":
@@ -744,6 +796,7 @@ def run_case(
                     )
                     xs = [states[key].x for key in ordered]
                     actions = {}
+                    formation_states = {} if formation_stats is not None else None
                     global_states, global_commands = {}, {}
                     if planner is not None:
                         global_states = {
@@ -782,6 +835,7 @@ def run_case(
                                 mode=mode,
                                 drop_x=1000.0 if scenario == "lane_drop" else None,
                             )
+                            formation_states[key] = command.formation_state
                         if not math.isfinite(command.speed):
                             raise ValueError("non-finite controller speed")
                         safety_cap = safe_speed(ego, neighbors)
@@ -818,7 +872,10 @@ def run_case(
                                 reason=command.reason,
                                 target_x=command.target_x,
                                 reference=command.reference,
+                                formation_state=command.formation_state if formation_stats is not None else None,
                             )
+                    if formation_stats is not None:
+                        formation_stats.update(now, formation_states)
                     positions.write(
                         json.dumps(
                             dict(
@@ -826,6 +883,7 @@ def run_case(
                                 states={
                                     key: [s.x, s.y, s.speed, s.acceleration] for key, s in states.items()
                                 },
+                                formation_states=formation_states,
                             ),
                             separators=(",", ":"),
                         )
@@ -935,6 +993,7 @@ def run_case(
                 len(ending_completed & ending_lane_seen) / len(ending_lane_seen) if ending_lane_seen else None
             ),
             action_reasons=dict(reasons),
+            formation_state=formation_stats.summary() if formation_stats is not None else None,
             execution=dict(execution),
             sumo_version=version,
             source_sha256=source_sha,

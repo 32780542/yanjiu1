@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 
 SOURCES = (
@@ -154,6 +155,62 @@ class NativeComparisonTests(unittest.TestCase):
         manifest = self.root / "manifest.json"
         self.write(manifest, {"cases": [str(p.relative_to(self.root)) for p in paths]})
         return self.summarize(manifest, **kwargs)
+
+    def reported_case(self):
+        path = self.case("transform")
+        self.edit(path / "input.json", lambda r: r.update(formation_state_schema="formation_states[id]=0|1"))
+        with gzip.open(path / "positions.jsonl.gz", "rt", encoding="utf-8") as stream:
+            frames = [json.loads(line) for line in stream]
+        for frame in frames:
+            frame["formation_states"] = {key: 1 for key in frame["states"]}
+        self.edit_positions(path, lambda _: frames)
+        # Six vehicles each spend ten seconds in state one in a twenty-second record.
+        self.edit(path / "result.json", lambda r: r.update(formation_state=dict(
+            vehicle_seconds=60.0, participating_vehicle_seconds=60.0,
+            participation_rate=1.0, mean_participants=3.0, peak_participants=6,
+            episodes=6, mean_episode_s=10.0, max_episode_s=10.0,
+        )))
+        return path
+
+    def test_self_reported_case_uses_direct_flags_without_complete_layer_detection(self):
+        path = self.reported_case()
+        with patch("experiments.native_comparison.evaluate_layers", side_effect=AssertionError("geometry should not run")):
+            report = self.report([path])
+        run = report["runs"][0]
+        self.assertTrue(run["performance_eligible"], run["audit_issues"])
+        self.assertEqual(run["state_participation_rate"], 1.0)
+        self.assertEqual(run["state_peak_participants"], 6)
+        self.assertAlmostEqual(run["state_mean_episode_s"], 10.0)
+        self.assertNotIn("upstream_mean_multilayer_size", run)
+        self.assertEqual(report["run_means"][0]["state_participation_rate_mean"], 1.0)
+
+    def test_declared_reports_cannot_be_replaced_by_geometric_inference(self):
+        path = self.reported_case()
+        self.edit_positions(path, lambda frames: [
+            {k: v for k, v in frame.items() if k != "formation_states"} for frame in frames
+        ])
+        run = self.report([path])["runs"][0]
+        self.assertFalse(run["performance_eligible"])
+        self.assertIn("missing_formation_state_trace", run["audit_issues"])
+
+    def test_every_physical_vehicle_requires_a_flag(self):
+        path = self.reported_case()
+        def remove_one(frames):
+            flags = next(f for f in frames if f["states"])["formation_states"]
+            flags.pop(next(iter(flags)))
+            return frames
+        self.edit_positions(path, remove_one)
+        run = self.report([path])["runs"][0]
+        self.assertFalse(run["performance_eligible"])
+        self.assertTrue(any("formation state vehicle IDs" in issue for issue in run["audit_issues"]))
+
+    def test_recorded_summary_is_checked_against_direct_state_recount(self):
+        path = self.reported_case()
+        self.edit(path / "result.json", lambda r: r["formation_state"].update(participation_rate=.123))
+        run = self.report([path])["runs"][0]
+        self.assertFalse(run["performance_eligible"])
+        self.assertIn("formation_state_summary_mismatch", run["audit_issues"])
+        self.assertEqual(run["state_participation_rate"], 1.0)
 
     def test_recomputes_trip_metrics_and_complete_layers_from_real_artifacts(self):
         report = self.report([self.case()])

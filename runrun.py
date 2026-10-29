@@ -136,6 +136,14 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
         f"{result['requested']}/{result['departed']}/{result['completed']}；"
         f"接触 {result['collisions']}，瞬移 {result['teleports']}。"
     )
+    state = result.get("formation_state")
+    if state and state["participation_rate"] is not None:
+        hold = state["mean_episode_s"]
+        hold_text = f"{hold:.2f}秒" if hold is not None else "无"
+        output_fn(
+            f"本车编队关系参与率 {state['participation_rate']:.2%}；"
+            f"同时参与峰值 {state['peak_participants']}辆；平均连续1状态 {hold_text}。"
+        )
     return 1 if result["status"] in ("error", "unsafe") else 0
 
 

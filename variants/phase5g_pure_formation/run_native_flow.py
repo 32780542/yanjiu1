@@ -61,6 +61,7 @@ def main(argv=None):
                     collisions=result["collisions"],
                     teleports=result["teleports"],
                     mean_travel_time_s=result["mean_travel_time_s"],
+                    formation_state=result["formation_state"],
                 ),
                 ensure_ascii=True,
             ),

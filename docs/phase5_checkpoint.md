@@ -687,3 +687,20 @@
 - 一手资料：[Soundararajan 2021，第2章传递函数和第4章串稳定区域](https://oaktrust.library.tamu.edu/bitstreams/dcd773fb-fb4f-4966-adc6-fb871d5432c2/download)；[Darbha等2018，含执行器迟滞的时距条件及车载前车观测方案](https://arxiv.org/abs/1803.02900)。上述本项目数值由现行代码参数自行推导，不是文献或仿真报告中的实验结果。
 
 当前没有新时距仿真或候选进程。下一步若实施，以此为方法讨论起点；先验证纵向波动传播，再判断其能否改善持续编队和全程交通结果。
+
+### 2026-10-29：用户确认的本车0/1状态已实现
+
+用户确认状态1定义为“已有本车编队跟驰或队首配对关系，允许仍在调距”，孤立车和NOA为0。本轮在原目录直接实施输出与统计，没有实施固定时距，没有改驾驶参数或入口。当前没有运行中的试验。
+
+- `Command.formation_state`新增0/1；现有50米前车链、可见同道后车或互选相邻道队首使其为1。后车使链首也能自报参与。状态只进入记录，`Vehicle`及邻车观测没有该字段。没有跨车读取状态或隐含通信。
+- `_following`第四返回值为状态，前三项速度/目标/引用保留；各动作分支携带相同当帧局部状态。无误差阈值、完整层或额外确认计时。纯NOA固定0。自建global未实现本车状态，记为不可用而非0。
+- `native_sumo.FormationStateStats`直接统计车辆秒加权参与率、平均/峰值同时参与人数、连续1段数及平均/最长已观测时长。逐帧`formation_states[id]`独立于原四项运动数组；result/diagnostic及根runrun终端均可查看。参与人数是全路总数，不等于单支编队大小。
+- 新`native_comparison`直接从原状态帧重算，不调用完整层检测；测试用拦截器证明了该路径。它仍核对请求、共同参数、安全完成和记录完整性。旧轨迹无状态输出时保留原历史口径；既有P100及报告没有改写或补造状态。
+- 初始13项新合同因字段/累计器缺失预期失败，随后通过；比较入口4项先失败后通过，其中一个测试误写车辆ID已修正并另留有效失败。全回归最初203通过、1项旧三元组断言失败；改为第四项状态后最终 **206 tests +29 subtests通过**，operation `20261029T093250428557Z_local-state-final-core_4a2b879b`，17.03秒。根GUI **9 tests通过**，operation `20261029T093432043403Z_local-state-root-gui-entry_74755a33`。`runrun.py --check`也通过。
+- 900个随机局部状态逐项对比冻结P，除新增状态外，全部动作与私有记忆一致。真实SUMO五对（straight NOA/transform、drop NOA/formation/transform），1500/seed6/60秒请求/max180，每例80辆全安全排空；全部物理帧相同、trips原字节相同。operation `20261029T092956163630Z_local-formation-state-physical-equivalence_5e796f81` completed0，116.157秒；原目录 `tmp/formation_state_validation_20261029T092956361074Z`只读。
+- 该短回归中，缩减道路编队变换的自报参与率95.651%、平均同时32.175人、峰61、平均连续1为28.671秒；NOA为0。它与旧完整层口径不同，不构成新的交通提效结果。原运动逐帧不变。
+- 当前规则SHA **ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d**；引擎 **bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1**；CLI **986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24**。不是旧P的8d源码字节，但已验证控制行为相同。六源摘要随新运行封存。
+- 公开交接目录 `docs/experiments/2026-10-29-local-formation-state`含可读说明、完整summary、约2.33MB的83成员证据及独立verify。档案SHA **09388ef1dd8539e2468a5634b59e45d1e8a81d120c1d623fe70ed037188c41f7**；保留一对完整新旧轨迹，其他8份仅索引大轨迹。根独立verify operation `20261029T094136843053Z_local-state-public-evidence-verification_91f257ed`退出0，83成员、999物理帧及直接状态重算均通过。README/系统说明3.13及7.1已同步。
+- 最后核验源码、证据、Git索引与交接链接均通过，operation `20261029T094702078168Z_local-state-final-index-and-handoff_615e33fc`退出0。真实根入口短测 `20261029T094536422432Z_local-state-entry-output-smoke_e9fbaab2`也退出0：4/4安全完成，终端打印参与率86.49%、峰4人、连续1均值18.09秒。此例只验输出链路，不作交通结论。源码、说明和证据随本检查点提交至用户远端`yanjiu1/main`。
+
+**接续入口：**当前默认统计为本车局部关系的0/1直接统计，历史完整层模块只作旧报告复算。固定时距仍未实施；此前约0.85秒的分析保留为下一项方法讨论。不要因新的状态参与率高而改写旧交通结果，也不要将全路总参与人数当作单支编队大小。

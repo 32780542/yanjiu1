@@ -5,11 +5,13 @@ Relative paths resolve against the manifest. One run per seed/scenario/mode is
 allowed. Saved source bytes, demand, common parameters and SUMO version are checked
 before pairing. Incomplete/unsafe/unmatched runs remain visible; an affected mean
 group is suppressed rather than averaging only its successful seeds. No ranking
-or Cai2024 paper result is inferred. NOA layers are detected geometry only.
+or Cai2024 paper result is inferred. New runs directly aggregate the controller's
+local 0/1 formation reports. Historical runs without reports retain their original
+complete-layer measures; historical NOA detections are geometry only.
 
-Fuel is SUMO fuel_abs mg / actual route distance m, numerically g/km. Geometry is
-sample-based, with independent upstream/downstream evaluation to exclude planned
-3-to-2 relationship replacement. CSV cells are empty for undefined quantities.
+Fuel is SUMO fuel_abs mg / actual route distance m, numerically g/km. CSV cells are
+empty for undefined quantities. State counts are total participants, not the size
+of a single platoon; continuous-one durations use observed intervals only.
 """
 
 import argparse
@@ -19,9 +21,11 @@ import gzip
 import hashlib
 from itertools import combinations
 import json
+import math
 from pathlib import Path
 
 from experiments.complete_layers import evaluate_layers
+from experiments.native_sumo import FormationStateStats
 
 SOURCES = (
     "experiments/native_sumo.py",
@@ -59,6 +63,10 @@ LAYER_FIELDS = (
     "internal_relation_breaks",
     "boundary_censored_relations",
 )
+STATE_FIELDS = (
+    "vehicle_seconds", "participating_vehicle_seconds", "participation_rate",
+    "mean_participants", "peak_participants", "episodes", "mean_episode_s", "max_episode_s",
+)
 
 
 def _read(path):
@@ -77,9 +85,10 @@ def _sha(path):
     return digest.hexdigest()
 
 
-def _position_evidence(path):
+def _position_evidence(path, *, report_states=False):
     last_ending, first, previous, max_step = {}, None, None, None
     sample_count = nonempty_frames = 0
+    stats, reports_seen = FormationStateStats() if report_states else None, False
     with gzip.open(path, "rt", encoding="utf-8") as stream:
         for line in stream:
             frame = json.loads(line)
@@ -91,16 +100,27 @@ def _position_evidence(path):
             previous = time_s
             sample_count += 1
             nonempty_frames += bool(frame["states"])
+            if stats is not None and frame.get("formation_states") is not None:
+                flags = frame["formation_states"]
+                if set(flags) != set(frame["states"]):
+                    raise ValueError("formation state vehicle IDs differ from physical frame")
+                stats.update(time_s, flags)
+                reports_seen = True
+            elif stats is not None and not frame.get("unsafe"):
+                raise ValueError("missing_formation_state_trace")
             for vehicle, state in frame["states"].items():
                 if abs(state[1] - 8.25) <= 0.3:
                     last_ending[vehicle] = time_s
-    return last_ending, dict(
+    evidence = dict(
         first_position_sample_s=first,
         last_position_sample_s=previous,
         max_position_sample_step_s=max_step,
         position_sample_count=sample_count,
         nonempty_position_frames=nonempty_frames,
     )
+    if report_states:
+        evidence["formation_state_stats"] = stats.summary() if reports_seen else None
+    return last_ending, evidence
 
 
 def load_case(path):
@@ -215,7 +235,9 @@ def load_case(path):
     row.update({field: None for field in TRAFFIC})
     try:
         positions = path / "positions.jsonl.gz"
-        ending, evidence = _position_evidence(positions)
+        reporting = bool(source.get("formation_state_schema"))
+        ending, evidence = _position_evidence(positions, report_states=reporting)
+        state_stats = evidence.pop("formation_state_stats", None)
         row.update(evidence)
         row["positions_sha256"] = _sha(positions)
         # A valid empty road differs from a missing observation interval.
@@ -234,14 +256,34 @@ def load_case(path):
                 issues.append("position_trace_end_mismatch")
             if departed and not evidence["nonempty_position_frames"]:
                 issues.append("position_trace_has_no_vehicles")
-        regions = (
-            (("upstream", 3, (0.0, 640.0)), ("downstream", 2, (1000.0, 1200.0)))
-            if config["scenario"] == "lane_drop"
-            else (("whole", 3, (0.0, 1200.0)),)
-        )
-        for prefix, lanes, region in regions:
-            layers = evaluate_layers(positions, lanes, region=region)
-            row.update({prefix + "_" + key: layers[key] for key in LAYER_FIELDS})
+        if reporting:
+            row["formation_metric"] = "local_state"
+            if config["mode"] == "noa":
+                row["mode_label"] = "NOA (self-reported state 0)"
+            if state_stats is None:
+                issues.append("missing_formation_state_trace")
+            else:
+                row.update({"state_" + key: value for key, value in state_stats.items()})
+                recorded = result.get("formation_state") or {}
+                for key, value in state_stats.items():
+                    saved = recorded.get(key)
+                    same = saved is None if value is None else (
+                        isinstance(saved, (int, float))
+                        and math.isclose(saved, value, rel_tol=1e-9, abs_tol=1e-8)
+                    )
+                    if not same:
+                        issues.append("formation_state_summary_mismatch")
+                        break
+        else:
+            row["formation_metric"] = "historical_complete_layers"
+            regions = (
+                (("upstream", 3, (0.0, 640.0)), ("downstream", 2, (1000.0, 1200.0)))
+                if config["scenario"] == "lane_drop"
+                else (("whole", 3, (0.0, 1200.0)),)
+            )
+            for prefix, lanes, region in regions:
+                layers = evaluate_layers(positions, lanes, region=region)
+                row.update({prefix + "_" + key: layers[key] for key in LAYER_FIELDS})
         if config["scenario"] == "lane_drop":
             trace = all("lane_completion_events" in t for t in trips)
             merged = {
@@ -263,7 +305,8 @@ def load_case(path):
                 merge_completion_trace_available=trace,
             )
     except (OSError, ValueError, KeyError) as error:
-        issues.append("position_evaluation_error:" + str(error))
+        issues.append("missing_formation_state_trace" if str(error) == "missing_formation_state_trace"
+                      else "position_evaluation_error:" + str(error))
     eligible = safe and all_completed and not issues
     row["performance_eligible"] = eligible
     if eligible:
@@ -323,7 +366,7 @@ def summarize_cases(manifest_path, output_dir=None):
         if run["mode"] in grouped[key]:
             raise ValueError("Duplicate seed/scenario/mode; separate different probes or versions")
         grouped[key][run["mode"]] = run
-    metrics = list(TRAFFIC) + sorted(
+    metrics = list(TRAFFIC) + ["state_" + key for key in STATE_FIELDS] + sorted(
         {
             k
             for r in runs
@@ -390,6 +433,7 @@ def summarize_cases(manifest_path, output_dir=None):
             fuel_reference="https://sumo.dlr.de/docs/Simulation/Output/TripInfo.html",
             throughput_window="[0, demand_duration_s], startup included; completed exits per hour",
             geometry_interpretation="Sample-based physical structures; NOA detections do not establish controlled formation",
+            state_interpretation="Local 0/1 relations; direct participation, total participants and observed continuous-one durations; no complete-layer requirement",
             mean_policy="No successful-only performance means: all attempted members must be eligible; per-metric n preserves undefined geometry",
         ),
         runs=runs,

@@ -53,15 +53,15 @@ class CommonPairHeadTests(unittest.TestCase):
     def test_near_rear_never_adds_free_head_speed_without_a_peer(self):
         ego=self.car(100,0)
         for gap in [15.,30.,45.,70.]:
-            speed,target,reference=r._following(ego,(self.car(100-gap,0,1),),3)
+            speed,target,reference,_=r._following(ego,(self.car(100-gap,0,1),),3)
             self.assertEqual(target,ego.x);self.assertIsNone(reference)
             self.assertAlmostEqual(speed,r.CRUISE)
-        self.assertEqual(r._following(ego,(),3),(r.CRUISE,ego.x,None))
+        self.assertEqual(r._following(ego,(),3),(r.CRUISE,ego.x,None,0))
 
     def test_compressed_rear_does_not_change_the_head_phase_action(self):
         ego,peer,rear=self.car(100,0),self.car(100,1,1),self.car(85,0,2)
-        speed,target,_=r._following(ego,(peer,rear),3)
-        without,old_target,_=r._following(ego,(peer,),3)
+        speed,target,_,_=r._following(ego,(peer,rear),3)
+        without,old_target,_,_=r._following(ego,(peer,),3)
         self.assertEqual(target,old_target)
         self.assertLessEqual(abs(r.POSITION_GAIN*(target-ego.x)),2.+1e-9)
         self.assertAlmostEqual(speed,without)
@@ -72,12 +72,12 @@ class CommonPairHeadTests(unittest.TestCase):
         behind=self.car(630,1,99)
         ahead=self.car(681,1,1)
         # Both are actual heads,51m apart. Common geometry selects the630m head.
-        speed,target,reference=r._following(ego,(behind,ahead),2,phase_boundary=640.)
+        speed,target,reference,state=r._following(ego,(behind,ahead),2,phase_boundary=640.)
         self.assertAlmostEqual(target,647.5)
         self.assertAlmostEqual(speed,28.65)
         self.assertIsNone(reference)
         changed=(replace(ahead,track=99),replace(behind,track=1))
-        self.assertEqual((speed,target,reference),r._following(ego,changed,2,phase_boundary=640.))
+        self.assertEqual((speed,target,reference,state),r._following(ego,changed,2,phase_boundary=640.))
 
     def test_all_actual_front_body_actions_remain_H_exact(self):
         rng=random.Random(600)
@@ -90,7 +90,8 @@ class CommonPairHeadTests(unittest.TestCase):
                 rows=(front,rear,*peers)
                 a,m=r.decide(ego,rows,r.Memory(),mode,1000.)
                 b,n=H.decide(H.Vehicle(**asdict(ego)),tuple(H.Vehicle(**asdict(c)) for c in rows),H.Memory(),mode,1000.)
-                self.assertEqual((asdict(a),asdict(m)),(asdict(b),asdict(n)))
+                control=asdict(a);control.pop('formation_state')
+                self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))
 
     def test_NOA_is_unchanged_even_with_compressed_rears(self):
         rng=random.Random(800)
@@ -99,7 +100,8 @@ class CommonPairHeadTests(unittest.TestCase):
             rows=(self.car(ego.x-15,ego.lane,1),)+tuple(self.car(ego.x+rng.uniform(-100,200),rng.randrange(3),i+2) for i in range(5))
             a,m=r.decide(ego,rows,r.Memory(),'noa',1000.)
             b,n=H.decide(H.Vehicle(**asdict(ego)),tuple(H.Vehicle(**asdict(c)) for c in rows),H.Memory(),'noa',1000.)
-            self.assertEqual((asdict(a),asdict(m)),(asdict(b),asdict(n)))
+            control=asdict(a);control.pop('formation_state')
+            self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))
 
     def test_compressed_free_head_still_obeys_visible_stopped_front_safety_cap(self):
         ego=self.car(100,0,speed=33.3)

@@ -28,7 +28,7 @@ class E11RulesTests(unittest.TestCase):
         ego = self.cars[name]
         return ego, r._following(
             ego, tuple(c for c in self.cars.values() if c.track != ego.track), 2
-        )
+        )[:3]
 
     def test_real_lane_zero_head_c1_shares_phase_by_slowing(self):
         ego, (speed, target, reference) = self.command("C1")
@@ -60,7 +60,7 @@ class E11RulesTests(unittest.TestCase):
     def check_lattice(self, positions, lanes):
         cars = tuple(car(i, x, lane) for i, (x, lane) in enumerate(positions))
         for ego in cars:
-            speed, target, _ = r._following(
+            speed, target, _, _ = r._following(
                 ego, tuple(c for c in cars if c.track != ego.track), lanes
             )
             self.assertAlmostEqual(speed, 28.8)
@@ -74,14 +74,14 @@ class E11RulesTests(unittest.TestCase):
 
     def test_head_seventy_meters_away_is_outside_the_mutual_group(self):
         ego, peer = car(0, 100, 0), car(1, 170, 1)
-        speed, target, reference = r._following(ego, (peer,), 3)
+        speed, target, reference, _ = r._following(ego, (peer,), 3)
         self.assertIsNone(reference)
         self.assertAlmostEqual(target, ego.x)
         self.assertAlmostEqual(speed, 28.8)
 
     def test_same_lane_front_seventy_meters_away_is_still_not_a_formation_link(self):
         ego, front = car(0, 100, 0), car(1, 170, 0)
-        speed, target, reference = r._following(ego, (front,), 3)
+        speed, target, reference, _ = r._following(ego, (front,), 3)
         self.assertIsNone(reference)
         self.assertAlmostEqual(speed, 28.8)
 
