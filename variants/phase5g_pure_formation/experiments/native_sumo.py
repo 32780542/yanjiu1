@@ -7,7 +7,7 @@ used. Every case creates a fresh directory, including unsuccessful cases.
 
 from bisect import bisect_left, bisect_right
 from collections import Counter
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 import gzip
 import hashlib
@@ -283,6 +283,17 @@ def lane_change_is_complete(state, target_lane):
         and abs(state.vy) < 0.05
         and abs(state.y - (1.65 + LANE_WIDTH * target_lane)) < 0.05
     )
+
+
+def active_lane_request(state, attempt, now):
+    """Release own request on strict completion; retain real motion past expiry."""
+    if attempt is None or lane_change_is_complete(state, attempt[0]):
+        return None
+    moving = (
+        abs(state.vy) > 0.05
+        or abs(state.y - (state.lane + 0.5) * LANE_WIDTH) > 0.05
+    )
+    return attempt[0] if now - attempt[1] <= 1.2 or moving else None
 
 
 def _source_snapshot(directory):
@@ -754,7 +765,13 @@ def run_case(
                     for key in ordered:
                         # This view is used by the common execution guard in all
                         # modes. Only distributed strategies receive it as input.
+                        physical = states[key]
+                        pending = active_lane_request(physical, lane_attempts.get(key), now)
+                        if pending is None:
+                            lane_attempts.pop(key, None)
                         ego, neighbors = local.observe(key, states, ordered, xs)
+                        # Only ego receives its own submitted request feedback.
+                        ego = replace(ego, pending_lane=pending)
                         if planner is not None:
                             command = global_commands[key]
                         else:
@@ -776,12 +793,6 @@ def run_case(
                             execution["safe_speed_limited_ticks"] += 1
                         reasons[command.reason or "unspecified"] += 1
                         requested_lane, accepted = command.lane, False
-                        physical = states[key]
-                        attempt = lane_attempts.get(key)
-                        if attempt is not None and (
-                            lane_change_is_complete(physical, attempt[0]) or now - attempt[1] > 1.2
-                        ):
-                            lane_attempts.pop(key)
                         if requested_lane is not None and requested_lane != ego.lane:
                             execution["lane_requested_ticks"] += 1
                             if key in lane_attempts or abs(physical.vy) > 0.05:
@@ -800,6 +811,7 @@ def run_case(
                             actions[key] = dict(
                                 speed=executed_speed,
                                 requested_speed=command.speed,
+                                pending_lane=ego.pending_lane,
                                 safe_speed_cap_mps=safety_cap,
                                 lane=requested_lane,
                                 accepted=accepted,

@@ -1,0 +1,382 @@
+{
+  "audit_date": "2026-10-29",
+  "source_root": "D:/matlab_huipu_2000",
+  "scope": "Static source audit only; no MATLAB, SUMO, or solver execution; no source mutation; runtime path resolution not verified",
+  "excluded": [
+    "lib solver internals",
+    "nlp solver internals",
+    "examples",
+    "MAT/data/result directories",
+    "TraCI package internals not present under traci_tls"
+  ],
+  "source_files": [
+    {
+      "file": "RUN.m",
+      "reading": "complete",
+      "bytes": 24,
+      "sha256": "cf55155b4c283049a64df44ea7c3b5a1608820bf6189c69eb4f4d2bd141c2521"
+    },
+    {
+      "file": "RUN_20220530.m",
+      "reading": "complete",
+      "bytes": 240,
+      "sha256": "7620e18a8098be4a185f63218557b867866d72ba491c8d5be25ab4795dc0848f"
+    },
+    {
+      "file": "mainmain.m",
+      "reading": "complete",
+      "bytes": 50663,
+      "sha256": "9cea997d1df84aa6ad3d6b971b8232296f7043fd3e6d93460547909877857ef0"
+    },
+    {
+      "file": "mainmain_REF.m",
+      "reading": "complete",
+      "bytes": 8166,
+      "sha256": "6f47979a52f139f29850f43d18f831023fb333658fc7a549ca81b7b48ab7701d"
+    },
+    {
+      "file": "formationControl.m",
+      "reading": "complete",
+      "bytes": 1724,
+      "sha256": "deb43b436f5b48747c50370491cecfeac6cd9a82f88cf87a60f693cb4e8069e8"
+    },
+    {
+      "file": "formationControlNormal.m",
+      "reading": "complete",
+      "bytes": 8905,
+      "sha256": "df8fef8dfcd7571660a43d903c1dfe079ed276f3e5adc3c1e683069a21c33afd"
+    },
+    {
+      "file": "formationControlRamp.m",
+      "reading": "complete",
+      "bytes": 8214,
+      "sha256": "5227f1b334220d51a0d9446b205db27d3031255abe6394d6fe98f9bd78dd83f8"
+    },
+    {
+      "file": "formationControll.m",
+      "reading": "complete",
+      "bytes": 1724,
+      "sha256": "deb43b436f5b48747c50370491cecfeac6cd9a82f88cf87a60f693cb4e8069e8"
+    },
+    {
+      "file": "formationcontroljiude.m",
+      "reading": "complete",
+      "bytes": 1742,
+      "sha256": "9c6f6ad22f1b8568a29b3e41847b02a888aa94ba5773647a306f2ad9a541998d"
+    },
+    {
+      "file": "singleVehicleCalculate.m",
+      "reading": "complete",
+      "bytes": 9891,
+      "sha256": "bca76f19b7e8b484bac46e3edfe72258a1d81efa1a2ade08e20799c5e9c6ef50"
+    },
+    {
+      "file": "trajectory_planning.m",
+      "reading": "complete",
+      "bytes": 468,
+      "sha256": "9129237a1d7f0710e6e3924bfbeeba2abbda114c28a36d61fa2f440375181659"
+    },
+    {
+      "file": "PointOnBezier.m",
+      "reading": "complete",
+      "bytes": 1152,
+      "sha256": "86979ee1d6a1e3c3d57e617f71c13a2504d3cb1f55e9828e67795b293fa2f2fd"
+    },
+    {
+      "file": "BrysonDenhamContinuous.m",
+      "reading": "complete",
+      "bytes": 282,
+      "sha256": "eb348bac35aaa2d191cf87e5df9d32f88bcc68285f72e508b889d0bcf898b27b"
+    },
+    {
+      "file": "BrysonDenhamEvents.m",
+      "reading": "complete",
+      "bytes": 758,
+      "sha256": "a88125e1af42652ed4f671d3caa1385e9106af725bfba852f0f36d3bb3d80f38"
+    },
+    {
+      "file": "getRelativeDistance.m",
+      "reading": "complete",
+      "bytes": 488,
+      "sha256": "e0886b801539e4f1683c3f3c3e9078d3da7b6c37307289c4d305445bb4a6c396"
+    },
+    {
+      "file": "assign.m",
+      "reading": "complete",
+      "bytes": 713,
+      "sha256": "64eda4b1f51fab4119e14b9653da07eacc32574e0669ebb2fba92291752ac673"
+    },
+    {
+      "file": "assignz.m",
+      "reading": "complete",
+      "bytes": 834,
+      "sha256": "0e31dd2e97ef76c3b3d74e54553e552893a0f49e45897d2054727147d636ab0b"
+    },
+    {
+      "file": "assignln.m",
+      "reading": "complete",
+      "bytes": 827,
+      "sha256": "0259efdb7b2ea2005510b3ef33100476faae0322fb42f135006f345739c6106b"
+    },
+    {
+      "file": "pathRelativeCalculate.m",
+      "reading": "complete",
+      "bytes": 1795,
+      "sha256": "413ea414b876960a55f1e9648017c2033ea5ea20c7b3a65653fc8cb8a40be158"
+    },
+    {
+      "file": "New_Vehicle_frc.m",
+      "reading": "complete",
+      "bytes": 3494,
+      "sha256": "e4329f4df810d7a697d7c8085d0b391aea7453537e1336a1184eb212fc6e1a4e"
+    },
+    {
+      "file": "New_Vehicle.m",
+      "reading": "complete",
+      "bytes": 2537,
+      "sha256": "d04f125a8597d81e6ab25b2a17260960b1fb1905d960f2db09a87418569b1857"
+    },
+    {
+      "file": "New_Connections.m",
+      "reading": "complete",
+      "bytes": 1320,
+      "sha256": "d98145a3b12203ef244f2fbf5c67bfecefe30205e360711e8bb3c014aa48a439"
+    },
+    {
+      "file": "New_Road.m",
+      "reading": "complete",
+      "bytes": 1175,
+      "sha256": "5a3f2f5746e3bfc331a0c5a23f3ac54b60f2f99af61ce9c8566c68fbfb5b2725"
+    },
+    {
+      "file": "New_Edge.m",
+      "reading": "complete",
+      "bytes": 603,
+      "sha256": "f93fd85c741e463b18514bf22b8133054b8f379e4ba49eac52e596d292699d3e"
+    },
+    {
+      "file": "aggressiveBehaviorDecision.m",
+      "reading": "complete",
+      "bytes": 713,
+      "sha256": "a552dfd90bf5dafcb0c6392b8dffd91d99841abee559e3d825a3001b43fbdb2f"
+    },
+    {
+      "file": "updateICVDegradationState.m",
+      "reading": "complete",
+      "bytes": 1265,
+      "sha256": "4cae3578b25b95f5711e2300cb0691b4535475ff7bde9b8b89e54e8cd741274c"
+    },
+    {
+      "file": "isVehicleDegraded.m",
+      "reading": "complete",
+      "bytes": 223,
+      "sha256": "a678cccea3df750c223a76db1b28a0ddfeb83e5a2f039e29129f5cc9fa94f681"
+    },
+    {
+      "file": "isICVType.m",
+      "reading": "complete",
+      "bytes": 251,
+      "sha256": "9816b3eb29af31b17e99c76f5dd49105fa1691a8c20536d241d0560baf402841"
+    },
+    {
+      "file": "isLaneChangeGapSafe.m",
+      "reading": "complete",
+      "bytes": 445,
+      "sha256": "0b3d4b1265d36611aa22d06a37f7d73ff0373884aedfc1bfd79c03ea88f91953"
+    },
+    {
+      "file": "One_Vehicle_Control.m",
+      "reading": "complete",
+      "bytes": 8116,
+      "sha256": "68708c4709bcd2720aa8798144bca0a3167e061523d1208e4e29e4a23973af9b"
+    },
+    {
+      "file": "One_Lane_Control.m",
+      "reading": "complete",
+      "bytes": 11389,
+      "sha256": "d40e2bbadadb5373e80912fc357e3eb3bfe520b574b61f9baa85861d0cbcbe02"
+    },
+    {
+      "file": "CAV_control.m",
+      "reading": "complete",
+      "bytes": 932,
+      "sha256": "e26b54a7a749d482949556ec9423a1674d0fc4c48669c13e3a4eb8015229d5c9"
+    },
+    {
+      "file": "Car_following_model.m",
+      "reading": "complete",
+      "bytes": 4683,
+      "sha256": "f117814ccee69d478fe0eb17bd96d88a8cd17f214bd27c97e41c956f70278017"
+    },
+    {
+      "file": "applySmoothSpeedControl.m",
+      "reading": "complete",
+      "bytes": 961,
+      "sha256": "8a1aff51497938561adde9899d76ae3bdb1fcf14e4d5c8e348eb62e3072c554e"
+    },
+    {
+      "file": "constrainSpeed.m",
+      "reading": "complete",
+      "bytes": 373,
+      "sha256": "565d3a737d4f4c9702f332c5cd001ea123eca295ffdb9176ef9d12b0d51eb372"
+    },
+    {
+      "file": "getVehiclePosition.m",
+      "reading": "complete",
+      "bytes": 773,
+      "sha256": "4f237534cb374c15abea9f6ba419e4848c7f826ffd0fd0fe8c4027ed1fc0a57d"
+    },
+    {
+      "file": "getPrecedingVehicleID.m",
+      "reading": "complete",
+      "bytes": 216,
+      "sha256": "e4cfb64cc65179a673c3e7f359bd5840c7e761671c0557c9f5b87be3ff87a571"
+    },
+    {
+      "file": "getMaxVehicleNum_inLane.m",
+      "reading": "complete",
+      "bytes": 770,
+      "sha256": "54d9dc30eb0363efeadfda880299865e4a562014cb81ee0b28a4dc0e8b64ee65"
+    },
+    {
+      "file": "TL_target_speed.m",
+      "reading": "complete",
+      "bytes": 10629,
+      "sha256": "130b51c0547bc09c07f675d7a8b208bfc3fbf6b408fb4c285436a32e2f544975"
+    },
+    {
+      "file": "PlatoonSize_Adjustment.m",
+      "reading": "complete",
+      "bytes": 578,
+      "sha256": "1d6279383f2d84f55b1b07130f0f4e377bcee8a0b851104d3596d888ebbb4582"
+    },
+    {
+      "file": "calculateSafetyField.m",
+      "reading": "complete",
+      "bytes": 1391,
+      "sha256": "dc1c2dc72ed5b9193c4a26ff380d43ba68419e1bfc8939be87474b566a895d47"
+    },
+    {
+      "file": "detectICV.m",
+      "reading": "complete",
+      "bytes": 1429,
+      "sha256": "4cb437739e8e8f7d954d87722420982be50519f22153049ac1d6c23aa90e7c47"
+    },
+    {
+      "file": "detectNearbyICV.m",
+      "reading": "complete",
+      "bytes": 585,
+      "sha256": "6193b3dce542082d4c77bbd33b6f225edebbfa5aed8723a64b164bc692f1124c"
+    },
+    {
+      "file": "checkNearbyICV.m",
+      "reading": "complete",
+      "bytes": 1230,
+      "sha256": "de42a08b9d6ddb38d6d133fd78101e094c69cf80f1b2b1a71120f9c7c8f32db4"
+    },
+    {
+      "file": "mainmain1.m",
+      "reading": "targeted_search",
+      "bytes": 30878,
+      "sha256": "4663978669b1486b3d025db6a382bb7cdb34d5427e7a379d48c525add9332b47"
+    },
+    {
+      "file": "mainmainanquanjuli.m",
+      "reading": "targeted_search",
+      "bytes": 30651,
+      "sha256": "efa1ca2a65a19495c1e05684ce5071bccf575e3df46724c5596322549f9c145d"
+    },
+    {
+      "file": "mainmain11.m",
+      "reading": "targeted_search",
+      "bytes": 22970,
+      "sha256": "48a6817f4148afd3e1e8e5acd01ff36feb9659c4783a6c59bb15125e39bdfc56"
+    },
+    {
+      "file": "mainmain1111111.m",
+      "reading": "targeted_search",
+      "bytes": 30596,
+      "sha256": "07b4ce1ed5067df45bb6238a161b3ea09a225ec48f59581159dc81a1b8c2d2bf"
+    },
+    {
+      "file": "mainmain20250506.m",
+      "reading": "targeted_search",
+      "bytes": 29634,
+      "sha256": "5945e9fb74a086f75dfb4d17710c120a9386f23ab88c48dbe1f0ebd89da9f678"
+    },
+    {
+      "file": "mainmain20210301.m",
+      "reading": "targeted_search",
+      "bytes": 7474,
+      "sha256": "01292168dcaae8cedd8099cd54f4f3e1b2698a662bd988c5a1868c8bb33b4850"
+    },
+    {
+      "file": "mainmain20210302.m",
+      "reading": "targeted_search",
+      "bytes": 11043,
+      "sha256": "8325b92a12483e1a4f51a90689060e10803c9080a958690d1def927422f6549c"
+    },
+    {
+      "file": "mainmain_REF_2.m",
+      "reading": "targeted_search",
+      "bytes": 17686,
+      "sha256": "49874e11884e2e8cc3e8d12be4172524d4b5df698517b57da057468f791f855c"
+    },
+    {
+      "file": "mainmain_REF_3.m",
+      "reading": "targeted_search",
+      "bytes": 22827,
+      "sha256": "81d159d65590f0667002b60ee601c1b9d0274c5470b12703a5fba11aff5298bb"
+    },
+    {
+      "file": "mainmain_REF_3_1.m",
+      "reading": "targeted_search",
+      "bytes": 22827,
+      "sha256": "8f23d4914fed5e5aa5f0f457c2e91a93b20e24acaad69b211e14f9005edc7684"
+    },
+    {
+      "file": "mainmain_REF_3_6.m",
+      "reading": "targeted_search",
+      "bytes": 22827,
+      "sha256": "093220a5ac3859ddd3b82c014fca9d6eb784b90f86b22d10245cbbb3054d9a5b"
+    }
+  ],
+  "project_observation_files": [
+    {
+      "file": "variants/phase5g_pure_formation/noa/native_rules.py",
+      "sha256": "e170488265fcaa1814af28c80ca775f8193fdcc510cad721c680f35539d61ba5",
+      "reading": "complete"
+    },
+    {
+      "file": "variants/phase5g_pure_formation/experiments/native_sumo.py",
+      "sha256": "27e2de0941e019d4fb548c6e2b5f2427a0b4e1ee415d16ccd832d53902438e31",
+      "reading": "targeted_search"
+    }
+  ],
+  "project_observation_note": "D-version content was read before parent changes; native_rules.py at reading had CRUISE=28.8, MAX_SPEED=33.3. SHA below reflects capture time; if different from D hash e170488265fcaa1814af28c80ca775f8193fdcc510cad721c680f35539d61ba5, treat separately.",
+  "static_checks": {
+    "main_calls_formationControl": true,
+    "main_does_not_call_smooth": true,
+    "main_does_not_call_CAV_control": true,
+    "main_does_not_call_One_Lane_Control": true,
+    "main_does_not_call_One_Vehicle_Control": true,
+    "main_does_not_call_Car_following_model": true,
+    "main_does_not_call_setAcceleration": true,
+    "main_vF_28_8": true,
+    "singleVehicle_vmax_33_33": true
+  },
+  "report": {
+    "path": "D:/yanjiu1/keyan1/docs/2026-10-29-MATLAB车辆控制调用链核查.md",
+    "sha256": "ce100cee946ffa854bfe0ec62af50373a1a2e052b699b7f06db3a8a006fa391d"
+  },
+  "captured_at": "2026-10-29T08:29:12.5089251+08:00",
+  "verification": {
+    "status": "passed",
+    "matlab_source_hashes_verified": 55,
+    "static_checks_verified": 9,
+    "line_anchors_verified": 6,
+    "local_links_verified": 2,
+    "executed_at": "2026-10-29T08:29:52.0439454+08:00",
+    "scope": "Static evidence verification only, not a MATLAB runtime or simulation test"
+  }
+}

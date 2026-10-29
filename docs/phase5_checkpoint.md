@@ -594,3 +594,33 @@
 ### 最终云端发布记录
 
 方法代码`931a005`、完整报告/规则说明/图形/A-C-D数据包`87303b8`均已成功推送`https://github.com/32780542/yanjiu1`的main。实施计划全部验收项已完成。本轮1250/3→2实现、检验、改进、独立比较及可读交接文档任务完成；当前版本为D，未启动后续实验。最后封存提交只补本发布记录与计划勾选，不改变已验证运行代码和数据。
+
+## 2026-10-29 08:28：用户要求四流量瓶颈归因，当前任务重新开始
+
+- 用户指出自建global不应充当Cai集中式性能数据，并要求500/750/1000/1500每道流量比较NOA/编队，只有瓶颈拥挤降低带来的收益才成立；若无关必须改方法。补充允许读取D:/matlab_huipu_2000完整思路和车辆控制。已明确更正主README/旧D报告/Cai依据，不再把自建global列作Cai或最优集中基线。
+- 旧D1250整体数据实际反例：drop−straight瓶颈附加TT，NOA0.306771s、transform1.027158s，NOA−transform减少量−0.720387s。不能用D全程2.5%优势宣称瓶颈疏解；源控制允许形成追赶30.8/33.3而NOA通常28.8，需因果核验。
+- 新计划docs/superpowers/plans/2026-10-29-flow-bottleneck-attribution.md，用户已授权直接试验与归因失败后改方法，不等额外确认。当前六D源码冻结不改；新增run_flow_study.py仅批次编排。
+- 100例D诊断正在运行：exec40841，operation results/operations/20261029T002525304552Z_flow-attribution-D-baseline-100_73a5fdcb，timeout7200；study根variants/phase5g_pure_formation/results/flow_attribution_D_20261029/20261029T002525811260Z。每flow×5seed有straight noa/transform及drop noa/formation/transform；先seed再flow，便于早期四流量诊断。每例600s需求/max900，_source_snapshot六源不变，wrapper也逐SHA复制到study目录。旧数据不覆盖。
+- 独立MATLAB审计agent matlab_control_audit_4flows：已证mainmain vF28.8但轨迹优化max33.33，每5s执行首5s，ICV setSpeed(goalSpeed)未按vF截断；mainmain→formationControl→formationControlNormal→singleVehicleCalculate为实际链。applySmoothSpeedControl/constrainSpeed仅定义无调用，其他CAV_control/Car_following等属备用入口，不能混称。文档待该agent完成。
+- 独立评价agent bottleneck_attribution_metrics仅创建experiments/bottleneck_attribution.py及对应test，TDD分段过门/密度/低速积聚和多flow配对；先旧D1250只读复算。不会改控制器。
+- 独立local_causality_method_review只读研究最小局部更新、避免自由流超速伪造收益，不改源码/不跑仿真。root待真实分段/密度证据和MATLAB审计后决定替换方案。若原方法失败，必须保留并进行新冻结四流量验证，不能只交诊断结束。
+- 本轮尚未完成，禁止沿用上一轮“任务完成”记录。下一入口：先检查40841与study/run_status，读取agent成果；运行中的六源码不能改，只可在小型隔离包做候选校准。最终要清晰报告低流量是否根本无拥挤，不能制造慢NOA、入口门或改阈值凑收益。
+
+### 09:32继续点：旧D四流量归因失败，执行生命周期已修，候选仍在验证
+
+- D100 operation completed0，2759.375s，100/100 allsafe/completed，45,790请求全部排空，6源码快照600份与原D协议一致。正式独立包docs/experiments/2026-10-29-four-flow-attribution/D_baseline，analysis_overview/postverification/artifact_hashes齐；每flow25case独立native+recovery。全体主要640–1100归因减少均负：500−.161833、750−.298630、1000−.409117、1500−.337082s；20配对19负。全程DID500−.168441/750−.332441/1000−.486049/1500−2.873420s。低速vehicle-s NOA .54/1.38/3.20/120.32，transform0；1500断面flow反而−18.72/h。不能把消除少量低速与整体瓶颈提效混同，D不满足用户归因要求。
+- MATLAB调用链与55哈希证据已完成，docs/2026-10-29-MATLAB车辆控制调用链核查.md及同名源码证据.json。真正mainmain→formationControl→formationControlNormal→singleVehicleCalculate；普通ICV可33.33追赶、vF28.8为巡航末速；smooth/constrain/旧CAVControl并未走主链。道路源码两段实体都3道、仅连接2→1，不等于当前实际3→2。只读未执行MATLAB，无集中式实测效率，旧自建global已退出主结论。
+- 新离线评价器experiments/bottleneck_attribution.py及14测试完成，sha deea86...，+27comparison+15recovery冻结56项GREEN。逐请求过门、首尾/连续0.1s覆盖、分段删失、低速/密度/flow及差分，按flow分组。D100正式分析另有冻结源副本/70个artifact hash校验。旧1250真实定位640–800额外成本+.795175s，800–1100局部改善+.358439s，净主要段失败−.436736s。
+- 根因迭代：E1双向前后位置/速度反馈接近速度中性，但头车独自相位传递慢，六车peak0；加gain或安全接收距离仍未成6，保留tmp/balanced* summaries。E3将相位按可见车道头车共同分担，局部按车数去公共修正，六车peak6；20case seed1pilot却flow500残一车，750/1000整体慢，1500较NOA快但需全种子。E4将所有相位按30m折叠解决截断头行静态反例，却六车只成4，拒绝。
+- E3残车实际不是流量堵塞：v2_03506请求1→2于372.2(x637.598)，372.3未开始横移已进640，规则把target2重绑0；372.4原native开始向2，373.4已居中2而memory0，2→0被执行guard拒绝，终点残留900s。4100帧精确重现、空路端点独立probe证明能正常2→1。报告tmp/E3_stall_diagnosis_report.json与golden_frames。
+- 主variant已TDD修这一共用执行bug（不改D跟驰/相位/接收策略）：Vehicle.pending_lane仅本车，runner.active_lane_request从自身lane_attempts在decide前同步；严格0.05居中完成后先释放，尚在真实横移超1.2也保持；pending不能被preparing reset或宽容差arrived取消；静止旧非相邻目标重估。neighbor pending始终None，无邻车意图。rules e50ba5...、engine6a5300...，10新测/104native/39global-layers/rootGUI9共162不同测通过，主D500/seed1 238/238、六车6/6三LC安全。证据tmp/own_lane_execution_main_evidence.json。尚未git；agent e3_stall_diagnosis正把大REAL_FRAMES literal移tests/fixtures/own_lane_request_race.json，只碰test+fixture，10项再验。
+- 隔离E5=E3平衡相位+ownpending初版+普通路30m周期相位、prepare内unwrapped。六车peak6/P48.6%；500straight42.074/drop42.115，1500straight42.452/drop42.498（seed1，安全）。大流量成组参与仅~.8%，不足以定版。其ownpending实现早于主严格完成细修，勿覆盖主main。root在tmp/E5_execution_regression_summary.json记录；已全部结束。
+- 新E6基于已修复主D六源码，双向距离、跟前后实速均值（避免每车Cruise锚点拖慢队首传导），仅真实队首在45m范围成对对齐，安全接收距离用停止距离反解（同速11.26，快后车需额外停车差）。六车peak6但P14.4%。E7改一致的速度差耦合（body ref=ego.speed+ΣneighborΔv，head ref=Cruise+ΣneighborΔv），六车peak6/P26.9%，未加新状态或硬速度限幅；需真实流量因果检验。
+- 当前唯一候选长运行：E7 pilot，exec95054，label E7-two-flow-full-pilot，使用tmp/E7_symmetric_velocity/run_flow_study.py --flows5001500 --seeds1，10cases 600s，base variants/phase5g_pure_formation/results/flow_attribution_E7_pilot。源包冻结勿改。主main当前仍“D+执行bugfix”，不是E7。之前exec40841 D100、32809 E3pilot、59858 E5regression都已结束。
+- 下一入口：检查E7 pilot，按NOA/transform直路与drop差分，检查编队规模/真实低速积聚，再决定最小修法/新正式100case。不要用低流量本来无拥堵硬制造收益，也不能只交诊断就停（用户要求归因失败后改）。待正式选择后将唯一简洁规则装main、受影响测试+独立审查、全四flow5seed冻结验证、图表/报告和Git发布。当前README/旧报告更正、MATLAB核查、新metric/wrapper/bugfix均尚未提交；可以先提交已验证的更正与bugfix，但不要把任何E候选当成功发布。
+
+### 09:49：执行修复验收与候选否决
+
+- 主目录执行修复与新评价器联合回归：operation `20261029T014353516479Z_flow-attribution-current-180-tests_78108322` 实际 **167 tests + 29 subtests passed**，退出0；label中的180是运行前估计，计数以pytest输出为准。此前从根目录直接收集整个variant tests因同名根包优先及历史模块而22项collection error，未执行测试；重试显式将variant加入sys.path首位并选当前8个测试文件，未改测试回避实际失败。
+- E7 pilot 10/10完成，但1500 transform TT59.182841对NOA42.791421，主要段归因−4.779877s，上下游完整参与均0，正式否决。E5在1500下游参与仅.80%，没有同版NOA，不视为成功。独立候选质量包tmp/E_candidate_quality_review覆盖35持续流+3六车、166文件hash。
+- 原six_vehicle_initial本就完整两层三道，不能证明自组织；之后同时检验打乱位置的六车形成和原六车变换，最终以连续随机来车为准。E8/E9只在tmp独立包试验，未装主代码；不在D上叠加失败规则。主目录仍为D+执行生命周期修复。

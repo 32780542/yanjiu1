@@ -21,6 +21,7 @@ class Vehicle:
     vy: float = 0.0
     acceleration: float = 0.0
     time: float = 0.0
+    pending_lane: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -280,15 +281,29 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
     organized = mode != "noa"
     future_lanes = 2 if preparing and mode == "transform" else lanes
     moving = abs(ego.vy) > 0.1 or abs(ego.y - (ego.lane + 0.5) * LANE_WIDTH) > 0.15
-    if not moving and (
+    # Own submitted actuation can precede measured lateral motion by one frame.
+    if ego.pending_lane is not None and memory.lane_target != ego.pending_lane:
+        memory = replace(memory, lane_target=ego.pending_lane, gap=None)
+    if (
+        ego.pending_lane is None
+        and not moving
+        and memory.lane_target is not None
+        and abs(memory.lane_target - ego.lane) > 1
+    ):
+        memory = Memory()
+    if not moving and ego.pending_lane is None and (
         (preparing and memory.lane_target == 2)
         or _mandatory_priority(ego, rows, memory.lane_target, drop_x)
     ):
         memory = Memory()
     if memory.lane_target is not None:
         target_center = (memory.lane_target + 0.5) * LANE_WIDTH
-        arrived = abs(ego.y - target_center) <= 0.15 and abs(ego.vy) <= 0.1
-        if arrived or (not moving and not organized):
+        arrived = (
+            ego.pending_lane is None
+            and abs(ego.y - target_center) <= 0.15
+            and abs(ego.vy) <= 0.1
+        )
+        if arrived or (not moving and not organized and ego.pending_lane is None):
             memory = replace(memory, lane_target=None, gap=None)
         else:
             speed, target, memory = (
