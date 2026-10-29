@@ -624,3 +624,16 @@
 - 主目录执行修复与新评价器联合回归：operation `20261029T014353516479Z_flow-attribution-current-180-tests_78108322` 实际 **167 tests + 29 subtests passed**，退出0；label中的180是运行前估计，计数以pytest输出为准。此前从根目录直接收集整个variant tests因同名根包优先及历史模块而22项collection error，未执行测试；重试显式将variant加入sys.path首位并选当前8个测试文件，未改测试回避实际失败。
 - E7 pilot 10/10完成，但1500 transform TT59.182841对NOA42.791421，主要段归因−4.779877s，上下游完整参与均0，正式否决。E5在1500下游参与仅.80%，没有同版NOA，不视为成功。独立候选质量包tmp/E_candidate_quality_review覆盖35持续流+3六车、166文件hash。
 - 原six_vehicle_initial本就完整两层三道，不能证明自组织；之后同时检验打乱位置的六车形成和原六车变换，最终以连续随机来车为准。E8/E9只在tmp独立包试验，未装主代码；不在D上叠加失败规则。主目录仍为D+执行生命周期修复。
+
+### 10:18：H版冻结正式复测，先验证后定结论
+
+- D100便携证据约19.2MB在docs/experiments/2026-10-29-four-flow-attribution/portable_D_baseline；原展开分析只读并ignore。root独立verify operation `20261029T015636999909Z...b50e847c`退出0。四面板图figures/D_baseline.png/.svg已生成并目检；新报告docs/2026-10-29-四流量瓶颈归因报告.md列完整否定性结果，仍需补H正式数据。
+- E8“所有可见front都追”造成整串接近最高速度，连续流上游P0，拒绝；E9相邻道body互选虽打乱六车成6，持续流仍P0，拒绝；E10限50m形成连接把速度恢复约28.8，但已有6车变换只成4。实际34.7s坐标证明：两道各3车、q各差约一整层，头尾悬空，body互选错误平衡，不是安全或车道数问题。
+- H继承E11：50m内真实同道front30m跟驰；无该front才是局部队首，以physical phase在相邻道互选实际队首；头互选同50m，所需候选/前车信息完整落ego[-100,+150]，在现有视野内。只头跨道分担，跟车沿实际前链，不再body错层；接收gap用共同停止距离反解，不提前全30m。未增rear双向控制、全局分配或邻车intent。
+- E11原6变换峰6/P59.95%，打乱6首次11.3s形成6/P60.84%，均safe；q500straight/drop41.7063/41.7366，q150041.8428/42.2557，均safe。1500up1.67%/down14.23%仍需改善，不能靠小组或单种子宣告成功。
+- 发布冻结包tmp/head_group_H_release：从E11仅Black25.1格式化，AST完全一致；rules **77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2**，engine **6a530098146e85a637b4f29d580d61877c7a54b3a7e15858724651d80e8956b0**；wrapper **cf7a371677a08dd312ae904f410d26070452d464314b12b0a2b5943f0b2d1385**。8静态门rootfresh通过，operation021105...b04c0681。
+- 新wrapper支持独立进程jobs，源与wrapper完整封存。串行10case vs jobs2 10case实际请求/trips/解压positions全等，16.86→10.14s，无残留；异常5result亦保留且外层失败，tmp/parallel_study_equivalence.json。H格式化与验证wrapper AST同。没有改SUMO控制性能。
+- **当前正式H100运行 exec82453**，operation `20261029T021127070794Z_H-four-flow-five-seed-100_7fba570b`，study `variants/phase5g_pure_formation/results/flow_attribution_H_final/20261029T021127615583Z`，600/900、5seed、4flow、相同5模式/场景矩阵（100例），jobs4。冻结目录勿改。bottleneck_attribution_metrics agent等外层0+100齐后独立分析至H_analysis，复用原冻结评价器，所有失败保留。
+- e3_stall_diagnosis agent负责主目录字节安装H rules/wrapper、新增head静态8测试、按新规则重写旧7个合同（原失败38pass/7fail证据020715...ae1a7be8），不改其他production；root负责README/系统说明/主报告。local_causality_method_review只读独立审查H信息边界与因果解释。
+- root已告诉用户将补“仅协作合流”消融：保留同样helper/接收/必要并入、关闭成组调距和自由补位，20例drop配对，用来检验收益是否无需编队也能出现。主常用代码不增模式，只在明确源码封存的独立实验包实现；尚未启动，不可把其当已验证结果。
+- Git已推e9de622（执行bug修复/新metrics/MATLAB核查/撤回假Cai对比）；D便携、图、新报告、H代码与wrapper/新tests尚未提交。本轮仍进行中，下一入口先检查82453与agent，勿沿用旧“阶段成功”。

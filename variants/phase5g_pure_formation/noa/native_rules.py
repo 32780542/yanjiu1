@@ -90,29 +90,39 @@ def _component(ego, rows):
 
 
 def _following(ego, rows, lanes):
-    """同道速度只跟随真实前车；跨道仅以有界位置误差对齐。"""
-    cars = _component(ego, rows)
-    fronts = [c for c in rows if c.x > ego.x and _occupies(c, ego.lane, 0.0)]
+    """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
+    fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
     front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
-    if front is not None and front in cars:
+    if front is not None:
         target = front.x - GAP
         return _request(ego, target, front.speed), target, front.track
-    if front is not None and len(cars) < 2 * lanes:
-        target = front.x - GAP
-        return min(CRUISE + 2.0, _request(ego, target, front.speed)), target, front.track
-    errors = []
-    for lane in range(lanes):
-        if lane == ego.lane:
-            continue
-        peers = [c for c in cars if c.lane == lane]
-        if not peers:
-            continue
-        peer = max(peers, key=lambda c: (c.x, c.y))
-        raw = peer.x + _physical_phase(peer, lanes) - ego.x - _phase(ego.lane, lanes)
-        errors.append(raw)
-    error = sum(errors) / len(errors) if errors else 0.0
-    speed = CRUISE + max(-2.0, min(2.0, POSITION_GAIN * error))
-    return speed, ego.x + error if errors else None, None
+    cars = (ego, *rows)
+
+    def is_head(car):
+        return not any(
+            0.0 < other.x - car.x <= 50.0 and _occupies(other, car.lane, 0.0) for other in cars
+        )
+
+    def nearest(car, lane):
+        q = car.x + _physical_phase(car, lanes)
+        candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0 and is_head(c)]
+
+        def order(c):
+            difference = c.x + _physical_phase(c, lanes) - q
+            return abs(difference), difference, c.x, c.y, c.speed, c.vy
+
+        return min(candidates, key=order, default=None)
+
+    error = 0.0
+    for lane in (ego.lane - 1, ego.lane + 1):
+        if 0 <= lane < lanes:
+            peer = nearest(ego, lane)
+            if peer is not None and nearest(peer, ego.lane) is ego:
+                error += peer.x + _physical_phase(peer, lanes) - ego.x - _physical_phase(ego, lanes)
+    error /= max(1, lanes - 1)
+    phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+    target = ego.x + phase_speed / POSITION_GAIN
+    return _request(ego, target, CRUISE), target, None
 
 
 def _merge_target(ego, rows, lane, held=None):
@@ -247,6 +257,16 @@ def _fill(ego, rows, lanes):
     return lane if car.track == ego.track else None
 
 
+def _receiving_distance(ego, incoming):
+    return max(
+        CLEARANCE,
+        LENGTH
+        + STANDSTILL
+        + RESPONSE * ego.speed
+        + max(ego.speed**2 - incoming.speed**2, 0.0) / (2 * BRAKING),
+    )
+
+
 def _receiving(ego, rows, helper):
     front = min((c.x for c in rows if c.lane == ego.lane and c.x > ego.x), default=float("inf"))
     candidates = [c for c in rows if c.lane == 2 and ego.lane == 1 and ego.x <= c.x < front]
@@ -291,17 +311,19 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
         and abs(memory.lane_target - ego.lane) > 1
     ):
         memory = Memory()
-    if not moving and ego.pending_lane is None and (
-        (preparing and memory.lane_target == 2)
-        or _mandatory_priority(ego, rows, memory.lane_target, drop_x)
+    if (
+        not moving
+        and ego.pending_lane is None
+        and (
+            (preparing and memory.lane_target == 2)
+            or _mandatory_priority(ego, rows, memory.lane_target, drop_x)
+        )
     ):
         memory = Memory()
     if memory.lane_target is not None:
         target_center = (memory.lane_target + 0.5) * LANE_WIDTH
         arrived = (
-            ego.pending_lane is None
-            and abs(ego.y - target_center) <= 0.15
-            and abs(ego.vy) <= 0.1
+            ego.pending_lane is None and abs(ego.y - target_center) <= 0.15 and abs(ego.vy) <= 0.1
         )
         if arrived or (not moving and not organized and ego.pending_lane is None):
             memory = replace(memory, lane_target=None, gap=None)
@@ -337,7 +359,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             )
         receiving = _receiving(ego, rows, helper)
         if receiving is not None:
-            target = receiving.x - GAP
+            target = receiving.x - _receiving_distance(ego, receiving)
             speed = min(speed, _request(ego, target, receiving.speed))
             return Command(speed, None, "open_gap", target, receiving.track), memory
         if (
