@@ -1,0 +1,46 @@
+test_a_lower_braking_alternative_wins_equal_formation_benefit (__main__.BrakingCostFillTests.test_a_lower_braking_alternative_wins_equal_formation_benefit) ... FAIL
+test_cf_model_keeps_safety_for_front_outside_formation_chain (__main__.BrakingCostFillTests.test_cf_model_keeps_safety_for_front_outside_formation_chain) ... FAIL
+test_cf_model_uses_actual_same_lane_front_and_existing_public_limits (__main__.BrakingCostFillTests.test_cf_model_uses_actual_same_lane_front_and_existing_public_limits) ... FAIL
+test_complete_layers_are_not_dismantled (__main__.BrakingCostFillTests.test_complete_layers_are_not_dismantled) ... ok
+test_equal_speed_useful_fill_is_still_accepted (__main__.BrakingCostFillTests.test_equal_speed_useful_fill_is_still_accepted) ... ok
+test_mandatory_merge_remains_available_despite_severe_follower_cost (__main__.BrakingCostFillTests.test_mandatory_merge_remains_available_despite_severe_follower_cost) ... ok
+test_only_fill_and_public_cf_helper_differ_from_frozen_baseline (__main__.BrakingCostFillTests.test_only_fill_and_public_cf_helper_differ_from_frozen_baseline) ... ok
+test_target_follower_severe_braking_rejects_discretionary_fill (__main__.BrakingCostFillTests.test_target_follower_severe_braking_rejects_discretionary_fill) ... FAIL
+test_track_renaming_and_observation_order_do_not_change_selection (__main__.BrakingCostFillTests.test_track_renaming_and_observation_order_do_not_change_selection) ... ok
+
+======================================================================
+FAIL: test_a_lower_braking_alternative_wins_equal_formation_benefit (__main__.BrakingCostFillTests.test_a_lower_braking_alternative_wins_equal_formation_benefit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\M\test_braking_cost_fill.py", line 58, in test_a_lower_braking_alternative_wins_equal_formation_benefit
+    self.assertEqual(r._fill(ego, rows, 3), 1)
+AssertionError: None != 1
+
+======================================================================
+FAIL: test_cf_model_keeps_safety_for_front_outside_formation_chain (__main__.BrakingCostFillTests.test_cf_model_keeps_safety_for_front_outside_formation_chain)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\M\test_braking_cost_fill.py", line 103, in test_cf_model_keeps_safety_for_front_outside_formation_chain
+    self.assertTrue(callable(helper), "missing public same-frame CF estimator")
+AssertionError: False is not true : missing public same-frame CF estimator
+
+======================================================================
+FAIL: test_cf_model_uses_actual_same_lane_front_and_existing_public_limits (__main__.BrakingCostFillTests.test_cf_model_uses_actual_same_lane_front_and_existing_public_limits)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\M\test_braking_cost_fill.py", line 93, in test_cf_model_uses_actual_same_lane_front_and_existing_public_limits
+    self.assertTrue(callable(helper), "missing public same-frame CF estimator")
+AssertionError: False is not true : missing public same-frame CF estimator
+
+======================================================================
+FAIL: test_target_follower_severe_braking_rejects_discretionary_fill (__main__.BrakingCostFillTests.test_target_follower_severe_braking_rejects_discretionary_fill)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\M\test_braking_cost_fill.py", line 51, in test_target_follower_severe_braking_rejects_discretionary_fill
+    self.assertIsNone(r._fill(ego, rows, 3))
+AssertionError: 1 is not None
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.014s
+
+FAILED (failures=4)

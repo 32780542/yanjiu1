@@ -1,0 +1,18 @@
+test_a_lower_braking_alternative_wins_equal_formation_benefit (__main__.BrakingCostFillTests.test_a_lower_braking_alternative_wins_equal_formation_benefit) ... ok
+test_cf_model_keeps_safety_for_front_outside_formation_chain (__main__.BrakingCostFillTests.test_cf_model_keeps_safety_for_front_outside_formation_chain) ... ok
+test_cf_model_uses_actual_same_lane_front_and_existing_public_limits (__main__.BrakingCostFillTests.test_cf_model_uses_actual_same_lane_front_and_existing_public_limits) ... ok
+test_complete_layers_are_not_dismantled (__main__.BrakingCostFillTests.test_complete_layers_are_not_dismantled) ... ok
+test_cost_ranking_alternative_is_below_separate_severe_braking_bound (__main__.BrakingCostFillTests.test_cost_ranking_alternative_is_below_separate_severe_braking_bound) ... ok
+test_equal_speed_useful_fill_is_still_accepted (__main__.BrakingCostFillTests.test_equal_speed_useful_fill_is_still_accepted) ... ok
+test_mandatory_merge_remains_available_despite_severe_follower_cost (__main__.BrakingCostFillTests.test_mandatory_merge_remains_available_despite_severe_follower_cost) ... ok
+test_neighbor_private_actuation_fields_do_not_change_fill (__main__.BrakingCostFillTests.test_neighbor_private_actuation_fields_do_not_change_fill) ... ok
+test_only_fill_and_public_cf_helper_differ_from_frozen_baseline (__main__.BrakingCostFillTests.test_only_fill_and_public_cf_helper_differ_from_frozen_baseline) ... ok
+test_remote_cars_outside_ego_perception_do_not_change_decision (__main__.BrakingCostFillTests.test_remote_cars_outside_ego_perception_do_not_change_decision) ... ok
+test_severe_follower_bound_cannot_be_offset_by_large_old_lane_release (__main__.BrakingCostFillTests.test_severe_follower_bound_cannot_be_offset_by_large_old_lane_release) ... ok
+test_target_follower_severe_braking_rejects_discretionary_fill (__main__.BrakingCostFillTests.test_target_follower_severe_braking_rejects_discretionary_fill) ... ok
+test_track_renaming_and_observation_order_do_not_change_selection (__main__.BrakingCostFillTests.test_track_renaming_and_observation_order_do_not_change_selection) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.021s
+
+OK

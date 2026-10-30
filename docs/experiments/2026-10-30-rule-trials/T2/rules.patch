@@ -1,0 +1,22 @@
+--- a/noa/native_rules.py
++++ b/noa/native_rules.py
+@@ -110,8 +110,17 @@
+     )
+     if front is None:
+         return CRUISE, None, None, 0
+-    target = front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed
+-    return _request(ego, target, front.speed), target, front.track, 1
++    distance = LENGTH + STANDSTILL + HEADWAY * ego.speed
++    target, reference_speed = front.x - distance, front.speed
++    second = min(
++        (c for c in rows if front.x < c.x <= min(front.x + 50.0, ego.x + 200.0)
++         and _occupies(c, ego.lane, 0.0)),
++        key=lambda c: (c.x, c.y, c.speed), default=None,
++    )
++    if second is not None:
++        target = (target + 0.5 * (second.x - 2 * distance)) / 1.5
++        reference_speed = (front.speed + 0.5 * second.speed) / 1.5
++    return _request(ego, target, reference_speed), target, front.track, 1
+ 
+ 
+ def _following(ego, rows, lanes, phase_boundary=None):

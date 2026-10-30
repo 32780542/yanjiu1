@@ -63,7 +63,6 @@ def run(source, directory, signal):
     label = "string_" + directory.name
     horizon = 180. if signal == "sine" else 100.
     traces = [[] for _ in keys]
-    memories = {key: rules.Memory() for key in keys}
     local = native.LocalTracks(rules.Vehicle)
     collisions = teleports = 0
     minimum_net_gap = float("inf")
@@ -94,10 +93,10 @@ def run(source, directory, signal):
                         if i == 0:
                             requested = leader_speed(now, signal)
                         else:
-                            action, memories[key] = rules.decide(ego, neighbors, memories[key], "transform", None)
-                            if action.lane is not None:
-                                raise RuntimeError("Unexpected lane change in single-lane string")
-                            requested = action.speed
+                            # Isolate the longitudinal law on the one-lane bench.
+                            # The complete 3-lane decision is tested in run_trials.
+                            requested = min(rules._following(ego, neighbors, 1)[0],
+                                            rules.safe_speed(ego, neighbors))
                         connection.vehicle.setSpeed(key, requested)
                         traces[i].append((now, states[key].speed, states[key].acceleration))
                     trace.write(json.dumps(dict(time_s=now, states={key: [s.x, s.speed, s.acceleration]
@@ -115,6 +114,7 @@ def run(source, directory, signal):
                              min_acceleration_mps2=min(accelerations), max_acceleration_mps2=max(accelerations)))
     result = dict(signal=signal, source_sha256=hashlib.sha256(raw).hexdigest(), physical=native.PHYSICAL,
                   leader_input="leader_speed() in saved driver", vehicles=12, initial_head_gap_m=30.,
+                  follower_control="_following plus unchanged safe_speed; no lane-change decision",
                   horizon_s=horizon, measurement_window_s=window, sumo_version=version,
                   collisions=collisions, teleports=teleports, minimum_net_gap_m=minimum_net_gap,
                   safe=collisions == teleports == 0 and minimum_net_gap >= 1.5-1e-6, measures=measures)
@@ -126,13 +126,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--base", type=Path, required=True)
     parser.add_argument("--candidate", type=Path, required=True)
+    parser.add_argument("--base-label", default="base")
+    parser.add_argument("--candidate-label", default="T")
     args = parser.parse_args()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     output = REPO / "tmp/literature_trials/strings" / stamp
     output.mkdir(parents=True, exist_ok=False)
     (output / "driver.py").write_bytes(Path(__file__).read_bytes())
     results = []
-    for name, source in (("base", args.base), ("T", args.candidate)):
+    for name, source in ((args.base_label, args.base), (args.candidate_label, args.candidate)):
         for signal in ("sine", "brake"):
             result = run(source.resolve(), output / (name + "_" + signal), signal)
             results.append(dict(candidate=name, run_dir=str(output / (name + "_" + signal)), **result))

@@ -1,0 +1,112 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -6,7 +6,8 @@
+ 
+ CRUISE, MAX_SPEED, GAP = 28.8, 33.3, 30.0
+ POSITION_GAIN = 0.3
+-SPEED_RELAXATION = 0.2  # 0.1 s step / 0.5 s following response
++FOLLOWING_RESPONSE = 0.5
++SPEED_RELAXATION = 0.1 / FOLLOWING_RESPONSE
+ WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.0
+ LENGTH, STANDSTILL, BRAKING, RESPONSE = 4.0, 1.5, 10.0, 0.2
+ 
+@@ -39,6 +40,8 @@
+     lane_target: int | None = None
+     gap: tuple[int | None, int | None] | None = None
+     joining: bool = False
++    # Current front token, organization position/speed offsets, completion time.
++    recovery: tuple[int, float, float, float] | None = None
+ 
+ 
+ def _occupies(car, lane, horizon=1.0):
+@@ -101,13 +104,19 @@
+     ), pair_lanes
+ 
+ 
+-def _following(ego, rows, lanes, phase_boundary=None):
++def _following(ego, rows, lanes, phase_boundary=None, recovery=None):
+     """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
+     fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
+     front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
+     if front is not None:
+         target = front.x - GAP
+-        return _request(ego, target, front.speed), target, front.track, 1
++        reference_speed = front.speed
++        if recovery is not None and recovery[0] == front.track:
++            _, position_offset, speed_offset, started = recovery
++            weight = max(0.0, min(1.0, 1.0 - (ego.time - started) / FOLLOWING_RESPONSE))
++            target += weight * position_offset
++            reference_speed += weight * speed_offset
++        return _request(ego, target, reference_speed), target, front.track, 1
+     cars = (ego, *rows)
+ 
+     def is_head(car):
+@@ -312,6 +321,10 @@
+     preparing = drop_x is not None and ego.x >= drop_x - 360.0 and (ego.x < drop_x or ego.lane == 2)
+     lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
+     organized = mode != "noa"
++    if memory.recovery is not None and (
++        not organized or ego.time - memory.recovery[3] >= FOLLOWING_RESPONSE
++    ):
++        memory = replace(memory, recovery=None)
+     future_lanes = 2 if preparing and mode == "transform" else lanes
+     following_lanes = lanes if ego.lane == 2 else future_lanes
+     speed, target, reference, formation_state = (
+@@ -320,10 +333,13 @@
+             rows,
+             following_lanes,
+             drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
++            memory.recovery,
+         )
+         if organized
+         else (CRUISE, None, None, 0)
+     )
++    if memory.recovery is not None and reference != memory.recovery[0]:
++        memory = replace(memory, recovery=None)
+ 
+     def action(speed, lane, reason, target_x=None, reference=None):
+         return Command(speed, lane, reason, target_x, reference, formation_state)
+@@ -331,7 +347,7 @@
+     moving = abs(ego.vy) > 0.1 or abs(ego.y - (ego.lane + 0.5) * LANE_WIDTH) > 0.15
+     # Own submitted actuation can precede measured lateral motion by one frame.
+     if ego.pending_lane is not None and memory.lane_target != ego.pending_lane:
+-        memory = replace(memory, lane_target=ego.pending_lane, gap=None)
++        memory = replace(memory, lane_target=ego.pending_lane, gap=None, recovery=None)
+     if (
+         ego.pending_lane is None
+         and not moving
+@@ -354,6 +370,16 @@
+             ego.pending_lane is None and abs(ego.y - target_center) <= 0.15 and abs(ego.vy) <= 0.1
+         )
+         if arrived or (not moving and not organized and ego.pending_lane is None):
++            if arrived and organized and reference is not None:
++                join_target, gap_speed, gap = _merge_target(ego, rows, memory.lane_target, memory.gap)
++                if reference == gap[0]:
++                    front = next(c for c in rows if c.track == reference)
++                    memory = replace(
++                        memory,
++                        joining=True,
++                        recovery=(reference, join_target - (front.x - GAP), gap_speed - front.speed, ego.time),
++                    )
++                    speed, target = _request(ego, join_target, gap_speed), join_target
+             memory = replace(memory, lane_target=None, gap=None)
+         else:
+             speed, target, memory = (
+@@ -364,7 +390,7 @@
+             if moving or _clear(ego, rows, memory.lane_target):
+                 return action(speed, memory.lane_target, "executing", target), memory
+             return action(speed, None, "approach_join", target), memory
+-    if memory.joining and (
++    if memory.joining and memory.recovery is None and (
+         not organized
+         or (target is None or abs(target - ego.x) <= 2.0)
+         and abs(speed - ego.speed) <= 0.5
+@@ -400,7 +426,7 @@
+         speed = _request(ego, target, gap_speed)
+         if _clear(ego, rows, 1):
+             return action(speed, 1, "merge", target), replace(
+-                memory, lane_target=1, joining=organized
++                memory, lane_target=1, joining=organized, recovery=None
+             )
+         return action(speed, None, "approach_gap", target), memory
+ 

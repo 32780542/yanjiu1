@@ -1,0 +1,511 @@
+test_a_complete_local_unit_does_not_race_a_distant_unit (test_native_rules.NativeRulesTests.test_a_complete_local_unit_does_not_race_a_distant_unit) ... ERROR
+test_a_free_head_does_not_chase_its_own_positive_offset (test_native_rules.NativeRulesTests.test_a_free_head_does_not_chase_its_own_positive_offset) ... ERROR
+test_a_free_head_rejoins_cross_lane_alignment_after_lateral_completion (test_native_rules.NativeRulesTests.test_a_free_head_rejoins_cross_lane_alignment_after_lateral_completion) ... ERROR
+test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows (test_native_rules.NativeRulesTests.test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows) ... ERROR
+test_a_front_that_left_its_lane_does_not_keep_an_old_speed_reference (test_native_rules.NativeRulesTests.test_a_front_that_left_its_lane_does_not_keep_an_old_speed_reference) ... ERROR
+test_a_head_keeps_cruise_without_a_cross_lane_position_error (test_native_rules.NativeRulesTests.test_a_head_keeps_cruise_without_a_cross_lane_position_error) ... ERROR
+test_a_helper_tracks_the_gap_while_the_rear_opens_space (test_native_rules.NativeRulesTests.test_a_helper_tracks_the_gap_while_the_rear_opens_space) ... ERROR
+test_a_new_lane_head_uses_the_exact_lane_phase (test_native_rules.NativeRulesTests.test_a_new_lane_head_uses_the_exact_lane_phase) ... ERROR
+test_a_rear_upper_lane_car_does_not_command_the_flow_head_to_stop (test_native_rules.NativeRulesTests.test_a_rear_upper_lane_car_does_not_command_the_flow_head_to_stop) ... ERROR
+test_a_retained_head_adopts_the_two_lane_phase (test_native_rules.NativeRulesTests.test_a_retained_head_adopts_the_two_lane_phase) ... ERROR
+test_after_middle_moves_ending_front_can_merge (test_native_rules.NativeRulesTests.test_after_middle_moves_ending_front_can_merge) ... ERROR
+test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration (test_native_rules.NativeRulesTests.test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration) ... ERROR
+test_aligned_group_can_follow_a_temporary_slow_reference (test_native_rules.NativeRulesTests.test_aligned_group_can_follow_a_temporary_slow_reference) ... ERROR
+test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640 (test_native_rules.NativeRulesTests.test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640) ... ERROR
+test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640 (test_native_rules.NativeRulesTests.test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640) ... ERROR
+test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes (test_native_rules.NativeRulesTests.test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes) ... ERROR
+test_closing_limit_protects_both_physically_occupied_lanes (test_native_rules.NativeRulesTests.test_closing_limit_protects_both_physically_occupied_lanes) ... ERROR
+test_crossing_reference_keeps_position_and_damped_speed_corrections_bounded (test_native_rules.NativeRulesTests.test_crossing_reference_keeps_position_and_damped_speed_corrections_bounded) ... ERROR
+test_ending_front_uses_safe_space_without_waiting_for_other_plans (test_native_rules.NativeRulesTests.test_ending_front_uses_safe_space_without_waiting_for_other_plans) ... ERROR
+test_equal_distance_actual_heads_use_signed_geometry_not_track_order (test_native_rules.NativeRulesTests.test_equal_distance_actual_heads_use_signed_geometry_not_track_order) ... ERROR
+test_equal_speed_target_gap_keeps_cruise (test_native_rules.NativeRulesTests.test_equal_speed_target_gap_keeps_cruise) ... ERROR
+test_executing_helper_keeps_the_actual_receiving_gap (test_native_rules.NativeRulesTests.test_executing_helper_keeps_the_actual_receiving_gap) ... ERROR
+test_following_a_braking_front_keeps_the_physical_stopping_distance (test_native_rules.NativeRulesTests.test_following_a_braking_front_keeps_the_physical_stopping_distance) ... ERROR
+test_free_lane_ahead_does_not_slow_a_merging_leader (test_native_rules.NativeRulesTests.test_free_lane_ahead_does_not_slow_a_merging_leader) ... ERROR
+test_local_track_permutation_and_remote_cars_do_not_change_action (test_native_rules.NativeRulesTests.test_local_track_permutation_and_remote_cars_do_not_change_action) ... ERROR
+test_mandatory_merge_continues_until_actual_lane_exit (test_native_rules.NativeRulesTests.test_mandatory_merge_continues_until_actual_lane_exit) ... ERROR
+test_middle_front_car_makes_room_in_the_other_retained_lane (test_native_rules.NativeRulesTests.test_middle_front_car_makes_room_in_the_other_retained_lane) ... ERROR
+test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed (test_native_rules.NativeRulesTests.test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed) ... ERROR
+test_noa_is_a_working_mandatory_merge_policy (test_native_rules.NativeRulesTests.test_noa_is_a_working_mandatory_merge_policy) ... ERROR
+test_nonadjacent_lane_head_does_not_pull_the_local_head_phase (test_native_rules.NativeRulesTests.test_nonadjacent_lane_head_does_not_pull_the_local_head_phase) ... ERROR
+test_occupied_target_lane_is_not_overwritten (test_native_rules.NativeRulesTests.test_occupied_target_lane_is_not_overwritten) ... ERROR
+test_ongoing_front_transfer_does_not_choose_a_second_helper (test_native_rules.NativeRulesTests.test_ongoing_front_transfer_does_not_choose_a_second_helper) ... ERROR
+test_opposite_sides_do_not_both_fill_the_same_physical_corridor (test_native_rules.NativeRulesTests.test_opposite_sides_do_not_both_fill_the_same_physical_corridor) ... ERROR
+test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car (test_native_rules.NativeRulesTests.test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car) ... ERROR
+test_physical_phase_interpolates_continuously_independent_of_lane_index (test_native_rules.NativeRulesTests.test_physical_phase_interpolates_continuously_independent_of_lane_index) ... ERROR
+test_position_and_relative_speed_feedback_has_a_gradual_response (test_native_rules.NativeRulesTests.test_position_and_relative_speed_feedback_has_a_gradual_response) ... ERROR
+test_rejected_lane_request_keeps_adjusting_the_physical_gap (test_native_rules.NativeRulesTests.test_rejected_lane_request_keeps_adjusting_the_physical_gap) ... ERROR
+test_retained_lane_head_does_not_follow_an_ending_car_behind (test_native_rules.NativeRulesTests.test_retained_lane_head_does_not_follow_an_ending_car_behind) ... ERROR
+test_retained_lanes_restore_their_missing_cell_before_the_drop (test_native_rules.NativeRulesTests.test_retained_lanes_restore_their_missing_cell_before_the_drop) ... ERROR
+test_selected_local_cell_survives_lateral_motion_and_completion (test_native_rules.NativeRulesTests.test_selected_local_cell_survives_lateral_motion_and_completion) ... ERROR
+test_transform_approaches_current_gap_without_skipping_its_front (test_native_rules.NativeRulesTests.test_transform_approaches_current_gap_without_skipping_its_front) ... ERROR
+test_two_lane_reforming_can_still_observe_an_unmerged_car_behind (test_native_rules.NativeRulesTests.test_two_lane_reforming_can_still_observe_an_unmerged_car_behind) ... ERROR
+test_unit_head_does_not_build_a_formation_chain_to_a_visible_distant_front (test_native_rules.NativeRulesTests.test_unit_head_does_not_build_a_formation_chain_to_a_visible_distant_front) ... ERROR
+test_upstream_extra_car_fills_the_nearby_missing_middle_slot (test_native_rules.NativeRulesTests.test_upstream_extra_car_fills_the_nearby_missing_middle_slot) ... ERROR
+test_upstream_fill_does_not_send_a_less_populated_lane_to_a_crowded_one (test_native_rules.NativeRulesTests.test_upstream_fill_does_not_send_a_less_populated_lane_to_a_crowded_one) ... ERROR
+test_visible_front_sequence_follows_the_nearest_physical_front (test_native_rules.NativeRulesTests.test_visible_front_sequence_follows_the_nearest_physical_front) ... ERROR
+
+======================================================================
+ERROR: test_a_complete_local_unit_does_not_race_a_distant_unit (test_native_rules.NativeRulesTests.test_a_complete_local_unit_does_not_race_a_distant_unit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_free_head_does_not_chase_its_own_positive_offset (test_native_rules.NativeRulesTests.test_a_free_head_does_not_chase_its_own_positive_offset)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_free_head_rejoins_cross_lane_alignment_after_lateral_completion (test_native_rules.NativeRulesTests.test_a_free_head_rejoins_cross_lane_alignment_after_lateral_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows (test_native_rules.NativeRulesTests.test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_front_that_left_its_lane_does_not_keep_an_old_speed_reference (test_native_rules.NativeRulesTests.test_a_front_that_left_its_lane_does_not_keep_an_old_speed_reference)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_head_keeps_cruise_without_a_cross_lane_position_error (test_native_rules.NativeRulesTests.test_a_head_keeps_cruise_without_a_cross_lane_position_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_helper_tracks_the_gap_while_the_rear_opens_space (test_native_rules.NativeRulesTests.test_a_helper_tracks_the_gap_while_the_rear_opens_space)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_new_lane_head_uses_the_exact_lane_phase (test_native_rules.NativeRulesTests.test_a_new_lane_head_uses_the_exact_lane_phase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_rear_upper_lane_car_does_not_command_the_flow_head_to_stop (test_native_rules.NativeRulesTests.test_a_rear_upper_lane_car_does_not_command_the_flow_head_to_stop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_a_retained_head_adopts_the_two_lane_phase (test_native_rules.NativeRulesTests.test_a_retained_head_adopts_the_two_lane_phase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_after_middle_moves_ending_front_can_merge (test_native_rules.NativeRulesTests.test_after_middle_moves_ending_front_can_merge)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration (test_native_rules.NativeRulesTests.test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_aligned_group_can_follow_a_temporary_slow_reference (test_native_rules.NativeRulesTests.test_aligned_group_can_follow_a_temporary_slow_reference)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640 (test_native_rules.NativeRulesTests.test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640 (test_native_rules.NativeRulesTests.test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes (test_native_rules.NativeRulesTests.test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_closing_limit_protects_both_physically_occupied_lanes (test_native_rules.NativeRulesTests.test_closing_limit_protects_both_physically_occupied_lanes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_crossing_reference_keeps_position_and_damped_speed_corrections_bounded (test_native_rules.NativeRulesTests.test_crossing_reference_keeps_position_and_damped_speed_corrections_bounded)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_ending_front_uses_safe_space_without_waiting_for_other_plans (test_native_rules.NativeRulesTests.test_ending_front_uses_safe_space_without_waiting_for_other_plans)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_equal_distance_actual_heads_use_signed_geometry_not_track_order (test_native_rules.NativeRulesTests.test_equal_distance_actual_heads_use_signed_geometry_not_track_order)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_equal_speed_target_gap_keeps_cruise (test_native_rules.NativeRulesTests.test_equal_speed_target_gap_keeps_cruise)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_executing_helper_keeps_the_actual_receiving_gap (test_native_rules.NativeRulesTests.test_executing_helper_keeps_the_actual_receiving_gap)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_following_a_braking_front_keeps_the_physical_stopping_distance (test_native_rules.NativeRulesTests.test_following_a_braking_front_keeps_the_physical_stopping_distance)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_free_lane_ahead_does_not_slow_a_merging_leader (test_native_rules.NativeRulesTests.test_free_lane_ahead_does_not_slow_a_merging_leader)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_local_track_permutation_and_remote_cars_do_not_change_action (test_native_rules.NativeRulesTests.test_local_track_permutation_and_remote_cars_do_not_change_action)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_mandatory_merge_continues_until_actual_lane_exit (test_native_rules.NativeRulesTests.test_mandatory_merge_continues_until_actual_lane_exit)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_middle_front_car_makes_room_in_the_other_retained_lane (test_native_rules.NativeRulesTests.test_middle_front_car_makes_room_in_the_other_retained_lane)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed (test_native_rules.NativeRulesTests.test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_noa_is_a_working_mandatory_merge_policy (test_native_rules.NativeRulesTests.test_noa_is_a_working_mandatory_merge_policy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_nonadjacent_lane_head_does_not_pull_the_local_head_phase (test_native_rules.NativeRulesTests.test_nonadjacent_lane_head_does_not_pull_the_local_head_phase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_occupied_target_lane_is_not_overwritten (test_native_rules.NativeRulesTests.test_occupied_target_lane_is_not_overwritten)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_ongoing_front_transfer_does_not_choose_a_second_helper (test_native_rules.NativeRulesTests.test_ongoing_front_transfer_does_not_choose_a_second_helper)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_opposite_sides_do_not_both_fill_the_same_physical_corridor (test_native_rules.NativeRulesTests.test_opposite_sides_do_not_both_fill_the_same_physical_corridor)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car (test_native_rules.NativeRulesTests.test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_physical_phase_interpolates_continuously_independent_of_lane_index (test_native_rules.NativeRulesTests.test_physical_phase_interpolates_continuously_independent_of_lane_index)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_position_and_relative_speed_feedback_has_a_gradual_response (test_native_rules.NativeRulesTests.test_position_and_relative_speed_feedback_has_a_gradual_response)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_rejected_lane_request_keeps_adjusting_the_physical_gap (test_native_rules.NativeRulesTests.test_rejected_lane_request_keeps_adjusting_the_physical_gap)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_retained_lane_head_does_not_follow_an_ending_car_behind (test_native_rules.NativeRulesTests.test_retained_lane_head_does_not_follow_an_ending_car_behind)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_retained_lanes_restore_their_missing_cell_before_the_drop (test_native_rules.NativeRulesTests.test_retained_lanes_restore_their_missing_cell_before_the_drop)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_selected_local_cell_survives_lateral_motion_and_completion (test_native_rules.NativeRulesTests.test_selected_local_cell_survives_lateral_motion_and_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_transform_approaches_current_gap_without_skipping_its_front (test_native_rules.NativeRulesTests.test_transform_approaches_current_gap_without_skipping_its_front)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_two_lane_reforming_can_still_observe_an_unmerged_car_behind (test_native_rules.NativeRulesTests.test_two_lane_reforming_can_still_observe_an_unmerged_car_behind)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_unit_head_does_not_build_a_formation_chain_to_a_visible_distant_front (test_native_rules.NativeRulesTests.test_unit_head_does_not_build_a_formation_chain_to_a_visible_distant_front)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_upstream_extra_car_fills_the_nearby_missing_middle_slot (test_native_rules.NativeRulesTests.test_upstream_extra_car_fills_the_nearby_missing_middle_slot)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_upstream_fill_does_not_send_a_less_populated_lane_to_a_crowded_one (test_native_rules.NativeRulesTests.test_upstream_fill_does_not_send_a_less_populated_lane_to_a_crowded_one)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+======================================================================
+ERROR: test_visible_front_sequence_follows_the_nearest_physical_front (test_native_rules.NativeRulesTests.test_visible_front_sequence_follows_the_nearest_physical_front)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\variants\phase5g_pure_formation\tests\test_native_rules.py", line 11, in setUp
+    importlib.util.find_spec("noa.native_rules"), "缺少原生SUMO的本车规则模块"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib.util>", line 111, in find_spec
+ValueError: noa.native_rules.__spec__ is None
+
+----------------------------------------------------------------------
+Ran 46 tests in 0.013s
+
+FAILED (errors=46)

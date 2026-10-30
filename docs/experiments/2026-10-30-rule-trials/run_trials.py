@@ -81,6 +81,8 @@ def main():
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     batch = REPO / "tmp/literature_trials/batches" / (stamp + "_" + args.stage)
     batch.mkdir(parents=True, exist_ok=False)
+    driver = Path(__file__).read_bytes()
+    (batch / "driver.py").write_bytes(driver)
     tasks, sources = [], {}
     for item in args.candidate:
         name, _, location = item.partition("=")
@@ -96,7 +98,8 @@ def main():
                                           scenario=scenario, mode=mode, source=str(source),
                                           duration=args.duration, max_time=args.max_time,
                                           output=str(batch / "cases" / f"{name}_{flow:g}_{seed}_{scenario}_{mode}")))
-    write(batch / "protocol.json", dict(arguments=vars(args), base_commit=BASE, sources=sources, tasks=tasks))
+    write(batch / "protocol.json", dict(arguments=vars(args), base_commit=BASE, sources=sources, tasks=tasks,
+                                       driver_sha256=hashlib.sha256(driver).hexdigest()))
     rows = []
     print(json.dumps(dict(batch=str(batch), cases=len(tasks))), flush=True)
     with ThreadPoolExecutor(max_workers=args.jobs) as pool:

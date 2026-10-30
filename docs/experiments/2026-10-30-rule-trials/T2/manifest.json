@@ -1,0 +1,19 @@
+{
+  "candidate": "T2",
+  "parent": "T",
+  "parent_source_sha256": "046f00aa397b7f4ff306f3fbb796c97565b743550a9dae608572e88f5a8cc02b",
+  "candidate_source": "tmp/literature_trials/T2/native_rules.py",
+  "changed_function": "_front_following",
+  "weight": 0.5,
+  "sha256": {
+    "tmp/literature_trials/T/native_rules.py": "046f00aa397b7f4ff306f3fbb796c97565b743550a9dae608572e88f5a8cc02b",
+    "tmp/literature_trials/T2/native_rules.py": "5f452480f54b701fa564e8a45c6384bb4d432cdccbee24b285c7f3a4e589e34f",
+    "docs/experiments/2026-10-30-rule-trials/T2/test_two_fronts.py": "fe954f868e6820b46bd77456188b3d072ff6b10aaa33446e59631cb9f1d27568",
+    "docs/experiments/2026-10-30-rule-trials/T2/method.md": "d5037b0ad56ae125a8d08a1a44df16030d85d041df0d5b712a31093c2c0ac46c",
+    "docs/experiments/2026-10-30-rule-trials/T2/rules.patch": "f6b694eb05826f963fc35508c3fe39ef7e66c0d571905c8fc7814ffa29a4afcd"
+  },
+  "red": "results/operations/20261030T004754532129Z_literature_T2_two_front_red_64150ca2",
+  "green": "results/operations/20261030T004817598136Z_literature_T2_two_front_green_ffd33240",
+  "static_tests": 10,
+  "simulation_runs": 0
+}

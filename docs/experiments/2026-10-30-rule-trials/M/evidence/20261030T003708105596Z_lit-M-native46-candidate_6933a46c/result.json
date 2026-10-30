@@ -1,0 +1,36 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "docs/experiments/2026-10-30-rule-trials/M/run_affected_regression.py",
+    "--source",
+    "candidate",
+    "--suite",
+    "native"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 60.0,
+  "started_utc": "2026-10-30T00:37:08.105596+00:00",
+  "status": "failed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 134988,
+  "execution_status": "failed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 1,
+  "child_returncode": 1,
+  "elapsed_s": 0.437,
+  "ended_utc": "2026-10-30T00:37:08.546211+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "8cefcfc548637e9ad51b94e6e395608e5d47bb15304424c9e68787c1c7a60771",
+    "stderr.log": "f814c5309ca19d58ad3ee98eb4315c4c0b54df7b04b2847ac0333eeb365d45f9"
+  },
+  "archive_errors": {}
+}

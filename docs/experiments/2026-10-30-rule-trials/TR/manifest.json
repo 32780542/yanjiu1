@@ -1,0 +1,20 @@
+{
+  "candidate": "TR",
+  "parent": "T",
+  "parent_source_sha256": "046f00aa397b7f4ff306f3fbb796c97565b743550a9dae608572e88f5a8cc02b",
+  "recovery_source_sha256": "cba7c9a1fb74c25192fed4765c75626bb78117c0a5c6e3f1a6dfb9b9166f722d",
+  "candidate_source": "tmp/literature_trials/TR/native_rules.py",
+  "recovery_duration_s": 0.5,
+  "sha256": {
+    "tmp/literature_trials/T/native_rules.py": "046f00aa397b7f4ff306f3fbb796c97565b743550a9dae608572e88f5a8cc02b",
+    "tmp/literature_trials/R/native_rules.py": "cba7c9a1fb74c25192fed4765c75626bb78117c0a5c6e3f1a6dfb9b9166f722d",
+    "tmp/literature_trials/TR/native_rules.py": "2acc9fb989801581ddc555c683eafb6c80916a12ab1810c45c2507cfd6c36f3a",
+    "docs/experiments/2026-10-30-rule-trials/TR/test_recovery_on_T.py": "658ffd77d3c2fc79b0ad39b8adc60cc02e0e1f48f8afb983f358ee48d6daaef0",
+    "docs/experiments/2026-10-30-rule-trials/TR/method.md": "0b78070c4254505bc240a3dee11ea190c81b01e7d86e55cbd830c324fd2bd9c9",
+    "docs/experiments/2026-10-30-rule-trials/TR/rules.patch": "933474ea72baa3d194f20dba3717bd50ffc499898ab8ca26e58e88c1ce301c1d"
+  },
+  "red": "results/operations/20261030T005415119764Z_literature_TR_recovery_red_5f302d01",
+  "green": "results/operations/20261030T005445864100Z_literature_TR_recovery_green_7d86f934",
+  "static_tests": 9,
+  "simulation_runs": 0
+}

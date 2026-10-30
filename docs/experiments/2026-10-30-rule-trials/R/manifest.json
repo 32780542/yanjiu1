@@ -1,0 +1,25 @@
+{
+  "candidate": "R",
+  "baseline_git": "8ed11d90ac457269b2175e20aec5ba1bbba8a318",
+  "candidate_path": "tmp/literature_trials/R/native_rules.py",
+  "sha256": {
+    "variants/phase5g_pure_formation/noa/native_rules.py": "ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d",
+    "tmp/literature_trials/R/native_rules.py": "cba7c9a1fb74c25192fed4765c75626bb78117c0a5c6e3f1a6dfb9b9166f722d",
+    "docs/experiments/2026-10-30-rule-trials/R/rules.patch": "ef62a484a70a25f0bd2a4c2bcdbb05eb15937433801df039655aa004dad06bb4",
+    "docs/experiments/2026-10-30-rule-trials/R/test_recovery.py": "218e1d9f95ab23e314be8be1b11dd8c34673d23202360840a1826df2f5a27560",
+    "docs/experiments/2026-10-30-rule-trials/R/method.md": "eb67b7d287ed7cf1a743d245cfbe689f4c1d51a0a9e78e7b8dad2008c3d2a6ce"
+  },
+  "red": "results/operations/20261030T003054422101Z_literature_R_recovery_red_2d5c67d7",
+  "green": "results/operations/20261030T003301457804Z_literature_R_recovery_final_static_309b0f17",
+  "static_tests": {
+    "new": 8,
+    "existing": 46,
+    "passed": 54
+  },
+  "simulation_runs": 0,
+  "assumptions": [
+    "existing monotonic Vehicle.time",
+    "fixed 0.5 s linear organization-reference recovery",
+    "only when merge gap front equals current physical near predecessor"
+  ]
+}

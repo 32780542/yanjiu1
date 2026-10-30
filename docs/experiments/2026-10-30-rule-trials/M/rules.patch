@@ -1,0 +1,73 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -198,8 +198,19 @@
+     return head, helper
+ 
+ 
++def cf_speed(car, rows):
++    """Public same-frame physical-front CF response; no neighbor intent or memory."""
++    front = min(
++        (c for c in rows if 0.0 < c.x - car.x <= 50.0 and _occupies(c, car.lane, 0.0)),
++        key=lambda c: (c.x, c.y, c.speed, c.vy), default=None,
++    )
++    requested = (_request(car, front.x - GAP, front.speed) if front is not None
++                 else _request(car, car.x, CRUISE))
++    return min(requested, safe_speed(car, rows))
++
++
+ def _fill(ego, rows, lanes):
+-    """将局部未成层的余车补入前方空位；已经完整的层不被拆散。"""
++    """保留形成收益，优先选择同帧CF响应损失较小且后车无需强制动的补位。"""
+     component = _component(ego, rows)
+     cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0)
+     if len(cars) < lanes:
+@@ -231,6 +242,36 @@
+         and abs(c.vy) < 0.1
+         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+     ]
++    observed = (ego, *rows)
++    costs = {}
++
++    def response_cost(car, lane):
++        key = (car.track, lane)
++        if key in costs:
++            return costs[key]
++        followers = [
++            max((c for c in observed if c.track != car.track and c.x < car.x
++                 and _occupies(c, corridor, 0.0)),
++                key=lambda c: (c.x, c.y, c.speed, c.vy), default=None)
++            for corridor in (lane, car.lane)
++        ]
++        moved = replace(car, lane=lane, y=(lane + 0.5) * LANE_WIDTH, vy=0.0)
++        after = tuple(moved if c.track == car.track else c for c in observed)
++        new_rear = followers[0]
++        # Native SUMO already uses a fixed 0.1 s frame and BRAKING=10 m/s2.
++        # Bound the target follower separately; release elsewhere cannot pay it off.
++        if new_rear is not None and cf_speed(new_rear, after) < new_rear.speed - BRAKING * 0.1 - 1e-9:
++            costs[key] = None
++            return None
++        affected = [car]
++        for follower in followers:
++            if follower is not None and all(c.track != follower.track for c in affected):
++                affected.append(follower)
++        cost = sum(max(0.0, cf_speed(c, observed) - cf_speed(
++            moved if c.track == car.track else c, after)) for c in affected)
++        costs[key] = cost
++        return cost
++
+     choices = []
+     for center in centers:
+         window = [c for c in component if c.lane < lanes and center - 60.0 <= c.x <= center + 30.0]
+@@ -262,8 +303,10 @@
+                 ):
+                     reference = max(references, key=lambda c: (c.lane, c.x))
+                     target = reference.x + phase(reference.lane) - phase(lane)
+-                    score = (-center, abs(target - car.x), -car.x, -car.lane, -lane)
+-                    choices.append((score, car, lane))
++                    cost = response_cost(car, lane)
++                    if cost is not None:
++                        score = (cost, -center, abs(target - car.x), -car.x, -car.lane, -lane)
++                        choices.append((score, car, lane))
+     if not choices:
+         return None
+     _, car, lane = min(choices, key=lambda item: item[0])

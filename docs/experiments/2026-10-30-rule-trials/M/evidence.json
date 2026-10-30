@@ -1,0 +1,156 @@
+[
+  {
+    "operation": "20261030T003018348567Z_lit-M-tdd-red-fill_0b84b8de",
+    "purpose": "red: 7 tests, 2 intended behavioral failures",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "a18ad3b08bfb1b2abcd3c7fdb0b34b2b434bddb10c5ba54c8e27f18010fb695c",
+      "stdout.log": "52ff837813f3c48536c369282e87fa7ec5a2a8f19ac954618721d9d2c008d3b8",
+      "stderr.log": "2eec58ff4ae729331fc06b0a7b935a54db1dc326ede436480dcf2980f140e52c"
+    }
+  },
+  {
+    "operation": "20261030T003107886339Z_lit-M-tdd-red-cf-and-ranking_290bb13f",
+    "purpose": "red: 9 tests, 2 intended behavioral failures plus 2 missing CF helper failures",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "78c1e890af3cbf4d79da36049441dc38106cba255823694c3559ebc473d3eec6",
+      "stdout.log": "52ff837813f3c48536c369282e87fa7ec5a2a8f19ac954618721d9d2c008d3b8",
+      "stderr.log": "f229bea6d87972c7933a1f6cbe5b71f59e38548cbe086c2d50b440d5e5578a39"
+    }
+  },
+  {
+    "operation": "20261030T003156024199Z_lit-M-tdd-green-fill_c69925a2",
+    "purpose": "green: 9 candidate contracts",
+    "status": "completed",
+    "returncode": 0,
+    "files": {
+      "result.json": "79b1d552a930845a9e76c9f0bb19219b1452a59e722009d273cf656e302d43a5",
+      "stdout.log": "663cf540337d41660ec8ed674d977eebb3d17df7d6c924287b5777c9be6d13e1",
+      "stderr.log": "1fe3ad54525d46e3e305174b83f3e5f4da295fcb5d4b5ceb0decb79e06a1b0b2"
+    }
+  },
+  {
+    "operation": "20261030T003323398980Z_lit-M-affected-static-regression_fe5d73c0",
+    "purpose": "exploratory too broad: included one accidental 3-second SUMO test and exact-P equivalence; not adoption evidence",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "03ab995558e4031b93e927b52d9f7a819464f678b4a30a1ae304039dee8c222f",
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr.log": "1eda77738bd802de248c55297f676891632343e7f2813709e5a390d658efe793"
+    }
+  },
+  {
+    "operation": "20261030T003426583356Z_lit-M-frozen-baseline-static_241bee3a",
+    "purpose": "invalid exploratory loader: missing module __spec__ causes 46 loading errors; superseded",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "ecee411809fad0914af7b04de1737bcb66dcb460e619270ae40c052a4dd1bd9c",
+      "stdout.log": "c726fb756218b7e76ade4bf46dfe594e0e8c247b0fef651dee2dcd2752601f4f",
+      "stderr.log": "49626c9aa8e44b4bb2011e5477b25078dcd29fa598e5bae09437640d27ce1186"
+    }
+  },
+  {
+    "operation": "20261030T003426592708Z_lit-M-candidate-static_7d6d9a11",
+    "purpose": "invalid exploratory loader: missing module __spec__ causes 46 loading errors; superseded",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "628575e0f8c4d63adc489f24b5556880680578bdf19405740eb41be53071eec9",
+      "stdout.log": "fc964facae440f209ca3e3a07c284ed981e4fdd12c19b091f0a76e7827fb8332",
+      "stderr.log": "1d71886372306a8787967a0afb0a8352dd4592efc90224a64b6ca4718142bf01"
+    }
+  },
+  {
+    "operation": "20261030T003510642882Z_lit-M-legacy-root-cause_82a2d759",
+    "purpose": "unique-module legacy fixture root cause; no source change",
+    "status": "completed",
+    "returncode": 0,
+    "files": {
+      "result.json": "2ede4313c95eee81a99739a3493c7f80d4ed17b055ab981ff28ee6ca5afc2c8c",
+      "stdout.log": "897fbadf1c441cb9918d3b46a30ec194d52c2280a83ee093bc3ff4a2ed733b4f",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T003554470146Z_lit-M-final-unit-contracts_5f1853fb",
+    "purpose": "final: 13 candidate contracts pass",
+    "status": "completed",
+    "returncode": 0,
+    "files": {
+      "result.json": "dba6f661cd929085ca350498df6156e803355c68c25b1bb3302820fd504442d0",
+      "stdout.log": "663cf540337d41660ec8ed674d977eebb3d17df7d6c924287b5777c9be6d13e1",
+      "stderr.log": "d5cf81021a9480b1bee5b316998cf44cc8a60c738a06c715341c3b07aa0b269b"
+    }
+  },
+  {
+    "operation": "20261030T003708081029Z_lit-M-native46-baseline_914a7d7f",
+    "purpose": "invalid exploratory loader: __spec__ omitted; superseded",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "83f733d70e93059c821ec46929a2bd0e51c086d7a4c2be79207157138f82512a",
+      "stdout.log": "ecec2c700734940d541c246854207fb4e62bae37849d20b67df9208cba81dc95",
+      "stderr.log": "6b724aab6a71381233d1f458f9acafb00b5895259415cc879637d551898f8a20"
+    }
+  },
+  {
+    "operation": "20261030T003708105596Z_lit-M-native46-candidate_6933a46c",
+    "purpose": "invalid exploratory loader: __spec__ omitted; superseded",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "57127b5eacede750336114e6ce0d6f1a30ed3f6e4c1071fceaae0842520dbe8d",
+      "stdout.log": "8cefcfc548637e9ad51b94e6e395608e5d47bb15304424c9e68787c1c7a60771",
+      "stderr.log": "f814c5309ca19d58ad3ee98eb4315c4c0b54df7b04b2847ac0333eeb365d45f9"
+    }
+  },
+  {
+    "operation": "20261030T003753101597Z_lit-M-native46-baseline-valid-spec_1a477ed2",
+    "purpose": "final: existing native46 baseline pass",
+    "status": "completed",
+    "returncode": 0,
+    "files": {
+      "result.json": "d71a5c9d67c9383c0e47376e9f1ca3b4b92d5d33df80167dfa16f6e47568219a",
+      "stdout.log": "ecec2c700734940d541c246854207fb4e62bae37849d20b67df9208cba81dc95",
+      "stderr.log": "4c9418c3ebf051a8ba476385057450489f226297018965078bb202f3f5919f48"
+    }
+  },
+  {
+    "operation": "20261030T003753111916Z_lit-M-native46-candidate-valid-spec_8c288fb3",
+    "purpose": "final: existing native46 candidate pass",
+    "status": "completed",
+    "returncode": 0,
+    "files": {
+      "result.json": "416cc85325a1e6eef862287dcd06ece5b89ae4b3f8d898b499673ee47cc25440",
+      "stdout.log": "8cefcfc548637e9ad51b94e6e395608e5d47bb15304424c9e68787c1c7a60771",
+      "stderr.log": "9807bdd3aa4bbe228f76502108689efee38c9d707dc545befc51412dc8e36cca"
+    }
+  },
+  {
+    "operation": "20261030T003801081350Z_lit-M-baseline-compat-valid-spec_35e82fe7",
+    "purpose": "exploratory static compatibility: 72 baseline; 69 pass, 3 historical assertions fail, 0 errors",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "3d849279cf0bcd11ffa3664d9216015329595ee440efcb29bdf569998ef41d67",
+      "stdout.log": "13c34b566d152338c9742bc87ea5e2b9485e77f94f4066bd802d905420c1176a",
+      "stderr.log": "aa91a1579359dc9ecdb6cc782338e85689cfcd991d6745f227ad616778d2ee13"
+    }
+  },
+  {
+    "operation": "20261030T003801102284Z_lit-M-candidate-compat-valid-spec_9d4a610a",
+    "purpose": "exploratory static compatibility: 72 candidate; identical 3 historical assertions fail, 0 errors",
+    "status": "failed",
+    "returncode": 1,
+    "files": {
+      "result.json": "f3c709c149455dad3d87c909f58ce593ad7e4260b4f0c5e9abc76fc8199cfe30",
+      "stdout.log": "d877fd8f844ab3fc394ac5e86048cb17a84b5d5e11fb0598a0148e2fd4bd22ac",
+      "stderr.log": "c31add13023cc60457e1525b0183053b00fd6c2572df09f3f54ce26d10322812"
+    }
+  }
+]

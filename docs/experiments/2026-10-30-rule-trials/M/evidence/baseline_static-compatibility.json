@@ -1,0 +1,22 @@
+{
+  "source": "baseline",
+  "suite": "static-compatibility",
+  "sha256": "ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d",
+  "tests_run": 72,
+  "simulation_tests_excluded": true,
+  "failures": [
+    {
+      "test": "test_physical_following.PhysicalFollowingTests.test_a_join_is_finished_longitudinally_before_another_free_fill",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_physical_following.py\", line 39, in test_a_join_is_finished_longitudinally_before_another_free_fill\n    self.assertTrue(memory.joining)\nAssertionError: False is not true\n"
+    },
+    {
+      "test": "test_physical_following.PhysicalFollowingTests.test_heads_align_the_first_row_instead_of_accepting_a_one_row_offset",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_physical_following.py\", line 45, in test_heads_align_the_first_row_instead_of_accepting_a_one_row_offset\n    self.assertAlmostEqual(command.target_x, 730.0)\nAssertionError: 706.6666666666666 != 730.0 within 7 places (23.33333333333337 difference)\n"
+    },
+    {
+      "test": "test_physical_following.PhysicalFollowingTests.test_real_negative_reference_cycle_has_no_cross_lane_speed_feedback",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_physical_following.py\", line 31, in test_real_negative_reference_cycle_has_no_cross_lane_speed_feedback\n    self.assertGreaterEqual(command.speed, 26.8)\nAssertionError: 5.360000000000003 not greater than or equal to 26.8\n"
+    }
+  ],
+  "errors": []
+}
