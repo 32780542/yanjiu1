@@ -1,0 +1,52 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -9,6 +9,7 @@
+ SPEED_RELAXATION = 0.2  # 0.1 s step / 0.5 s following response
+ WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.0
+ LENGTH, STANDSTILL, BRAKING, RESPONSE = 4.0, 1.5, 10.0, 0.2
++HEADWAY = (GAP - LENGTH - STANDSTILL) / CRUISE
+ 
+ 
+ @dataclass(frozen=True, slots=True)
+@@ -101,13 +102,23 @@
+     ), pair_lanes
+ 
+ 
++def _front_following(ego, rows):
++    """同一实际前车时距跟驰，供NOA和编队共用。"""
++    front = min(
++        (c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)),
++        key=lambda c: (c.x, c.y, c.speed), default=None,
++    )
++    if front is None:
++        return CRUISE, None, None, 0
++    target = front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed
++    return _request(ego, target, front.speed), target, front.track, 1
++
++
+ def _following(ego, rows, lanes, phase_boundary=None):
+     """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
+-    fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
+-    front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
+-    if front is not None:
+-        target = front.x - GAP
+-        return _request(ego, target, front.speed), target, front.track, 1
++    following = _front_following(ego, rows)
++    if following[2] is not None:
++        return following
+     cars = (ego, *rows)
+ 
+     def is_head(car):
+@@ -322,8 +333,10 @@
+             drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
+         )
+         if organized
+-        else (CRUISE, None, None, 0)
+-    )
++        else _front_following(ego, rows)
++    )
++    if not organized:
++        formation_state = 0
+ 
+     def action(speed, lane, reason, target_x=None, reference=None):
+         return Command(speed, lane, reason, target_x, reference, formation_state)

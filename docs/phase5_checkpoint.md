@@ -718,3 +718,13 @@
 - 文献离线核验operation`20261029T175521159104Z_literature-final-catalog-verification_be14dba2`退出0：150条CSV/BibTeX、17处主报告引用、44条本地链接、原始输入SHA与生产代码未变通过。此前一次因合法的TU/e全文备用链接未列入检查表而失败，已补充该来源并另留成功记录。五份主目录文件离线重建逐字节一致，见`reproducibility.json`。最终出版核验以文献目录中的`verification.json`及Git提交为准。
 
 **接续入口：**先读本轮方法建议与A/B/C重点笔记，再读当前`native_rules.py`。下一项候选是单前车固定时距；目前仍未实施、未宣称其提高交通效率。本轮文献目录及研究进度随检查点保存至用户远端`yanjiu1/main`，现有P正式负结果保持原样。
+
+### 2026-10-30：文献建议的独立规则试验已启动
+
+用户授权分别试验，采用有用项并用GitHub管理。协议为`docs/experiments/2026-10-30-rule-trials/protocol.md`，计划为`docs/superpowers/plans/2026-10-30-literature-rule-trials.md`。在原主目录工作，生产规则仍为8ed11d9对应版本，候选不先装入主入口。研究分支`research/20261030-rule-trials`随单元提交至远端`yanjiu1`。
+
+- T为共用实际前车固定时距，巡航仍30米，h=.8506944444；NOA状态0，原NOA另留。候选规则SHA046f00aa…，7项合同先有6个预期断言失败再全部通过；T方法及补丁放在本轮目录。M/R由隔离候选分别实现，均未修改生产文件。
+- `run_trials.py`冻结必要源及配置，每工况独立进程/目录；初筛base/T 32例正在运行，operation`20261030T003244549091Z_literature-screen-base-T_8f4b7c0a`，batch`tmp/literature_trials/batches/20261030T003244862597Z_screen`。1250/1500，种子1/4，直路/3→2，NOA/transform，600秒需求/900秒上限，jobs4。每个已完成例均保留原source/input/result/trips/positions，不改旧记录。
+- 独立检查发现worker早期超时的临时result缺少最终字段时会抛KeyError。针对性测试先失败，改为读取可缺失的最终字段后通过，operation`20261030T003839724166Z_literature-runner-timeout-green_89d0573b`。新批使用修正；当前运行批次已加载原驱动、已完成数据不受影响。外层run_logged私有Windows Job管理全树；未观察到孤儿进程。
+
+**断流后下一入口：**检查上述operation/manifest和进程再继续，不重启相同批次。完成T车串、M/R独立筛查后再选择组合；尚无最终采用结论，不用单种子燃油改善代替五流量验证。Git认证管理器在本机报运行时错误，使用现有Windows GitHub凭据的内存授权完成推送，不在文件或日志保存令牌。
