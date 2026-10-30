@@ -10,6 +10,7 @@ import random
 import sys
 from tempfile import TemporaryDirectory
 import unittest
+from archived_rules_source import load_state_enabled_base
 
 from noa import native_rules as rules
 from experiments import native_sumo as native
@@ -117,6 +118,11 @@ class FormationStateStatisticsTests(unittest.TestCase):
 
 class StateOnlyChangeTests(unittest.TestCase):
     def test_control_and_memory_match_frozen_P_across_local_states(self):
+        """Keep the published state-only change tied to its original controller."""
+        archived = load_state_enabled_base("state_only_P")
+        def archived_car(track, x, lane=0, speed=28.8):
+            return archived.Vehicle(track, x, (lane + 0.5) * archived.LANE_WIDTH, speed, lane)
+
         path = (
             Path(__file__).resolve().parents[3]
             / "docs/experiments/2026-10-29-four-flow-attribution/portable_P/source/noa/native_rules.py"
@@ -132,23 +138,19 @@ class StateOnlyChangeTests(unittest.TestCase):
         rng = random.Random(20261029)
         for mode in ("noa", "formation", "transform"):
             for _ in range(300):
-                ego = car(0, rng.uniform(0, 1200), rng.randrange(3), rng.uniform(0, 33.3))
+                ego = archived_car(0, rng.uniform(0, 1200), rng.randrange(3), rng.uniform(0, 33.3))
                 rows = tuple(
-                    car(
-                        i + 1,
-                        ego.x + rng.uniform(-120, 220),
-                        rng.randrange(3),
-                        rng.uniform(0, 33.3),
-                    )
+                    archived_car(i + 1, ego.x + rng.uniform(-120, 220),
+                                 rng.randrange(3), rng.uniform(0, 33.3))
                     for i in range(7)
                 )
-                memory = rules.Memory(
+                memory = archived.Memory(
                     lane_target=rng.choice((None, 0, 1, 2)),
                     gap=rng.choice((None, (1, 2))),
                     joining=rng.choice((True, False)),
                 )
                 boundary = rng.choice((None, 1000.0))
-                actual, after = rules.decide(ego, rows, memory, mode, boundary)
+                actual, after = archived.decide(ego, rows, memory, mode, boundary)
                 expected, old_after = old.decide(
                     old.Vehicle(**asdict(ego)),
                     tuple(old.Vehicle(**asdict(c)) for c in rows),

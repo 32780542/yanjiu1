@@ -9,6 +9,7 @@ POSITION_GAIN = 0.3
 SPEED_RELAXATION = 0.2  # 0.1 s step / 0.5 s following response
 WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.0
 LENGTH, STANDSTILL, BRAKING, RESPONSE = 4.0, 1.5, 10.0, 0.2
+HEADWAY = (GAP - LENGTH - STANDSTILL) / CRUISE
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,13 +102,23 @@ def _pair_error(car, peer, lanes, phase_boundary=None):
     ), pair_lanes
 
 
+def _front_following(ego, rows):
+    """同一实际前车时距跟驰，供NOA和编队共用。"""
+    front = min(
+        (c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)),
+        key=lambda c: (c.x, c.y, c.speed), default=None,
+    )
+    if front is None:
+        return CRUISE, None, None, 0
+    target = front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed
+    return _request(ego, target, front.speed), target, front.track, 1
+
+
 def _following(ego, rows, lanes, phase_boundary=None):
     """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
-    fronts = [c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)]
-    front = min(fronts, key=lambda c: (c.x, c.y, c.speed), default=None)
-    if front is not None:
-        target = front.x - GAP
-        return _request(ego, target, front.speed), target, front.track, 1
+    following = _front_following(ego, rows)
+    if following[2] is not None:
+        return following
     cars = (ego, *rows)
 
     def is_head(car):
@@ -198,8 +209,13 @@ def _make_room(ego, rows):
     return head, helper
 
 
+def cf_speed(car, rows):
+    """Predict the same public following law without another car's private stage."""
+    return min(_front_following(car, rows)[0], safe_speed(car, rows))
+
+
 def _fill(ego, rows, lanes):
-    """将局部未成层的余车补入前方空位；已经完整的层不被拆散。"""
+    """保留形成收益，优先选择同帧CF响应损失较小且后车无需强制动的补位。"""
     component = _component(ego, rows)
     cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0)
     if len(cars) < lanes:
@@ -231,6 +247,36 @@ def _fill(ego, rows, lanes):
         and abs(c.vy) < 0.1
         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
     ]
+    observed = (ego, *rows)
+    costs = {}
+
+    def response_cost(car, lane):
+        key = (car.track, lane)
+        if key in costs:
+            return costs[key]
+        followers = [
+            max((c for c in observed if c.track != car.track and c.x < car.x
+                 and _occupies(c, corridor, 0.0)),
+                key=lambda c: (c.x, c.y, c.speed, c.vy), default=None)
+            for corridor in (lane, car.lane)
+        ]
+        moved = replace(car, lane=lane, y=(lane + 0.5) * LANE_WIDTH, vy=0.0)
+        after = tuple(moved if c.track == car.track else c for c in observed)
+        new_rear = followers[0]
+        # Native SUMO already uses a fixed 0.1 s frame and BRAKING=10 m/s2.
+        # Bound the target follower separately; release elsewhere cannot pay it off.
+        if new_rear is not None and cf_speed(new_rear, after) < new_rear.speed - BRAKING * 0.1 - 1e-9:
+            costs[key] = None
+            return None
+        affected = [car]
+        for follower in followers:
+            if follower is not None and all(c.track != follower.track for c in affected):
+                affected.append(follower)
+        cost = sum(max(0.0, cf_speed(c, observed) - cf_speed(
+            moved if c.track == car.track else c, after)) for c in affected)
+        costs[key] = cost
+        return cost
+
     choices = []
     for center in centers:
         window = [c for c in component if c.lane < lanes and center - 60.0 <= c.x <= center + 30.0]
@@ -262,8 +308,10 @@ def _fill(ego, rows, lanes):
                 ):
                     reference = max(references, key=lambda c: (c.lane, c.x))
                     target = reference.x + phase(reference.lane) - phase(lane)
-                    score = (-center, abs(target - car.x), -car.x, -car.lane, -lane)
-                    choices.append((score, car, lane))
+                    cost = response_cost(car, lane)
+                    if cost is not None:
+                        score = (cost, -center, abs(target - car.x), -car.x, -car.lane, -lane)
+                        choices.append((score, car, lane))
     if not choices:
         return None
     _, car, lane = min(choices, key=lambda item: item[0])
@@ -322,8 +370,10 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
         )
         if organized
-        else (CRUISE, None, None, 0)
+        else _front_following(ego, rows)
     )
+    if not organized:
+        formation_state = 0
 
     def action(speed, lane, reason, target_x=None, reference=None):
         return Command(speed, lane, reason, target_x, reference, formation_state)

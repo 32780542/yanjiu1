@@ -359,7 +359,7 @@ def main():
                 "Per-case segment means cover independently eligible vehicles. Paired segment means/deltas use the common per-vehicle eligible set; counts and vehicle rows are retained.",
                 "All case rows remain visible. Unsafe, incomplete, invalid or mismatched pairs have no deltas; their aggregate group is suppressed.",
                 "Candidate-minus-base holds mode fixed. Transform-minus-NOA holds candidate fixed; base NOA remains the original reference.",
-                "A rule changing regular longitudinal following also changes candidate NOA; its transform-minus-NOA comparison cannot isolate a formation-only effect.",
+                "T-minus-base includes the changed following law. Same-candidate NOA/transform shares that law; its remaining differences include organization, cooperative merging and overtaking policy, so it is a complete-strategy comparison rather than a formation-only ablation.",
                 "Only noa/native_rules.py source differences are permitted across paired runs; every saved snapshot is hash-verified.",
                 "Per-case observed flag/segment/subset values on unsafe or incomplete runs are descriptive and excluded from paired aggregates."]
     clean_cases = [{k: v for k, v in row.items() if not k.startswith("_")} for row in cases]

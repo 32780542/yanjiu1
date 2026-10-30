@@ -5,6 +5,7 @@ from pathlib import Path
 import random
 import sys
 import unittest
+from archived_rules_source import load_state_enabled_base
 
 P=Path(__file__).resolve().parents[1];sys.path.insert(0,str(P))
 from noa import native_rules as r
@@ -80,25 +81,31 @@ class CommonPairHeadTests(unittest.TestCase):
         self.assertEqual((speed,target,reference,state),r._following(ego,changed,2,phase_boundary=640.))
 
     def test_all_actual_front_body_actions_remain_H_exact(self):
+        """Historical P/state-only refactor contract, before time-headway trials."""
+        archived=load_state_enabled_base('common_pair_body')
+        car=lambda x,lane,track=0,speed=28.8: archived.Vehicle(track,x,(lane+.5)*3.3,speed,lane)
         rng=random.Random(600)
         for mode in ['formation','transform']:
             for _ in range(80):
-                ego=self.car(rng.uniform(100,1100),rng.randrange(3),speed=rng.uniform(10,32))
-                front=self.car(ego.x+rng.uniform(8,45),ego.lane,1,speed=rng.uniform(10,32))
-                rear=self.car(ego.x-15,ego.lane,2)
-                peers=[self.car(ego.x+rng.uniform(-40,40),rng.randrange(3),i+3) for i in range(3)]
+                ego=car(rng.uniform(100,1100),rng.randrange(3),speed=rng.uniform(10,32))
+                front=car(ego.x+rng.uniform(8,45),ego.lane,1,speed=rng.uniform(10,32))
+                rear=car(ego.x-15,ego.lane,2)
+                peers=[car(ego.x+rng.uniform(-40,40),rng.randrange(3),i+3) for i in range(3)]
                 rows=(front,rear,*peers)
-                a,m=r.decide(ego,rows,r.Memory(),mode,1000.)
+                a,m=archived.decide(ego,rows,archived.Memory(),mode,1000.)
                 b,n=H.decide(H.Vehicle(**asdict(ego)),tuple(H.Vehicle(**asdict(c)) for c in rows),H.Memory(),mode,1000.)
                 control=asdict(a);control.pop('formation_state')
                 self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))
 
     def test_NOA_is_unchanged_even_with_compressed_rears(self):
+        """Historical P/state-only NOA contract, not a claim about new following."""
+        archived=load_state_enabled_base('common_pair_noa')
+        car=lambda x,lane,track=0,speed=28.8: archived.Vehicle(track,x,(lane+.5)*3.3,speed,lane)
         rng=random.Random(800)
         for _ in range(160):
-            ego=self.car(rng.uniform(0,1100),rng.randrange(3),speed=rng.uniform(0,33.3))
-            rows=(self.car(ego.x-15,ego.lane,1),)+tuple(self.car(ego.x+rng.uniform(-100,200),rng.randrange(3),i+2) for i in range(5))
-            a,m=r.decide(ego,rows,r.Memory(),'noa',1000.)
+            ego=car(rng.uniform(0,1100),rng.randrange(3),speed=rng.uniform(0,33.3))
+            rows=(car(ego.x-15,ego.lane,1),)+tuple(car(ego.x+rng.uniform(-100,200),rng.randrange(3),i+2) for i in range(5))
+            a,m=archived.decide(ego,rows,archived.Memory(),'noa',1000.)
             b,n=H.decide(H.Vehicle(**asdict(ego)),tuple(H.Vehicle(**asdict(c)) for c in rows),H.Memory(),'noa',1000.)
             control=asdict(a);control.pop('formation_state')
             self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))

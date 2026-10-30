@@ -35,7 +35,7 @@ Upstream time means the observed front-position crossing from x=100 to 600 m; bo
 
 Full-road TT/system time/fuel and entry wait remain the recorder's direct eligible metrics. Completed/departed subset values on failed or incomplete cases are retained as descriptive columns. Unsafe, incomplete, missing, mismatched or unauditable runs have no paired deltas. An aggregate with a bad pair is suppressed instead of silently averaging only successful seeds. A metric missing from any otherwise valid pair also has no aggregate mean.
 
-Candidate versus base estimates the whole candidate rule change within one mode. Transform versus NOA holds the candidate fixed. If T also changes ordinary longitudinal following, its NOA changes too: the T transform/NOA difference cannot establish a formation-only causal effect. The original base NOA remains separately visible. Small trial sets and unequal segment eligibility limit generalization; these tables are evidence for the fixed trial demand, not a literature-wide reproduction claim.
+Candidate versus base estimates the whole candidate rule change within one mode. T-minus-base includes the changed following law. Within the same T or TM candidate, NOA and transform share that longitudinal law; their remaining differences include organization, cooperative merging and overtaking policy. This is a complete-strategy comparison. TM-transform minus T-transform isolates the incremental fill-cost rule under the same new following. Original base NOA remains separately visible. M/R reuse base NOA explicitly; an absent same-candidate NOA table row is not a failed simulation. Segment eligibility and the tested demand are stated with each table.
 
 Fixture verification:
 

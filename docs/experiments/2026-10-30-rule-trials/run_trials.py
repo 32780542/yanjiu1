@@ -77,6 +77,7 @@ def main():
     parser.add_argument("--max-time", type=float, default=900.)
     parser.add_argument("--jobs", type=int, default=4)
     parser.add_argument("--all-modes", action="store_true", help="also run unchanged NOA for M/R")
+    parser.add_argument("--transform-only", nargs="*", default=[], help="explicitly reuse a proved unchanged NOA")
     args = parser.parse_args()
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     batch = REPO / "tmp/literature_trials/batches" / (stamp + "_" + args.stage)
@@ -89,7 +90,8 @@ def main():
         assert name and all(c.isalnum() or c == "_" for c in name)
         source = batch / "sources" / name
         sources[name] = freeze(source, Path(location).resolve() if location else None)
-        modes = ("noa", "transform") if name in ("base", "T") or args.all_modes else ("transform",)
+        modes = (("noa", "transform") if (name in ("base", "T") or args.all_modes)
+                 and name not in args.transform_only else ("transform",))
         for flow in args.flows:
             for seed in args.seeds:
                 for scenario in ("straight3", "lane_drop"):

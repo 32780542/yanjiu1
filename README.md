@@ -1,10 +1,10 @@
 # 多车道纯规则编队与车道减少变换
 
-当前主代码保留P的驾驶规则，新增本车输出的`formation_state=0/1`：已有局部编队跟驰、被跟驰或互选队首关系为1，孤立车和纯NOA为0，调距过程也计入。记录器直接汇总参与率、同时参与人数和连续1时长，新运行的常用比较入口不要求完整交错层。实现及验证见[本车状态说明](docs/experiments/2026-10-29-local-formation-state/README.md)。
+当前程序采用TM候选：NOA与编队共用单前车固定时距跟驰，自由补位增加邻车制动代价排序。时距约0.851秒，巡航时仍为30米。`formation_state=0/1`保持原定义：已有局部编队跟驰、被跟驰或互选队首关系为1，孤立车和纯NOA为0，调距过程也计入。记录器直接汇总参与率、同时参与人数和连续1时长。新增规则及独立试验见[本轮协议](docs/experiments/2026-10-30-rule-trials/protocol.md)。
 
-此前P的[独立验收](docs/2026-10-29-P独立验收报告.md)完成新种子6–10的100例及20例严格消融，全部安全排空，但四个流量均未实现全程交通提效；其中的编队数据采用当时完整层口径。后续R/S候选已否决并单独归档。新增状态未改变车辆运动，原交通结果保留。当前没有正在运行的实验。旧global为自建模型，其数值已退出Cai和最优集中式性能比较。
+本轮已完成80例独立/组合筛查和8例车串试验，保留时距与补位代价进入[新种子五流量验证](docs/experiments/2026-10-30-rule-trials/heldout_protocol.md)，250例正在运行。合流参考恢复及第二前车预瞄的补丁、数据继续留作研究记录。此前P的[独立验收](docs/2026-10-29-P独立验收报告.md)及否决的R/S结果按原版本保留；旧global仍为自建模型，不用于Cai或最优集中式性能排名。
 
-工作目录是 `D:\yanjiu1\keyan1`。当前主线使用真实SUMO发车和运动：每车观察前200米、后100米内所有车道的实车，用本车私有记忆和条件规则形成交错编队，完成3→2变换。巡航28.8m/s、最高33.3m/s，同道期望间距30米，相邻车道交错15米。
+工作目录是 `D:\yanjiu1\keyan1`。当前主线使用真实SUMO发车和运动：每车观察前200米、后100米内所有车道的实车，用本车私有记忆和条件规则形成交错编队，完成3→2变换。巡航28.8m/s、最高33.3m/s，巡航同道30米、相邻道交错15米；减速时同道期望间距随本车速度缩短。
 
 ## 接续研究先读什么
 
@@ -15,7 +15,8 @@
 4. [方法迭代记录](docs/2026-10-29-编队变换方法更新.md)：保留失败轨迹和被替换的方法，不作为现行规则定义。
 5. [MATLAB 控制调用链](docs/2026-10-29-MATLAB车辆控制调用链核查.md)与[Cai文献依据](docs/Cai2024全局方案对照依据.md)：完整代码的活跃控制链、可借鉴机制及原图记录。
 6. [前期方法诊断](docs/experiments/2026-10-29-four-flow-attribution/method_diagnostics/README.md)与[R/S候选档案](docs/experiments/2026-10-29-four-flow-attribution/R_S_diagnostics/README.md)：被否决方法的源码、对照与失败证据。
-7. [2026-10-30文献检索与方法建议](docs/research/2026-10-30-literature-review/README.md)：去重150篇，含可筛选目录、BibTeX、阅读深度及对形成/变换的具体建议。本轮为文献分析，固定时距等候选尚未写入控制代码。
+7. [2026-10-30文献检索与方法建议](docs/research/2026-10-30-literature-review/README.md)：去重150篇，含可筛选目录、BibTeX、阅读深度及形成/变换的文献依据。
+8. [规则试验协议](docs/experiments/2026-10-30-rule-trials/protocol.md)、[五流量验证方案](docs/experiments/2026-10-30-rule-trials/heldout_protocol.md)及[离线证据](docs/experiments/2026-10-30-rule-trials/evidence/README.md)：候选差异、各项作用和验收入口。
 
 ## 在这个文件夹打开窗口
 
@@ -41,9 +42,9 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 
 ## 方法怎样工作
 
-形成连接限于50米内的实际同道前车，目标位于其后30米。没有这类前车的头车，以28.8m/s为基础，按相邻道互选头车的位置误差最多上下调整2m/s，对齐各道首层。更远车辆仍参与安全判断；跨道对齐不复制邻车速度。双方使用同一个三道或两道构型，具体切换条件见系统说明第3.2节。
+形成连接限于50米内的实际同道前车，期望车头距为`4+1.5+0.8506944444×本车速度`米。NOA共用这一基础跟驰，只有组织模式进行跨道对齐。没有这类前车的头车，以28.8m/s为基础，按相邻道互选头车的位置误差最多上下调整2m/s，对齐各道首层。更远车辆仍参与安全判断。双方使用同一个三道或两道构型，具体切换条件见系统说明第3.2节。
 
-自由补位依据实际缺位、车道边界负荷差和物理候选顺序。争取同一层位的车辆使用同一层位附近窗口。横移前和横移中跟踪真实前后车辆构成的间隙；本车越出旧间隙后重新绑定当前位置。实际居中后按新道前车30米入列，纵向收敛后再参与自由补位。
+自由补位先检查实际缺位、车道边界负荷差和物理走廊。对有形成收益的候选，同帧比较本车、新旧道后车的公开基础跟驰响应，优先总制动代价较小的选择；目标道后车还有独立的10米/秒²制动上限。横移期间跟踪真实F/R空隙，越出旧间隙后重新绑定；实际居中后按新道真实前车的时距目标入列，纵向收敛后再参与补位。必要合流沿用原安全空隙，不受自由补位代价筛选阻塞。
 
 准备区内，中道局部让位，接收车依据可见待并入车辆开隙，终止道车辆利用安全间隙并入。后排车辆已有独立安全走廊时可同时行动。必要合流优先于争同走廊的自由补位和普通超车。各方案共用车型、真实运动和安全执行。
 
@@ -57,7 +58,7 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 | [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 跟驰、补位、让位、开隙、合流与私有记忆。 |
 | [native_sumo.py](variants/phase5g_pure_formation/experiments/native_sumo.py) | 路网、发车、局部观测、真实执行、逐车和逐拍记录。 |
 | [global_reference.py](variants/phase5g_pure_formation/experiments/global_reference.py) | 每5秒集中分组与匈牙利分配。 |
-| [complete_layers.py](variants/phase5g_pure_formation/experiments/complete_layers.py) | 完整连续层、规模、参与和保持的物理识别。 |
+| [complete_layers.py](variants/phase5g_pure_formation/experiments/complete_layers.py) | 仅用于历史完整层报告复算，当前直接统计0/1。 |
 | [native_comparison.py](variants/phase5g_pure_formation/experiments/native_comparison.py) | 源码与需求核验、逐车重算、配对和汇总。 |
 | [run_native_flow.py](variants/phase5g_pure_formation/run_native_flow.py) | 单次和固定矩阵入口。 |
 
@@ -67,9 +68,9 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 
 修改前代码已通过提交 `26a3de5` 和标签 `backup/pre-lane-drop-20261029` 保存GitHub。已实现原生SUMO链路、局部变换、完整层评价、四方案比较与实时窗口。
 
-迭代修复了跨道矛盾引用环、虚拟合并车道排名、横移目标丢失、过期物理间隙和必要合流争隙。位置增益为0.3，速度反馈每步权重0.2（0.5秒名义响应时间）；统一当前位置F/R空隙，删除普通合流30米候选门。新增状态后通过206项核心测试、29项子测试和9项根GUI测试，900个局部状态及5对真实SUMO运行核实驾驶输出不变。原两个六车诊断均确认六车结构。
+迭代修复了跨道矛盾引用环、虚拟合并车道排名、横移目标丢失、过期物理间隙和必要合流争隙。位置增益为0.3，速度反馈每步权重0.2（0.5秒名义响应时间）；统一当前位置F/R空隙，删除普通合流30米候选门。此前新增状态时通过206项核心测试、29项子测试和9项根GUI测试，900个局部状态及5对真实SUMO运行核实驾驶输出不变。原两个六车诊断均确认六车结构。
 
-最新P使用每道500、750、1000、1500辆/h，600秒连续来车、独立种子6–10。缩减道路的全程平均时间如下：
+此前P基线使用每道500、750、1000、1500辆/h，600秒连续来车、独立种子6–10。缩减道路的全程平均时间如下：
 
 | 每道流量 / (辆/h) | NOA / s | P编队变换 / s | P−NOA / s |
 | ---: | ---: | ---: | ---: |

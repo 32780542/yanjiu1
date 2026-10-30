@@ -46,7 +46,8 @@ class NativeRulesTests(unittest.TestCase):
 
     def test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration(self):
         ego = self.car(0, 100.0, 2, 31.0)
-        command = self.command(ego, [self.car(1, 130.0, 2, 31.0)], drop=None)
+        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+        command = self.command(ego, [self.car(1, ego.x + distance, 2, 31.0)], drop=None)
         self.assertAlmostEqual(command.speed, 31.0)
 
     def test_equal_speed_target_gap_keeps_cruise(self):
@@ -229,7 +230,8 @@ class NativeRulesTests(unittest.TestCase):
 
     def test_aligned_group_can_follow_a_temporary_slow_reference(self):
         ego = self.car(0, 100.0, 2, 26.8)
-        command = self.command(ego, [self.car(1, 130.0, 2, 26.8)], drop=None)
+        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+        command = self.command(ego, [self.car(1, ego.x + distance, 2, 26.8)], drop=None)
         self.assertAlmostEqual(command.speed, 26.8)
 
     def test_visible_front_sequence_follows_the_nearest_physical_front(self):

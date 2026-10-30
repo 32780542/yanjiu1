@@ -1,0 +1,38 @@
+{
+  "label": "before_TM",
+  "rules": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\TM\\native_rules.py",
+  "rules_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+  "tests_run": 79,
+  "simulation_tests_excluded": true,
+  "failures": [
+    {
+      "test": "test_native_rules.NativeRulesTests.test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py\", line 50, in test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration\n    self.assertAlmostEqual(command.speed, 31.0)\nAssertionError: 30.887708333333332 != 31.0 within 7 places (0.11229166666666757 difference)\n"
+    },
+    {
+      "test": "test_native_rules.NativeRulesTests.test_aligned_group_can_follow_a_temporary_slow_reference",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py\", line 233, in test_aligned_group_can_follow_a_temporary_slow_reference\n    self.assertAlmostEqual(command.speed, 26.8)\nAssertionError: 26.902083333333334 != 26.8 within 7 places (0.10208333333333286 difference)\n"
+    },
+    {
+      "test": "test_head_group_rules.E11RulesTests.test_internal_a2_follows_only_its_physical_front_a1",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py\", line 57, in test_internal_a2_follows_only_its_physical_front_a1\n    self.assertAlmostEqual(target, front.x - 30.0)\nAssertionError: 1052.9320092959067 != 1052.628529074364 within 7 places (0.3034802215427135 difference)\n"
+    },
+    {
+      "test": "test_head_group_rules.E11RulesTests.test_internal_b1_follows_only_its_physical_front_c1",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py\", line 50, in test_internal_b1_follows_only_its_physical_front_c1\n    self.assertAlmostEqual(target, front.x - 30.0)\nAssertionError: 1064.3875616305434 != 1064.1655585396875 within 7 places (0.22200309085587833 difference)\n"
+    },
+    {
+      "test": "test_common_pair.CommonPairHeadTests.test_NOA_is_unchanged_even_with_compressed_rears",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_common_pair.py\", line 104, in test_NOA_is_unchanged_even_with_compressed_rears\n    self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))\nAssertionError: Tuples differ: ({'speed': 16.284125975166557, 'lane': None, 'reason[117 chars]lse}) != ({'speed': 28.8, 'lane': None, 'reason': 'normal_fol[92 chars]lse})\n\nFirst differing element 0:\n{'speed': 16.284125975166557, 'lane': None, 'reason[62 chars]': 4}\n{'speed': 28.8, 'lane': None, 'reason': 'normal_fol[37 chars]None}\n\n  ({'lane': None,\n    'reason': 'normal_follow',\n-   'reference': 4,\n?                ^\n\n+   'reference': None,\n?                ^^^^\n\n-   'speed': 16.284125975166557,\n-   'target_x': 400.43769299330415},\n+   'speed': 28.8,\n+   'target_x': None},\n   {'gap': None, 'joining': False, 'lane_target': None})\n"
+    },
+    {
+      "test": "test_common_pair.CommonPairHeadTests.test_all_actual_front_body_actions_remain_H_exact",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_common_pair.py\", line 94, in test_all_actual_front_body_actions_remain_H_exact\n    self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))\nAssertionError: Tuples differ: ({'speed': 23.046491165099688, 'lane': None, 'reason'[118 chars]lse}) != ({'speed': 22.79698077360972, 'lane': None, 'reason':[118 chars]lse})\n\nFirst differing element 0:\n{'speed': 23.046491165099688, 'lane': None, 'reason'[63 chars]': 1}\n{'speed': 22.79698077360972, 'lane': None, 'reason':[63 chars]': 1}\n\n  ({'lane': None,\n    'reason': 'formation_follow',\n    'reference': 1,\n-   'speed': 23.046491165099688,\n+   'speed': 22.79698077360972,\n-   'target_x': 1028.281652902353},\n?                  ^  ^    -  ---\n\n+   'target_x': 1024.1231463775202},\n?                  ^ + ^ + +++\n\n   {'gap': None, 'joining': False, 'lane_target': None})\n"
+    },
+    {
+      "test": "test_formation_state.StateOnlyChangeTests.test_control_and_memory_match_frozen_P_across_local_states",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_formation_state.py\", line 161, in test_control_and_memory_match_frozen_P_across_local_states\n    self.assertEqual(control, asdict(expected))\nAssertionError: {'speed': 18.23328162984992, 'lane': 1, 'reason': '[49 chars]None} != {'speed': 26.452147035404664, 'lane': 1, 'reason': [50 chars]None}\n  {'lane': 1,\n   'reason': 'normal_overtake',\n   'reference': None,\n-  'speed': 18.23328162984992,\n+  'speed': 26.452147035404664,\n   'target_x': None}\n"
+    }
+  ],
+  "errors": []
+}

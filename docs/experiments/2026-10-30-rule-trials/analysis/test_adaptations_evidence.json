@@ -1,0 +1,73 @@
+{
+  "files": {
+    "test_native_rules.py": {
+      "before_sha256": "0aaa05bfc3c3a7c0d7cea0ef1ea372d57d4ad78c05ca71db43cdc52718ee4080",
+      "after_sha256": "8268ce10f51dbccffd4c0ba4a066f0e3d1a2027dfb6465c60ce92e0f103cad1b"
+    },
+    "test_head_group_rules.py": {
+      "before_sha256": "e0bf364d248ccbe89914d2be2078d30a687d2511eb5454a089a2d7025a876d4e",
+      "after_sha256": "c5f5c41c916f6e3ad1e1e4f1270511590b6fb16eecd1f8b3ade03ca7f1cb6305"
+    },
+    "test_common_pair.py": {
+      "before_sha256": "ed031930dc6ae4027f11bb95216929cbd1a91dc0e10d31da1dec9e80cf21682d",
+      "after_sha256": "40c1c0e1e0ffe33867fb5b2af38fadcedc971123e819f742441d76d4823efa5d"
+    },
+    "test_formation_state.py": {
+      "before_sha256": "8b0553bfb4e5fc4199e8632f789b128af1c462179fff27cc8a9e379315866541",
+      "after_sha256": "ceaf248a3094737f2e15c2fbf336c8915d49a3007206ac4418798a12754def6c"
+    },
+    "archived_rules_source.py": {
+      "after_sha256": "253d1c644b0e3a139b80e698554dab1515b8dbbcc58e57467f60ca2512426269"
+    }
+  },
+  "patch_sha256": "5878f32c21f8cafb427f476a1ab06b88f3c8dc375385ee43ce8bd6e121520807",
+  "pure_checks": {
+    "before_TM": {
+      "tests": 79,
+      "failures": 7,
+      "errors": 0,
+      "rules_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317"
+    },
+    "after_TM": {
+      "tests": 79,
+      "failures": 0,
+      "errors": 0,
+      "rules_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317"
+    },
+    "after_T": {
+      "tests": 79,
+      "failures": 0,
+      "errors": 0,
+      "rules_sha256": "046f00aa397b7f4ff306f3fbb796c97565b743550a9dae608572e88f5a8cc02b"
+    },
+    "after_base_expected_red": {
+      "tests": 79,
+      "failures": 4,
+      "errors": 0,
+      "rules_sha256": "ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d"
+    }
+  },
+  "historical_coverage": [
+    {
+      "reference": "H body actions",
+      "seed": 600,
+      "modes": 2,
+      "cases_per_mode": 80,
+      "cases": 160
+    },
+    {
+      "reference": "H NOA",
+      "seed": 800,
+      "cases": 160
+    },
+    {
+      "reference": "P control/memory",
+      "seed": 20261029,
+      "modes": 3,
+      "cases_per_mode": 300,
+      "cases": 900
+    }
+  ],
+  "assertion_tolerances_unchanged": true,
+  "simulation_tests_run": false
+}

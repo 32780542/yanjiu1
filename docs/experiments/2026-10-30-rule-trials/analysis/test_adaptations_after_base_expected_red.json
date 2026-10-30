@@ -1,0 +1,26 @@
+{
+  "label": "after_base_expected_red",
+  "rules": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-local-formation-state\\evidence.tar.gz",
+  "rules_sha256": "ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d",
+  "tests_run": 79,
+  "simulation_tests_excluded": true,
+  "failures": [
+    {
+      "test": "test_native_rules.NativeRulesTests.test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py\", line 51, in test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration\n    self.assertAlmostEqual(command.speed, 31.0)\nAssertionError: 31.112291666666668 != 31.0 within 7 places (0.11229166666666757 difference)\n"
+    },
+    {
+      "test": "test_native_rules.NativeRulesTests.test_aligned_group_can_follow_a_temporary_slow_reference",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py\", line 235, in test_aligned_group_can_follow_a_temporary_slow_reference\n    self.assertAlmostEqual(command.speed, 26.8)\nAssertionError: 26.697916666666668 != 26.8 within 7 places (0.10208333333333286 difference)\n"
+    },
+    {
+      "test": "test_head_group_rules.E11RulesTests.test_internal_a2_follows_only_its_physical_front_a1",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py\", line 59, in test_internal_a2_follows_only_its_physical_front_a1\n    self.assertAlmostEqual(target, front.x - distance)\nAssertionError: 1052.628529074364 != 1052.9320092959067 within 7 places (0.3034802215427135 difference)\n"
+    },
+    {
+      "test": "test_head_group_rules.E11RulesTests.test_internal_b1_follows_only_its_physical_front_c1",
+      "detail": "Traceback (most recent call last):\n  File \"D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py\", line 51, in test_internal_b1_follows_only_its_physical_front_c1\n    self.assertAlmostEqual(target, front.x - distance)\nAssertionError: 1064.1655585396875 != 1064.3875616305434 within 7 places (0.22200309085587833 difference)\n"
+    }
+  ],
+  "errors": []
+}

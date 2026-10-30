@@ -46,16 +46,18 @@ class E11RulesTests(unittest.TestCase):
     def test_internal_b1_follows_only_its_physical_front_c1(self):
         ego, (speed, target, reference) = self.command("B1")
         front = self.cars["C1"]
+        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
         self.assertEqual(reference, front.track)
-        self.assertAlmostEqual(target, front.x - 30.0)
-        self.assertAlmostEqual(speed, r._request(ego, front.x - 30.0, front.speed))
+        self.assertAlmostEqual(target, front.x - distance)
+        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
 
     def test_internal_a2_follows_only_its_physical_front_a1(self):
         ego, (speed, target, reference) = self.command("A2")
         front = self.cars["A1"]
+        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
         self.assertEqual(reference, front.track)
-        self.assertAlmostEqual(target, front.x - 30.0)
-        self.assertAlmostEqual(speed, r._request(ego, front.x - 30.0, front.speed))
+        self.assertAlmostEqual(target, front.x - distance)
+        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
 
     def check_lattice(self, positions, lanes):
         cars = tuple(car(i, x, lane) for i, (x, lane) in enumerate(positions))

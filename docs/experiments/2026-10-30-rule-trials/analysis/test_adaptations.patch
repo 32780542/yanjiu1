@@ -1,0 +1,178 @@
+--- a/variants/phase5g_pure_formation/tests/test_native_rules.py
++++ b/variants/phase5g_pure_formation/tests/test_native_rules.py
+@@ -46,7 +46,8 @@
+ 
+     def test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration(self):
+         ego = self.car(0, 100.0, 2, 31.0)
+-        command = self.command(ego, [self.car(1, 130.0, 2, 31.0)], drop=None)
++        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
++        command = self.command(ego, [self.car(1, ego.x + distance, 2, 31.0)], drop=None)
+         self.assertAlmostEqual(command.speed, 31.0)
+ 
+     def test_equal_speed_target_gap_keeps_cruise(self):
+@@ -229,7 +230,8 @@
+ 
+     def test_aligned_group_can_follow_a_temporary_slow_reference(self):
+         ego = self.car(0, 100.0, 2, 26.8)
+-        command = self.command(ego, [self.car(1, 130.0, 2, 26.8)], drop=None)
++        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
++        command = self.command(ego, [self.car(1, ego.x + distance, 2, 26.8)], drop=None)
+         self.assertAlmostEqual(command.speed, 26.8)
+ 
+     def test_visible_front_sequence_follows_the_nearest_physical_front(self):
+--- a/variants/phase5g_pure_formation/tests/test_head_group_rules.py
++++ b/variants/phase5g_pure_formation/tests/test_head_group_rules.py
+@@ -46,16 +46,18 @@
+     def test_internal_b1_follows_only_its_physical_front_c1(self):
+         ego, (speed, target, reference) = self.command("B1")
+         front = self.cars["C1"]
++        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+         self.assertEqual(reference, front.track)
+-        self.assertAlmostEqual(target, front.x - 30.0)
+-        self.assertAlmostEqual(speed, r._request(ego, front.x - 30.0, front.speed))
++        self.assertAlmostEqual(target, front.x - distance)
++        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
+ 
+     def test_internal_a2_follows_only_its_physical_front_a1(self):
+         ego, (speed, target, reference) = self.command("A2")
+         front = self.cars["A1"]
++        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+         self.assertEqual(reference, front.track)
+-        self.assertAlmostEqual(target, front.x - 30.0)
+-        self.assertAlmostEqual(speed, r._request(ego, front.x - 30.0, front.speed))
++        self.assertAlmostEqual(target, front.x - distance)
++        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
+ 
+     def check_lattice(self, positions, lanes):
+         cars = tuple(car(i, x, lane) for i, (x, lane) in enumerate(positions))
+--- a/variants/phase5g_pure_formation/tests/test_common_pair.py
++++ b/variants/phase5g_pure_formation/tests/test_common_pair.py
+@@ -5,6 +5,7 @@
+ import random
+ import sys
+ import unittest
++from archived_rules_source import load_state_enabled_base
+ 
+ P=Path(__file__).resolve().parents[1];sys.path.insert(0,str(P))
+ from noa import native_rules as r
+@@ -80,25 +81,31 @@
+         self.assertEqual((speed,target,reference,state),r._following(ego,changed,2,phase_boundary=640.))
+ 
+     def test_all_actual_front_body_actions_remain_H_exact(self):
++        """Historical P/state-only refactor contract, before time-headway trials."""
++        archived=load_state_enabled_base('common_pair_body')
++        car=lambda x,lane,track=0,speed=28.8: archived.Vehicle(track,x,(lane+.5)*3.3,speed,lane)
+         rng=random.Random(600)
+         for mode in ['formation','transform']:
+             for _ in range(80):
+-                ego=self.car(rng.uniform(100,1100),rng.randrange(3),speed=rng.uniform(10,32))
+-                front=self.car(ego.x+rng.uniform(8,45),ego.lane,1,speed=rng.uniform(10,32))
+-                rear=self.car(ego.x-15,ego.lane,2)
+-                peers=[self.car(ego.x+rng.uniform(-40,40),rng.randrange(3),i+3) for i in range(3)]
++                ego=car(rng.uniform(100,1100),rng.randrange(3),speed=rng.uniform(10,32))
++                front=car(ego.x+rng.uniform(8,45),ego.lane,1,speed=rng.uniform(10,32))
++                rear=car(ego.x-15,ego.lane,2)
++                peers=[car(ego.x+rng.uniform(-40,40),rng.randrange(3),i+3) for i in range(3)]
+                 rows=(front,rear,*peers)
+-                a,m=r.decide(ego,rows,r.Memory(),mode,1000.)
++                a,m=archived.decide(ego,rows,archived.Memory(),mode,1000.)
+                 b,n=H.decide(H.Vehicle(**asdict(ego)),tuple(H.Vehicle(**asdict(c)) for c in rows),H.Memory(),mode,1000.)
+                 control=asdict(a);control.pop('formation_state')
+                 self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))
+ 
+     def test_NOA_is_unchanged_even_with_compressed_rears(self):
++        """Historical P/state-only NOA contract, not a claim about new following."""
++        archived=load_state_enabled_base('common_pair_noa')
++        car=lambda x,lane,track=0,speed=28.8: archived.Vehicle(track,x,(lane+.5)*3.3,speed,lane)
+         rng=random.Random(800)
+         for _ in range(160):
+-            ego=self.car(rng.uniform(0,1100),rng.randrange(3),speed=rng.uniform(0,33.3))
+-            rows=(self.car(ego.x-15,ego.lane,1),)+tuple(self.car(ego.x+rng.uniform(-100,200),rng.randrange(3),i+2) for i in range(5))
+-            a,m=r.decide(ego,rows,r.Memory(),'noa',1000.)
++            ego=car(rng.uniform(0,1100),rng.randrange(3),speed=rng.uniform(0,33.3))
++            rows=(car(ego.x-15,ego.lane,1),)+tuple(car(ego.x+rng.uniform(-100,200),rng.randrange(3),i+2) for i in range(5))
++            a,m=archived.decide(ego,rows,archived.Memory(),'noa',1000.)
+             b,n=H.decide(H.Vehicle(**asdict(ego)),tuple(H.Vehicle(**asdict(c)) for c in rows),H.Memory(),'noa',1000.)
+             control=asdict(a);control.pop('formation_state')
+             self.assertEqual((control,asdict(m)),(asdict(b),asdict(n)))
+--- a/variants/phase5g_pure_formation/tests/test_formation_state.py
++++ b/variants/phase5g_pure_formation/tests/test_formation_state.py
+@@ -10,6 +10,7 @@
+ import sys
+ from tempfile import TemporaryDirectory
+ import unittest
++from archived_rules_source import load_state_enabled_base
+ 
+ from noa import native_rules as rules
+ from experiments import native_sumo as native
+@@ -117,6 +118,11 @@
+ 
+ class StateOnlyChangeTests(unittest.TestCase):
+     def test_control_and_memory_match_frozen_P_across_local_states(self):
++        """Keep the published state-only change tied to its original controller."""
++        archived = load_state_enabled_base("state_only_P")
++        def archived_car(track, x, lane=0, speed=28.8):
++            return archived.Vehicle(track, x, (lane + 0.5) * archived.LANE_WIDTH, speed, lane)
++
+         path = (
+             Path(__file__).resolve().parents[3]
+             / "docs/experiments/2026-10-29-four-flow-attribution/portable_P/source/noa/native_rules.py"
+@@ -132,23 +138,19 @@
+         rng = random.Random(20261029)
+         for mode in ("noa", "formation", "transform"):
+             for _ in range(300):
+-                ego = car(0, rng.uniform(0, 1200), rng.randrange(3), rng.uniform(0, 33.3))
++                ego = archived_car(0, rng.uniform(0, 1200), rng.randrange(3), rng.uniform(0, 33.3))
+                 rows = tuple(
+-                    car(
+-                        i + 1,
+-                        ego.x + rng.uniform(-120, 220),
+-                        rng.randrange(3),
+-                        rng.uniform(0, 33.3),
+-                    )
++                    archived_car(i + 1, ego.x + rng.uniform(-120, 220),
++                                 rng.randrange(3), rng.uniform(0, 33.3))
+                     for i in range(7)
+                 )
+-                memory = rules.Memory(
++                memory = archived.Memory(
+                     lane_target=rng.choice((None, 0, 1, 2)),
+                     gap=rng.choice((None, (1, 2))),
+                     joining=rng.choice((True, False)),
+                 )
+                 boundary = rng.choice((None, 1000.0))
+-                actual, after = rules.decide(ego, rows, memory, mode, boundary)
++                actual, after = archived.decide(ego, rows, memory, mode, boundary)
+                 expected, old_after = old.decide(
+                     old.Vehicle(**asdict(ego)),
+                     tuple(old.Vehicle(**asdict(c)) for c in rows),
+--- /dev/null
++++ b/variants/phase5g_pure_formation/tests/archived_rules_source.py
+@@ -0,0 +1,27 @@
++"""Load the published state-only baseline without Git or extracting archive files."""
++import hashlib
++from pathlib import Path
++import sys
++import tarfile
++import types
++
++
++ARCHIVE = (Path(__file__).resolve().parents[3]
++           / "docs/experiments/2026-10-29-local-formation-state/evidence.tar.gz")
++MEMBER = "current_source/noa/native_rules.py"
++SOURCE_SHA256 = "ac1c5aba082130718c81a23eb2c7bc9708caa8dae6b138baea951d07e735ee7d"
++
++
++def load_state_enabled_base(label):
++    """Give each historical test an independent, hash-verified module namespace."""
++    with tarfile.open(ARCHIVE, "r:gz") as archive:
++        with archive.extractfile(MEMBER) as stream:
++            source = stream.read()
++    if hashlib.sha256(source).hexdigest() != SOURCE_SHA256:
++        raise AssertionError("Published state-enabled baseline source hash mismatch")
++    name = "archived_state_enabled_base_" + label
++    module = types.ModuleType(name)
++    module.__file__ = str(ARCHIVE) + ":" + MEMBER
++    sys.modules[name] = module
++    exec(compile(source, module.__file__, "exec"), module.__dict__)
++    return module

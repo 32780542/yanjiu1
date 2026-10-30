@@ -1,0 +1,79 @@
+[
+  {
+    "operation": "20261030T005231900382Z_compact-evidence-tdd-red_31a73784",
+    "purpose": "TDD red: eight fixture contracts fail because implementation is absent",
+    "returncode": 1,
+    "status": "failed",
+    "log_sha256": {
+      "result.json": "fbae12b70bfc7ece732dbb7231fe2f094555b489d4d67dc456ee35958e7f04d7",
+      "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr.log": "af73dcf108dffe883800b6cd92785955fbc85fb1ea0cfca92f0e8c1ef09d8ac5"
+    }
+  },
+  {
+    "operation": "20261030T005517447632Z_compact-evidence-tdd-green_668a8766",
+    "purpose": "TDD green: all eight fixture tests pass",
+    "returncode": 0,
+    "status": "completed",
+    "log_sha256": {
+      "result.json": "7eabb35448ab12a34e9b02bc48324bab2b668ac8d6568d8b75c1a69553a4f4c7",
+      "stdout.log": "31a2eb76004ff490cc618acdd7f99169b1df504470dbb21ef2fe8e50491bc310",
+      "stderr.log": "0a7d17d87b43df5252c1774dad3fc17bd8ba044ed3dba2799efc5ccb2deb06b4"
+    }
+  },
+  {
+    "operation": "20261030T005601327114Z_compact-screen48-build_07e6ec8d",
+    "purpose": "Freeze original screen32+16 as one immutable 48-case bundle",
+    "returncode": 0,
+    "status": "completed",
+    "log_sha256": {
+      "result.json": "f084fcd8298e3ce2b10ade65d2d292b47dea3fa89059be71aac2bb72dc0e8196",
+      "stdout.log": "1afe378bc06acaa30855d5403ba7a8fa9dc18cd9a95371147fd4e10136d7ec71",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T005746371077Z_compact-screen48-offline-verify_4bdc8ac5",
+    "purpose": "Recompute and verify all48 without original positions",
+    "returncode": 0,
+    "status": "completed",
+    "log_sha256": {
+      "result.json": "0bce0eaf02c01b4f04bc42a8ad8aa17c788f0e0072824be341615b7cffa39e5f",
+      "stdout.log": "901d9f3eea04a15291a6729ae1c9bba1c70cd4bfa3ad6f72507c5da456a8fb69",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T005932666816Z_compact-screen48-publication-audit_36100493",
+    "purpose": "Independent merged48 identity and all48 analyzer numeric/count audit",
+    "returncode": 0,
+    "status": "completed",
+    "log_sha256": {
+      "result.json": "790326ea9cf1bf5a94991606d9ccd84d3127cd3077dffbe349d0d0a1484b9b08",
+      "stdout.log": "4050c893eec01bf790fe902ac716b4ace6251f07708bc24afd61f52e502644fb",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T005944583918Z_compact-screen48-extracted-offline-tool_98bda9fb",
+    "purpose": "Run the verifier extracted from the artifact under python -I -B",
+    "returncode": 0,
+    "status": "completed",
+    "log_sha256": {
+      "result.json": "4e81108cdb84e4d9bab7a1262dfde1b1229fa2cb74743012aa26ef95f2b046eb",
+      "stdout.log": "901d9f3eea04a15291a6729ae1c9bba1c70cd4bfa3ad6f72507c5da456a8fb69",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T010136328220Z_compact-screen48-local-originals-verify_7c74fa54",
+    "purpose": "Full local-original hashes and byte-exact reselection for all48",
+    "returncode": 0,
+    "status": "completed",
+    "log_sha256": {
+      "result.json": "b872b03daf219e7fe695173ee5c72245df3c70da5cae78364dfcd447a1b27ed4",
+      "stdout.log": "103bee35cd82a70024ee13c420eb6ab8a3f84ff5ba6438e64cc106c901cd0e02",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+]

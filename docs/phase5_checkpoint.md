@@ -737,3 +737,17 @@
 - TM规则复用T公开跟驰做反事实预测，仅自由补位增加制动成本，11项合同通过。TR在T的速度相关目标上复用0.5秒恢复，9项通过；都没有改变生产规则。TM8正在batch`20261030T005519408674Z_screen`运行，随后TR8及新种子五流量验收。当前研究分支在线保存协议、候选补丁及测试，原生产仍为8ed基线。
 
 **下一入口：**检查TM8和后续TR的operation，不重启已完成64例。候选是否采用，要看相对T的增量和新种子验证；保留原NOA、新NOA与编队三者区别。精简数据包保存原input/result/trips/source及0/1、越线原始字段，完整轨迹不重复加入Git。
+
+### 2026-10-30：TM已写回主目录，250例独立验证运行中
+
+**当前程序：**`D:/yanjiu1/keyan1/variants/phase5g_pure_formation/noa/native_rules.py`为冻结TM，SHA256`65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317`，461行改为511行；仍是本车纯规则、有限局部感知，私有记忆三个字段。仅保留共用单前车时距和自由补位制动成本，R/TR与T2未启用。生产源现在有意改变驾驶行为，不再是上轮仅加0/1的状态输出提交。
+
+- 初筛共80例，全部安全排空，清单`tmp/literature_trials/screen80_manifest.json`及分析`screen80_analysis`。在T上增加M，8例等权平均TT−.018819秒、燃油−.407684g/km，参与率+.32676个百分点、连续1均值+.702147秒。TR相对T四个道路/流量组平均TT全部增加，燃油均值约不变，不采用。T2车串更平顺但持续流增益很小且混合，暂留研究记录。所有候选补丁已核对能逐字节重建试算源码；T2/TR补丁的路径相对variant，其余相对仓库根，应用时使用对应目录。
+- 最终协议`docs/experiments/2026-10-30-rule-trials/heldout_protocol.md`在新批前登记。**250例正在运行**，operation`results/operations/20261030T010841852291Z_literature-heldout-five-flow-250_63ec1217`，session38533；batch`tmp/literature_trials/batches/20261030T010842083890Z_heldout`。流量500/750/1000/1250/1500，种子11–15，600/900秒、jobs4。base NOA/transform各50，T transform50，TM NOA/transform各50；T的NOA与TM同规则，不重复运行。源包已冻结，勿在运行中修改或重跑已完成工况。外层timeout7200秒；首次10800参数被runner启动前拒绝，没有产生案例。
+- 新增正式T7/M12合同先在基线出现预期失败，安装精确TM后19项及8个子测试通过。四个旧平衡/真实前车断言改为D*(v)，保持原容差；三项历史H/P全控制等价断言改为从原已公开`evidence.tar.gz`读取hash-pinned状态基线，保留原1220个随机案例、H/P SHA和全部断言。现行安全、局部信息、执行与直接状态合同继续检查当前源码。
+- 正式14文件核心回归 **225 tests、37 subtests全部通过**，operation`variants/phase5g_pure_formation/results/operations/20261030T011348789879Z_literature-TM-final-core_219b48fd`，23.156秒。当前原生GUI入口9项通过，根operation`20261030T012137610390Z_literature-TM-live-root-entry_b0a103bd`；额外旧demo83项/230子测试也通过，勿把它代替当前9项。根`runrun.py --check`通过；实际根headless10秒请求/80上限短测operation`20261030T012137608852Z_literature-TM-live-root-smoke_201454ba`退出0。
+- 代码审查未发现生产正确性缺陷，指出旧分析警示句对同候选NOA/编队的归因措辞不清，已修正生成器及说明。同候选共用跟驰，剩余差别为形成/协作/超车政策；TM−T用于补位增量。旧已封存分析数据不改数值，最终报告用正确解释。
+- screen48紧凑包8,802,762字节，SHA`347fb732be6cc0d8c28056ddf4a0400ff209f039d83512d4ffc80e1027c97d02`，300去重块、307843帧、31956次车辆运行。root独立离线核验退出0（operation`20261030T011514175873Z_literature-screen48-root-independent-verify_b95dcf26`）；原件及选出字段重提取也由独立构建者核验。extensions32另建，旧包不重写。后续heldout建议按五策略各50例分包。脚本和数据入口见本轮`evidence/README.md`。
+- 四面板真实车串图已生成并目检，PNG300dpi及SVG在本轮`figures/string_response.*`，原数值和源摘要同目录。T重复试验逐字节物理轨迹相同；图含base、T、T2，生产TM使用与T相同纵向规则。图由实测轨迹得到，不是示意图或理论传递函数曲线。
+
+**断流恢复：**先读本条及heldout operation的result/manifest和活跃进程，不重启250例；完成后分析全部案例、逐种子和TM−T增量，再更新README/系统说明/最终报告，核对所有公开数据包及代码索引，推送`yanjiu1/main`。当前研究分支为`research/20261030-rule-trials`，远端main仍为上一轮8ed11d9；本轮先随单元推研究分支，最终才更新main。未解决的整体效率问题以本批实际结果为准，不把初筛当正式结论。
