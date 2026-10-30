@@ -1,0 +1,26 @@
+{
+  "source_manifest": {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\extensions32_manifest.json",
+    "sha256": "4a9b92673e33902218bc934ed5aefb20a0b6271db61c55353271729e50252e54",
+    "bytes": 21671
+  },
+  "source_analyzer_csv": {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\screen80_analysis\\per_case.csv",
+    "sha256": "3299fb1c75c83bc881a8c5411e2b63e6909db946344e65e62e033254c61be04e",
+    "bytes": 74791
+  },
+  "source_analyzer_rows": 80,
+  "selected_rows": 32,
+  "selection": "exact run_dir membership in the full 32-case target manifest; no case/status filtering",
+  "profile_counts": {
+    "('T2', 'noa')": 8,
+    "('T2', 'transform')": 8,
+    "('TM', 'transform')": 8,
+    "('TR', 'transform')": 8
+  },
+  "subset_csv": {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\evidence_publish\\extensions32_inputs\\analysis_per_case.csv",
+    "sha256": "1cda33f003c71253234126baeb1320f101bcf6c0ae8483f00905d281222b0d38",
+    "bytes": 30951
+  }
+}

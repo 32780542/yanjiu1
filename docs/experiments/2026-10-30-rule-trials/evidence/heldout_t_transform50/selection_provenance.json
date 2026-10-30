@@ -1,0 +1,37 @@
+{
+  "source_manifest": {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\evidence_publish\\heldout_20261030T013812193989Z_manifest.json",
+    "sha256": "07e9f6759f943e5bf3cb4d52b8f346e53c15297a5d8ca99ae79c742dc3419949",
+    "bytes": 115252
+  },
+  "original_live_manifest_path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\batches\\20261030T010842083890Z_heldout\\manifest.json",
+  "profile": {
+    "candidate": "T",
+    "mode": "transform",
+    "stage": "heldout"
+  },
+  "exact_expected_grid": {
+    "flows": [
+      500,
+      750,
+      1000,
+      1250,
+      1500
+    ],
+    "seeds": [
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "scenarios": [
+      "straight3",
+      "lane_drop"
+    ]
+  },
+  "records": 50,
+  "source_snapshot_records": 169,
+  "selection": "entire completed 50-case profile; no case/status filtering",
+  "analyzer_csv": "pending final heldout analysis; later publication audit will bind it without rebuilding archive"
+}

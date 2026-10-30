@@ -23,6 +23,23 @@
 
 [verification.json](screen48/verification.json) 是全部48例的离线重算结果；`bundle.json` 记录包和索引摘要。还已从压缩包提取其自带脚本，在 `python -I -B` 隔离模式下独立复核通过。随后对全部48例完成本地原件全文件哈希和所有选出字段的重新提取逐字节核验，见[原件核验摘要](screen48/originals_verification_summary.json)。TDD先确认8个缺实现失败，再有8个实际夹具测试通过，涵盖原字节/去重、错误哈希、无效flag、重新哈希后的flag与统计矛盾、坏穿越样本、trip/result矛盾和本地原件变化。运行证据索引见 [runs.json](runs.json)，不重复保存 runner 源码快照。
 
+## extensions32 与完整 heldout 分组
+
+以下新包均由同一已测试标准库工具构建，记录源码基线 `8ed11d90ac457269b2175e20aec5ba1bbba8a318`。每例四份原始 JSON、六份源码、全部 flags 帧、首次实际穿越样本以及完整 positions/events 的全文件哈希索引均保留。每份包都已从包内提取工具，以 `python -I -B` 完成独立离线复算；也已对全部本地原件完成哈希及选出字段逐字节重提取核验。
+
+| 阶段 | 例数 | 包字节数 | SHA256 |
+| --- | ---: | ---: | --- |
+| [extensions32](extensions32/stage_summary.json) | 32 | 6,092,912 | `05e2e7c9840fb733bfe1a356daf0df35c54153b3264c1ff1857505f7094e24df` |
+| [heldout base/noa](heldout_base_noa50_retry1/stage_summary.json) | 50 | 4,785,291 | `419a233f82e5f946375e8d0b28b7e2c0bdc872db3938011700cc6dd393f31e92` |
+| [heldout base/transform](heldout_base_transform50/stage_summary.json) | 50 | 7,610,947 | `c88ae37b29164f81c4f767f1bba242431ed87ad839c3edbc08df0468e1e336cc` |
+| [heldout T/transform](heldout_t_transform50/stage_summary.json) | 50 | 7,504,025 | `a631cdb154eadf3bbded0dc5f16b35aa4c0dc2da47d51a40e8ed120546006aa9` |
+
+extensions32 使用 T2/noa、T2/transform、TM/transform、TR/transform 各8例。其分析表从原80行 CSV 按完整32例清单的 `run_dir` 精确选取，选择过程、原表 SHA256 及子表 SHA256 见 [selection_provenance.json](extensions32/selection_provenance.json)。独立[出版审计](extensions32/publication_audit.json)确认32例记录精确一致、205,202帧、21,304次车辆运行与1,280项分析数值/计数比较通过；未按状态、改善或缺失情况筛例。
+
+每份 heldout 包覆盖整个指定 profile 的50例：流量500/750/1000/1250/1500、随机种子11–15、straight3/lane_drop 两场景。三个分组的最终分析 CSV 审计尚待父任务提供最终 CSV，现有包已经保留精确 profile 清单及原始证据；后续追加分析子表与独立出版审计即可，归档字节保持不变。尚未完整的 TM/noa、TM/transform 分组没有封存。
+
+base/noa 首次构建在第14例后打开临时 `flags-current.jsonl` 时出现 Windows `OSError: [Errno 22] Invalid argument`；失败输出目录保留为空，日志保存在成功阶段的 `logs/` 中。相同工具和输入在新目录 `heldout_base_noa50_retry1` 成功，随后原件与离线校验均通过。失败和成功尝试均纳入 [runs.json](runs.json)，工具与模拟数据未改变。
+
 ## CLI
 
 从仓库根目录运行；长命令按仓库要求加 `python -B scripts/run_logged.py --label <唯一名称> --timeout <秒> --`。`--output` 必须是新目录，失败或旧试验目录均不覆盖。

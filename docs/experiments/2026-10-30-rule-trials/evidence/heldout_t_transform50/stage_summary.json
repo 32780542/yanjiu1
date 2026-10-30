@@ -1,0 +1,59 @@
+{
+  "cases": 50,
+  "frames": 320308,
+  "requested_vehicle_runs": 24374,
+  "source_git": "8ed11d90ac457269b2175e20aec5ba1bbba8a318",
+  "archive": {
+    "sha256": "a631cdb154eadf3bbded0dc5f16b35aa4c0dc2da47d51a40e8ed120546006aa9",
+    "bytes": 7504025
+  },
+  "unique_blobs": 307,
+  "source_logical_files": 300,
+  "unique_source_blobs": 6,
+  "full_original_positions_bytes_indexed": 309262845,
+  "full_original_events_bytes_indexed": 1652220,
+  "offline_extracted_tool_verified": true,
+  "all_local_originals_and_selected_bytes_verified": true,
+  "manifest_records_exact": true,
+  "scope": "selected raw fields, full original positions local hash+rerunnable Git source",
+  "analysis_status": "pending final heldout CSV publication audit",
+  "publication_audit": null,
+  "operations": [
+    {
+      "operation": "20261030T013846198324Z_evidence-heldout-t-transform50-build_3c7c822c",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_t_transform50/logs/20261030T013846198324Z_evidence-heldout-t-transform50-build_3c7c822c",
+      "log_sha256": {
+        "result.json": "bdd61365ad8c74ee10f473d9d078ee1e4d58df10fbb81839c9eaf7f4b3b8919e",
+        "stdout.log": "13669f7024ce924d05b5e8510aa1142fd1f144558338924b9a07f3d4b0ed4d09",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T014013084236Z_evidence-heldout-t-transform50-originals_4149baec",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_t_transform50/logs/20261030T014013084236Z_evidence-heldout-t-transform50-originals_4149baec",
+      "log_sha256": {
+        "result.json": "9f73f0a24d37383ef63f4c2989ede52b14e6bb4745019268262c45fffcb49fe7",
+        "stdout.log": "dfc3636993544af51aeb8ebc6e523e3dfec54fa213a76a92497679cf2ef7db67",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T014111350827Z_evidence-heldout-t-transform50-extracted_ec5e36ba",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_t_transform50/logs/20261030T014111350827Z_evidence-heldout-t-transform50-extracted_ec5e36ba",
+      "log_sha256": {
+        "result.json": "4d02a0361369b992cf8fbe3d08f43de4b81ad82bf9d4722589fe3fd38891b27f",
+        "stdout.log": "eb7d04646fedae99628cc9a0b6a8ce1c22b5454993315a6c381afa780a7f3d72",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

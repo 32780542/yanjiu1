@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\compact_evidence.py", line 440, in <module>
+    main()
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\compact_evidence.py", line 430, in main
+    archive = build(args.manifest, args.output, args.analyzer_csv, args.source_git)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\compact_evidence.py", line 171, in build
+    crossings = extract_positions(run / "positions.jsonl.gz", flag_path,
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\compact_evidence.py", line 81, in extract_positions
+    with gzip.open(path, "rt", encoding="utf-8") as source, Path(flags_path).open("wb") as target:
+                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\84335\AppData\Local\Programs\Python\Python312\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument: 'D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\compact-build-6ou9p_5c\\flags-current.jsonl'

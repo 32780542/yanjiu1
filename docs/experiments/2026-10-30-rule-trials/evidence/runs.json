@@ -75,5 +75,173 @@
       "stdout.log": "103bee35cd82a70024ee13c420eb6ab8a3f84ff5ba6438e64cc106c901cd0e02",
       "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
+  },
+  {
+    "operation": "20261030T013337010891Z_evidence-extensions32-build_275b0e64",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "extensions32/logs/20261030T013337010891Z_evidence-extensions32-build_275b0e64",
+    "log_sha256": {
+      "result.json": "362e1358b68f4b36e5a0f9f718f950874341d59ad071eb38ed0f1190863c3b11",
+      "stdout.log": "bcf3bf9ddefb955501d06a23c992062c5fb3288c59b0ebbad91e5d1e78678ea6",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013417083637Z_evidence-extensions32-originals_4a998a6b",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "extensions32/logs/20261030T013417083637Z_evidence-extensions32-originals_4a998a6b",
+    "log_sha256": {
+      "result.json": "ddc105879e27245e8f004fe3176eae68d230b65b81e052dcac6ce034b25eb04f",
+      "stdout.log": "35145ca759f902b3843753f8d120e9eae030273eaffeac118aae7b09d1db40e6",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013514114121Z_evidence-extensions32-extracted_8d626cec",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "extensions32/logs/20261030T013514114121Z_evidence-extensions32-extracted_8d626cec",
+    "log_sha256": {
+      "result.json": "95f091a1da40eea2932b5a5b80560ad04414146cd29e028b5660ee4be018fde3",
+      "stdout.log": "e83f920de4f3ef7bd1aeca695ee83c636b30f598217d70ceba82fca83c16c4a7",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013530378142Z_evidence-extensions32-publication_c86b28be",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "extensions32/logs/20261030T013530378142Z_evidence-extensions32-publication_c86b28be",
+    "log_sha256": {
+      "result.json": "947b8f19de7dc8e5075a0d9edffe01c86e6a7af95cb8ad0594e37237b2745eef",
+      "stdout.log": "e44872c617be6f6f8967fb7d32c86970f29496b016d9ad63b730245d69eb1739",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013514109076Z_evidence-heldout-base-noa50-build_053d933a",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 1,
+    "status": "failed",
+    "path": "heldout_base_noa50_retry1/logs/20261030T013514109076Z_evidence-heldout-base-noa50-build_053d933a",
+    "log_sha256": {
+      "result.json": "11cceeeb5f1097eb4af34b538ae1db4f7b02e4d3ee12d6fb7c278e0c146f8477",
+      "stdout.log": "fd87216cac6d287ab49349fafdd6014cb371a776104b92875b73d0fb90360917",
+      "stderr.log": "1c3475b79d21fc797aca977cb57bf2b751f849bc6b6dd39ee02222aa578a1f54"
+    }
+  },
+  {
+    "operation": "20261030T013614559987Z_evidence-heldout-base-noa50-retry1_90080254",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_base_noa50_retry1/logs/20261030T013614559987Z_evidence-heldout-base-noa50-retry1_90080254",
+    "log_sha256": {
+      "result.json": "af3babe22a8aa5516d33f98083ca1d79829e921638b1b8d6d25ded85ce8156f7",
+      "stdout.log": "4da4fb10b9190cd02235fc7365b4e7eebed793fd31e5e79fda809146b92b70c0",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013710485180Z_evidence-heldout-base-noa50-originals_0f346515",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_base_noa50_retry1/logs/20261030T013710485180Z_evidence-heldout-base-noa50-originals_0f346515",
+    "log_sha256": {
+      "result.json": "67577744ca7ff6d4649e904264decf51c0c466b30ca9faf3bbebaf44cf0687b6",
+      "stdout.log": "8f3d0e2191a1e76fb533b746d887f15f5d9fb890c14e66a472adc2ba46a12850",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013826022523Z_evidence-heldout-base-noa50-extracted_d48e3214",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_base_noa50_retry1/logs/20261030T013826022523Z_evidence-heldout-base-noa50-extracted_d48e3214",
+    "log_sha256": {
+      "result.json": "b3863afc86b66a4bc6855ac2d67ab55aff3f1e39444e2234152ddd2e1afa4843",
+      "stdout.log": "51b73d2b903b94cac4bd70a507156efef2995250dccb4c364d4744be788413cd",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013710507714Z_evidence-heldout-base-transform50-build_1118034b",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_base_transform50/logs/20261030T013710507714Z_evidence-heldout-base-transform50-build_1118034b",
+    "log_sha256": {
+      "result.json": "ac3e3fc2811ea45311f60731281c2477b675a0fedcb90051d97010fc19f9d1bf",
+      "stdout.log": "4b95e22726033e9c4aa2f512fa6530fb638b3b97826f5900a7385a5b1c591ccf",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013846183102Z_evidence-heldout-base-transform50-originals_4d65ba48",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_base_transform50/logs/20261030T013846183102Z_evidence-heldout-base-transform50-originals_4d65ba48",
+    "log_sha256": {
+      "result.json": "27ac48b879cf235d94eea53447b98acdf44247cff02e3dc00ef7de1d5ba0075c",
+      "stdout.log": "5c42ec2004c3cb6d15c18c3f74387072af3b6e4abbd9d92030889cdc9c1064f2",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T014013070019Z_evidence-heldout-base-transform50-extracted_f21301fe",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_base_transform50/logs/20261030T014013070019Z_evidence-heldout-base-transform50-extracted_f21301fe",
+    "log_sha256": {
+      "result.json": "e38506554cce32e528cbd04747d9656438000a0a23c901ae5ddadcdf6bec62f2",
+      "stdout.log": "ff16b8b8a3195237954852744ef53aef4e04c91fafcfd5026e9c6df3714ade0a",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T013846198324Z_evidence-heldout-t-transform50-build_3c7c822c",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_t_transform50/logs/20261030T013846198324Z_evidence-heldout-t-transform50-build_3c7c822c",
+    "log_sha256": {
+      "result.json": "bdd61365ad8c74ee10f473d9d078ee1e4d58df10fbb81839c9eaf7f4b3b8919e",
+      "stdout.log": "13669f7024ce924d05b5e8510aa1142fd1f144558338924b9a07f3d4b0ed4d09",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T014013084236Z_evidence-heldout-t-transform50-originals_4149baec",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_t_transform50/logs/20261030T014013084236Z_evidence-heldout-t-transform50-originals_4149baec",
+    "log_sha256": {
+      "result.json": "9f73f0a24d37383ef63f4c2989ede52b14e6bb4745019268262c45fffcb49fe7",
+      "stdout.log": "dfc3636993544af51aeb8ebc6e523e3dfec54fa213a76a92497679cf2ef7db67",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "operation": "20261030T014111350827Z_evidence-heldout-t-transform50-extracted_ec5e36ba",
+    "purpose": "complete stage evidence build/verify/audit; failures retained",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout_t_transform50/logs/20261030T014111350827Z_evidence-heldout-t-transform50-extracted_ec5e36ba",
+    "log_sha256": {
+      "result.json": "4d02a0361369b992cf8fbe3d08f43de4b81ad82bf9d4722589fe3fd38891b27f",
+      "stdout.log": "eb7d04646fedae99628cc9a0b6a8ce1c22b5454993315a6c381afa780a7f3d72",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
   }
 ]

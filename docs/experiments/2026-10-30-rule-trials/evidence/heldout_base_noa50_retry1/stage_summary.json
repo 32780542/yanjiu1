@@ -1,0 +1,71 @@
+{
+  "cases": 50,
+  "frames": 320546,
+  "requested_vehicle_runs": 24374,
+  "source_git": "8ed11d90ac457269b2175e20aec5ba1bbba8a318",
+  "archive": {
+    "sha256": "419a233f82e5f946375e8d0b28b7e2c0bdc872db3938011700cc6dd393f31e92",
+    "bytes": 4785291
+  },
+  "unique_blobs": 307,
+  "source_logical_files": 300,
+  "unique_source_blobs": 6,
+  "full_original_positions_bytes_indexed": 120081809,
+  "full_original_events_bytes_indexed": 772147,
+  "offline_extracted_tool_verified": true,
+  "all_local_originals_and_selected_bytes_verified": true,
+  "manifest_records_exact": true,
+  "scope": "selected raw fields, full original positions local hash+rerunnable Git source",
+  "analysis_status": "pending final heldout CSV publication audit",
+  "publication_audit": null,
+  "operations": [
+    {
+      "operation": "20261030T013514109076Z_evidence-heldout-base-noa50-build_053d933a",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 1,
+      "status": "failed",
+      "path": "heldout_base_noa50_retry1/logs/20261030T013514109076Z_evidence-heldout-base-noa50-build_053d933a",
+      "log_sha256": {
+        "result.json": "11cceeeb5f1097eb4af34b538ae1db4f7b02e4d3ee12d6fb7c278e0c146f8477",
+        "stdout.log": "fd87216cac6d287ab49349fafdd6014cb371a776104b92875b73d0fb90360917",
+        "stderr.log": "1c3475b79d21fc797aca977cb57bf2b751f849bc6b6dd39ee02222aa578a1f54"
+      }
+    },
+    {
+      "operation": "20261030T013614559987Z_evidence-heldout-base-noa50-retry1_90080254",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_base_noa50_retry1/logs/20261030T013614559987Z_evidence-heldout-base-noa50-retry1_90080254",
+      "log_sha256": {
+        "result.json": "af3babe22a8aa5516d33f98083ca1d79829e921638b1b8d6d25ded85ce8156f7",
+        "stdout.log": "4da4fb10b9190cd02235fc7365b4e7eebed793fd31e5e79fda809146b92b70c0",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T013710485180Z_evidence-heldout-base-noa50-originals_0f346515",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_base_noa50_retry1/logs/20261030T013710485180Z_evidence-heldout-base-noa50-originals_0f346515",
+      "log_sha256": {
+        "result.json": "67577744ca7ff6d4649e904264decf51c0c466b30ca9faf3bbebaf44cf0687b6",
+        "stdout.log": "8f3d0e2191a1e76fb533b746d887f15f5d9fb890c14e66a472adc2ba46a12850",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T013826022523Z_evidence-heldout-base-noa50-extracted_d48e3214",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_base_noa50_retry1/logs/20261030T013826022523Z_evidence-heldout-base-noa50-extracted_d48e3214",
+      "log_sha256": {
+        "result.json": "b3863afc86b66a4bc6855ac2d67ab55aff3f1e39444e2234152ddd2e1afa4843",
+        "stdout.log": "51b73d2b903b94cac4bd70a507156efef2995250dccb4c364d4744be788413cd",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

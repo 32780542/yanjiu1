@@ -1,0 +1,42 @@
+{
+  "command": [
+    "python",
+    "-I",
+    "-B",
+    "docs/experiments/2026-10-30-rule-trials/evidence/compact_evidence.py",
+    "build",
+    "--manifest",
+    "tmp/literature_trials/extensions32_manifest.json",
+    "--output",
+    "docs/experiments/2026-10-30-rule-trials/evidence/extensions32",
+    "--analyzer-csv",
+    "tmp/literature_trials/evidence_publish/extensions32_inputs/analysis_per_case.csv",
+    "--source-git",
+    "8ed11d90ac457269b2175e20aec5ba1bbba8a318"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 1200.0,
+  "started_utc": "2026-10-30T01:33:37.011893+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 146872,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 32.625,
+  "ended_utc": "2026-10-30T01:34:09.632581+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "bcf3bf9ddefb955501d06a23c992062c5fb3288c59b0ebbad91e5d1e78678ea6",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archive_errors": {}
+}
