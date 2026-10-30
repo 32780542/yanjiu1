@@ -25,6 +25,8 @@
 
 ## extensions32 与完整 heldout 分组
 
+连同已冻结的 screen48，总证据现覆盖 **330例、2,115,229个原始 flags 帧、175,130次车辆运行与13,200项分析比较**。七份压缩包合计47,819,419字节；每例四份原始 JSON、六份源码，共1,320份 JSON 和1,980份逻辑源码文件，源码内容跨包共12种不同 SHA256。完整 positions 原件共1,875,902,115字节、events共10,148,732字节仅保存哈希索引。汇总及逐文件哈希见 [manifest.json](manifest.json)。
+
 以下新包均由同一已测试标准库工具构建，记录源码基线 `8ed11d90ac457269b2175e20aec5ba1bbba8a318`。每例四份原始 JSON、六份源码、全部 flags 帧、首次实际穿越样本以及完整 positions/events 的全文件哈希索引均保留。每份包都已从包内提取工具，以 `python -I -B` 完成独立离线复算；也已对全部本地原件完成哈希及选出字段逐字节重提取核验。
 
 | 阶段 | 例数 | 包字节数 | SHA256 |
@@ -33,10 +35,12 @@
 | [heldout base/noa](heldout_base_noa50_retry1/stage_summary.json) | 50 | 4,785,291 | `419a233f82e5f946375e8d0b28b7e2c0bdc872db3938011700cc6dd393f31e92` |
 | [heldout base/transform](heldout_base_transform50/stage_summary.json) | 50 | 7,610,947 | `c88ae37b29164f81c4f767f1bba242431ed87ad839c3edbc08df0468e1e336cc` |
 | [heldout T/transform](heldout_t_transform50/stage_summary.json) | 50 | 7,504,025 | `a631cdb154eadf3bbded0dc5f16b35aa4c0dc2da47d51a40e8ed120546006aa9` |
+| [heldout TM/noa](heldout_tm_noa50/stage_summary.json) | 50 | 5,551,660 | `71b9658d409d48adb91f5fecf88523f9e282b1da9b4e23d73871c3c6ebea10a6` |
+| [heldout TM/transform](heldout_tm_transform50/stage_summary.json) | 50 | 7,471,822 | `d57e9d79cb00eac986554c15cecb5a1757b17c9688af3c5577bba74dd4fd92d5` |
 
 extensions32 使用 T2/noa、T2/transform、TM/transform、TR/transform 各8例。其分析表从原80行 CSV 按完整32例清单的 `run_dir` 精确选取，选择过程、原表 SHA256 及子表 SHA256 见 [selection_provenance.json](extensions32/selection_provenance.json)。独立[出版审计](extensions32/publication_audit.json)确认32例记录精确一致、205,202帧、21,304次车辆运行与1,280项分析数值/计数比较通过；未按状态、改善或缺失情况筛例。
 
-每份 heldout 包覆盖整个指定 profile 的50例：流量500/750/1000/1250/1500、随机种子11–15、straight3/lane_drop 两场景。三个分组的最终分析 CSV 审计尚待父任务提供最终 CSV，现有包已经保留精确 profile 清单及原始证据；后续追加分析子表与独立出版审计即可，归档字节保持不变。尚未完整的 TM/noa、TM/transform 分组没有封存。
+每份 heldout 包覆盖整个指定 profile 的50例：流量500/750/1000/1250/1500、随机种子11–15、straight3/lane_drop 两场景。五份分组清单逐项匹配[最终250例清单原字节](heldout250_analysis/analysis_manifest.json)，恰好覆盖全部250例，无重叠、无遗漏。最终[250行分析 CSV 原字节](heldout250_analysis/analysis_per_case.csv)按各包完整清单精确划分为50行子表，再由 `audit_publication.py` 逐包独立审计；合计10,000项分析数值/计数比较通过，见[总审计索引](heldout250_analysis/coverage_audit.json)。各阶段的 `analysis_selection_provenance.json` 保存最终 CSV 及子表的哈希关系，`publication_audit.json` 保存逐包比较结果。原始打包时的 `selection_provenance.json` 仅描述当时快照；后来追加分析文件没有重建既有压缩包。
 
 base/noa 首次构建在第14例后打开临时 `flags-current.jsonl` 时出现 Windows `OSError: [Errno 22] Invalid argument`；失败输出目录保留为空，日志保存在成功阶段的 `logs/` 中。相同工具和输入在新目录 `heldout_base_noa50_retry1` 成功，随后原件与离线校验均通过。失败和成功尝试均纳入 [runs.json](runs.json)，工具与模拟数据未改变。
 

@@ -16,8 +16,34 @@
   "all_local_originals_and_selected_bytes_verified": true,
   "manifest_records_exact": true,
   "scope": "selected raw fields, full original positions local hash+rerunnable Git source",
-  "analysis_status": "pending final heldout CSV publication audit",
-  "publication_audit": null,
+  "analysis_status": "independently audited",
+  "publication_audit": {
+    "cases_verified": 50,
+    "manifest_records_exact": true,
+    "analyzer_cases_compared": 50,
+    "numeric_or_count_comparisons": 2000,
+    "frames_verified": 320308,
+    "requested_vehicle_runs": 24374,
+    "unique_source_blobs": 6,
+    "full_original_positions_bytes_indexed": 309262845,
+    "full_original_events_bytes_indexed": 1652220,
+    "archive": {
+      "sha256": "a631cdb154eadf3bbded0dc5f16b35aa4c0dc2da47d51a40e8ed120546006aa9",
+      "bytes": 7504025
+    },
+    "manifest": {
+      "sha256": "749c99dfd59b98067f00893ba6156b40150ee82aab73c177388b510273b448f6",
+      "bytes": 34229
+    },
+    "analyzer_csv": {
+      "sha256": "521569089bfa9c152d6893370a3023f04c45596fa202b0bc6b4189abf0596677",
+      "bytes": 49861
+    },
+    "verification_report": {
+      "sha256": "4787ca439d58dcf5f5467ec45680de896dac41e5bfa73e63eae3f7e14e5e6b34",
+      "bytes": 1541285
+    }
+  },
   "operations": [
     {
       "operation": "20261030T013846198324Z_evidence-heldout-t-transform50-build_3c7c822c",
@@ -52,6 +78,18 @@
       "log_sha256": {
         "result.json": "4d02a0361369b992cf8fbe3d08f43de4b81ad82bf9d4722589fe3fd38891b27f",
         "stdout.log": "eb7d04646fedae99628cc9a0b6a8ce1c22b5454993315a6c381afa780a7f3d72",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T020016477978Z_evidence-heldout-t-transform50-publication_e7af4352",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_t_transform50/logs/20261030T020016477978Z_evidence-heldout-t-transform50-publication_e7af4352",
+      "log_sha256": {
+        "result.json": "aa7f2021715c650076b07d19da7d4b8b95b1a745fa187bb36302accfe7ff94a2",
+        "stdout.log": "c57f96c6925941dbe3cfaa1946b5a8c6ab5f281a12ff0ed52636f65bb0496a9b",
         "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       }
     }

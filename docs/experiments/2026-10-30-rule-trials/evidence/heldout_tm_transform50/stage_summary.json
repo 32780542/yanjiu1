@@ -1,0 +1,97 @@
+{
+  "cases": 50,
+  "frames": 320247,
+  "requested_vehicle_runs": 24374,
+  "source_git": "8ed11d90ac457269b2175e20aec5ba1bbba8a318",
+  "archive": {
+    "sha256": "d57e9d79cb00eac986554c15cecb5a1757b17c9688af3c5577bba74dd4fd92d5",
+    "bytes": 7471822
+  },
+  "unique_blobs": 307,
+  "source_logical_files": 300,
+  "unique_source_blobs": 6,
+  "full_original_positions_bytes_indexed": 309112337,
+  "full_original_events_bytes_indexed": 1637347,
+  "offline_extracted_tool_verified": true,
+  "all_local_originals_and_selected_bytes_verified": true,
+  "manifest_records_exact": true,
+  "scope": "selected raw fields, full original positions local hash+rerunnable Git source",
+  "analysis_status": "independently audited",
+  "publication_audit": {
+    "cases_verified": 50,
+    "manifest_records_exact": true,
+    "analyzer_cases_compared": 50,
+    "numeric_or_count_comparisons": 2000,
+    "frames_verified": 320247,
+    "requested_vehicle_runs": 24374,
+    "unique_source_blobs": 6,
+    "full_original_positions_bytes_indexed": 309112337,
+    "full_original_events_bytes_indexed": 1637347,
+    "archive": {
+      "sha256": "d57e9d79cb00eac986554c15cecb5a1757b17c9688af3c5577bba74dd4fd92d5",
+      "bytes": 7471822
+    },
+    "manifest": {
+      "sha256": "47733ff800e02376f995a5b573ce707cbf9303581878d8b60ced457869d4de7b",
+      "bytes": 34403
+    },
+    "analyzer_csv": {
+      "sha256": "2a970d5c0ecce7e4ed2e30a95dc010b263d0e76c8fd7eb4314190bd851dc9aa5",
+      "bytes": 50080
+    },
+    "verification_report": {
+      "sha256": "1e0f00fb266ddaeaede167fa1c0ab622657ed098c1f28c63deff3f2ac0abf886",
+      "bytes": 1541550
+    }
+  },
+  "operations": [
+    {
+      "operation": "20261030T015804062994Z_evidence-heldout-tm-transform50-build_f1e14616",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_tm_transform50/logs/20261030T015804062994Z_evidence-heldout-tm-transform50-build_f1e14616",
+      "log_sha256": {
+        "result.json": "ee1d730fdd96738a72c2d71fab2e0c05d8e6aeedc7e04db5101c4818d3982138",
+        "stdout.log": "209e0667748ca19cc36e06fedfd7b5a4777a9d5816a2e91be919847fc96e9b94",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T015936325584Z_evidence-heldout-tm-transform50-originals_15983551",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_tm_transform50/logs/20261030T015936325584Z_evidence-heldout-tm-transform50-originals_15983551",
+      "log_sha256": {
+        "result.json": "33c53266ac5f4a272e5431888d2b2d957460723b9dddc593941d5c51aa0bf082",
+        "stdout.log": "aae0c257b7ff1727afa9174045d278860adc289269688b3054defe8171d383bb",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T020031312734Z_evidence-heldout-tm-transform50-extracted_0c0881b1",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_tm_transform50/logs/20261030T020031312734Z_evidence-heldout-tm-transform50-extracted_0c0881b1",
+      "log_sha256": {
+        "result.json": "126ee4572e9317fe3f25a225b2ae9014b9546195235481f8b8a8b7cf301c2b26",
+        "stdout.log": "bb60d50b9f995bcae916067f38a32d695b44e906a079ca3f01a92d1418bf50dd",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T020124268895Z_evidence-heldout-tm-transform50-publication_978a8242",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_tm_transform50/logs/20261030T020124268895Z_evidence-heldout-tm-transform50-publication_978a8242",
+      "log_sha256": {
+        "result.json": "9718e07aeef511cc316e997bb49fdf9031538f293575f1c806a18ae50a96de6d",
+        "stdout.log": "459e75644a95166643b9f777d7db657d9aae3439fd9a649036ef9a8257252ed8",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

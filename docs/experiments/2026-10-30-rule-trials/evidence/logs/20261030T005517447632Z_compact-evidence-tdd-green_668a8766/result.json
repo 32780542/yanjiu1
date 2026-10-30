@@ -1,0 +1,32 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "docs/experiments/2026-10-30-rule-trials/evidence/test_compact_evidence.py"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 90.0,
+  "started_utc": "2026-10-30T00:55:17.449016+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 154408,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 1.157,
+  "ended_utc": "2026-10-30T00:55:18.599812+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "31a2eb76004ff490cc618acdd7f99169b1df504470dbb21ef2fe8e50491bc310",
+    "stderr.log": "0a7d17d87b43df5252c1774dad3fc17bd8ba044ed3dba2799efc5ccb2deb06b4"
+  },
+  "archive_errors": {}
+}

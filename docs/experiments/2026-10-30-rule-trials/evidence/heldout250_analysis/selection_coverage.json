@@ -1,0 +1,149 @@
+{
+  "cases": 250,
+  "profiles": {
+    "heldout_base_noa50_retry1": {
+      "source_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_manifest.json",
+        "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+        "bytes": 170041
+      },
+      "source_analyzer_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_per_case.csv",
+        "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+        "bytes": 226215
+      },
+      "source_analyzer_rows": 250,
+      "selected_rows": 50,
+      "selection": "exact run_dir membership in the entire sealed 50-case profile; no case/status filtering",
+      "stage_manifest_records_exact_with_final250": true,
+      "stage_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_base_noa50_retry1\\analysis_manifest.json",
+        "sha256": "1eaeeec94ecb8bbd631b26acce10341a9888dbf1da2352efd1e9205bdc66768d",
+        "bytes": 33526
+      },
+      "subset_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_base_noa50_retry1\\analysis_per_case.csv",
+        "sha256": "67705a10b71ff0f7c362c2993a2c8f01f9104b485cffc00f86e60b1cb056d5a4",
+        "bytes": 39570
+      }
+    },
+    "heldout_base_transform50": {
+      "source_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_manifest.json",
+        "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+        "bytes": 170041
+      },
+      "source_analyzer_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_per_case.csv",
+        "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+        "bytes": 226215
+      },
+      "source_analyzer_rows": 250,
+      "selected_rows": 50,
+      "selection": "exact run_dir membership in the entire sealed 50-case profile; no case/status filtering",
+      "stage_manifest_records_exact_with_final250": true,
+      "stage_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_base_transform50\\analysis_manifest.json",
+        "sha256": "998d233469037575e9ee079fe33a4f4a4655ffe869006e04ec97d50e0022491b",
+        "bytes": 34685
+      },
+      "subset_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_base_transform50\\analysis_per_case.csv",
+        "sha256": "c817c92f886a5fc129218026d0501c46dcbe2456016f7b226015db186aded8de",
+        "bytes": 50344
+      }
+    },
+    "heldout_t_transform50": {
+      "source_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_manifest.json",
+        "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+        "bytes": 170041
+      },
+      "source_analyzer_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_per_case.csv",
+        "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+        "bytes": 226215
+      },
+      "source_analyzer_rows": 250,
+      "selected_rows": 50,
+      "selection": "exact run_dir membership in the entire sealed 50-case profile; no case/status filtering",
+      "stage_manifest_records_exact_with_final250": true,
+      "stage_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_t_transform50\\analysis_manifest.json",
+        "sha256": "749c99dfd59b98067f00893ba6156b40150ee82aab73c177388b510273b448f6",
+        "bytes": 34229
+      },
+      "subset_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_t_transform50\\analysis_per_case.csv",
+        "sha256": "521569089bfa9c152d6893370a3023f04c45596fa202b0bc6b4189abf0596677",
+        "bytes": 49861
+      }
+    },
+    "heldout_tm_noa50": {
+      "source_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_manifest.json",
+        "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+        "bytes": 170041
+      },
+      "source_analyzer_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_per_case.csv",
+        "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+        "bytes": 226215
+      },
+      "source_analyzer_rows": 250,
+      "selected_rows": 50,
+      "selection": "exact run_dir membership in the entire sealed 50-case profile; no case/status filtering",
+      "stage_manifest_records_exact_with_final250": true,
+      "stage_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_tm_noa50\\analysis_manifest.json",
+        "sha256": "27c105fb7a21e73710a6cb1ee4f0b8a9c0117be637bfa42285b94658db2147ca",
+        "bytes": 33218
+      },
+      "subset_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_tm_noa50\\analysis_per_case.csv",
+        "sha256": "ac1d712675a9a99556f9c43033b9ac2001b6ab3cc1e552a4620e8d4c4b4764ab",
+        "bytes": 40958
+      }
+    },
+    "heldout_tm_transform50": {
+      "source_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_manifest.json",
+        "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+        "bytes": 170041
+      },
+      "source_analyzer_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout250_analysis\\analysis_per_case.csv",
+        "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+        "bytes": 226215
+      },
+      "source_analyzer_rows": 250,
+      "selected_rows": 50,
+      "selection": "exact run_dir membership in the entire sealed 50-case profile; no case/status filtering",
+      "stage_manifest_records_exact_with_final250": true,
+      "stage_manifest": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_tm_transform50\\analysis_manifest.json",
+        "sha256": "47733ff800e02376f995a5b573ce707cbf9303581878d8b60ced457869d4de7b",
+        "bytes": 34403
+      },
+      "subset_csv": {
+        "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_tm_transform50\\analysis_per_case.csv",
+        "sha256": "2a970d5c0ecce7e4ed2e30a95dc010b263d0e76c8fd7eb4314190bd851dc9aa5",
+        "bytes": 50080
+      }
+    }
+  },
+  "all_final_manifest_records_exact": true,
+  "all_final_csv_rows_covered_exactly_once": true,
+  "original_sources": {
+    "manifest": {
+      "path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\batches\\20261030T010842083890Z_heldout\\manifest.json",
+      "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+      "bytes": 170041
+    },
+    "analyzer_csv": {
+      "path": "D:\\yanjiu1\\keyan1\\tmp\\literature_trials\\heldout250_analysis\\per_case.csv",
+      "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+      "bytes": 226215
+    }
+  }
+}

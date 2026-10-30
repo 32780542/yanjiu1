@@ -1,0 +1,38 @@
+{
+  "command": [
+    "python",
+    "-I",
+    "-B",
+    "docs/experiments/2026-10-30-rule-trials/evidence/compact_evidence.py",
+    "verify",
+    "docs/experiments/2026-10-30-rule-trials/evidence/heldout_tm_noa50/bundle.tar.gz",
+    "--check-originals",
+    "--report",
+    "tmp/literature_trials/evidence_publish/heldout_tm_noa50_originals_verification.json"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 1200.0,
+  "started_utc": "2026-10-30T01:59:36.329039+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 153816,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 30.36,
+  "ended_utc": "2026-10-30T02:00:06.688812+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "8b5c3edce36472eef84200d05248d307a4e4b48806aae5331ea66abb2b8a94ce",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archive_errors": {}
+}

@@ -21,3 +21,7 @@ docs/research/2026-10-30-literature-review/**/*.pdf
 docs/research/2026-10-30-literature-review/A_acc/*.txt
 docs/research/2026-10-30-literature-review/A_acc/metadata_candidates.json
 docs/research/2026-10-30-literature-review/C_merge/*_text.txt
+
+# Publish the audited trial tables; simulation output directories stay ignored.
+!docs/experiments/2026-10-30-rule-trials/results/
+!docs/experiments/2026-10-30-rule-trials/results/**

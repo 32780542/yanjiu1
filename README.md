@@ -1,8 +1,8 @@
 # 多车道纯规则编队与车道减少变换
 
-当前程序采用TM候选：NOA与编队共用单前车固定时距跟驰，自由补位增加邻车制动代价排序。时距约0.851秒，巡航时仍为30米。`formation_state=0/1`保持原定义：已有局部编队跟驰、被跟驰或互选队首关系为1，孤立车和纯NOA为0，调距过程也计入。记录器直接汇总参与率、同时参与人数和连续1时长。新增规则及独立试验见[本轮协议](docs/experiments/2026-10-30-rule-trials/protocol.md)。
+当前程序采用TM：NOA与编队共用单前车固定时距跟驰，自由补位增加邻车制动代价排序。时距约0.851秒，巡航时仍为30米。`formation_state=0/1`保持原定义：已有局部编队跟驰、被跟驰或互选队首关系为1，孤立车和纯NOA为0，调距过程也计入。记录器直接汇总参与率、同时参与人数和连续1时长。新增规则及独立试验见[本轮协议](docs/experiments/2026-10-30-rule-trials/protocol.md)。
 
-本轮已完成80例独立/组合筛查和8例车串试验，保留时距与补位代价进入[新种子五流量验证](docs/experiments/2026-10-30-rule-trials/heldout_protocol.md)，250例正在运行。合流参考恢复及第二前车预瞄的补丁、数据继续留作研究记录。此前P的[独立验收](docs/2026-10-29-P独立验收报告.md)及否决的R/S结果按原版本保留；旧global仍为自建模型，不用于Cai或最优集中式性能排名。
+本轮已完成80例筛查、8次车串运行及250例新种子五流量验证，全部正式工况安全排空。保留固定时距和补位制动代价；相对原编队，3→2五流量平均行程减少0.124秒、燃油减少2.549g/km。相对同跟驰NOA，平均快0.108秒、燃油多4.409g/km。完整结果见[采用报告](docs/experiments/2026-10-30-rule-trials/研究结果与采用说明.md)。合流参考恢复及第二前车预瞄的补丁、数据继续留作研究记录。此前P的[独立验收](docs/2026-10-29-P独立验收报告.md)及否决的R/S结果按原版本保留；旧global仍为自建模型，不用于Cai或最优集中式性能排名。
 
 工作目录是 `D:\yanjiu1\keyan1`。当前主线使用真实SUMO发车和运动：每车观察前200米、后100米内所有车道的实车，用本车私有记忆和条件规则形成交错编队，完成3→2变换。巡航28.8m/s、最高33.3m/s，巡航同道30米、相邻道交错15米；减速时同道期望间距随本车速度缩短。
 
@@ -16,7 +16,7 @@
 5. [MATLAB 控制调用链](docs/2026-10-29-MATLAB车辆控制调用链核查.md)与[Cai文献依据](docs/Cai2024全局方案对照依据.md)：完整代码的活跃控制链、可借鉴机制及原图记录。
 6. [前期方法诊断](docs/experiments/2026-10-29-four-flow-attribution/method_diagnostics/README.md)与[R/S候选档案](docs/experiments/2026-10-29-four-flow-attribution/R_S_diagnostics/README.md)：被否决方法的源码、对照与失败证据。
 7. [2026-10-30文献检索与方法建议](docs/research/2026-10-30-literature-review/README.md)：去重150篇，含可筛选目录、BibTeX、阅读深度及形成/变换的文献依据。
-8. [规则试验协议](docs/experiments/2026-10-30-rule-trials/protocol.md)、[五流量验证方案](docs/experiments/2026-10-30-rule-trials/heldout_protocol.md)及[离线证据](docs/experiments/2026-10-30-rule-trials/evidence/README.md)：候选差异、各项作用和验收入口。
+8. [本轮结果与采用](docs/experiments/2026-10-30-rule-trials/研究结果与采用说明.md)、[规则试验协议](docs/experiments/2026-10-30-rule-trials/protocol.md)、[五流量验证方案](docs/experiments/2026-10-30-rule-trials/heldout_protocol.md)及[离线证据](docs/experiments/2026-10-30-rule-trials/evidence/README.md)：候选差异、各项作用和验收入口。
 
 ## 在这个文件夹打开窗口
 
@@ -93,7 +93,7 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 
 每次结果有独立目录，保存请求、源码快照、参数、SUMO版本、逐车账本、0.1秒压缩轨迹和事件。大型原始轨迹留在被忽略的results目录，由运行编号与SHA-256索引；Git保存紧凑无损数据包和去重源码档案，不另复制整份项目作为版本。[本轮成果目录](docs/experiments/2026-10-29-four-flow-attribution)中的portable_D_baseline/H/C0/C1/P/C1_P分别保存各版表格、逐次结果、请求及源码。便携包内verify_portable.py用于检查公开包，部分验证还需本机保留的原轨迹；包内说明列出范围。
 
-重跑当前P的四流量矩阵：
+运行当前方法的四流量矩阵：
 
 ```powershell
 python -B scripts/run_logged.py --label four-flow-replication --timeout 7200 -- python -B variants/phase5g_pure_formation/run_flow_study.py --flows 500 750 1000 1500 --seeds 6 7 8 9 10 --jobs 4

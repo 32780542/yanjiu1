@@ -1,0 +1,77 @@
+test_bad_blob_hash_is_rejected (__main__.CompactEvidenceTests.test_bad_blob_hash_is_rejected) ... FAIL
+test_changed_local_original_positions_is_detected (__main__.CompactEvidenceTests.test_changed_local_original_positions_is_detected) ... FAIL
+test_invalid_original_flag_is_rejected (__main__.CompactEvidenceTests.test_invalid_original_flag_is_rejected) ... FAIL
+test_rehashed_invalid_crossing_bracket_is_rejected (__main__.CompactEvidenceTests.test_rehashed_invalid_crossing_bracket_is_rejected) ... FAIL
+test_rehashed_invalid_flag_is_rejected_semantically (__main__.CompactEvidenceTests.test_rehashed_invalid_flag_is_rejected_semantically) ... FAIL
+test_rehashed_valid_flag_with_wrong_result_summary_is_rejected (__main__.CompactEvidenceTests.test_rehashed_valid_flag_with_wrong_result_summary_is_rejected) ... FAIL
+test_round_trip_recomputes_exact_flags_trips_and_crossings (__main__.CompactEvidenceTests.test_round_trip_recomputes_exact_flags_trips_and_crossings) ... FAIL
+test_wrong_trip_summary_is_rejected (__main__.CompactEvidenceTests.test_wrong_trip_summary_is_rejected) ... FAIL
+
+======================================================================
+FAIL: test_bad_blob_hash_is_rejected (__main__.CompactEvidenceTests.test_bad_blob_hash_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_changed_local_original_positions_is_detected (__main__.CompactEvidenceTests.test_changed_local_original_positions_is_detected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_invalid_original_flag_is_rejected (__main__.CompactEvidenceTests.test_invalid_original_flag_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_rehashed_invalid_crossing_bracket_is_rejected (__main__.CompactEvidenceTests.test_rehashed_invalid_crossing_bracket_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_rehashed_invalid_flag_is_rejected_semantically (__main__.CompactEvidenceTests.test_rehashed_invalid_flag_is_rejected_semantically)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_rehashed_valid_flag_with_wrong_result_summary_is_rejected (__main__.CompactEvidenceTests.test_rehashed_valid_flag_with_wrong_result_summary_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_round_trip_recomputes_exact_flags_trips_and_crossings (__main__.CompactEvidenceTests.test_round_trip_recomputes_exact_flags_trips_and_crossings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+======================================================================
+FAIL: test_wrong_trip_summary_is_rejected (__main__.CompactEvidenceTests.test_wrong_trip_summary_is_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-10-30-rule-trials\evidence\test_compact_evidence.py", line 29, in setUp
+    self.assertIsNotNone(tool, "compact evidence implementation is missing")
+AssertionError: unexpectedly None : compact evidence implementation is missing
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.003s
+
+FAILED (failures=8)

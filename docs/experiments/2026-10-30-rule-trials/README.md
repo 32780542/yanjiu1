@@ -1,6 +1,6 @@
 # 文献规则的独立试验
 
-本轮从Git基线`8ed11d9`分别研究单前车固定时距T、自由补位制动代价M、合流参考恢复R；再检查第二前车T2和组合TM/TR。80例筛查与8次纵向车串运行已完成，TM进入五流量、新种子11–15的250例独立验证。当前生产规则为TM，SHA256`65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317`。
+本轮从Git基线`8ed11d9`分别研究单前车固定时距T、自由补位制动代价M、合流参考恢复R；再检查第二前车T2和组合TM/TR。80例筛查与8次纵向车串运行已完成，TM已完成五流量、新种子11–15的250例独立验证，全部安全排空。最终采用单前车时距和补位制动代价，结果见[研究结果与采用说明](研究结果与采用说明.md)。当前生产规则为TM，SHA256`65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317`。
 
 ## 阅读入口
 
@@ -26,4 +26,4 @@ python -I -B -S docs/experiments/2026-10-30-rule-trials/prepare_candidates.py
 python -B docs/experiments/2026-10-30-rule-trials/run_trials.py --candidate base TM=重建目录/TM/noa/native_rules.py --all-modes --stage replicate --flows 500 750 1000 1250 1500 --seeds 11 12 13 14 15 --duration 600 --max-time 900 --jobs 4
 ```
 
-每次创建独立批次，运行器保存实际六份源码、请求和物理参数。`analysis/analyze_trials.py`核对原件并生成逐工况、配对及越线表；`summarize_trials.py`汇总正式250例的五种策略。完整数据口径、归因和最终采用结论将随独立验证结果更新。
+每次创建独立批次，运行器保存实际六份源码、请求和物理参数。`analysis/analyze_trials.py`核对原件并生成逐工况、配对及越线表；`summarize_trials.py`汇总正式250例的五种策略。完整数据口径、机制归因和采用结论见[最终报告](研究结果与采用说明.md)、[数据表](results/results_tables.md)和[瓶颈实测](traffic_evidence/README.md)。

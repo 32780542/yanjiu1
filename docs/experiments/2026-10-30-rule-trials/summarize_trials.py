@@ -98,7 +98,7 @@ def main():
                 values = [lookup[profile, flow, scenario][metric] for profile in PROFILES]
                 table.append("| " + str(flow) + " | " + " | ".join("—" if v is None else f"{v*scale:.4f}" for v in values) + " |")
             table.append("")
-    (args.output / "results_tables.md").write_text("\n".join(table) + "\n", encoding="utf-8")
+    (args.output / "results_tables.md").write_text("\n".join(table).rstrip() + "\n", encoding="utf-8")
     print(json.dumps(dict(cases=250, eligible=summary["eligible"], profiles=len(profiles), paired_seeds=len(differences))))
 
 

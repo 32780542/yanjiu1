@@ -1,0 +1,80 @@
+{
+  "cases_verified": 250,
+  "frames_verified": 1602184,
+  "requested_vehicle_runs": 121870,
+  "numeric_or_count_comparisons": 10000,
+  "profiles": {
+    "heldout_base_noa50_retry1": {
+      "archive": {
+        "sha256": "419a233f82e5f946375e8d0b28b7e2c0bdc872db3938011700cc6dd393f31e92",
+        "bytes": 4785291
+      },
+      "audit": {
+        "sha256": "4a7ae7828c6bbeb27e224d8c7dc1fc93a157378b5ed5a5505924f8d0e8fd0b27",
+        "bytes": 861
+      }
+    },
+    "heldout_base_transform50": {
+      "archive": {
+        "sha256": "c88ae37b29164f81c4f767f1bba242431ed87ad839c3edbc08df0468e1e336cc",
+        "bytes": 7610947
+      },
+      "audit": {
+        "sha256": "d563b12e46b74f5a71c916f883b3caedfc445ce69db4c9f1b09326bb6c51d11a",
+        "bytes": 862
+      }
+    },
+    "heldout_t_transform50": {
+      "archive": {
+        "sha256": "a631cdb154eadf3bbded0dc5f16b35aa4c0dc2da47d51a40e8ed120546006aa9",
+        "bytes": 7504025
+      },
+      "audit": {
+        "sha256": "5cf5af46c44b1451eb41bd9fb0de0e1481ec0f8fce9ecb680e31c94edb9ae255",
+        "bytes": 862
+      }
+    },
+    "heldout_tm_noa50": {
+      "archive": {
+        "sha256": "71b9658d409d48adb91f5fecf88523f9e282b1da9b4e23d73871c3c6ebea10a6",
+        "bytes": 5551660
+      },
+      "audit": {
+        "sha256": "63d0749b9f9a35b34d39c0b700f1948602c435ad51314cfe2aac7ecb3d8137e1",
+        "bytes": 861
+      }
+    },
+    "heldout_tm_transform50": {
+      "archive": {
+        "sha256": "d57e9d79cb00eac986554c15cecb5a1757b17c9688af3c5577bba74dd4fd92d5",
+        "bytes": 7471822
+      },
+      "audit": {
+        "sha256": "73f85b79fca2a3989c979d2c08cc0a1796a58ba455f2a07f1e1ada60e9bb9701",
+        "bytes": 862
+      }
+    }
+  },
+  "all_final_manifest_records_exact": true,
+  "all_final_csv_rows_covered_exactly_once": true,
+  "final_manifest": {
+    "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+    "bytes": 170041
+  },
+  "final_analyzer_csv": {
+    "sha256": "4c7459769e79752ffeb81891e4808cf307212a7feeb37bb20127cae86d6f351c",
+    "bytes": 226215
+  },
+  "source_analyzer_operation": {
+    "operation": "20261030T015713374828Z_literature-heldout250-independent-analysis_6c0d0c1b",
+    "purpose": "Final250 independent analyzer source for all five sealed-profile publication audits",
+    "returncode": 0,
+    "status": "completed",
+    "path": "heldout250_analysis/logs/20261030T015713374828Z_literature-heldout250-independent-analysis_6c0d0c1b",
+    "log_sha256": {
+      "result.json": "7b29306fb445c2f51290fc9f92c5e54e7fb0f1494994bf2bbf651ab8694359e4",
+      "stdout.log": "57ced2ed0fa4e40fdd806f733f7cd78c70b6203d5ac64a4dc21bae253e6d153c",
+      "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

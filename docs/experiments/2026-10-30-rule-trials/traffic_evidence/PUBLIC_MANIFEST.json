@@ -1,0 +1,168 @@
+{
+  "cases": 250,
+  "profiles": 5,
+  "compressed_ledgers": 750,
+  "bundles": [
+    {
+      "profile": "base_noa",
+      "archive": "traffic_base_noa.tar.gz",
+      "manifest": "traffic_base_noa.manifest.json",
+      "bytes": 5616141
+    },
+    {
+      "profile": "base_transform",
+      "archive": "traffic_base_transform.tar.gz",
+      "manifest": "traffic_base_transform.manifest.json",
+      "bytes": 10036183
+    },
+    {
+      "profile": "T_transform",
+      "archive": "traffic_T_transform.tar.gz",
+      "manifest": "traffic_T_transform.manifest.json",
+      "bytes": 10030011
+    },
+    {
+      "profile": "TM_noa",
+      "archive": "traffic_TM_noa.tar.gz",
+      "manifest": "traffic_TM_noa.manifest.json",
+      "bytes": 7913651
+    },
+    {
+      "profile": "TM_transform",
+      "archive": "traffic_TM_transform.tar.gz",
+      "manifest": "traffic_TM_transform.manifest.json",
+      "bytes": 10022110
+    }
+  ],
+  "files": {
+    "case_index.json": {
+      "sha256": "5d8ff1e03d1393fd4d1a245d0514826c46935484d5c1dc0071a68864663856b1",
+      "bytes": 110605
+    },
+    "FINAL_INTERPRETATION.md": {
+      "sha256": "116b4b1f8cda9c24fef48613e80c8e0b778517512e09ccdd946de8a5ed7618db",
+      "bytes": 6353
+    },
+    "ledger_index_all250.csv": {
+      "sha256": "511397b1c31ee57e0406a59e0180428659966d9948e707529b0e4d237323bde3",
+      "bytes": 571589
+    },
+    "manifest.json": {
+      "sha256": "06ef1801076958656683ad39bc8b19543c55a8d12bc83cf6b566bbde4e97a820",
+      "bytes": 170041
+    },
+    "METHOD.md": {
+      "sha256": "4158d381cc58ec017577e4a7b639115e6ea835128ddc2f136b3c34d74146de43",
+      "bytes": 4870
+    },
+    "method_sources/bottleneck_attribution.py": {
+      "sha256": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "bytes": 24035
+    },
+    "method_sources/bottleneck_trials.py": {
+      "sha256": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bytes": 16050
+    },
+    "method_sources/complete_layers.py": {
+      "sha256": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "bytes": 11426
+    },
+    "method_sources/native_comparison.py": {
+      "sha256": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "bytes": 21554
+    },
+    "overall_paired_means.csv": {
+      "sha256": "ce95b4d7c4a8ea347bfdbae8786f24c07db64d7f0f9161acdb87b59350895011",
+      "bytes": 5538
+    },
+    "package_evidence.py": {
+      "sha256": "643e24bb0bdfdee4e25903861a94df12fc836972b1b3db65d6dec64ab0461dbb",
+      "bytes": 5106
+    },
+    "paired.csv": {
+      "sha256": "3d442eee674017347dec1dba0786433e4ed2893d0076df8a41f6cb531d03f964",
+      "bytes": 353081
+    },
+    "paired_means.csv": {
+      "sha256": "0368281e15a43929d0018660cc636c8cd1517d9972cdb93654797e5dfe6c00ba",
+      "bytes": 21842
+    },
+    "per_case.csv": {
+      "sha256": "2c6f92a13e28b4ae005c59e4745cee0e1d541ee8dd607c8735849fa27962db37",
+      "bytes": 641033
+    },
+    "README.md": {
+      "sha256": "bf3123eb606266a7f86296a44301ffc64bc888883d63b64abe806061227446e2",
+      "bytes": 2453
+    },
+    "report.json": {
+      "sha256": "c1156ae1607a4a287992967d555e9ed5e5f2bdc0f094621b5b6fc0d22996792b",
+      "bytes": 2249974
+    },
+    "scenario_effect_means.csv": {
+      "sha256": "cec79841693dcc93c6fa7caf66c41aa5d9acbc0caeedb9235c64dfbc165b6198",
+      "bytes": 9075
+    },
+    "scenario_effects.csv": {
+      "sha256": "2fc9f0e04a8b83f56a26cc370e1202fc9bb3e2abeeb9eb586b00f0cab8634080",
+      "bytes": 145915
+    },
+    "traffic_base_noa.manifest.json": {
+      "sha256": "33d90b393be96c74c94c3658fd2d69ec57e1e1470219a7c55e58dd8f8354c89b",
+      "bytes": 53790
+    },
+    "traffic_base_noa.tar.gz": {
+      "sha256": "1eefb58b6723e35aa77684eb535060dfeb2b70bd9d0932e491b7558275752fad",
+      "bytes": 5616141
+    },
+    "traffic_base_transform.manifest.json": {
+      "sha256": "769ff2558a4c5924ffa9827e5a03b64b047e17da2b563d4b7acb111b927fd8e7",
+      "bytes": 54712
+    },
+    "traffic_base_transform.tar.gz": {
+      "sha256": "8966a61df3698a3b42cbf106fb1c4a5db29b41b027052868f24533b06bc7555e",
+      "bytes": 10036183
+    },
+    "traffic_T_transform.manifest.json": {
+      "sha256": "f4fed063abfa542a908bd9b8dd2af00042f706c5d359142670be6f69569702fb",
+      "bytes": 54406
+    },
+    "traffic_T_transform.tar.gz": {
+      "sha256": "6728878faa73de6a370b137f6edfe3073a20a5e7ea7c1981081803100c04d01b",
+      "bytes": 10030011
+    },
+    "traffic_TM_noa.manifest.json": {
+      "sha256": "b07fff3f9dda362989c79f3ac0434bcf060bacb5f83df05aaec42ffcce233038",
+      "bytes": 53586
+    },
+    "traffic_TM_noa.tar.gz": {
+      "sha256": "c5801e49a9025e7c87cb2f8c4f48dbabe0622ea7781f4c7755c645ffa2aad4ac",
+      "bytes": 7913651
+    },
+    "traffic_TM_transform.manifest.json": {
+      "sha256": "3fa7a5072f1cda57a8e7284a397c183a366d6d691bc887465fa2c261286ae103",
+      "bytes": 54508
+    },
+    "traffic_TM_transform.tar.gz": {
+      "sha256": "37873fe91ad39571132f9bfc3b24a60c96a58f115c7295cbc33fc379d60b5e23",
+      "bytes": 10022110
+    },
+    "verification_summary_all250.json": {
+      "sha256": "8f1f40cb038be9898c1be16906914c49e5c5c401d7c1d8bfab8699a4213c969b",
+      "bytes": 1028
+    },
+    "verify_public.py": {
+      "sha256": "4ce0544254229248bdea573cab9d2c820bd0d0af423b5cbd080abda5f3c13506",
+      "bytes": 6737
+    }
+  },
+  "method_source_hashes": {
+    "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+    "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761"
+  },
+  "original_json_ties": "case.json and report runs retain input/result/trips/source/positions hashes; original JSON records are in the companion case evidence bundles",
+  "raw_positions_copied": false,
+  "compressed_ledger_bytes_preserved": true
+}

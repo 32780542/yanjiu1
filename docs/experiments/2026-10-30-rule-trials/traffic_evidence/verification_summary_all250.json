@@ -1,0 +1,40 @@
+{
+  "cases": 250,
+  "eligible_cases": 250,
+  "pairs": 300,
+  "eligible_pairs": 300,
+  "ledger_files": 750,
+  "ledger_bytes_by_type": {
+    "region_steps.jsonl.gz": 16883201,
+    "gate_brackets.jsonl.gz": 14199987,
+    "vehicles.json.gz": 12488059
+  },
+  "ledger_total_bytes": 43571247,
+  "profiles": {
+    "base_noa": {
+      "cases": 50,
+      "total_low_speed_vehicle_s": 1286.0999999999997,
+      "max_simultaneous_low_speed": 6
+    },
+    "base_transform": {
+      "cases": 50,
+      "total_low_speed_vehicle_s": 2.7000000000000455,
+      "max_simultaneous_low_speed": 1
+    },
+    "T_transform": {
+      "cases": 50,
+      "total_low_speed_vehicle_s": 11.29999999999984,
+      "max_simultaneous_low_speed": 3
+    },
+    "TM_noa": {
+      "cases": 50,
+      "total_low_speed_vehicle_s": 538.1,
+      "max_simultaneous_low_speed": 5
+    },
+    "TM_transform": {
+      "cases": 50,
+      "total_low_speed_vehicle_s": 21.69999999999999,
+      "max_simultaneous_low_speed": 3
+    }
+  }
+}

@@ -16,8 +16,34 @@
   "all_local_originals_and_selected_bytes_verified": true,
   "manifest_records_exact": true,
   "scope": "selected raw fields, full original positions local hash+rerunnable Git source",
-  "analysis_status": "pending final heldout CSV publication audit",
-  "publication_audit": null,
+  "analysis_status": "independently audited",
+  "publication_audit": {
+    "cases_verified": 50,
+    "manifest_records_exact": true,
+    "analyzer_cases_compared": 50,
+    "numeric_or_count_comparisons": 2000,
+    "frames_verified": 320546,
+    "requested_vehicle_runs": 24374,
+    "unique_source_blobs": 6,
+    "full_original_positions_bytes_indexed": 120081809,
+    "full_original_events_bytes_indexed": 772147,
+    "archive": {
+      "sha256": "419a233f82e5f946375e8d0b28b7e2c0bdc872db3938011700cc6dd393f31e92",
+      "bytes": 4785291
+    },
+    "manifest": {
+      "sha256": "1eaeeec94ecb8bbd631b26acce10341a9888dbf1da2352efd1e9205bdc66768d",
+      "bytes": 33526
+    },
+    "analyzer_csv": {
+      "sha256": "67705a10b71ff0f7c362c2993a2c8f01f9104b485cffc00f86e60b1cb056d5a4",
+      "bytes": 39570
+    },
+    "verification_report": {
+      "sha256": "7c773bf786304ba730b6f88203610f492b9bfda0b744f337848eb0eba95c674d",
+      "bytes": 1540336
+    }
+  },
   "operations": [
     {
       "operation": "20261030T013514109076Z_evidence-heldout-base-noa50-build_053d933a",
@@ -64,6 +90,18 @@
       "log_sha256": {
         "result.json": "b3863afc86b66a4bc6855ac2d67ab55aff3f1e39444e2234152ddd2e1afa4843",
         "stdout.log": "51b73d2b903b94cac4bd70a507156efef2995250dccb4c364d4744be788413cd",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T020016459687Z_evidence-heldout-base-noa50-publication_5bd2bfb3",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_base_noa50_retry1/logs/20261030T020016459687Z_evidence-heldout-base-noa50-publication_5bd2bfb3",
+      "log_sha256": {
+        "result.json": "70f66e97662a711f51f0c3c5a740348c5823c3ecc6e63ebbd5d926db27f282cb",
+        "stdout.log": "933dcf8d0d7d26a7e65ff5bc6e6ef8b1b7a1d0617b74771d9fedb3ef137a46c8",
         "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       }
     }

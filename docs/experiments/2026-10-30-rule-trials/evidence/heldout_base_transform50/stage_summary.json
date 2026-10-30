@@ -16,8 +16,34 @@
   "all_local_originals_and_selected_bytes_verified": true,
   "manifest_records_exact": true,
   "scope": "selected raw fields, full original positions local hash+rerunnable Git source",
-  "analysis_status": "pending final heldout CSV publication audit",
-  "publication_audit": null,
+  "analysis_status": "independently audited",
+  "publication_audit": {
+    "cases_verified": 50,
+    "manifest_records_exact": true,
+    "analyzer_cases_compared": 50,
+    "numeric_or_count_comparisons": 2000,
+    "frames_verified": 320499,
+    "requested_vehicle_runs": 24374,
+    "unique_source_blobs": 6,
+    "full_original_positions_bytes_indexed": 310863310,
+    "full_original_events_bytes_indexed": 1724247,
+    "archive": {
+      "sha256": "c88ae37b29164f81c4f767f1bba242431ed87ad839c3edbc08df0468e1e336cc",
+      "bytes": 7610947
+    },
+    "manifest": {
+      "sha256": "998d233469037575e9ee079fe33a4f4a4655ffe869006e04ec97d50e0022491b",
+      "bytes": 34685
+    },
+    "analyzer_csv": {
+      "sha256": "c817c92f886a5fc129218026d0501c46dcbe2456016f7b226015db186aded8de",
+      "bytes": 50344
+    },
+    "verification_report": {
+      "sha256": "7af6f7a8a4830123bb63920e86f7c0f7f817f5ddb589a124c6cf28591be602b4",
+      "bytes": 1541988
+    }
+  },
   "operations": [
     {
       "operation": "20261030T013710507714Z_evidence-heldout-base-transform50-build_1118034b",
@@ -52,6 +78,18 @@
       "log_sha256": {
         "result.json": "e38506554cce32e528cbd04747d9656438000a0a23c901ae5ddadcdf6bec62f2",
         "stdout.log": "ff16b8b8a3195237954852744ef53aef4e04c91fafcfd5026e9c6df3714ade0a",
+        "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "operation": "20261030T020016476763Z_evidence-heldout-base-transform50-publication_45a71bf4",
+      "purpose": "complete stage evidence build/verify/audit; failures retained",
+      "returncode": 0,
+      "status": "completed",
+      "path": "heldout_base_transform50/logs/20261030T020016476763Z_evidence-heldout-base-transform50-publication_45a71bf4",
+      "log_sha256": {
+        "result.json": "8dd9534799fd5bb6ae97c39710a5d356d9c0c763819dfc4fa5d0d371e44b0507",
+        "stdout.log": "b77b6db58834a84e45978fea8c87b0164395c5e67043d6b1d0abf0779c078780",
         "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       }
     }
