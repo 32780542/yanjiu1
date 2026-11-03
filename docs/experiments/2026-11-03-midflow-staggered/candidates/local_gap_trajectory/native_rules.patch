@@ -1,0 +1,35 @@
+--- S/noa/native_rules.py
++++ C5/noa/native_rules.py
+@@ -66,6 +66,14 @@
+ def _request(ego, target, reference_speed):
+     desired = reference_speed + POSITION_GAIN * (target - ego.x)
+     return max(0.0, min(MAX_SPEED, ego.speed + SPEED_RELAXATION * (desired - ego.speed)))
++
++
++def _gap_approach(ego, target, reference_speed):
++    """5s局部移动端点的最小加速度平方解，逐帧重算初始控制量。"""
++    horizon = 5.0
++    acceleration = (6 * (target - ego.x) / horizon**2
++                    + 4 * (reference_speed - ego.speed) / horizon)
++    return max(0.0, min(MAX_SPEED, ego.speed + 0.1 * acceleration))
+ 
+ 
+ def _phase(lane, lanes):
+@@ -190,7 +198,7 @@
+ 
+ def _join_speed(ego, rows, memory, lane):
+     target, speed, gap = _merge_target(ego, rows, lane, memory.gap)
+-    return _request(ego, target, speed), target, replace(memory, gap=gap)
++    return _gap_approach(ego, target, speed), target, replace(memory, gap=gap)
+ 
+ 
+ def cf_speed(car, rows):
+@@ -394,7 +402,7 @@
+     if preparing and ego.lane == 2:
+         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
+         memory = replace(memory, gap=gap)
+-        speed = _request(ego, target, gap_speed)
++        speed = _gap_approach(ego, target, gap_speed) if organized else _request(ego, target, gap_speed)
+         if _clear(ego, rows, 1):
+             return action(speed, 1, "merge", target), replace(
+                 memory, lane_target=1, joining=organized
