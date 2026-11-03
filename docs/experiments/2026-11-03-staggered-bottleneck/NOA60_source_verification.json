@@ -1,0 +1,11 @@
+{
+  "sensitivity_rule_sha256": "c5ed30e8c8f722959c97a9db86c857db22e8740a7d7d0c118d1c028ec7550dd2",
+  "recorded_baseline_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+  "ephemeral_default50_sha256": "4a5ff0b7d846d94210241e05e68c450be9fde046a68b6136149c1bb62d0ee663",
+  "noa_command_memory_exact_comparisons": 2000,
+  "random_seed": 202611030931,
+  "source_files_unchanged": true,
+  "formal_baseline_modified": false,
+  "final61_performance_read": false,
+  "scope": "Only in-memory default front distance reverted 60 to50; NOA outputs equal recorded TM on finite shadow states. cf_speed source also inherits default but organized branches are not executed in this NOA study."
+}

@@ -54,12 +54,15 @@ class NativeRulesTests(unittest.TestCase):
         ego = self.car(0, 100.0, 2)
         self.assertAlmostEqual(self.command(ego, [self.car(1, 130.0, 2)], drop=None).speed, 28.8)
 
-    def test_middle_front_car_makes_room_in_the_other_retained_lane(self):
+    def test_middle_car_has_no_assigned_helper_role_in_direct_gap_policy(self):
         cars = self.six()
         ego = replace(cars[2], track=0)
         others = [c for i, c in enumerate(cars) if i != 2]
         others = [replace(c, track=i + 1) for i, c in enumerate(others)]
-        self.assertEqual(self.command(ego, others).lane, 0)
+        command, memory = self.r.decide(ego, others, self.r.Memory(), "transform")
+        self.assertIsNone(command.lane)
+        self.assertIsNone(memory.lane_target)
+        self.assertNotIn(command.reason, ("make_room", "prepare_room", "open_gap"))
 
     def test_ending_front_uses_safe_space_without_waiting_for_other_plans(self):
         cars = self.six()
@@ -123,17 +126,16 @@ class NativeRulesTests(unittest.TestCase):
         ]
         self.assertEqual(self.command(ego, others, mode="formation", drop=None).lane, 1)
 
-    def test_equal_distance_actual_heads_use_signed_geometry_not_track_order(self):
+    def test_equal_phase_error_prefers_nearer_physical_peer_without_track_order(self):
         ego = self.car(0, 300.0, 0)
-        # Both peers are actual heads (>50m apart), equally close in phase.
+        # The peers have equal |dx+15|=26, but physical distances are 41 and 11m.
         others = [self.car(99, 259.0, 1), self.car(1, 311.0, 1)]
         a = self.r._following(ego, others, 3)
         changed = [replace(c, track=100-c.track) for c in reversed(others)]
-        b = self.r._following(ego, changed, 3)
-        self.assertEqual(a, b)
-        self.assertLess(a[1], ego.x)
-        self.assertLess(a[0], self.r.CRUISE)
-        self.assertLessEqual(abs(self.r.POSITION_GAIN * (a[1] - ego.x)), 2.0 + 1e-9)
+        self.assertEqual(a, self.r._following(ego, changed, 3))
+        self.assertAlmostEqual(a[1], ego.x + 2.0 / self.r.POSITION_GAIN)
+        self.assertAlmostEqual(a[0], self.r.CRUISE + 2.0 * self.r.SPEED_RELAXATION)
+        self.assertIsNone(a[2])
 
     def test_transform_approaches_current_gap_without_skipping_its_front(self):
         ego = self.car(0, 700.0, 2)
@@ -176,10 +178,15 @@ class NativeRulesTests(unittest.TestCase):
         others[0] = replace(others[0], y=6.6, vy=-3.3)
         self.assertIsNone(self.command(ego, others).lane)
 
-    def test_retained_lane_head_does_not_follow_an_ending_car_behind(self):
+    def test_retained_head_couples_to_actual_ending_peer_without_a_fake_front(self):
         ego = self.car(0, 700.0, 1)
-        a = self.command(ego, [self.car(1, 670.0, 2)])
-        self.assertAlmostEqual(a.speed, 28.8)
+        peer = self.car(1, 670.0, 2)
+        a = self.command(ego, [peer])
+        # dx=-30 and phi(peer)-phi(ego)=-15; a three-lane edge clips at -2m/s.
+        self.assertIsNone(a.reference)
+        self.assertAlmostEqual(a.target_x, ego.x - 2.0 / self.r.POSITION_GAIN)
+        self.assertAlmostEqual(a.speed, self.r.CRUISE - 2.0 * self.r.SPEED_RELAXATION)
+        self.assertEqual(a.formation_state, 1)
 
     def test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes(self):
         ego = self.car(0, 100.0, 2, 20.0)
@@ -267,7 +274,7 @@ class NativeRulesTests(unittest.TestCase):
         others = [
             self.car(i + 1, x, lane)
             for i, (x, lane) in enumerate(
-                ((800.0, 1), (770.0, 1), (740.0, 1), (785.0, 0), (725.0, 0))
+                ((770.0, 1), (740.0, 1), (710.0, 1), (785.0, 0), (725.0, 0))
             )
         ]
         command = self.command(ego, others)
@@ -307,9 +314,18 @@ class NativeRulesTests(unittest.TestCase):
                 )
             )
         ]
-        before = self.command(ego, others)
-        after = self.command(replace(ego, x=641.0), [replace(c, x=c.x + 2.0) for c in others])
-        self.assertAlmostEqual(after.target_x, before.target_x + 2.0)
+        after_ego = replace(ego, x=641.0)
+        shifted = [replace(c, x=c.x + 2.0) for c in others]
+        before_follow = self.r._following(ego, others, 3, 640.0)
+        after_follow = self.r._following(after_ego, shifted, 3, 640.0)
+        self.assertEqual((before_follow[2], after_follow[2]), (1, 1))
+        self.assertAlmostEqual(after_follow[1], before_follow[1] + 2.0)
+        command, memory = self.r.decide(after_ego, shifted, self.r.Memory(), "transform")
+        self.assertEqual(command.reason, "approach_gap")
+        self.assertIsNone(command.lane)
+        self.assertEqual(memory.gap, (4, 3))
+        self.assertAlmostEqual(command.target_x, (shifted[2].x + shifted[3].x) / 2)
+        self.assertLessEqual(command.speed, self.r.safe_speed(after_ego, shifted))
 
     def test_selected_local_cell_survives_lateral_motion_and_completion(self):
         ego = self.car(0, 285.0, 0)
@@ -339,13 +355,13 @@ class NativeRulesTests(unittest.TestCase):
         command, _ = self.r.decide(moving, rows, memory, "transform")
         self.assertAlmostEqual(command.speed, 28.8)
 
-    def test_a_helper_tracks_the_gap_while_the_rear_opens_space(self):
+    def test_submitted_own_lane_request_keeps_tracking_the_actual_gap(self):
         cars = self.six()
         ego = replace(cars[2], track=0)
         rows = [
             replace(c, track=i + 1) for i, c in enumerate(c for j, c in enumerate(cars) if j != 2)
         ]
-        _, memory = self.r.decide(ego, rows, self.r.Memory(), "transform")
+        memory = self.r.Memory(lane_target=0, joining=True)
         moved = [
             replace(c, x=650.0, speed=20.0) if c.lane == 0 and c.x == 670.0 else c for c in rows
         ]
@@ -380,15 +396,15 @@ class NativeRulesTests(unittest.TestCase):
         self.assertEqual(command, fresh)
         self.assertIsNone(command.reference)
 
-    def test_a_retained_head_adopts_the_two_lane_phase(self):
+    def test_retained_head_keeps_the_physical_zero_fifteen_phase(self):
         ego = self.car(0, 700.0, 0)
         reference = self.car(1, 700.0, 1)
-        memory = self.r.Memory()
-        command, _ = self.r.decide(ego, [reference], memory, "transform")
-        self.assertEqual((self.r._phase(0, 2), self.r._phase(1, 2)), (15.0, 0.0))
-        self.assertLess(command.target_x, ego.x)
-        self.assertLess(command.speed, self.r.CRUISE)
-        self.assertLessEqual(abs(self.r.POSITION_GAIN * (command.target_x - ego.x)), 2.0 + 1e-9)
+        command, _ = self.r.decide(ego, [reference], self.r.Memory(), "transform")
+        self.assertEqual((self.r._phase(0, 2), self.r._phase(1, 2)), (0.0, 15.0))
+        self.assertEqual((self.r._phase(0, 3), self.r._phase(1, 3)), (0.0, 15.0))
+        # Same-x outer->middle error is +15, not the former two-lane -15.
+        self.assertAlmostEqual(command.target_x, ego.x + 2.0 / self.r.POSITION_GAIN)
+        self.assertAlmostEqual(command.speed, self.r.CRUISE + 2.0 * self.r.SPEED_RELAXATION)
         self.assertAlmostEqual(command.speed, self.r._request(ego, command.target_x, self.r.CRUISE))
 
     def test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640(self):
@@ -464,8 +480,8 @@ class NativeRulesTests(unittest.TestCase):
         rows = [self.car(1, 700.0, 0), self.car(2, 655.0, 1)]
         memory = self.r.Memory(lane_target=1, gap=(None, 2), joining=True)
         command, memory = self.r.decide(ego, rows, memory, "transform")
-        self.assertGreater(command.speed, 28.8)
-        self.assertGreater(command.target_x, ego.x)
+        self.assertAlmostEqual(command.speed, self.r.CRUISE - 2.0 * self.r.SPEED_RELAXATION)
+        self.assertAlmostEqual(command.target_x, ego.x - 2.0 / self.r.POSITION_GAIN)
         self.assertLessEqual(abs(self.r.POSITION_GAIN * (command.target_x-ego.x)), 2.0 + 1e-9)
         self.assertAlmostEqual(command.speed, self.r._request(ego, command.target_x, self.r.CRUISE))
         self.assertIsNone(memory.lane_target)

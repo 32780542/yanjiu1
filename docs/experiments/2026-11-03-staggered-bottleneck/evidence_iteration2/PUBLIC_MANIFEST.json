@@ -1,0 +1,288 @@
+{
+  "format": "iteration2-publication-v1",
+  "archives": [
+    {
+      "archive": "20261103_L_screen180_8.tar.gz",
+      "sha256": "b95d95c8d0bf93288a09e6d6e067b1671408446b6fef4e00b704b9a08fd61998",
+      "bytes": 2138882,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "62fb8893f9df9163bb0fc5b17aabc2d5456ef51c282fafc861027387af33d126",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_M_screen180_8.tar.gz",
+      "sha256": "8304ecb1f8b15602da7569b6bb64b80965d1d355c98dcfcb66943578c6f1a848",
+      "bytes": 2127002,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "b33eb9e512f79519ce5451585f1df9299ca3916d281dca0b04734a609ff9b9c0",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_N_screen180_8.tar.gz",
+      "sha256": "57f15e334dd5e84da0fa27332df0aff982d3fa64bc05bbc78312519f4b390cbd",
+      "bytes": 2131546,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "f73949fbd3a14a093a25aa861b6a0391d9f02df3e214de91c0eefaaa5bf1a926",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_NOA60_screen180_16.tar.gz",
+      "sha256": "0247c3c4f43475f110e7b5b519da5bd14f7365da6bb0351223ea5d540a3ac33b",
+      "bytes": 3658717,
+      "case_count": 16,
+      "member_count": 307,
+      "index_sha256": "a8c26c3b7553c7b17edff3bf2b43b64bf03755a9db6d22636f5976d36001819f",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_validation31_L40_lane_drop_20.tar.gz",
+      "sha256": "3b328bbca56b31f0658f7d0046da54555dc23d98642f49fa7727de5c2059f71c",
+      "bytes": 15152140,
+      "case_count": 20,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road group, independent of outcomes",
+        "scenario": "lane_drop",
+        "full_plan_cases": 40,
+        "partition_cases": 20,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_L40",
+        "original_protocol_sha256": "92dc83962e84cab530ee5dd9a40bc66aef38922cde8835e37774c1a09c6a996b",
+        "original_manifest_sha256": "6cc87a33c6fac1eb87ffde40ba024dea45c2c8eb3a46835e095d69ea15e47e6c"
+      },
+      "index_sha256": "63935b24c0a0af8baf22bee35d039d74992071a5491f50c55f975e62dd1401b0"
+    },
+    {
+      "archive": "20261103_validation31_L40_straight3_20.tar.gz",
+      "sha256": "6849038ed6a9cea97b8abb29bfae819af7b26181c7e69c2210e72bdb92125f40",
+      "bytes": 14137445,
+      "case_count": 20,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road group, independent of outcomes",
+        "scenario": "straight3",
+        "full_plan_cases": 40,
+        "partition_cases": 20,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_L40",
+        "original_protocol_sha256": "92dc83962e84cab530ee5dd9a40bc66aef38922cde8835e37774c1a09c6a996b",
+        "original_manifest_sha256": "6cc87a33c6fac1eb87ffde40ba024dea45c2c8eb3a46835e095d69ea15e47e6c"
+      },
+      "index_sha256": "cbba9d086da401c128ee87b40c2a1c577db199b5af9c0b7a89d9edbedc5242e9"
+    },
+    {
+      "archive": "20261103_validation31_LP0_10.tar.gz",
+      "sha256": "c17c7b130f9a4251fb88481a5365c8e31692c7f016f41bc91afd00ef228fb7a8",
+      "bytes": 8825757,
+      "case_count": 10,
+      "member_count": 205,
+      "index_sha256": "f873e7424bba45d62e9dc3be44b581ac06361b4e27455844ab8196bd3f7eb67f",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_validation31_NOA60_20.tar.gz",
+      "sha256": "22de4607dbc768446a5eb25760a569ef412c8ced2c1df40a2482d797b7c4a8f3",
+      "bytes": 15255344,
+      "case_count": 20,
+      "member_count": 375,
+      "index_sha256": "b432fdb391724f37bf856342ced0439f19682002db2daaaf3413fdbb1175a914",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    }
+  ],
+  "new_plan_attempts": 110,
+  "total_archive_bytes": 63426833,
+  "short_common_rule_pairs": 24,
+  "noa_short_common_pairs": 16,
+  "noa_long_common_pairs": 20,
+  "formal_baseline_modified": false,
+  "final61_performance_read": false,
+  "frozen_package_stage_sha256": "3b202af61ed2a8aab66415dce4afad4204d5077e500f16b6b7684bfde50d11e7",
+  "frozen_report_paired_sha256": "88990f7bb18853d6e8278af5e41c1cf0079532b137dd6cd4b20275497e803ebd",
+  "related_reports": {
+    "validation31_L90\\flow_means.csv": {
+      "sha256": "3f98dd72c9327e23ffb5e52584f259bfd39ad6c3ae14fa7f624e67d972c31419",
+      "bytes": 8733
+    },
+    "validation31_L90\\paired_seeds.csv": {
+      "sha256": "ed23dc3deb15cd5730ecf524114c2381eb4306ebc7a39c12215e904be4800690",
+      "bytes": 83989
+    },
+    "validation31_L90\\per_case.csv": {
+      "sha256": "8743f31cf8d8c65c5a0b48e305231a0b9073de902cde797b306f885bb937df71",
+      "bytes": 283843
+    },
+    "validation31_L90\\summary.json": {
+      "sha256": "25fa229ec7a24fb92cd56e0b9d001421597d7a02318cb1efc401dbb8f55a0c39",
+      "bytes": 28084
+    },
+    "validation31_L90\\tables.md": {
+      "sha256": "d9e1576012233c0c621b7b4732611720fe3480fd2fdebf0475ea1cf98607eba9",
+      "bytes": 1313
+    },
+    "NOA60_sensitivity_short180\\flow_means.csv": {
+      "sha256": "c94b348a3fb7d77e13607511fe180cf60755ea36ecfa6860013614c4f253113b",
+      "bytes": 5040
+    },
+    "NOA60_sensitivity_short180\\paired_seeds.csv": {
+      "sha256": "a3c8032e919a3cf6c571b37cde764c90f7b8002dac8ac765bb433175a26b965a",
+      "bytes": 23544
+    },
+    "NOA60_sensitivity_short180\\per_case.csv": {
+      "sha256": "d24359abe50f5e1f137751b99bc90eae6ffd50b1312a83411917b411321c8395",
+      "bytes": 107959
+    },
+    "NOA60_sensitivity_short180\\summary.json": {
+      "sha256": "31e27028dd9bbbfe9d4a2078712c925143382310443c834969396ff53fcaf134",
+      "bytes": 21907
+    },
+    "NOA60_sensitivity_short180\\tables.md": {
+      "sha256": "6025adcf0ff0765c92b15d733acb68494711ef084766b967678fe81399dad005",
+      "bytes": 1015
+    },
+    "NOA60_sensitivity_long600\\flow_means.csv": {
+      "sha256": "051aef5d11fec7ec4348fcafb75d0d0adfddca3072331d7f1f82a2e07791043d",
+      "bytes": 3916
+    },
+    "NOA60_sensitivity_long600\\paired_seeds.csv": {
+      "sha256": "342728ac20e92e44e8f221407cec5c0275d657062ff5aa3a56b3556d28e72123",
+      "bytes": 33240
+    },
+    "NOA60_sensitivity_long600\\per_case.csv": {
+      "sha256": "7483b61958c6b0d086f4467580acb64cb494f0d255925c27c176f5eea149f923",
+      "bytes": 187893
+    },
+    "NOA60_sensitivity_long600\\summary.json": {
+      "sha256": "cf76cf36f6af6de947c7950ab6f7c2186eed61dcc65eb66ee00e3748a4ddfa0e",
+      "bytes": 13265
+    },
+    "NOA60_sensitivity_long600\\tables.md": {
+      "sha256": "9b1d6a28dd976d94868ad8dd0c12e68014bdefa82e9669572503308cdcbc4603",
+      "bytes": 705
+    },
+    "NOA60_source_verification.json": {
+      "sha256": "3e146f27a58327509be831fdc4274031991cc60335aff6ad84454e7aee020376"
+    }
+  },
+  "files": {
+    "20261103_L_screen180_8.tar.gz": {
+      "sha256": "b95d95c8d0bf93288a09e6d6e067b1671408446b6fef4e00b704b9a08fd61998",
+      "bytes": 2138882
+    },
+    "20261103_L_screen180_8.tar.manifest.json": {
+      "sha256": "3b96afa960b8c669ab9c4151f30a0d5518c384d1f2fb59d61f8c1d232676a454",
+      "bytes": 467
+    },
+    "20261103_L_screen180_8.tar.verification.json": {
+      "sha256": "edfc6655736e110084a18989bac656b901610f4cb27aff65f59f665c3069ed9d",
+      "bytes": 85011
+    },
+    "20261103_M_screen180_8.tar.gz": {
+      "sha256": "8304ecb1f8b15602da7569b6bb64b80965d1d355c98dcfcb66943578c6f1a848",
+      "bytes": 2127002
+    },
+    "20261103_M_screen180_8.tar.manifest.json": {
+      "sha256": "00e7fa6fad591c2c2015d9c2e520737903d29406ad0ac502d960bc44c3430cc9",
+      "bytes": 467
+    },
+    "20261103_M_screen180_8.tar.verification.json": {
+      "sha256": "5a452785e1f247ac9ea663ad6387c00f70dd2af2b09b389165ff9f3e3fe15780",
+      "bytes": 85063
+    },
+    "20261103_N_screen180_8.tar.gz": {
+      "sha256": "57f15e334dd5e84da0fa27332df0aff982d3fa64bc05bbc78312519f4b390cbd",
+      "bytes": 2131546
+    },
+    "20261103_N_screen180_8.tar.manifest.json": {
+      "sha256": "8dae2fef6bebb967c2d8f813d917c4b6d79679a0361f32ea29f6fb6ebc898693",
+      "bytes": 467
+    },
+    "20261103_N_screen180_8.tar.verification.json": {
+      "sha256": "11ff78549abaf26a8b6dcb896e5df17530ddc8e3db3a747eea9804be5e6f3a47",
+      "bytes": 84961
+    },
+    "20261103_NOA60_screen180_16.tar.gz": {
+      "sha256": "0247c3c4f43475f110e7b5b519da5bd14f7365da6bb0351223ea5d540a3ac33b",
+      "bytes": 3658717
+    },
+    "20261103_NOA60_screen180_16.tar.manifest.json": {
+      "sha256": "4c22e96df8df50a654b0d778a365eb8072c8e112b7369b4a89b557467837fea0",
+      "bytes": 473
+    },
+    "20261103_NOA60_screen180_16.tar.verification.json": {
+      "sha256": "910c1a50670119fa901a25e41a5b15bab507002771039c045f32ff3d44ce399b",
+      "bytes": 167238
+    },
+    "20261103_validation31_L40_lane_drop_20.tar.gz": {
+      "sha256": "3b328bbca56b31f0658f7d0046da54555dc23d98642f49fa7727de5c2059f71c",
+      "bytes": 15152140
+    },
+    "20261103_validation31_L40_lane_drop_20.tar.manifest.json": {
+      "sha256": "0638d0655d76c949a8dc73b008a3c29cd7f30f31cbdee6b554744afbec2cc563",
+      "bytes": 785
+    },
+    "20261103_validation31_L40_lane_drop_20.tar.verification.json": {
+      "sha256": "045ea76f6e9d8708d1c39403b0a81bb67800081554234e890eab1654fa207495",
+      "bytes": 215851
+    },
+    "20261103_validation31_L40_straight3_20.tar.gz": {
+      "sha256": "6849038ed6a9cea97b8abb29bfae819af7b26181c7e69c2210e72bdb92125f40",
+      "bytes": 14137445
+    },
+    "20261103_validation31_L40_straight3_20.tar.manifest.json": {
+      "sha256": "e40afb45a51a3dac7c7fb8ad96717d56868d066468c7f930ac407685f8462f63",
+      "bytes": 785
+    },
+    "20261103_validation31_L40_straight3_20.tar.verification.json": {
+      "sha256": "2a0e339ca46f89f03e75afcf5608628f23d80ed55bea906b6f02eb5098539f32",
+      "bytes": 214341
+    },
+    "20261103_validation31_LP0_10.tar.gz": {
+      "sha256": "c17c7b130f9a4251fb88481a5365c8e31692c7f016f41bc91afd00ef228fb7a8",
+      "bytes": 8825757
+    },
+    "20261103_validation31_LP0_10.tar.manifest.json": {
+      "sha256": "a23083ffc273bfbcb8a5fce86c2cd2ede059cdda21999b58fe4d88be574b88a3",
+      "bytes": 474
+    },
+    "20261103_validation31_LP0_10.tar.verification.json": {
+      "sha256": "d1de378efb42fb1394c1f3860168722910870d882e0c30666b7fac84ae4b9cd4",
+      "bytes": 108711
+    },
+    "20261103_validation31_NOA60_20.tar.gz": {
+      "sha256": "22de4607dbc768446a5eb25760a569ef412c8ced2c1df40a2482d797b7c4a8f3",
+      "bytes": 15255344
+    },
+    "20261103_validation31_NOA60_20.tar.manifest.json": {
+      "sha256": "860ba00e05a7790c909ca9991feff5716f836958dac983cd90804f63b5f98e27",
+      "bytes": 477
+    },
+    "20261103_validation31_NOA60_20.tar.verification.json": {
+      "sha256": "bb9c411c5e33d2494e69a2b9bab7b134c13836a9dd4f654a5f71dba35358e5da",
+      "bytes": 212219
+    },
+    "README.md": {
+      "sha256": "9ba0b329cdb821d52a8d2df90c928219a7ed8bab9388f1a0639fc8004e0a4c6a",
+      "bytes": 3899
+    },
+    "short_comparisons.json": {
+      "sha256": "23c3d6006e380dba8ddb3398dd9479eea3a435b12c7bec8cb9b2010f8ce5c963",
+      "bytes": 80049
+    },
+    "short_flow_means.csv": {
+      "sha256": "73752c14dd1c1db5d27c63591e8b33083be58f79b4bead52690b8b92315ea73b",
+      "bytes": 3733
+    },
+    "short_paired_seeds.csv": {
+      "sha256": "7013f3a48d0081d1b80b39556be37c1e464a3af2b4b4e42fceaa58293ad5e767",
+      "bytes": 25916
+    }
+  },
+  "full_positions_included": false
+}

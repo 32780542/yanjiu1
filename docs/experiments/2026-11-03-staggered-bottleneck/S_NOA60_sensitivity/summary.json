@@ -1,0 +1,194 @@
+{
+  "case_count": 30,
+  "protocol_verified": 30,
+  "evidence_verified": 30,
+  "safe": 30,
+  "drained": 30,
+  "pair_count": 10,
+  "eligible_pairs": 10,
+  "means": [
+    {
+      "comparison": "S/transform=NOA60/noa",
+      "candidate": "S",
+      "reference": "NOA60/noa",
+      "flow": 2250.0,
+      "scenario": "lane_drop",
+      "seeds": 5,
+      "eligible": true,
+      "improved_seeds": 5,
+      "reference_mean_travel_time_s": 52.76213944332608,
+      "target_mean_travel_time_s": 48.38206872700744,
+      "delta_mean_travel_time_s": -4.380070716318636,
+      "reference_mean_system_time_s": 52.93910303549541,
+      "target_mean_system_time_s": 48.56239063608153,
+      "delta_mean_system_time_s": -4.3767123994138775,
+      "reference_mean_entry_wait_s": 0.1769635921693329,
+      "target_mean_entry_wait_s": 0.180321909074092,
+      "delta_mean_entry_wait_s": 0.003358316904759101,
+      "reference_fuel_g_per_km": 82.20966832448931,
+      "target_fuel_g_per_km": 88.46427327695349,
+      "delta_fuel_g_per_km": 6.2546049524641685,
+      "reference_mean_segment_100_600_s": 17.86736655029839,
+      "target_mean_segment_100_600_s": 17.985364838685452,
+      "delta_mean_segment_100_600_s": 0.11799828838706432,
+      "reference_mean_segment_640_1100_s": 25.998914534201223,
+      "target_mean_segment_640_1100_s": 21.29977817476738,
+      "delta_mean_segment_640_1100_s": -4.699136359433843,
+      "reference_region_density_veh_km_lane": 40.76240000000012,
+      "target_region_density_veh_km_lane": 28.80686666666648,
+      "delta_region_density_veh_km_lane": -11.955533333333642,
+      "reference_region_mean_speed_mps": 16.674989207317093,
+      "target_region_mean_speed_mps": 23.653360945851947,
+      "delta_region_mean_speed_mps": 6.978371738534853,
+      "reference_region_low_speed_vehicle_s": 3272.8999999999505,
+      "target_region_low_speed_vehicle_s": 1199.1599999999792,
+      "delta_region_low_speed_vehicle_s": -2073.739999999971,
+      "reference_flow_1000m_veh_h": 6651.36,
+      "target_flow_1000m_veh_h": 6772.32,
+      "delta_flow_1000m_veh_h": 120.96000000000004,
+      "reference_lane_change_completions": 845.6,
+      "target_lane_change_completions": 1366.8,
+      "delta_lane_change_completions": 521.2,
+      "reference_flag_participation_rate": 0.0,
+      "target_flag_participation_rate": 0.9946679767630072,
+      "delta_flag_participation_rate": 0.9946679767630072,
+      "reference_flag_mean_participants": 0.0,
+      "target_flag_mean_participants": 83.160768195197,
+      "delta_flag_mean_participants": 83.160768195197,
+      "reference_flag_peak_participants": 0,
+      "target_flag_peak_participants": 112.8,
+      "delta_flag_peak_participants": 112.8,
+      "reference_flag_mean_episode_s": null,
+      "target_flag_mean_episode_s": 46.64093531688187,
+      "delta_flag_mean_episode_s": null,
+      "system_improvement_percent": 8.267447214735228
+    },
+    {
+      "comparison": "S/transform=NOA60/noa",
+      "candidate": "S",
+      "reference": "NOA60/noa",
+      "flow": 2500.0,
+      "scenario": "lane_drop",
+      "seeds": 5,
+      "eligible": true,
+      "improved_seeds": 5,
+      "reference_mean_travel_time_s": 75.99248449104812,
+      "target_mean_travel_time_s": 67.20313494331074,
+      "delta_mean_travel_time_s": -8.789349547737377,
+      "reference_mean_system_time_s": 76.28141791279872,
+      "target_mean_system_time_s": 67.48467653059679,
+      "delta_mean_system_time_s": -8.79674138220194,
+      "reference_mean_entry_wait_s": 0.288933421750596,
+      "target_mean_entry_wait_s": 0.2815415872860342,
+      "delta_mean_entry_wait_s": -0.007391834464561797,
+      "reference_fuel_g_per_km": 91.71571934019283,
+      "target_fuel_g_per_km": 97.24360447827645,
+      "delta_fuel_g_per_km": 5.527885138083628,
+      "reference_mean_segment_100_600_s": 25.086132807821325,
+      "target_mean_segment_100_600_s": 21.382150537492667,
+      "delta_mean_segment_100_600_s": -3.7039822703286602,
+      "reference_mean_segment_640_1100_s": 40.40799577404558,
+      "target_mean_segment_640_1100_s": 35.755023408661415,
+      "delta_mean_segment_640_1100_s": -4.652972365384166,
+      "reference_region_density_veh_km_lane": 67.89000000000016,
+      "target_region_density_veh_km_lane": 60.68746666666694,
+      "delta_region_density_veh_km_lane": -7.202533333333212,
+      "reference_region_mean_speed_mps": 9.448648845823941,
+      "target_region_mean_speed_mps": 10.840237911620656,
+      "delta_region_mean_speed_mps": 1.391589065796715,
+      "reference_region_low_speed_vehicle_s": 10505.4399999996,
+      "target_region_low_speed_vehicle_s": 8911.259999999695,
+      "delta_region_low_speed_vehicle_s": -1594.179999999905,
+      "reference_flow_1000m_veh_h": 6762.24,
+      "target_flow_1000m_veh_h": 6943.68,
+      "delta_flow_1000m_veh_h": 181.43999999999997,
+      "reference_lane_change_completions": 934.8,
+      "target_lane_change_completions": 1468.4,
+      "delta_lane_change_completions": 533.6,
+      "reference_flag_participation_rate": 0.0,
+      "target_flag_participation_rate": 0.997887140967411,
+      "delta_flag_participation_rate": 0.997887140967411,
+      "reference_flag_mean_participants": 0.0,
+      "target_flag_mean_participants": 118.04011320937774,
+      "delta_flag_mean_participants": 118.04011320937774,
+      "reference_flag_peak_participants": 0,
+      "target_flag_peak_participants": 183.6,
+      "delta_flag_peak_participants": 183.6,
+      "reference_flag_mean_episode_s": null,
+      "target_flag_mean_episode_s": 65.22095692258291,
+      "delta_flag_mean_episode_s": null,
+      "system_improvement_percent": 11.531958402055341
+    }
+  ],
+  "coverage": [
+    {
+      "comparison": "S/transform=NOA60/noa",
+      "common": 10,
+      "reference_only": [
+        [
+          2250.0,
+          31,
+          "straight3"
+        ],
+        [
+          2250.0,
+          32,
+          "straight3"
+        ],
+        [
+          2250.0,
+          33,
+          "straight3"
+        ],
+        [
+          2250.0,
+          34,
+          "straight3"
+        ],
+        [
+          2250.0,
+          35,
+          "straight3"
+        ],
+        [
+          2500.0,
+          31,
+          "straight3"
+        ],
+        [
+          2500.0,
+          32,
+          "straight3"
+        ],
+        [
+          2500.0,
+          33,
+          "straight3"
+        ],
+        [
+          2500.0,
+          34,
+          "straight3"
+        ],
+        [
+          2500.0,
+          35,
+          "straight3"
+        ]
+      ],
+      "target_only": []
+    }
+  ],
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA60_20",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_S10"
+  ],
+  "protocol_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA60_20": "76a07d4d07214aaaa4283f409d41316d37ef9b22c4bea60a5e15137e0bd45490",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_S10": "0a293a2a62f36cff7de69b6c9a7116de3732e7a2c76ea12615195990abdf4645"
+  },
+  "conventions": "Only the common original planned input keys; equal seed weights; target minus reference; missing metrics remain null.",
+  "causal_limits": "G0/G0N are explicitly transform-mode nonformation controls, not original NOA. S versus LP0 changes the extra gate as well as longitudinal phase; not strict S-phase0 equivalence. Traffic success does not prove formation geometry.",
+  "tool_sha256": "56969798d76ab8f69efdc253510a96a6495b96dcc14374ece200e003591f9abf",
+  "frozen_report_paired_sha256": "88990f7bb18853d6e8278af5e41c1cf0079532b137dd6cd4b20275497e803ebd"
+}

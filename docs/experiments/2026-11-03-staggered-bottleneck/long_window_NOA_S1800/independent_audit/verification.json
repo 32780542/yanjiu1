@@ -1,0 +1,16 @@
+{
+  "report": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\long_window_NOA_S1800",
+  "report_source_sha256": {
+    "per_case.csv": "a3039b7ab1de1e777c3672cc0e46c14431629824703092dfe687e024b97b2869",
+    "paired_seeds.csv": "516dce33fad24a5a60a2bbe0375ccb27af4b28f16f246626908504057b7bead5",
+    "flow_means.csv": "ca36fef433e504c3c6378862e01af04b2ebdb40740a1e3f612f51d9861ba52a0",
+    "summary.json": "cfcd8e66357edc79ab17a4320a17fe23c5c677a7e118ec59f8972e07773d8008",
+    "ledger_index.json": "e33eb0e46a9f5e3926b2a38875728f5aefe00f938f8c26b5ff384215e5694fb9"
+  },
+  "independent_cases": 8,
+  "raw_frame_checks": 32,
+  "independent_no_existing_evaluator_import": true,
+  "all_ledger_integrals_and_gate_counts_match": true,
+  "all_raw_region_counts_low_counts_speed_sums_match": true,
+  "no_pruning": true
+}

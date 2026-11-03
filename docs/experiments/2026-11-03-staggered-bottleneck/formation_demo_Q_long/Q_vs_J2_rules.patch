@@ -1,0 +1,91 @@
+--- frozen_J2
++++ frozen_L
+@@ -101,10 +101,10 @@
+     return peer.x - car.x + phase, pair_lanes
+ 
+ 
+-def _front_following(ego, rows):
++def _front_following(ego, rows, distance=50.0):
+     """同一实际前车时距跟驰，供NOA和编队共用。"""
+     front = min(
+-        (c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)),
++        (c for c in rows if 0.0 < c.x - ego.x <= distance and _occupies(c, ego.lane, 0.0)),
+         key=lambda c: (c.x, c.y, c.speed), default=None,
+     )
+     if front is None:
+@@ -116,6 +116,15 @@
+ def _following(ego, rows, lanes, phase_boundary=None):
+     """真实前车CTH叠加实际相邻道互选相位；每车只输出自身速度。"""
+     following = _front_following(ego, rows)
++    if following[2] is None:
++        extended = _front_following(ego, rows, 2 * GAP)
++        front = next((c for c in rows if c.track == extended[2]), None)
++        if front is not None and any(
++            abs(c.lane - ego.lane) == 1 and ego.x < c.x < front.x
++            and abs(c.x + _physical_phase(c, 3) - _physical_phase(ego, 3) - (front.x - GAP)) <= 2.0
++            for c in rows
++        ):
++            following = extended
+     cars = (ego, *rows)
+ 
+     def nearest(car, lane):
+@@ -137,7 +146,7 @@
+             if peer is not None and nearest(peer, ego.lane) is ego:
+                 linked = True
+                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+-                error += difference / max(1, pair_lanes - 1)
++                error += (difference + 1.0 * (peer.speed - ego.speed)) / max(1, pair_lanes - 1)
+     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+     if following[2] is not None:
+         speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))
+@@ -221,7 +230,12 @@
+         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+     ]
+     observed = (ego, *rows)
+-    costs = {}
++    costs, before_speeds = {}, {}
++
++    def cf_cached(car, snapshot, cache):
++        if car.track not in cache:
++            cache[car.track] = cf_speed(car, snapshot)
++        return cache[car.track]
+ 
+     def response_cost(car, lane):
+         key = (car.track, lane)
+@@ -236,17 +250,18 @@
+         moved = replace(car, lane=lane, y=(lane + 0.5) * LANE_WIDTH, vy=0.0)
+         after = tuple(moved if c.track == car.track else c for c in observed)
+         new_rear = followers[0]
++        after_speeds = {}
+         # Native SUMO already uses a fixed 0.1 s frame and BRAKING=10 m/s2.
+         # Bound the target follower separately; release elsewhere cannot pay it off.
+-        if new_rear is not None and cf_speed(new_rear, after) < new_rear.speed - BRAKING * 0.1 - 1e-9:
++        if new_rear is not None and cf_cached(new_rear, after, after_speeds) < new_rear.speed - BRAKING * 0.1 - 1e-9:
+             costs[key] = None
+             return None
+         affected = [car]
+         for follower in followers:
+             if follower is not None and all(c.track != follower.track for c in affected):
+                 affected.append(follower)
+-        cost = sum(max(0.0, cf_speed(c, observed) - cf_speed(
+-            moved if c.track == car.track else c, after)) for c in affected)
++        cost = sum(max(0.0, cf_cached(c, observed, before_speeds) - cf_cached(
++            moved if c.track == car.track else c, after, after_speeds)) for c in affected)
+         costs[key] = cost
+         return cost
+ 
+@@ -425,9 +440,12 @@
+     """按前车继续制动后的停止位置，保留0.2s响应和车身净距。"""
+     limit = MAX_SPEED
+     response_speed = BRAKING * RESPONSE
++    occupied = tuple(lane for lane in range(3) if _occupies(ego, lane))
+     for front in neighbors:
+-        shared = any(_occupies(ego, lane) and _occupies(front, lane) for lane in range(3))
+-        if 0.0 < front.x - ego.x <= 200.0 and shared:
++        if not 0.0 < front.x - ego.x <= 200.0:
++            continue
++        shared = any(_occupies(front, lane) for lane in occupied)
++        if shared:
+             free = max(0.0, front.x - ego.x - LENGTH - STANDSTILL)
+             stopping = (
+                 sqrt(response_speed**2 + front.speed**2 + 2 * BRAKING * free) - response_speed

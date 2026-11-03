@@ -1,0 +1,17 @@
+{
+  "archive": "20261103_validation31_J2fast40_lane_drop_20.tar.gz",
+  "sha256": "1407aab05bb0c15755299ac0586668ad67005d30fb7ed9850284888fd49ccb39",
+  "bytes": 15159666,
+  "case_count": 20,
+  "under_20mb": true,
+  "partition": {
+    "rule": "complete preplanned road group, independent of outcomes",
+    "scenario": "lane_drop",
+    "full_plan_cases": 40,
+    "partition_cases": 20,
+    "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_J2fast40",
+    "original_protocol_sha256": "fbcfcf212cb1cf6a17ca19fb5c2e4cdfa840848a63a20545f54f5236f7a10036",
+    "original_manifest_sha256": "915dcfdcb47a1089d03b73072ed84512f6344fc9db4fec62244af4a471c11f7d"
+  },
+  "index_sha256": "61f8f55f88786cf7365aabaea12014f6778982c237889daf6a0949f8ba704369"
+}

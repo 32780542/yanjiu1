@@ -1,0 +1,24 @@
+{
+  "archive": "evidence_reviewed.tar.gz",
+  "archive_sha256": "463b214f1615f15a485c5d97fa44c92380439e967b0cb2ecf4d848f10eacd40b",
+  "archive_bytes": 13235401,
+  "archive_members_including_manifest": 173,
+  "all_member_hashes_rechecked": true,
+  "operation_directories": [
+    "20261103T072702056914Z_S-long-freeze_0fc1baf6",
+    "20261103T072703956458Z_S2400-demo-formed45_bbb61fd9",
+    "20261103T072703989515Z_S2400-demo-unformed24_977c8824",
+    "20261103T072759649866Z_S-long-extraction_4935cbe6",
+    "20261103T072804534067Z_S-long-extra-fixed-facts_fad4c9cd",
+    "20261103T073301641111Z_S-long-analysis-prepare_40f0e77a",
+    "20261103T073303556098Z_S-long-witness-audit_fad0b006",
+    "20261103T073303577656Z_S-long-academic-plots_beb7b31c",
+    "20261103T073629252586Z_S-long-audit-retry2-prepare_b932e510",
+    "20261103T073631246783Z_S-long-witness-audit-retry2_e974d091",
+    "20261103T074142227350Z_S-long-independent-verify_1ffa505e",
+    "20261103T074204159266Z_S-long-independent-verify-retry2_b64d7d31"
+  ],
+  "includes_both_full_positions_events_diagnostic": true,
+  "includes_failed_pre_SUMO_attempts": false,
+  "no_pruning": true
+}

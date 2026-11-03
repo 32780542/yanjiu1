@@ -1,0 +1,111 @@
+{
+  "archives": [
+    {
+      "profile": "NoA",
+      "archive": "NoA_four_cases_evidence.tar.gz",
+      "bytes": 11654665,
+      "sha256": "877c3be2be615e0545989c056d882bbe3540078303b07a3ce6ae0309f9e3bcad",
+      "members_including_manifest": 114,
+      "all_members_byte_hash_verified": true
+    },
+    {
+      "profile": "S",
+      "archive": "S_four_cases_evidence.tar.gz",
+      "bytes": 12513619,
+      "sha256": "2ffdefbb9b923575791f54a3f57bd185ab0091458ad1a0a583b8bbca5f376e1e",
+      "members_including_manifest": 114,
+      "all_members_byte_hash_verified": true
+    }
+  ],
+  "raw_cases": [
+    {
+      "label": "NoA",
+      "flow": 2250.0,
+      "seed": 41,
+      "retained_full_raw": false,
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 49543122
+    },
+    {
+      "label": "NoA",
+      "flow": 2250.0,
+      "seed": 42,
+      "retained_full_raw": true,
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "label": "NoA",
+      "flow": 2500.0,
+      "seed": 41,
+      "retained_full_raw": false,
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 115614895
+    },
+    {
+      "label": "NoA",
+      "flow": 2500.0,
+      "seed": 42,
+      "retained_full_raw": false,
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 124044344
+    },
+    {
+      "label": "S",
+      "flow": 2250.0,
+      "seed": 41,
+      "retained_full_raw": false,
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 52989036
+    },
+    {
+      "label": "S",
+      "flow": 2250.0,
+      "seed": 42,
+      "retained_full_raw": true,
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "label": "S",
+      "flow": 2500.0,
+      "seed": 41,
+      "retained_full_raw": false,
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 108887220
+    },
+    {
+      "label": "S",
+      "flow": 2500.0,
+      "seed": 42,
+      "retained_full_raw": false,
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 123502004
+    }
+  ],
+  "pruned_successful_cases": 6,
+  "retained_selected_full_raw_cases": 2,
+  "bytes_released": 574580621,
+  "only_exact_authorized_NOA4_S4_successes": true,
+  "old_other_batch_raw_untouched": true,
+  "existing_prune_raw_used": true,
+  "no_recursive_delete": true
+}

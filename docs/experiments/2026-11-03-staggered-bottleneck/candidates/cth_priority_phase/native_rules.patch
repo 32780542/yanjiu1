@@ -1,0 +1,11 @@
+--- local_vacancy_bridge/noa/native_rules.py
++++ cth_priority_phase/noa/native_rules.py
+@@ -149,6 +149,8 @@
+                 error += difference / max(1, pair_lanes - 1)
+     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+     if following[2] is not None:
++        if phase_speed * (following[0] - ego.speed) < 0.0:
++            phase_speed = 0.0
+         speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))
+         return speed, following[1], following[2], int(linked)
+     target = ego.x + phase_speed / POSITION_GAIN

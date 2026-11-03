@@ -1,0 +1,32 @@
+{
+  "source_hashes": {
+    "local_vacancy_bridge": "e0707d0e8443e074a24de27524618417d0f8d8daff36b703a9a3a9066c47605a",
+    "local_phase_velocity_damping": "a286110cf2e14904152b63c9a66f960496f5f7f04ab0097b8d7ed00353db4762",
+    "local_conflict_release": "5d21af5456e816c927116a66895db29d03fada7b28057ecef266b60a0d92a0d6",
+    "noa_range60": "c5ed30e8c8f722959c97a9db86c857db22e8740a7d7d0c118d1c028ec7550dd2"
+  },
+  "M_core": {
+    "tests": 225,
+    "subtests": 37,
+    "patch_sha256": "025ed9b5d153bca6bcabb79d2b7c3ea6310afc051548e9ce68b67df0b5ee43f2"
+  },
+  "M_specialized": {
+    "tests": 9,
+    "subtests": 20,
+    "inherited_L30_passed": 28,
+    "inherited_L30_policy_conflicts": 2
+  },
+  "N_specialized": {
+    "tests": 15,
+    "subtests": 4,
+    "inherited_L30_passed": 30,
+    "inherited_L30_subtests": 106
+  },
+  "NOA60": {
+    "tests": 8,
+    "subtests": 4,
+    "inside50_complete_exact_cases": 600
+  },
+  "production_original_tests_unchanged": true,
+  "no_new_simulation_by_method_agent": true
+}

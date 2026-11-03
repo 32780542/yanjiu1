@@ -69,7 +69,7 @@ def _request(ego, target, reference_speed):
 
 
 def _phase(lane, lanes):
-    return GAP / 2 if (lanes - 1 - min(lane, lanes - 1)) % 2 else 0.0
+    return GAP / 2 if lane % 2 else 0.0
 
 
 def _physical_phase(car, lanes):
@@ -97,15 +97,14 @@ def _pair_error(car, peer, lanes, phase_boundary=None):
         if phase_boundary is None
         else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
     )
-    return (
-        (peer.x + _physical_phase(peer, pair_lanes)) - (car.x + _physical_phase(car, pair_lanes))
-    ), pair_lanes
+    phase = _physical_phase(peer, 3) - _physical_phase(car, 3)
+    return peer.x - car.x + phase, pair_lanes
 
 
-def _front_following(ego, rows):
+def _front_following(ego, rows, distance=50.0):
     """同一实际前车时距跟驰，供NOA和编队共用。"""
     front = min(
-        (c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)),
+        (c for c in rows if 0.0 < c.x - ego.x <= distance and _occupies(c, ego.lane, 0.0)),
         key=lambda c: (c.x, c.y, c.speed), default=None,
     )
     if front is None:
@@ -115,36 +114,45 @@ def _front_following(ego, rows):
 
 
 def _following(ego, rows, lanes, phase_boundary=None):
-    """跟车仅沿真实前车链；跨道相位仅由互选的实际局部队首分担。"""
+    """真实前车CTH叠加实际相邻道互选相位；每车只输出自身速度。"""
     following = _front_following(ego, rows)
-    if following[2] is not None:
-        return following
+    if following[2] is None:
+        extended = _front_following(ego, rows, 2 * GAP)
+        front = next((c for c in rows if c.track == extended[2]), None)
+        if front is not None and any(
+            abs(c.lane - ego.lane) == 1 and ego.x < c.x < front.x
+            and abs(c.x + _physical_phase(c, 3) - _physical_phase(ego, 3) - (front.x - GAP)) <= 2.0
+            for c in rows
+        ):
+            following = extended
     cars = (ego, *rows)
 
-    def is_head(car):
-        return not any(
-            0.0 < other.x - car.x <= 50.0 and _occupies(other, car.lane, 0.0) for other in cars
-        )
-
     def nearest(car, lane):
-        candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0 and is_head(c)]
+        candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0]
 
         def order(c):
             difference, _ = _pair_error(car, c, lanes, phase_boundary)
-            return abs(difference), difference, c.x, c.y, c.speed, c.vy
+            return abs(difference), abs(c.x - car.x), difference, c.x, c.y, c.speed, c.vy
 
         return min(candidates, key=order, default=None)
 
-    linked = any(-50.0 <= c.x - ego.x < 0.0 and _occupies(c, ego.lane, 0.0) for c in rows)
+    linked = bool(following[3]) or any(
+        -50.0 <= c.x - ego.x < 0.0 and _occupies(c, ego.lane, 0.0) for c in rows
+    )
     error = 0.0
     for lane in (ego.lane - 1, ego.lane + 1):
-        if 0 <= lane < lanes:
+        if 0 <= lane < 3:
             peer = nearest(ego, lane)
             if peer is not None and nearest(peer, ego.lane) is ego:
                 linked = True
                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
                 error += difference / max(1, pair_lanes - 1)
     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+    if following[2] is not None:
+        if phase_speed * (following[0] - ego.speed) < 0.0:
+            phase_speed = 0.0
+        speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))
+        return speed, following[1], following[2], int(linked)
     target = ego.x + phase_speed / POSITION_GAIN
     return _request(ego, target, CRUISE), target, None, int(linked)
 
@@ -185,30 +193,6 @@ def _join_speed(ego, rows, memory, lane):
     return _request(ego, target, speed), target, replace(memory, gap=gap)
 
 
-def _make_room(ego, rows):
-    """只用当前终止车道前车及其90m窗口选择一个实际可行的中道车。"""
-    all_rows = (ego, *rows)
-    ending = [c for c in all_rows if c.lane == 2 and abs(c.x - ego.x) <= 90.0]
-    if not ending:
-        return None, None
-    head = max(ending, key=lambda c: c.x)
-    anchor = max(
-        (c for c in all_rows if c.lane >= 1 and abs(c.x - head.x) <= 90.0),
-        key=lambda c: (c.x, c.lane),
-    )
-    window = [c for c in all_rows if anchor.x - 60.0 <= c.x <= anchor.x + 30.0]
-    counts = [sum(c.lane == lane for c in window) for lane in range(3)]
-    if counts[1] + counts[2] - counts[0] < 2:
-        return head, None
-    options = [
-        c
-        for c in window
-        if c.lane == 1 and c.track != anchor.track and anchor.x - 30.0 <= c.x <= anchor.x + 15.0
-    ]
-    helper = max(options, key=lambda c: c.x) if options else None
-    return head, helper
-
-
 def cf_speed(car, rows):
     """Predict the same public following law without another car's private stage."""
     return min(_front_following(car, rows)[0], safe_speed(car, rows))
@@ -223,7 +207,7 @@ def _fill(ego, rows, lanes):
     members = tuple(c for c in cars if c.lane < lanes)
 
     def phase(lane):
-        return 15.0 if (lanes - 1 - lane) % 2 else 0.0
+        return _phase(lane, lanes)
 
     anchor = max(
         (c for c in component if c.lane < lanes), key=lambda c: (c.x + phase(c.lane), c.lane, c.x)
@@ -248,7 +232,12 @@ def _fill(ego, rows, lanes):
         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
     ]
     observed = (ego, *rows)
-    costs = {}
+    costs, before_speeds = {}, {}
+
+    def cf_cached(car, snapshot, cache):
+        if car.track not in cache:
+            cache[car.track] = cf_speed(car, snapshot)
+        return cache[car.track]
 
     def response_cost(car, lane):
         key = (car.track, lane)
@@ -263,17 +252,18 @@ def _fill(ego, rows, lanes):
         moved = replace(car, lane=lane, y=(lane + 0.5) * LANE_WIDTH, vy=0.0)
         after = tuple(moved if c.track == car.track else c for c in observed)
         new_rear = followers[0]
+        after_speeds = {}
         # Native SUMO already uses a fixed 0.1 s frame and BRAKING=10 m/s2.
         # Bound the target follower separately; release elsewhere cannot pay it off.
-        if new_rear is not None and cf_speed(new_rear, after) < new_rear.speed - BRAKING * 0.1 - 1e-9:
+        if new_rear is not None and cf_cached(new_rear, after, after_speeds) < new_rear.speed - BRAKING * 0.1 - 1e-9:
             costs[key] = None
             return None
         affected = [car]
         for follower in followers:
             if follower is not None and all(c.track != follower.track for c in affected):
                 affected.append(follower)
-        cost = sum(max(0.0, cf_speed(c, observed) - cf_speed(
-            moved if c.track == car.track else c, after)) for c in affected)
+        cost = sum(max(0.0, cf_cached(c, observed, before_speeds) - cf_cached(
+            moved if c.track == car.track else c, after, after_speeds)) for c in affected)
         costs[key] = cost
         return cost
 
@@ -316,27 +306,6 @@ def _fill(ego, rows, lanes):
         return None
     _, car, lane = min(choices, key=lambda item: item[0])
     return lane if car.track == ego.track else None
-
-
-def _receiving_distance(ego, incoming):
-    return max(
-        CLEARANCE,
-        LENGTH
-        + STANDSTILL
-        + RESPONSE * ego.speed
-        + max(ego.speed**2 - incoming.speed**2, 0.0) / (2 * BRAKING),
-    )
-
-
-def _receiving(ego, rows, helper):
-    front = min((c.x for c in rows if c.lane == ego.lane and c.x > ego.x), default=float("inf"))
-    candidates = [c for c in rows if c.lane == 2 and ego.lane == 1 and ego.x <= c.x < front]
-    if ego.lane == 0 and helper is not None and ego.x <= helper.x < front:
-        candidates.append(helper)
-    if not candidates:
-        return None
-    reference = max(candidates, key=lambda c: c.x)
-    return reference
 
 
 def _mandatory_priority(ego, rows, lane, drop_x):
@@ -421,28 +390,6 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
     ):
         memory = replace(memory, joining=False)
 
-    if preparing and mode == "transform":
-        head, helper = _make_room(ego, rows)
-        if helper is not None and helper.track == ego.track:
-            memory = Memory(lane_target=0, joining=True)
-            speed, target, memory = _join_speed(ego, rows, memory, 0)
-            lane = 0 if _clear(ego, rows, 0) else None
-            return (
-                action(speed, lane, "make_room" if lane is not None else "prepare_room", target),
-                memory,
-            )
-        receiving = _receiving(ego, rows, helper)
-        if receiving is not None:
-            target = receiving.x - _receiving_distance(ego, receiving)
-            speed = min(speed, _request(ego, target, receiving.speed))
-            return action(speed, None, "open_gap", target, receiving.track), memory
-        if (
-            ego.lane == 2
-            and head is not None
-            and head.track != ego.track
-            and not _clear(ego, rows, 1)
-        ):
-            return action(speed, None, "ending_follower", target, reference), memory
 
     if preparing and ego.lane == 2:
         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
@@ -495,9 +442,12 @@ def safe_speed(ego, neighbors):
     """按前车继续制动后的停止位置，保留0.2s响应和车身净距。"""
     limit = MAX_SPEED
     response_speed = BRAKING * RESPONSE
+    occupied = tuple(lane for lane in range(3) if _occupies(ego, lane))
     for front in neighbors:
-        shared = any(_occupies(ego, lane) and _occupies(front, lane) for lane in range(3))
-        if 0.0 < front.x - ego.x <= 200.0 and shared:
+        if not 0.0 < front.x - ego.x <= 200.0:
+            continue
+        shared = any(_occupies(front, lane) for lane in occupied)
+        if shared:
             free = max(0.0, front.x - ego.x - LENGTH - STANDSTILL)
             stopping = (
                 sqrt(response_speed**2 + front.speed**2 + 2 * BRAKING * free) - response_speed

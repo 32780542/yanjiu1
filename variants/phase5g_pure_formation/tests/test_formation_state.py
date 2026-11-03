@@ -38,8 +38,11 @@ class LocalFormationStateTests(unittest.TestCase):
     def test_exactly_aligned_heads_still_report_one(self):
         self.assertEqual(self.state(car(0, 100), (car(1, 85, lane=1),)), 1)
 
-    def test_other_lane_body_is_not_a_mutually_selected_head(self):
-        self.assertEqual(self.state(car(0, 90), (car(1, 100, 1), car(2, 145, 1))), 0)
+    def test_actual_cross_lane_body_relation_counts_without_a_head_flag(self):
+        ego = car(0, 90)
+        body, front = car(1, 100, 1), car(2, 145, 1)
+        self.assertEqual(rules._front_following(body, (ego, front))[2], front.track)
+        self.assertEqual(self.state(ego, (body, front)), 1)
 
     def test_distant_front_and_rear_do_not_extend_the_relation(self):
         self.assertEqual(self.state(car(0, 100), (car(1, 150.01), car(2, 49.99))), 0)

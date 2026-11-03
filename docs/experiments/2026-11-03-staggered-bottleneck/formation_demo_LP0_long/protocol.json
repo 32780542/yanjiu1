@@ -1,0 +1,87 @@
+{
+  "purpose": "LP0 same-input 2400 m local geometric diagnostic; never official traffic efficiency",
+  "exit_x_m": 2400,
+  "bottleneck_x_m": 1000,
+  "preparation_x_m": 640,
+  "upstream_lanes": 3,
+  "downstream_lanes": 2,
+  "duration_s": 1,
+  "max_time_s": 180,
+  "mode": "transform",
+  "sumo_seed": 1,
+  "scenario": "lane_drop",
+  "diagnostic": true,
+  "original_input_byte_identity": true,
+  "original_initial_depart_s": 0,
+  "original_initial_speed_mps": 28.8,
+  "fixed_requested_times_s": [
+    0,
+    5,
+    10,
+    15,
+    20
+  ],
+  "physical_t0_policy": "first real physical frame at .1; no fabricated t=0 positions",
+  "preregistered_downstream_anchor": "First stored frame by which each initial vehicle has been physically observed x>=1000 m",
+  "preregistered_downstream_offsets_s": [
+    0,
+    5,
+    10,
+    15
+  ],
+  "early_exit_policy": "Record actual arrived/exited IDs before each selected frame; never infer whole-fleet completion from survivors",
+  "no_geometry_success_classifier": true,
+  "no_modulo_or_position_reordering": true,
+  "selected_geometry_ids": {
+    "unformed24": [
+      "unformed_l0_r04",
+      "unformed_l1_r04",
+      "unformed_l2_r04"
+    ],
+    "formed45": [
+      "formed_l0_r07",
+      "formed_l1_r07",
+      "formed_l2_r07"
+    ]
+  },
+  "input_sha256": {
+    "unformed24": "f562a8f65fc4323730250f12c85f1998e925baf433e6e8f2bb93d7ee8607b0d4",
+    "formed45": "fd6481a12c991a6dd6398987d7e476c08883b7fffd169237e8bf06a46fb5ad89"
+  },
+  "runtimes": {
+    "LP02400": {
+      "original_runtime": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_LP0_10\\sources\\LP0",
+      "frozen_runtime": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_LP0_long_formation_demo\\sources\\LP02400",
+      "rules_sha256": "64a134fee75ae628779b81e497fca1de6b095a2f1828493c573ee2dacc455eb4",
+      "original_sha256": {
+        "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+        "experiments/native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+        "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+        "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+        "noa/native_rules.py": "64a134fee75ae628779b81e497fca1de6b095a2f1828493c573ee2dacc455eb4",
+        "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+      },
+      "extended_sha256": {
+        "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+        "experiments/native_sumo.py": "bfc93f69c0f7820562a8c1c4103c95d181445f8e2e2c3570d58cd47b20df475c",
+        "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+        "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+        "noa/native_rules.py": "64a134fee75ae628779b81e497fca1de6b095a2f1828493c573ee2dacc455eb4",
+        "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+      },
+      "support_file_sha256": {
+        "configs/tools.json": "61cdb30944310d810ee2d57cd2f2e059d367a4b3ae45c64d50d45b7b0eb27c09",
+        "experiments/__init__.py": "eaf1a3f7eca911b7d8ba2605eb8c5b1d359fbc0b6942ac0a913b6d92fe5f4a0f",
+        "noa/__init__.py": "a38248b8b8a2c5b4d6c8859effa6ac58a3fa3eb5c12529e517cba65d07b0b6de",
+        "research/__init__.py": "fd4b9e113a6dde18d250130ef8eb6342952822d752342b3c7b25d2cbc7f9062d"
+      },
+      "changed_source_files": [
+        "experiments/native_sumo.py"
+      ],
+      "source_change": "Only two exit coordinates1200->2400"
+    }
+  },
+  "run_base": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_LP0_long_formation_demo",
+  "physical_runs_planned": 2,
+  "compare_to_frozen_J2_long": true
+}

@@ -1,0 +1,24 @@
+{
+  "M_sha256": "a286110cf2e14904152b63c9a66f960496f5f7f04ab0097b8d7ed00353db4762",
+  "LP0_sha256": "64a134fee75ae628779b81e497fca1de6b095a2f1828493c573ee2dacc455eb4",
+  "virtual_M_phase_zero_sha256": "7957ce027bf8a2a305ff2a79cfe5cfc743d95e7cb59aa63a547f79308cee3356",
+  "no_virtual_source_written": true,
+  "source_difference": "only dead error AugAssign RHS",
+  "phase_speed_constant_zero": true,
+  "error_has_no_explicit_load_after_ablation": true,
+  "AST_identical_after_removing_dead_error_stores": true,
+  "states": 6000,
+  "complete_command_memory_comparisons": 18000,
+  "float_hex_exact": true,
+  "safe_speed_comparisons": 6000,
+  "linked_state_one_commands": 10006,
+  "modes": [
+    "noa",
+    "formation",
+    "transform"
+  ],
+  "protected_sources_unchanged": true,
+  "scope": "LP0 equals phase-zero M, not phase-zero MN; N release is not in LP0",
+  "no_simulation": true,
+  "oracle_sha256": "a24adc6bee09319fd1d71eb05c468be76bed54b41d9dd8e55caa43731fbe91f6"
+}

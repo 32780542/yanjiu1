@@ -1,0 +1,98 @@
+{
+  "final160_verified": true,
+  "cases": 160,
+  "pairs": 80,
+  "seeds": [
+    61,
+    62,
+    63,
+    64,
+    65
+  ],
+  "source_tables_sha256": {
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\final61_S160\\flow_means.csv": "00ee6ded281a1bb3e5f2ad8266ec884657c0c495361f09e6b58c634ab845446d",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\final61_S160\\paired_seeds.csv": "a90174b40edfcea42ba35661acea6de73dc2617d2e74f83177433d4e1a053c7c",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\final61_S160\\per_case.csv": "683156aa6b252cfa9d8d67a4de942f7deab6247d19149f4ceadf513b4cd528a1",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\final61_S160\\summary.json": "0234281cc4e4a23b438af8ae16682665356d63e89a72dce698694571e756c24d"
+  },
+  "raster_sources": [
+    {
+      "profile": "NoA",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2250_42_lane_drop_noa\\20261103T060508923099Z_lane_drop_noa_s42_5c3a66",
+      "positions": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2250_42_lane_drop_noa\\20261103T060508923099Z_lane_drop_noa_s42_5c3a66\\positions.jsonl.gz",
+      "positions_sha256": "63ce87dd1ab98372fadf46d9b1b294f0727cccf9f5c8717dd6f5ad2ca4caaa6a",
+      "positions_bytes": 66114791,
+      "input_sha256": "75dae407e948210a147c8600024cac6f45211c08fc69e8a71da1214fb02caaca",
+      "demand_sha256": "d4913a6729f3b9485f81d7cbab06e42856c06fe0983cb8334068e6dcf2d3feb3",
+      "demand_physics_execution_nonrule_sources_exactly_equal": true,
+      "seal_sha256": "09c0f49a5a1167021099c136893a0f4444a5e49a79485122d98e846e01a2db05",
+      "rule_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+      "raw_frames_in_window": 17000,
+      "vehicle_samples_in_raster": 1356629,
+      "first_window_s": 100,
+      "last_window_exclusive_s": 1800,
+      "spatial_window_m": [
+        500,
+        1000
+      ],
+      "bins_m_s": [
+        20,
+        5
+      ],
+      "empty_cells": 0,
+      "last_raw_sample_s": 1915.2
+    },
+    {
+      "profile": "S",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_S4\\cases\\S_2250_42_lane_drop_transform\\20261103T073307643608Z_lane_drop_transform_s42_9ba95e",
+      "positions": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_S4\\cases\\S_2250_42_lane_drop_transform\\20261103T073307643608Z_lane_drop_transform_s42_9ba95e\\positions.jsonl.gz",
+      "positions_sha256": "d3ebbfd608001de1e9b2624f6e2c9f5306552aa96c370421770a4ab584ed2572",
+      "positions_bytes": 56509625,
+      "input_sha256": "eb3d96d51ce82d2b0087c086a797e28bb9ec0b19574dd6b384b241f8ea0a5d62",
+      "demand_sha256": "d4913a6729f3b9485f81d7cbab06e42856c06fe0983cb8334068e6dcf2d3feb3",
+      "demand_physics_execution_nonrule_sources_exactly_equal": true,
+      "seal_sha256": "cf3204221cb7b2682b5a4a4729e3bf10380e8ec7370dac13fbbb91dbcb0c8824",
+      "rule_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+      "raw_frames_in_window": 17000,
+      "vehicle_samples_in_raster": 782052,
+      "first_window_s": 100,
+      "last_window_exclusive_s": 1800,
+      "spatial_window_m": [
+        500,
+        1000
+      ],
+      "bins_m_s": [
+        20,
+        5
+      ],
+      "empty_cells": 0,
+      "last_raw_sample_s": 1860.7
+    }
+  ],
+  "raw_ledger_spotchecks": 8,
+  "rule_source_locked_before_seeds61": true,
+  "source_csv_unchanged": true,
+  "all_points_from_actual_rows": true,
+  "seed_horizontal_plot_offset_veh_h": [
+    -24,
+    -12,
+    0,
+    12,
+    24
+  ],
+  "raster_method": "All 0.1 s observed samples; 100 <= t < 1800, 500 <= x < 1000. Arithmetic mean speed of vehicle samples across all physical lanes, not flow/density. 20 m x 5 s; empty NaN, no interpolation, no smoothing, no occupancy imputation.",
+  "style_skill": "C:\\Users\\84335\\.codex\\skills\\academic-figures\\scripts\\gen_figure.py",
+  "style_skill_sha256": "dc9d35bc8613c23e67ff0a4fdcb5ecef88e282a23b2968ad1cb61a6576a052cf",
+  "outputs": {
+    "fuel_cost_paired.png": "441e2f309782ae2f7a6d503df26963a3706d3d001f66ebe8a2b93be125ee1d33",
+    "fuel_cost_paired.svg": "e65298086385cc50c779341f8ae4e918b79dbcae6c2f5765554a7ffc322ebf29",
+    "long1800_2250_seed42_speed_raster.png": "af5a59f4091d644a322e3b564568da1665d3861d3fc2fa8a5b141c5272896633",
+    "long1800_2250_seed42_speed_raster.svg": "1bc3e49c61fe56eca9777f1de12724ff3e393c71a07af8ad8741c5e12ba17106",
+    "NoA_2250_seed42_speed_raster.npz": "7f1945f7684ec74b484f8bd6991729b8002b9bd9e21041e9f082426abe609ff5",
+    "raw_ledger_spotchecks.csv": "56edbc435273e2441e5d82b5d6078c25a85f1915bec42414975ebb5b756ff40c",
+    "speed_raster_cells.csv": "033a6a8fbdd589dbe5790dc60f45f9090e12d5fac2660525cb131d13efcfeaf6",
+    "system_time_and_paired_improvement.png": "a3de86d74d295c153a1e153fb1e1083e625fe3b6636867da4056b86bfa0c5eb2",
+    "system_time_and_paired_improvement.svg": "529720fe71bb9d29aa2c1aa1054f39e0c39950eb671db1786aed6ea80750901e",
+    "S_2250_seed42_speed_raster.npz": "db265a72c00b902abafee9246939ad0fd0d9484f10a776851922dd658877ed68"
+  }
+}

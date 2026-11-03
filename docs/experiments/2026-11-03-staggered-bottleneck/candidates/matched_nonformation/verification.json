@@ -1,0 +1,34 @@
+{
+  "candidates": [
+    {
+      "label": "G0",
+      "source_sha256": "1ca965ae0cbaa373f97c48757ca54ddaa907fc839d1a3ef62e962d5fa498b1a6",
+      "parent_sha256": "a286110cf2e14904152b63c9a66f960496f5f7f04ab0097b8d7ed00353db4762",
+      "only_changed_functions": [
+        "_following",
+        "_fill"
+      ],
+      "full_decide_byte_unchanged": true,
+      "memory_schema_unchanged": true
+    },
+    {
+      "label": "G0N",
+      "source_sha256": "d4124d14568b282585395efd118a9ea434adcd1f73b40ae08159d97184b6302f",
+      "parent_sha256": "5d21af5456e816c927116a66895db29d03fada7b28057ecef266b60a0d92a0d6",
+      "only_changed_functions": [
+        "_following",
+        "_fill"
+      ],
+      "full_decide_byte_unchanged": true,
+      "memory_schema_unchanged": true
+    }
+  ],
+  "tests": 12,
+  "subtests": 28,
+  "complete_noa_exact_states_per_candidate": 600,
+  "formed_mode_state_zero_checks_per_candidate": 1200,
+  "G0N_minus_G0_exact_N_eight_lines": true,
+  "role": "matched-nonformation controls using transform; not original NOA",
+  "no_simulation": true,
+  "production_and_original_tests_unchanged": true
+}

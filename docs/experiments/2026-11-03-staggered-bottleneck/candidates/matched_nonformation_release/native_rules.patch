@@ -1,0 +1,185 @@
+--- local_conflict_release/noa/native_rules.py
++++ matched_nonformation_release/noa/native_rules.py
+@@ -114,45 +114,9 @@
+ 
+ 
+ def _following(ego, rows, lanes, phase_boundary=None):
+-    """真实前车CTH叠加实际相邻道互选相位；每车只输出自身速度。"""
+-    following = _front_following(ego, rows)
+-    if following[2] is None:
+-        extended = _front_following(ego, rows, 2 * GAP)
+-        front = next((c for c in rows if c.track == extended[2]), None)
+-        if front is not None and any(
+-            abs(c.lane - ego.lane) == 1 and ego.x < c.x < front.x
+-            and abs(c.x + _physical_phase(c, 3) - _physical_phase(ego, 3) - (front.x - GAP)) <= 2.0
+-            for c in rows
+-        ):
+-            following = extended
+-    cars = (ego, *rows)
+-
+-    def nearest(car, lane):
+-        candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0]
+-
+-        def order(c):
+-            difference, _ = _pair_error(car, c, lanes, phase_boundary)
+-            return abs(difference), abs(c.x - car.x), difference, c.x, c.y, c.speed, c.vy
+-
+-        return min(candidates, key=order, default=None)
+-
+-    linked = bool(following[3]) or any(
+-        -50.0 <= c.x - ego.x < 0.0 and _occupies(c, ego.lane, 0.0) for c in rows
+-    )
+-    error = 0.0
+-    for lane in (ego.lane - 1, ego.lane + 1):
+-        if 0 <= lane < 3:
+-            peer = nearest(ego, lane)
+-            if peer is not None and nearest(peer, ego.lane) is ego:
+-                linked = True
+-                difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+-                error += difference / max(1, pair_lanes - 1)
+-    phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+-    if following[2] is not None:
+-        speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))
+-        return speed, following[1], following[2], int(linked)
+-    target = ego.x + phase_speed / POSITION_GAIN
+-    return _request(ego, target, CRUISE), target, None, int(linked)
++    """Matched nonformation: actual front CTH only, no formation relation flag."""
++    speed, target, reference, _ = _front_following(ego, rows)
++    return speed, target, reference, 0
+ 
+ 
+ def _merge_target(ego, rows, lane, held=None):
+@@ -197,113 +161,27 @@
+ 
+ 
+ def _fill(ego, rows, lanes):
+-    """保留形成收益，优先选择同帧CF响应损失较小且后车无需强制动的补位。"""
+-    component = _component(ego, rows)
+-    cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0)
+-    if len(cars) < lanes:
+-        return None
+-    members = tuple(c for c in cars if c.lane < lanes)
+-
+-    def phase(lane):
+-        return _phase(lane, lanes)
+-
+-    anchor = max(
+-        (c for c in component if c.lane < lanes), key=lambda c: (c.x + phase(c.lane), c.lane, c.x)
+-    )
+-    base = anchor.x + phase(anchor.lane)
+-    near = base - round((base - ego.x - phase(ego.lane)) / GAP) * GAP
+-    centers = [near + k * GAP for k in range(-3, 4)]
+-
+-    def matches(center, lane):
+-        return [c for c in cars if c.lane == lane and abs(c.x - (center - phase(lane))) <= 2.0]
+-
+-    full = [
+-        center
+-        for center in centers
+-        if all(len(matches(center, lane)) == 1 for lane in range(lanes))
+-    ]
+-    candidates = [
+-        c
+-        for c in members
+-        if c.track != anchor.track
+-        and abs(c.vy) < 0.1
+-        and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+-    ]
+-    observed = (ego, *rows)
+-    costs, before_speeds = {}, {}
+-
+-    def cf_cached(car, snapshot, cache):
+-        if car.track not in cache:
+-            cache[car.track] = cf_speed(car, snapshot)
+-        return cache[car.track]
+-
+-    def response_cost(car, lane):
+-        key = (car.track, lane)
+-        if key in costs:
+-            return costs[key]
+-        followers = [
+-            max((c for c in observed if c.track != car.track and c.x < car.x
+-                 and _occupies(c, corridor, 0.0)),
+-                key=lambda c: (c.x, c.y, c.speed, c.vy), default=None)
+-            for corridor in (lane, car.lane)
++    """Original NOA slow-front overtake proposal; caller retains gap execution."""
++    front = min(
++        (c for c in rows if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x, default=None
++    )
++    if front is not None and ego.speed < CRUISE - 2 and front.speed < CRUISE - 2:
++        options = [
++            lane
++            for lane in (ego.lane - 1, ego.lane + 1)
++            if 0 <= lane < lanes and _clear(ego, rows, lane)
+         ]
+-        moved = replace(car, lane=lane, y=(lane + 0.5) * LANE_WIDTH, vy=0.0)
+-        after = tuple(moved if c.track == car.track else c for c in observed)
+-        new_rear = followers[0]
+-        after_speeds = {}
+-        # Native SUMO already uses a fixed 0.1 s frame and BRAKING=10 m/s2.
+-        # Bound the target follower separately; release elsewhere cannot pay it off.
+-        if new_rear is not None and cf_cached(new_rear, after, after_speeds) < new_rear.speed - BRAKING * 0.1 - 1e-9:
+-            costs[key] = None
+-            return None
+-        affected = [car]
+-        for follower in followers:
+-            if follower is not None and all(c.track != follower.track for c in affected):
+-                affected.append(follower)
+-        cost = sum(max(0.0, cf_cached(c, observed, before_speeds) - cf_cached(
+-            moved if c.track == car.track else c, after, after_speeds)) for c in affected)
+-        costs[key] = cost
+-        return cost
+-
+-    choices = []
+-    for center in centers:
+-        window = [c for c in component if c.lane < lanes and center - 60.0 <= c.x <= center + 30.0]
+-        counts = [sum(c.lane == lane for c in window) for lane in range(lanes)]
+-        if not any(matches(center, lane) for lane in range(lanes)):
+-            continue
+-        for lane in range(lanes):
+-            target = center - phase(lane)
+-            if any(_occupies(c, lane) and abs(c.x - target) < CLEARANCE for c in cars):
+-                continue
+-            for car in candidates:
+-                if car not in window:
+-                    continue
+-                boundary = min(car.lane, lane)
+-                imbalance = sum(counts[: boundary + 1]) - (boundary + 1) * len(window) / lanes
+-                after = imbalance + (1 if lane <= boundary else -1)
+-                balances = abs(after) < abs(imbalance) - 1e-9
+-                references = [
+-                    c
+-                    for c in members
+-                    if c.track != car.track and abs(c.x - (center - phase(c.lane))) <= 2.0
+-                ]
+-                if (
+-                    abs(car.lane - lane) == 1
+-                    and balances
+-                    and abs(car.x - target) <= GAP
+-                    and references
+-                    and _clear(car, cars, lane)
+-                ):
+-                    reference = max(references, key=lambda c: (c.lane, c.x))
+-                    target = reference.x + phase(reference.lane) - phase(lane)
+-                    cost = response_cost(car, lane)
+-                    if cost is not None:
+-                        score = (cost, -center, abs(target - car.x), -car.x, -car.lane, -lane)
+-                        choices.append((score, car, lane))
+-    if not choices:
+-        return None
+-    _, car, lane = min(choices, key=lambda item: item[0])
+-    return lane if car.track == ego.track else None
++
++        def free_distance(lane):
++            return min(
++                (c.x - ego.x for c in rows if c.lane == lane and c.x > ego.x), default=200.0
++            )
++
++        if options:
++            lane = max(options, key=free_distance)
++            if free_distance(lane) > front.x - ego.x + 15.0:
++                return lane
++    return None
+ 
+ 
+ def _mandatory_priority(ego, rows, lane, drop_x):

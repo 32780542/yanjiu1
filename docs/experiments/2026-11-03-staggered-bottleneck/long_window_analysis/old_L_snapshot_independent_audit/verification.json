@@ -1,0 +1,16 @@
+{
+  "report": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_window100_1800_attempt2",
+  "report_source_sha256": {
+    "per_case.csv": "af6d84bafd94ada2655b125347ccc85ee307f995f4747cfb28b6f811fb6f3365",
+    "paired_seeds.csv": "24fd5465dab907a9fcdd9a08cbda5c80819b5cc97b0bf45bc333617595064a30",
+    "flow_means.csv": "32a2841ff955eeabc6e9710ce9efa5cb624f34afaded4ad64ef5bdecabdd4e07",
+    "summary.json": "f977190818d84531b8240d765dabac884335fdd1786bc1aff1005f0577b551ce",
+    "ledger_index.json": "70bb5cbd3d30da04268647de5c1f103e80a91e3c9ba7f8033b6b30653c321e0f"
+  },
+  "independent_cases": 6,
+  "raw_frame_checks": 24,
+  "independent_no_existing_evaluator_import": true,
+  "all_ledger_integrals_and_gate_counts_match": true,
+  "all_raw_region_counts_low_counts_speed_sums_match": true,
+  "no_pruning": true
+}

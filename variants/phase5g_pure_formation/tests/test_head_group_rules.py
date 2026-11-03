@@ -30,34 +30,53 @@ class E11RulesTests(unittest.TestCase):
             ego, tuple(c for c in self.cars.values() if c.track != ego.track), 2
         )[:3]
 
-    def test_real_lane_zero_head_c1_shares_phase_by_slowing(self):
+    def test_real_lane_zero_head_c1_uses_fixed_phase_of_actual_a1(self):
         ego, (speed, target, reference) = self.command("C1")
+        peer = self.cars["A1"]
+        # The existing 11.537m separation needs +3.463m in fixed 0/15 geometry.
+        error = peer.x - ego.x + 15.0
         self.assertIsNone(reference)
-        self.assertAlmostEqual(target, ego.x - 2.0 / 0.3)
-        self.assertLess(speed, ego.speed - 0.1)
-
-    def test_real_lane_one_head_a1_shares_phase_by_accelerating(self):
-        ego, (speed, target, reference) = self.command("A1")
-        self.assertIsNone(reference)
-        self.assertAlmostEqual(target, ego.x + 2.0 / 0.3)
+        self.assertLess(abs(r.POSITION_GAIN * error), 2.0)
+        self.assertAlmostEqual(target, ego.x + error)
         self.assertAlmostEqual(speed, r._request(ego, target, r.CRUISE))
         self.assertGreater(speed, ego.speed)
 
-    def test_internal_b1_follows_only_its_physical_front_c1(self):
-        ego, (speed, target, reference) = self.command("B1")
-        front = self.cars["C1"]
-        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
-        self.assertEqual(reference, front.track)
-        self.assertAlmostEqual(target, front.x - distance)
-        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
+    def test_real_lane_one_head_a1_uses_fixed_phase_of_actual_c1(self):
+        ego, (speed, target, reference) = self.command("A1")
+        peer = self.cars["C1"]
+        error = peer.x - ego.x - 15.0
+        self.assertIsNone(reference)
+        self.assertLess(abs(r.POSITION_GAIN * error), 2.0)
+        self.assertAlmostEqual(target, ego.x + error)
+        self.assertAlmostEqual(speed, r._request(ego, target, r.CRUISE))
+        self.assertLess(speed, ego.speed)
 
-    def test_internal_a2_follows_only_its_physical_front_a1(self):
-        ego, (speed, target, reference) = self.command("A2")
-        front = self.cars["A1"]
+    def test_internal_b1_keeps_front_c1_and_couples_to_actual_body_a2(self):
+        ego, (speed, target, reference) = self.command("B1")
+        front, peer = self.cars["C1"], self.cars["A2"]
         distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
         self.assertEqual(reference, front.track)
         self.assertAlmostEqual(target, front.x - distance)
-        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
+        # The mutual B1/A2 body edge has e=+0.728852m, independently of CTH.
+        error = peer.x - ego.x + 15.0
+        phase_speed = max(-2.0, min(2.0, r.POSITION_GAIN * error))
+        cf = r._request(ego, front.x - distance, front.speed)
+        self.assertLess(phase_speed * (cf - ego.speed), 0.0)
+        # In these measured body states phase opposes the real-front CTH action.
+        self.assertEqual(speed.hex(), cf.hex())
+
+    def test_internal_a2_keeps_front_a1_and_couples_to_actual_body_b1(self):
+        ego, (speed, target, reference) = self.command("A2")
+        front, peer = self.cars["A1"], self.cars["B1"]
+        distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+        self.assertEqual(reference, front.track)
+        self.assertAlmostEqual(target, front.x - distance)
+        error = peer.x - ego.x - 15.0
+        phase_speed = max(-2.0, min(2.0, r.POSITION_GAIN * error))
+        cf = r._request(ego, front.x - distance, front.speed)
+        self.assertLess(phase_speed * (cf - ego.speed), 0.0)
+        # In these measured body states phase opposes the real-front CTH action.
+        self.assertEqual(speed.hex(), cf.hex())
 
     def check_lattice(self, positions, lanes):
         cars = tuple(car(i, x, lane) for i, (x, lane) in enumerate(positions))
