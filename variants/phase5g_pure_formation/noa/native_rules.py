@@ -4,12 +4,18 @@ from dataclasses import dataclass, replace
 from math import sqrt, ceil, floor
 
 
-CRUISE, MAX_SPEED, GAP = 28.8, 33.3, 30.0
+CRUISE, MAX_SPEED = 28.8, 33.3
 POSITION_GAIN = 0.3
 SPEED_RELAXATION = 0.2  # 0.1 s step / 0.5 s following response
 WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.0
 LENGTH, STANDSTILL, BRAKING, RESPONSE = 4.0, 1.5, 10.0, 0.2
-HEADWAY = (GAP - LENGTH - STANDSTILL) / CRUISE
+HEADWAY = 0.85
+GAP = LENGTH + STANDSTILL + HEADWAY * CRUISE
+ROAD_PREVIEW = 200.0
+
+
+def desired_spacing(speed):
+    return LENGTH + STANDSTILL + HEADWAY * speed
 
 
 @dataclass(frozen=True, slots=True)
@@ -68,15 +74,17 @@ def _request(ego, target, reference_speed):
     return max(0.0, min(MAX_SPEED, ego.speed + SPEED_RELAXATION * (desired - ego.speed)))
 
 
-def _phase(lane, lanes):
-    return GAP / 2 if lane % 2 else 0.0
+def _phase(lane, lanes, speed=CRUISE):
+    return desired_spacing(speed) / 2 if lane % 2 else 0.0
 
 
-def _physical_phase(car, lanes):
+def _physical_phase(car, lanes, speed=None):
+    speed = car.speed if speed is None else speed
     lateral = max(0.0, min(lanes - 1, car.y / LANE_WIDTH - 0.5))
     lower = int(lateral)
     upper = min(lower + 1, lanes - 1)
-    return _phase(lower, lanes) + (lateral - lower) * (_phase(upper, lanes) - _phase(lower, lanes))
+    return _phase(lower, lanes, speed) + (lateral - lower) * (
+        _phase(upper, lanes, speed) - _phase(lower, lanes, speed))
 
 
 def _component(ego, rows):
@@ -97,7 +105,8 @@ def _pair_error(car, peer, lanes, phase_boundary=None):
         if phase_boundary is None
         else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
     )
-    phase = _physical_phase(peer, 3) - _physical_phase(car, 3)
+    speed = (car.speed + peer.speed) / 2
+    phase = _physical_phase(peer, 3, speed) - _physical_phase(car, 3, speed)
     return peer.x - car.x + phase, pair_lanes
 
 
@@ -109,7 +118,7 @@ def _front_following(ego, rows, distance=50.0):
     )
     if front is None:
         return CRUISE, None, None, 0
-    target = front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed
+    target = front.x - desired_spacing(ego.speed)
     return _request(ego, target, front.speed), target, front.track, 1
 
 
@@ -284,6 +293,8 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
     """所有分支只输出本车动作，横移前后沿用目标车道实际跟驰。"""
     if mode not in ("noa", "formation", "transform"):
         raise ValueError("Unknown driving mode: " + mode)
+    if drop_x is not None and drop_x - ego.x > ROAD_PREVIEW:
+        drop_x = None
     rows = tuple(c for c in neighbors if -100.0 <= c.x - ego.x <= 200.0)
     preparing = drop_x is not None and ego.x >= drop_x - 360.0 and (ego.x < drop_x or ego.lane == 2)
     receiving = preparing or (mode == "transform" and drop_x is not None and any(
@@ -340,7 +351,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
             speed, target, memory = (
                 _join_speed(ego, rows, memory, memory.lane_target)
                 if organized
-                else (CRUISE, None, memory)
+                else (speed, target, memory)
             )
             if moving or _clear(ego, rows, memory.lane_target):
                 return action(speed, memory.lane_target, "executing", target), memory
@@ -354,6 +365,10 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.0):
 
 
     if preparing and ego.lane == 2:
+        if mode == "noa":
+            if _clear(ego, rows, 1):
+                return action(speed, 1, "merge"), Memory(lane_target=1)
+            return action(speed, None, "merge_wait"), memory
         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
         memory = replace(memory, gap=gap)
         speed = _request(ego, target, gap_speed)
@@ -420,4 +435,9 @@ def safe_speed(ego, neighbors):
 
 def decide(ego, neighbors, memory, mode, drop_x=1000.0):
     command, memory = _decide(ego, neighbors, memory, mode, drop_x)
-    return replace(command, speed=min(command.speed, safe_speed(ego, neighbors))), memory
+    limit = safe_speed(ego, neighbors)
+    if drop_x is not None and drop_x - ego.x <= ROAD_PREVIEW and ego.lane == 2:
+        distance = max(0.0, drop_x - ego.x - STANDSTILL)
+        limit = min(limit, sqrt((BRAKING * RESPONSE) ** 2 + 2 * BRAKING * distance)
+                    - BRAKING * RESPONSE)
+    return replace(command, speed=min(command.speed, limit)), memory
