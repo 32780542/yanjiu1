@@ -1,5 +1,5 @@
 {
-  "status": "registered_fixed_posthoc_pending_formal180_completion",
+  "status": "running_headway_after_formal_and_other_posthoc_completed",
   "registered_utc": "2026-11-03T20:45:15.201049+00:00",
   "source_selection": "fixed by root; no main-source or parameter reselection based on any result",
   "deadline_local": "2026-11-04T08:00:00+08:00",
@@ -82,7 +82,14 @@
       "NOA_front200 noa - C12 original noa, same preview/road/flow/seed",
       "per-seed road DID for each contrast, with explicit 300-to-200 straight sharing"
     ],
-    "interpretation": "supplementary causal/mechanism baseline: how much main benefit remains with direct 200m actual-front pursuit; does not replace registered main NOA or choose main controller"
+    "interpretation": "supplementary causal/mechanism baseline: how much main benefit remains with direct 200m actual-front pursuit; does not replace registered main NOA or choose main controller",
+    "result": {
+      "report": "tmp/staggered_bottleneck/20261104_posthoc_NOAfront200_211_215_report_r01",
+      "new_cases": 45,
+      "failed_cases": 0,
+      "eligible_pairs": 90,
+      "eligible_did_seeds": 60
+    }
   },
   "headway_sensitivity": {
     "seeds": [
@@ -120,7 +127,12 @@
       "h1.00-h0.75 separately within noa and transform, same road/flow/seed",
       "per-seed road DID, separately per h/mode/reference mode"
     ],
-    "nominal_reference_note": "nominal h.85 formal uses seeds211-215; do not label unpaired comparisons with h201/202 as a matched headway effect; no extra nominal rerun authorized"
+    "nominal_reference_note": "nominal h.85 formal uses seeds211-215; do not label unpaired comparisons with h201/202 as a matched headway effect; no extra nominal rerun authorized",
+    "activation_decision_utc": "2026-11-03T23:01:22.033200+00:00",
+    "activation_basis": "about59 minutes remain to08:00; observed completed600s batches support whole fixed48 plus consumption; decision uses wall-time only, before reading speedcap result metrics",
+    "status": "running_fixed48",
+    "controller_request_cap_mps": 33.3,
+    "headway_group_independent_of_speedcap_group": true
   },
   "reporting": {
     "metrics": [
@@ -137,7 +149,7 @@
   "speed_cap_supplement": {
     "registered_utc": "2026-11-03T22:10:24.987609+00:00",
     "reason": "root requested direct check of bottleneck effect under a common request cap equal to cruise, without changing the formal main controller",
-    "status": "registered_fixed_pending_formal_and_strong_noa",
+    "status": "completed",
     "seeds": [
       201,
       202
@@ -196,6 +208,13 @@
       "per-seed road DID,300explicitly shares200straight"
     ],
     "comparison_limit": "formal33.3 uses211-215 and this group201/202; no fake paired speed-cap effect across different seeds, no new nominal rerun",
-    "source_lock": "no result-based source or parameter reselection; frozen formal C12/P12 retained"
+    "source_lock": "no result-based source or parameter reselection; frozen formal C12/P12 retained",
+    "result": {
+      "report": "tmp/staggered_bottleneck/20261104_posthoc_speedcap288_201_202_report_r01",
+      "cases": 36,
+      "failed_cases": 0,
+      "eligible_pairs": 18,
+      "eligible_did_seeds": 12
+    }
   }
 }

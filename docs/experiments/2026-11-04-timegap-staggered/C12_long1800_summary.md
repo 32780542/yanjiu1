@@ -60,6 +60,6 @@ NOA的12例参与率和episode数均为0。C12的状态1表示已有真实跟驰
 
 六组区域均速上升、低速与末道停止暴露减少，但固定窗断面流量五组略低、一组略高，不能把等待减少直接写成容量提高。高流量下C12仍存在低速与停车暴露。这里没有配套的1800 s直路案例，因此不填缩道相对直路的DID，也不把时间收益全部归为交错特有贡献。
 
-完整数据见[逐案例CSV](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/data/C12_long1800/per_case.csv)、[12对seed配对CSV](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/data/C12_long1800/paired_seeds.csv)、[流量均值CSV](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/data/C12_long1800/flow_means.csv)和[汇总JSON](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/data/C12_long1800/summary.json)。
+完整数据见[逐案例CSV](data/C12_long1800/per_case.csv)、[12对seed配对CSV](data/C12_long1800/paired_seeds.csv)、[流量均值CSV](data/C12_long1800/flow_means.csv)和[汇总JSON](data/C12_long1800/summary.json)。
 
-本页是1800 s持续需求的运行结果；[45车群机制探针](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/report.md)另用预先成形的交错／并排初态解释局部接续，其1000 m逐车内插延误不与本页系统时间合并。两项证据回答不同问题，也都不替代正式600 s确认结果。
+本页是1800 s持续需求的运行结果；[45车群机制探针](stage/cohort_mechanism_report/report.md)另用预先成形的交错／并排初态解释局部接续，其1000 m逐车内插延误不与本页系统时间合并。两项证据回答不同问题，也都不替代正式600 s确认结果。

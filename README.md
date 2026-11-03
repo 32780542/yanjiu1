@@ -15,7 +15,7 @@
 
 方法来源见 [本轮依据](docs/experiments/2026-11-04-timegap-staggered/method_options.md) 和 [150篇文献库](docs/research/2026-10-30-literature-review/README.md)。文献库分别标明相关章节、摘要预览和仅题录的读取深度；采用细节以当前规则为准。
 
-**本轮仍在进行，截止为2026年11月4日08:00。** 最终C12于04:35登记锁定，211–215独立五种子的正式主135例已全部安全排空；并排及参数、机制补充继续进行。开发结果与正式确认分别保存。
+**本轮仍在进行，截止为2026年11月4日08:00。** 最终C12于04:35登记锁定，211–215独立五种子的正式主135例、匹配并排45例、1800秒持续对照24例、扩展NOA45例与共同28.8 m/s上限36例已全部安全排空；时距补充正在收齐。开发结果与正式确认分别保存。
 
 ## 当前已经验证到哪里
 
@@ -33,7 +33,7 @@ C12在50米内建立普通跟驰链，之后可在200米内继续跟当前真实
 
 相同需求的直路时间差在约0.11秒以内，瓶颈区域的低速和末道停止暴露明显减少；收益主要出现在缩道条件。低流量油耗增加，高流量600秒结果接近NOA；1800秒两种子持续对照的六格平均油耗仍增加，均保留实际数值。完整指标见[正式主结果](docs/experiments/2026-11-04-timegap-staggered/formal600_main_summary.md)与[1800秒结果](docs/experiments/2026-11-04-timegap-staggered/C12_long1800_summary.md)。
 
-交错相对匹配并排的独有作用，以及共同速度上限下的效果，按独立补充对照报告。45车控制探针的平均瓶颈延误小幅改善，最后一辆通过略晚；它与持续随机交通分别解释，详见[机制探针](docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/report.md)。
+交错在30个缩道配对中有22个略快，两种几何的时间差较小，当前收益主要由关系接续与提前收缩解释。把NOA真实前车跟驰范围扩到200米后，C12仍在27/30个缩道配对更快，高流量分别节省8.44和9.00秒；把双方指令速度上限共同设为28.8 m/s后，另两种子的12个缩道配对也全部更快。详见[并排消融](docs/experiments/2026-11-04-timegap-staggered/formal600_parallel_summary.md)、[扩展NOA](docs/experiments/2026-11-04-timegap-staggered/posthoc_NOAfront200_summary.md)与[共同速度上限](docs/experiments/2026-11-04-timegap-staggered/posthoc_speedcap288_summary.md)。45车控制探针的平均瓶颈延误小幅改善，最后一辆通过略晚；它与持续随机交通分别解释，详见[机制探针](docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/report.md)。
 
 仅形成而不主动变换的方案、纯NOA、形成并变换的方案分开运行。车辆输出的状态1只表示本车已有编队关系，允许仍在调距；NOA始终为0。状态1的总人数与真实交错几何分别评价。
 
@@ -52,8 +52,8 @@ python -B runrun.py
 ```powershell
 python -B runrun.py --duration 60 --max-time 240 --gui-delay-ms 20 --no-wait
 python -B runrun.py --headless --duration 20 --max-time 150 --no-wait
-python -B variants/phase5g_pure_formation/run_native_flow.py --mode noa --flow 1750 --duration 600 --max-time 1200
-python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --flow 1750 --duration 600 --max-time 1200
+python -B variants/phase5g_pure_formation/run_native_flow.py --mode noa --flow 1750 --duration 600 --max-time 1200 --gui
+python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --flow 1750 --duration 600 --max-time 1200 --gui
 ```
 
 观察lane2退入lane1、部分lane1车辆移入lane0，以及下游两道的纵向错位恢复。200米直接可见与300米公共道路预告作为两个独立实验条件；公共预告对所有对照方法同时提供，邻车感知范围不随之扩大。
@@ -76,6 +76,6 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 
 版本管理使用 [GitHub仓库](https://github.com/32780542/yanjiu1)，远端名为 `yanjiu1`；`origin`是历史仓库。本轮分支为 `research/20261104-timegap-staggered`。代码候选只保留小型规则源与变更，实验复用同一组引擎文件，不复制整套项目。
 
-11月3日D1及其负荷/成本规则保存在 [D1历史报告](docs/experiments/2026-11-03-midflow-staggered/README.md) 和Git历史中。其数据属于当时方法与基线，不能与当前C8结果合并。此前定点清理已释放约1.70GB；本轮新增数据的实际归档和清理状态以本轮报告为准。
+11月3日D1及其负荷/成本规则保存在 [D1历史报告](docs/experiments/2026-11-03-midflow-staggered/README.md) 和Git历史中。其数据属于当时方法与基线，与当前C12分别保存。本轮已在云端归档核验后，定点释放1,650,262,592字节原始大轨迹；这是实际删除文件之和，新增实验数据另计。关键逐步轨迹、失败和未完成记录保留，见[数据与存储说明](docs/experiments/2026-11-04-timegap-staggered/data/evidence/README.md)。此前约1.70GB清理属于上一轮，不重复计入本轮。
 
 [Cai原文对照依据](docs/Cai2024全局方案对照依据.md)保留原论文图、当前MATLAB调用链与可比条件。当前没有Cai发表版在本轮相同条件下的行程时间或油耗标量。

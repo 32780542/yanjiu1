@@ -1,5 +1,5 @@
 {
-  "status": "running_main_consumed_parallel",
+  "status": "completed_formal180",
   "registered_utc": "2026-11-03T20:35:21.064190+00:00",
   "formal_started": true,
   "research_deadline_local": "2026-11-04T08:00:00+08:00",
@@ -201,5 +201,13 @@
     "failed_cases": 0,
     "eligible_mode_pairs": 135,
     "eligible_road_did_seeds": 90
+  },
+  "parallel_result": {
+    "report": "tmp/staggered_bottleneck/20261104_formal600_parallel_211_215_report_r01",
+    "new_cases": 45,
+    "all_actual_cases_including_main": 180,
+    "failed_cases": 0,
+    "eligible_pairs": 90,
+    "eligible_road_did_seeds": 60
   }
 }

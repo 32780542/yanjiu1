@@ -12,7 +12,7 @@
 
 三组都是45车、三道各15车、速度28.8 m/s、同道纵距30 m、depart=0。NOA / S称为**已给定交错初态上的单车对照**：NOA自身状态始终0，不能据该初态称NOA形成了编队。它使用主NOA的50 m普通跟驰，不使用另一项远前车补充基线。
 
-原交错输入为[formed45_initial.json](D:/yanjiu1/keyan1/docs/experiments/2026-11-03-staggered-bottleneck/formation_demo_D1/formed45_initial.json)：道0／2为`35+30i`，道1为`20+30i`，i=0…14。新[cohort_parallel45_initial.json](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/cohort_parallel45_initial.json)仅将原道1各车x加10 m，道0／2各车x减5 m，使所有道均为`30+30i`。IDs、车道、速度、出发时间和记录顺序均不变；IDs只用于关联输出。
+原交错输入为[formed45_initial.json](../../2026-11-03-staggered-bottleneck/formation_demo_D1/formed45_initial.json)：道0／2为`35+30i`，道1为`20+30i`，i=0…14。新[cohort_parallel45_initial.json](cohort_parallel45_initial.json)仅将原道1各车x加10 m，道0／2各车x减5 m，使所有道均为`30+30i`。IDs、车道、速度、出发时间和记录顺序均不变；IDs只用于关联输出。
 
 两种初态的全车纵向均值都是240 m。它们仍保留实际几何差异：交错组的纵向范围为20–455 m，并排组为30–450 m；各车的起始位置也不同。P12 / P与C12 / S比较的是各自已成形结构下的完整控制行为，不把这项初态几何差异隐去。原同道30 m与h=.85时目标29.98 m相差.02 m，两组保持相同名义同道距。
 
@@ -20,7 +20,7 @@
 
 ## 入口与待运行命令
 
-[geometry_trial.py](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/geometry_trial.py)新增`--mode {noa,formation,transform}`和`--initial PATH`。未传时仍是原`transform`与原demo tape；协议会记录实际mode、initial及完整命令。道路构造和控制器源没有改动。
+[geometry_trial.py](../geometry_trial.py)新增`--mode {noa,formation,transform}`和`--initial PATH`。未传时仍是原`transform`与原demo tape；协议会记录实际mode、initial及完整命令。道路构造和控制器源没有改动。
 
 以下命令从`D:/yanjiu1/keyan1`运行；由root在当前单槽任务结束后执行。输出目录若已存在，应另取新目录保留旧尝试。
 
@@ -36,7 +36,7 @@ python scripts/run_logged.py --label cohort_P12_P --timeout 900 -- python "$coho
 
 ## 按实际轨迹读取1000 m通过
 
-只读工具为[cohort_probe.py](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/tools/cohort_probe.py)。逐车在实际`positions.jsonl.gz`中找相邻实测位置`x_a<1000≤x_b`，用相应时间做线性内插：
+只读工具为[cohort_probe.py](../tools/cohort_probe.py)。逐车在实际`positions.jsonl.gz`中找相邻实测位置`x_a<1000≤x_b`，用相应时间做线性内插：
 
 \[
 t_{1000}=t_a+(t_b-t_a)\frac{1000-x_a}{x_b-x_a}.
@@ -64,4 +64,4 @@ python "$cohortDoc/tools/cohort_probe.py" --case C12_S=tmp/staggered_bottleneck/
 
 ## 已做的入口验证
 
-[test_cohort_mechanism.py](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/test_cohort_mechanism.py)的4项无SUMO测试已通过：旧默认不变；mode／initial覆盖写入协议并进入实际命令；并排输入逐车属性、同道距与中心守恒；人工三帧轨迹的通过内插、首实测帧自由基准、停止暴露与实际横移计数正确。覆盖参数测试先在旧入口上按预期失败。测试中的外部调用全部替换，没有运行Git或SUMO。
+[test_cohort_mechanism.py](test_cohort_mechanism.py)的4项无SUMO测试已通过：旧默认不变；mode／initial覆盖写入协议并进入实际命令；并排输入逐车属性、同道距与中心守恒；人工三帧轨迹的通过内插、首实测帧自由基准、停止暴露与实际横移计数正确。覆盖参数测试先在旧入口上按预期失败。测试中的外部调用全部替换，没有运行Git或SUMO。

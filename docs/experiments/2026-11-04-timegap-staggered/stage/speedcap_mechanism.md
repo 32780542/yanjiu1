@@ -27,7 +27,7 @@ NOA与transform都使用同一候选文件，巡航速度仍为28.8 m/s，h仍�
 
 ## 纯规则验证与运行范围
 
-[test_speedcap_mechanism.py](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/test_speedcap_mechanism.py)先在C12父本的远位置请求上得到预期失败：其`_request`可输出33.3 m/s。新源的同一请求通过28.8 m/s上限断言；两种preview、三种mode、三档本车速度与三种邻车快照共54个完整Command全部≤28.8，NOA状态全部为0。测试同时确认源码唯一常量差，已通过；没有运行SUMO。
+[test_speedcap_mechanism.py](test_speedcap_mechanism.py)先在C12父本的远位置请求上得到预期失败：其`_request`可输出33.3 m/s。新源的同一请求通过28.8 m/s上限断言；两种preview、三种mode、三档本车速度与三种邻车快照共54个完整Command全部≤28.8，NOA状态全部为0。测试同时确认源码唯一常量差，已通过；没有运行SUMO。
 
 ```powershell
 python docs/experiments/2026-11-04-timegap-staggered/stage/test_speedcap_mechanism.py

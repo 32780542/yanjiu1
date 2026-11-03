@@ -26,4 +26,4 @@ P12采用与C12匹配的规则，仅将跨道相位置0，并将slot几何进步
 
 C12比P12平均瓶颈延误少0.340 s，末道停止暴露少5.2 vehicle-s，全段实际LC少2次；最后一辆通过则晚0.223 s。P12每车最多完成2次横移。两组平均延误差较小，而末道停车有所不同，说明在这个已成形车群中，交错几何及其控制有助于减少局部等待。该探针不替代正式连续流结果，也不证明连续流进入瓶颈前已充分成形或具有更高全局容量。
 
-完整数值与逐车通过记录见[summary.csv](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/summary.csv)、[per_vehicle.csv](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/per_vehicle.csv)和[summary.json](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/summary.json)。原始run、mode、initial和rules路径都保留在summary中；运行与计算口径见[探针协议](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_protocol.md)。本次只读取三组已完成数据，没有新增仿真或更改控制器。
+完整数值与逐车通过记录见[summary.csv](summary.csv)、[per_vehicle.csv](per_vehicle.csv)和[summary.json](summary.json)。原始run、mode、initial和rules路径都保留在summary中；运行与计算口径见[探针协议](../cohort_mechanism_protocol.md)。本次只读取三组已完成数据，没有新增仿真或更改控制器。

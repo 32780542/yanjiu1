@@ -25,7 +25,7 @@
 
 ## 纯规则断言
 
-[test_posthoc_controls.py](D:/yanjiu1/keyan1/docs/experiments/2026-11-04-timegap-staggered/stage/test_posthoc_controls.py)共5项测试，覆盖两种道路预警范围：
+[test_posthoc_controls.py](test_posthoc_controls.py)共5项测试，覆盖两种道路预警范围：
 
 1. h=.75、h=1.00分别给出正确巡航D，并在无跨道关系的同一真实前车快照中，让NOA与transform使用相同纵向目标及速度请求。
 2. NOA补充基线在fresh 80 m真实前车场景中选到该前车并主动追赶，状态仍为0、前驱记忆仍为空。

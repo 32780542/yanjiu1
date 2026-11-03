@@ -1,4 +1,4 @@
-# 锁源后的正式实验计划
+# 锁源实验与完成状态
 
 工作目录 D:/yanjiu1/keyan1；研究截止仍为北京时间 2026-11-04 08:00。
 用户取消的是“最后发车后30秒形成/10秒保持”验收期限。
@@ -57,3 +57,10 @@ C8_joint03_dev180_summary.md、C8b_P8b_dev180_summary.md：相位去门/参数�
 C11_P11_dev180_summary.md：24例安全排空，但C11几何仅38/44交替，不采用。
 C12_P12_dev180_summary.md：24例安全排空，C12对NOA12/12时间改善、对C8全慢、对C11全快；完整正负表。
 更早各候选/直路归因在对应summary；C6含已修bug，C10的11异常/1完整与C10b的43/44未采用结果独立保留。
+
+## 当前完成状态与固定事后组
+
+正式main135与matched parallel45已全部安全排空/消费，源仍锁定；见formal600_main_summary.md与formal600_parallel_summary.md。
+扩展NOA_front20045已完成，见posthoc_NOAfront200_summary.md；共同请求cap28.8组36已完成，见posthoc_speedcap288_summary.md。
+h=.75/1.00敏感性48正整组运行（200信息、两道路、201/202、NOA/T、600/1200、独立MAX33.3），不据结果改变主参数。
+事后源/顺序/同输入引用与时间决定见stage/posthoc_protocol_600.json；所有raw保留，08:00工作截止不变。

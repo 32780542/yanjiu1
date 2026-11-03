@@ -1,0 +1,13 @@
+﻿candidate,actual_candidate,preview_m,scenario,flow,mode,seeds,shared_straight,aggregation,flag_mean_participants,flag_participation_rate,flag_mean_episode_s,region_mean_speed_mps,region_low_speed_vehicle_s,flow_1000m_veh_h,stop_vehicles,stop_sample_vehicle_s,merge_2to1_completions,merge_2to1_mean_x_m,max_lane_completions_per_vehicle,vehicles_more_than_two_lane_completions,flag_mean_episode_s_defined_seeds,mean_seed_max_lane_completions_per_vehicle,sum_vehicles_more_than_two_lane_completions
+NOA_front200_200,NOA_front200_200,200,lane_drop,1500.0,noa,5,False,equal_seed_mean,0.0,0.0,,21.439900221598727,1289.0199999999993,4606.5599999999995,32.6,799.9200000000001,285.4,842.8567488945799,5.0,22.2,0,4.8,111.0
+NOA_front200_200,NOA_front200_200,200,lane_drop,1750.0,noa,5,False,equal_seed_mean,0.0,0.0,,15.55426598634084,3053.7399999999534,5302.08,55.6,1718.8000000000002,343.0,848.2199053412405,6.0,35.2,0,5.4,176.0
+NOA_front200_200,NOA_front200_200,200,lane_drop,2000.0,noa,5,False,equal_seed_mean,0.0,0.0,,9.99704343535203,7542.919999999974,5914.08,106.6,2930.36,432.0,832.5531540531541,7.0,68.0,0,6.0,340.0
+NOA_front200_200,NOA_front200_200,200,straight3,1500.0,noa,5,False,equal_seed_mean,0.0,0.0,,31.84294834755972,0.0,4602.24,0.0,0.0,13.8,37.3846624317128,2.0,0.0,0,1.2,0.0
+NOA_front200_200,NOA_front200_200,200,straight3,1750.0,noa,5,False,equal_seed_mean,0.0,0.0,,32.07040480441609,0.0,5320.8,0.0,0.0,16.8,37.488556180102066,2.0,0.0,0,1.6,0.0
+NOA_front200_200,NOA_front200_200,200,straight3,2000.0,noa,5,False,equal_seed_mean,0.0,0.0,,32.28830779029284,0.0,6078.24,0.0,0.0,23.2,38.170619403699426,2.0,0.0,0,1.8,0.0
+NOA_front200_300,NOA_front200_300,300,lane_drop,1500.0,noa,5,False,equal_seed_mean,0.0,0.0,,24.412465945099893,796.4799999999958,4613.76,23.2,568.54,280.2,769.6979979072267,6.0,15.2,0,4.8,76.0
+NOA_front200_300,NOA_front200_300,300,lane_drop,1750.0,noa,5,False,equal_seed_mean,0.0,0.0,,16.16034868499282,3427.7000000000003,5280.4800000000005,50.8,2294.48,329.2,785.8001842544588,7.0,27.2,0,5.2,136.0
+NOA_front200_300,NOA_front200_300,300,lane_drop,2000.0,noa,5,False,equal_seed_mean,0.0,0.0,,10.125287143527979,7669.099999999992,5925.6,93.6,3537.88,398.8,800.2886175914787,7.0,32.6,0,6.2,163.0
+NOA_front200_300,NOA_front200_200,300,straight3,1500.0,noa,5,True,equal_seed_mean,0.0,0.0,,31.84294834755972,0.0,4602.24,0.0,0.0,13.8,37.3846624317128,2.0,0.0,0,1.2,0.0
+NOA_front200_300,NOA_front200_200,300,straight3,1750.0,noa,5,True,equal_seed_mean,0.0,0.0,,32.07040480441609,0.0,5320.8,0.0,0.0,16.8,37.488556180102066,2.0,0.0,0,1.6,0.0
+NOA_front200_300,NOA_front200_200,300,straight3,2000.0,noa,5,True,equal_seed_mean,0.0,0.0,,32.28830779029284,0.0,6078.24,0.0,0.0,23.2,38.170619403699426,2.0,0.0,0,1.8,0.0
