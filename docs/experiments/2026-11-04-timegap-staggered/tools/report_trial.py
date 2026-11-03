@@ -16,8 +16,7 @@ import seal_case
 METRICS = ("mean_system_time_s", "mean_travel_time_s", "mean_entry_wait_s", "fuel_g_per_km")
 
 
-def reuse_report(path):
-    """Reuse the already-consumed immutable A rows, including their raw observations."""
+def read_report_rows(path):
     def decode(value):
         if not value:
             return None
@@ -27,12 +26,53 @@ def reuse_report(path):
             return json.loads(value)
         except ValueError:
             return value
-    with (path / "per_case.csv").open(encoding="utf-8-sig", newline="") as stream:
-        rows = [{key: decode(value) for key, value in row.items()} for row in csv.DictReader(stream)]
+    with path.open(encoding="utf-8-sig", newline="") as stream:
+        return [{key: decode(value) for key, value in row.items()} for row in csv.DictReader(stream)]
+
+
+def reuse_report(path):
+    """Reuse the already-consumed immutable A rows, including their raw observations."""
+    rows = read_report_rows(path / "per_case.csv")
     for row in rows:
         row["_run"] = {**row, "case_dir": row["run_dir"]}
         row["evidence_reused_from"] = str(path)
     return rows
+
+
+def road_effect(pairs, drop_report, output):
+    """DID consumes existing within-road pairs; it does not reevaluate old cases."""
+    _, traffic = seal_case.tools()
+    drop = {(p["candidate"], p["flow"], p["seed"]): p
+            for p in read_report_rows(drop_report / "paired_seeds.csv")
+            if p["scenario"] == "lane_drop" and p["reference_mode"] == "noa"}
+    rows = []
+    for straight in pairs:
+        key = straight["candidate"], straight["flow"], straight["seed"]
+        lane_drop = drop.get(key)
+        valid = bool(lane_drop and lane_drop["pair_eligible"] and straight["pair_eligible"])
+        row = dict(candidate=key[0], flow=key[1], seed=key[2], eligible=valid)
+        for metric in METRICS:
+            a, b = lane_drop.get("delta_" + metric) if lane_drop else None, straight.get("delta_" + metric)
+            row["drop_delta_" + metric], row["straight_delta_" + metric] = a, b
+            row["did_" + metric] = a - b if valid and a is not None and b is not None else None
+        rows.append(row)
+    traffic.write_rows(output / "road_did_seeds.csv", rows)
+    means = []
+    for flow in sorted({row["flow"] for row in rows}):
+        members = [row for row in rows if row["flow"] == flow]
+        row = dict(flow=flow, seeds=len(members), eligible=all(r["eligible"] for r in members))
+        for prefix in ("drop_delta_", "straight_delta_", "did_"):
+            for metric in METRICS:
+                values = [r[prefix + metric] for r in members]
+                row[prefix + metric] = mean(values) if row["eligible"] and all(v is not None for v in values) else None
+        denominator = row["drop_delta_mean_system_time_s"]
+        row["straight_share_of_drop_system_gain"] = row["straight_delta_mean_system_time_s"] / denominator if denominator else None
+        means.append(row)
+    traffic.write_rows(output / "road_did_means.csv", means)
+    seal_case.write(output / "road_did_summary.json", dict(eligible_seeds=sum(r["eligible"] for r in rows), means=means,
+        drop_report_reused=str(drop_report), formula="DID=(transform-NOA)_drop-(transform-NOA)_straight, within seed; equal seed means",
+        reference_identity="Drop reuses A200/noa; straight uses C200/noa; common NOA definitions confirmed before execution",
+        share_definition="ratio of equal-seed mean straight system delta to mean drop system delta; not mean per-seed percentages"))
 
 
 def cross_pairs(cases, mappings):
@@ -90,6 +130,7 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--reuse-report", type=Path)
     parser.add_argument("--compare", nargs="+", help="explicit target=reference candidates, e.g. B200=A200")
+    parser.add_argument("--road-drop-report", type=Path, help="already-consumed drop pairs for a straight-road DID")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     records = summarize.protocol_records(args.batch)
@@ -121,6 +162,8 @@ def main():
                 item[prefix + metric] = mean(values) if item["eligible"] and all(v is not None for v in values) else None
         rows.append(item)
     traffic.write_rows(args.output / "flow_means.csv", rows)
+    if args.road_drop_report:
+        road_effect(pairs, args.road_drop_report, args.output)
     bad = [c for c in cases if not c.get("safe") or not c.get("all_completed") or not c.get("protocol_verified")
            or not c.get("evidence_verified") or c.get("returncode") != 0 or c.get("status") != "drained"]
     seal_case.write(args.output / "summary.json", dict(case_count=len(cases), eligible_pairs=sum(p["pair_eligible"] for p in pairs),

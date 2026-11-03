@@ -37,6 +37,10 @@
 消费脚本 `tools/report_trial.py` 直接复用旧 summarize/seal 接口，候选内部配对，另单遍读取 raw 描述末道停车及真实2→1完成位置。
 第二批 `20261104_B_dev180_201_202_r01` 按主代理指示仅 B200/B300 transform，各三流量×201/202，共12例；冻结305行与候选字节相同。
 其消费用 `--reuse-report tmp/staggered_bottleneck/20261104_A_dev180_201_202_report_r01 --compare B200=A200 B300=A300`，显式报告 B−A/noa 与 B−A/transform，不重跑NOA。
+第三批 `20261104_C_dev180_201_202_r01` 使用主代理冻结311行的 C200/C300，仅transform共12例，180/600、jobs3；主代理已确认14公共定义与A相同。
+消费继续复用同一A报告，映射 `--compare C200=A200 C300=A300`；不重读A raw、不重跑A验证或NOA，不先执行持续/正式。
+随后按主代理要求补 `20261104_C_straight_dev180_201_202_r01`：仅C200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
+该直路报告用 `--road-drop-report tmp/staggered_bottleneck/20261104_C_dev180_201_202_report_r01` 读取既有缩道配对，逐seed计算道路DID；不重跑C300直路。
 
 ## 可直接填写的 PowerShell 命令
 

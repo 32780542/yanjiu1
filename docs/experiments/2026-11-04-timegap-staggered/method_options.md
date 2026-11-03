@@ -89,3 +89,5 @@ v_i^{\rm form}=v_p+k(x_p-x_i-\delta_{ip}).
 | Kesting、Treiber、Helbing，TRR 1999:86–94，2007，*General Lane-Changing Model MOBIL for Car-Following Models*，[作者PDF](https://akesting.de/download/MOBIL_TRR_2007.pdf) | 读安全与换道激励设计：用当前跟驰模型比较目标道收益、检查目标后车受迫制动。NOA基线可据此保留局部主动超车；不应只靠人为加速差或过晚强制合流制造差距。 |
 
 基线与两方案共用h=0.85、车辆物理限制、真实跟驰安全、传感器和道路知情时刻。NOA可以因实际局部跟驰受阻而主动超车；两新方案的区别应来自交错结构和必要重排。先看实际末道停等、总通行时间及额外横移是否改善，再决定是否值得继续，而不是靠相位误差下降宣布成功。
+
+11月4日补读了Rupp的[机构公开研究海报](https://tugraz.elsevierpure.com/ws/portalfiles/portal/11137142/SummerSchool.pdf)。其合流思路同样把速度调整与实际横移分开，前驱选择依据车道、相对位置和相对速度，并讨论无通信下的速度相关间距。这说明“无通信”和“虚拟前驱”本身已有先例。本轮需要检验的是交错结构如何在局部感知下完成三道到两道的实际重构，以及这种重构的附加交通效果；不能把该海报中的滑模控制与稳定性结论转移给当前if/else控制器，也不能据此宣称0.85秒为最优时距。
