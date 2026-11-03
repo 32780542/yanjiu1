@@ -1,0 +1,13 @@
+{
+  "formula": "GP2 target minus S target at identical flow/seed/road, both against byte-identical same NOA reference metrics; original same-mode pair eligibility verified",
+  "cases_verified": 18,
+  "incremental_eligible_pairs": 6,
+  "reference_metric_identity_checks": 90,
+  "nonwindow_deltas_match_original_same_mode_within_1e9": true,
+  "source_csv_sha256": {
+    "original_same_mode": "d071b392bfcd245065cca51ef3906fa3c0c6664cbb49a81c71e571754ae4990a",
+    "extended_same_NOA": "ef80632fe1a03097e604d4d4830793f560dffe8816a8ccf93855a7e796807f9b"
+  },
+  "unchanged_evaluator": true,
+  "no_raw_rescan": true
+}

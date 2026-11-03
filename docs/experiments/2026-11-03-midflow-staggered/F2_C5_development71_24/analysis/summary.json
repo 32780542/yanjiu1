@@ -1,0 +1,310 @@
+{
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24"
+  ],
+  "case_count": 48,
+  "evidence_verified_count": 48,
+  "protocol_verified_count": 48,
+  "planned_task_count": 48,
+  "protocol_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24": "c61f3fbaf1ab96ef73b4eb9010f76a0b05f77fccc43c8f733f0b817bc7d3f015",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24": "0ef5303903e7072129a687c21cbab7b91146c474b81cdaf8b026bb95edcc8251"
+  },
+  "physical_safe_count": 48,
+  "drained_count": 48,
+  "pair_count": 36,
+  "pair_eligible_count": 36,
+  "fixed_window_complete_count": 48,
+  "fixed_traffic_window_s": [
+    100,
+    600
+  ],
+  "window_policy": "Unchanged original [100,600) region ledger; partial observed exposure retained in region_window, formal incomplete-window metrics stay null.",
+  "failed_cases": [],
+  "low_speed_cases": [
+    {
+      "candidate": "C5",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5063.299999999994,
+        "mean_n": 10.126599999999987,
+        "density_veh_km_lane": 16.877666666666645,
+        "mean_speed_mps": 28.001444699876814,
+        "low_speed_vehicle_s": 2.199999999999932,
+        "low_speed_fraction": 0.00043449923962631773,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "C5",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5421.400000000053,
+        "mean_n": 10.842800000000107,
+        "density_veh_km_lane": 18.071333333333513,
+        "mean_speed_mps": 28.23329164517554,
+        "low_speed_vehicle_s": 2.2000000000000455,
+        "low_speed_fraction": 0.0004057992400487003,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "C5",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5763.900000000089,
+        "mean_n": 11.527800000000177,
+        "density_veh_km_lane": 19.213000000000296,
+        "mean_speed_mps": 27.61279084066365,
+        "low_speed_vehicle_s": 19.59999999999998,
+        "low_speed_fraction": 0.003400475372577539,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "C5",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6197.40000000014,
+        "mean_n": 12.394800000000279,
+        "density_veh_km_lane": 20.658000000000467,
+        "mean_speed_mps": 27.59643191233508,
+        "low_speed_vehicle_s": 2.3000000000000114,
+        "low_speed_fraction": 0.000371123374318256,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "F",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4214.6,
+        "mean_n": 8.429200000000002,
+        "density_veh_km_lane": 14.04866666666667,
+        "mean_speed_mps": 28.763281186321326,
+        "low_speed_vehicle_s": 1.1999999999999886,
+        "low_speed_fraction": 0.0002847245290181722,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "F",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5443.400000000038,
+        "mean_n": 10.886800000000076,
+        "density_veh_km_lane": 18.144666666666794,
+        "mean_speed_mps": 28.06431624264648,
+        "low_speed_vehicle_s": 5.5,
+        "low_speed_fraction": 0.0010103979130690307,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "F",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5650.300000000021,
+        "mean_n": 11.300600000000042,
+        "density_veh_km_lane": 18.834333333333404,
+        "mean_speed_mps": 28.190406666579275,
+        "low_speed_vehicle_s": 1.0999999999999943,
+        "low_speed_fraction": 0.00019467992849936998,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4435.299999999996,
+        "mean_n": 8.87059999999999,
+        "density_veh_km_lane": 14.784333333333318,
+        "mean_speed_mps": 27.35709672360147,
+        "low_speed_vehicle_s": 86.90000000000003,
+        "low_speed_fraction": 0.019592812211124414,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4893.4000000000215,
+        "mean_n": 9.786800000000042,
+        "density_veh_km_lane": 16.311333333333405,
+        "mean_speed_mps": 26.789996509454753,
+        "low_speed_vehicle_s": 144.79999999999998,
+        "low_speed_fraction": 0.02959087750848068,
+        "max_simultaneous_low_speed": 3
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5218.399999999998,
+        "mean_n": 10.436799999999996,
+        "density_veh_km_lane": 17.394666666666662,
+        "mean_speed_mps": 27.136831273549245,
+        "low_speed_vehicle_s": 34.0,
+        "low_speed_fraction": 0.0065154070213092165,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6085.400000000043,
+        "mean_n": 12.170800000000087,
+        "density_veh_km_lane": 20.284666666666812,
+        "mean_speed_mps": 25.153447645529745,
+        "low_speed_vehicle_s": 470.59999999999997,
+        "low_speed_fraction": 0.07733263220166244,
+        "max_simultaneous_low_speed": 4
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6003.3999999999805,
+        "mean_n": 12.006799999999961,
+        "density_veh_km_lane": 20.01133333333327,
+        "mean_speed_mps": 26.620145597385573,
+        "low_speed_vehicle_s": 1.1000000000000227,
+        "low_speed_fraction": 0.0001832295032814782,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5710.500000000002,
+        "mean_n": 11.421000000000003,
+        "density_veh_km_lane": 19.035000000000007,
+        "mean_speed_mps": 27.940871116989417,
+        "low_speed_vehicle_s": 73.4,
+        "low_speed_fraction": 0.012853515453988265,
+        "max_simultaneous_low_speed": 2
+      }
+    }
+  ],
+  "original_raw_bytes_pruned": 0,
+  "method_sha256": {
+    "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+    "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+    "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+    "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+  },
+  "delta_definition": "candidate minus reference; source/demand/parameter/eligibility checks and differences reuse published tools"
+}
