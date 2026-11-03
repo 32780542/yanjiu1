@@ -1,0 +1,32 @@
+{
+  "repository_head_observed_before_analysis": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+  "case_count": 100,
+  "lane_drop_case_count": 50,
+  "paired_shared_arrivals": 50,
+  "safe_completed_cases": 100,
+  "ledger_reconstructions": 50,
+  "note": "No simulator, controller, network or original run-directory reads. All delay totals are signed net excess, not positive-part delay.",
+  "constants": {
+    "cruise_mps": 28.8,
+    "route_length_m": 1200,
+    "cruise_reference_s": 41.666666666666664,
+    "absolute_speed_ceiling_lower_bound_s": 36.03603603603604,
+    "two_lane_equilibrium_reference_veh_h": 6912.0,
+    "upstream_per_lane_equilibrium_reference_veh_h": 2304.0
+  },
+  "source_sha256": {
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\traffic_evidence\\per_case.csv": "2c6f92a13e28b4ae005c59e4745cee0e1d541ee8dd607c8735849fa27962db37",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\traffic_evidence\\case_index.json": "5d8ff1e03d1393fd4d1a245d0514826c46935484d5c1dc0071a68864663856b1",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_tm_noa50\\bundle.tar.gz": "71b9658d409d48adb91f5fecf88523f9e282b1da9b4e23d73871c3c6ebea10a6",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\evidence\\heldout_tm_transform50\\bundle.tar.gz": "d57e9d79cb00eac986554c15cecb5a1757b17c9688af3c5577bba74dd4fd92d5",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\traffic_evidence\\traffic_TM_noa.tar.gz": "c5801e49a9025e7c87cb2f8c4f48dbabe0622ea7781f4c7755c645ffa2aad4ac",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-30-rule-trials\\traffic_evidence\\traffic_TM_transform.tar.gz": "37873fe91ad39571132f9bfc3b24a60c96a58f115c7295cbc33fc379d60b5e23",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\diagnosis\\analyze_diagnosis.py": "e475ce27d7b392cf8036e02d9e02a46903155c6d41ce02fb16f8726361880b96",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\experiments\\native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\noa\\native_rules.py": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+    "D:\\matlab_huipu_2000\\mainmain.m": "9cea997d1df84aa6ad3d6b971b8232296f7043fd3e6d93460547909877857ef0",
+    "D:\\matlab_huipu_2000\\mainmain_REF.m": "6f47979a52f139f29850f43d18f831023fb333658fc7a549ca81b7b48ab7701d",
+    "D:\\matlab_huipu_2000\\RUN_result_draw_1.m": "986d08ca09e5e90a008bd20cf91ac0538a0ced8b60cfbfe5a662fc3c056137d4"
+  }
+}

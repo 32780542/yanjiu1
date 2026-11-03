@@ -1,0 +1,90 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -183,30 +183,6 @@
+ def _join_speed(ego, rows, memory, lane):
+     target, speed, gap = _merge_target(ego, rows, lane, memory.gap)
+     return _request(ego, target, speed), target, replace(memory, gap=gap)
+-
+-
+-def _make_room(ego, rows):
+-    """只用当前终止车道前车及其90m窗口选择一个实际可行的中道车。"""
+-    all_rows = (ego, *rows)
+-    ending = [c for c in all_rows if c.lane == 2 and abs(c.x - ego.x) <= 90.0]
+-    if not ending:
+-        return None, None
+-    head = max(ending, key=lambda c: c.x)
+-    anchor = max(
+-        (c for c in all_rows if c.lane >= 1 and abs(c.x - head.x) <= 90.0),
+-        key=lambda c: (c.x, c.lane),
+-    )
+-    window = [c for c in all_rows if anchor.x - 60.0 <= c.x <= anchor.x + 30.0]
+-    counts = [sum(c.lane == lane for c in window) for lane in range(3)]
+-    if counts[1] + counts[2] - counts[0] < 2:
+-        return head, None
+-    options = [
+-        c
+-        for c in window
+-        if c.lane == 1 and c.track != anchor.track and anchor.x - 30.0 <= c.x <= anchor.x + 15.0
+-    ]
+-    helper = max(options, key=lambda c: c.x) if options else None
+-    return head, helper
+ 
+ 
+ def cf_speed(car, rows):
+@@ -316,27 +292,6 @@
+         return None
+     _, car, lane = min(choices, key=lambda item: item[0])
+     return lane if car.track == ego.track else None
+-
+-
+-def _receiving_distance(ego, incoming):
+-    return max(
+-        CLEARANCE,
+-        LENGTH
+-        + STANDSTILL
+-        + RESPONSE * ego.speed
+-        + max(ego.speed**2 - incoming.speed**2, 0.0) / (2 * BRAKING),
+-    )
+-
+-
+-def _receiving(ego, rows, helper):
+-    front = min((c.x for c in rows if c.lane == ego.lane and c.x > ego.x), default=float("inf"))
+-    candidates = [c for c in rows if c.lane == 2 and ego.lane == 1 and ego.x <= c.x < front]
+-    if ego.lane == 0 and helper is not None and ego.x <= helper.x < front:
+-        candidates.append(helper)
+-    if not candidates:
+-        return None
+-    reference = max(candidates, key=lambda c: c.x)
+-    return reference
+ 
+ 
+ def _mandatory_priority(ego, rows, lane, drop_x):
+@@ -421,28 +376,6 @@
+     ):
+         memory = replace(memory, joining=False)
+ 
+-    if preparing and mode == "transform":
+-        head, helper = _make_room(ego, rows)
+-        if helper is not None and helper.track == ego.track:
+-            memory = Memory(lane_target=0, joining=True)
+-            speed, target, memory = _join_speed(ego, rows, memory, 0)
+-            lane = 0 if _clear(ego, rows, 0) else None
+-            return (
+-                action(speed, lane, "make_room" if lane is not None else "prepare_room", target),
+-                memory,
+-            )
+-        receiving = _receiving(ego, rows, helper)
+-        if receiving is not None:
+-            target = receiving.x - _receiving_distance(ego, receiving)
+-            speed = min(speed, _request(ego, target, receiving.speed))
+-            return action(speed, None, "open_gap", target, receiving.track), memory
+-        if (
+-            ego.lane == 2
+-            and head is not None
+-            and head.track != ego.track
+-            and not _clear(ego, rows, 1)
+-        ):
+-            return action(speed, None, "ending_follower", target, reference), memory
+ 
+     if preparing and ego.lane == 2:
+         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)

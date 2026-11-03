@@ -1,0 +1,11 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -205,7 +205,7 @@
+         for c in window
+         if c.lane == 1 and c.track != anchor.track and anchor.x - 30.0 <= c.x <= anchor.x + 15.0
+     ]
+-    helper = max(options, key=lambda c: c.x) if options else None
++    helper = None  # diagnostic: no middle-to-left helper
+     return head, helper
+ 
+ 

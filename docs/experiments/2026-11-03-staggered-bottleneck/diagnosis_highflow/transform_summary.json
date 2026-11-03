@@ -1,0 +1,48 @@
+{
+  "mode": "transform",
+  "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\diagnostic2500_20261103\\transform\\20261103T031406911129Z_lane_drop_transform_s1_5390a4",
+  "frames": 3892,
+  "first_slow_s": 103.2,
+  "max_onroad": 184,
+  "max_simultaneous_low5": 115,
+  "reason_ticks": {
+    "formation_follow": 174754,
+    "fill_layer": 412,
+    "executing": 7164,
+    "join_follow": 30287,
+    "approach_join": 4265,
+    "merge": 126,
+    "approach_gap": 3843,
+    "open_gap": 76328,
+    "ending_follower": 79276,
+    "make_room": 19,
+    "prepare_room": 81
+  },
+  "execution": {
+    "lane_requested_ticks": 3563,
+    "native_lane_requests": 655,
+    "lane_motion_in_progress": 2908
+  },
+  "status": "drained",
+  "safe": true,
+  "all_completed": true,
+  "requested": 379,
+  "departed": 379,
+  "completed": 379,
+  "actual_end_s": 389.2,
+  "mean_travel_time_s": 99.35488126649076,
+  "mean_system_time_s": 99.71081794195251,
+  "mean_entry_wait_s": 0.35593667546174146,
+  "lane_changes": 634,
+  "lane_change_completions": 633,
+  "collisions": 0,
+  "teleports": 0,
+  "source_sha256": {
+    "experiments/native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+    "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  }
+}

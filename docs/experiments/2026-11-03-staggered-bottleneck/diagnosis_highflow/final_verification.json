@@ -1,0 +1,30 @@
+{
+  "cases": 3,
+  "all_safe_drained": true,
+  "same_frozen_source": true,
+  "local_guard_rejections": 0,
+  "reproduction_trips_identical": true,
+  "local_links": 10,
+  "operations": [
+    {
+      "mode": "transform",
+      "operation": "results\\operations\\20261103T031406408997Z_diagnostic2500-transform_061e3518",
+      "returncode": 0
+    },
+    {
+      "mode": "noa",
+      "operation": "results\\operations\\20261103T031406406927Z_diagnostic2500-noa_55bc19cc",
+      "returncode": 0
+    },
+    {
+      "mode": "formation",
+      "operation": "results\\operations\\20261103T031406425621Z_diagnostic2500-formation_5c638d09",
+      "returncode": 0
+    }
+  ],
+  "tool_sha256": {
+    "analyze_trace.py": "334648cd018895180f852c9383e4a2f33cf51d1ffa25f331daa7be19583812db",
+    "extract_events.py": "a358aa777bd5a1b09f8bcd5066df896f7b684c293adec25e27981f0feb4ee4bd",
+    "quantify_flow.py": "6e494bf8f6e3eddd1dc722dd3054082d9c2644366a848443869cb4240ffce21e"
+  }
+}

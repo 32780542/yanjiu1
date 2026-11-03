@@ -1,0 +1,11 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -421,7 +421,7 @@
+     ):
+         memory = replace(memory, joining=False)
+ 
+-    if preparing and mode == "transform":
++    if preparing and mode == "transform" and False:  # diagnostic: no cooperation
+         head, helper = _make_room(ego, rows)
+         if helper is not None and helper.track == ego.track:
+             memory = Memory(lane_target=0, joining=True)

@@ -1,0 +1,134 @@
+{
+  "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+  "baseline_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+  "states": 2000,
+  "random_seed": 202611030931,
+  "exact_equality": true,
+  "candidates": {
+    "gap_projection": {
+      "source_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\gap_projection\\native_rules.py",
+      "sha256": "afa7ff9c85fdd9efae9c66805415e095d560eab750c7ce9722357098bcf552f5",
+      "changed_definitions": [
+        "_decide",
+        "_join_speed",
+        "_merge_target"
+      ],
+      "module_globals_and_imports_unchanged": true,
+      "class_and_memory_definitions_unchanged": true,
+      "ordering_keys": [
+        "lambda c: (c.x, c.lane, c.y)",
+        "lambda c: (c.x, c.y, c.speed)",
+        "lambda c: (c.x, c.y, c.speed, c.vy)",
+        "lambda c: c.x",
+        "lambda c: (c.x, c.lane)",
+        "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+        "lambda item: item[0]",
+        "lambda c: c.x",
+        "order",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: (c.x, c.y, c.speed, c.vy)",
+        "free_distance",
+        "lambda c: (c.lane, c.x)"
+      ],
+      "track_in_ordering_key": false,
+      "noa_exact": 2000,
+      "straight3_exact": 0,
+      "relabel_order_exact": 6000,
+      "remote_exact": 6000,
+      "changed_transform_shadows": 745,
+      "effective_helpers_checked": 0
+    },
+    "continuous_phase": {
+      "source_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\continuous_phase\\native_rules.py",
+      "sha256": "ba78a9a19e1a876444afec9ef383a111243c4c504a0d9e511a29db9c2130e22e",
+      "changed_definitions": [
+        "_fill",
+        "_phase"
+      ],
+      "module_globals_and_imports_unchanged": true,
+      "class_and_memory_definitions_unchanged": true,
+      "ordering_keys": [
+        "lambda c: (c.x, c.lane, c.y)",
+        "lambda c: (c.x, c.y, c.speed)",
+        "lambda c: (c.x, c.y, c.speed, c.vy)",
+        "lambda c: c.x",
+        "lambda c: (c.x, c.lane)",
+        "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+        "lambda item: item[0]",
+        "lambda c: c.x",
+        "order",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: (c.x, c.y, c.speed, c.vy)",
+        "free_distance",
+        "lambda c: (c.lane, c.x)"
+      ],
+      "track_in_ordering_key": false,
+      "physical_lane_offsets_3_then_2": [
+        [
+          0,
+          15,
+          0
+        ],
+        [
+          0,
+          15
+        ]
+      ],
+      "noa_exact": 2000,
+      "straight3_exact": 6000,
+      "relabel_order_exact": 6000,
+      "remote_exact": 6000,
+      "changed_transform_shadows": 38,
+      "effective_helpers_checked": 0
+    },
+    "effective_handoff": {
+      "source_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\effective_handoff\\native_rules.py",
+      "sha256": "9b7f80dc6f7f4fb6352f2fb8356fbf57cb14aef1aa03bb3b6c8457bb0002bbe4",
+      "changed_definitions": [
+        "_make_room"
+      ],
+      "module_globals_and_imports_unchanged": true,
+      "class_and_memory_definitions_unchanged": true,
+      "ordering_keys": [
+        "lambda c: (c.x, c.lane, c.y)",
+        "lambda c: (c.x, c.y, c.speed)",
+        "lambda c: (c.x, c.y, c.speed, c.vy)",
+        "lambda c: c.x",
+        "lambda c: (c.x, c.lane)",
+        "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+        "lambda item: item[0]",
+        "lambda c: c.x",
+        "order",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: c.x",
+        "lambda c: (c.x, c.y, c.speed, c.vy)",
+        "free_distance",
+        "lambda c: (c.lane, c.x)"
+      ],
+      "track_in_ordering_key": false,
+      "noa_exact": 2000,
+      "straight3_exact": 6000,
+      "relabel_order_exact": 6000,
+      "remote_exact": 6000,
+      "changed_transform_shadows": 2,
+      "effective_helpers_checked": 58
+    }
+  },
+  "production_before_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+  "production_after_sha256": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+  "production_unchanged": true,
+  "driver_sha256": "871b3edc4bbffa14f86ce06647f3bd7e4089ba7ef7e710623e0c555ab0e7b1f8",
+  "limits": [
+    "Shadow states are algebraic checks, not SUMO rollouts or efficiency/safety certification.",
+    "Random physical states are finite and include boundary/moving/pending/private-memory cases, but are not exhaustive.",
+    "Track IDs are relabeled and neighbor order reversed; physically exact ties are not generated."
+  ]
+}

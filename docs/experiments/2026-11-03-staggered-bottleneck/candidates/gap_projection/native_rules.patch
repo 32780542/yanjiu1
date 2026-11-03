@@ -1,0 +1,44 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -149,7 +149,7 @@
+     return _request(ego, target, CRUISE), target, None, int(linked)
+ 
+ 
+-def _merge_target(ego, rows, lane, held=None):
++def _merge_target(ego, rows, lane, held=None, project=False):
+     """跟踪本车旁边的真实空隙；可用性由共同物理走廊判断。"""
+     ordered = sorted(
+         (c for c in rows if _occupies(c, lane)), key=lambda c: (c.x, c.y, c.speed, c.vy)
+@@ -171,7 +171,13 @@
+         rear = max((c for c in ordered if c.x <= ego.x), key=lambda c: c.x, default=None)
+     gap = (front.track if front else None, rear.track if rear else None)
+     if front is not None and rear is not None:
+-        return (front.x + rear.x) / 2, (front.speed + rear.speed) / 2, gap
++        target = (front.x + rear.x) / 2
++        if project:
++            low = rear.x + CLEARANCE + max(0.0, rear.speed - ego.speed)
++            high = front.x - CLEARANCE + min(0.0, front.speed - ego.speed)
++            if low <= high:
++                target = max(low, min(high, ego.x))
++        return target, (front.speed + rear.speed) / 2, gap
+     distance = max(15.0, LENGTH + STANDSTILL + RESPONSE * ego.speed)
+     reference = front if front is not None else rear
+     target = reference.x - distance if front is not None else reference.x + distance
+@@ -181,7 +187,7 @@
+ 
+ 
+ def _join_speed(ego, rows, memory, lane):
+-    target, speed, gap = _merge_target(ego, rows, lane, memory.gap)
++    target, speed, gap = _merge_target(ego, rows, lane, memory.gap, project=True)
+     return _request(ego, target, speed), target, replace(memory, gap=gap)
+ 
+ 
+@@ -445,7 +451,7 @@
+             return action(speed, None, "ending_follower", target, reference), memory
+ 
+     if preparing and ego.lane == 2:
+-        target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
++        target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap, project=organized)
+         memory = replace(memory, gap=gap)
+         speed = _request(ego, target, gap_speed)
+         if _clear(ego, rows, 1):

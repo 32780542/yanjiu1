@@ -1,0 +1,11 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -455,7 +455,7 @@
+         return action(speed, None, "approach_gap", target), memory
+ 
+     if organized and not memory.joining:
+-        lane = _fill(ego, rows, 2 if preparing else lanes)
++        lane = None  # diagnostic: no discretionary formation fill
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):
+                 memory = Memory(lane_target=lane, joining=True)

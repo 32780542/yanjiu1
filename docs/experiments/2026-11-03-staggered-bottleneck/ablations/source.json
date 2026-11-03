@@ -1,0 +1,38 @@
+{
+  "NF": {
+    "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+    "source_sha256": "bf82d9b52bf5db3acb4babfb86cf95491b99f41c2f864b005c2fffbdb161da85",
+    "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\NF\\native_rules.py",
+    "intervention": [
+      "lane = _fill(ego, rows, 2 if preparing else lanes)",
+      "lane = None  # diagnostic: no discretionary formation fill"
+    ]
+  },
+  "NC": {
+    "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+    "source_sha256": "fe6c9d6e0629358eee86dce7a46ad0068375939d5faaca0d21acebc2d64b218f",
+    "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\NC\\native_rules.py",
+    "intervention": [
+      "if preparing and mode == \"transform\":",
+      "if preparing and mode == \"transform\" and False:  # diagnostic: no cooperation"
+    ]
+  },
+  "NP": {
+    "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+    "source_sha256": "27d98ad857cad50fd3047aa3f66a2d7f237b1aa24f5495832f9561e99914d8eb",
+    "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\NP\\native_rules.py",
+    "intervention": [
+      "phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))",
+      "phase_speed = 0.0  # diagnostic: no cross-lane speed correction"
+    ]
+  },
+  "NH": {
+    "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+    "source_sha256": "905c8b35dbb7342fb7bb0403552446a98fc4d919378d8f5953b4fe18e4eebf31",
+    "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\NH\\native_rules.py",
+    "intervention": [
+      "helper = max(options, key=lambda c: c.x) if options else None",
+      "helper = None  # diagnostic: no middle-to-left helper"
+    ]
+  }
+}

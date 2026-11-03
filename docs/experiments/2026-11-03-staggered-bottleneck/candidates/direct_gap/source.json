@@ -1,0 +1,17 @@
+{
+  "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+  "source_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "lines": 444,
+  "removed_functions": [
+    "_make_room",
+    "_receiving",
+    "_receiving_distance"
+  ],
+  "changed_functions": [
+    "_decide"
+  ],
+  "equivalent_to": "NC",
+  "production_unchanged": true,
+  "noa_control_unchanged": true,
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\direct_gap\\native_rules.py"
+}
