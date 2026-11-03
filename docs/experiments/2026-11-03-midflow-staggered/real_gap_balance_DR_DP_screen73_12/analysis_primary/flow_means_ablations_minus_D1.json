@@ -1,0 +1,74 @@
+[
+  {
+    "candidate": "DP",
+    "flow": 1500.0,
+    "seeds": 2,
+    "ablation_faster_seeds": 0,
+    "D1_mean_system_time_s": 41.89141495194972,
+    "ablation_mean_system_time_s": 42.20427771727709,
+    "delta_mean_system_time_s": 0.3128627653273668,
+    "ablation_improvement_percent": -0.7468422006901093,
+    "delta_fuel_g_per_km": -5.513163077065151,
+    "delta_lane_change_completions": 7.5
+  },
+  {
+    "candidate": "DP",
+    "flow": 1750.0,
+    "seeds": 2,
+    "ablation_faster_seeds": 1,
+    "D1_mean_system_time_s": 42.38214892942567,
+    "ablation_mean_system_time_s": 42.45195239330279,
+    "delta_mean_system_time_s": 0.06980346387712189,
+    "ablation_improvement_percent": -0.16470015239991231,
+    "delta_fuel_g_per_km": -6.13006167305457,
+    "delta_lane_change_completions": 2.0
+  },
+  {
+    "candidate": "DP",
+    "flow": 2000.0,
+    "seeds": 2,
+    "ablation_faster_seeds": 2,
+    "D1_mean_system_time_s": 42.96785310734464,
+    "ablation_mean_system_time_s": 42.79336712085964,
+    "delta_mean_system_time_s": -0.1744859864849957,
+    "ablation_improvement_percent": 0.4060849539051562,
+    "delta_fuel_g_per_km": -5.907663747045902,
+    "delta_lane_change_completions": 22.5
+  },
+  {
+    "candidate": "DR",
+    "flow": 1500.0,
+    "seeds": 2,
+    "ablation_faster_seeds": 1,
+    "D1_mean_system_time_s": 41.89141495194972,
+    "ablation_mean_system_time_s": 41.97780134120479,
+    "delta_mean_system_time_s": 0.08638638925506825,
+    "ablation_improvement_percent": -0.20621501888669824,
+    "delta_fuel_g_per_km": 0.14653226207306602,
+    "delta_lane_change_completions": 4.5
+  },
+  {
+    "candidate": "DR",
+    "flow": 1750.0,
+    "seeds": 2,
+    "ablation_faster_seeds": 1,
+    "D1_mean_system_time_s": 42.38214892942567,
+    "ablation_mean_system_time_s": 42.32004265006772,
+    "delta_mean_system_time_s": -0.06210627935794477,
+    "ablation_improvement_percent": 0.14653876909678065,
+    "delta_fuel_g_per_km": -0.30818008702919286,
+    "delta_lane_change_completions": -12.0
+  },
+  {
+    "candidate": "DR",
+    "flow": 2000.0,
+    "seeds": 2,
+    "ablation_faster_seeds": 1,
+    "D1_mean_system_time_s": 42.96785310734464,
+    "ablation_mean_system_time_s": 42.94533399800598,
+    "delta_mean_system_time_s": -0.022519109338656307,
+    "ablation_improvement_percent": 0.052409202950861516,
+    "delta_fuel_g_per_km": -0.014862122982897574,
+    "delta_lane_change_completions": -14.0
+  }
+]

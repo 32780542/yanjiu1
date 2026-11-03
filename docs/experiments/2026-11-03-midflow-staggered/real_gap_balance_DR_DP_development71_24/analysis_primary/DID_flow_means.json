@@ -1,0 +1,74 @@
+[
+  {
+    "candidate": "DP",
+    "flow": 1500.0,
+    "seeds": 2,
+    "D1_extra_drop_better_seeds": 0,
+    "drop_delta_mean_system_time_s": 0.2384903449976754,
+    "straight_delta_mean_system_time_s": 0.3913074149837499,
+    "did_mean_system_time_s": -0.15281706998607447,
+    "drop_delta_fuel_g_per_km": -5.695300065466867,
+    "straight_delta_fuel_g_per_km": -3.259380532660284,
+    "did_fuel_g_per_km": -2.435919532806583
+  },
+  {
+    "candidate": "DP",
+    "flow": 1750.0,
+    "seeds": 2,
+    "D1_extra_drop_better_seeds": 0,
+    "drop_delta_mean_system_time_s": 0.32987226516441837,
+    "straight_delta_mean_system_time_s": 0.4434130748067595,
+    "did_mean_system_time_s": -0.11354080964234115,
+    "drop_delta_fuel_g_per_km": -5.403175138794268,
+    "straight_delta_fuel_g_per_km": -3.2595197879929287,
+    "did_fuel_g_per_km": -2.143655350801339
+  },
+  {
+    "candidate": "DP",
+    "flow": 2000.0,
+    "seeds": 2,
+    "D1_extra_drop_better_seeds": 1,
+    "drop_delta_mean_system_time_s": 0.48409633844416433,
+    "straight_delta_mean_system_time_s": 0.454406825059003,
+    "did_mean_system_time_s": 0.029689513385161348,
+    "drop_delta_fuel_g_per_km": -5.724521679467884,
+    "straight_delta_fuel_g_per_km": -4.170316930744374,
+    "did_fuel_g_per_km": -1.5542047487235102
+  },
+  {
+    "candidate": "DR",
+    "flow": 1500.0,
+    "seeds": 2,
+    "D1_extra_drop_better_seeds": 2,
+    "drop_delta_mean_system_time_s": 0.03744160573351962,
+    "straight_delta_mean_system_time_s": 0.0,
+    "did_mean_system_time_s": 0.03744160573351962,
+    "drop_delta_fuel_g_per_km": -0.4376458608832152,
+    "straight_delta_fuel_g_per_km": 0.0,
+    "did_fuel_g_per_km": -0.4376458608832152
+  },
+  {
+    "candidate": "DR",
+    "flow": 1750.0,
+    "seeds": 2,
+    "D1_extra_drop_better_seeds": 2,
+    "drop_delta_mean_system_time_s": 0.10202580898729252,
+    "straight_delta_mean_system_time_s": 0.0,
+    "did_mean_system_time_s": 0.10202580898729252,
+    "drop_delta_fuel_g_per_km": 0.24187876350496396,
+    "straight_delta_fuel_g_per_km": 0.0,
+    "did_fuel_g_per_km": 0.24187876350496396
+  },
+  {
+    "candidate": "DR",
+    "flow": 2000.0,
+    "seeds": 2,
+    "D1_extra_drop_better_seeds": 1,
+    "drop_delta_mean_system_time_s": 0.010952091386872809,
+    "straight_delta_mean_system_time_s": 0.0,
+    "did_mean_system_time_s": 0.010952091386872809,
+    "drop_delta_fuel_g_per_km": -0.28419717046239157,
+    "straight_delta_fuel_g_per_km": 0.0,
+    "did_fuel_g_per_km": -0.28419717046239157
+  }
+]

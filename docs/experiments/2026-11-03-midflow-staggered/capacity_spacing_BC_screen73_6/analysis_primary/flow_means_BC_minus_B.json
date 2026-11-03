@@ -1,0 +1,38 @@
+[
+  {
+    "reference": "B",
+    "flow": 1500.0,
+    "seeds": 2,
+    "BC_faster_seeds": 1,
+    "reference_mean_system_time_s": 42.59547868783554,
+    "BC_mean_system_time_s": 42.709509753348236,
+    "delta_mean_system_time_s": 0.1140310655126946,
+    "BC_improvement_percent": -0.2677069703767872,
+    "delta_fuel_g_per_km": -8.505360078221024,
+    "delta_lane_change_completions": -38.5
+  },
+  {
+    "reference": "B",
+    "flow": 1750.0,
+    "seeds": 2,
+    "BC_faster_seeds": 2,
+    "reference_mean_system_time_s": 44.04212126451687,
+    "BC_mean_system_time_s": 43.386756145356046,
+    "delta_mean_system_time_s": -0.6553651191608303,
+    "BC_improvement_percent": 1.4880416754331813,
+    "delta_fuel_g_per_km": -10.202729979083209,
+    "delta_lane_change_completions": -44.0
+  },
+  {
+    "reference": "B",
+    "flow": 2000.0,
+    "seeds": 2,
+    "BC_faster_seeds": 1,
+    "reference_mean_system_time_s": 45.135375540046525,
+    "BC_mean_system_time_s": 45.35284646061814,
+    "delta_mean_system_time_s": 0.2174709205716141,
+    "BC_improvement_percent": -0.48181923373754193,
+    "delta_fuel_g_per_km": -8.6972062467228,
+    "delta_lane_change_completions": 190.5
+  }
+]

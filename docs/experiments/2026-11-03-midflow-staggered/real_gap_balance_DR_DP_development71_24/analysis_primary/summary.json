@@ -1,0 +1,247 @@
+{
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24"
+  ],
+  "case_count": 36,
+  "evidence_verified_count": 36,
+  "protocol_verified_count": 36,
+  "planned_task_count": 36,
+  "protocol_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12": "9deb31f52c61406f680813278ef867a89f1fd480f24d8f174789403596c751ea",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24": "e8a6bf830babb91907bc04566f1a5e76174d2384fe0d8de9d660f5cc7b4f0d97"
+  },
+  "physical_safe_count": 36,
+  "drained_count": 36,
+  "pair_count": 36,
+  "pair_eligible_count": 24,
+  "fixed_window_complete_count": 36,
+  "fixed_traffic_window_s": [
+    100,
+    600
+  ],
+  "window_policy": "Unchanged original [100,600) region ledger; partial observed exposure retained in region_window, formal incomplete-window metrics stay null.",
+  "failed_cases": [],
+  "low_speed_cases": [
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4201.299999999988,
+        "mean_n": 8.402599999999977,
+        "density_veh_km_lane": 14.004333333333294,
+        "mean_speed_mps": 28.843301496833718,
+        "low_speed_vehicle_s": 1.099999999999966,
+        "low_speed_fraction": 0.000261823721229136,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5339.100000000011,
+        "mean_n": 10.678200000000022,
+        "density_veh_km_lane": 17.797000000000036,
+        "mean_speed_mps": 28.59360014175397,
+        "low_speed_vehicle_s": 1.0999999999999943,
+        "low_speed_fraction": 0.00020602723305425857,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5656.299999999994,
+        "mean_n": 11.312599999999987,
+        "density_veh_km_lane": 18.85433333333331,
+        "mean_speed_mps": 28.169857149911167,
+        "low_speed_vehicle_s": 42.10000000000002,
+        "low_speed_fraction": 0.007443028127928163,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6172.20000000015,
+        "mean_n": 12.3444000000003,
+        "density_veh_km_lane": 20.574000000000503,
+        "mean_speed_mps": 27.721434254402205,
+        "low_speed_vehicle_s": 1.1999999999999886,
+        "low_speed_fraction": 0.00019442014192669704,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "DP",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5472.300000000099,
+        "mean_n": 10.944600000000198,
+        "density_veh_km_lane": 18.24100000000033,
+        "mean_speed_mps": 27.907852688579357,
+        "low_speed_vehicle_s": 64.30000000000001,
+        "low_speed_fraction": 0.011750086800796528,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "DP",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6700.799999999972,
+        "mean_n": 13.401599999999943,
+        "density_veh_km_lane": 22.335999999999906,
+        "mean_speed_mps": 25.515131415945305,
+        "low_speed_vehicle_s": 378.4,
+        "low_speed_fraction": 0.056470869149952474,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "DR",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4914.499999999984,
+        "mean_n": 9.828999999999967,
+        "density_veh_km_lane": 16.38166666666661,
+        "mean_speed_mps": 28.78796574860949,
+        "low_speed_vehicle_s": 1.0999999999999943,
+        "low_speed_fraction": 0.00022382744938447411,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "DR",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5381.1000000000195,
+        "mean_n": 10.762200000000039,
+        "density_veh_km_lane": 17.937000000000065,
+        "mean_speed_mps": 28.392697542076256,
+        "low_speed_vehicle_s": 16.400000000000034,
+        "low_speed_fraction": 0.0030477040010406745,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "DR",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5595.099999999986,
+        "mean_n": 11.190199999999972,
+        "density_veh_km_lane": 18.65033333333329,
+        "mean_speed_mps": 28.457907054929287,
+        "low_speed_vehicle_s": 1.1000000000000227,
+        "low_speed_fraction": 0.00019660059695090804,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "DR",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6214.20000000013,
+        "mean_n": 12.42840000000026,
+        "density_veh_km_lane": 20.714000000000432,
+        "mean_speed_mps": 27.548273638920538,
+        "low_speed_vehicle_s": 80.30000000000001,
+        "low_speed_fraction": 0.01292201731518109,
+        "max_simultaneous_low_speed": 2
+      }
+    }
+  ],
+  "original_raw_bytes_pruned": 0,
+  "method_sha256": {
+    "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+    "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+    "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+    "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+  },
+  "delta_definition": "candidate minus reference; source/demand/parameter/eligibility checks and differences reuse published tools"
+}
