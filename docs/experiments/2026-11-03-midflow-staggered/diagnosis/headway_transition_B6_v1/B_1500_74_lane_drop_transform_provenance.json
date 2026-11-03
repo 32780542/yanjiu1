@@ -1,0 +1,28 @@
+{
+  "candidate": "B",
+  "flow": 1500.0,
+  "seed": 74,
+  "scenario": "lane_drop",
+  "mode": "transform",
+  "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_1500_74_lane_drop_transform\\20261103T122025107796Z_lane_drop_transform_s74_eebd27",
+  "positions_sha256": "a33d13a8b1b51a367446d126982760d80e3c1de4b59c20456a75d55e9ccec82c",
+  "window_s": [
+    30,
+    180
+  ],
+  "upstream_reference_scale": 1.5,
+  "cross640_n": 197,
+  "independent_region_ledger_errors": [
+    3.5697667044587433e-11,
+    2.1827872842550278e-11
+  ],
+  "mean_entry_wait_s": 0.2472803347280339,
+  "mean_system_time_s": 42.66401673640168,
+  "mean_travel_time_s": 42.41673640167364,
+  "total_entry_wait_s": 59.1000000000001,
+  "limitations": [
+    "20m statistics use the fixed demand window; cross640 cohort is first sampled crossing in that window and followed for 5s.",
+    "Same-front means exact observed nearest-front identity, and is evaluated only offline. Front changes are retained, not imputed.",
+    "Reference scale annotates a metric only; it does not change any observation, motion, controller or evaluator."
+  ]
+}

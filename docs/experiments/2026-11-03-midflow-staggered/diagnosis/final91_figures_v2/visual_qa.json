@@ -1,0 +1,41 @@
+{
+  "figures": [
+    {
+      "file": "final91_system_time_effects.png",
+      "pixels": [
+        3644,
+        2248
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "sha256": "e7b5be0eab0a8a0cf9f0039fc1dea8612d00282da47a7847dac2ac07810cc392",
+      "visually_reviewed": true,
+      "review": "All five colored dots visible, mean lines and zero reference clear; bottom legend and two-line note separated; no clipping or footer overlap.",
+      "svg_sha256": "5979475d2bef461f86e5f770a627d13314f00827aebb66f44b0287c243c3368a"
+    },
+    {
+      "file": "final91_fuel_effects.png",
+      "pixels": [
+        3612,
+        2248
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "sha256": "2189f1411162792b3306633ceba2dee43c950769c5f31c3248db01bcfb5fa53e",
+      "visually_reviewed": true,
+      "review": "All five colored dots visible, mean lines and zero reference clear; bottom legend and two-line note separated; no clipping or footer overlap.",
+      "svg_sha256": "4f7e79351771ad22d7c21a8c5ef6be3802890d5b15255efbffaf12ab0d626259"
+    }
+  ],
+  "panels_n": 12,
+  "all_points_per_figure": 90,
+  "source_hashes_verified": true,
+  "visual_review_pending": false,
+  "visual_review_passed": true,
+  "reviewed_version": "v2",
+  "supersedes": "v1 footer/legend overlap; v1 kept unchanged"
+}

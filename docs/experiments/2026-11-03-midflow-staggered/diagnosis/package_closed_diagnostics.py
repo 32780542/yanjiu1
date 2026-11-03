@@ -2,6 +2,7 @@
 from pathlib import Path
 import hashlib
 import json
+import sys
 import tarfile
 
 
@@ -14,10 +15,11 @@ def sha256(path):
     return hashlib.file_digest(path.open('rb'), 'sha256').hexdigest()
 
 
-def main():
+def main(final=False):
     assert not ARCHIVE.exists() and not INDEX.exists(), 'Use a new output for any retry.'
     folders = sorted(p for p in ROOT.iterdir() if p.is_dir() and
-                     (p.name.startswith('raw_') or 'fill_scores_v1' in p.name))
+                     (p.name.startswith('raw_final91_' if final else 'raw_') or
+                      (not final and 'fill_scores_v1' in p.name)))
     files = sorted(p for folder in folders for p in folder.rglob('*') if p.is_file())
     records = [{'path': p.relative_to(ROOT).as_posix(), 'bytes': p.stat().st_size,
                 'sha256': sha256(p)} for p in files]
@@ -41,4 +43,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    assert sys.argv[1:] in ([], ['--final91'])
+    if sys.argv[1:]:
+        ARCHIVE = ROOT / 'final91_diagnostic_tables.tar.gz'
+        INDEX = ROOT / 'final91_diagnostic_tables_index.json'
+    main(final=bool(sys.argv[1:]))

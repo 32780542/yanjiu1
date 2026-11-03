@@ -1,0 +1,194 @@
+[
+  {
+    "case": "GP_1500_73_lane_drop_transform_stages",
+    "availability_s": {
+      "stationary_lane2_vehicle_s": 57.90000000000028,
+      "plan_exists_vehicle_s": 28.60000000000003,
+      "horizon_expired_vehicle_s": 0.0,
+      "current_cth_compatible_vehicle_s": 0.8999999999999999,
+      "current_pair_both_real_vehicle_s": 53.00000000000021,
+      "current_pair_nominally_feasible_vehicle_s": 9.899999999999997,
+      "free_minenergy_pair_contains_ego_vehicle_s": 9.899999999999997,
+      "no_plan_vehicle_s": 29.299999999999994,
+      "current_cth_and_nominally_feasible_vehicle_s": 0.4
+    },
+    "stages": {
+      "request": {
+        "n": 76,
+        "cth_compatible": 7,
+        "planner_exists": 12,
+        "current_pair_nominally_feasible": 12,
+        "median_rear_gap": 15.966547818383901,
+        "median_x": 642.3600473123402
+      },
+      "lateral_start": {
+        "n": 76,
+        "cth_compatible": 7,
+        "planner_exists": 16,
+        "current_pair_nominally_feasible": 11,
+        "median_rear_gap": 16.336994719939526,
+        "median_x": 650.4020473624753
+      }
+    }
+  },
+  {
+    "case": "GP_1500_74_lane_drop_transform_stages",
+    "availability_s": {
+      "stationary_lane2_vehicle_s": 50.200000000000266,
+      "plan_exists_vehicle_s": 17.799999999999976,
+      "horizon_expired_vehicle_s": 0.0,
+      "current_cth_compatible_vehicle_s": 0.8999999999999999,
+      "current_pair_both_real_vehicle_s": 48.100000000000236,
+      "current_pair_nominally_feasible_vehicle_s": 2.5,
+      "free_minenergy_pair_contains_ego_vehicle_s": 2.5,
+      "no_plan_vehicle_s": 32.4000000000001,
+      "current_cth_and_nominally_feasible_vehicle_s": 0.30000000000000004
+    },
+    "stages": {
+      "request": {
+        "n": 85,
+        "cth_compatible": 9,
+        "planner_exists": 7,
+        "current_pair_nominally_feasible": 7,
+        "median_rear_gap": 16.02438982242336,
+        "median_x": 641.9479861899991
+      },
+      "lateral_start": {
+        "n": 85,
+        "cth_compatible": 8,
+        "planner_exists": 8,
+        "current_pair_nominally_feasible": 7,
+        "median_rear_gap": 16.350760824482563,
+        "median_x": 645.3087437879309
+      }
+    }
+  },
+  {
+    "case": "GP_1750_73_lane_drop_transform_stages",
+    "availability_s": {
+      "stationary_lane2_vehicle_s": 96.90000000000056,
+      "plan_exists_vehicle_s": 29.200000000000088,
+      "horizon_expired_vehicle_s": 0.0,
+      "current_cth_compatible_vehicle_s": 0.5,
+      "current_pair_both_real_vehicle_s": 94.30000000000071,
+      "current_pair_nominally_feasible_vehicle_s": 6.200000000000001,
+      "free_minenergy_pair_contains_ego_vehicle_s": 6.200000000000001,
+      "no_plan_vehicle_s": 67.70000000000041,
+      "current_cth_and_nominally_feasible_vehicle_s": 0.1
+    },
+    "stages": {
+      "request": {
+        "n": 85,
+        "cth_compatible": 6,
+        "planner_exists": 6,
+        "current_pair_nominally_feasible": 6,
+        "median_rear_gap": 15.157524735112247,
+        "median_x": 642.4344719106967
+      },
+      "lateral_start": {
+        "n": 85,
+        "cth_compatible": 6,
+        "planner_exists": 7,
+        "current_pair_nominally_feasible": 5,
+        "median_rear_gap": 15.149404907466646,
+        "median_x": 656.3134515515595
+      }
+    }
+  },
+  {
+    "case": "GP_1750_74_lane_drop_transform_stages",
+    "availability_s": {
+      "stationary_lane2_vehicle_s": 81.6000000000005,
+      "plan_exists_vehicle_s": 20.39999999999997,
+      "horizon_expired_vehicle_s": 0.0,
+      "current_cth_compatible_vehicle_s": 2.0000000000000004,
+      "current_pair_both_real_vehicle_s": 78.60000000000046,
+      "current_pair_nominally_feasible_vehicle_s": 2.8000000000000003,
+      "free_minenergy_pair_contains_ego_vehicle_s": 2.8000000000000003,
+      "no_plan_vehicle_s": 61.20000000000028,
+      "current_cth_and_nominally_feasible_vehicle_s": 0.7999999999999999
+    },
+    "stages": {
+      "request": {
+        "n": 90,
+        "cth_compatible": 12,
+        "planner_exists": 13,
+        "current_pair_nominally_feasible": 13,
+        "median_rear_gap": 16.77563908880495,
+        "median_x": 642.6114934668412
+      },
+      "lateral_start": {
+        "n": 90,
+        "cth_compatible": 12,
+        "planner_exists": 14,
+        "current_pair_nominally_feasible": 11,
+        "median_rear_gap": 16.834637583371943,
+        "median_x": 654.7154319144213
+      }
+    }
+  },
+  {
+    "case": "GP_2000_73_lane_drop_transform_stages",
+    "availability_s": {
+      "stationary_lane2_vehicle_s": 122.89999999999932,
+      "plan_exists_vehicle_s": 30.900000000000112,
+      "horizon_expired_vehicle_s": 0.0,
+      "current_cth_compatible_vehicle_s": 1.4000000000000001,
+      "current_pair_both_real_vehicle_s": 122.89999999999932,
+      "current_pair_nominally_feasible_vehicle_s": 0.7,
+      "free_minenergy_pair_contains_ego_vehicle_s": 0.7,
+      "no_plan_vehicle_s": 92.00000000000077,
+      "current_cth_and_nominally_feasible_vehicle_s": 0.0
+    },
+    "stages": {
+      "request": {
+        "n": 98,
+        "cth_compatible": 6,
+        "planner_exists": 4,
+        "current_pair_nominally_feasible": 4,
+        "median_rear_gap": 15.953803516868788,
+        "median_x": 645.0982811295994
+      },
+      "lateral_start": {
+        "n": 98,
+        "cth_compatible": 5,
+        "planner_exists": 6,
+        "current_pair_nominally_feasible": 3,
+        "median_rear_gap": 16.053813375161837,
+        "median_x": 654.3903089926348
+      }
+    }
+  },
+  {
+    "case": "GP_2000_74_lane_drop_transform_stages",
+    "availability_s": {
+      "stationary_lane2_vehicle_s": 153.09999999999826,
+      "plan_exists_vehicle_s": 39.40000000000015,
+      "horizon_expired_vehicle_s": 0.0,
+      "current_cth_compatible_vehicle_s": 0.1,
+      "current_pair_both_real_vehicle_s": 151.59999999999835,
+      "current_pair_nominally_feasible_vehicle_s": 0.30000000000000004,
+      "free_minenergy_pair_contains_ego_vehicle_s": 0.30000000000000004,
+      "no_plan_vehicle_s": 113.69999999999989,
+      "current_cth_and_nominally_feasible_vehicle_s": 0.0
+    },
+    "stages": {
+      "request": {
+        "n": 106,
+        "cth_compatible": 2,
+        "planner_exists": 5,
+        "current_pair_nominally_feasible": 5,
+        "median_rear_gap": 16.131337074956775,
+        "median_x": 657.4881513079147
+      },
+      "lateral_start": {
+        "n": 106,
+        "cth_compatible": 2,
+        "planner_exists": 12,
+        "current_pair_nominally_feasible": 5,
+        "median_rear_gap": 16.22538681914756,
+        "median_x": 663.2943523137756
+      }
+    }
+  }
+]

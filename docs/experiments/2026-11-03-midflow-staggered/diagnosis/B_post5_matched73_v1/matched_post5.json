@@ -1,0 +1,1121 @@
+{
+  "reference": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\raw_post5_reference_S73_3_v2",
+  "candidate": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\raw_Bscreen6_post5_v1",
+  "limitations": "Identity matching is evaluation-only. Timing/position and receiving relationship may differ; same_entrant_and_receiver fixes both observed identities.",
+  "reference_label": null,
+  "candidate_label": null,
+  "summaries": [
+    {
+      "flow": 1500.0,
+      "seed": 73,
+      "cohort": "same_entrant",
+      "n": 49,
+      "vehicles": [
+        "v0_00099",
+        "v1_00149",
+        "v1_00224",
+        "v1_00282",
+        "v1_00777",
+        "v1_00782",
+        "v1_01059",
+        "v1_01320",
+        "v1_01431",
+        "v1_01617",
+        "v1_01650",
+        "v2_00041",
+        "v2_00088",
+        "v2_00255",
+        "v2_00317",
+        "v2_00348",
+        "v2_00425",
+        "v2_00464",
+        "v2_00544",
+        "v2_00556",
+        "v2_00565",
+        "v2_00604",
+        "v2_00613",
+        "v2_00638",
+        "v2_00688",
+        "v2_00727",
+        "v2_00762",
+        "v2_00864",
+        "v2_00881",
+        "v2_00885",
+        "v2_00912",
+        "v2_00962",
+        "v2_00983",
+        "v2_01005",
+        "v2_01097",
+        "v2_01129",
+        "v2_01156",
+        "v2_01222",
+        "v2_01255",
+        "v2_01342",
+        "v2_01397",
+        "v2_01459",
+        "v2_01485",
+        "v2_01530",
+        "v2_01575",
+        "v2_01604",
+        "v2_01742",
+        "v2_01764",
+        "v2_01780"
+      ],
+      "entrant_merge_negative_acceleration_integral_mps": {
+        "n": 49,
+        "reference": 2.793452672961233,
+        "candidate": 1.6850268028585145,
+        "delta": -1.1084258701027183
+      },
+      "entrant_merge_acceleration_square_integral_m2ps3": {
+        "n": 49,
+        "reference": 19.45266358958554,
+        "candidate": 12.039548756611968,
+        "delta": -7.413114832973574
+      },
+      "entrant_merge_hard_brake_s": {
+        "n": 49,
+        "reference": 0.16326530612244824,
+        "candidate": 0.08367346938775469,
+        "delta": -0.07959183673469356
+      },
+      "entrant_post0_2_negative_acceleration_integral_mps": {
+        "n": 49,
+        "reference": 1.2310388827856575,
+        "candidate": 0.6528296368609521,
+        "delta": -0.5782092459247055
+      },
+      "entrant_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 49,
+        "reference": 9.502506049245314,
+        "candidate": 6.889362407044882,
+        "delta": -2.6131436422004315
+      },
+      "entrant_post0_2_hard_brake_s": {
+        "n": 49,
+        "reference": 0.03673469387755169,
+        "candidate": 0.014285714285714055,
+        "delta": -0.022448979591837635
+      },
+      "entrant_post2_5_negative_acceleration_integral_mps": {
+        "n": 49,
+        "reference": 0.4723666377477233,
+        "candidate": 0.280926337395583,
+        "delta": -0.1914403003521403
+      },
+      "entrant_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 49,
+        "reference": 5.320177253118842,
+        "candidate": 3.156646972204111,
+        "delta": -2.1635302809147308
+      },
+      "entrant_post2_5_hard_brake_s": {
+        "n": 49,
+        "reference": 0.018367346938775626,
+        "candidate": 0.0,
+        "delta": -0.018367346938775626
+      },
+      "entrant_through_post5_negative_acceleration_integral_mps": {
+        "n": 49,
+        "reference": 4.496858193494614,
+        "candidate": 2.6187827771150496,
+        "delta": -1.8780754163795637
+      },
+      "entrant_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 49,
+        "reference": 34.275346891949695,
+        "candidate": 22.08555813586096,
+        "delta": -12.189788756088735
+      },
+      "entrant_through_post5_hard_brake_s": {
+        "n": 49,
+        "reference": 0.21836734693877558,
+        "candidate": 0.09795918367346874,
+        "delta": -0.12040816326530682
+      },
+      "receiver_merge_negative_acceleration_integral_mps": {
+        "n": 43,
+        "reference": 3.143053019549702,
+        "candidate": 3.4191792203624787,
+        "delta": 0.2761262008127766
+      },
+      "receiver_merge_acceleration_square_integral_m2ps3": {
+        "n": 43,
+        "reference": 18.41879145647009,
+        "candidate": 28.29633252327347,
+        "delta": 9.877541066803381
+      },
+      "receiver_merge_hard_brake_s": {
+        "n": 43,
+        "reference": 0.20000000000000037,
+        "candidate": 0.2860465116279077,
+        "delta": 0.08604651162790729
+      },
+      "receiver_post0_2_negative_acceleration_integral_mps": {
+        "n": 43,
+        "reference": 1.4675365755482068,
+        "candidate": 1.3757896234214184,
+        "delta": -0.09174695212678848
+      },
+      "receiver_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 43,
+        "reference": 9.451922340910912,
+        "candidate": 16.795039583910462,
+        "delta": 7.3431172429995515
+      },
+      "receiver_post0_2_hard_brake_s": {
+        "n": 43,
+        "reference": 0.041860465116279166,
+        "candidate": 0.0930232558139529,
+        "delta": 0.05116279069767374
+      },
+      "receiver_post2_5_negative_acceleration_integral_mps": {
+        "n": 43,
+        "reference": 0.7551914134712515,
+        "candidate": 0.36003222276183394,
+        "delta": -0.3951591907094176
+      },
+      "receiver_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 43,
+        "reference": 8.785640921894622,
+        "candidate": 5.962909354712869,
+        "delta": -2.8227315671817523
+      },
+      "receiver_post2_5_hard_brake_s": {
+        "n": 43,
+        "reference": 0.027906976744185616,
+        "candidate": 0.00465116279069774,
+        "delta": -0.023255813953487876
+      },
+      "receiver_through_post5_negative_acceleration_integral_mps": {
+        "n": 43,
+        "reference": 5.365781008569161,
+        "candidate": 5.155001066545731,
+        "delta": -0.2107799420234293
+      },
+      "receiver_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 43,
+        "reference": 36.65635471927562,
+        "candidate": 51.05428146189681,
+        "delta": 14.397926742621182
+      },
+      "receiver_through_post5_hard_brake_s": {
+        "n": 43,
+        "reference": 0.26976744186046514,
+        "candidate": 0.3837209302325583,
+        "delta": 0.11395348837209315
+      }
+    },
+    {
+      "flow": 1500.0,
+      "seed": 73,
+      "cohort": "same_entrant_and_receiver",
+      "n": 14,
+      "vehicles": [
+        "v1_01059",
+        "v1_01320",
+        "v1_01617",
+        "v2_00088",
+        "v2_00425",
+        "v2_00464",
+        "v2_00962",
+        "v2_00983",
+        "v2_01097",
+        "v2_01129",
+        "v2_01342",
+        "v2_01459",
+        "v2_01742",
+        "v2_01764"
+      ],
+      "entrant_merge_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 1.525772680782197,
+        "candidate": 1.2873908715623135,
+        "delta": -0.23838180921988367
+      },
+      "entrant_merge_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 11.074495023403587,
+        "candidate": 9.770366100950216,
+        "delta": -1.304128922453372
+      },
+      "entrant_merge_hard_brake_s": {
+        "n": 14,
+        "reference": 0.07857142857142918,
+        "candidate": 0.05714285714285593,
+        "delta": -0.021428571428573257
+      },
+      "entrant_post0_2_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 0.8927972936684339,
+        "candidate": 0.4920800892233482,
+        "delta": -0.4007172044450857
+      },
+      "entrant_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 4.086361981498449,
+        "candidate": 1.9958806225909689,
+        "delta": -2.0904813589074798
+      },
+      "entrant_post0_2_hard_brake_s": {
+        "n": 14,
+        "reference": 0.007142857142856737,
+        "candidate": 0.0,
+        "delta": -0.007142857142856737
+      },
+      "entrant_post2_5_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 0.2772099123987571,
+        "candidate": 0.35544128931513475,
+        "delta": 0.0782313769163777
+      },
+      "entrant_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 1.0549828134421464,
+        "candidate": 1.5384895044294675,
+        "delta": 0.4835066909873212
+      },
+      "entrant_post2_5_hard_brake_s": {
+        "n": 14,
+        "reference": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0
+      },
+      "entrant_through_post5_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 2.6957798868493876,
+        "candidate": 2.1349122501007964,
+        "delta": -0.5608676367485913
+      },
+      "entrant_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 16.215839818344183,
+        "candidate": 13.304736227970652,
+        "delta": -2.9111035903735294
+      },
+      "entrant_through_post5_hard_brake_s": {
+        "n": 14,
+        "reference": 0.08571428571428592,
+        "candidate": 0.05714285714285593,
+        "delta": -0.028571428571429993
+      },
+      "receiver_merge_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 3.4395861408685695,
+        "candidate": 3.973638061916196,
+        "delta": 0.5340519210476266
+      },
+      "receiver_merge_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 20.523025543834915,
+        "candidate": 33.986086154836975,
+        "delta": 13.463060611002062
+      },
+      "receiver_merge_hard_brake_s": {
+        "n": 14,
+        "reference": 0.2142857142857153,
+        "candidate": 0.3571428571428604,
+        "delta": 0.14285714285714515
+      },
+      "receiver_post0_2_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 0.5528633594072067,
+        "candidate": 1.0049432592732814,
+        "delta": 0.4520798998660749
+      },
+      "receiver_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 4.673394947149789,
+        "candidate": 14.145866836125908,
+        "delta": 9.47247188897612
+      },
+      "receiver_post0_2_hard_brake_s": {
+        "n": 14,
+        "reference": 0.0,
+        "candidate": 0.0642857142857147,
+        "delta": 0.0642857142857147
+      },
+      "receiver_post2_5_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 0.5144732945763477,
+        "candidate": 0.38852582077833303,
+        "delta": -0.1259474737980147
+      },
+      "receiver_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 3.9693772969318015,
+        "candidate": 4.42965168945014,
+        "delta": 0.46027439251833857
+      },
+      "receiver_post2_5_hard_brake_s": {
+        "n": 14,
+        "reference": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0
+      },
+      "receiver_through_post5_negative_acceleration_integral_mps": {
+        "n": 14,
+        "reference": 4.506922794852124,
+        "candidate": 5.367107141967811,
+        "delta": 0.8601843471156866
+      },
+      "receiver_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 14,
+        "reference": 29.165797787916507,
+        "candidate": 52.561604680413026,
+        "delta": 23.395806892496523
+      },
+      "receiver_through_post5_hard_brake_s": {
+        "n": 14,
+        "reference": 0.2142857142857153,
+        "candidate": 0.42142857142857515,
+        "delta": 0.20714285714285982
+      }
+    },
+    {
+      "flow": 1750.0,
+      "seed": 73,
+      "cohort": "same_entrant",
+      "n": 55,
+      "vehicles": [
+        "v1_00131",
+        "v1_00145",
+        "v1_00180",
+        "v1_00186",
+        "v1_00204",
+        "v1_00270",
+        "v1_00782",
+        "v1_00861",
+        "v1_01320",
+        "v1_01431",
+        "v1_01490",
+        "v1_01648",
+        "v1_01650",
+        "v2_00041",
+        "v2_00088",
+        "v2_00244",
+        "v2_00292",
+        "v2_00317",
+        "v2_00373",
+        "v2_00425",
+        "v2_00464",
+        "v2_00493",
+        "v2_00502",
+        "v2_00527",
+        "v2_00541",
+        "v2_00544",
+        "v2_00562",
+        "v2_00565",
+        "v2_00616",
+        "v2_00626",
+        "v2_00642",
+        "v2_00688",
+        "v2_00727",
+        "v2_00736",
+        "v2_00762",
+        "v2_00864",
+        "v2_00881",
+        "v2_00898",
+        "v2_00912",
+        "v2_00983",
+        "v2_01094",
+        "v2_01130",
+        "v2_01149",
+        "v2_01197",
+        "v2_01255",
+        "v2_01256",
+        "v2_01342",
+        "v2_01459",
+        "v2_01485",
+        "v2_01507",
+        "v2_01530",
+        "v2_01575",
+        "v2_01604",
+        "v2_01780",
+        "v2_01790"
+      ],
+      "entrant_merge_negative_acceleration_integral_mps": {
+        "n": 55,
+        "reference": 2.621528306053383,
+        "candidate": 2.83790230300689,
+        "delta": 0.2163739969535067
+      },
+      "entrant_merge_acceleration_square_integral_m2ps3": {
+        "n": 55,
+        "reference": 14.80230696620018,
+        "candidate": 18.655664416712867,
+        "delta": 3.8533574505126866
+      },
+      "entrant_merge_hard_brake_s": {
+        "n": 55,
+        "reference": 0.11272727272727394,
+        "candidate": 0.15636363636363665,
+        "delta": 0.0436363636363627
+      },
+      "entrant_post0_2_negative_acceleration_integral_mps": {
+        "n": 55,
+        "reference": 1.4114538623697197,
+        "candidate": 0.4282294888606553,
+        "delta": -0.9832243735090646
+      },
+      "entrant_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 55,
+        "reference": 11.700982811190258,
+        "candidate": 12.831269733324033,
+        "delta": 1.1302869221337755
+      },
+      "entrant_post0_2_hard_brake_s": {
+        "n": 55,
+        "reference": 0.05272727272727309,
+        "candidate": 0.012727272727272521,
+        "delta": -0.04000000000000057
+      },
+      "entrant_post2_5_negative_acceleration_integral_mps": {
+        "n": 55,
+        "reference": 0.17894655028624082,
+        "candidate": 0.3888609682093102,
+        "delta": 0.20991441792306942
+      },
+      "entrant_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 55,
+        "reference": 6.943704937714285,
+        "candidate": 7.918754073598253,
+        "delta": 0.9750491358839676
+      },
+      "entrant_post2_5_hard_brake_s": {
+        "n": 55,
+        "reference": 0.0,
+        "candidate": 0.00909090909090909,
+        "delta": 0.00909090909090909
+      },
+      "entrant_through_post5_negative_acceleration_integral_mps": {
+        "n": 55,
+        "reference": 4.211928718709344,
+        "candidate": 3.6549927600768557,
+        "delta": -0.5569359586324882
+      },
+      "entrant_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 55,
+        "reference": 33.44699471510472,
+        "candidate": 39.40568822363515,
+        "delta": 5.958693508530431
+      },
+      "entrant_through_post5_hard_brake_s": {
+        "n": 55,
+        "reference": 0.16545454545454702,
+        "candidate": 0.17818181818181825,
+        "delta": 0.012727272727271229
+      },
+      "receiver_merge_negative_acceleration_integral_mps": {
+        "n": 51,
+        "reference": 3.3681241984713264,
+        "candidate": 3.439005775313333,
+        "delta": 0.07088157684200674
+      },
+      "receiver_merge_acceleration_square_integral_m2ps3": {
+        "n": 51,
+        "reference": 19.768083042688826,
+        "candidate": 27.530723962495852,
+        "delta": 7.762640919807028
+      },
+      "receiver_merge_hard_brake_s": {
+        "n": 51,
+        "reference": 0.19215686274509883,
+        "candidate": 0.2803921568627456,
+        "delta": 0.08823529411764679
+      },
+      "receiver_post0_2_negative_acceleration_integral_mps": {
+        "n": 51,
+        "reference": 1.796048326576106,
+        "candidate": 0.9823896970133579,
+        "delta": -0.813658629562748
+      },
+      "receiver_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 51,
+        "reference": 10.734858689116063,
+        "candidate": 16.43534643289102,
+        "delta": 5.700487743774958
+      },
+      "receiver_post0_2_hard_brake_s": {
+        "n": 51,
+        "reference": 0.03333333333333318,
+        "candidate": 0.05294117647058746,
+        "delta": 0.019607843137254274
+      },
+      "receiver_post2_5_negative_acceleration_integral_mps": {
+        "n": 51,
+        "reference": 0.5091975884871265,
+        "candidate": 0.452979568962747,
+        "delta": -0.05621801952437948
+      },
+      "receiver_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 51,
+        "reference": 10.766464436746638,
+        "candidate": 9.307817074739607,
+        "delta": -1.4586473620070313
+      },
+      "receiver_post2_5_hard_brake_s": {
+        "n": 51,
+        "reference": 0.00980392156862745,
+        "candidate": 0.001960784313725518,
+        "delta": -0.007843137254901933
+      },
+      "receiver_through_post5_negative_acceleration_integral_mps": {
+        "n": 51,
+        "reference": 5.673370113534559,
+        "candidate": 4.874375041289437,
+        "delta": -0.7989950722451209
+      },
+      "receiver_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 51,
+        "reference": 41.26940616855153,
+        "candidate": 53.27388747012648,
+        "delta": 12.004481301574955
+      },
+      "receiver_through_post5_hard_brake_s": {
+        "n": 51,
+        "reference": 0.23529411764705946,
+        "candidate": 0.3352941176470586,
+        "delta": 0.09999999999999912
+      }
+    },
+    {
+      "flow": 1750.0,
+      "seed": 73,
+      "cohort": "same_entrant_and_receiver",
+      "n": 11,
+      "vehicles": [
+        "v1_01320",
+        "v1_01648",
+        "v2_00373",
+        "v2_00464",
+        "v2_00864",
+        "v2_00881",
+        "v2_01197",
+        "v2_01255",
+        "v2_01342",
+        "v2_01459",
+        "v2_01780"
+      ],
+      "entrant_merge_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 2.0635653208093587,
+        "candidate": 2.809646153501697,
+        "delta": 0.7460808326923385
+      },
+      "entrant_merge_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 14.041640203102101,
+        "candidate": 17.99819152473283,
+        "delta": 3.9565513216307315
+      },
+      "entrant_merge_hard_brake_s": {
+        "n": 11,
+        "reference": 0.11818181818182309,
+        "candidate": 0.15454545454545868,
+        "delta": 0.03636363636363559
+      },
+      "entrant_post0_2_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 1.4153284623449378,
+        "candidate": 0.29956314410686957,
+        "delta": -1.1157653182380682
+      },
+      "entrant_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 9.165385112189309,
+        "candidate": 8.404000479846761,
+        "delta": -0.761384632342547
+      },
+      "entrant_post0_2_hard_brake_s": {
+        "n": 11,
+        "reference": 0.045454545454545456,
+        "candidate": 0.0,
+        "delta": -0.045454545454545456
+      },
+      "entrant_post2_5_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 0.09901788650284678,
+        "candidate": 0.5495235418704575,
+        "delta": 0.4505056553676107
+      },
+      "entrant_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 2.6830660900329364,
+        "candidate": 3.4628908466882873,
+        "delta": 0.7798247566553508
+      },
+      "entrant_post2_5_hard_brake_s": {
+        "n": 11,
+        "reference": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0
+      },
+      "entrant_through_post5_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 3.5779116696571434,
+        "candidate": 3.658732839479024,
+        "delta": 0.08082116982188098
+      },
+      "entrant_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 25.89009140532435,
+        "candidate": 29.865082851267882,
+        "delta": 3.974991445943532
+      },
+      "entrant_through_post5_hard_brake_s": {
+        "n": 11,
+        "reference": 0.16363636363636855,
+        "candidate": 0.15454545454545868,
+        "delta": -0.009090909090909866
+      },
+      "receiver_merge_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 3.346716079765026,
+        "candidate": 4.157847052156301,
+        "delta": 0.8111309723912747
+      },
+      "receiver_merge_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 21.978331034859398,
+        "candidate": 33.91164544337787,
+        "delta": 11.933314408518475
+      },
+      "receiver_merge_hard_brake_s": {
+        "n": 11,
+        "reference": 0.25454545454545685,
+        "candidate": 0.36363636363636237,
+        "delta": 0.10909090909090548
+      },
+      "receiver_post0_2_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 1.850033069717516,
+        "candidate": 0.5192393707824736,
+        "delta": -1.3307936989350424
+      },
+      "receiver_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 11.242355365504483,
+        "candidate": 13.807267834327012,
+        "delta": 2.5649124688225284
+      },
+      "receiver_post0_2_hard_brake_s": {
+        "n": 11,
+        "reference": 0.054545454545454675,
+        "candidate": 0.027272727272727015,
+        "delta": -0.02727272727272766
+      },
+      "receiver_post2_5_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 0.35410583833527853,
+        "candidate": 0.5424175165997976,
+        "delta": 0.18831167826451906
+      },
+      "receiver_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 6.98778112490803,
+        "candidate": 5.095434299032444,
+        "delta": -1.892346825875586
+      },
+      "receiver_post2_5_hard_brake_s": {
+        "n": 11,
+        "reference": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0
+      },
+      "receiver_through_post5_negative_acceleration_integral_mps": {
+        "n": 11,
+        "reference": 5.550854987817821,
+        "candidate": 5.219503939538572,
+        "delta": -0.3313510482792488
+      },
+      "receiver_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 11,
+        "reference": 40.208467525271914,
+        "candidate": 52.81434757673733,
+        "delta": 12.60588005146542
+      },
+      "receiver_through_post5_hard_brake_s": {
+        "n": 11,
+        "reference": 0.3090909090909115,
+        "candidate": 0.3909090909090894,
+        "delta": 0.08181818181817781
+      }
+    },
+    {
+      "flow": 2000.0,
+      "seed": 73,
+      "cohort": "same_entrant",
+      "n": 61,
+      "vehicles": [
+        "v0_00053",
+        "v1_00064",
+        "v1_00131",
+        "v1_00149",
+        "v1_00188",
+        "v1_00204",
+        "v1_00457",
+        "v1_00571",
+        "v1_00615",
+        "v1_00777",
+        "v1_01257",
+        "v1_01431",
+        "v1_01650",
+        "v2_00019",
+        "v2_00041",
+        "v2_00088",
+        "v2_00373",
+        "v2_00385",
+        "v2_00425",
+        "v2_00432",
+        "v2_00464",
+        "v2_00502",
+        "v2_00527",
+        "v2_00541",
+        "v2_00556",
+        "v2_00642",
+        "v2_00661",
+        "v2_00694",
+        "v2_00727",
+        "v2_00736",
+        "v2_00762",
+        "v2_00788",
+        "v2_00881",
+        "v2_00885",
+        "v2_00898",
+        "v2_00912",
+        "v2_00962",
+        "v2_00983",
+        "v2_01016",
+        "v2_01094",
+        "v2_01114",
+        "v2_01129",
+        "v2_01156",
+        "v2_01186",
+        "v2_01222",
+        "v2_01255",
+        "v2_01320",
+        "v2_01342",
+        "v2_01361",
+        "v2_01367",
+        "v2_01397",
+        "v2_01468",
+        "v2_01485",
+        "v2_01507",
+        "v2_01541",
+        "v2_01604",
+        "v2_01621",
+        "v2_01676",
+        "v2_01691",
+        "v2_01742",
+        "v2_01758"
+      ],
+      "entrant_merge_negative_acceleration_integral_mps": {
+        "n": 61,
+        "reference": 2.756272284609137,
+        "candidate": 2.2659805202709697,
+        "delta": -0.4902917643381672
+      },
+      "entrant_merge_acceleration_square_integral_m2ps3": {
+        "n": 61,
+        "reference": 16.159730368014305,
+        "candidate": 15.239970240013049,
+        "delta": -0.9197601280012553
+      },
+      "entrant_merge_hard_brake_s": {
+        "n": 61,
+        "reference": 0.1245901639344276,
+        "candidate": 0.12295081967213208,
+        "delta": -0.001639344262295513
+      },
+      "entrant_post0_2_negative_acceleration_integral_mps": {
+        "n": 61,
+        "reference": 1.2271154402158002,
+        "candidate": 0.2901172467230052,
+        "delta": -0.936998193492795
+      },
+      "entrant_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 61,
+        "reference": 12.176860388418621,
+        "candidate": 12.719660987177948,
+        "delta": 0.5428005987593256
+      },
+      "entrant_post0_2_hard_brake_s": {
+        "n": 61,
+        "reference": 0.03278688524590199,
+        "candidate": 0.0,
+        "delta": -0.03278688524590199
+      },
+      "entrant_post2_5_negative_acceleration_integral_mps": {
+        "n": 61,
+        "reference": 0.3426328801037383,
+        "candidate": 0.492258089644591,
+        "delta": 0.1496252095408527
+      },
+      "entrant_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 61,
+        "reference": 8.890526324214687,
+        "candidate": 8.680564770237414,
+        "delta": -0.20996155397727295
+      },
+      "entrant_post2_5_hard_brake_s": {
+        "n": 61,
+        "reference": 0.0,
+        "candidate": 0.009836065573770515,
+        "delta": 0.009836065573770515
+      },
+      "entrant_through_post5_negative_acceleration_integral_mps": {
+        "n": 61,
+        "reference": 4.326020604928676,
+        "candidate": 3.0483558566385662,
+        "delta": -1.2776647482901093
+      },
+      "entrant_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 61,
+        "reference": 37.227117080647616,
+        "candidate": 36.64019599742841,
+        "delta": -0.5869210832192051
+      },
+      "entrant_through_post5_hard_brake_s": {
+        "n": 61,
+        "reference": 0.15737704918032958,
+        "candidate": 0.1327868852459026,
+        "delta": -0.024590163934426985
+      },
+      "receiver_merge_negative_acceleration_integral_mps": {
+        "n": 60,
+        "reference": 3.2543071440864417,
+        "candidate": 3.3547888880591903,
+        "delta": 0.10048174397274891
+      },
+      "receiver_merge_acceleration_square_integral_m2ps3": {
+        "n": 60,
+        "reference": 18.16769808867274,
+        "candidate": 25.752262619386777,
+        "delta": 7.584564530714038
+      },
+      "receiver_merge_hard_brake_s": {
+        "n": 60,
+        "reference": 0.1649999999999992,
+        "candidate": 0.25833333333333447,
+        "delta": 0.09333333333333525
+      },
+      "receiver_post0_2_negative_acceleration_integral_mps": {
+        "n": 60,
+        "reference": 1.625135661311636,
+        "candidate": 1.040736781386997,
+        "delta": -0.5843988799246389
+      },
+      "receiver_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 60,
+        "reference": 10.363726295475766,
+        "candidate": 16.594309821911775,
+        "delta": 6.230583526436008
+      },
+      "receiver_post0_2_hard_brake_s": {
+        "n": 60,
+        "reference": 0.028333333333333915,
+        "candidate": 0.0666666666666663,
+        "delta": 0.0383333333333324
+      },
+      "receiver_post2_5_negative_acceleration_integral_mps": {
+        "n": 60,
+        "reference": 0.5197213935305331,
+        "candidate": 0.3583530596648812,
+        "delta": -0.161368333865652
+      },
+      "receiver_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 60,
+        "reference": 11.880007871216845,
+        "candidate": 9.147183919357294,
+        "delta": -2.73282395185955
+      },
+      "receiver_post2_5_hard_brake_s": {
+        "n": 60,
+        "reference": 0.0033333333333336176,
+        "candidate": 0.001666666666666572,
+        "delta": -0.0016666666666670456
+      },
+      "receiver_through_post5_negative_acceleration_integral_mps": {
+        "n": 60,
+        "reference": 5.39916419892861,
+        "candidate": 4.753878729111069,
+        "delta": -0.6452854698175421
+      },
+      "receiver_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 60,
+        "reference": 40.411432255365355,
+        "candidate": 51.493756360655844,
+        "delta": 11.082324105290494
+      },
+      "receiver_through_post5_hard_brake_s": {
+        "n": 60,
+        "reference": 0.19666666666666674,
+        "candidate": 0.3266666666666673,
+        "delta": 0.13000000000000062
+      }
+    },
+    {
+      "flow": 2000.0,
+      "seed": 73,
+      "cohort": "same_entrant_and_receiver",
+      "n": 10,
+      "vehicles": [
+        "v1_00131",
+        "v1_01431",
+        "v1_01650",
+        "v2_00019",
+        "v2_00088",
+        "v2_01094",
+        "v2_01114",
+        "v2_01255",
+        "v2_01604",
+        "v2_01691"
+      ],
+      "entrant_merge_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 2.095977685593143,
+        "candidate": 2.0067822074247674,
+        "delta": -0.0891954781683755
+      },
+      "entrant_merge_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 14.202978018610443,
+        "candidate": 12.315077658820764,
+        "delta": -1.887900359789678
+      },
+      "entrant_merge_hard_brake_s": {
+        "n": 10,
+        "reference": 0.12000000000000313,
+        "candidate": 0.09999999999999928,
+        "delta": -0.020000000000003838
+      },
+      "entrant_post0_2_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 1.3663745246865788,
+        "candidate": 0.42074863833038123,
+        "delta": -0.9456258863561975
+      },
+      "entrant_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 8.932921442110924,
+        "candidate": 8.61817785430473,
+        "delta": -0.3147435878061953
+      },
+      "entrant_post0_2_hard_brake_s": {
+        "n": 10,
+        "reference": 0.05000000000000284,
+        "candidate": 0.0,
+        "delta": -0.05000000000000284
+      },
+      "entrant_post2_5_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 0.37989863040059185,
+        "candidate": 0.3298069114189855,
+        "delta": -0.05009171898160637
+      },
+      "entrant_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 7.219177766056489,
+        "candidate": 4.8614307202445115,
+        "delta": -2.3577470458119776
+      },
+      "entrant_post2_5_hard_brake_s": {
+        "n": 10,
+        "reference": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0
+      },
+      "entrant_through_post5_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 3.8422508406803138,
+        "candidate": 2.757337757174134,
+        "delta": -1.0849130835061793
+      },
+      "entrant_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 30.35507722677786,
+        "candidate": 25.794686233370005,
+        "delta": -4.560390993407855
+      },
+      "entrant_through_post5_hard_brake_s": {
+        "n": 10,
+        "reference": 0.17000000000000598,
+        "candidate": 0.09999999999999928,
+        "delta": -0.07000000000000668
+      },
+      "receiver_merge_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 3.6991290086270485,
+        "candidate": 4.022991406943659,
+        "delta": 0.32386239831661123
+      },
+      "receiver_merge_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 22.233613023219416,
+        "candidate": 32.62964420029707,
+        "delta": 10.396031177077655
+      },
+      "receiver_merge_hard_brake_s": {
+        "n": 10,
+        "reference": 0.23000000000000256,
+        "candidate": 0.3399999999999995,
+        "delta": 0.10999999999999695
+      },
+      "receiver_post0_2_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 1.8539824099798008,
+        "candidate": 1.0720871580321922,
+        "delta": -0.7818952519476086
+      },
+      "receiver_post0_2_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 8.451977061826222,
+        "candidate": 14.235471458211517,
+        "delta": 5.7834943963852945
+      },
+      "receiver_post0_2_hard_brake_s": {
+        "n": 10,
+        "reference": 0.009999999999999431,
+        "candidate": 0.060000000000000143,
+        "delta": 0.05000000000000071
+      },
+      "receiver_post2_5_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 0.1966763038852056,
+        "candidate": 0.3449863657439428,
+        "delta": 0.1483100618587372
+      },
+      "receiver_post2_5_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 8.829248614582408,
+        "candidate": 7.087427390969187,
+        "delta": -1.74182122361322
+      },
+      "receiver_post2_5_hard_brake_s": {
+        "n": 10,
+        "reference": 0.0,
+        "candidate": 0.0,
+        "delta": 0.0
+      },
+      "receiver_through_post5_negative_acceleration_integral_mps": {
+        "n": 10,
+        "reference": 5.749787722492055,
+        "candidate": 5.440064930719795,
+        "delta": -0.30972279177226
+      },
+      "receiver_through_post5_acceleration_square_integral_m2ps3": {
+        "n": 10,
+        "reference": 39.514838699628044,
+        "candidate": 53.952543049477775,
+        "delta": 14.437704349849735
+      },
+      "receiver_through_post5_hard_brake_s": {
+        "n": 10,
+        "reference": 0.240000000000002,
+        "candidate": 0.39999999999999963,
+        "delta": 0.15999999999999764
+      }
+    }
+  ]
+}

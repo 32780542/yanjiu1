@@ -1,0 +1,39 @@
+{
+  "candidate": "GP2",
+  "flow": 1500.0,
+  "seed": 81,
+  "scenario": "lane_drop",
+  "mode": "transform",
+  "source_sha256": "37306e86a8e0e1045763bf54ebb3adca60ebc489dde6925a61553240ad0195cc",
+  "positions_sha256": "4dafa1c77ed87ee097862cdad63c8179d7593087400329c53ca6410e29971773",
+  "window_s": [
+    100.0,
+    1800.0
+  ],
+  "action_reasons": {
+    "formation_follow": 779932,
+    "fill_layer": 1594,
+    "executing": 24694,
+    "join_follow": 108439,
+    "merge": 732,
+    "approach_gap": 7633,
+    "approach_join": 454
+  },
+  "execution": {
+    "lane_requested_ticks": 13051,
+    "native_lane_requests": 2384,
+    "lane_motion_in_progress": 10667
+  },
+  "stage_rows": 1464,
+  "limitations": [
+    "Held=None existence is independent of private memory; inferred current containing pair is not asserted to equal private held except admission enforces containment.",
+    "Availability is all stationary lane2 preparation samples in the stated complete 0.1s window, not all controller calls or all lane1 fill calls.",
+    "Lateral velocity is measured-y finite difference; same frozen executor validated against 35523 diagnostic samples with maximum 7.99e-14 error. Actual lane comes from original trip transition times.",
+    "Actual stage CTH uses measured own and rear speeds; nominal endpoint feasibility does not prove actual constant-speed future behavior."
+  ],
+  "cth_columns": {
+    "current_cth_compatible": "residual >= -1e-8 m numeric strictness",
+    "current_cth_exact_window": "low<=x<=high, zero physical band",
+    "current_cth_with_2m_band": "low-2<=x<=high+2, native GP2 band arithmetic"
+  }
+}

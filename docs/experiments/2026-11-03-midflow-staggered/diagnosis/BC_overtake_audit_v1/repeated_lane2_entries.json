@@ -1,0 +1,38 @@
+[
+  {
+    "candidate": "B",
+    "seed": 73,
+    "vehicles": 295,
+    "vehicles_entering_lane2_twice_before640": 1,
+    "max_enter2_before640": 2,
+    "max_trip_lane_changes": 5,
+    "example": "v1_00457"
+  },
+  {
+    "candidate": "B",
+    "seed": 74,
+    "vehicles": 306,
+    "vehicles_entering_lane2_twice_before640": 0,
+    "max_enter2_before640": 1,
+    "max_trip_lane_changes": 4,
+    "example": "v1_00033"
+  },
+  {
+    "candidate": "BC",
+    "seed": 73,
+    "vehicles": 295,
+    "vehicles_entering_lane2_twice_before640": 7,
+    "max_enter2_before640": 3,
+    "max_trip_lane_changes": 7,
+    "example": "v2_00864"
+  },
+  {
+    "candidate": "BC",
+    "seed": 74,
+    "vehicles": 306,
+    "vehicles_entering_lane2_twice_before640": 50,
+    "max_enter2_before640": 6,
+    "max_trip_lane_changes": 12,
+    "example": "v1_00879"
+  }
+]

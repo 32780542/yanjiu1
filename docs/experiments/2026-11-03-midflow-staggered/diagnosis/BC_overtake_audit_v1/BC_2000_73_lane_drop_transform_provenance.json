@@ -1,0 +1,45 @@
+{
+  "candidate": "BC",
+  "flow": 2000.0,
+  "seed": 73,
+  "scenario": "lane_drop",
+  "mode": "transform",
+  "source_sha256": "b25f0047ebe6b8989607bd9c7c94ce10e7579e495e300f00f7d7fda189889f35",
+  "positions_sha256": "214d87647f3de44451c3865d3d5dcafec413f04474229127156f2a746012e2ab",
+  "exact_action_reasons": {
+    "formation_follow": 118643,
+    "normal_overtake": 241,
+    "executing": 4335,
+    "merge": 109,
+    "join_follow": 3933,
+    "approach_join": 1696,
+    "approach_gap": 516
+  },
+  "exact_lane_transitions": {
+    "2->1": 174,
+    "1->0": 56,
+    "0->1": 38,
+    "1->2": 73
+  },
+  "exact_execution": {
+    "lane_requested_ticks": 2639,
+    "native_lane_requests": 427,
+    "lane_motion_in_progress": 2212
+  },
+  "formation_state": {
+    "vehicle_seconds": 12947.299999999988,
+    "participating_vehicle_seconds": 0.0,
+    "participation_rate": 0.0,
+    "mean_participants": 0.0,
+    "peak_participants": 0,
+    "episodes": 0,
+    "mean_episode_s": null,
+    "max_episode_s": null
+  },
+  "completions": 341,
+  "limitations": [
+    "Normal_overtake action counts are original recorder counts; no reason log is rewritten or imputed.",
+    "Latest native submission can be an executing retry. Raw predicate qualification is not necessarily the first intention trigger.",
+    "Ending-to1-after640 is a spatial category; a held ordinary intent could have begun upstream of640."
+  ]
+}

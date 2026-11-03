@@ -1,0 +1,21 @@
+{
+  "candidate": "D",
+  "flow": 2000.0,
+  "seed": 71,
+  "scenario": "lane_drop",
+  "mode": "transform",
+  "source_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "positions_sha256": "b00b6057f1c058b2bcf6162254b85aa77553c88fc70090e8d5344453db621f30",
+  "window_s": [
+    100.0,
+    600.0
+  ],
+  "sampled_snapshots": 500,
+  "sample_period_s": 1.0,
+  "sampled_mutual_pairs": 15693,
+  "limitations": [
+    "No reported flags, modulo distances, inferred global slots or common platoon size.",
+    "Only actual adjacent-lane mutual nearest pairs within50m; their geometry is not all-road formation success or 24/45 perturbation recovery.",
+    "Pair region uses midpoint x. Headway region uses ego x; CTH residual limited to actual physical fronts within50m, with visible200m gaps and coverage separately retained."
+  ]
+}

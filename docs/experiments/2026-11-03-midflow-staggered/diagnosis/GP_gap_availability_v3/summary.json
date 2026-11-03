@@ -1,0 +1,39 @@
+{
+  "request": {
+    "n": 540,
+    "plan_exists": 47,
+    "current_pair_both_real": 514,
+    "current_cth_compatible": 42,
+    "current_cth_exact_window": 42,
+    "current_cth_with_2m_band": 57,
+    "current_pair_nominally_feasible": 47,
+    "planned_strict": 18,
+    "planned_band2": 23
+  },
+  "lateral_start": {
+    "n": 540,
+    "plan_exists": 63,
+    "current_pair_both_real": 514,
+    "current_cth_compatible": 40,
+    "current_cth_exact_window": 40,
+    "current_cth_with_2m_band": 54,
+    "current_pair_nominally_feasible": 42,
+    "planned_strict": 18,
+    "planned_band2": 24
+  },
+  "stationary_window_s": {
+    "stationary_lane2_vehicle_s": 562.5999999999992,
+    "plan_exists_vehicle_s": 166.30000000000032,
+    "horizon_expired_vehicle_s": 0.0,
+    "current_cth_compatible_vehicle_s": 5.800000000000001,
+    "current_cth_exact_window_vehicle_s": 5.800000000000001,
+    "current_cth_with_2m_band_vehicle_s": 8.100000000000001,
+    "current_pair_both_real_vehicle_s": 548.4999999999993,
+    "current_pair_nominally_feasible_vehicle_s": 22.4,
+    "free_minenergy_pair_contains_ego_vehicle_s": 22.4,
+    "no_plan_vehicle_s": 396.30000000000143,
+    "current_cth_and_nominally_feasible_vehicle_s": 1.6,
+    "current_cth_band2_and_nominally_feasible_vehicle_s": 2.1,
+    "current_cth_exact_and_nominally_feasible_vehicle_s": 1.6
+  }
+}

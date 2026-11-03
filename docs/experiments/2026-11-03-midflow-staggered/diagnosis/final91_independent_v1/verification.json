@@ -1,0 +1,34 @@
+{
+  "cases_n": 90,
+  "common_road_inputs_n": 30,
+  "primary_pairs_n": 30,
+  "secondary_pairs_n": 30,
+  "primary_road_DID_n": 15,
+  "secondary_road_DID_n": 15,
+  "primary_manifest_sha256": "2d1103df04a2816a18b88e55e86b73ba250c5a49c2c6a7ad1d77a2956af965dd",
+  "secondary_manifest_sha256": "b08ba79e3e8f304a827562a1fa994b0905fd3cadba323f8958f94d7df5590586",
+  "rules_sha256": {
+    "D1": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+    "S": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f"
+  },
+  "nonrule_sources_sha256": {
+    "experiments/native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "eligible_cases_n": 90,
+  "source_files_n": [
+    6
+  ],
+  "raw_reconstructed": true,
+  "raw_gate_endpoint_checks": 978696,
+  "raw_region_ledger_max_error": 0.0,
+  "limitations": [
+    "Full-request system/travel/wait/fuel are reconstructed directly from original trips, not copied from official tables.",
+    "All case originals, snapshots, sealed compact index and ledger SHA are checked. Raw gate endpoints and fixed-window regional exposure are independently reconstructed when requested.",
+    "DID subtracts absolute time deltas across roads, never percentages. Five seeds are reported individually; no post-final tuning or global feedback.",
+    "Region [100,600) and crossing counts are mechanism evidence, not saturated capacity. Failures remain counted and ineligible, never replaced."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "verified_utc": "2026-11-03T15:08:27.923148+00:00",
+  "source_sha256_checks": 192,
+  "final_cases": 90,
+  "common_road_inputs": 30,
+  "primary_pairs": 30,
+  "secondary_pairs": 30,
+  "primary_road_DID": 15,
+  "secondary_road_DID": 15,
+  "formal_numeric_checks": 1458,
+  "gate_raw_endpoint_checks": 978696,
+  "raw_region_ledger_max_error": 0,
+  "post5_cases": 45,
+  "post5_mandatory_events": 14153,
+  "post5_uncensored_window_checks": 54366,
+  "figures": "2 PNG300dpi + 2 SVG; visual QA passed v2",
+  "artifact_sha256": {
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_independent_v1\\verification.json": "79514c77ad6c2a81f2173aaea6839396292a6b1e3b3b353ee92ca8b74479cfd4",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_independent_v1\\official_primary_concordance.json": "b82d38f90f549ab00a29b166f6501d3506506ec0918111d24a80d40ff9a1c68e",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_independent_v1\\official_secondary_concordance.json": "07586b915b28ab867ae574c04ebcc37dc9030e3b1e39eccdea3b9b080f230633",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_independent_v1\\official_group_means_concordance.json": "d4dc8ec39a400834e851426b167c7242e27c77d077198111e27c6b4bd6390086",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_drop45_mechanism_consolidated_v1\\mechanism.json": "6a0db58d551c51ddd9d4bf9f8995b196570df6a4743d8a964e4588be396afab4",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_figures_v2\\visual_qa.json": "d7ae184f28e1ba9ffb84c88f99733e2701201458eb23ea35a589cf1368e7fb49",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\final91_figures_v2\\plot_data.json": "50bf3b80b05fef1c4ea69516a280322f21ad7022d15f8ed319f08afd03a2de4c"
+  },
+  "scope": "Read-only evaluation; no simulation, control changes or Git by the mechanism auditor."
+}

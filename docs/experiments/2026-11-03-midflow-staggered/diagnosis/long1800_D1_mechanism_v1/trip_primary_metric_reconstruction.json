@@ -1,0 +1,128 @@
+{
+  "cases_n": 12,
+  "official_side_and_delta_checks": 72,
+  "official_csv_sha256": "dca93113bf5e10ea9f31bb280ea5eb6f75004743c86a064777d39193549a6701",
+  "source": "full original trips with seal compact-index SHA",
+  "per_case": [
+    {
+      "label": "D1",
+      "flow": 1500.0,
+      "seed": 81,
+      "mean_system_time_s": 41.9011812812358,
+      "mean_travel_time_s": 41.83103134938664,
+      "mean_entry_wait_s": 0.07014993184915932,
+      "fuel_g_per_km": 73.97014188247766,
+      "trips_sha256": "a2456d31ed1a480e94bb6e7e47ae05c464f66fe7cdab284ba6509561cf554f1f"
+    },
+    {
+      "label": "D1",
+      "flow": 1500.0,
+      "seed": 82,
+      "mean_system_time_s": 41.87962633451957,
+      "mean_travel_time_s": 41.81539145907473,
+      "mean_entry_wait_s": 0.06423487544484072,
+      "fuel_g_per_km": 74.64371600311388,
+      "trips_sha256": "18c4e48257eddc4c1379294aad9ff11ee794979e30bcbd158d069fb7d941323a"
+    },
+    {
+      "label": "D1",
+      "flow": 1750.0,
+      "seed": 81,
+      "mean_system_time_s": 42.11711292200233,
+      "mean_travel_time_s": 42.00741171905316,
+      "mean_entry_wait_s": 0.10970120294916584,
+      "fuel_g_per_km": 77.02896230112535,
+      "trips_sha256": "3075e8a8da759ab4c5dc1ab8bd40e6f776a3ed83fc62528ec5f936915bf12985"
+    },
+    {
+      "label": "D1",
+      "flow": 1750.0,
+      "seed": 82,
+      "mean_system_time_s": 42.23111620795107,
+      "mean_travel_time_s": 42.135129969418955,
+      "mean_entry_wait_s": 0.09598623853210937,
+      "fuel_g_per_km": 77.59655358690112,
+      "trips_sha256": "2f0ffbe78dffe6a8e1b0c7c3b9a8de67adcd45fb931c68290b7cbf7a30b2467c"
+    },
+    {
+      "label": "D1",
+      "flow": 2000.0,
+      "seed": 81,
+      "mean_system_time_s": 43.088688858695654,
+      "mean_travel_time_s": 42.927547554347825,
+      "mean_entry_wait_s": 0.16114130434782636,
+      "fuel_g_per_km": 79.82884847995925,
+      "trips_sha256": "9ef7521b0a0bde3845a73ffd457c223b1d95ae501da09755abd2018dc3d8a52b"
+    },
+    {
+      "label": "D1",
+      "flow": 2000.0,
+      "seed": 82,
+      "mean_system_time_s": 43.061898395721926,
+      "mean_travel_time_s": 42.91908422459893,
+      "mean_entry_wait_s": 0.1428141711229943,
+      "fuel_g_per_km": 79.99532066900623,
+      "trips_sha256": "e280eab4a7b091549f2e7c459e35d6e01f7c9c418bb1139cbfacf8f9640b9815"
+    },
+    {
+      "label": "S",
+      "flow": 1500.0,
+      "seed": 81,
+      "mean_system_time_s": 42.07219445706497,
+      "mean_travel_time_s": 42.006360745115856,
+      "mean_entry_wait_s": 0.06583371194911397,
+      "fuel_g_per_km": 74.58729616083599,
+      "trips_sha256": "c7253ed0edcee16ef8787376d4a698c4d4d816dc81afd5fcb17a74f81a44c42b"
+    },
+    {
+      "label": "S",
+      "flow": 1500.0,
+      "seed": 82,
+      "mean_system_time_s": 42.107072953736655,
+      "mean_travel_time_s": 42.039946619217076,
+      "mean_entry_wait_s": 0.06712633451957319,
+      "fuel_g_per_km": 75.20316986951364,
+      "trips_sha256": "e5a84db88cc9c2bd96de0c8f11b1c7f70b8bab29a26e5f7dc455ff851a62359d"
+    },
+    {
+      "label": "S",
+      "flow": 1750.0,
+      "seed": 81,
+      "mean_system_time_s": 42.49798214978657,
+      "mean_travel_time_s": 42.395847885137755,
+      "mean_entry_wait_s": 0.10213426464881602,
+      "fuel_g_per_km": 78.41270889923683,
+      "trips_sha256": "72d04ac0d471c65dffb7b3621e23563e93229d4b2f1cc5b071eb2350b454f893"
+    },
+    {
+      "label": "S",
+      "flow": 1750.0,
+      "seed": 82,
+      "mean_system_time_s": 42.45519877675841,
+      "mean_travel_time_s": 42.3605122324159,
+      "mean_entry_wait_s": 0.09468654434250809,
+      "fuel_g_per_km": 78.03702587920489,
+      "trips_sha256": "45c1fe9d54aae3475c3a2cfb45dcbf48f608bcbe23987cd6b6922317392da7de"
+    },
+    {
+      "label": "S",
+      "flow": 2000.0,
+      "seed": 81,
+      "mean_system_time_s": 43.66796875,
+      "mean_travel_time_s": 43.51351902173913,
+      "mean_entry_wait_s": 0.1544497282608699,
+      "fuel_g_per_km": 82.10600123414856,
+      "trips_sha256": "339e0f0c651729f8175a4493be1572b67d1472d8371bf27fdcc0b7c9b0841556"
+    },
+    {
+      "label": "S",
+      "flow": 2000.0,
+      "seed": 82,
+      "mean_system_time_s": 43.759826203208554,
+      "mean_travel_time_s": 43.601370320855615,
+      "mean_entry_wait_s": 0.15845588235294084,
+      "fuel_g_per_km": 82.79931730169339,
+      "trips_sha256": "9bd64305a8648c100fb58494f9fc317ab1c357b909cffa9e55f19aeba517ffc6"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "flow": 1500,
+    "B": {
+      "lane_changes": 244.5,
+      "transitions": {
+        "0>1": 37.5,
+        "1>0": 61,
+        "1>2": 32.5,
+        "2>1": 113.5
+      },
+      "upstream_1to2": 28.5,
+      "normal_overtake_or_fill_initial_reason_ticks": 167
+    },
+    "BC": {
+      "lane_changes": 206,
+      "transitions": {
+        "0>1": 15.5,
+        "1>0": 26.5,
+        "1>2": 41.5,
+        "2>1": 122.5
+      },
+      "upstream_1to2": 29.5,
+      "normal_overtake_or_fill_initial_reason_ticks": 120
+    }
+  },
+  {
+    "flow": 1750,
+    "B": {
+      "lane_changes": 289,
+      "transitions": {
+        "0>1": 45.5,
+        "1>0": 81.5,
+        "1>2": 35,
+        "2>1": 127
+      },
+      "upstream_1to2": 34,
+      "normal_overtake_or_fill_initial_reason_ticks": 200
+    },
+    "BC": {
+      "lane_changes": 244.5,
+      "transitions": {
+        "0>1": 31,
+        "1>0": 54.5,
+        "1>2": 33.5,
+        "2>1": 125.5
+      },
+      "upstream_1to2": 24.5,
+      "normal_overtake_or_fill_initial_reason_ticks": 152.5
+    }
+  },
+  {
+    "flow": 2000,
+    "B": {
+      "lane_changes": 339.5,
+      "transitions": {
+        "0>1": 49.5,
+        "1>0": 91,
+        "1>2": 47.5,
+        "2>1": 151.5
+      },
+      "upstream_1to2": 46,
+      "normal_overtake_or_fill_initial_reason_ticks": 237
+    },
+    "BC": {
+      "lane_changes": 530.5,
+      "transitions": {
+        "0>1": 54,
+        "1>0": 79.5,
+        "1>2": 146.5,
+        "2>1": 250.5
+      },
+      "upstream_1to2": 122,
+      "normal_overtake_or_fill_initial_reason_ticks": 420.5
+    }
+  }
+]

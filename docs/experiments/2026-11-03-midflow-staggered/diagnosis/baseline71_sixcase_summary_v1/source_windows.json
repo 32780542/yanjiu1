@@ -1,0 +1,192 @@
+{
+  "inputs": [
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\raw_baseline1500_pair71_v2",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\raw_baseline1750_pair71_v1",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\diagnosis\\raw_baseline2000_pair71_v1"
+  ],
+  "window_s": [
+    100,
+    600
+  ],
+  "summary_policy": "Case-specific event quantiles; seed-equal means of case summaries, never pooled event quantiles.",
+  "cases": [
+    {
+      "candidate": "S",
+      "mode": "noa",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_noa\\20261103T102426946253Z_lane_drop_noa_s71_2e4e4b",
+      "positions_sha256": "523d88f4ca994f934585b4e77e41980ce109a11324eaf5051e360de47048b2c6",
+      "positions_bytes": 7316440,
+      "frames": 6410,
+      "events": 274,
+      "all_complete": true,
+      "safe": true,
+      "limitations": [
+        "Region metrics use [100,600) left-held measured samples; no terminal extrapolation.",
+        "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+        "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+        "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+        "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+      ]
+    },
+    {
+      "candidate": "S",
+      "mode": "transform",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_transform\\20261103T102520716589Z_lane_drop_transform_s71_24dc9a",
+      "positions_sha256": "37a4b64b54c687350eab8f8535a45403499a4b9c704429b7450290028563657a",
+      "positions_bytes": 9896442,
+      "frames": 6414,
+      "events": 358,
+      "all_complete": true,
+      "safe": true,
+      "limitations": [
+        "Region metrics use [100,600) left-held measured samples; no terminal extrapolation.",
+        "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+        "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+        "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+        "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+      ]
+    },
+    {
+      "candidate": "S",
+      "mode": "noa",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_noa\\20261103T103205950090Z_lane_drop_noa_s71_e0885e",
+      "positions_sha256": "138a636b9055ae404978e43a3a6baee95881e0149951fecb83a48ecebf4461f5",
+      "positions_bytes": 9498136,
+      "analysis_script_sha256": "d32a06f6baab97e8cfecff89ad00f60639c0e869894928879ead502138c9253a",
+      "seal_sha256": "0e55e35b7679beb061bd9cbafdb207a715723d6d2b143f457d33cced38b9ef3b",
+      "frames": 6422,
+      "events": 317,
+      "all_complete": true,
+      "safe": true,
+      "window_s": [
+        100.0,
+        600.0
+      ],
+      "observed_duration_s": 500.0,
+      "window_complete": true,
+      "independent_region_ledger_absolute_errors": {
+        "vehicle_s": 2.7685018721967936e-09,
+        "speed_integral_m": 8.818460628390312e-09,
+        "low_speed_vehicle_s": 0.0
+      },
+      "limitations": [
+        "Region metrics use [100.0,600.0) left-held measured samples; no terminal extrapolation.",
+        "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+        "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+        "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+        "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+      ]
+    },
+    {
+      "candidate": "S",
+      "mode": "transform",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_transform\\20261103T103356416973Z_lane_drop_transform_s71_c381f2",
+      "positions_sha256": "2d6a96c0cb1f8945c497af1683e2c67b8f8965fee543e45522180e8cea67126c",
+      "positions_bytes": 12057456,
+      "analysis_script_sha256": "d32a06f6baab97e8cfecff89ad00f60639c0e869894928879ead502138c9253a",
+      "seal_sha256": "d873af799d963cb33d7342cdfa3d4f0bece08f7df31ca863a8317971005871ef",
+      "frames": 6420,
+      "events": 428,
+      "all_complete": true,
+      "safe": true,
+      "window_s": [
+        100.0,
+        600.0
+      ],
+      "observed_duration_s": 500.0,
+      "window_complete": true,
+      "independent_region_ledger_absolute_errors": {
+        "vehicle_s": 2.547494659665972e-09,
+        "speed_integral_m": 8.440110832452774e-10,
+        "low_speed_vehicle_s": 0.0
+      },
+      "limitations": [
+        "Region metrics use [100.0,600.0) left-held measured samples; no terminal extrapolation.",
+        "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+        "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+        "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+        "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+      ]
+    },
+    {
+      "candidate": "S",
+      "mode": "noa",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_noa\\20261103T104232056503Z_lane_drop_noa_s71_8ec02d",
+      "positions_sha256": "a2bfd6afc233ef6fb9df2c9855b57725b0e023cb7c681897fcd4d02ffee642c0",
+      "positions_bytes": 11898517,
+      "analysis_script_sha256": "c925f4f3ed68d38d3f85275129e2a03c4301ab955a76f70de44793c9018ce7e8",
+      "seal_sha256": "1503239aa9ecad6e0e5bfbcd3abf66459cbc2d92a346375f7c964017e497468b",
+      "frames": 6429,
+      "events": 385,
+      "all_complete": true,
+      "safe": true,
+      "window_s": [
+        100.0,
+        600.0
+      ],
+      "observed_duration_s": 500.0,
+      "window_complete": true,
+      "independent_region_ledger_absolute_errors": {
+        "vehicle_s": 3.3642209018580616e-09,
+        "speed_integral_m": 1.5425030142068863e-09,
+        "low_speed_vehicle_s": 0.0
+      },
+      "limitations": [
+        "Region metrics use [100.0,600.0) left-held measured samples; no terminal extrapolation.",
+        "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+        "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+        "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+        "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+      ]
+    },
+    {
+      "candidate": "S",
+      "mode": "transform",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_transform\\20261103T104451202985Z_lane_drop_transform_s71_016f7a",
+      "positions_sha256": "987a67266683a5871834e779dd7bd2abf5d387b167271a32bd87ac85022291fa",
+      "positions_bytes": 14183328,
+      "analysis_script_sha256": "c925f4f3ed68d38d3f85275129e2a03c4301ab955a76f70de44793c9018ce7e8",
+      "seal_sha256": "b9e96136be25eb3c04c122480a70c7256b88218681c0b400baccb6f7d8d34392",
+      "frames": 6431,
+      "events": 485,
+      "all_complete": true,
+      "safe": true,
+      "window_s": [
+        100.0,
+        600.0
+      ],
+      "observed_duration_s": 500.0,
+      "window_complete": true,
+      "independent_region_ledger_absolute_errors": {
+        "vehicle_s": 3.1122908694669604e-09,
+        "speed_integral_m": 2.0372681319713593e-10,
+        "low_speed_vehicle_s": 0.0
+      },
+      "limitations": [
+        "Region metrics use [100.0,600.0) left-held measured samples; no terminal extrapolation.",
+        "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+        "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+        "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+        "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+      ]
+    }
+  ]
+}
