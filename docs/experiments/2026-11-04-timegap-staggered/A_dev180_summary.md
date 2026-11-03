@@ -1,5 +1,7 @@
 # A200/A300 开发短筛（201/202）
 
+云端数据：[逐案例](data/A_dev180/per_case.csv)、[逐种子配对](data/A_dev180/paired_seeds.csv)、[等权均值](data/A_dev180/flow_means.csv)。A规则保存在Git提交`2a49a13`的生产规则文件中，后续候选不会覆盖其历史。
+
 2026-11-04。批 `tmp/staggered_bottleneck/20261104_A_dev180_201_202_r01`；消费结果 `tmp/staggered_bottleneck/20261104_A_dev180_201_202_report_r01`。
 旧冻结 runner，lane_drop，三档流量，180 s 来车/600 s 上限，jobs3，全部 raw 保留。24/24 safe、drained、sealed；12/12同源 NOA/transform 配对合格，无碰撞、teleport 或未完成。
 旧 evaluator 通过 `tools/report_trial.py` 一次消费。以下均为两个开发 seed 的等权均值，Δ=transform−本候选 NOA。

@@ -1,5 +1,7 @@
 # B200/B300 开发短筛（201/202）
 
+云端数据：[逐案例](data/B_dev180/per_case.csv)、[逐种子配对](data/B_dev180/paired_seeds.csv)、[等权均值](data/B_dev180/flow_means.csv)。[B200冻结规则](stage/candidates/triplet_B200.py)保留失败版本；B300只将道路预告常量改为300。
+
 2026-11-04。新批 `tmp/staggered_bottleneck/20261104_B_dev180_201_202_r01`；消费结果 `tmp/staggered_bottleneck/20261104_B_dev180_201_202_report_r01`。
 冻结 B200/B300 均305行，与主代理已关闭候选直接字节相同。只跑 transform：三流量×两seed×两preview=12例，180 s来车/600 s上限、jobs3，完整raw保留。
 新12例均 safe、0碰撞、0 teleport、sealed，worker进程均exit0；其中6例排空、6例达到600 s仍未完成。runner最终exit1对应方法未排空，非启动或封包失败。
