@@ -1,0 +1,161 @@
+{
+  "cases": [
+    {
+      "candidate": "F",
+      "flow": 1500.0,
+      "seed": 73,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1500_73_lane_drop_transform\\20261103T105933948483Z_lane_drop_transform_s73_a028d4",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1500_73_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "00205fcdc174d992d76da1d4dccd44b51fab0353a7bafb78815b34d70f8475d4",
+          "bytes": 2977838
+        },
+        "events.jsonl.gz": {
+          "sha256": "fb18b0ce4ce1599d1e7030ac4e1c04bf4ad5c2efbb9054de41bc1868c30d57c1",
+          "bytes": 16871
+        }
+      },
+      "post5_provenance_sha256": "e31d84a8ca72d9cc322cae0ccd521c46a8f05f187b074d57f0b1b948551797b3",
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "F",
+      "flow": 1500.0,
+      "seed": 74,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1500_74_lane_drop_transform\\20261103T110016471041Z_lane_drop_transform_s74_a5d7ee",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1500_74_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "5cc7d91d20c25cc2b3f6f85098bc961358be49eafad799a0b10428f03ea95128",
+          "bytes": 3337750
+        },
+        "events.jsonl.gz": {
+          "sha256": "d753cacd549ad6a41ae588411c49c225fd809cdadd1089a1da31ce34694e60f1",
+          "bytes": 19045
+        }
+      },
+      "post5_provenance_sha256": "e187df54d08b89762c681540010cfcf58f47228d00487fd5bd85a0807d7b6e5f",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3356795
+    },
+    {
+      "candidate": "F",
+      "flow": 1750.0,
+      "seed": 73,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1750_73_lane_drop_transform\\20261103T110104071200Z_lane_drop_transform_s73_7c37de",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1750_73_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "ca55f9dd14e0645b28671f1f9fadcd1400d0e5e9bb2dda8855d625803913af24",
+          "bytes": 3637326
+        },
+        "events.jsonl.gz": {
+          "sha256": "de5bddb2921bd0d503b4a3e7e9f84253b25de69175f60b21910fb49bd307676d",
+          "bytes": 19810
+        }
+      },
+      "post5_provenance_sha256": "e01efdb593b746d675ccea79612216a4e93cd68ed2d3b7d170331d66f0654e6b",
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "F",
+      "flow": 1750.0,
+      "seed": 74,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1750_74_lane_drop_transform\\20261103T110157193126Z_lane_drop_transform_s74_81b07d",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1750_74_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "74192f95a36d019ee0abbc8823d20c5dc454d19ef09f6f130f96310a8d1e66fc",
+          "bytes": 3842540
+        },
+        "events.jsonl.gz": {
+          "sha256": "30fa27ee7d7d4f7cdc35b1091104aa6221810b2a4f5e20fb6c0faa0aaa1049ae",
+          "bytes": 21624
+        }
+      },
+      "post5_provenance_sha256": "69791b88f9a687e43c27ff469de721f796ebb6d9b5caf1deb699a111d51ad9cf",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3864164
+    },
+    {
+      "candidate": "F",
+      "flow": 2000.0,
+      "seed": 73,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_2000_73_lane_drop_transform\\20261103T110255020983Z_lane_drop_transform_s73_527e81",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_2000_73_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "7a9c5a06230b056e0a17fb02576e019a0e626d827a83620e15fc093684ce7814",
+          "bytes": 4285222
+        },
+        "events.jsonl.gz": {
+          "sha256": "cfba9b901ebbb925f6efac3a4b162ec436a752503be594ec29b8e61a9162c16d",
+          "bytes": 24704
+        }
+      },
+      "post5_provenance_sha256": "4a0f4a383b42db916abde1e4b5680df2853843aa1185b0c3b3fcf61d59215c2a",
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "F",
+      "flow": 2000.0,
+      "seed": 74,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_2000_74_lane_drop_transform\\20261103T110357698766Z_lane_drop_transform_s74_acd3b7",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_2000_74_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "91f39a9ba83c14e03b15d88d4018e0e9f921d2a4a68a4f7d71ea79dab3875f3a",
+          "bytes": 4459180
+        },
+        "events.jsonl.gz": {
+          "sha256": "4b42dc613734e5ebc79309a2d48abdc9f1fbbacea125b0c2105da3f7f2f77d91",
+          "bytes": 24995
+        }
+      },
+      "post5_provenance_sha256": "0493334c9d69431e8051a875200bfb92b348efe9598f38e04f1496fcf8ac9e31",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 4484175
+    }
+  ],
+  "pruned_successful_cases": 3,
+  "retained_full_raw_cases": 3,
+  "bytes_released": 11705134,
+  "archive_sha256": "10c2084f7503d3665346dc4bcf441ab72c740311e80e19717acf78ef62fafe19",
+  "post5_audit_complete_for_all_cases": true,
+  "only_exact_seed74_success_raw_pruned": true,
+  "no_recursive_delete": true,
+  "failed_cases_pruned": 0,
+  "original_manifest_and_seals_unchanged": true,
+  "old_batches_untouched": true
+}

@@ -1,0 +1,21 @@
+test_archive_failure_retains_raw_and_records_physical_failure (test_runner.RunnerContracts.test_archive_failure_retains_raw_and_records_physical_failure) ... ok
+test_freeze_uses_pinned_git_sources_and_only_replaces_rules (test_runner.RunnerContracts.test_freeze_uses_pinned_git_sources_and_only_replaces_rules) ... ok
+test_output_cannot_target_an_old_directory (test_runner.RunnerContracts.test_output_cannot_target_an_old_directory) ... ok
+test_pruning_checks_all_hashes_before_deleting_anything (test_runner.RunnerContracts.test_pruning_checks_all_hashes_before_deleting_anything) ... ok
+test_pruning_refuses_paths_outside_owned_batch (test_runner.RunnerContracts.test_pruning_refuses_paths_outside_owned_batch) ... ok
+test_pruning_requires_verification (test_runner.RunnerContracts.test_pruning_requires_verification) ... ok
+test_rounded_flow_path_collision_is_rejected_before_batch_creation (test_runner.RunnerContracts.test_rounded_flow_path_collision_is_rejected_before_batch_creation) ... usage: runner.py [-h] --candidate CANDIDATE [CANDIDATE ...] --stage STAGE
+                 --flows FLOWS [FLOWS ...] --seeds SEEDS [SEEDS ...]
+                 [--scenarios {straight3,lane_drop} [{straight3,lane_drop} ...]]
+                 [--modes {noa,transform,formation} [{noa,transform,formation} ...]]
+                 [--duration DURATION] [--max-time MAX_TIME] [--jobs JOBS]
+                 [--worker-timeout WORKER_TIMEOUT] --output OUTPUT
+                 [--prune-raw]
+runner.py: error: case output names collide after flow formatting; use distinct case paths/flows
+ok
+test_verified_pruning_removes_only_two_raw_files (test_runner.RunnerContracts.test_verified_pruning_removes_only_two_raw_files) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.188s
+
+OK

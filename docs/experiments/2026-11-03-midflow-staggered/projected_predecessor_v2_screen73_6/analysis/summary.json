@@ -1,0 +1,36 @@
+{
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6"
+  ],
+  "case_count": 18,
+  "evidence_verified_count": 18,
+  "protocol_verified_count": 18,
+  "planned_task_count": 18,
+  "protocol_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12": "c5c5a9af419fa384ddc3c371cd662e86bd22f8e4fb212b2bd2c030d7ff6f7f88",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6": "2e38d053f4e7dceeb081b2c10402acbe39675138d3276ec5ed57c8aae5a64ff9"
+  },
+  "physical_safe_count": 18,
+  "drained_count": 18,
+  "pair_count": 18,
+  "pair_eligible_count": 12,
+  "fixed_window_complete_count": 0,
+  "fixed_traffic_window_s": [
+    100,
+    600
+  ],
+  "window_policy": "Unchanged original [100,600) region ledger; partial observed exposure retained in region_window, formal incomplete-window metrics stay null.",
+  "failed_cases": [],
+  "low_speed_cases": [],
+  "original_raw_bytes_pruned": 0,
+  "method_sha256": {
+    "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+    "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+    "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+    "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+  },
+  "delta_definition": "candidate minus reference; source/demand/parameter/eligibility checks and differences reuse published tools"
+}

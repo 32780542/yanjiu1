@@ -1,0 +1,25 @@
+{
+  "cases": 6,
+  "planned_cases": 6,
+  "protocol_verified": 6,
+  "evidence_verified": 6,
+  "extended_window_verified": 6,
+  "window_complete": 6,
+  "safe": 6,
+  "drained": 6,
+  "pairs": 0,
+  "eligible_pairs": 0,
+  "window_start_s": 100.0,
+  "window_end_s": 1800.0,
+  "means": [],
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6"
+  ],
+  "method": "existing._region(full sealed region_steps,start,end,complete); first observed gate times reconstructed from all sealed brackets",
+  "boundary": "Region intervals clipped [start,end). Gate first crossings use original closed start<=t<=end.",
+  "nonwindow_metrics": "TT/system/entry/fuel/segments/flags/lane changes remain original full-demand or full-trace values; not restricted to this time window.",
+  "no_positions_rescan": true,
+  "no_imputation_or_partial_completion": true,
+  "no_existing_evidence_changed": true,
+  "worker_wallclock_timeouts": 0
+}

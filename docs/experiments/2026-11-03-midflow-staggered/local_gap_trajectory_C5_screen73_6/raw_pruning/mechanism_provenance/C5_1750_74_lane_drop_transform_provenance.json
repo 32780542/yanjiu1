@@ -1,0 +1,38 @@
+{
+  "candidate": "C5",
+  "mode": "transform",
+  "flow": 1750.0,
+  "seed": 74,
+  "scenario": "lane_drop",
+  "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_1750_74_lane_drop_transform\\20261103T110741521160Z_lane_drop_transform_s74_1cd04b",
+  "positions_sha256": "7a9315ad2cfe3353c9ff1bcf9f6e3e2a60dd8c8fed781c7202a72300fe2af4fa",
+  "positions_bytes": 3819071,
+  "analysis_script_sha256": "b29a8ef272e0c7d4851f4d82e76cb9259aedc2d8145642e9ca73cc4aba654a60",
+  "seal_sha256": "8b5078774b470b0afbb9672b761ad11b421a7075f245c8b9da1dfb1eacb7bf7f",
+  "event_integral_invariant_checks": 1446,
+  "event_integral_max_absolute_error": 7.105427357601002e-14,
+  "frames": 2208,
+  "events": 135,
+  "all_complete": true,
+  "safe": true,
+  "window_s": [
+    30.0,
+    180.0
+  ],
+  "observed_duration_s": 150.0,
+  "window_complete": true,
+  "independent_region_ledger_absolute_errors": {
+    "vehicle_s": 2.3942448024172336e-10,
+    "speed_integral_m": 1.3096723705530167e-10,
+    "low_speed_vehicle_s": 0.0
+  },
+  "limitations": [
+    "Region metrics use [30.0,180.0) left-held measured samples; no terminal extrapolation.",
+    "Event integrals use full recorded requests: [request,complete), [complete,complete+2), [complete+2,complete+5), and [request,complete+5). Observed_s exposes any vehicle exit censoring.",
+    "Event-associated receiver histories may overlap across merges and must not be summed as unique network exposure; regional metrics count each vehicle-frame once.",
+    "Strong/hard thresholds -3/-6 m/s2 are explicit diagnostic labels, not SUMO emergency events.",
+    "Lateral start is first 0.1s measured sample >1e-6m from source lane2 center after recorded native request.",
+    "Front gaps are front-to-front positions within 200m in ego nominal physical corridor; straddling neighbors are included.",
+    "Headway percentiles use samples with own speed >0.1m/s; absolute gap statistics include stopped cars."
+  ]
+}

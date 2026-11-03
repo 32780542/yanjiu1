@@ -1,0 +1,596 @@
+{
+  "cases": [
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_noa\\20261103T102426946253Z_lane_drop_noa_s71_2e4e4b",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_noa\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "523d88f4ca994f934585b4e77e41980ce109a11324eaf5051e360de47048b2c6",
+          "bytes": 7316440
+        },
+        "events.jsonl.gz": {
+          "sha256": "035dce02ed19374e142fc34a936ccd5308af04e4c23d52dfffc946505c1e2b50",
+          "bytes": 37880
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_transform\\20261103T102520716589Z_lane_drop_transform_s71_24dc9a",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "37a4b64b54c687350eab8f8535a45403499a4b9c704429b7450290028563657a",
+          "bytes": 9896442
+        },
+        "events.jsonl.gz": {
+          "sha256": "fb0baf68142a69b6d4cf5e344efb0ff1b7683e678f264aa635d2731255ae4454",
+          "bytes": 55064
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "straight3",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_straight3_noa\\20261103T102257978203Z_straight3_noa_s71_be48ca",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_straight3_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "07cf2a31ec7023213921b44f5b8b506af51e98be193c55545f19f19aac1851a7",
+          "bytes": 6315592
+        },
+        "events.jsonl.gz": {
+          "sha256": "27e947d79802ff60ac3b107f5bea714e2c8cca85b7171768a729d5457888bcd4",
+          "bytes": 19318
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 6334910
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "straight3",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_straight3_transform\\20261103T102257978203Z_straight3_transform_s71_fbea1e",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_straight3_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "caead8223396c2fc4fb9065d41046f2e63ab0cc1e03bdbd9b553dde43fc11e08",
+          "bytes": 9422706
+        },
+        "events.jsonl.gz": {
+          "sha256": "92a9b6e3d16bf6f0a4d789190964b0f47be13049560db7b0caf31f8897431b38",
+          "bytes": 43085
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 9465791
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_lane_drop_noa\\20261103T102742930124Z_lane_drop_noa_s72_64b647",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_lane_drop_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "08bbc0fea90560db9ffc9cdc344e1ca2a2bccd76fb48132a992530d6b399cc53",
+          "bytes": 8197323
+        },
+        "events.jsonl.gz": {
+          "sha256": "d234786be9e8c1e0304f8683e034867365a317c4e7e69db7f21d7bd9cd404545",
+          "bytes": 41035
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 8238358
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_lane_drop_transform\\20261103T102923625131Z_lane_drop_transform_s72_420941",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "a0742a39169c3953aa197e3e8997a90a417644603d63410ab1f342a537c2445c",
+          "bytes": 10746105
+        },
+        "events.jsonl.gz": {
+          "sha256": "9896709b63ece46b632c0e11fb5cec5af8f086682b49e04c8d6f3dbc99847483",
+          "bytes": 61721
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10807826
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 72,
+      "scenario": "straight3",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_straight3_noa\\20261103T102559845682Z_straight3_noa_s72_b4c887",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_straight3_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "55ee88f4d29b33e862af2c9e5dbcf467f787d0222c546feff088fd8a336d011a",
+          "bytes": 7047262
+        },
+        "events.jsonl.gz": {
+          "sha256": "12eea9e176d2019e46066d4c16ed4ee43a4431c5dd4747914c1149d0116d1f27",
+          "bytes": 20606
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 7067868
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 72,
+      "scenario": "straight3",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_straight3_transform\\20261103T102735022220Z_straight3_transform_s72_27b485",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_72_straight3_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "bb2c41ce167b4d9df71da8337961fd11c3a14491024330d12e68a4e13b6e07da",
+          "bytes": 10308451
+        },
+        "events.jsonl.gz": {
+          "sha256": "b24e7c98fbf649b3b7206221df930555ea2c9c78e68c61b2fde0406379704cef",
+          "bytes": 48737
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10357188
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_noa\\20261103T103205950090Z_lane_drop_noa_s71_e0885e",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_noa\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "138a636b9055ae404978e43a3a6baee95881e0149951fecb83a48ecebf4461f5",
+          "bytes": 9498136
+        },
+        "events.jsonl.gz": {
+          "sha256": "81c9ffaeb42971860d7fc1ff67c1a3560501c48c9b4759f34b4b464d6d710c06",
+          "bytes": 46661
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_transform\\20261103T103356416973Z_lane_drop_transform_s71_c381f2",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "2d6a96c0cb1f8945c497af1683e2c67b8f8965fee543e45522180e8cea67126c",
+          "bytes": 12057456
+        },
+        "events.jsonl.gz": {
+          "sha256": "103ed193146f14d32986cece69b15ad746c65c5cb77ac9f5c423df42b70c89d5",
+          "bytes": 68686
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "straight3",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_straight3_noa\\20261103T103011688726Z_straight3_noa_s71_2f7f71",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_straight3_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "16d257b4e2a9c7ad2f40eb6ad00239a677ecac6233d0c285bbca616f03fe7b2a",
+          "bytes": 8144582
+        },
+        "events.jsonl.gz": {
+          "sha256": "5dccdd7434389a67940175dc3f9b40e0b981cbe01b03829efd58c64670e5651b",
+          "bytes": 23444
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 8168026
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "straight3",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_straight3_transform\\20261103T103157327562Z_straight3_transform_s71_bd6566",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_straight3_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "46de849666fb3a7e411cc9a127356d154ac44df4eb23c72aba93496ec3abd2a5",
+          "bytes": 11534207
+        },
+        "events.jsonl.gz": {
+          "sha256": "a405e9dc58c810f23554b58881ce4d24dc607b9ca21dab98061729bca0fd5337",
+          "bytes": 59821
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 11594028
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_lane_drop_noa\\20261103T103705121099Z_lane_drop_noa_s72_1773bd",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_lane_drop_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "9ad9ed3860802edbe068e5009a65aca1d36e32ce6455f8a209966159e01cbd16",
+          "bytes": 10471023
+        },
+        "events.jsonl.gz": {
+          "sha256": "3f1f6e038067a6efdfbc7ad04694f92c69079e094b79fe449ed31373a834d8de",
+          "bytes": 51180
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10522203
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_lane_drop_transform\\20261103T103911303795Z_lane_drop_transform_s72_343e05",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "fed26a7cab88a5e0b7daadf09d619d96ffa7e384f61e43eb84cc4e9c974ded20",
+          "bytes": 12856561
+        },
+        "events.jsonl.gz": {
+          "sha256": "b6c3acdc3823faf1776684a938d8e4b00718fc2bc0d1911f65b29892c95a32bd",
+          "bytes": 73938
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12930499
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "straight3",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_straight3_noa\\20261103T103456696595Z_straight3_noa_s72_445712",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_straight3_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "3d046b7ba0cfeb6f8a67b0a1052831cc85a533a0fc5f0326e8e54a6d08a90ba8",
+          "bytes": 9071369
+        },
+        "events.jsonl.gz": {
+          "sha256": "8e1c7a7ed86ff415a9c1bf1a7dcdf9d2b378f31702ffdf2142ec00c2c13ce525",
+          "bytes": 24128
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 9095497
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "straight3",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_straight3_transform\\20261103T103654984621Z_straight3_transform_s72_15bee8",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_72_straight3_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "75e89ad038ead65448e0e30c38e45904b44896ca6b6b61469b6adbeafab7673e",
+          "bytes": 12199033
+        },
+        "events.jsonl.gz": {
+          "sha256": "0318b995b81e1c0c60e86f99a3f03e5ce974c9d56758b8244e54af0c6fd1e390",
+          "bytes": 58415
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12257448
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_noa\\20261103T104232056503Z_lane_drop_noa_s71_8ec02d",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_noa\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "a2bfd6afc233ef6fb9df2c9855b57725b0e023cb7c681897fcd4d02ffee642c0",
+          "bytes": 11898517
+        },
+        "events.jsonl.gz": {
+          "sha256": "fbdc3f55c470770fb15465e840af8ae6cbb4a1c377822c0a2431e2d9319868e4",
+          "bytes": 57216
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_transform\\20261103T104451202985Z_lane_drop_transform_s71_016f7a",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "987a67266683a5871834e779dd7bd2abf5d387b167271a32bd87ac85022291fa",
+          "bytes": 14183328
+        },
+        "events.jsonl.gz": {
+          "sha256": "a31211d63e7e9588798088e171231b3a5e6d64b1af307adfce0d3b625e561dc4",
+          "bytes": 78079
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "straight3",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_straight3_noa\\20261103T104013884137Z_straight3_noa_s71_161e09",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_straight3_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "4fda5c64785c50af061a4f88359c2806bf6ff37da4ffab259fdfc479061a7c8d",
+          "bytes": 10109652
+        },
+        "events.jsonl.gz": {
+          "sha256": "ede6eb415e3b19bd074f0c7f0c7d2fcffa965726b308b2a98f3a142e1d9051bf",
+          "bytes": 27574
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10137226
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "straight3",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_straight3_transform\\20261103T104221112545Z_straight3_transform_s71_22a08d",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_straight3_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "ac9eeb0cd700587289183da33b46d8ac25b99dc3d44baca1079ddf30be6fa85e",
+          "bytes": 13297222
+        },
+        "events.jsonl.gz": {
+          "sha256": "600a806ab48c409fd90c0aed55fe5084dbb70f790e64a009d078a70fc6f4ea7c",
+          "bytes": 64447
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 13361669
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_lane_drop_noa\\20261103T104835877518Z_lane_drop_noa_s72_6a198e",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_lane_drop_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "b4196ffa160980d6d0f226be77e394428dc841500669759a9e187e794a2ee0d6",
+          "bytes": 12691178
+        },
+        "events.jsonl.gz": {
+          "sha256": "32e335f814cfa513525461988034630f9674e885b6c432a1c22ba212598741f2",
+          "bytes": 59421
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12750599
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_lane_drop_transform\\20261103T105059243317Z_lane_drop_transform_s72_86bafb",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "9c754d48fbfbbff9d3ce5eb05bc9a6bda064cd03afea5d087ce821ca1fefdbe9",
+          "bytes": 14840275
+        },
+        "events.jsonl.gz": {
+          "sha256": "a5104c35b429bd5bf94beb36a0423a0e085d892bb4e3ab77db4eab320ea387a0",
+          "bytes": 83332
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 14923607
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "straight3",
+      "mode": "noa",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_straight3_noa\\20261103T104605070575Z_straight3_noa_s72_357c1c",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_straight3_noa\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "2c517c3cb09837ba485a46c33168d64554b2ea71a200f1e3b5304f90299f13dd",
+          "bytes": 10712154
+        },
+        "events.jsonl.gz": {
+          "sha256": "d348c78aa7e715073f047720de4c70ffcef99c8e84c0967bb42030a968f82653",
+          "bytes": 27940
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10740094
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 72,
+      "scenario": "straight3",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_straight3_transform\\20261103T104819128613Z_straight3_transform_s72_8eaa22",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_72_straight3_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "7cb9037f4fb5c637d8aa1febd3c35c5e57c262a8e29881b193d617aca0f3ddae",
+          "bytes": 13842668
+        },
+        "events.jsonl.gz": {
+          "sha256": "ae6df899c8f8288a338af7fb2f7904d141e6e90ffcce97a5bb0e4b81c521a32a",
+          "bytes": 69747
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 13912415
+    }
+  ],
+  "pruned_successful_cases": 18,
+  "retained_full_raw_cases": 6,
+  "bytes_released": 192665252,
+  "archive_sha256": "a34570db95181d4d2e39ecaeff2baf65934258b0b9d7268186f861ac4b4567ce",
+  "mechanism_source_windows_sha256": "b9f16750a27c00823abda37518596d0a792df1b24e4495bed4b5782b0ab2279d",
+  "only_predeclared_success_raw_pruned": true,
+  "no_recursive_delete": true,
+  "failed_cases_pruned": 0,
+  "original_manifest_and_seals_unchanged": true,
+  "old_batches_untouched": true
+}

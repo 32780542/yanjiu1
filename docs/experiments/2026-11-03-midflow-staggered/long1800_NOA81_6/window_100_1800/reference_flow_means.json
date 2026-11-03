@@ -1,0 +1,41 @@
+[
+  {
+    "flow": 1500.0,
+    "seeds": 2,
+    "mean_system_time_s": 42.352492538170125,
+    "mean_travel_time_s": 42.285210297486906,
+    "mean_entry_wait_s": 0.06728224068322225,
+    "fuel_g_per_km": 66.75107207577753,
+    "mean_segment_640_1100_s": 16.47587287575363,
+    "region_density_veh_km_lane": 14.637107843137283,
+    "region_mean_speed_mps": 28.0503972050075,
+    "region_low_speed_vehicle_s": 118.55000000000003,
+    "flow_1000m_veh_h": 4433.294117647059
+  },
+  {
+    "flow": 1750.0,
+    "seeds": 2,
+    "mean_system_time_s": 43.05553146571826,
+    "mean_travel_time_s": 42.94982947243257,
+    "mean_entry_wait_s": 0.10570199328569957,
+    "fuel_g_per_km": 69.76967612576601,
+    "mean_segment_640_1100_s": 17.106943311020984,
+    "region_density_veh_km_lane": 17.83612745098044,
+    "region_mean_speed_mps": 26.87080311083843,
+    "region_low_speed_vehicle_s": 431.94999999999993,
+    "flow_1000m_veh_h": 5175.529411764706
+  },
+  {
+    "flow": 2000.0,
+    "seeds": 2,
+    "mean_system_time_s": 45.041465284236224,
+    "mean_travel_time_s": 44.88340847332016,
+    "mean_entry_wait_s": 0.15805681091606585,
+    "fuel_g_per_km": 74.06819334103653,
+    "mean_segment_640_1100_s": 18.955163264565385,
+    "region_density_veh_km_lane": 23.015441176471008,
+    "region_mean_speed_mps": 23.781422317633364,
+    "region_low_speed_vehicle_s": 1682.4499999999252,
+    "flow_1000m_veh_h": 5927.2941176470595
+  }
+]

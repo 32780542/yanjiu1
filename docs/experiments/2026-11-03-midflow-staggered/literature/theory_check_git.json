@@ -1,0 +1,107 @@
+{
+  "scope": "algebra plus finite pure-function witnesses; no SUMO/traffic simulation",
+  "source_provenance": {
+    "S": {
+      "path": "git:1aa86344af2a269053cd4fcda9d58168697daf17:variants/phase5g_pure_formation/noa/native_rules.py",
+      "sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f"
+    },
+    "V1": {
+      "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_projected_predecessor_v1\\native_rules.py",
+      "sha256": "517d169ff012950e288c20a9fca9225db20bae6ffcc1a6f3aca43c05c8790c7d"
+    },
+    "executor": {
+      "path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\experiments\\native_sumo.py",
+      "sha256": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    }
+  },
+  "parameters": {
+    "dt_s": 0.1,
+    "T_s": 0.5,
+    "k_per_s": 0.3,
+    "H_s": 0.8506944444444444,
+    "alpha": 0.2
+  },
+  "continuous": {
+    "stable": true,
+    "poles": [
+      {
+        "real": -0.26751001903415206,
+        "imag": 0.0,
+        "abs": 0.26751001903415206
+      },
+      {
+        "real": -2.2429066476325143,
+        "imag": 0.0,
+        "abs": 2.2429066476325143
+      }
+    ],
+    "string_margin_2H_plus_kH2_minus_2T": 0.9184932002314815,
+    "H_threshold_s": 0.46725141699712686
+  },
+  "semi_implicit_discrete_conditional": {
+    "assumptions": "fixed observed predecessor; commanded speed applied exactly next step; no clipping or switching",
+    "a": 0.7489583333333333,
+    "q": 0.006,
+    "trace": 1.7429583333333334,
+    "poles": [
+      {
+        "real": 0.9740345400056317,
+        "imag": 0.0,
+        "abs": 0.9740345400056317
+      },
+      {
+        "real": 0.7689237933277017,
+        "imag": 0.0,
+        "abs": 0.7689237933277017
+      }
+    ],
+    "jury_margins": [
+      0.006,
+      3.4919166666666666,
+      0.25104166666666666
+    ],
+    "unit_circle_difference_A": 0.022656336805555555,
+    "unit_circle_difference_B": 2.995833333333333,
+    "string_margin": 0.9440140335648148,
+    "H_threshold_s_for_nonnegative_a": 0.4611793507110022,
+    "frequency_grid_points": 20001,
+    "max_gain_including_DC": 1.0,
+    "max_polynomial_identity_absolute_error": 8.881784197001252e-15
+  },
+  "actual_cth_not_final_upper_bound_witness": {
+    "ego": {
+      "x": 700.0,
+      "speed": 20.0,
+      "lane": 1
+    },
+    "real_front": {
+      "x": 730.0,
+      "speed": 18.754166666666666,
+      "lane": 1
+    },
+    "merging": {
+      "x": 715.5,
+      "speed": 23.054166666666667,
+      "lane": 2
+    },
+    "raw_actual_cth_mps": 20.2,
+    "raw_projected_cth_mps": 20.189999999999998,
+    "following_after_phase_mps": 20.205,
+    "decide_speed_mps": 20.205,
+    "physical_safe_cap_mps": 27.08124425400521,
+    "implied_ego_acceleration_mps2": 2.049999999999983,
+    "no_requested_lane_change": true,
+    "reference_is_projected_vehicle": true
+  },
+  "finite_contract_witnesses": {
+    "invisible_added_vehicle_does_not_change_action": true,
+    "bijective_labels_and_reversed_observation_order_preserve_physical_action": true
+  },
+  "not_established": [
+    "full S/V string stability",
+    "collision-free invariance",
+    "global convergence",
+    "SUMO executed speed always equals request",
+    "traffic performance improvement"
+  ]
+}

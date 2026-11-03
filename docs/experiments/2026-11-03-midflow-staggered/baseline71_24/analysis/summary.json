@@ -1,0 +1,161 @@
+{
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24"
+  ],
+  "case_count": 24,
+  "evidence_verified_count": 24,
+  "protocol_verified_count": 24,
+  "planned_task_count": 24,
+  "protocol_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24": "c61f3fbaf1ab96ef73b4eb9010f76a0b05f77fccc43c8f733f0b817bc7d3f015"
+  },
+  "physical_safe_count": 24,
+  "drained_count": 24,
+  "pair_count": 12,
+  "pair_eligible_count": 12,
+  "fixed_window_complete_count": 24,
+  "fixed_traffic_window_s": [
+    100,
+    600
+  ],
+  "window_policy": "Unchanged original [100,600) region ledger; partial observed exposure retained in region_window, formal incomplete-window metrics stay null.",
+  "failed_cases": [],
+  "low_speed_cases": [
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4435.299999999996,
+        "mean_n": 8.87059999999999,
+        "density_veh_km_lane": 14.784333333333318,
+        "mean_speed_mps": 27.35709672360147,
+        "low_speed_vehicle_s": 86.90000000000003,
+        "low_speed_fraction": 0.019592812211124414,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1500.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4893.4000000000215,
+        "mean_n": 9.786800000000042,
+        "density_veh_km_lane": 16.311333333333405,
+        "mean_speed_mps": 26.789996509454753,
+        "low_speed_vehicle_s": 144.79999999999998,
+        "low_speed_fraction": 0.02959087750848068,
+        "max_simultaneous_low_speed": 3
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5218.399999999998,
+        "mean_n": 10.436799999999996,
+        "density_veh_km_lane": 17.394666666666662,
+        "mean_speed_mps": 27.136831273549245,
+        "low_speed_vehicle_s": 34.0,
+        "low_speed_fraction": 0.0065154070213092165,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 1750.0,
+      "seed": 72,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6085.400000000043,
+        "mean_n": 12.170800000000087,
+        "density_veh_km_lane": 20.284666666666812,
+        "mean_speed_mps": 25.153447645529745,
+        "low_speed_vehicle_s": 470.59999999999997,
+        "low_speed_fraction": 0.07733263220166244,
+        "max_simultaneous_low_speed": 4
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6003.3999999999805,
+        "mean_n": 12.006799999999961,
+        "density_veh_km_lane": 20.01133333333327,
+        "mean_speed_mps": 26.620145597385573,
+        "low_speed_vehicle_s": 1.1000000000000227,
+        "low_speed_fraction": 0.0001832295032814782,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "S",
+      "flow": 2000.0,
+      "seed": 71,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5710.500000000002,
+        "mean_n": 11.421000000000003,
+        "density_veh_km_lane": 19.035000000000007,
+        "mean_speed_mps": 27.940871116989417,
+        "low_speed_vehicle_s": 73.4,
+        "low_speed_fraction": 0.012853515453988265,
+        "max_simultaneous_low_speed": 2
+      }
+    }
+  ],
+  "original_raw_bytes_pruned": 0,
+  "method_sha256": {
+    "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+    "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+    "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+    "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+  },
+  "delta_definition": "candidate minus reference; source/demand/parameter/eligibility checks and differences reuse published tools"
+}

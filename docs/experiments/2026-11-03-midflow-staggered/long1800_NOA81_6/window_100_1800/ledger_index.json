@@ -1,0 +1,182 @@
+[
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1500.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_81_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_81_lane_drop_noa\\evidence\\traffic\\cases\\82854ed1f1b9ca99",
+    "case_json_sha256": "8c15a193568207c0291862854c318bf92bc3844d67798b5b1d3a826bdf8733f5",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "fcbf74cab0426884956c162023d28ea61d511291178abcbe80e085a44687e2d9",
+      "gate_brackets.jsonl.gz": "ec640228eb82482e55e547589ced6bc4d85296020cb2e69da34f94c87d552ec2",
+      "vehicles.json.gz": "3c2f53aaa0cdb988c61098589ebff50abdde647659725b19087e41430534bf08"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18404,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.5,
+    "gate_observed_count": 13206,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1500.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_82_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_82_lane_drop_noa\\evidence\\traffic\\cases\\196df2bcc28adab8",
+    "case_json_sha256": "0e7a55359277da2cd3a5680f62be651f352d27eb2d1537a2596f9cd6353c87a1",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "4bce9336e48acd3716fa25032a8add3aa356ff8ecaf88483ab51d751eac642d3",
+      "gate_brackets.jsonl.gz": "56bcb2f236808fee5ff64237451f6d5dac9db42fc632c8ed33dbc5e83d3080e1",
+      "vehicles.json.gz": "b2c3d02070eeedb3623ebdeffe873f8f2b6998334a5a05eddb91993f0dfecdde"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18427,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.8,
+    "gate_observed_count": 13488,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1750.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_81_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_81_lane_drop_noa\\evidence\\traffic\\cases\\18f8c7fe5fa926e6",
+    "case_json_sha256": "0da50c599825b779a006efcb92c0c96e76e3f3087799fd478bb8065f449d1e38",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "d58b0d807c1c094c236fffc5cd6f0128940b8189564f00112c324476c6b7c4f7",
+      "gate_brackets.jsonl.gz": "0c296b3cbd1df4678ba7220fef202bbc464e038a009cf7fe39f30cdb5729be73",
+      "vehicles.json.gz": "e48be612ed8ce9d1792785232e09a80402bdf627ed0f04edaf4f08b3e1936d31"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18459,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1846.0,
+    "gate_observed_count": 15462,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1750.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_82_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_82_lane_drop_noa\\evidence\\traffic\\cases\\9b00c4dec8e17447",
+    "case_json_sha256": "8fdef2b2ac1ee00fb8ad532d66bebdc7fc0d8645752b1474a7575efc8ead4d31",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "4ff342f29116a434c8e8e84c5197e703fa75250165152df29f7ca426e1e02cbe",
+      "gate_brackets.jsonl.gz": "de5a4c412fad04e7f00190b8b122f0640b72dcd87839567dc9ca927e799ffadb",
+      "vehicles.json.gz": "dad965ea52fecd8efb8a815d5ba031fc6764c9378dd8c57cd0fe246947ed0d58"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18427,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.8,
+    "gate_observed_count": 15696,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 2000.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_81_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_81_lane_drop_noa\\evidence\\traffic\\cases\\9b1a6d22ac7b9536",
+    "case_json_sha256": "a7fac94af97ef8ccba7c302deb66355a9ab4061c26ee7d88ec4b2f1fcda89fdd",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "dc0d7db7a9dbf243882542b80220af7246b2ee545123a5f3b1f039f04d2333f7",
+      "gate_brackets.jsonl.gz": "9284d6657a507493515e6acc39d96e0b202fa373f9b50b2c9af4e7a8ba72dccf",
+      "vehicles.json.gz": "0bfdd717d765b3458abe166cf62521c3b1c7d1d28618b3d0a6d29f262d4ed0ba"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18404,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.5,
+    "gate_observed_count": 17664,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 2000.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_82_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_82_lane_drop_noa\\evidence\\traffic\\cases\\883f6103bfd13c7f",
+    "case_json_sha256": "7ef62368af9c162c0c98b48742da828599e04f99ccb335e7b0e4d0d4ed5f1077",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "b3591c244f36955c94379a0c6b9b4ffd2afaab5ce671976f78b0853452162ce8",
+      "gate_brackets.jsonl.gz": "3a6812d3d124ef26c7dc9fbc00768f394df934b33ffc5e64c78ea7022c393103",
+      "vehicles.json.gz": "2391a1833034962ac4055c7986ecb59671ab612b22f42e2e58fb17ae4453ade3"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18424,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.5,
+    "gate_observed_count": 17952,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  }
+]

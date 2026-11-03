@@ -1,0 +1,35 @@
+[
+  {
+    "flow": 1500.0,
+    "seeds": 2,
+    "improved_seeds": 1,
+    "reference_mean_system_time_s": 42.1880103551709,
+    "candidate_mean_system_time_s": 42.163423511205366,
+    "delta_mean_system_time_s": -0.024586843965533234,
+    "system_improvement_percent": 0.05827922141514235,
+    "delta_fuel_g_per_km": -0.31318331717329073,
+    "delta_lane_change_completions": -6.0
+  },
+  {
+    "flow": 1750.0,
+    "seeds": 2,
+    "improved_seeds": 1,
+    "reference_mean_system_time_s": 42.68613152358722,
+    "candidate_mean_system_time_s": 42.735053744848855,
+    "delta_mean_system_time_s": 0.048922221261634036,
+    "system_improvement_percent": -0.11460917050916389,
+    "delta_fuel_g_per_km": 0.3974970475754773,
+    "delta_lane_change_completions": 10.0
+  },
+  {
+    "flow": 2000.0,
+    "seeds": 2,
+    "improved_seeds": 2,
+    "reference_mean_system_time_s": 43.240020494073335,
+    "candidate_mean_system_time_s": 43.08344798936524,
+    "delta_mean_system_time_s": -0.15657250470809814,
+    "system_improvement_percent": 0.3621009030963772,
+    "delta_fuel_g_per_km": 0.4514020733632407,
+    "delta_lane_change_completions": -2.0
+  }
+]

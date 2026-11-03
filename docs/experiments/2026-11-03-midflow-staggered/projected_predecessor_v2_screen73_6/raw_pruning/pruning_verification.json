@@ -1,0 +1,155 @@
+{
+  "cases": [
+    {
+      "candidate": "W",
+      "flow": 1500.0,
+      "seed": 73,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1500_73_lane_drop_transform\\20261103T104938254164Z_lane_drop_transform_s73_7be51d",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1500_73_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "8df16c2099c85ec18ad73bacd8fc98aeff97a00afa98f5a3a0b71e791ae6037e",
+          "bytes": 2982360
+        },
+        "events.jsonl.gz": {
+          "sha256": "0f51b838587329ae3e070710415bac7a6328e8ed38c022aca1d9f7894ff9510f",
+          "bytes": 17200
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "W",
+      "flow": 1500.0,
+      "seed": 74,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1500_74_lane_drop_transform\\20261103T105023992593Z_lane_drop_transform_s74_0c8494",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1500_74_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "2c1b6259c93a46c3a3185f9dc4efdf0e4444b16b9941dcd8ad6deec1cfa51030",
+          "bytes": 3330155
+        },
+        "events.jsonl.gz": {
+          "sha256": "d782671d47b45259feebee8bbea3cbe7d3f6dc2fabf4191b6b49dab2e2cacf95",
+          "bytes": 19184
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3349339
+    },
+    {
+      "candidate": "W",
+      "flow": 1750.0,
+      "seed": 73,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1750_73_lane_drop_transform\\20261103T105115309790Z_lane_drop_transform_s73_6c88ac",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1750_73_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "b9c0203536e84ce68ae71f9bce2478b678fd6c7c13978689cbbbb81b0a5ae033",
+          "bytes": 3662425
+        },
+        "events.jsonl.gz": {
+          "sha256": "d2a32877a2e93f1e0472d952b7744f7501ff4e24ea7a2581385ebc9646d7b818",
+          "bytes": 19777
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "W",
+      "flow": 1750.0,
+      "seed": 74,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1750_74_lane_drop_transform\\20261103T105211944921Z_lane_drop_transform_s74_71baaf",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1750_74_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "aabd12e7834b73312032f26f090a22db2361b673d1f40c39d3e0124b3ab77bd3",
+          "bytes": 3840908
+        },
+        "events.jsonl.gz": {
+          "sha256": "0a35bb255825808d0b3f85c7d3944d6b41350da9820f5985a4f1ba2700f5c346",
+          "bytes": 22021
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3862929
+    },
+    {
+      "candidate": "W",
+      "flow": 2000.0,
+      "seed": 73,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_2000_73_lane_drop_transform\\20261103T105309035626Z_lane_drop_transform_s73_68a37f",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_2000_73_lane_drop_transform\\evidence",
+      "keep_full_raw": true,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "83e134707fedc3bfe8061302f0172ba6b919d63bafc4149065f4fe1084ca08e6",
+          "bytes": 4293184
+        },
+        "events.jsonl.gz": {
+          "sha256": "28b8f8c4099b6b38ae53863c466cfe471e55730f0fdbc91b6c274511e23d0be5",
+          "bytes": 25131
+        }
+      },
+      "deleted": [],
+      "bytes_released": 0
+    },
+    {
+      "candidate": "W",
+      "flow": 2000.0,
+      "seed": 74,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_2000_74_lane_drop_transform\\20261103T105404038561Z_lane_drop_transform_s74_4225a2",
+      "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_2000_74_lane_drop_transform\\evidence",
+      "keep_full_raw": false,
+      "originals": {
+        "positions.jsonl.gz": {
+          "sha256": "c3d7d0ff29a5e4824d7280551ccf5fd3f39eb5a1fbfd1729dd6ff7e13aa5349c",
+          "bytes": 4510688
+        },
+        "events.jsonl.gz": {
+          "sha256": "d24440a58298fc469d4884668603dc9f10f92fb59e3fa1c9b60d8355aba0bdcb",
+          "bytes": 25791
+        }
+      },
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 4536479
+    }
+  ],
+  "pruned_successful_cases": 3,
+  "retained_full_raw_cases": 3,
+  "bytes_released": 11748747,
+  "archive_sha256": "d70958a7568ca87f98b093cfa76e3889779b897d9a1a37cbccdd394c0c234448",
+  "mechanism_source_windows_sha256": "47405377fb8beac17fcef247878fdabb67a8ad6a353142152c23a59c24454309",
+  "only_predeclared_success_raw_pruned": true,
+  "no_recursive_delete": true,
+  "failed_cases_pruned": 0,
+  "original_manifest_and_seals_unchanged": true,
+  "old_batches_untouched": true
+}

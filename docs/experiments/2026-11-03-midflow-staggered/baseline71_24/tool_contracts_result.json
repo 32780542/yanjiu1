@@ -1,0 +1,39 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "docs/experiments/2026-11-03-staggered-bottleneck/tools/tests",
+    "-p",
+    "test_runner.py",
+    "-v"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 180.0,
+  "started_utc": "2026-11-03T10:24:08.093639+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 32068,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 1.843,
+  "ended_utc": "2026-11-03T10:24:09.943674+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "95b973272daa824cfd45650fd3e158c5f59a0c8ea58571e1e9510340cb7b69c2"
+  },
+  "archive_errors": {}
+}
