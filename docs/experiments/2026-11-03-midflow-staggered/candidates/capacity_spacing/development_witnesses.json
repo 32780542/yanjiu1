@@ -1,0 +1,177 @@
+[
+  {
+    "name": "cruise_balance",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 1.65,
+      "speed": 28.8,
+      "lane": 0,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 445.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 377.5,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "command": {
+      "speed": 28.8,
+      "lane": null,
+      "reason": "formation_follow",
+      "target_x": 400.0,
+      "reference": 1,
+      "formation_state": 1
+    },
+    "memory": {
+      "lane_target": null,
+      "gap": null,
+      "joining": false
+    }
+  },
+  {
+    "name": "missing_layer",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 1.65,
+      "speed": 28.8,
+      "lane": 0,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 490.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 422.5,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "command": {
+      "speed": 31.9,
+      "lane": null,
+      "reason": "join_follow",
+      "target_x": 445.0,
+      "reference": 1,
+      "formation_state": 1
+    },
+    "memory": {
+      "lane_target": null,
+      "gap": null,
+      "joining": true
+    }
+  },
+  {
+    "name": "full_layer_protected",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 4.949999999999999,
+      "speed": 28.8,
+      "lane": 1,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 422.5,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 422.5,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 3,
+        "x": 332.5,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 4,
+        "x": 377.5,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "command": {
+      "speed": 28.8,
+      "lane": null,
+      "reason": "formation_follow",
+      "target_x": 400.0,
+      "reference": null,
+      "formation_state": 1
+    },
+    "memory": {
+      "lane_target": null,
+      "gap": null,
+      "joining": false
+    }
+  }
+]

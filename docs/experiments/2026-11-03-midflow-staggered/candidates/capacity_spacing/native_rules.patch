@@ -1,0 +1,165 @@
+--- S/noa/native_rules.py
++++ B/noa/native_rules.py
+@@ -68,15 +68,16 @@
+     return max(0.0, min(MAX_SPEED, ego.speed + SPEED_RELAXATION * (desired - ego.speed)))
+ 
+ 
+-def _phase(lane, lanes):
+-    return GAP / 2 if lane % 2 else 0.0
+-
+-
+-def _physical_phase(car, lanes):
++def _phase(lane, lanes, scale=1.0):
++    return (GAP / 2 if lane % 2 else 0.0) * scale
++
++
++def _physical_phase(car, lanes, transition=None):
++    scale = 1.5 if transition is not None and car.x < transition else 1.0
+     lateral = max(0.0, min(lanes - 1, car.y / LANE_WIDTH - 0.5))
+     lower = int(lateral)
+     upper = min(lower + 1, lanes - 1)
+-    return _phase(lower, lanes) + (lateral - lower) * (_phase(upper, lanes) - _phase(lower, lanes))
++    return _phase(lower, lanes, scale) + (lateral - lower) * (_phase(upper, lanes, scale) - _phase(lower, lanes, scale))
+ 
+ 
+ def _component(ego, rows):
+@@ -91,17 +92,17 @@
+     return tuple(cars[low : high + 1])
+ 
+ 
+-def _pair_error(car, peer, lanes, phase_boundary=None):
++def _pair_error(car, peer, lanes, phase_boundary=None, transition=None):
+     pair_lanes = (
+         lanes
+         if phase_boundary is None
+         else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
+     )
+-    phase = _physical_phase(peer, 3) - _physical_phase(car, 3)
++    phase = _physical_phase(peer, 3, transition) - _physical_phase(car, 3, transition)
+     return peer.x - car.x + phase, pair_lanes
+ 
+ 
+-def _front_following(ego, rows, distance=50.0):
++def _front_following(ego, rows, distance=50.0, scale=1.0):
+     """同一实际前车时距跟驰，供NOA和编队共用。"""
+     front = min(
+         (c for c in rows if 0.0 < c.x - ego.x <= distance and _occupies(c, ego.lane, 0.0)),
+@@ -109,19 +110,21 @@
+     )
+     if front is None:
+         return CRUISE, None, None, 0
+-    target = front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed
++    target = (front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed if scale == 1.0
++              else front.x - scale * (LENGTH + STANDSTILL + HEADWAY * ego.speed))
+     return _request(ego, target, front.speed), target, front.track, 1
+ 
+ 
+-def _following(ego, rows, lanes, phase_boundary=None):
++def _following(ego, rows, lanes, phase_boundary=None, transition=None):
+     """真实前车CTH叠加实际相邻道互选相位；每车只输出自身速度。"""
+-    following = _front_following(ego, rows)
++    scale = 1.5 if transition is not None and ego.x < transition else 1.0
++    following = _front_following(ego, rows, scale=scale)
+     if following[2] is None:
+-        extended = _front_following(ego, rows, 2 * GAP)
++        extended = _front_following(ego, rows, 2 * GAP * scale, scale)
+         front = next((c for c in rows if c.track == extended[2]), None)
+         if front is not None and any(
+             abs(c.lane - ego.lane) == 1 and ego.x < c.x < front.x
+-            and abs(c.x + _physical_phase(c, 3) - _physical_phase(ego, 3) - (front.x - GAP)) <= 2.0
++            and abs(c.x + _physical_phase(c, 3, transition) - _physical_phase(ego, 3, transition) - (front.x - GAP * scale)) <= 2.0
+             for c in rows
+         ):
+             following = extended
+@@ -131,7 +134,7 @@
+         candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0]
+ 
+         def order(c):
+-            difference, _ = _pair_error(car, c, lanes, phase_boundary)
++            difference, _ = _pair_error(car, c, lanes, phase_boundary, transition)
+             return abs(difference), abs(c.x - car.x), difference, c.x, c.y, c.speed, c.vy
+ 
+         return min(candidates, key=order, default=None)
+@@ -145,7 +148,7 @@
+             peer = nearest(ego, lane)
+             if peer is not None and nearest(peer, ego.lane) is ego:
+                 linked = True
+-                difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
++                difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary, transition)
+                 error += difference / max(1, pair_lanes - 1)
+     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+     if following[2] is not None:
+@@ -198,23 +201,24 @@
+     return min(_front_following(car, rows)[0], safe_speed(car, rows))
+ 
+ 
+-def _fill(ego, rows, lanes):
++def _fill(ego, rows, lanes, scale=1.0):
+     """保留形成收益，优先选择同帧CF响应损失较小且后车无需强制动的补位。"""
++    gap = GAP * scale
+     component = _component(ego, rows)
+-    cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0)
++    cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0 * scale)
+     if len(cars) < lanes:
+         return None
+     members = tuple(c for c in cars if c.lane < lanes)
+ 
+     def phase(lane):
+-        return _phase(lane, lanes)
++        return _phase(lane, lanes, scale)
+ 
+     anchor = max(
+         (c for c in component if c.lane < lanes), key=lambda c: (c.x + phase(c.lane), c.lane, c.x)
+     )
+     base = anchor.x + phase(anchor.lane)
+-    near = base - round((base - ego.x - phase(ego.lane)) / GAP) * GAP
+-    centers = [near + k * GAP for k in range(-3, 4)]
++    near = base - round((base - ego.x - phase(ego.lane)) / gap) * gap
++    centers = [near + k * gap for k in range(-3, 4)]
+ 
+     def matches(center, lane):
+         return [c for c in cars if c.lane == lane and abs(c.x - (center - phase(lane))) <= 2.0]
+@@ -269,7 +273,7 @@
+ 
+     choices = []
+     for center in centers:
+-        window = [c for c in component if c.lane < lanes and center - 60.0 <= c.x <= center + 30.0]
++        window = [c for c in component if c.lane < lanes and center - 60.0 * scale <= c.x <= center + 30.0 * scale]
+         counts = [sum(c.lane == lane for c in window) for lane in range(lanes)]
+         if not any(matches(center, lane) for lane in range(lanes)):
+             continue
+@@ -292,7 +296,7 @@
+                 if (
+                     abs(car.lane - lane) == 1
+                     and balances
+-                    and abs(car.x - target) <= GAP
++                    and abs(car.x - target) <= gap
+                     and references
+                     and _clear(car, cars, lane)
+                 ):
+@@ -329,6 +333,7 @@
+     preparing = drop_x is not None and ego.x >= drop_x - 360.0 and (ego.x < drop_x or ego.lane == 2)
+     lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
+     organized = mode != "noa"
++    transition = drop_x - 360.0 if mode == "transform" and drop_x is not None else None
+     future_lanes = 2 if preparing and mode == "transform" else lanes
+     following_lanes = lanes if ego.lane == 2 else future_lanes
+     speed, target, reference, formation_state = (
+@@ -337,6 +342,7 @@
+             rows,
+             following_lanes,
+             drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
++            transition,
+         )
+         if organized
+         else _front_following(ego, rows)
+@@ -402,7 +408,8 @@
+         return action(speed, None, "approach_gap", target), memory
+ 
+     if organized and not memory.joining:
+-        lane = _fill(ego, rows, 2 if preparing else lanes)
++        scale = 1.5 if transition is not None and ego.x < transition else 1.0
++        lane = _fill(ego, rows, 2 if preparing else lanes, scale)
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):
+                 memory = Memory(lane_target=lane, joining=True)

@@ -1,0 +1,20 @@
+{
+  "source_sha256": "b25f0047ebe6b8989607bd9c7c94ce10e7579e495e300f00f7d7fda189889f35",
+  "lines": 429,
+  "red_log": "results/operations/20261103T122108441286Z_midflow-BC-red_6cd8f2e8",
+  "corrected_red_log": "results/operations/20261103T122151218887Z_midflow-BC-red-corrected_0a4ddbc3",
+  "first_green_log": "results/operations/20261103T122226598578Z_midflow-BC-green_0b216f63",
+  "final_green_log": "results/operations/20261103T122429398736Z_midflow-BC-scope-final_2cb48017",
+  "test_count": 8,
+  "random_states": 1000,
+  "NOA_exact_combinations_per_state": 2,
+  "formation_state_zero_combinations_per_state": 6,
+  "physical_safe_comparisons": 1000,
+  "public_cf_comparisons": 1000,
+  "float_comparison": "hex bit exact",
+  "source_rebuild_bytes_verified": true,
+  "frozen_S_blob": "1aa86344af2a269053cd4fcda9d58168697daf17:variants/phase5g_pure_formation/noa/native_rules.py",
+  "frozen_B_sha256": "7d749ba8919efbf06efc0abd43846dee4c13b886e81019ae89c0f0116a1553d2",
+  "behavior": "phase/freefill off in both straight and drop transform; ordinary overtake available; all formation_state zero",
+  "no_traffic_simulation": true
+}

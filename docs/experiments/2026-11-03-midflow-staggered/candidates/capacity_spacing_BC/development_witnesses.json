@@ -1,0 +1,277 @@
+[
+  {
+    "name": "phase_feedback_removed",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 1.65,
+      "speed": 28.8,
+      "lane": 0,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 390.0,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "B": {
+      "command": {
+        "speed": 29.175,
+        "lane": null,
+        "reason": "formation_follow",
+        "target_x": 406.25,
+        "reference": null,
+        "formation_state": 1
+      },
+      "memory": {
+        "lane_target": null,
+        "gap": null,
+        "joining": false
+      }
+    },
+    "BC": {
+      "command": {
+        "speed": 28.8,
+        "lane": null,
+        "reason": "formation_follow",
+        "target_x": null,
+        "reference": null,
+        "formation_state": 0
+      },
+      "memory": {
+        "lane_target": null,
+        "gap": null,
+        "joining": false
+      }
+    }
+  },
+  {
+    "name": "freefill_removed",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 4.949999999999999,
+      "speed": 28.8,
+      "lane": 1,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 355.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 422.5,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "B": {
+      "command": {
+        "speed": 28.8,
+        "lane": 2,
+        "reason": "fill_layer",
+        "target_x": 400.0,
+        "reference": null,
+        "formation_state": 1
+      },
+      "memory": {
+        "lane_target": 2,
+        "gap": [
+          null,
+          null
+        ],
+        "joining": true
+      }
+    },
+    "BC": {
+      "command": {
+        "speed": 27.45,
+        "lane": null,
+        "reason": "formation_follow",
+        "target_x": 377.5,
+        "reference": 2,
+        "formation_state": 0
+      },
+      "memory": {
+        "lane_target": null,
+        "gap": null,
+        "joining": false
+      }
+    }
+  },
+  {
+    "name": "normal_overtake_available",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 4.949999999999999,
+      "speed": 20.0,
+      "lane": 1,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 420.0,
+        "y": 4.949999999999999,
+        "speed": 20.0,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 600.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 3,
+        "x": 450.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "B": {
+      "command": {
+        "speed": 19.173750000000002,
+        "lane": null,
+        "reason": "formation_follow",
+        "target_x": 386.2291666666667,
+        "reference": 1,
+        "formation_state": 1
+      },
+      "memory": {
+        "lane_target": null,
+        "gap": null,
+        "joining": false
+      }
+    },
+    "BC": {
+      "command": {
+        "speed": 19.173750000000002,
+        "lane": 0,
+        "reason": "normal_overtake",
+        "target_x": null,
+        "reference": null,
+        "formation_state": 0
+      },
+      "memory": {
+        "lane_target": 0,
+        "gap": null,
+        "joining": false
+      }
+    }
+  },
+  {
+    "name": "sidewitness_base_CTH_retained",
+    "ego": {
+      "track": 0,
+      "x": 400.0,
+      "y": 1.65,
+      "speed": 28.8,
+      "lane": 0,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 490.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 422.5,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "B": {
+      "command": {
+        "speed": 31.9,
+        "lane": null,
+        "reason": "formation_follow",
+        "target_x": 445.0,
+        "reference": 1,
+        "formation_state": 1
+      },
+      "memory": {
+        "lane_target": null,
+        "gap": null,
+        "joining": false
+      }
+    },
+    "BC": {
+      "command": {
+        "speed": 31.5,
+        "lane": null,
+        "reason": "formation_follow",
+        "target_x": 445.0,
+        "reference": 1,
+        "formation_state": 0
+      },
+      "memory": {
+        "lane_target": null,
+        "gap": null,
+        "joining": false
+      }
+    }
+  }
+]

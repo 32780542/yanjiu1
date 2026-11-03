@@ -1,0 +1,68 @@
+--- B/noa/native_rules.py
++++ BC/noa/native_rules.py
+@@ -128,36 +128,7 @@
+             for c in rows
+         ):
+             following = extended
+-    cars = (ego, *rows)
+-
+-    def nearest(car, lane):
+-        candidates = [c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.0]
+-
+-        def order(c):
+-            difference, _ = _pair_error(car, c, lanes, phase_boundary, transition)
+-            return abs(difference), abs(c.x - car.x), difference, c.x, c.y, c.speed, c.vy
+-
+-        return min(candidates, key=order, default=None)
+-
+-    linked = bool(following[3]) or any(
+-        -50.0 <= c.x - ego.x < 0.0 and _occupies(c, ego.lane, 0.0) for c in rows
+-    )
+-    error = 0.0
+-    for lane in (ego.lane - 1, ego.lane + 1):
+-        if 0 <= lane < 3:
+-            peer = nearest(ego, lane)
+-            if peer is not None and nearest(peer, ego.lane) is ego:
+-                linked = True
+-                difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary, transition)
+-                error += difference / max(1, pair_lanes - 1)
+-    phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+-    if following[2] is not None:
+-        if phase_speed * (following[0] - ego.speed) < 0.0:
+-            phase_speed = 0.0
+-        speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))
+-        return speed, following[1], following[2], int(linked)
+-    target = ego.x + phase_speed / POSITION_GAIN
+-    return _request(ego, target, CRUISE), target, None, int(linked)
++    return following
+ 
+ 
+ def _merge_target(ego, rows, lane, held=None):
+@@ -347,8 +318,7 @@
+         if organized
+         else _front_following(ego, rows)
+     )
+-    if not organized:
+-        formation_state = 0
++    formation_state = 0
+ 
+     def action(speed, lane, reason, target_x=None, reference=None):
+         return Command(speed, lane, reason, target_x, reference, formation_state)
+@@ -407,16 +377,7 @@
+             )
+         return action(speed, None, "approach_gap", target), memory
+ 
+-    if organized and not memory.joining:
+-        scale = 1.5 if transition is not None and ego.x < transition else 1.0
+-        lane = _fill(ego, rows, 2 if preparing else lanes, scale)
+-        if lane is not None:
+-            if not _mandatory_priority(ego, rows, lane, drop_x):
+-                memory = Memory(lane_target=lane, joining=True)
+-                speed, target, memory = _join_speed(ego, rows, memory, lane)
+-                return action(speed, lane, "fill_layer", target), memory
+-
+-    if mode == "noa":
++    if mode in ("noa", "transform"):
+         front = min(
+             (c for c in rows if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x, default=None
+         )
