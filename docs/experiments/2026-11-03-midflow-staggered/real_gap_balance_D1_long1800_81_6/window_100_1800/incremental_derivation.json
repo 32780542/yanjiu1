@@ -1,0 +1,12 @@
+{
+  "formula": "D1 target minus S target against identical same NOA reference metrics; original same-mode eligibility verified",
+  "verified_cases": 18,
+  "incremental_pairs": 6,
+  "reference_metric_identity_checks": 90,
+  "nonwindow_deltas_match_original_same_mode_within_1e9": true,
+  "source_csv_sha256": {
+    "original": "2f20a447d815ebf9314650c4a447d6c22f13db2de4a6062b44bb3c56dd544921",
+    "extended": "44bfe36230ad66499727d8b636e3a50fa86063e2dd9833e845cfd2f12ff5e6e9"
+  },
+  "unchanged_evaluator": true
+}

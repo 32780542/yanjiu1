@@ -1,0 +1,542 @@
+[
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1500.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_81_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_81_lane_drop_noa\\evidence\\traffic\\cases\\82854ed1f1b9ca99",
+    "case_json_sha256": "8c15a193568207c0291862854c318bf92bc3844d67798b5b1d3a826bdf8733f5",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "fcbf74cab0426884956c162023d28ea61d511291178abcbe80e085a44687e2d9",
+      "gate_brackets.jsonl.gz": "ec640228eb82482e55e547589ced6bc4d85296020cb2e69da34f94c87d552ec2",
+      "vehicles.json.gz": "3c2f53aaa0cdb988c61098589ebff50abdde647659725b19087e41430534bf08"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18404,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.5,
+    "gate_observed_count": 13206,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1500.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_82_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_82_lane_drop_noa\\evidence\\traffic\\cases\\196df2bcc28adab8",
+    "case_json_sha256": "0e7a55359277da2cd3a5680f62be651f352d27eb2d1537a2596f9cd6353c87a1",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "4bce9336e48acd3716fa25032a8add3aa356ff8ecaf88483ab51d751eac642d3",
+      "gate_brackets.jsonl.gz": "56bcb2f236808fee5ff64237451f6d5dac9db42fc632c8ed33dbc5e83d3080e1",
+      "vehicles.json.gz": "b2c3d02070eeedb3623ebdeffe873f8f2b6998334a5a05eddb91993f0dfecdde"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18427,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.8,
+    "gate_observed_count": 13488,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1750.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_81_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_81_lane_drop_noa\\evidence\\traffic\\cases\\18f8c7fe5fa926e6",
+    "case_json_sha256": "0da50c599825b779a006efcb92c0c96e76e3f3087799fd478bb8065f449d1e38",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "d58b0d807c1c094c236fffc5cd6f0128940b8189564f00112c324476c6b7c4f7",
+      "gate_brackets.jsonl.gz": "0c296b3cbd1df4678ba7220fef202bbc464e038a009cf7fe39f30cdb5729be73",
+      "vehicles.json.gz": "e48be612ed8ce9d1792785232e09a80402bdf627ed0f04edaf4f08b3e1936d31"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18459,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1846.0,
+    "gate_observed_count": 15462,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 1750.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_82_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_82_lane_drop_noa\\evidence\\traffic\\cases\\9b00c4dec8e17447",
+    "case_json_sha256": "8fdef2b2ac1ee00fb8ad532d66bebdc7fc0d8645752b1474a7575efc8ead4d31",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "4ff342f29116a434c8e8e84c5197e703fa75250165152df29f7ca426e1e02cbe",
+      "gate_brackets.jsonl.gz": "de5a4c412fad04e7f00190b8b122f0640b72dcd87839567dc9ca927e799ffadb",
+      "vehicles.json.gz": "dad965ea52fecd8efb8a815d5ba031fc6764c9378dd8c57cd0fe246947ed0d58"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18427,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.8,
+    "gate_observed_count": 15696,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 2000.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_81_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_81_lane_drop_noa\\evidence\\traffic\\cases\\9b1a6d22ac7b9536",
+    "case_json_sha256": "a7fac94af97ef8ccba7c302deb66355a9ab4061c26ee7d88ec4b2f1fcda89fdd",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "dc0d7db7a9dbf243882542b80220af7246b2ee545123a5f3b1f039f04d2333f7",
+      "gate_brackets.jsonl.gz": "9284d6657a507493515e6acc39d96e0b202fa373f9b50b2c9af4e7a8ba72dccf",
+      "vehicles.json.gz": "0bfdd717d765b3458abe166cf62521c3b1c7d1d28618b3d0a6d29f262d4ed0ba"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18404,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.5,
+    "gate_observed_count": 17664,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "noa",
+    "flow": 2000.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_82_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_82_lane_drop_noa\\evidence\\traffic\\cases\\883f6103bfd13c7f",
+    "case_json_sha256": "7ef62368af9c162c0c98b48742da828599e04f99ccb335e7b0e4d0d4ed5f1077",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "b3591c244f36955c94379a0c6b9b4ffd2afaab5ce671976f78b0853452162ce8",
+      "gate_brackets.jsonl.gz": "3a6812d3d124ef26c7dc9fbc00768f394df934b33ffc5e64c78ea7022c393103",
+      "vehicles.json.gz": "2391a1833034962ac4055c7986ecb59671ab612b22f42e2e58fb17ae4453ade3"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18424,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.5,
+    "gate_observed_count": 17952,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "transform",
+    "flow": 1500.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1500_81_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1500_81_lane_drop_transform\\evidence\\traffic\\cases\\c7e17837e181b98e",
+    "case_json_sha256": "01ef1f0e9b096503fec86ede686ef596c93305ed7bd5938fccd98df4e3134a93",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "0b4a226263e709b455a081e34ea810500c3f9b1fffeb2ca6f26c0a7a6f3ea816",
+      "gate_brackets.jsonl.gz": "2f53a1bb516a279f65a3b40be470ce060ac27a642e08cfb719caf709174272d8",
+      "vehicles.json.gz": "80e047929828f2df55a1863442d16a0ed8181ce3b93597962f0bbab58b4538f3"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18403,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.4,
+    "gate_observed_count": 13206,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "transform",
+    "flow": 1500.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1500_82_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1500_82_lane_drop_transform\\evidence\\traffic\\cases\\2f5095ed68b56691",
+    "case_json_sha256": "7c40393193d0cd8d91efacbf6a0b562e26ab5aa536d3f0038beec940cc9cd25f",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "777e5cc8559174d482c6fad52545404866bb66d3b489c629241f3ab52cbe3ad6",
+      "gate_brackets.jsonl.gz": "ef501c1fe3873be66b7d0a46ad9206c5d8c5aa77593286c80d782adf6d05d4d2",
+      "vehicles.json.gz": "5071bd4179db655f210a9992ebd86ac2668c5a73715461528fbb6ad7718ccbe0"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18440,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1844.1,
+    "gate_observed_count": 13488,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "transform",
+    "flow": 1750.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1750_81_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1750_81_lane_drop_transform\\evidence\\traffic\\cases\\9e4252c0ccdf0fa4",
+    "case_json_sha256": "4a811a14545f186cda1b91997724cd81120e06281b23f9d68ea897dc3688eeef",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "1d37a5091bfcd963d10a629de21e33c0e696a40201e84ebcc77e61598b9ef1d4",
+      "gate_brackets.jsonl.gz": "d93a651ead15b254c38b9eb51015f97983aac5b19358f3c5c574330802a4d00d",
+      "vehicles.json.gz": "4c3940a6847d9fa49b91a075d7cb1201b82046c9aa4c5a208241a0927038ff10"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18401,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.2,
+    "gate_observed_count": 15462,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "transform",
+    "flow": 1750.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1750_82_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1750_82_lane_drop_transform\\evidence\\traffic\\cases\\9c4d5ded4f272dd4",
+    "case_json_sha256": "6610ff10686e65cdcafcf93aa7bc3841c01161e9e724a358aaf94c8590d5510c",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "3717e575462a5f90e9bc34fde859cada52ea3a8880738e5f4458212d2eb3313c",
+      "gate_brackets.jsonl.gz": "6936655e532f35327e0c0e7c63393926b35d38db58c4d86cf8a42f49c4da27f5",
+      "vehicles.json.gz": "174e89094beb7872852f1cb75aa111d0f16e5980e424777acad6e3885359cd31"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18420,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.1,
+    "gate_observed_count": 15696,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "transform",
+    "flow": 2000.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_2000_81_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_2000_81_lane_drop_transform\\evidence\\traffic\\cases\\82b6e1ae8fc5026f",
+    "case_json_sha256": "362065faf8d044288b500dde7a28a82b8627323dd58e17466a8edaef8cda92f4",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "a332d1aa21777932d51f5bb7019964507524e23a7109c1c597e8b10d166ddb78",
+      "gate_brackets.jsonl.gz": "fac084f3687a0e31068564c79c447c77a198714432a2c2cf0b2a8936dfe910db",
+      "vehicles.json.gz": "dde300c0c962d6ce438b9c4bb59c0d2f0e26750c7a3215ca88cc5bc50cdc6cd1"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18406,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.7,
+    "gate_observed_count": 17664,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "S",
+    "mode": "transform",
+    "flow": 2000.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_2000_82_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_2000_82_lane_drop_transform\\evidence\\traffic\\cases\\c8292905c784bbf4",
+    "case_json_sha256": "b1c54106b31d852bee6b5cca6c7ea8567fde6bbc82fff8dd437a7ca6a3fb21eb",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "34dd0a360f10cd78926532dee0dc5d762aa8ccb8a80a42bc10c4631268a7cfff",
+      "gate_brackets.jsonl.gz": "179f2c57919aafb39f8e01f530182a3f388f431547b29cae8662117e683731e3",
+      "vehicles.json.gz": "4bd36fb0fc581bff55d32352258814dfb64112e849e7c53953e83489d0553963"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18470,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1847.1,
+    "gate_observed_count": 17952,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "D",
+    "mode": "transform",
+    "flow": 1500.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1500_81_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1500_81_lane_drop_transform\\evidence\\traffic\\cases\\915ed64d1cb3cfa1",
+    "case_json_sha256": "4b3937fc02ebb59b57b2a227a97f8a55f9d3b544be921166ec824eac405f1411",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "83d9ba45b2b32a173ee80ac77be898efe6c06339fa1381119403775114aed50a",
+      "gate_brackets.jsonl.gz": "486103f73322e8e75c86835ff1fd720913f346a3eb9c75c61b15e9ce31e75972",
+      "vehicles.json.gz": "d405aef3d0fcb3f48ad365ee26e4c4faab3b365f174752b054cefb5d5fd1fb37"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18401,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.2,
+    "gate_observed_count": 13206,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "D",
+    "mode": "transform",
+    "flow": 1500.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1500_82_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1500_82_lane_drop_transform\\evidence\\traffic\\cases\\260b5cbea5e8e4a5",
+    "case_json_sha256": "1c126a72cd773f888fbd5ec9f423f42a97b785f42d1c9170eab38c939fcf21d6",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "0e4a03ae45511ef4304d10345724f43dedb3a13bc92874382e74d3d84dae0f89",
+      "gate_brackets.jsonl.gz": "4cc38e92f15acae4f6136f2a936ba7105ba88ca963fcbfbd84eec659bd3751bb",
+      "vehicles.json.gz": "45693e04ba2a735cae34d60b9bf6666665fdc80f387e034c48507040ddcc4cd4"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18419,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.0,
+    "gate_observed_count": 13488,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "D",
+    "mode": "transform",
+    "flow": 1750.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1750_81_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1750_81_lane_drop_transform\\evidence\\traffic\\cases\\50d1afe75bd5863f",
+    "case_json_sha256": "3c985d369ad51c1f094ae7387f2b4196ce8faaccb2e7cae4de0c750532298b64",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "26605c28daf01c0d9889ec2295e2d108e46f4843aeb295a6fed19d54ba52489a",
+      "gate_brackets.jsonl.gz": "4706135b93f50c33a8f7d8b7c39d6dd3301af04c147046b86a4863bf008edaf5",
+      "vehicles.json.gz": "fdc6cdff218cbc0e469adfc83d4de5ba5e2d60ae4db5164dd928deb8a988afaf"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18401,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1840.2,
+    "gate_observed_count": 15462,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "D",
+    "mode": "transform",
+    "flow": 1750.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1750_82_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1750_82_lane_drop_transform\\evidence\\traffic\\cases\\00c3dcb78f79da75",
+    "case_json_sha256": "bd067d9dbb8fa4e652eb3be36ccdbf9a15743c1f15534e166b59eadbf1063eb7",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "da356dfa46f3de174a6f2d07b51d17e34793ac39be8374f7edad9011a907738f",
+      "gate_brackets.jsonl.gz": "ad963e358d6cda4a1df6cd164e04e403c67bf9b07423ff7e0e2bc7973cb4acf2",
+      "vehicles.json.gz": "30ab5d439de3752b0a04f98a149803db7c341c0573f57fd32cbfd6a07f138058"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18437,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1843.8,
+    "gate_observed_count": 15696,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "D",
+    "mode": "transform",
+    "flow": 2000.0,
+    "seed": 81,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_2000_81_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_2000_81_lane_drop_transform\\evidence\\traffic\\cases\\1cb46d0fb7101847",
+    "case_json_sha256": "def8831dcf39fdfe1e2aaa72b8b363cad41fd5d27d25c9ce26dfcc80b58d1034",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "bc6be4a7afb0b0e46fda1d064e399868868220e6d56659d489bfa559c7a05fec",
+      "gate_brackets.jsonl.gz": "99077c8e11fda19f935ef6e7eb51ba2da27faaa1ed50714f7b87a119a10b2b5e",
+      "vehicles.json.gz": "5ae1beb7e42b340d4c71096c1ec930518f0d9dcf9818ee3c3db26b464876ae9f"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18443,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1844.4,
+    "gate_observed_count": 17664,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "D",
+    "mode": "transform",
+    "flow": 2000.0,
+    "seed": 82,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_2000_82_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_2000_82_lane_drop_transform\\evidence\\traffic\\cases\\143d9fb731c0f472",
+    "case_json_sha256": "2d84fbea7ce0938582bf998fe1429e5f4c1d5db583698c204e557cfc6ff17bc2",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "8fc6f096018cfd6b77a549fb6d0bf3b12863ed2f7915e6722247bb808b779425",
+      "gate_brackets.jsonl.gz": "4aea3a64f7e38258b5bacf71c7880c78bc00aecac7583c8266938eafc31f927c",
+      "vehicles.json.gz": "0ed43a78eb92926a073d7697ab2b6377a204a71aa052e65e93c35ec5506f9ace"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18420,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1842.1,
+    "gate_observed_count": 17952,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  }
+]
