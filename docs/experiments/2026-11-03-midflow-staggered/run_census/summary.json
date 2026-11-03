@@ -1,0 +1,12 @@
+{
+  "scope": "midflow stage traffic matrices only; excludes reused references, unit tests, offline queries, GUI/smoke and separately owned geometry diagnostics",
+  "batches": 22,
+  "planned_cases": 282,
+  "distinct_runs": 282,
+  "safe_drained_verified": 282,
+  "reused_references_recounted": 0,
+  "final_cases": 90,
+  "prefinal_traffic_cases": 192,
+  "D0_registered_but_not_run": true,
+  "D0_executed_cases": 0
+}

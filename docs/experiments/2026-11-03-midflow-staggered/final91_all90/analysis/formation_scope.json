@@ -1,0 +1,9 @@
+{
+  "source": "unmodified original result.json formation_state, each result SHA recorded",
+  "cases": 90,
+  "groups": 18,
+  "aggregation": "equal mean of five per-case fields; not pooled episodes; peak is mean of five per-case peaks",
+  "time_scope": "full recorded simulation trace, not100-600region window",
+  "meaning": "direct per-car0/1 participation permits spacing adjustment; not complete geometric formation or one platoon size",
+  "NOA": "participation/time/peak/count zero; no episodes means duration null/N/A, not numeric zero"
+}

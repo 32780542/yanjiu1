@@ -1,0 +1,9 @@
+{
+  "source_csv_sha256": "60eada90976cd8628f046ed1e47fa1602e9630b02d0caeae902f79e92bbf2318",
+  "source_comparison": "S-minus-D_transform",
+  "target_comparison": "D1-minus-S_transform",
+  "operation": "swap candidate/reference numeric values; negate every defined delta; no eligibility change",
+  "cases_verified": 90,
+  "eligible_secondary_pairs": 30,
+  "delta_identity_tolerance": 1e-09
+}
