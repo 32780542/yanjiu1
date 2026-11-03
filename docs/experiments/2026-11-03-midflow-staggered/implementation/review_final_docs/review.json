@@ -1,0 +1,174 @@
+{
+  "review_date_local": "2026-11-03",
+  "status": "passed_after_two_minor_clarifications",
+  "open_findings": [],
+  "resolved_findings": [
+    {
+      "id": "DOC-01",
+      "severity": "minor",
+      "topic": "rear head-to-head metric definition",
+      "verified_locations": [
+        "stage README.md:70,76",
+        "论文主线与贡献.md:71"
+      ],
+      "resolved_by": "root",
+      "new_definition": "entrant.x minus target rear.x at latest bound request; not total F/R opening or body clearance"
+    },
+    {
+      "id": "DOC-02",
+      "severity": "minor",
+      "topic": "crossing window upper endpoint",
+      "verified_location": "docs/原生SUMO编队变换系统说明.md:198",
+      "resolved_by": "root",
+      "new_definition": "[100,600)"
+    }
+  ],
+  "source": {
+    "path": "variants/phase5g_pure_formation/noa/native_rules.py",
+    "sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+    "lines": 423
+  },
+  "reviewed_documents": [
+    {
+      "path": "README.md",
+      "sha256": "eb9a664cca4cdb8fd30556180fce63df8d0df71cf2ae1640a265a11aa93cf479"
+    },
+    {
+      "path": "docs/experiments/2026-11-03-midflow-staggered/README.md",
+      "sha256": "a15962fe9ba1bfdd9f5c6415748214f82bdf8fe140bd28baaab0775341ae7048"
+    },
+    {
+      "path": "docs/原生SUMO编队变换系统说明.md",
+      "sha256": "8ee7f53dcd5347c89f7899530fdaa5653089d6c826c8aae69e65d4ef4aa14f9d"
+    },
+    {
+      "path": "docs/experiments/2026-11-03-midflow-staggered/论文主线与贡献.md",
+      "sha256": "5cf9eb4632b8ff82f44ede1d81295fdc1f3febc33eea8e21e0bb46d8dc576146"
+    },
+    {
+      "path": "docs/experiments/2026-11-03-midflow-staggered/方法贡献与论证结构.md",
+      "sha256": "23e67fae43fc4662f7b25cccd8c2aaa3639ea66bf37fb345b405a4dc942c4f20"
+    }
+  ],
+  "input_sha256": {
+    "docs/experiments/2026-11-03-midflow-staggered/diagnosis/final91_independent_v1/per_case.csv": "2afe4b9d8708419214797d980d47eef1e0b7380e9ed7651379109c6464f28b51",
+    "docs/experiments/2026-11-03-midflow-staggered/diagnosis/final91_independent_v1/paired_seeds.csv": "2e89bd752bae322e47d1474401270666d67f0043adf5eb0406e2f599c77ce060",
+    "docs/experiments/2026-11-03-midflow-staggered/diagnosis/final91_independent_v1/road_did_seeds.csv": "05b0b780ab296ef317dfd41b9817609d729d0c2656f1f2ea5f78ca1872b92be7",
+    "docs/experiments/2026-11-03-midflow-staggered/diagnosis/final91_independent_v1/flow_means.csv": "47de866c0f2e3f24966afd6ada1a7f6894c991fab0c565e579cf24b7b46a3335",
+    "docs/experiments/2026-11-03-midflow-staggered/diagnosis/final91_independent_v1/road_did_flow_means.csv": "fcd36c10f9dee84b07a62daeb187dc7ed530ab7846f7836ab8d6708e5ccdcd3a",
+    "docs/experiments/2026-11-03-midflow-staggered/diagnosis/final91_independent_v1/verification.json": "79514c77ad6c2a81f2173aaea6839396292a6b1e3b3b353ee92ca8b74479cfd4",
+    "docs/experiments/2026-11-03-midflow-staggered/final91_all90/analysis/summary.json": "fe87891f0124ab70872dcf95fd33a322a68abc49f76fcc41c7865ff11e6e2a59",
+    "docs/experiments/2026-11-03-midflow-staggered/final91_all90/analysis/secondary_D1_minus_S.csv": "8b65c2503737ebc6f089baddc030550ac27d8346b5cbb68cd4289be07bc11c4c",
+    "docs/experiments/2026-11-03-midflow-staggered/final91_all90/analysis/formation_per_case_from_result.csv": "ae2f360197c697b4bdae3585e1ba0a40b5c7d7d5413187c5ccece35b5fec3879",
+    "docs/experiments/2026-11-03-midflow-staggered/final91_all90/analysis/formation_seed_equal_means.csv": "1e6c98a5c89b242947a085d1a351692cd15c1a103839d249104f8b38cc0f8f15",
+    "docs/experiments/2026-11-03-midflow-staggered/final91_all90/analysis/formation_scope.json": "993ea3f46f4b551d20dece6bcbfa8376e36e4db3c0e088f66209e25b0ea0e859"
+  },
+  "checks": {
+    "constants_and_mode_scope": true,
+    "own_memory_and_neighbor_private_state_boundary": true,
+    "geometric_sort_not_true_ID_priority": true,
+    "fresh_fill_same_gap_scope_and_priority_veto_boundary": true,
+    "formal_cases_eligible": 90,
+    "formal_pairs": 60,
+    "road_DID_rows": 30,
+    "arithmetic_checks": 1374,
+    "arithmetic_max_absolute_error": 3.427813588530171e-14,
+    "all_60_road_system_pairs_faster": true,
+    "negative_DID_count": 27,
+    "DID_counterexamples": [
+      {
+        "reference": "NOA",
+        "flow": 1500,
+        "seed": 91,
+        "DID_s": 0.003263707571804275
+      },
+      {
+        "reference": "NOA",
+        "flow": 1750,
+        "seed": 91,
+        "DID_s": 0.014718614718617573
+      },
+      {
+        "reference": "S",
+        "flow": 2000,
+        "seed": 94,
+        "DID_s": 0.041258741258737075
+      }
+    ],
+    "formation_case_rows": 90,
+    "formation_mean_groups": 18,
+    "formation_scalar_checks": 132,
+    "formation_max_absolute_error": 0.0,
+    "NOA_30_zero_NA_valid": true,
+    "raw_endpoint_count_from_verification_and_CSV": 978696,
+    "raw_region_max_error_from_existing_audit": 0.0,
+    "common_physical_hash_count": 1,
+    "common_nonrule_hash_count": 1,
+    "local_links_broken": 0
+  },
+  "flow_facts": [
+    {
+      "flow": 1500,
+      "absolute_drop_system_means_s": {
+        "NOA": 42.44388058017642,
+        "S": 42.10962457642863,
+        "D1": 41.930336807062766
+      },
+      "fuel_better_seeds": {
+        "NOA": 0,
+        "S": 2
+      }
+    },
+    {
+      "flow": 1750,
+      "absolute_drop_system_means_s": {
+        "NOA": 43.25297742956915,
+        "S": 42.59991605124722,
+        "D1": 42.344910873888274
+      },
+      "fuel_better_seeds": {
+        "NOA": 0,
+        "S": 4
+      }
+    },
+    {
+      "flow": 2000,
+      "absolute_drop_system_means_s": {
+        "NOA": 44.71536221847698,
+        "S": 43.81590681099701,
+        "D1": 43.23381083341051
+      },
+      "fuel_better_seeds": {
+        "NOA": 0,
+        "S": 5
+      }
+    }
+  ],
+  "bibliography": {
+    "Cai_2023": {
+      "title": "Formation control for connected and automated vehicles on multi-lane roads: Relative motion planning and conflict resolution",
+      "venue": "IET Intelligent Transport Systems",
+      "volume": "17(1)",
+      "pages": "211-226",
+      "DOI": "10.1049/itr2.12249",
+      "first_online_year": 2022,
+      "issue_year": 2023
+    },
+    "Cai_2024": {
+      "title": "Multi-lane Formation Control in Mixed Traffic Environment",
+      "venue": "2024 IEEE Intelligent Vehicles Symposium (IV)",
+      "pages": "2283-2288",
+      "DOI": "10.1109/IV55156.2024.10588701"
+    },
+    "primary_web_sources": [
+      "https://ietresearch.onlinelibrary.wiley.com/doi/abs/10.1049/itr2.12249",
+      "https://www.civil.tsinghua.edu.cn/ceen/info/1062/1473.htm",
+      "https://arxiv.org/html/2103.10287v3"
+    ]
+  },
+  "scope": "Read final documents, fixed implementation, existing independent verification and recompute published per-case/paired CSV arithmetic; did not rerun raw-trajectory reconstruction or tests.",
+  "no_source_changes": true,
+  "no_simulation": true,
+  "no_Git": true,
+  "no_239_test_rerun": true
+}

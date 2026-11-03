@@ -1,0 +1,109 @@
+{
+  "status": "passed_after_precondition_clarifications",
+  "scope": "Only new Section 7.1-7.3; historical Sections1-6 and five final documents/CSV/regression tests not repeated",
+  "source_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "source_lines": 423,
+  "theory_file_sha256": "566e72bad18d5aea89ce7e847323c49bd910edbaab9ddacd48a9189d0100dac1",
+  "section7_raw_bytes_sha256": "ff37e420b866c38ead48d2a6d02cfe90c766f083d0f7db4343696ac82659ec7d",
+  "reviewed_source_locations": {
+    "resource_count": "201-212",
+    "candidate_and_descent": "249-267",
+    "runtime_call_domain": "366-372",
+    "gap_execution": "191-193,370-372",
+    "final_speed_only_cap": "421-423",
+    "input_window": "283-295"
+  },
+  "claims": {
+    "section7_1": "valid for actual _decide runtime call domain; future True implies lanes2 and candidate source/target in0,1; stationary candidate maps to its actual resource",
+    "section7_2": "valid for newly issued fill_layer after priority, same snapshot, empty held; does not imply SUMO acceptance or completion",
+    "section7_3": "valid with fixed local input, own Memory, mode, map and parameters; lane/y/vy resource mapping and speed response distinguished"
+  },
+  "open_findings": [],
+  "resolved_clarifications": [
+    {
+      "id": "T7-01",
+      "topic": "actual runtime future/lanes domain",
+      "resolved": true
+    },
+    {
+      "id": "T7-02",
+      "topic": "controller-issued fresh fill versus physical acceptance",
+      "resolved": true
+    },
+    {
+      "id": "T7-03",
+      "topic": "resource fields and fixed mode/parameters",
+      "resolved": true
+    }
+  ],
+  "off_runtime_domain_counterexample": {
+    "ego": {
+      "track": 0,
+      "x": 700.0,
+      "y": 4.949999999999999,
+      "speed": 28.8,
+      "lane": 1,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "neighbors": [
+      {
+        "track": 1,
+        "x": 670.0,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "helper_arguments": {
+      "lanes": 3,
+      "future": true
+    },
+    "helper_return_lane": 2,
+    "pi_counts_before": [
+      0,
+      2
+    ],
+    "pi_counts_after_lane1_to2": [
+      0,
+      2
+    ],
+    "actual_decide_command": {
+      "speed": 28.8,
+      "lane": 0,
+      "reason": "fill_layer",
+      "target_x": 700.0,
+      "reference": null,
+      "formation_state": 1
+    },
+    "actual_decide_memory": {
+      "lane_target": 0,
+      "gap": [
+        null,
+        null
+      ],
+      "joining": true
+    },
+    "actual_pi_counts_after_lane1_to0": [
+      1,
+      1
+    ],
+    "interpretation": "Illustrates why the runtime domain is explicit; not a production controller bug and no API change requested"
+  },
+  "not_claimed": [
+    "global monotone Phi",
+    "hybrid string stability",
+    "general collision invariance",
+    "SUMO action acceptance or completion"
+  ],
+  "no_source_changes": true,
+  "no_simulation": true,
+  "no_Git": true,
+  "no_regression_test_rerun": true
+}

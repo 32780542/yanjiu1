@@ -1,0 +1,33 @@
+{
+  "command": [
+    "python",
+    "-B",
+    "-c",
+    "import json,sys,hashlib\nfrom pathlib import Path\nfrom datetime import datetime\nfrom collections import defaultdict\nroot=Path.cwd();base=root/'docs/experiments/2026-11-03-midflow-staggered';sys.path.insert(0,str(root/'docs/experiments/2026-11-03-staggered-bottleneck/tools'))\nimport seal_case as seal\nplan=base/'storage_cleanup_plan';targets=seal.read(plan/'exact_delete_targets.json');retained=seal.read(plan/'exact_retained_files.json');summary=seal.read(plan/'summary.json');assert len(targets)==252 and sum(x['bytes'] for x in targets)==1550020724\nout=base/'cleanup_execution';out.mkdir(exist_ok=False)\ndef save(name,obj):\n    p=out/name;t=p.with_suffix(p.suffix+'.writing');t.write_text(json.dumps(obj,indent=2,ensure_ascii=False)+'\\n',encoding='utf-8');t.replace(p)\nrootraw=(root/'tmp/staggered_bottleneck').resolve();selected={str(Path(x['path']).resolve()).casefold() for x in retained};byrun=defaultdict(list)\nfor x in targets:\n    p=Path(x['path']);resolved=p.resolve();assert resolved.is_relative_to(rootraw) and str(resolved).casefold() not in selected and p.name in seal.RAW_FILES and p.is_file() and not p.is_symlink() and p.stat().st_size==x['bytes'];assert x['safe'] is True and x['all_completed'] is True and x['returncode']==0 and x['case_status']=='drained';byrun[x['run_dir']].append(x)\nassert len(byrun)==126\nsave('approval_and_scope.json',dict(approved_by='root explicit instruction after independent path/bytes/success review and auditor45allLC/post5 closure',plan_summary_sha256=seal.sha(plan/'summary.json'),exact_target_list_sha256=seal.sha(plan/'exact_delete_targets.json'),retained_list_sha256=seal.sha(plan/'exact_retained_files.json'),planned_cases=126,planned_files=252,planned_bytes=1550020724,closed_final_directories_not_modified=True,no_recursive_operations=True,started_local=datetime.now().astimezone().isoformat()))\nresults=[];save('progress.json',dict(status='running',completed_cases=0,deleted_files=0,bytes_released=0,cases=[]))\nfor runname,xx in sorted(byrun.items()):\n    assert len(xx)==2 and {x['name'] for x in xx}==set(seal.RAW_FILES);run=Path(runname).resolve();batch=Path(xx[0]['batch']).resolve();evidence=Path(xx[0]['evidence_dir']);saved=seal.read(evidence/'seal.json')\n    assert all(x['batch']==xx[0]['batch'] and x['evidence_dir']==xx[0]['evidence_dir'] for x in xx)\n    for x in xx:\n        expected=saved['originals'][x['name']];p=Path(x['path']);assert p.resolve().parent==run and expected['sha256']==x['expected_sha256'] and expected['bytes']==x['bytes'] and seal.sha(p)==expected['sha256']\n    before=seal.verify(evidence,False);assert before['cases_verified']==1\n    changed=seal.prune_raw(run,batch,saved['originals'],verified=True);assert set(changed['deleted'])==set(seal.RAW_FILES) and changed['bytes_released']==sum(x['bytes'] for x in xx)\n    assert all(not Path(x['path']).exists() for x in xx);after=seal.verify(evidence,False);assert after['cases_verified']==1\n    results.append(dict(run_dir=str(run),batch=str(batch),stage=xx[0]['stage'],candidate=xx[0]['candidate'],flow=xx[0]['flow'],seed=xx[0]['seed'],scenario=xx[0]['scenario'],mode=xx[0]['mode'],deleted_files=[dict(path=x['path'],bytes=x['bytes'],sha256=x['expected_sha256']) for x in xx],bytes_released=changed['bytes_released'],offline_before_after_verified=True))\n    save('progress.json',dict(status='running',completed_cases=len(results),deleted_files=2*len(results),bytes_released=sum(x['bytes_released'] for x in results),cases=results))\nchecked=[]\nfor x in retained:\n    p=Path(x['path']);assert p.is_file() and p.stat().st_size==x['bytes'] and seal.sha(p)==x['expected_sha256'];checked.append(dict(path=x['path'],bytes=x['bytes'],sha256=x['expected_sha256'],retained_hash_verified=True))\nassert len(results)==126 and sum(x['bytes_released'] for x in results)==1550020724 and len(checked)==240 and sum(x['bytes'] for x in checked)==1331850907\nsave('actual_deleted_cases.json',results);save('retained_hash_verification.json',checked)\nfinal=dict(status='complete',completed_local=datetime.now().astimezone().isoformat(),successful_cases_pruned=126,files_deleted=252,actual_bytes_released=1550020724,retained_cases=120,retained_files=240,retained_bytes=1331850907,all_retained_file_hashes_verified=True,geometry_and_nonmatrix_runs_excluded=True,failed_cases_deleted=0,no_recursive_delete=True,original_manifests_seals_and_closed_final_directories_unchanged=True,all_deleted_cases_offline_verified_before_and_after=True)\nsave('verification.json',final);save('progress.json',dict(**final,cases=results));(out/'README.md').write_text('# 定点成功raw清理完成\\n\\nroot逐项审查固定计划、auditor完整90及新增45缩道allLC/post5关闭后执行。仅282交通run中的126成功非展示case，精确删除252个positions/events，实际释放1,550,020,724字节。无递归操作，没有删除失败/未完成/碰撞case，原manifest/seal、所有小JSON/源码/ledger/证据包以及三个closed final目录不改。\\n\\n120个case的240个完整raw保留，共1,331,850,907字节，逐件重新核原SHA通过；含原定展示、最终三方法seed91缩道、主/次DID及次燃油反向的完整上下文。24/45原raw、非矩阵诊断、GUI/smoke与旧阶段不在任何目标内，保持原位。\\n\\n[verification.json](verification.json)为实际结果；[actual_deleted_cases.json](actual_deleted_cases.json)逐例列绝对文件路径/字节/原SHA；[retained_hash_verification.json](retained_hash_verification.json)记录每个保留文件复核。全部126例compact/traffic在删除前后离线重验通过。精确原计划与前置SHA在../storage_cleanup_plan及approval_and_scope.json。紧凑证据保留原件和可复算选定字段/ledger，不冒称可恢复被删完整轨迹。\\n',encoding='utf-8');print(json.dumps(final))"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 1800.0,
+  "started_utc": "2026-11-03T15:11:54.557662+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 72144,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 71.063,
+  "ended_utc": "2026-11-03T15:13:05.626961+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "7d9cef26c7e02fd4753084ad8f088f5a23915a6e13e9643219ecff07995dc96d",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archive_errors": {}
+}

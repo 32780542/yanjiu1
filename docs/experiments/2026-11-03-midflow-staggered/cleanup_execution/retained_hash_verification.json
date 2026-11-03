@@ -1,0 +1,1442 @@
+[
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_noa\\20261103T102426946253Z_lane_drop_noa_s71_2e4e4b\\positions.jsonl.gz",
+    "bytes": 7316440,
+    "sha256": "523d88f4ca994f934585b4e77e41980ce109a11324eaf5051e360de47048b2c6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_noa\\20261103T102426946253Z_lane_drop_noa_s71_2e4e4b\\events.jsonl.gz",
+    "bytes": 37880,
+    "sha256": "035dce02ed19374e142fc34a936ccd5308af04e4c23d52dfffc946505c1e2b50",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_transform\\20261103T102520716589Z_lane_drop_transform_s71_24dc9a\\positions.jsonl.gz",
+    "bytes": 9896442,
+    "sha256": "37a4b64b54c687350eab8f8535a45403499a4b9c704429b7450290028563657a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1500_71_lane_drop_transform\\20261103T102520716589Z_lane_drop_transform_s71_24dc9a\\events.jsonl.gz",
+    "bytes": 55064,
+    "sha256": "fb0baf68142a69b6d4cf5e344efb0ff1b7683e678f264aa635d2731255ae4454",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_noa\\20261103T103205950090Z_lane_drop_noa_s71_e0885e\\positions.jsonl.gz",
+    "bytes": 9498136,
+    "sha256": "138a636b9055ae404978e43a3a6baee95881e0149951fecb83a48ecebf4461f5",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_noa\\20261103T103205950090Z_lane_drop_noa_s71_e0885e\\events.jsonl.gz",
+    "bytes": 46661,
+    "sha256": "81c9ffaeb42971860d7fc1ff67c1a3560501c48c9b4759f34b4b464d6d710c06",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_transform\\20261103T103356416973Z_lane_drop_transform_s71_c381f2\\positions.jsonl.gz",
+    "bytes": 12057456,
+    "sha256": "2d6a96c0cb1f8945c497af1683e2c67b8f8965fee543e45522180e8cea67126c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_1750_71_lane_drop_transform\\20261103T103356416973Z_lane_drop_transform_s71_c381f2\\events.jsonl.gz",
+    "bytes": 68686,
+    "sha256": "103ed193146f14d32986cece69b15ad746c65c5cb77ac9f5c423df42b70c89d5",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_noa\\20261103T104232056503Z_lane_drop_noa_s71_8ec02d\\positions.jsonl.gz",
+    "bytes": 11898517,
+    "sha256": "a2bfd6afc233ef6fb9df2c9855b57725b0e023cb7c681897fcd4d02ffee642c0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_noa\\20261103T104232056503Z_lane_drop_noa_s71_8ec02d\\events.jsonl.gz",
+    "bytes": 57216,
+    "sha256": "fbdc3f55c470770fb15465e840af8ae6cbb4a1c377822c0a2431e2d9319868e4",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_transform\\20261103T104451202985Z_lane_drop_transform_s71_016f7a\\positions.jsonl.gz",
+    "bytes": 14183328,
+    "sha256": "987a67266683a5871834e779dd7bd2abf5d387b167271a32bd87ac85022291fa",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_baseline71_24\\cases\\S_2000_71_lane_drop_transform\\20261103T104451202985Z_lane_drop_transform_s71_016f7a\\events.jsonl.gz",
+    "bytes": 78079,
+    "sha256": "a31211d63e7e9588798088e171231b3a5e6d64b1af307adfce0d3b625e561dc4",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\S_1500_73_lane_drop_transform\\20261103T103243230309Z_lane_drop_transform_s73_d11f19\\positions.jsonl.gz",
+    "bytes": 2987472,
+    "sha256": "e6db356811d26bcb137215a77cfbe76c3c64083045391bac00ebcef3e1bdb9d2",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\S_1500_73_lane_drop_transform\\20261103T103243230309Z_lane_drop_transform_s73_d11f19\\events.jsonl.gz",
+    "bytes": 17591,
+    "sha256": "51af26e3fc336e52470fe968429d561305f66bf5357abf0348ecd72783856a92",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\S_1750_73_lane_drop_transform\\20261103T103416853904Z_lane_drop_transform_s73_e73edb\\positions.jsonl.gz",
+    "bytes": 3654965,
+    "sha256": "7ed551a11a5e75bea7580dfb6e0a1c94651e8708dd7ab739dce1dbf2db3688ba",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\S_1750_73_lane_drop_transform\\20261103T103416853904Z_lane_drop_transform_s73_e73edb\\events.jsonl.gz",
+    "bytes": 19128,
+    "sha256": "899bdb704d00953b8db6ce73d6b64354a3ff73ca8a0d20b6ead5683dd0777690",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\S_2000_73_lane_drop_transform\\20261103T103614619459Z_lane_drop_transform_s73_7a5adc\\positions.jsonl.gz",
+    "bytes": 4284935,
+    "sha256": "9dde87044c746ba2156661d3b8f78c1c647efaa6b0aa776cda201c0551a4906d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\S_2000_73_lane_drop_transform\\20261103T103614619459Z_lane_drop_transform_s73_7a5adc\\events.jsonl.gz",
+    "bytes": 24762,
+    "sha256": "1ce20b8814225de5349616a1e86523b10a4b3461f92fc82d3ac2085b1b07a2b9",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\V_1500_73_lane_drop_transform\\20261103T103837534080Z_lane_drop_transform_s73_5ffd0d\\positions.jsonl.gz",
+    "bytes": 2986863,
+    "sha256": "c0adf33d024dc49bbeeadd479db4c6947679d03edc038c72cb4cc140e5fef22a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\V_1500_73_lane_drop_transform\\20261103T103837534080Z_lane_drop_transform_s73_5ffd0d\\events.jsonl.gz",
+    "bytes": 17171,
+    "sha256": "f9c997be99461062bf3fb4cb51a6f99fed7f92e32be25156e7fe6cab41325c0b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\V_1750_73_lane_drop_transform\\20261103T104014816942Z_lane_drop_transform_s73_5ccf7a\\positions.jsonl.gz",
+    "bytes": 3664057,
+    "sha256": "4992b501e2524da60489fffe869e6415e8f0a86288b6900059d80f67e9cd4795",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\V_1750_73_lane_drop_transform\\20261103T104014816942Z_lane_drop_transform_s73_5ccf7a\\events.jsonl.gz",
+    "bytes": 19366,
+    "sha256": "9f7034a858ecd1748ed8d66da4fac6a25fbb97fed981252fae51431072da5ee0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\V_2000_73_lane_drop_transform\\20261103T104214108791Z_lane_drop_transform_s73_5f5df0\\positions.jsonl.gz",
+    "bytes": 4293570,
+    "sha256": "04cb4b425ea37864320c0478cbac3712f94ac7737f1eeccc77f4f053ae17ee15",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V1_screen73_12\\cases\\V_2000_73_lane_drop_transform\\20261103T104214108791Z_lane_drop_transform_s73_5f5df0\\events.jsonl.gz",
+    "bytes": 24970,
+    "sha256": "8c4b11d7d48512ebfcb7e0862f0f67de2775265c3827ca261d6f909a7811d14c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1500_73_lane_drop_transform\\20261103T104938254164Z_lane_drop_transform_s73_7be51d\\positions.jsonl.gz",
+    "bytes": 2982360,
+    "sha256": "8df16c2099c85ec18ad73bacd8fc98aeff97a00afa98f5a3a0b71e791ae6037e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1500_73_lane_drop_transform\\20261103T104938254164Z_lane_drop_transform_s73_7be51d\\events.jsonl.gz",
+    "bytes": 17200,
+    "sha256": "0f51b838587329ae3e070710415bac7a6328e8ed38c022aca1d9f7894ff9510f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1750_73_lane_drop_transform\\20261103T105115309790Z_lane_drop_transform_s73_6c88ac\\positions.jsonl.gz",
+    "bytes": 3662425,
+    "sha256": "b9c0203536e84ce68ae71f9bce2478b678fd6c7c13978689cbbbb81b0a5ae033",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_1750_73_lane_drop_transform\\20261103T105115309790Z_lane_drop_transform_s73_6c88ac\\events.jsonl.gz",
+    "bytes": 19777,
+    "sha256": "d2a32877a2e93f1e0472d952b7744f7501ff4e24ea7a2581385ebc9646d7b818",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_2000_73_lane_drop_transform\\20261103T105309035626Z_lane_drop_transform_s73_68a37f\\positions.jsonl.gz",
+    "bytes": 4293184,
+    "sha256": "83e134707fedc3bfe8061302f0172ba6b919d63bafc4149065f4fe1084ca08e6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_V2_screen73_6\\cases\\W_2000_73_lane_drop_transform\\20261103T105309035626Z_lane_drop_transform_s73_68a37f\\events.jsonl.gz",
+    "bytes": 25131,
+    "sha256": "28b8f8c4099b6b38ae53863c466cfe471e55730f0fdbc91b6c274511e23d0be5",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1500_73_lane_drop_transform\\20261103T105933948483Z_lane_drop_transform_s73_a028d4\\positions.jsonl.gz",
+    "bytes": 2977838,
+    "sha256": "00205fcdc174d992d76da1d4dccd44b51fab0353a7bafb78815b34d70f8475d4",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1500_73_lane_drop_transform\\20261103T105933948483Z_lane_drop_transform_s73_a028d4\\events.jsonl.gz",
+    "bytes": 16871,
+    "sha256": "fb18b0ce4ce1599d1e7030ac4e1c04bf4ad5c2efbb9054de41bc1868c30d57c1",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1750_73_lane_drop_transform\\20261103T110104071200Z_lane_drop_transform_s73_7c37de\\positions.jsonl.gz",
+    "bytes": 3637326,
+    "sha256": "ca55f9dd14e0645b28671f1f9fadcd1400d0e5e9bb2dda8855d625803913af24",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_1750_73_lane_drop_transform\\20261103T110104071200Z_lane_drop_transform_s73_7c37de\\events.jsonl.gz",
+    "bytes": 19810,
+    "sha256": "de5bddb2921bd0d503b4a3e7e9f84253b25de69175f60b21910fb49bd307676d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_2000_73_lane_drop_transform\\20261103T110255020983Z_lane_drop_transform_s73_527e81\\positions.jsonl.gz",
+    "bytes": 4285222,
+    "sha256": "7a9c5a06230b056e0a17fb02576e019a0e626d827a83620e15fc093684ce7814",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_screen73_6\\cases\\F_2000_73_lane_drop_transform\\20261103T110255020983Z_lane_drop_transform_s73_527e81\\events.jsonl.gz",
+    "bytes": 24704,
+    "sha256": "cfba9b901ebbb925f6efac3a4b162ec436a752503be594ec29b8e61a9162c16d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_1500_73_lane_drop_transform\\20261103T110529765308Z_lane_drop_transform_s73_c8b3f4\\positions.jsonl.gz",
+    "bytes": 2974333,
+    "sha256": "6859b120a8354bc7b5497ad997f39fff2e8c85613b60216c396f070c737bee1e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_1500_73_lane_drop_transform\\20261103T110529765308Z_lane_drop_transform_s73_c8b3f4\\events.jsonl.gz",
+    "bytes": 16435,
+    "sha256": "d6f77309d1cf3062260ea8745df8d2cd16112294b721e4aeacfd8a7d3a31dc6d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_1750_73_lane_drop_transform\\20261103T110653538473Z_lane_drop_transform_s73_c45c2c\\positions.jsonl.gz",
+    "bytes": 3644735,
+    "sha256": "aa7b30d6b3231c7005d24bf7b3830cd8451de82c415d8abfba76f4b15ba74f05",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_1750_73_lane_drop_transform\\20261103T110653538473Z_lane_drop_transform_s73_c45c2c\\events.jsonl.gz",
+    "bytes": 19895,
+    "sha256": "b9de4ec0f245ac3efd099f15a2c2b34a60776145750a05198019d5a6c6e0bafd",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_2000_73_lane_drop_transform\\20261103T110833075604Z_lane_drop_transform_s73_c41945\\positions.jsonl.gz",
+    "bytes": 4298078,
+    "sha256": "99165fd9a3342ff55ecb24c2d450c4dd1df2dbb7c49272379ebccd2591103bdc",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_C5_screen73_6\\cases\\C5_2000_73_lane_drop_transform\\20261103T110833075604Z_lane_drop_transform_s73_c41945\\events.jsonl.gz",
+    "bytes": 23922,
+    "sha256": "6e79f64928ce9c49bb3f4f4073c6da500eab4326ad3b5096eb3dc2c98246cee9",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_81_lane_drop_noa\\20261103T105530981687Z_lane_drop_noa_s81_3f5514\\positions.jsonl.gz",
+    "bytes": 22528273,
+    "sha256": "bd727896e8254bf71656bc03450b254179ee86cbce983fa0ce2dfabf30617bb1",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1500_81_lane_drop_noa\\20261103T105530981687Z_lane_drop_noa_s81_3f5514\\events.jsonl.gz",
+    "bytes": 109904,
+    "sha256": "4a55809b80b30f8a5d1fb9db1a70e4dc71e95bee52e31339e705b744d07f6261",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_81_lane_drop_noa\\20261103T105935828180Z_lane_drop_noa_s81_528c22\\positions.jsonl.gz",
+    "bytes": 29231762,
+    "sha256": "e9a4f6f4ed919e4a5d1a2175602f7ffd31ed31394b31e774deab650e62b53fa8",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_1750_81_lane_drop_noa\\20261103T105935828180Z_lane_drop_noa_s81_528c22\\events.jsonl.gz",
+    "bytes": 139856,
+    "sha256": "e918490028626bde91c599ec560992ba31aa95fcd816aa434178343eebc62242",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_81_lane_drop_noa\\20261103T110438723583Z_lane_drop_noa_s81_2478b4\\positions.jsonl.gz",
+    "bytes": 37225896,
+    "sha256": "c4916092f7779d29e526170dfa63bf4b55472c1c6636e06cab27237b72f36e76",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_NOA81_6\\cases\\S_2000_81_lane_drop_noa\\20261103T110438723583Z_lane_drop_noa_s81_2478b4\\events.jsonl.gz",
+    "bytes": 170509,
+    "sha256": "4ca8ee048fbda3a87c410a2e94501c90a3d3ec492ee5f97870bb1a4a8792a66f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1500_81_lane_drop_transform\\20261103T111841196609Z_lane_drop_transform_s81_bdcc17\\positions.jsonl.gz",
+    "bytes": 30293872,
+    "sha256": "59320f9280477681739d95f6c6a831ba9be94574859e260d8d9958564810ce4a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1500_81_lane_drop_transform\\20261103T111841196609Z_lane_drop_transform_s81_bdcc17\\events.jsonl.gz",
+    "bytes": 174472,
+    "sha256": "86b0a7e102ec1b4da4ce97572c517284570d8355dd390cf1f58ce5912c13c368",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1750_81_lane_drop_transform\\20261103T113156103143Z_lane_drop_transform_s81_69ab29\\positions.jsonl.gz",
+    "bytes": 36421523,
+    "sha256": "f40f6c0ab082f9b2a16545dc58e4511fcee8b7e40a4a21b76e7d439b9cda924f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_1750_81_lane_drop_transform\\20261103T113156103143Z_lane_drop_transform_s81_69ab29\\events.jsonl.gz",
+    "bytes": 205734,
+    "sha256": "784c0ce71135bcdb66698ce6f8a3ef0a68b861b278f20ef0007ebc614130d92c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_2000_81_lane_drop_transform\\20261103T114836864180Z_lane_drop_transform_s81_56ce95\\positions.jsonl.gz",
+    "bytes": 43434641,
+    "sha256": "76e6802e9cba0d2f793d898f015549a9fc2651f258638dc43bb92313b442a251",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_S81_6\\cases\\S_2000_81_lane_drop_transform\\20261103T114836864180Z_lane_drop_transform_s81_56ce95\\events.jsonl.gz",
+    "bytes": 243998,
+    "sha256": "265978cf345539e268351f7c8f2c46009e71c66652bb3ec423306736dc4ee2c1",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\C5_1500_71_lane_drop_transform\\20261103T113732144765Z_lane_drop_transform_s71_b94eb6\\positions.jsonl.gz",
+    "bytes": 9884777,
+    "sha256": "e956128c45230660170fd88964f2f0a24e52ef0095a8e32bc306aeffeaaee868",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\C5_1500_71_lane_drop_transform\\20261103T113732144765Z_lane_drop_transform_s71_b94eb6\\events.jsonl.gz",
+    "bytes": 55792,
+    "sha256": "5df9311287356f1116b0d8626ce427fc7af64a27046c1c44e3d3d151672be92b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\C5_1750_71_lane_drop_transform\\20261103T114223157280Z_lane_drop_transform_s71_d55413\\positions.jsonl.gz",
+    "bytes": 12088729,
+    "sha256": "ff0eb7f50509d89a70da863f27498736353c8b90b0dc26e09c43ac50d3e3924f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\C5_1750_71_lane_drop_transform\\20261103T114223157280Z_lane_drop_transform_s71_d55413\\events.jsonl.gz",
+    "bytes": 66237,
+    "sha256": "7633c0ab2fbfac370c3cb1da5dfe1dd3e9de170d971f425abdbdb550a14f3cef",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\C5_2000_71_lane_drop_transform\\20261103T114727342023Z_lane_drop_transform_s71_2ed2e5\\positions.jsonl.gz",
+    "bytes": 14126138,
+    "sha256": "0225ae1bdc63413332e841ad503e7a4bfc55bf922b8c6fafe36c97a3bb789f06",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\C5_2000_71_lane_drop_transform\\20261103T114727342023Z_lane_drop_transform_s71_2ed2e5\\events.jsonl.gz",
+    "bytes": 79598,
+    "sha256": "b508f2acf6e46d8139b10371bc453b09646538580f834e56092807ee93906e74",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\F_1500_71_lane_drop_transform\\20261103T111842144138Z_lane_drop_transform_s71_9960fb\\positions.jsonl.gz",
+    "bytes": 9870378,
+    "sha256": "e95b6a810fdbec212d31aa2868cfa69b7b2c62bca17db8dd4acd359fd0300146",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\F_1500_71_lane_drop_transform\\20261103T111842144138Z_lane_drop_transform_s71_9960fb\\events.jsonl.gz",
+    "bytes": 54854,
+    "sha256": "5b3c592ae8d01f913490051d9c6c9a0c0d883b28c9a0d5b7801188096fa760ab",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\F_1750_71_lane_drop_transform\\20261103T112325197452Z_lane_drop_transform_s71_32a331\\positions.jsonl.gz",
+    "bytes": 12062278,
+    "sha256": "ac023f4923efe8534dd1a329dd2fbcb22b45c09053badba6a03f1c0c29a388e0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\F_1750_71_lane_drop_transform\\20261103T112325197452Z_lane_drop_transform_s71_32a331\\events.jsonl.gz",
+    "bytes": 69362,
+    "sha256": "1facb23e56117ca0e14a0356fc66ef3efa1c49f82619c229aabe225bc8ad2799",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\F_2000_71_lane_drop_transform\\20261103T112930807478Z_lane_drop_transform_s71_32e877\\positions.jsonl.gz",
+    "bytes": 14144240,
+    "sha256": "73497e8720c53e38d09b478d02535ee6abdf44e83f158d393e59774066909569",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_F2_C5_development71_24\\cases\\F_2000_71_lane_drop_transform\\20261103T112930807478Z_lane_drop_transform_s71_32e877\\events.jsonl.gz",
+    "bytes": 79052,
+    "sha256": "f1c1f8e4c018d9075c27066d78e09d1e8764dd697c9452b57f0c6526fd07cbcf",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP_screen73_6\\cases\\GP_1500_73_lane_drop_transform\\20261103T113144039908Z_lane_drop_transform_s73_578eca\\positions.jsonl.gz",
+    "bytes": 3000137,
+    "sha256": "6ffadf67b913037ea1709338358135a653e0e7bcd7bd1ad5201bfe3a44efa34a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP_screen73_6\\cases\\GP_1500_73_lane_drop_transform\\20261103T113144039908Z_lane_drop_transform_s73_578eca\\events.jsonl.gz",
+    "bytes": 17205,
+    "sha256": "532585efab2795cfd81443dec7f419f417736c8c81e13abe766b96d4d0225b4e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP_screen73_6\\cases\\GP_1750_73_lane_drop_transform\\20261103T113320315808Z_lane_drop_transform_s73_c4e594\\positions.jsonl.gz",
+    "bytes": 3640367,
+    "sha256": "ee0d0fc0b9ae57f7d942808b863e6d57ce4caaf7e8dffd8620bae7b5e646e097",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP_screen73_6\\cases\\GP_1750_73_lane_drop_transform\\20261103T113320315808Z_lane_drop_transform_s73_c4e594\\events.jsonl.gz",
+    "bytes": 18606,
+    "sha256": "c29b5b151c0e39cdc7f190cf44f27a6fb7b5bb5f03db6091a65f12d6bb231856",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP_screen73_6\\cases\\GP_2000_73_lane_drop_transform\\20261103T113515671059Z_lane_drop_transform_s73_b87079\\positions.jsonl.gz",
+    "bytes": 4258593,
+    "sha256": "05b0863d414f9b8f9fc1f29bcff3c460d165b94f5a801461e9cf656a369777b2",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP_screen73_6\\cases\\GP_2000_73_lane_drop_transform\\20261103T113515671059Z_lane_drop_transform_s73_b87079\\events.jsonl.gz",
+    "bytes": 24647,
+    "sha256": "53c335ca4007d5575d1fbc16775d28ab88e423ff293ea19817ba5090c7062de9",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_screen73_6\\cases\\GP2_1500_73_lane_drop_transform\\20261103T114657448109Z_lane_drop_transform_s73_028db0\\positions.jsonl.gz",
+    "bytes": 2997984,
+    "sha256": "81e7e0ddb6ee17681a1a6c1ff4f05a96fd3cdb33dea2e36af8f88049c68d0581",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_screen73_6\\cases\\GP2_1500_73_lane_drop_transform\\20261103T114657448109Z_lane_drop_transform_s73_028db0\\events.jsonl.gz",
+    "bytes": 17054,
+    "sha256": "b3dd1c9d6301e886ca32d280bb0e2821a2541bc11b678d5fd67b2cc60ed80f87",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_screen73_6\\cases\\GP2_1750_73_lane_drop_transform\\20261103T114824304219Z_lane_drop_transform_s73_006578\\positions.jsonl.gz",
+    "bytes": 3642719,
+    "sha256": "e85c3569d10736db5fa0cff51b6dfc96de2b117badfa1002f891b49c240f0753",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_screen73_6\\cases\\GP2_1750_73_lane_drop_transform\\20261103T114824304219Z_lane_drop_transform_s73_006578\\events.jsonl.gz",
+    "bytes": 18727,
+    "sha256": "0f5de5674690fd3f8352e31591e9dfc79b8f994737386247cec239ca705bcf51",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_screen73_6\\cases\\GP2_2000_73_lane_drop_transform\\20261103T115007175162Z_lane_drop_transform_s73_d56115\\positions.jsonl.gz",
+    "bytes": 4258042,
+    "sha256": "0584e0ac5d078e4c4c3bccb6e2fea965425fdadcf94ef5d28b39ffbe2b1a28ae",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_screen73_6\\cases\\GP2_2000_73_lane_drop_transform\\20261103T115007175162Z_lane_drop_transform_s73_d56115\\events.jsonl.gz",
+    "bytes": 24107,
+    "sha256": "9b357138312ae77305aff7a47d178a1a3eb1530b9ae00441e969d146378debd4",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_development71_6\\cases\\GP2_1500_71_lane_drop_transform\\20261103T120532408276Z_lane_drop_transform_s71_6548ee\\positions.jsonl.gz",
+    "bytes": 9886761,
+    "sha256": "8b1a2d18a08b466c1cd6eb96457ee8cc167e614b64d4c65802978deec3d2e266",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_development71_6\\cases\\GP2_1500_71_lane_drop_transform\\20261103T120532408276Z_lane_drop_transform_s71_6548ee\\events.jsonl.gz",
+    "bytes": 55081,
+    "sha256": "a856c2a620a8de4faa66071c12188e68ca57c2c638b03f8088df4bc20390cf8c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_development71_6\\cases\\GP2_1750_71_lane_drop_transform\\20261103T120658199815Z_lane_drop_transform_s71_3b0c31\\positions.jsonl.gz",
+    "bytes": 12048114,
+    "sha256": "a763dcb5aeac9bd7c4736a6196525d03d0a0a0f31a5ba78b16dece1fc0233147",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_development71_6\\cases\\GP2_1750_71_lane_drop_transform\\20261103T120658199815Z_lane_drop_transform_s71_3b0c31\\events.jsonl.gz",
+    "bytes": 68473,
+    "sha256": "8aef64099808d6988e0a3957238a27f97838b92b9be7dae86604dcf49d879b03",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_development71_6\\cases\\GP2_2000_71_lane_drop_transform\\20261103T120843602278Z_lane_drop_transform_s71_6fad46\\positions.jsonl.gz",
+    "bytes": 14143420,
+    "sha256": "aa2838a2306f85329b3c4dbd366ef3bbd26e2aefbe9ad769a11dc023e5abc13d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_development71_6\\cases\\GP2_2000_71_lane_drop_transform\\20261103T120843602278Z_lane_drop_transform_s71_6fad46\\events.jsonl.gz",
+    "bytes": 78099,
+    "sha256": "d03eb224df8f48b008a5bb07aa20c1f3cb46a7e19bc7adb0825461dd628e7229",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_G0_screen73_6\\cases\\G0_1500_73_lane_drop_transform\\20261103T121433039080Z_lane_drop_transform_s73_2f9072\\positions.jsonl.gz",
+    "bytes": 2250837,
+    "sha256": "93737b758b75647cfec4590cfc02981946d86e1f68bd0b7ec5de2d5619d5330e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_G0_screen73_6\\cases\\G0_1500_73_lane_drop_transform\\20261103T121433039080Z_lane_drop_transform_s73_2f9072\\events.jsonl.gz",
+    "bytes": 11036,
+    "sha256": "69b9555e99cd66dbc28286287513e6d4d471e64881d68e808b82bf321b7b48dd",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_G0_screen73_6\\cases\\G0_1750_73_lane_drop_transform\\20261103T121453466019Z_lane_drop_transform_s73_3bd086\\positions.jsonl.gz",
+    "bytes": 3004150,
+    "sha256": "1bcf33d9fa3d854126a7e8ec8205ab4542aed84241deb6a64307ad5663d94c79",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_G0_screen73_6\\cases\\G0_1750_73_lane_drop_transform\\20261103T121453466019Z_lane_drop_transform_s73_3bd086\\events.jsonl.gz",
+    "bytes": 15119,
+    "sha256": "d38f91b0ba851c1e79921c086d7e1ec781919bf01bcbc10aa070b8e58e248dd7",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_G0_screen73_6\\cases\\G0_2000_73_lane_drop_transform\\20261103T121516234841Z_lane_drop_transform_s73_ad8422\\positions.jsonl.gz",
+    "bytes": 3576108,
+    "sha256": "5d38affd091aefee8cc9ec225fdf93e957a23291b0a77e74ddca8633dfda155e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_GP2_G0_screen73_6\\cases\\G0_2000_73_lane_drop_transform\\20261103T121516234841Z_lane_drop_transform_s73_ad8422\\events.jsonl.gz",
+    "bytes": 18924,
+    "sha256": "b8f3a440d3119d5f52077e012910b43c97b7408538f3c7f499f3d3b5b423689c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_1500_73_lane_drop_transform\\20261103T122025107796Z_lane_drop_transform_s73_ca3c56\\positions.jsonl.gz",
+    "bytes": 3063687,
+    "sha256": "727427b8f290db6e4120b4611cc47761432cc27a8c5ef478ea00015aefc5d8ad",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_1500_73_lane_drop_transform\\20261103T122025107796Z_lane_drop_transform_s73_ca3c56\\events.jsonl.gz",
+    "bytes": 16970,
+    "sha256": "7d8af8dba8ccf59c6e1c6b68109df90f78ff9beba16f7ac229d1ada92f9d0af3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_1750_73_lane_drop_transform\\20261103T122053470269Z_lane_drop_transform_s73_dd7aac\\positions.jsonl.gz",
+    "bytes": 3755908,
+    "sha256": "23c6c0e84d5afe5474f725a3c82b34a28afb7411c1e243a6a4c98c5d0af65296",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_1750_73_lane_drop_transform\\20261103T122053470269Z_lane_drop_transform_s73_dd7aac\\events.jsonl.gz",
+    "bytes": 20834,
+    "sha256": "92ea7a2c81409982ba26cfd73e1d418de9371a8020e6d1530d26d6ee34c411e7",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_2000_73_lane_drop_transform\\20261103T122132817450Z_lane_drop_transform_s73_1ef60b\\positions.jsonl.gz",
+    "bytes": 4457077,
+    "sha256": "23e7c42e316d6b78d5714cdeef09c1add2230d03b155dfdcc6fa3b9da2259f4a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_B_screen73_6\\cases\\B_2000_73_lane_drop_transform\\20261103T122132817450Z_lane_drop_transform_s73_1ef60b\\events.jsonl.gz",
+    "bytes": 25127,
+    "sha256": "a700ac1f8eda89ebd54379f3862437e0060cd4f14642134879ce9ac8a6b98a5e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_BC_screen73_6\\cases\\BC_1500_73_lane_drop_transform\\20261103T122610059348Z_lane_drop_transform_s73_8fdbd3\\positions.jsonl.gz",
+    "bytes": 2346348,
+    "sha256": "809aba7ba7923e177b83dd4c087b531823831c126619bc8fceb5aa1bc08169d8",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_BC_screen73_6\\cases\\BC_1500_73_lane_drop_transform\\20261103T122610059348Z_lane_drop_transform_s73_8fdbd3\\events.jsonl.gz",
+    "bytes": 15799,
+    "sha256": "53244cbf35a8fe6bf1a9851f9acdb6e9e9373974b72ba2ee2982f17eaf92cfb1",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_BC_screen73_6\\cases\\BC_1750_73_lane_drop_transform\\20261103T122628736921Z_lane_drop_transform_s73_bd81cd\\positions.jsonl.gz",
+    "bytes": 3166848,
+    "sha256": "2064016e0155378337f771b0f3429c24387cf585b66366f4c77ae6493267edd0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_BC_screen73_6\\cases\\BC_1750_73_lane_drop_transform\\20261103T122628736921Z_lane_drop_transform_s73_bd81cd\\events.jsonl.gz",
+    "bytes": 18841,
+    "sha256": "c2d0c67865832c879b9f9d9d44d525c30b8abb63e8ee447fe83fb669f2588995",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_BC_screen73_6\\cases\\BC_2000_73_lane_drop_transform\\20261103T122654474460Z_lane_drop_transform_s73_af023f\\positions.jsonl.gz",
+    "bytes": 3864327,
+    "sha256": "214d87647f3de44451c3865d3d5dcafec413f04474229127156f2a746012e2ab",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_BC_screen73_6\\cases\\BC_2000_73_lane_drop_transform\\20261103T122654474460Z_lane_drop_transform_s73_af023f\\events.jsonl.gz",
+    "bytes": 24366,
+    "sha256": "4857df357d8d5801549d88b902467e0744af76f935af9060c98eadce7fa21a40",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_GP2_81_6\\cases\\GP2_1500_81_lane_drop_transform\\20261103T123656299156Z_lane_drop_transform_s81_86b938\\positions.jsonl.gz",
+    "bytes": 30266106,
+    "sha256": "4dafa1c77ed87ee097862cdad63c8179d7593087400329c53ca6410e29971773",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_GP2_81_6\\cases\\GP2_1500_81_lane_drop_transform\\20261103T123656299156Z_lane_drop_transform_s81_86b938\\events.jsonl.gz",
+    "bytes": 173972,
+    "sha256": "0b39ec0e205b600140063ca8991fd4ec330459aee485227117ed5b7d4a99f9bf",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_GP2_81_6\\cases\\GP2_1750_81_lane_drop_transform\\20261103T124058762725Z_lane_drop_transform_s81_0ef5ff\\positions.jsonl.gz",
+    "bytes": 36410765,
+    "sha256": "0a7f8a9c965a8f168ff71670cac9e836fdc3b5b2cce2d647e0ba3af382f6a6c3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_GP2_81_6\\cases\\GP2_1750_81_lane_drop_transform\\20261103T124058762725Z_lane_drop_transform_s81_0ef5ff\\events.jsonl.gz",
+    "bytes": 205931,
+    "sha256": "1612d55e2a35e3af2e9d1a6a0e67c2b4296430b140c78ac391e049cfb4cbf1ac",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_GP2_81_6\\cases\\GP2_2000_81_lane_drop_transform\\20261103T124606333809Z_lane_drop_transform_s81_8bed72\\positions.jsonl.gz",
+    "bytes": 43299556,
+    "sha256": "3abcd9a006bba25066935fe90280bff967421ab0cbc091a6e8d78d3a8b1fb637",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_GP2_81_6\\cases\\GP2_2000_81_lane_drop_transform\\20261103T124606333809Z_lane_drop_transform_s81_8bed72\\events.jsonl.gz",
+    "bytes": 243131,
+    "sha256": "80b33d42d74ffb928114d235bcfa9d8fcf3baed77b730491ce5f175c180f569d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_screen73_6\\cases\\D_1500_73_lane_drop_transform\\20261103T130504661809Z_lane_drop_transform_s73_adbf91\\positions.jsonl.gz",
+    "bytes": 2955059,
+    "sha256": "9a7202c29b9f8aee0dd9f9783bc519b3078acc9cbcefad702a7158b1182ff528",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_screen73_6\\cases\\D_1500_73_lane_drop_transform\\20261103T130504661809Z_lane_drop_transform_s73_adbf91\\events.jsonl.gz",
+    "bytes": 17697,
+    "sha256": "67e0f406cf1f763b9eee24e3650274571c555ac5a1b630a9c39776f14a130f23",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_screen73_6\\cases\\D_1750_73_lane_drop_transform\\20261103T130529309348Z_lane_drop_transform_s73_b15891\\positions.jsonl.gz",
+    "bytes": 3609131,
+    "sha256": "6c899cc79083b69a442a043bb7182e9e5b9e685133cbd552efe4e83248dfda4c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_screen73_6\\cases\\D_1750_73_lane_drop_transform\\20261103T130529309348Z_lane_drop_transform_s73_b15891\\events.jsonl.gz",
+    "bytes": 21215,
+    "sha256": "ec9b16323958bbc849c44c6683624e378a69aea5f34dccd13d230048bb28d8b0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_screen73_6\\cases\\D_2000_73_lane_drop_transform\\20261103T130559123656Z_lane_drop_transform_s73_8853a8\\positions.jsonl.gz",
+    "bytes": 4238699,
+    "sha256": "6d492fc1b8313eead92e1733f19876b5246701074c41c77e010142f843945a94",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_screen73_6\\cases\\D_2000_73_lane_drop_transform\\20261103T130559123656Z_lane_drop_transform_s73_8853a8\\events.jsonl.gz",
+    "bytes": 24353,
+    "sha256": "a1a8ccb647bb9884d50557e312347046563e3149401f472a23e3881febdaa717",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12\\cases\\D_1500_71_lane_drop_transform\\20261103T131650117852Z_lane_drop_transform_s71_320a3a\\positions.jsonl.gz",
+    "bytes": 9824620,
+    "sha256": "c37f573dd043cb2292cc6db396be837aeefe39dc260feefba0ea49637e7f9035",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12\\cases\\D_1500_71_lane_drop_transform\\20261103T131650117852Z_lane_drop_transform_s71_320a3a\\events.jsonl.gz",
+    "bytes": 60076,
+    "sha256": "785123158ee108aa378679a9cb4ffda386905d146407a4dcc78f0345a418fb7b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12\\cases\\D_1750_71_lane_drop_transform\\20261103T131841635984Z_lane_drop_transform_s71_c7e6e3\\positions.jsonl.gz",
+    "bytes": 11914960,
+    "sha256": "957da7d46cac82920602835a6b53763187272a7ee881eb89e0e7c88a2e5197b4",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12\\cases\\D_1750_71_lane_drop_transform\\20261103T131841635984Z_lane_drop_transform_s71_c7e6e3\\events.jsonl.gz",
+    "bytes": 70049,
+    "sha256": "eefefc78d1190a1b6e73e2a9b022f08436c58620fbfaf4be29fccac8fd5e21ed",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12\\cases\\D_2000_71_lane_drop_transform\\20261103T132109236977Z_lane_drop_transform_s71_cff01b\\positions.jsonl.gz",
+    "bytes": 13921730,
+    "sha256": "b00b6057f1c058b2bcf6162254b85aa77553c88fc70090e8d5344453db621f30",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_D1_development71_12\\cases\\D_2000_71_lane_drop_transform\\20261103T132109236977Z_lane_drop_transform_s71_cff01b\\events.jsonl.gz",
+    "bytes": 81290,
+    "sha256": "490dfa30f798dd361ae2a390fd73eb1db5724eca78e0321974bf9900d1e7a44e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DP_1500_73_lane_drop_transform\\20261103T131902098429Z_lane_drop_transform_s73_cce54c\\positions.jsonl.gz",
+    "bytes": 2565335,
+    "sha256": "fd497343a312777e34fcab670d1a1daa7d8253aafe656749ca999eba89d7bca3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DP_1500_73_lane_drop_transform\\20261103T131902098429Z_lane_drop_transform_s73_cce54c\\events.jsonl.gz",
+    "bytes": 19046,
+    "sha256": "b74159ca13f6207e1d98b0d09b41d7cdc026b7c135d7034b4a1a1bc9525926c6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DP_1750_73_lane_drop_transform\\20261103T131940090066Z_lane_drop_transform_s73_653fe9\\positions.jsonl.gz",
+    "bytes": 3256595,
+    "sha256": "588bc0a39d8d8755f1f236600221ee1f705435bfbcbb80a2360da315bf2e4659",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DP_1750_73_lane_drop_transform\\20261103T131940090066Z_lane_drop_transform_s73_653fe9\\events.jsonl.gz",
+    "bytes": 22423,
+    "sha256": "1760238577068240f762e77f3c746aea76cfc11e6f631a998ad5906fc352ba64",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DP_2000_73_lane_drop_transform\\20261103T132024616416Z_lane_drop_transform_s73_5e246b\\positions.jsonl.gz",
+    "bytes": 3896541,
+    "sha256": "39ef66756cf035a9ec82b48923f12c48446f0aec86a99c0f3ced4ed8c3e60704",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DP_2000_73_lane_drop_transform\\20261103T132024616416Z_lane_drop_transform_s73_5e246b\\events.jsonl.gz",
+    "bytes": 27179,
+    "sha256": "a85ebf9ae357b414a83c6e6a575b97658424c3e46f60dedb6b156b17d8ef4f65",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DR_1500_73_lane_drop_transform\\20261103T131651161793Z_lane_drop_transform_s73_a69ce9\\positions.jsonl.gz",
+    "bytes": 2970068,
+    "sha256": "7a30e96fbdcf9a02613ddaeb3b0d3efcf3ac0095685afa326a391bd3ff72344c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DR_1500_73_lane_drop_transform\\20261103T131651161793Z_lane_drop_transform_s73_a69ce9\\events.jsonl.gz",
+    "bytes": 18657,
+    "sha256": "3f8bb75563605df58dcf81bf6326db9c92f93baa51bc2796519b9b6511e7b832",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DR_1750_73_lane_drop_transform\\20261103T131725792051Z_lane_drop_transform_s73_9f20e8\\positions.jsonl.gz",
+    "bytes": 3621089,
+    "sha256": "0b3b45ea0c1a402f38a95a944ed2262c71df4d7669d97be9ed16666909338f70",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DR_1750_73_lane_drop_transform\\20261103T131725792051Z_lane_drop_transform_s73_9f20e8\\events.jsonl.gz",
+    "bytes": 21636,
+    "sha256": "715fbeae2bad5dcd179d2edbe691dfbd3c8bb5dadf229617d2982d95138ab4a3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DR_2000_73_lane_drop_transform\\20261103T131807588162Z_lane_drop_transform_s73_4956e4\\positions.jsonl.gz",
+    "bytes": 4246538,
+    "sha256": "3acbb5f8000a7a5732fbb623d6a717bcc4f80a34179a5f50a669559a183dfc12",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_screen73_12\\cases\\DR_2000_73_lane_drop_transform\\20261103T131807588162Z_lane_drop_transform_s73_4956e4\\events.jsonl.gz",
+    "bytes": 24457,
+    "sha256": "3e9a2d978033417c789449124927b76a4b250aa59bf8df9e645ac1dcf6af9c17",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DP_1500_71_lane_drop_transform\\20261103T134407334604Z_lane_drop_transform_s71_9678fc\\positions.jsonl.gz",
+    "bytes": 8367591,
+    "sha256": "32585cab66b8924d5d2ecaef53f84ed13c456ee5beb969d141b49f9c1df3bf3e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DP_1500_71_lane_drop_transform\\20261103T134407334604Z_lane_drop_transform_s71_9678fc\\events.jsonl.gz",
+    "bytes": 59312,
+    "sha256": "6185f4da92401ab1ea73f830b6cc8500acc5f183291a175ffe5cbdd17b9e11d3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DP_1750_71_lane_drop_transform\\20261103T134552749706Z_lane_drop_transform_s71_4a8a6e\\positions.jsonl.gz",
+    "bytes": 10617202,
+    "sha256": "0166d72952cb567cb6b02ddcf23b2dcfdcbcfc6cd8a2a8cbc6470a1c2af31bba",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DP_1750_71_lane_drop_transform\\20261103T134552749706Z_lane_drop_transform_s71_4a8a6e\\events.jsonl.gz",
+    "bytes": 72335,
+    "sha256": "ad04eafdb0aea18c8e8b363aba2022b474cabc141102204bc7eefce481bb8b7a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DP_2000_71_lane_drop_transform\\20261103T134803048329Z_lane_drop_transform_s71_32a14e\\positions.jsonl.gz",
+    "bytes": 12859032,
+    "sha256": "4cce7f61f2ced095bdd11bccbda7970052cbaac81ee0676994f6834661779307",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DP_2000_71_lane_drop_transform\\20261103T134803048329Z_lane_drop_transform_s71_32a14e\\events.jsonl.gz",
+    "bytes": 79446,
+    "sha256": "7019f02b950b248551943e55f5997456b0340e47d34cc37efcf8425de6f78648",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DR_1500_71_lane_drop_transform\\20261103T133727808470Z_lane_drop_transform_s71_f5bb64\\positions.jsonl.gz",
+    "bytes": 9814545,
+    "sha256": "221a85ecb4efeafa8adc35015279d44400b656b9f35261a19224d40b5b021ac9",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DR_1500_71_lane_drop_transform\\20261103T133727808470Z_lane_drop_transform_s71_f5bb64\\events.jsonl.gz",
+    "bytes": 59101,
+    "sha256": "5e4ab90bda6b141f00c5e410f2ab554bf5c5ee9e18401ddcb7bbfcf08a46f719",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DR_1750_71_lane_drop_transform\\20261103T133913684390Z_lane_drop_transform_s71_509d97\\positions.jsonl.gz",
+    "bytes": 11926498,
+    "sha256": "24826a8778bd534c4d32597e18945b10b73e81216b020a9b893250bff21b7ff8",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DR_1750_71_lane_drop_transform\\20261103T133913684390Z_lane_drop_transform_s71_509d97\\events.jsonl.gz",
+    "bytes": 69231,
+    "sha256": "994db02929898ce6fa8d3c16637549a0c6a46b7a8d983df8395014426a199ab8",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DR_2000_71_lane_drop_transform\\20261103T134126870411Z_lane_drop_transform_s71_f78bc5\\positions.jsonl.gz",
+    "bytes": 13965044,
+    "sha256": "540e8bafc596b3649a93611ad187cef4314d795a70412b44fe60da2ef40c5627",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_DR_DP_development71_24\\cases\\DR_2000_71_lane_drop_transform\\20261103T134126870411Z_lane_drop_transform_s71_f78bc5\\events.jsonl.gz",
+    "bytes": 78180,
+    "sha256": "0057fb535e3167e4150f563dac4cbf17a3cc10b372a247b0f3c6284c3db56578",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1500_81_lane_drop_transform\\20261103T133726682253Z_lane_drop_transform_s81_379b35\\positions.jsonl.gz",
+    "bytes": 29821450,
+    "sha256": "06999c4bf27b7bef9b4f3bea7e6746e9e90f1faf7fdcfea6b3bfcfdacfc3402f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1500_81_lane_drop_transform\\20261103T133726682253Z_lane_drop_transform_s81_379b35\\events.jsonl.gz",
+    "bytes": 178685,
+    "sha256": "23c4dee7cf0fa782930adea118b611401c9451ce65969771eef4068c95ed5215",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1750_81_lane_drop_transform\\20261103T134236290022Z_lane_drop_transform_s81_6e047a\\positions.jsonl.gz",
+    "bytes": 35934023,
+    "sha256": "e3db32d694fdf7d80bdacc8a24622f331aafa9fa56df520aa198326bb749d134",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_1750_81_lane_drop_transform\\20261103T134236290022Z_lane_drop_transform_s81_6e047a\\events.jsonl.gz",
+    "bytes": 215627,
+    "sha256": "5d8d67e920a479a230e1050f3bfd40daec773ae8c3e98e60441eaa1521cb94db",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_2000_81_lane_drop_transform\\20261103T134922692888Z_lane_drop_transform_s81_044cbc\\positions.jsonl.gz",
+    "bytes": 42729297,
+    "sha256": "76891ab640e60b7b4e7a4930569b6f0638de926b02a2e28e0cecdcad0a27c600",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_long1800_D1_81_6\\cases\\D_2000_81_lane_drop_transform\\20261103T134922692888Z_lane_drop_transform_s81_044cbc\\events.jsonl.gz",
+    "bytes": 247886,
+    "sha256": "84d1187a477aa153edb1e83f709c2f545d146401c87ca742f6484029f57842da",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_lane_drop_noa\\20261103T134826558990Z_lane_drop_noa_s91_bec75b\\positions.jsonl.gz",
+    "bytes": 8042615,
+    "sha256": "f32b6199bff980e1dd639431d66289351da7a9e5f13d48d588aa8c1672a5b4a5",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_lane_drop_noa\\20261103T134826558990Z_lane_drop_noa_s91_bec75b\\events.jsonl.gz",
+    "bytes": 38598,
+    "sha256": "63fdf1f9f09ed29a86e2657d87b48d56a15cf8fdfa00d0f433121c6591356088",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_lane_drop_transform\\20261103T134826556912Z_lane_drop_transform_s91_5cf257\\positions.jsonl.gz",
+    "bytes": 10360119,
+    "sha256": "1381ab834b48bb38505ee79859a84dc0a5db894df3a7eba2d1e35222837e1786",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_lane_drop_transform\\20261103T134826556912Z_lane_drop_transform_s91_5cf257\\events.jsonl.gz",
+    "bytes": 59085,
+    "sha256": "a53f56d8b1ed6d7fc3af23febfc6f6d7bc4802fede1be94f1deeedd820cf39ad",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_straight3_noa\\20261103T134826556912Z_straight3_noa_s91_12acc9\\positions.jsonl.gz",
+    "bytes": 7036007,
+    "sha256": "abd3f3adbb16391041f0698eaacabf99da9cdcec951c43df57adbace2742d3db",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_straight3_noa\\20261103T134826556912Z_straight3_noa_s91_12acc9\\events.jsonl.gz",
+    "bytes": 20568,
+    "sha256": "b9732100a349150fd631fd40e7e9ea410908bbd6882599985885692315024e91",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_straight3_transform\\20261103T134826565919Z_straight3_transform_s91_744ec7\\positions.jsonl.gz",
+    "bytes": 9813810,
+    "sha256": "b9d337c35fc6c0da2781eecdfa672ba35a2a7cd0587a9e574fca31909cacd638",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_91_straight3_transform\\20261103T134826565919Z_straight3_transform_s91_744ec7\\events.jsonl.gz",
+    "bytes": 32665,
+    "sha256": "b57b2d25b733b242707b76668ba964572421906820a36f15eb55df4003505e31",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_lane_drop_noa\\20261103T135048778346Z_lane_drop_noa_s92_733c79\\positions.jsonl.gz",
+    "bytes": 8278791,
+    "sha256": "23e9f782eee67bb79d815c39cb0513bfd5371fcaa528f0548f0be34727c8696f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_lane_drop_noa\\20261103T135048778346Z_lane_drop_noa_s92_733c79\\events.jsonl.gz",
+    "bytes": 40119,
+    "sha256": "ea28b68f39fa7104c0986b389d83a46bf5ae3e211647a17009a320d51d8b9860",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_lane_drop_transform\\20261103T135059086680Z_lane_drop_transform_s92_f0cc72\\positions.jsonl.gz",
+    "bytes": 10564774,
+    "sha256": "dfae2165ed3aa88aa041b2a69eb471e341fe503b0f15261842b28c5e0f974272",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_lane_drop_transform\\20261103T135059086680Z_lane_drop_transform_s92_f0cc72\\events.jsonl.gz",
+    "bytes": 61865,
+    "sha256": "b2e196630d7a669fdb127f4082663ab36c9b1def62630f3af789e24bdd99d457",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_straight3_noa\\20261103T135004484748Z_straight3_noa_s92_d4891c\\positions.jsonl.gz",
+    "bytes": 7297162,
+    "sha256": "f222a6852cc12af843e567cee9bc10118edb60896e4bbb6eda6aad647a0ccf90",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_straight3_noa\\20261103T135004484748Z_straight3_noa_s92_d4891c\\events.jsonl.gz",
+    "bytes": 20383,
+    "sha256": "1ae0e8262676229e39a7a697c689d1b1c1ab05ebc2375400261973bec19364e7",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_straight3_transform\\20261103T135014277765Z_straight3_transform_s92_77b441\\positions.jsonl.gz",
+    "bytes": 10035504,
+    "sha256": "cc5db5e5f835c0611c85bc9251b1c00c023d47940e4f9126c20b7e4d0f31a22d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_92_straight3_transform\\20261103T135014277765Z_straight3_transform_s92_77b441\\events.jsonl.gz",
+    "bytes": 35448,
+    "sha256": "0a584cd0d783f67b90e97485aae608a6f6c6e4592f3e4cac741c74800dde9688",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_lane_drop_noa\\20261103T135241384165Z_lane_drop_noa_s93_57cffe\\positions.jsonl.gz",
+    "bytes": 8203647,
+    "sha256": "f56b497b350f7cb76b8393e5e32a3933c35e43668f8b836205da93ac97620cdb",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_lane_drop_noa\\20261103T135241384165Z_lane_drop_noa_s93_57cffe\\events.jsonl.gz",
+    "bytes": 40701,
+    "sha256": "06a4577b16ff85d46a53f1590872ee91474c3b25852d2db3828776a3954dff57",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_lane_drop_transform\\20261103T135323001464Z_lane_drop_transform_s93_d91e2e\\positions.jsonl.gz",
+    "bytes": 10696992,
+    "sha256": "e3c73c74fbd2be2255c870724917f3c48a6d7161e382cc155372ebbad26d37ae",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_lane_drop_transform\\20261103T135323001464Z_lane_drop_transform_s93_d91e2e\\events.jsonl.gz",
+    "bytes": 63446,
+    "sha256": "e131a8a6d60c555c1901c8d76e148298a71d9b38e3c9c9e7ca384cbfd0295360",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_straight3_noa\\20261103T135146289336Z_straight3_noa_s93_ceeb05\\positions.jsonl.gz",
+    "bytes": 7108470,
+    "sha256": "9c7dd5f67fadbf83bc46a4abacc0e35323b5f41093eaab7c1bd0006a314c93c3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_straight3_noa\\20261103T135146289336Z_straight3_noa_s93_ceeb05\\events.jsonl.gz",
+    "bytes": 21217,
+    "sha256": "eb36e2e296556084b924f4bad2a691bfbbc960274ad1dec092a04beb81941b1a",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_straight3_transform\\20261103T135232119866Z_straight3_transform_s93_a015f5\\positions.jsonl.gz",
+    "bytes": 10147543,
+    "sha256": "acd85a1678089ab8e5360f1ac59a9a7961d5b4acd99316e77d945e9d942c629b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_93_straight3_transform\\20261103T135232119866Z_straight3_transform_s93_a015f5\\events.jsonl.gz",
+    "bytes": 33622,
+    "sha256": "8e7bea219a8786d0883297e1d3130fa46ab40bdea0e22d670d8e6c11168de9d0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_lane_drop_noa\\20261103T135629477461Z_lane_drop_noa_s95_e1e282\\positions.jsonl.gz",
+    "bytes": 8808517,
+    "sha256": "6fd015dffe44ba1f283e6d3dee1140946db4cb463e078f58787ed14d31d0ab02",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_lane_drop_noa\\20261103T135629477461Z_lane_drop_noa_s95_e1e282\\events.jsonl.gz",
+    "bytes": 43480,
+    "sha256": "6d2664428d7794c9502e461b91d4534ded811038d90408fceb2315d9289fbc31",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_lane_drop_transform\\20261103T135710196160Z_lane_drop_transform_s95_84f02e\\positions.jsonl.gz",
+    "bytes": 11191634,
+    "sha256": "c99664c1eba249f3ecdfe440233ddf91440ee96e352a22b5c254a8644192a631",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_lane_drop_transform\\20261103T135710196160Z_lane_drop_transform_s95_84f02e\\events.jsonl.gz",
+    "bytes": 67564,
+    "sha256": "9d809b2614baf6da70583561cd6b4a2e170c97fd24ad72c2ff0e61dcb7293e72",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_straight3_noa\\20261103T135532662007Z_straight3_noa_s95_b748eb\\positions.jsonl.gz",
+    "bytes": 7639555,
+    "sha256": "905ec6ebd3382b35ac9d93ec92e624f5dc0e550e5a276241ba2b6c0925f385b6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_straight3_noa\\20261103T135532662007Z_straight3_noa_s95_b748eb\\events.jsonl.gz",
+    "bytes": 23549,
+    "sha256": "ecb5184fcdf7c3f3ba11b9c5b875714375077f799238d0553895a86a4e0796c6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_straight3_transform\\20261103T135617836151Z_straight3_transform_s95_08832e\\positions.jsonl.gz",
+    "bytes": 10610493,
+    "sha256": "f899fb23d2f62eae158a2c171648ab8dca098b16fe5d4568d7473d96c859ae4c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1500_95_straight3_transform\\20261103T135617836151Z_straight3_transform_s95_08832e\\events.jsonl.gz",
+    "bytes": 38175,
+    "sha256": "bdc361fc3cebe8af119d2d5001eb44050f9d43a5aaa6cfcda07f4d66946b52e5",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_lane_drop_noa\\20261103T135834066211Z_lane_drop_noa_s91_7016ff\\positions.jsonl.gz",
+    "bytes": 10755354,
+    "sha256": "3c999e805b7fe455d26d9fabfaed0a31ebc1ec8263fe8160bf8b7998b8c141a7",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_lane_drop_noa\\20261103T135834066211Z_lane_drop_noa_s91_7016ff\\events.jsonl.gz",
+    "bytes": 49162,
+    "sha256": "0d3dd068579ec5fe714eb364f60215c8f7bd2a465147719bf874d657599e06ef",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_lane_drop_transform\\20261103T135902039377Z_lane_drop_transform_s91_dde4d0\\positions.jsonl.gz",
+    "bytes": 13002527,
+    "sha256": "dacfd1fb8f264e569dd28ed8f608134a96d4c1bc532ccebe32079b421a82e464",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_lane_drop_transform\\20261103T135902039377Z_lane_drop_transform_s91_dde4d0\\events.jsonl.gz",
+    "bytes": 76295,
+    "sha256": "5d4ec8db319f82e55eebae5fdfb71c34ff8066ce1015c3c64911c5920de5ee85",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_straight3_noa\\20261103T135718272311Z_straight3_noa_s91_503a89\\positions.jsonl.gz",
+    "bytes": 9315655,
+    "sha256": "88e6e50601f580975c9d4491ca254b16d932fc78356348a22cdba9aca57c053d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_straight3_noa\\20261103T135718272311Z_straight3_noa_s91_503a89\\events.jsonl.gz",
+    "bytes": 25106,
+    "sha256": "08674d995975a13b41b390589609d5b7515e1b23723a2bab7c55bb98e4394b8c",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_straight3_transform\\20261103T135804409731Z_straight3_transform_s91_7da2c7\\positions.jsonl.gz",
+    "bytes": 12252388,
+    "sha256": "743fceac9e2bb6573d9f074e15438413af0af931c9c67ac302f8074bc8d1a9b0",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_91_straight3_transform\\20261103T135804409731Z_straight3_transform_s91_7da2c7\\events.jsonl.gz",
+    "bytes": 41782,
+    "sha256": "59f66a354d0b67941cb5e893de7ba27abea4791472b869773e7a68858ca23cfa",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_lane_drop_noa\\20261103T140316162796Z_lane_drop_noa_s93_98d44a\\positions.jsonl.gz",
+    "bytes": 10171542,
+    "sha256": "572a48113f2c1324ccb28a3c438a0fd3b4516e807da38772bfb2435fc0029aec",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_lane_drop_noa\\20261103T140316162796Z_lane_drop_noa_s93_98d44a\\events.jsonl.gz",
+    "bytes": 49767,
+    "sha256": "0880141aa24c81e4f3d0a5a8be24b4f8c6a92014ac0c9c98604a9b69e42d14df",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_lane_drop_transform\\20261103T140341162718Z_lane_drop_transform_s93_d4b928\\positions.jsonl.gz",
+    "bytes": 12590129,
+    "sha256": "20f0ccc24997fac31b1f5a99f4e91608fa0eb0b36f533973117c601e8304e2ae",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_lane_drop_transform\\20261103T140341162718Z_lane_drop_transform_s93_d4b928\\events.jsonl.gz",
+    "bytes": 76211,
+    "sha256": "6f296ab316eab1c4a241abcc197afaa8ef71b698cf9570e6e152e1a1c3f19b42",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_straight3_noa\\20261103T140153626767Z_straight3_noa_s93_c678d4\\positions.jsonl.gz",
+    "bytes": 8808633,
+    "sha256": "eade8c766d16596132758a0db1bd2417dd3f3af12f67174d14fd83a49a5def53",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_straight3_noa\\20261103T140153626767Z_straight3_noa_s93_c678d4\\events.jsonl.gz",
+    "bytes": 25087,
+    "sha256": "282ce2230b36f4033e45df977a715a6a683e447188f7cb6ab448c89a18f109af",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_straight3_transform\\20261103T140248498823Z_straight3_transform_s93_545555\\positions.jsonl.gz",
+    "bytes": 11861234,
+    "sha256": "7bb565f05a2ed3072f7f0e20dc9ad203c7735bc7399f0784ac8fc5ff906d267b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_1750_93_straight3_transform\\20261103T140248498823Z_straight3_transform_s93_545555\\events.jsonl.gz",
+    "bytes": 41033,
+    "sha256": "d1414e7ba9d3331aeeba525bc6530df814ef4700c4e20ce1c5f69686f41a7dff",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_91_lane_drop_noa\\20261103T141005374881Z_lane_drop_noa_s91_c7943a\\positions.jsonl.gz",
+    "bytes": 13193496,
+    "sha256": "3b90d42092f6ca2120c70ba1291c017921859ecd89a07c515271ca25b2da5c4e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_91_lane_drop_noa\\20261103T141005374881Z_lane_drop_noa_s91_c7943a\\events.jsonl.gz",
+    "bytes": 59394,
+    "sha256": "ec30e15d4ab82e502463f2ff092fe581b2f717c513d2e63f5c00f06ac4a94b0b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_91_lane_drop_transform\\20261103T141015117051Z_lane_drop_transform_s91_088d1c\\positions.jsonl.gz",
+    "bytes": 15113176,
+    "sha256": "7895ba999a946cc096783b5f280cea603a7da676460cebfba823cd2546582fca",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_91_lane_drop_transform\\20261103T141015117051Z_lane_drop_transform_s91_088d1c\\events.jsonl.gz",
+    "bytes": 88952,
+    "sha256": "1e5be9941e76bbf76adc1f865a69cbcf2518fe371e3145d063e70bc380c4fd0d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_lane_drop_noa\\20261103T141721296220Z_lane_drop_noa_s94_e08ffb\\positions.jsonl.gz",
+    "bytes": 12421080,
+    "sha256": "ce8842b1959c3b0e3c347ba06779ee93c507ff4c6aa925d8f5db30fbdb4da276",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_lane_drop_noa\\20261103T141721296220Z_lane_drop_noa_s94_e08ffb\\events.jsonl.gz",
+    "bytes": 57280,
+    "sha256": "8f981265f82dd8a2244db5c7e7e5533b470aecbc0019c8b21fc23273419df958",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_lane_drop_transform\\20261103T141730145073Z_lane_drop_transform_s94_612924\\positions.jsonl.gz",
+    "bytes": 14537359,
+    "sha256": "832d3c00a277266556057f0d89ce1d081ad0758fe5ef7accca65a227a7fad309",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_lane_drop_transform\\20261103T141730145073Z_lane_drop_transform_s94_612924\\events.jsonl.gz",
+    "bytes": 86737,
+    "sha256": "cf11b82fcf6c1d24b93f4281e8b46cfca0b37ee59bb25d87a71f6b6ea340d961",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_straight3_noa\\20261103T141545068014Z_straight3_noa_s94_3758d1\\positions.jsonl.gz",
+    "bytes": 10580063,
+    "sha256": "0f25265cb0268b6e930748099ef6166aba8b48f71f7c288f08d536ec60e3ca9d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_straight3_noa\\20261103T141545068014Z_straight3_noa_s94_3758d1\\events.jsonl.gz",
+    "bytes": 27826,
+    "sha256": "f6b6f4bc4072ec538bb8c3902c4dd1c5756ae59dfb6a74f462dce6c14787fe39",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_straight3_transform\\20261103T141656448984Z_straight3_transform_s94_58fc45\\positions.jsonl.gz",
+    "bytes": 13540139,
+    "sha256": "4022c77124795feea24e7624dd8a2d90ef8383da2328afe308bf1856c005ccfd",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60\\cases\\D_2000_94_straight3_transform\\20261103T141656448984Z_straight3_transform_s94_58fc45\\events.jsonl.gz",
+    "bytes": 45397,
+    "sha256": "629f7b4302b891d4480dc0bb18838c2becc4c65a452d244659db27ee4328f88e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_91_lane_drop_transform\\20261103T134826585877Z_lane_drop_transform_s91_79979b\\positions.jsonl.gz",
+    "bytes": 10621164,
+    "sha256": "ca19a6c596d304fd7674afffe106f691fc62855c5e15ce6e737df4d44b4d6a84",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_91_lane_drop_transform\\20261103T134826585877Z_lane_drop_transform_s91_79979b\\events.jsonl.gz",
+    "bytes": 60675,
+    "sha256": "418b7392819560de43e99a6e09ec96d417a19c252ea327044cb81ac2ccb19fc6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_91_straight3_transform\\20261103T134826583409Z_straight3_transform_s91_e904a6\\positions.jsonl.gz",
+    "bytes": 10208737,
+    "sha256": "89f60f3cf0eb503b700ba8c359f60bfe8a85bda395dd08b88715ccc337f2c9d2",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_91_straight3_transform\\20261103T134826583409Z_straight3_transform_s91_e904a6\\events.jsonl.gz",
+    "bytes": 51002,
+    "sha256": "43a1b7571d929e47f64d99f9e65ee698b36bd4b18af460c026824af37683dbbe",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_92_lane_drop_transform\\20261103T135113436827Z_lane_drop_transform_s92_7f0a76\\positions.jsonl.gz",
+    "bytes": 10728701,
+    "sha256": "7f5dcfdf149fc73449e745aa19a9e143d403fe1216fcdeddb205c740bf58053d",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_92_lane_drop_transform\\20261103T135113436827Z_lane_drop_transform_s92_7f0a76\\events.jsonl.gz",
+    "bytes": 59721,
+    "sha256": "c82ac1267e1ce75db63ac227d04d567ce6db3e1e61f29871ed0311c5c840dac9",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_92_straight3_transform\\20261103T135103087007Z_straight3_transform_s92_490ce3\\positions.jsonl.gz",
+    "bytes": 10299156,
+    "sha256": "db1135157089d0657433597d3d746d86c783869faf2dfd66383e497d38dcfd13",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_92_straight3_transform\\20261103T135103087007Z_straight3_transform_s92_490ce3\\events.jsonl.gz",
+    "bytes": 51126,
+    "sha256": "b53e07e8fba3a0becb6db2ce08a6005d51a056b0040922a27423cd990e3563ee",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_93_lane_drop_transform\\20261103T135348492010Z_lane_drop_transform_s93_7d2885\\positions.jsonl.gz",
+    "bytes": 10800360,
+    "sha256": "86ffa82a412aad20c4cff5b73d096440508281f73d56fe4ae3e2df836bf4b889",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_93_lane_drop_transform\\20261103T135348492010Z_lane_drop_transform_s93_7d2885\\events.jsonl.gz",
+    "bytes": 61809,
+    "sha256": "fa1e824eeb88ae23881b4d8e0eca339414c0cd5c416d6574e44e478ff825461b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_93_straight3_transform\\20261103T135339965229Z_straight3_transform_s93_4f2cf5\\positions.jsonl.gz",
+    "bytes": 10352462,
+    "sha256": "9c85145caa643d240982f44121ef4e43a1eeb41b2e649f08d2ba8eb77c7023dd",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_93_straight3_transform\\20261103T135339965229Z_straight3_transform_s93_4f2cf5\\events.jsonl.gz",
+    "bytes": 51662,
+    "sha256": "f92e0d7c96a89f666c203d44af9dcfd52ee6d02c1cb1adc09a968dc8474faf8f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_95_lane_drop_transform\\20261103T135835561271Z_lane_drop_transform_s95_36b15b\\positions.jsonl.gz",
+    "bytes": 11305669,
+    "sha256": "a1debca9503f970ed5016adb2ed36ef2752f2f40fdc4dcc30de78a328950eb3b",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_95_lane_drop_transform\\20261103T135835561271Z_lane_drop_transform_s95_36b15b\\events.jsonl.gz",
+    "bytes": 63802,
+    "sha256": "6912e1549ca1a8f7f0768c1b48ca5330f7efc21dd6507b00e617b2fe9cc87293",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_95_straight3_transform\\20261103T135827323578Z_straight3_transform_s95_8ccbfd\\positions.jsonl.gz",
+    "bytes": 10874156,
+    "sha256": "e388b7abd33c6715cfa70ae06bcb8bd58fd9dd04284ae712c6356546994f8881",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1500_95_straight3_transform\\20261103T135827323578Z_straight3_transform_s95_8ccbfd\\events.jsonl.gz",
+    "bytes": 52040,
+    "sha256": "1da539ca0b4cdc7ad7ad131e728846b72b2d21da764615c73989dda9fa2024ec",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_91_lane_drop_transform\\20261103T140108013700Z_lane_drop_transform_s91_d90318\\positions.jsonl.gz",
+    "bytes": 13226607,
+    "sha256": "31c4f95544d33806a562457cf40bdb007b4f561329e2d9607b7937856b209ea8",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_91_lane_drop_transform\\20261103T140108013700Z_lane_drop_transform_s91_d90318\\events.jsonl.gz",
+    "bytes": 72569,
+    "sha256": "4d6d5b0dd9eec4083d9116161a6433669f4dd09e4bb6b8bc4ecc0ed82fb19124",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_91_straight3_transform\\20261103T140058264735Z_straight3_transform_s91_fb06d0\\positions.jsonl.gz",
+    "bytes": 12529074,
+    "sha256": "093a9b52ca6c9bbe4106af72d9e07b848bc22926c5b29c38a4ee581f1b2ff6c3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_91_straight3_transform\\20261103T140058264735Z_straight3_transform_s91_fb06d0\\events.jsonl.gz",
+    "bytes": 60461,
+    "sha256": "45901736b5da68bc2799485937286c1a12f52fc758defa8a2981311b7c2d112e",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_93_lane_drop_transform\\20261103T140704183718Z_lane_drop_transform_s93_a0bb9b\\positions.jsonl.gz",
+    "bytes": 12732053,
+    "sha256": "3ed246ed24d96cb93385d16f35f07ad4c054404a6548954c5d21d7382e06521f",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_93_lane_drop_transform\\20261103T140704183718Z_lane_drop_transform_s93_a0bb9b\\events.jsonl.gz",
+    "bytes": 71097,
+    "sha256": "1798c729336a231f38a1f716d3049a6f65fb3558f6e78b8e45aa0a38ff594733",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_93_straight3_transform\\20261103T140654470086Z_straight3_transform_s93_35070b\\positions.jsonl.gz",
+    "bytes": 12130984,
+    "sha256": "4d87d417f67b4e75b88f22d3b0d599a65073de47dac44fb8910b7a121f6306a6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_1750_93_straight3_transform\\20261103T140654470086Z_straight3_transform_s93_35070b\\events.jsonl.gz",
+    "bytes": 58319,
+    "sha256": "862622cd5ddd20d3bc68050ff22a066f086acdac5afd80242c43830bf9f617f3",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_2000_91_lane_drop_transform\\20261103T141525425068Z_lane_drop_transform_s91_279f4b\\positions.jsonl.gz",
+    "bytes": 15417378,
+    "sha256": "278286fa04e2fa9bdc98575c4b33e9db4c67225e0996ad50d9ca03a57986b9aa",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_2000_91_lane_drop_transform\\20261103T141525425068Z_lane_drop_transform_s91_279f4b\\events.jsonl.gz",
+    "bytes": 88399,
+    "sha256": "2e21274bc4ec45c96c88dc3362c36dd454b7c034beece8aef6d45e955d96f821",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_2000_94_lane_drop_transform\\20261103T142414598503Z_lane_drop_transform_s94_1e46a2\\positions.jsonl.gz",
+    "bytes": 14647379,
+    "sha256": "d672fd32319cc73c60195996e923e49ad64b3ce6bf091351225362574b55d1ae",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_2000_94_lane_drop_transform\\20261103T142414598503Z_lane_drop_transform_s94_1e46a2\\events.jsonl.gz",
+    "bytes": 82535,
+    "sha256": "e5de7423a24138f4b24a911a4541d08988868230dfccb2e84129e45c3ed906a6",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_2000_94_straight3_transform\\20261103T142402630673Z_straight3_transform_s94_bb8659\\positions.jsonl.gz",
+    "bytes": 13794569,
+    "sha256": "6a051472d678be2ad14ca4ac39a7b0792b6d264f545fb0cd12042b440ac0d197",
+    "retained_hash_verified": true
+  },
+  {
+    "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_S30\\cases\\S_2000_94_straight3_transform\\20261103T142402630673Z_straight3_transform_s94_bb8659\\events.jsonl.gz",
+    "bytes": 65612,
+    "sha256": "982ab5fc796411eb5cc94e74beef7753c2045d8af4998b41e2edd1ea965055c0",
+    "retained_hash_verified": true
+  }
+]

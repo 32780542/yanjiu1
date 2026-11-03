@@ -1,0 +1,9 @@
+{
+  "candidate": "D0",
+  "rules_sha256": "afb3ecbe5a432bd2c93e16a21ac88690171266fd37e0c420bc74ea7e6146047e",
+  "status": "registered_not_executed",
+  "raw_batch_created": false,
+  "cases_executed": 0,
+  "reason": "Before runner launch root identified scoring includes the offcenter ego in destination membership while actual join excludes ego. Do not launch D0 or relabel any result as corrected D1.",
+  "replacement_stage": "real_gap_balance_D1_screen73_6"
+}

@@ -1,22 +1,33 @@
 # 局部感知的交错编队形成与车道减少变换
 
-当前工作目录是 `D:\yanjiu1\keyan1`。现行S规则已经安装：真实前车固定时距跟驰、全体车辆局部跨道互选、实际邻道车辆证明的单格补位，以及跟驰与相位冲突时的CTH优先。控制器461行，原版511行；旧提前开隙与等待链已删除，三个私有记忆字段保持。
+工作目录：`D:\yanjiu1\keyan1`。现行方法为 **D1**：真实前车固定时距跟驰维持纵向运动，相邻道实车互选维持交错形状，实际间隙与未来车道负荷共同决定横向分工。三道减为两道时，接收道车辆提前向空余存续道分担，为终止道的必要合流留下空间。
 
-纯NOA与编队使用相同车辆、发车、速度和物理安全。巡航28.8m/s，最高33.3m/s；巡航同道30m、相邻道交错15m。每车只读取前200m、后100m内各车道实车及自身记忆。
+规则集中在一个 **423行** 文件，较上一版S减少38行。每车只读取前200米、后100米内各车道车辆的实测状态及三个本车记忆字段。巡航28.8m/s，最高33.3m/s；巡航同道30米、相邻道交错15米。控制没有中心排序、邻车私有状态或全局评价反馈。
 
-全新61–65种子、八档流量的160例确认全部安全排空。2250、2500辆/h/车道下，600秒需求的平均系统时间分别改善 **15.81%、14.34%**，均5/5种子改善；1800秒八例确认分别改善 **20.08%、17.24%**。燃油相对NOA增加。[本轮完整报告](docs/experiments/2026-11-03-staggered-bottleneck/README.md)列出全部数据、路内行程、入口等待、实际队形和失败版本。
+## 当前研究结果
 
-选择组另设保留普通超车及相同合流执行的无编队对照，S仍改善4.49%、8.00%；严格关闭所采用phase子系统后，S再改善2.20%、3.05%，均5/5。几何与[匹配归因](docs/experiments/2026-11-03-staggered-bottleneck/matched_nonformation31_and_S170/tables.md)共同支持形成/变换机制的作用。
+本轮只测试 **1500、1750、2000辆/h/车道**。冻结规则后，用91–95五个新种子，在三车道直路与3→2道路比较NOA、原编队S和D1，共90例。全部正常排空、无碰撞和传送，逐车时间、共同需求、物理参数与源码经独立复算。
 
-## 接续研究
+| 每道流量 | NOA缩道系统时间(s) | D1缩道系统时间(s) | D1改善 | 扣除直路改善后的额外缩道节省(s/车) |
+| ---: | ---: | ---: | ---: | ---: |
+| 1500 | 42.444 | 41.930 | 1.21% | 0.096 |
+| 1750 | 43.253 | 42.345 | 2.09% | 0.404 |
+| 2000 | 44.715 | 43.234 | 3.30% | 0.915 |
 
-1. [现行系统说明](docs/原生SUMO编队变换系统说明.md)：逐条规则、每个方法、代码结构、执行顺序和指标。
-2. [本轮报告与数据入口](docs/experiments/2026-11-03-staggered-bottleneck/README.md)：拥堵诊断、分别尝试的文献机制、失败版本、配对数据及采用证据。
-3. [检查点末尾](docs/phase5_checkpoint.md)：当前已安装版本、最新运行及剩余事项。
-4. [真实形成与变换图](docs/experiments/2026-11-03-staggered-bottleneck/formation_demo_S_long/README.md)：原24辆随机初态和45辆预成形的实际轨迹。
-5. [文献目录](docs/research/2026-10-30-literature-review/README.md)、[MATLAB活跃调用链](docs/2026-10-29-MATLAB车辆控制调用链核查.md)、[本轮方法依据](docs/experiments/2026-11-03-staggered-bottleneck/methods/reference_design.md)。
+15组缩道对比均更快；额外缩道节省分别有4/5、4/5、5/5种子为正。81/82种子另持续来车1800秒，三档系统时间改善1.09%、2.05%、4.37%。600秒与1800秒结果分别汇总。
 
-## 打开实时窗口
+实际轨迹显示640米前完成的中道1→0腾位，必要合流的长尾延误减少。**燃油仍高于NOA，急减速未全面改善。** 相对原编队S，D1正式缩道系统时间再减少0.179、0.255、0.582秒/车，燃油均值也降低。完整数据与消融见[研究报告](docs/experiments/2026-11-03-midflow-staggered/README.md)。
+
+## 下次接续从哪里读
+
+1. [完整系统说明与规则集](docs/原生SUMO编队变换系统说明.md)：逐条规则、全部方法、参数、状态、执行顺序与指标。
+2. [本轮研究报告](docs/experiments/2026-11-03-midflow-staggered/README.md)：正式对照、持续流、消融、实际队形、未采用方案。
+3. [论文主线与贡献](docs/experiments/2026-11-03-midflow-staggered/论文主线与贡献.md)：研究问题、与Cai的关系、统一方法逻辑及证据安排。
+4. [恢复检查点](docs/phase5_checkpoint.md)：开头最新入口与末尾执行记录，不用重跑历史前置验收。
+5. [24辆形成和45辆变换](docs/experiments/2026-11-03-staggered-bottleneck/formation_demo_D1/README.md)：实际位置、时距、交错误差及可复算图。
+6. [本轮文献依据](docs/experiments/2026-11-03-midflow-staggered/literature/README.md)、[MATLAB调用链](docs/2026-10-29-MATLAB车辆控制调用链核查.md)。
+
+## 打开实时仿真窗口
 
 ```powershell
 Set-Location -LiteralPath 'D:\yanjiu1\keyan1'
@@ -24,41 +35,33 @@ python -B runrun.py --check
 python -B runrun.py
 ```
 
-也可直接在VS Code中运行本文件夹的 `runrun.py`。窗口和第一次计算同步，每算0.1秒推进一帧。默认每道1250辆/h、600秒、seed1；配置位于脚本顶部。需要观察持续瓶颈时，将 `FLOW_VEH_H_LANE` 改为2250或2500。`--gui-delay-ms 0`加快显示，`--no-wait`结束后自动关闭。
+也可在VS Code直接运行这个目录里的`runrun.py`。SUMO窗口与第一次计算同步，每算0.1秒推进一步。默认每道1750辆/h、600秒、seed1，配置在脚本顶部。`--gui-delay-ms 0`加快显示，`--no-wait`结束后自动关闭。
 
-原路为0–1000m三道、1000–1200m两道，准备区从640m开始。查看同道距离时采用 `D(v)=5.5+0.8506944444v`；巡航时看30m/15m交错，合流后看真实两道恢复。45辆两道巡航队形跨度约660m，整队几何另用2400m道路观察，交通效率仍在原1200m道路比较。
-
-无窗口短测：
+路网0–1000米为三道，1000–1200米为两道，准备区从640米开始。观察接收道向lane0腾位、lane2进入lane1以及后续两道交错恢复。跟驰距离为`D(v)=5.5+0.8506944444v`，巡航时对应30米/15米。45辆完整两道队形跨度较长，几何展示另用2400米道路；交通效率仍在原1200米道路比较。
 
 ```powershell
 python -B runrun.py --headless --duration 20 --max-time 120 --no-wait
-python -B variants/phase5g_pure_formation/run_native_flow.py --mode noa --flow 2250 --duration 600 --max-time 1200
-python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --flow 2250 --duration 600 --max-time 1200
+python -B variants/phase5g_pure_formation/run_native_flow.py --mode noa --flow 1750 --duration 600 --max-time 1200
+python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --flow 1750 --duration 600 --max-time 1200
 ```
 
-## 方法与代码
-
-实际前车跟驰决定本车的时距目标和速度。全体车辆从真实相邻道互选关系取得交错相位；已有前车的车辆保留实际前车参考，相位与CTH要求相反调速时优先CTH。没有近前车时，只有相邻道实车直接证明一格空位，才衔接60m内真实前车。
-
-自由补位同时检查局部车道负荷、真实交错空位、物理走廊及本车和前后车的公开跟驰响应成本。横移跟踪目标道实际前后车空隙；必要合流优先，SUMO逐步执行，安全上限始终保留。
+## 代码结构与验收
 
 | 文件 | 职责 |
 | --- | --- |
-| [runrun.py](runrun.py) | 用户配置、实时窗口和自检 |
-| [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 全部纯规则控制与三个私有记忆字段 |
-| [native_sumo.py](variants/phase5g_pure_formation/experiments/native_sumo.py) | 路网、伯努利来车、局部观测、真实执行和记录 |
-| [run_native_flow.py](variants/phase5g_pure_formation/run_native_flow.py) | 单次实验和固定矩阵入口 |
-| [native_comparison.py](variants/phase5g_pure_formation/experiments/native_comparison.py) | 需求/源码核验、逐车重算和配对 |
-| [本轮实验工具](docs/experiments/2026-11-03-staggered-bottleneck/tools/README.md) | 冻结、紧凑封存与独立复算 |
+| [runrun.py](runrun.py) | 用户配置、实时窗口、自检 |
+| [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 纯规则控制、本车三个记忆字段、关联状态0/1 |
+| [native_sumo.py](variants/phase5g_pure_formation/experiments/native_sumo.py) | 伯努利来车、局部观测、原生执行和记录 |
+| [run_native_flow.py](variants/phase5g_pure_formation/run_native_flow.py) | 单次实验与固定矩阵入口 |
+| [native_comparison.py](variants/phase5g_pure_formation/experiments/native_comparison.py) | 共同条件核验、逐车重算与配对 |
+| [实验工具](docs/experiments/2026-11-03-staggered-bottleneck/tools/README.md) | 冻结、紧凑封存与离线复算 |
 
-`formation_state=1`表示本车已有编队跟驰、被跟驰或实际跨道互选关系；允许仍在调距。纯NOA为0。参与率、同时参与人数、连续1时长直接统计这些本车输出；同时人数可包含多支队伍。几何采用实际位置与速度另行展示。
+`formation_state=1`表示本车已有实际编队关系，允许仍在调距；纯NOA为0。同时参与人数可包含多支队伍，实际队形另按轨迹检查。
 
-## 验证与版本
+已安装源码SHA256：`2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a`。[实际磁盘验收](docs/experiments/2026-11-03-midflow-staggered/implementation/installed_D1_migrated_core.json)为239项测试及51项子测试通过；9项GUI入口测试、自检及30/30辆真实SUMO短测也通过。独立审查与测试迁移原件均保留。
 
-已安装源码SHA256：`8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f`。实际磁盘233项测试和43项子测试、9项GUI入口测试、依赖自检均通过；根入口真实短测22/22辆安全排空。[安装验收](docs/experiments/2026-11-03-staggered-bottleneck/implementation/installed_S_verification.json)与[完整规则测试](variants/phase5g_pure_formation/tests/test_local_staggered_rules.py)保留对应证据。
+版本保存在[GitHub](https://github.com/32780542/yanjiu1)。远端`yanjiu1`对应本仓库，`origin`是历史仓库。本轮分支为`research/20261103-midflow-staggered`；候选保存小补丁与SHA，完整计划分组紧凑归档。成功大轨迹经原件、归档和机制核验后定点清理，代表性完整轨迹和失败原件保留。
 
-版本保存在[GitHub仓库](https://github.com/32780542/yanjiu1)。远端 `yanjiu1` 对应该仓库，`origin`是历史仓库。各候选保存补丁和源SHA；数据按完整计划分组封包，单包小于20MB，逐件核验后清理本轮可替代大轨迹，不复制整份项目存版本。选定几何案例保留完整轨迹；未封口失败原件及状态继续保存。
+本轮已释放约1.70GB，包括1.55GB可替代成功轨迹和0.15GB已归档诊断的重复展开文件。120个案例的完整轨迹、反向结果上下文和24/45队形原件继续保留，见[存储执行记录](docs/experiments/2026-11-03-midflow-staggered/cleanup_execution/README.md)。
 
-历史[TM报告](docs/experiments/2026-10-30-rule-trials/研究结果与采用说明.md)、[P验收](docs/2026-10-29-P独立验收报告.md)及[Cai原文对照](docs/Cai2024全局方案对照依据.md)保留原版本含义。历史自建global入口继续存档，现行结论来自同输入的实际NOA、编队和匹配对照。
-
-本轮已清理约1.05GB可替代轨迹；失败原件及关键完整轨迹保留。详见[存储复核](docs/experiments/2026-11-03-staggered-bottleneck/storage_cleanup_final/README.md)。
+旧[S报告](docs/experiments/2026-11-03-staggered-bottleneck/README.md)、[TM报告](docs/experiments/2026-10-30-rule-trials/研究结果与采用说明.md)和[Cai原文对照](docs/Cai2024全局方案对照依据.md)保留各自版本含义；当前结论以本轮三档流量与D1为准。

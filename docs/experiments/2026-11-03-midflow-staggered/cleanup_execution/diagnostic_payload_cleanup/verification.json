@@ -1,0 +1,22 @@
+{
+  "status": "complete",
+  "files_removed": 1128,
+  "bytes_released": 151578995,
+  "archives_verified_and_retained": [
+    {
+      "archive": "closed_diagnostic_tables.tar.gz",
+      "sha256": "44a5516cf467c08365b2a7e31e98a286cec832f3f6d559044e1466384867a7b0",
+      "index_sha256": "ff218df6978e3f4c54e0f65f1ae06117d960078d304cd077e6746fb737b3f321",
+      "members": 991
+    },
+    {
+      "archive": "final91_diagnostic_tables.tar.gz",
+      "sha256": "8b4fa0ad07895b16fbecd8f69ff38dff7c200398f0eb909695556996f855f5fd",
+      "index_sha256": "6d07f3b9fec6497d162223f99813d947453b6b9cab8197d21f05217ca1fc4a14",
+      "members": 137
+    }
+  ],
+  "recursive_delete": false,
+  "traffic_raw_or_geometry_removed": false,
+  "restore": "tar -xzf ARCHIVE inside diagnosis"
+}

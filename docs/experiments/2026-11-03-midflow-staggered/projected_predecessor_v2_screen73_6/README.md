@@ -1,4 +1,4 @@
-# V2短筛：1750和2000四个种子均变慢
+# V2短筛：1750和2000四例均变慢
 
 新增W/V2六例全部安全排空，与原冻结S73/74六例同输入跨批核对有效。原summarize重验18个case（包括V1历史六例），原件/协议均通过；本批正式只引用`W-minus-S_transform`六对。源与完整命令见[固定协议](protocol.md)。
 
@@ -8,7 +8,7 @@
 | 1750 | 42.686132 | 42.788761 | +0.102630 | -0.240428 | 0/2 | +0.844725 | +14.5 |
 | 2000 | 43.240020 | 43.286673 | +0.046652 | -0.107891 | 0/2 | +1.731462 | +11.5 |
 
-表为73/74种子等权，差值W减S，改善为负差值除以参考均值。1750/2000四个种子全部变慢、变道明显增加，燃油三档均增加；此短筛不支持采用V2。逐种子全部指标见[paired_W_minus_S.csv](analysis/paired_W_minus_S.csv)，均值见[flow_means_W_minus_S.json](analysis/flow_means_W_minus_S.json)。原180秒formal [100,600)区域窗不足保持空值，未补值或声称容量。
+表为73/74种子等权，差值W减S，改善为负差值除以参考均值。1750/2000四例全部变慢、变道明显增加，燃油三档均增加；此短筛不支持采用V2。逐种子全部指标见[paired_W_minus_S.csv](analysis/paired_W_minus_S.csv)，均值见[flow_means_W_minus_S.json](analysis/flow_means_W_minus_S.json)。原180秒formal [100,600)区域窗不足保持空值，未补值或声称容量。
 
 机制全六例已提取，并与S/V在共同[30,180)窗比较，见[raw_V2screen6_v1](../diagnosis/raw_V2screen6_v1)和[V1V2screen18_summary_v1](../diagnosis/V1V2screen18_summary_v1)。该诊断单列，不替换原评价。
 

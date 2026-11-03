@@ -1,0 +1,78 @@
+{
+  "status": "PLAN_ONLY_NO_DELETION",
+  "created_local": "2026-11-03T23:04:23.522061+08:00",
+  "scope": "282 traffic-matrix run dirs only; all other runs, all24/45 geometry raw, GUI/smoke and previous stages excluded",
+  "cases": 282,
+  "failed_unsafe_incomplete_cases": 0,
+  "planned_prune_cases": 126,
+  "planned_prune_files": 252,
+  "planned_bytes_released": 1550020724,
+  "retained_present_cases": 120,
+  "retained_present_files": 240,
+  "retained_bytes": 1331850907,
+  "already_absent_authorized_files": 72,
+  "diagnostic_files_found": 0,
+  "geometry_raw_always_untouched": true,
+  "all_archives_current_sha_and_offline_coverage_verified": 24,
+  "root_requested_core": "D1/S91drop6 + NoA91drop3 extra to preserve full primary/secondary matched triplets; longNOA/S/D1seed81nine + D1development71dropthree; prior declared showcase scopes also retained",
+  "extra_core_NOA_files_reason": "3 additional NOA91drop cases beyond suggested6D1/S preserve each complete same-input triplet; root may review explicitly",
+  "counterexample_contexts": [
+    {
+      "flow": 1500.0,
+      "seed": 91,
+      "reasons": [
+        "primary_road_DID_not_improved"
+      ]
+    },
+    {
+      "flow": 1500.0,
+      "seed": 92,
+      "reasons": [
+        "secondary_fuel_increase_lane_drop"
+      ]
+    },
+    {
+      "flow": 1500.0,
+      "seed": 93,
+      "reasons": [
+        "secondary_fuel_increase_lane_drop"
+      ]
+    },
+    {
+      "flow": 1500.0,
+      "seed": 95,
+      "reasons": [
+        "secondary_fuel_increase_lane_drop"
+      ]
+    },
+    {
+      "flow": 1750.0,
+      "seed": 91,
+      "reasons": [
+        "primary_road_DID_not_improved"
+      ]
+    },
+    {
+      "flow": 1750.0,
+      "seed": 93,
+      "reasons": [
+        "secondary_fuel_increase_lane_drop"
+      ]
+    },
+    {
+      "flow": 2000.0,
+      "seed": 94,
+      "reasons": [
+        "secondary_road_DID_not_improved"
+      ]
+    }
+  ],
+  "approval_gates": [
+    "root reviews exact targets and retention list",
+    "auditor final45allLC/post5 and all other requested new fields complete and explicit release",
+    "every target rehashes exact expected bytes/SHA immediately before old prune_raw",
+    "only successful owned batch run dirs; old prune_raw validates all targets before any unlink per case"
+  ],
+  "no_recursive_delete": true,
+  "no_other_files_or_old_manifests_changed": true
+}

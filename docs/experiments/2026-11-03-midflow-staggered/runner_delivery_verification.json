@@ -1,0 +1,193 @@
+{
+  "verified_local": "2026-11-03T23:20:45.765904+08:00",
+  "traffic_batches": 22,
+  "traffic_distinct_runs": 282,
+  "all282_safe_drained_sealed": true,
+  "final_cases": 90,
+  "final_eligible_pairs": 60,
+  "publication_archives": [
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\baseline71_24\\evidence_complete24.tar.gz",
+      "bytes": 14249768,
+      "sha256": "a34570db95181d4d2e39ecaeff2baf65934258b0b9d7268186f861ac4b4567ce",
+      "cases": 24
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\projected_predecessor_v1_screen73_12\\evidence_complete12.tar.gz",
+      "bytes": 2961276,
+      "sha256": "752886dc747c5e11102288c51fb681fc524c129fad7a4c9f8b273ab462713cf7",
+      "cases": 12
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\projected_predecessor_v2_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1510629,
+      "sha256": "d70958a7568ca87f98b093cfa76e3889779b897d9a1a37cbccdd394c0c234448",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\future_resources_F2_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1508855,
+      "sha256": "10c2084f7503d3665346dc4bcf441ab72c740311e80e19717acf78ef62fafe19",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\local_gap_trajectory_C5_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1508814,
+      "sha256": "7a69b5409f525ea362cd10d9df05ef84793dfd1a8d3025f7ad94110147faabda",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\long1800_NOA81_6\\evidence_complete6.tar.gz",
+      "bytes": 9782351,
+      "sha256": "046f747fdceef6fa2e6401658dd83ded0ed1d6626d8413674ee4400874e2bd8e",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\long1800_S81_6\\evidence_complete6.tar.gz",
+      "bytes": 11269381,
+      "sha256": "78813f8f6308485641fda17b22b98d4bca60b2e4e4251db5cf68691090437f06",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\F2_C5_development71_24\\evidence_complete24.tar.gz",
+      "bytes": 15727581,
+      "sha256": "7f9b4299901fcb79f41b373b4003fb19897337541e5dd22ed103317a2d0cf801",
+      "cases": 24
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\bound_real_gap_GP_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1515847,
+      "sha256": "52701af5746cf01d8d25932436525dd7f48af43bf10bb4d7eb875a5e450c935d",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\bound_real_gap_GP2_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1516216,
+      "sha256": "4601ddfd0fa3a015fa6d5ac7df746b85fecd7dc76dcbfba36724432333a00ef1",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\bound_real_gap_GP2_development71_6\\evidence_complete6.tar.gz",
+      "bytes": 4080726,
+      "sha256": "84634b05201dcdc940d5dc824655240a05a0023b8029a4178dbe65d9a8c3c50d",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\matched_GP2_G0_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1367532,
+      "sha256": "9854157fc871a732155b8c8f32c6dcc8edbb92d819330422e8ac54f0c09ebfe0",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\capacity_spacing_B_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1521358,
+      "sha256": "72f44d952a51be7ff5828598fce2d79060e2aa3717f4ec7cf773639a695de3f7",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\capacity_spacing_BC_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1470012,
+      "sha256": "927f03bb6cf7561ac49da5c5b1a6f35dbbf1f4f8114751dd94e98ca23fa3fb93",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\bound_real_gap_GP2_long1800_81_6\\evidence_complete6.tar.gz",
+      "bytes": 11267385,
+      "sha256": "2f99beabb2c009357207cfc02904d1a52fc53247db4e0d6321f7a2a6e5ae6b3e",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\real_gap_balance_D1_screen73_6\\evidence_complete6.tar.gz",
+      "bytes": 1512537,
+      "sha256": "f1c87fc48790b24a08e0a96463f23ecd7eae84ce3c6ef492a24a8e40ed74f8ac",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\real_gap_balance_D1_development71_12\\evidence_complete12.tar.gz",
+      "bytes": 7753543,
+      "sha256": "60efbcfd095f262b02f3eea079b296bdcd7e9144423ba581d25765b04ac181b4",
+      "cases": 12
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\real_gap_balance_DR_DP_screen73_12\\evidence_complete12.tar.gz",
+      "bytes": 2911497,
+      "sha256": "6f13874fae394a1f0426173d9ebc27a9f1287f7a9d11abf6f15f06b2015f123d",
+      "cases": 12
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\real_gap_balance_DR_DP_development71_24\\evidence_complete24.tar.gz",
+      "bytes": 14810458,
+      "sha256": "7ef73259c1d3e96267984a15e19edb42bd20e0824d156fe1160d60fc75a9d8d6",
+      "cases": 24
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\real_gap_balance_D1_long1800_81_6\\evidence_complete6.tar.gz",
+      "bytes": 11289277,
+      "sha256": "7d0f159ca4ead665deba5f59122e4aa0836a5f03c07732b8bb2201b2895ac4e7",
+      "cases": 6
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\final91_D1_NOA60\\evidence_lane_drop30.tar.gz",
+      "bytes": 19465309,
+      "sha256": "d6526fdf4888718d7011dcf037f360b4b2d053ce85d94824f4ba2f7544cf6bd0",
+      "cases": 30
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\final91_D1_NOA60\\evidence_straight3_30.tar.gz",
+      "bytes": 17018055,
+      "sha256": "1f2d54b8ee06b7595c81f2c01d3a10df6daa608e03eaa3150c00320114970134",
+      "cases": 30
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\final91_S30\\evidence_lane_drop15.tar.gz",
+      "bytes": 10388725,
+      "sha256": "cd07e8f60004a3275fc79a29b8582f54694aa60d0810e3cd7161f7dc7e72a193",
+      "cases": 15
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-midflow-staggered\\final91_S30\\evidence_straight3_15.tar.gz",
+      "bytes": 9980624,
+      "sha256": "6cb2ed611b459969316bf25879bcaddff87a29bdf62d216baae3d4461a2401e2",
+      "cases": 15
+    }
+  ],
+  "source_bundle": {
+    "archive": "final91_frozen_D1_S_sources.tar.gz",
+    "bytes": 58278,
+    "sha256": "1008dc95d6dbd955cf94bd27ac776735f32d1d7cc3298c432daf87f36bbc2cdf",
+    "members": 30,
+    "all_members_byte_hash_verified": true,
+    "D1_rules_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+    "S_rules_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+    "D1_lines": 423,
+    "S_lines": 461,
+    "recorded_simulation_sources": 6,
+    "nonrule_sources": 5,
+    "source_only": true
+  },
+  "cleanup": {
+    "status": "complete",
+    "completed_local": "2026-11-03T23:13:05.609793+08:00",
+    "successful_cases_pruned": 126,
+    "files_deleted": 252,
+    "actual_bytes_released": 1550020724,
+    "retained_cases": 120,
+    "retained_files": 240,
+    "retained_bytes": 1331850907,
+    "all_retained_file_hashes_verified": true,
+    "geometry_and_nonmatrix_runs_excluded": true,
+    "failed_cases_deleted": 0,
+    "no_recursive_delete": true,
+    "original_manifests_seals_and_closed_final_directories_unchanged": true,
+    "all_deleted_cases_offline_verified_before_and_after": true
+  },
+  "closed_final_directories": [
+    "final91_D1_NOA60",
+    "final91_S30",
+    "final91_all90"
+  ],
+  "all_case_origins_sources_inputs_trips_and_ledgers_preserved": true,
+  "raw_history": "Earlier72 files pruned in documented scopes; final252 files pruned only after exact root approval and independent audit; current240 full raw hashes verified, geometry excluded",
+  "no_active_simulations": true,
+  "no_git_operations_by_runner": true
+}
