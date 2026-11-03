@@ -41,6 +41,16 @@
 消费继续复用同一A报告，映射 `--compare C200=A200 C300=A300`；不重读A raw、不重跑A验证或NOA，不先执行持续/正式。
 随后按主代理要求补 `20261104_C_straight_dev180_201_202_r01`：仅C200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
 该直路报告用 `--road-drop-report tmp/staggered_bottleneck/20261104_C_dev180_201_202_report_r01` 读取既有缩道配对，逐seed计算道路DID；不重跑C300直路。
+第四版 `20261104_C2_dev180_201_202_r01` 用315行C2_200/C2_300，三流量×201/202×transform=12例，180/600、jobs3。
+复用C报告内A-noa与C-transform，显式比较 `C2_200=A200/noa C2_200=C200/transform C2_300=A300/noa C2_300=C300/transform`；不先持续/正式。
+按主代理要求补 `20261104_C2_straight_dev180_201_202_r01`：仅C2_200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
+C2自身DID读取C2缩道既有报告；不复用C直路，不锁源或执行持续/正式。
+第五版 `20261104_C3_dev180_201_202_r01` 用319行C3_200/C3_300，同12例缩道180/600、jobs3；复用C2消费表中A-noa和C2-transform。
+显式比较 `C3_200=A200/noa C3_200=C2_200/transform C3_300=A300/noa C3_300=C2_300/transform`；不正式。
+按主代理要求补 `20261104_C3_straight_dev180_201_202_r01`：仅C3_200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
+C3自身道路DID读取C3缩道既有报告；不复用C2直路，独立保留本版证据。
+第六版 `20261104_C4_dev180_201_202_r01` 用318行C4_200/C4_300，同12例缩道180/600、jobs3；复用C2消费表中A-noa与C2-transform。
+显式比较 `C4_200=A200/noa C4_200=C2_200/transform C4_300=A300/noa C4_300=C2_300/transform`，不先直路/持续/正式。
 
 ## 可直接填写的 PowerShell 命令
 

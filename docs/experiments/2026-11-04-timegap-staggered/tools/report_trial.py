@@ -50,7 +50,9 @@ def road_effect(pairs, drop_report, output):
         key = straight["candidate"], straight["flow"], straight["seed"]
         lane_drop = drop.get(key)
         valid = bool(lane_drop and lane_drop["pair_eligible"] and straight["pair_eligible"])
-        row = dict(candidate=key[0], flow=key[1], seed=key[2], eligible=valid)
+        row = dict(candidate=key[0], flow=key[1], seed=key[2], eligible=valid,
+                   drop_reference_candidate=lane_drop.get("reference_candidate") if lane_drop else None,
+                   straight_reference_candidate=straight.get("reference_candidate"))
         for metric in METRICS:
             a, b = lane_drop.get("delta_" + metric) if lane_drop else None, straight.get("delta_" + metric)
             row["drop_delta_" + metric], row["straight_delta_" + metric] = a, b
@@ -71,7 +73,7 @@ def road_effect(pairs, drop_report, output):
     traffic.write_rows(output / "road_did_means.csv", means)
     seal_case.write(output / "road_did_summary.json", dict(eligible_seeds=sum(r["eligible"] for r in rows), means=means,
         drop_report_reused=str(drop_report), formula="DID=(transform-NOA)_drop-(transform-NOA)_straight, within seed; equal seed means",
-        reference_identity="Drop reuses A200/noa; straight uses C200/noa; common NOA definitions confirmed before execution",
+        reference_identity="Per-seed reference candidates recorded in road_did_seeds.csv; common NOA definitions confirmed before execution",
         share_definition="ratio of equal-seed mean straight system delta to mean drop system delta; not mean per-seed percentages"))
 
 
@@ -79,11 +81,12 @@ def cross_pairs(cases, mappings):
     _, traffic = seal_case.tools()
     index = summarize.unique(cases)
     pairs = []
-    for target, reference in (mapping.split("=", 1) for mapping in mappings):
+    for target, specification in (mapping.split("=", 1) for mapping in mappings):
+        reference, separator, reference_mode = specification.partition("/")
         for case in cases:
             if case["candidate"] != target or case["mode"] != "transform":
                 continue
-            for mode in ("noa", "transform"):
+            for mode in ((reference_mode,) if separator else ("noa", "transform")):
                 other = index.get((reference, case["flow"], case["seed"], case["scenario"], mode))
                 a, b = other.get("_run") if other else None, case["_run"]
                 pair = traffic.pair(a, b, target + "-minus-" + reference + "_" + mode,
@@ -129,7 +132,7 @@ def main():
     parser.add_argument("--batch", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--reuse-report", type=Path)
-    parser.add_argument("--compare", nargs="+", help="explicit target=reference candidates, e.g. B200=A200")
+    parser.add_argument("--compare", nargs="+", help="explicit TARGET=REFERENCE[/MODE], e.g. C2_200=A200/noa")
     parser.add_argument("--road-drop-report", type=Path, help="already-consumed drop pairs for a straight-road DID")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
