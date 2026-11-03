@@ -23,7 +23,7 @@ def save(fig, output, name):
     fig.savefig(output / (name + '.png'), dpi=300, bbox_inches='tight')
     svg = output / (name + '.svg')
     fig.savefig(svg, bbox_inches='tight')
-    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines()) + '\n',
+    svg.write_text('\n'.join(line.rstrip() for line in svg.read_text(encoding='utf-8').splitlines()) + '\n',
                    encoding='utf-8', newline='\n')
     plt.close(fig)
 
@@ -67,14 +67,14 @@ def main():
                 ax.scatter([flow] * len(samples), samples, color=color, alpha=.35, s=12)
                 values.append(mean(samples))
             ax.plot(FLOWS, values, 'o-', color=color, label=label, markersize=4, linewidth=1.5)
-        ax.set(xticks=FLOWS, xlabel='流量 / 辆·h⁻¹·车道⁻¹')
+        ax.set(xticks=FLOWS, xlabel='流量 / (辆/h/车道)')
         ax.grid(axis='y', linewidth=.5, alpha=.3)
 
     fig, axes = plt.subplots(1, 2, figsize=(8.5, 3.6), sharey=True, layout='constrained')
     for ax, preview in zip(axes, (200, 300)):
         curves(ax, preview, 'mean_system_time_s')
         ax.set_title(f'{preview} m道路信息')
-    axes[0].set_ylabel('平均系统时间 / s·车⁻¹')
+    axes[0].set_ylabel('平均系统时间 / s')
     axes[1].legend(frameon=False)
     fig.suptitle('缩道交通效率：独立五种子确认')
     save(fig, args.output, 'system_time')
@@ -97,11 +97,11 @@ def main():
                             's--', color='#3C5488', label='扣除直路差值')
         axes[index, 1].plot(FLOWS, [float(row['delta_fuel_g_per_km']) for row in selected],
                             'o-', color='#E64B35')
-        axes[index, 0].set_ylabel(f'{preview} m · 时间差 / s·车⁻¹')
-        axes[index, 1].set_ylabel(f'{preview} m · 油耗差 / g·km⁻¹')
+        axes[index, 0].set_ylabel(f'{preview} m · 时间差 / s')
+        axes[index, 1].set_ylabel(f'{preview} m · 油耗差 / (g/km)')
         for ax in axes[index]:
             ax.axhline(0, color='#aaaaaa', linewidth=.7)
-            ax.set(xticks=FLOWS, xlabel='流量 / 辆·h⁻¹·车道⁻¹')
+            ax.set(xticks=FLOWS, xlabel='流量 / (辆/h/车道)')
             ax.grid(axis='y', linewidth=.5, alpha=.3)
     axes[0, 0].legend(frameon=False)
     fig.suptitle('形成并变换−NOA：时间改善与燃油代价')
@@ -114,6 +114,8 @@ def main():
                modes=('formation', 'transform'))
         axes[index, 0].set_ylabel(f'{preview} m · 平均同时参与车辆数')
         axes[index, 1].set_ylabel(f'{preview} m · 车辆时间参与率 / %')
+        axes[index, 0].set_ylim(bottom=0)
+        axes[index, 1].set_ylim(0, 101)
     axes[0, 1].legend(frameon=False)
     fig.suptitle('直接0/1关系统计：全路参与规模与参与率')
     save(fig, args.output, 'participation')

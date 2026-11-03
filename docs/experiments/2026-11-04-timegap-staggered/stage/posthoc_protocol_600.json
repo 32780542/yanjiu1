@@ -3,7 +3,7 @@
   "registered_utc": "2026-11-03T20:45:15.201049+00:00",
   "source_selection": "fixed by root; no main-source or parameter reselection based on any result",
   "deadline_local": "2026-11-04T08:00:00+08:00",
-  "priority": "finish formal180 first, then NOA_front20045; start h48 only if time allows its whole fixed matrix",
+  "priority": "finish formal180, then NOA_front20045, then speedcap28836; start h48 only if enough time for its whole fixed matrix before08:00",
   "resources": {
     "jobs": 3,
     "root_long_jobs": 1,
@@ -133,5 +133,69 @@
     "eligibility": "same demand/parameters/nonrule source and old sealed-evaluator full-completion eligibility; errors/incompletes retained, no completed-subset efficiency claims",
     "mechanism": "actual LC completion/terminal stop counts and direct0/1 distinct from geometric formation acceptance",
     "straight_sharing": "300 has no extra straight run; explicitly reference corresponding actual200 source/mode; no new independent sample count"
+  },
+  "speed_cap_supplement": {
+    "registered_utc": "2026-11-03T22:10:24.987609+00:00",
+    "reason": "root requested direct check of bottleneck effect under a common request cap equal to cruise, without changing the formal main controller",
+    "status": "registered_fixed_pending_formal_and_strong_noa",
+    "seeds": [
+      201,
+      202
+    ],
+    "sources": [
+      {
+        "candidate": "CAP288_200",
+        "path": "tmp/staggered_bottleneck/candidates/20261104_speedcap288_200/native_rules.py",
+        "sha256": "6cc79e4ab72040f8fd1e334b202cd9053aa4ce5652cf9a3025906f244b2a85b0"
+      },
+      {
+        "candidate": "CAP288_300",
+        "path": "tmp/staggered_bottleneck/candidates/20261104_speedcap288_300/native_rules.py",
+        "sha256": "3d6c2012a5a2764a564b6d40b22c762e8904877819aca3da7b22dc2b41dff947"
+      }
+    ],
+    "source_lines": 316,
+    "change": "only shared controller MAX_SPEED request cap33.3->28.8 m/s; cruise28.8, physical native_sumo maxSpeed33.3, other logic/safety/entry unchanged",
+    "batches": [
+      {
+        "name": "20261104_posthoc_speedcap288_drop_201_202_r01",
+        "previews": [
+          200,
+          300
+        ],
+        "scenario": "lane_drop",
+        "modes": [
+          "noa",
+          "transform"
+        ],
+        "cases": 24
+      },
+      {
+        "name": "20261104_posthoc_speedcap288_straight_201_202_r01",
+        "previews": [
+          200
+        ],
+        "scenario": "straight3",
+        "modes": [
+          "noa",
+          "transform"
+        ],
+        "cases": 12
+      }
+    ],
+    "demand_duration_s": 600,
+    "max_time_s": 1200,
+    "flows_veh_h_lane": [
+      1500,
+      1750,
+      2000
+    ],
+    "headway_s": 0.85,
+    "contrasts": [
+      "within-source transform-noa, same preview/road/flow/seed",
+      "per-seed road DID,300explicitly shares200straight"
+    ],
+    "comparison_limit": "formal33.3 uses211-215 and this group201/202; no fake paired speed-cap effect across different seeds, no new nominal rerun",
+    "source_lock": "no result-based source or parameter reselection; frozen formal C12/P12 retained"
   }
 }

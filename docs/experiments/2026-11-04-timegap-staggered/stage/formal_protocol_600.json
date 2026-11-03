@@ -1,5 +1,5 @@
 {
-  "status": "registered_locked",
+  "status": "running_main_consumed_parallel",
   "registered_utc": "2026-11-03T20:35:21.064190+00:00",
   "formal_started": true,
   "research_deadline_local": "2026-11-04T08:00:00+08:00",
@@ -194,5 +194,12 @@
     ],
     "lc_max_note": "report per-seed maxima, their equal-seed mean and full group maximum separately; retain per-seed over2 counts",
     "straight_note": "300 uses the actual200 straight source; any shared table view remains explicitly labeled and is not an extra independent sample"
+  },
+  "main_result": {
+    "report": "tmp/staggered_bottleneck/20261104_formal600_main_211_215_report_r01",
+    "cases": 135,
+    "failed_cases": 0,
+    "eligible_mode_pairs": 135,
+    "eligible_road_did_seeds": 90
   }
 }

@@ -1,0 +1,428 @@
+{
+  "published_commit": "f65333bfd94efbbe3957509e29baf56d7a77962f",
+  "retention": "All seed201 full trajectories and seed202 formation-mode trajectories retained; errors/unfinished and all other batches untouched.",
+  "cases": [
+    {
+      "candidate": "C8_200",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_200_1500_202_lane_drop_noa\\20261103T190454477959Z_lane_drop_noa_s202_be2c4f",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_200_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 8827928
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_200_1500_202_lane_drop_transform\\20261103T190505483243Z_lane_drop_transform_s202_c4da65",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_200_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10185154
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_200_1750_202_lane_drop_noa\\20261103T190705949650Z_lane_drop_noa_s202_5f521f",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_200_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12279121
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_200_1750_202_lane_drop_transform\\20261103T190750240798Z_lane_drop_transform_s202_edc144",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_200_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12641565
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_200_2000_202_lane_drop_noa\\20261103T191000347915Z_lane_drop_noa_s202_70a537",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_200_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 20074690
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_200_2000_202_lane_drop_transform\\20261103T191208375488Z_lane_drop_transform_s202_cc3697",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_200_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 18629757
+    },
+    {
+      "candidate": "C8_300",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_300_1500_202_lane_drop_noa\\20261103T191429485024Z_lane_drop_noa_s202_317b58",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_300_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 9014357
+    },
+    {
+      "candidate": "C8_300",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_300_1500_202_lane_drop_transform\\20261103T191527581647Z_lane_drop_transform_s202_2324a2",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_300_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 10068890
+    },
+    {
+      "candidate": "C8_300",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_300_1750_202_lane_drop_noa\\20261103T191709530273Z_lane_drop_noa_s202_332bb0",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_300_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12132064
+    },
+    {
+      "candidate": "C8_300",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_300_1750_202_lane_drop_transform\\20261103T191815584348Z_lane_drop_transform_s202_7dd67b",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_300_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 12222839
+    },
+    {
+      "candidate": "C8_300",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_300_2000_202_lane_drop_noa\\20261103T192035190323Z_lane_drop_noa_s202_15a915",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_300_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 18672087
+    },
+    {
+      "candidate": "C8_300",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_drop_201_202_r01\\cases\\C8_300_2000_202_lane_drop_transform\\20261103T192232266102Z_lane_drop_transform_s202_e84093",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_drop_201_202_r01/C8_300_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 17204473
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "straight3",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_straight_201_202_r01\\cases\\C8_200_1500_202_straight3_noa\\20261103T192739447104Z_straight3_noa_s202_d880ff",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_straight_201_202_r01/C8_200_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 7291359
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "straight3",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_straight_201_202_r01\\cases\\C8_200_1500_202_straight3_transform\\20261103T192748264408Z_straight3_transform_s202_ababbe",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_straight_201_202_r01/C8_200_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 9752407
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "straight3",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_straight_201_202_r01\\cases\\C8_200_1750_202_straight3_noa\\20261103T192925160037Z_straight3_noa_s202_a81b4e",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_straight_201_202_r01/C8_200_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 9081462
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "straight3",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_straight_201_202_r01\\cases\\C8_200_1750_202_straight3_transform\\20261103T192950125208Z_straight3_transform_s202_2ce5b6",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_straight_201_202_r01/C8_200_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 11420208
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "noa",
+      "scenario": "straight3",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_straight_201_202_r01\\cases\\C8_200_2000_202_straight3_noa\\20261103T193136923140Z_straight3_noa_s202_54dd92",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_straight_201_202_r01/C8_200_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 11174110
+    },
+    {
+      "candidate": "C8_200",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "straight3",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C8_dev600_straight_201_202_r01\\cases\\C8_200_2000_202_straight3_transform\\20261103T193217003832Z_straight3_transform_s202_d6c606",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C8_dev600_straight_201_202_r01/C8_200_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 13236135
+    },
+    {
+      "candidate": "C12_200",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\C12_200_1500_202_lane_drop_transform\\20261103T202913901256Z_lane_drop_transform_s202_451659",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/C12_200_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 2982593
+    },
+    {
+      "candidate": "C12_200",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\C12_200_1750_202_lane_drop_transform\\20261103T202937317385Z_lane_drop_transform_s202_71bb1b",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/C12_200_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3553064
+    },
+    {
+      "candidate": "C12_200",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\C12_200_2000_202_lane_drop_transform\\20261103T203003794301Z_lane_drop_transform_s202_6094c9",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/C12_200_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 4317621
+    },
+    {
+      "candidate": "C12_300",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\C12_300_1500_202_lane_drop_transform\\20261103T203035570775Z_lane_drop_transform_s202_ec0aba",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/C12_300_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 2920303
+    },
+    {
+      "candidate": "C12_300",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\C12_300_1750_202_lane_drop_transform\\20261103T203059319316Z_lane_drop_transform_s202_28d620",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/C12_300_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3543513
+    },
+    {
+      "candidate": "C12_300",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\C12_300_2000_202_lane_drop_transform\\20261103T203126308401Z_lane_drop_transform_s202_7fafc9",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/C12_300_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 4259707
+    },
+    {
+      "candidate": "P12_200",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\P12_200_1500_202_lane_drop_transform\\20261103T203159284663Z_lane_drop_transform_s202_1bc81f",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/P12_200_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 2963696
+    },
+    {
+      "candidate": "P12_200",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\P12_200_1750_202_lane_drop_transform\\20261103T203221936408Z_lane_drop_transform_s202_c436d8",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/P12_200_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3558265
+    },
+    {
+      "candidate": "P12_200",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\P12_200_2000_202_lane_drop_transform\\20261103T203248040458Z_lane_drop_transform_s202_918297",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/P12_200_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 4361168
+    },
+    {
+      "candidate": "P12_300",
+      "flow": 1500.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\P12_300_1500_202_lane_drop_transform\\20261103T203321429209Z_lane_drop_transform_s202_c2f569",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/P12_300_f1500.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 2978859
+    },
+    {
+      "candidate": "P12_300",
+      "flow": 1750.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\P12_300_1750_202_lane_drop_transform\\20261103T203344916380Z_lane_drop_transform_s202_2d2bf8",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/P12_300_f1750.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 3488372
+    },
+    {
+      "candidate": "P12_300",
+      "flow": 2000.0,
+      "seed": 202,
+      "mode": "transform",
+      "scenario": "lane_drop",
+      "run": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_C12_P12_dev180_201_202_r01\\cases\\P12_300_2000_202_lane_drop_transform\\20261103T203412528921Z_lane_drop_transform_s202_6d94c2",
+      "published_archive": "docs/experiments/2026-11-04-timegap-staggered/data/evidence/development600_short/20261104_C12_P12_dev180_201_202_r01/P12_300_f2000.tar.gz",
+      "deleted": [
+        "positions.jsonl.gz",
+        "events.jsonl.gz"
+      ],
+      "bytes_released": 4337952
+    }
+  ],
+  "files": 60,
+  "bytes_released": 267173719
+}

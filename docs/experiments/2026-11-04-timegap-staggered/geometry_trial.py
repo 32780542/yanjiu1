@@ -20,6 +20,8 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--demo', choices=('unformed24', 'formed45'), required=True)
     p.add_argument('--scenario', choices=('straight3', 'lane_drop'), required=True)
+    p.add_argument('--mode', choices=('noa', 'formation', 'transform'), default='transform')
+    p.add_argument('--initial', type=Path, help='Override the original demo initial tape.')
     p.add_argument('--exit-m', type=int, default=2400)
     a = p.parse_args()
     if a.exit_m < 1200:
@@ -37,12 +39,12 @@ def main():
         target = source / name
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(raw)
-    tape = OLD / (a.demo + '_initial.json')
+    tape = a.initial if a.initial is not None else OLD / (a.demo + '_initial.json')
     command = [sys.executable, '-X', 'utf8', '-B', str(source / 'run_native_flow.py'),
-               '--mode', 'transform', '--flow', '1750', '--seed', '1', '--duration', '1',
+               '--mode', a.mode, '--flow', '1750', '--seed', '1', '--duration', '1',
                '--max-time', '240', '--scenario', a.scenario, '--initial', str(tape),
                '--diagnostic', '--output-base', str(a.output / 'run')]
-    protocol = {'demo': a.demo, 'scenario': a.scenario, 'rules': str(a.rules),
+    protocol = {'demo': a.demo, 'scenario': a.scenario, 'mode': a.mode, 'rules': str(a.rules),
                 'initial': str(tape), 'exit_m': a.exit_m, 'bottleneck_m': 1000,
                 'purpose': 'formation geometry; not a traffic-efficiency comparison', 'command': command}
     (a.output / 'protocol.json').write_text(json.dumps(protocol, indent=2) + '\n', encoding='utf-8')
