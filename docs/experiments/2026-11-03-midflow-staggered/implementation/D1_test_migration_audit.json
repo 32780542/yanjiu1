@@ -1,0 +1,58 @@
+{
+  "only_permitted_existing_tests_changed": [
+    "tests/test_native_rules.py",
+    "tests/test_braking_cost_fill.py"
+  ],
+  "other_13_test_files_and_D1_source_match_before": true,
+  "migrated_source_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "red_failure_count": 9,
+  "expected_red9": [
+    "test_a_new_lane_head_uses_the_exact_lane_phase",
+    "test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640",
+    "test_retained_head_couples_to_actual_ending_peer_without_a_fake_front",
+    "test_selected_local_cell_survives_lateral_motion_and_completion",
+    "test_upstream_extra_car_fills_the_nearby_missing_middle_slot",
+    "test_visible_front_sequence_follows_the_nearest_physical_front",
+    "test_a_lower_braking_alternative_wins_equal_formation_benefit",
+    "test_cost_ranking_alternative_is_below_separate_severe_braking_bound",
+    "test_equal_speed_useful_fill_is_still_accepted"
+  ],
+  "migrated_suite_returncode": 0,
+  "migrated_test_files": 16,
+  "tests_passed": 239,
+  "subtests_passed": 51,
+  "method_AST_changes": {
+    "test_native_rules.py": {
+      "changed": [
+        "test_a_new_lane_head_uses_the_exact_lane_phase",
+        "test_retained_head_couples_to_actual_ending_peer_without_a_fake_front",
+        "test_visible_front_sequence_follows_the_nearest_physical_front"
+      ],
+      "removed": [
+        "test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640",
+        "test_selected_local_cell_survives_lateral_motion_and_completion",
+        "test_upstream_extra_car_fills_the_nearby_missing_middle_slot"
+      ],
+      "added": [
+        "test_selected_real_gap_survives_lateral_motion_and_completion",
+        "test_upstream_extra_car_balances_actual_load_through_a_real_gap",
+        "test_visible_ending_traffic_cancels_only_unstarted_entry_before_640"
+      ]
+    },
+    "test_braking_cost_fill.py": {
+      "changed": [
+        "test_a_lower_braking_alternative_wins_equal_formation_benefit",
+        "test_cost_ranking_alternative_is_below_separate_severe_braking_bound",
+        "test_equal_speed_useful_fill_is_still_accepted",
+        "useful_fill"
+      ],
+      "removed": [],
+      "added": [
+        "assert_real_load_reducing_opportunity"
+      ]
+    }
+  },
+  "new_portable_contracts": 6,
+  "no_source_changes": true,
+  "no_Git_operations": true
+}

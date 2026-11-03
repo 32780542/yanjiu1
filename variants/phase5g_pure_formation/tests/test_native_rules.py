@@ -115,16 +115,23 @@ class NativeRulesTests(unittest.TestCase):
         self.assertAlmostEqual(self.r._request(ego, 100.0, 15.0), 19.0)
         self.assertAlmostEqual(self.r._request(ego, 100.0, 20.0), 20.0)
 
-    def test_upstream_extra_car_fills_the_nearby_missing_middle_slot(self):
+    def test_upstream_extra_car_balances_actual_load_through_a_real_gap(self):
         ego = self.car(0, 285.0, 0)
         others = [
-            self.car(1, 300.0, 2),
-            self.car(2, 270.0, 2),
+            self.car(1, 270.0, 2),
+            self.car(2, 240.0, 2),
             self.car(3, 255.0, 1),
-            self.car(4, 300.0, 0),
-            self.car(5, 270.0, 0),
+            self.car(4, 255.0, 0),
+            self.car(5, 225.0, 0),
         ]
-        self.assertEqual(self.command(ego, others, mode="formation", drop=None).lane, 1)
+        counts = [sum(c.lane == lane for c in (ego, *others)) for lane in range(3)]
+        self.assertEqual(counts, [3, 1, 2])
+        self.assertLess(sum(n*n for n in (2, 2, 2)), sum(n*n for n in counts))
+        self.assertTrue(self.r._clear(ego, others, 1))
+        command, memory = self.r.decide(ego, others, self.r.Memory(), "formation", None)
+        self.assertEqual((command.lane, command.reason), (1, "fill_layer"))
+        self.assertEqual(command.target_x, ego.x)
+        self.assertEqual(memory.gap, (None, 3))
 
     def test_equal_phase_error_prefers_nearer_physical_peer_without_track_order(self):
         ego = self.car(0, 300.0, 0)
@@ -181,12 +188,15 @@ class NativeRulesTests(unittest.TestCase):
     def test_retained_head_couples_to_actual_ending_peer_without_a_fake_front(self):
         ego = self.car(0, 700.0, 1)
         peer = self.car(1, 670.0, 2)
-        a = self.command(ego, [peer])
+        # Already joining isolates longitudinal phase from a new load transfer.
+        a, memory = self.r.decide(ego, [peer], self.r.Memory(joining=True), "transform")
         # dx=-30 and phi(peer)-phi(ego)=-15; a three-lane edge clips at -2m/s.
         self.assertIsNone(a.reference)
         self.assertAlmostEqual(a.target_x, ego.x - 2.0 / self.r.POSITION_GAIN)
         self.assertAlmostEqual(a.speed, self.r.CRUISE - 2.0 * self.r.SPEED_RELAXATION)
         self.assertEqual(a.formation_state, 1)
+        self.assertIsNone(a.lane)
+        self.assertTrue(memory.joining)
 
     def test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes(self):
         ego = self.car(0, 100.0, 2, 20.0)
@@ -243,8 +253,12 @@ class NativeRulesTests(unittest.TestCase):
 
     def test_visible_front_sequence_follows_the_nearest_physical_front(self):
         ego = self.car(0, 100.0, 2)
-        command = self.command(ego, [self.car(1, 150.0, 2), self.car(2, 200.0, 2)], drop=None)
+        rows = [self.car(1, 150.0, 2), self.car(2, 200.0, 2)]
+        command, _ = self.r.decide(ego, rows, self.r.Memory(joining=True), "transform", None)
         self.assertAlmostEqual(command.target_x, 120.0)
+        self.assertEqual(command.reference, rows[0].track)
+        self.assertIsNone(command.lane)
+        self.assertAlmostEqual(command.speed, 30.0)
 
     def test_a_complete_local_unit_does_not_race_a_distant_unit(self):
         cars = self.six()
@@ -327,25 +341,29 @@ class NativeRulesTests(unittest.TestCase):
         self.assertAlmostEqual(command.target_x, (shifted[2].x + shifted[3].x) / 2)
         self.assertLessEqual(command.speed, self.r.safe_speed(after_ego, shifted))
 
-    def test_selected_local_cell_survives_lateral_motion_and_completion(self):
+    def test_selected_real_gap_survives_lateral_motion_and_completion(self):
         ego = self.car(0, 285.0, 0)
         rows = [
             self.car(i + 1, x, lane)
             for i, (x, lane) in enumerate(
-                ((300.0, 2), (270.0, 2), (255.0, 1), (300.0, 0), (270.0, 0))
+                ((270.0, 2), (240.0, 2), (255.0, 1), (255.0, 0), (225.0, 0))
             )
         ]
         command, memory = self.r.decide(ego, rows, self.r.Memory(), "transform", None)
         self.assertEqual(command.lane, 1)
+        self.assertEqual(memory.gap, (None, 3))
         target = command.target_x
         ego = replace(ego, x=287.88, y=1.98, vy=3.3)
         rows = [replace(c, x=c.x + 2.88) for c in rows]
         command, memory = self.r.decide(ego, rows, memory, "transform", None)
         self.assertAlmostEqual(command.target_x, target + 2.88)
+        self.assertEqual(memory.gap, (None, 3))
         ego = replace(ego, lane=1, y=4.95, vy=0.0)
-        command, _ = self.r.decide(ego, rows, memory, "transform")
+        command, arrived = self.r.decide(ego, rows, memory, "transform")
         self.assertIsNone(command.lane)
         self.assertAlmostEqual(command.target_x, target + 2.88)
+        self.assertIsNone(arrived.lane_target)
+        self.assertFalse(arrived.joining)
 
     def test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows(self):
         ego = self.car(0, 700.0, 2)
@@ -369,16 +387,27 @@ class NativeRulesTests(unittest.TestCase):
         self.assertAlmostEqual(command.target_x, 675.0)
 
     def test_a_new_lane_head_uses_the_exact_lane_phase(self):
-        ego = self.car(0, 285.0, 0)
+        ego = self.car(0, 285.0, 1)
         rows = [
             self.car(i + 1, x, lane)
             for i, (x, lane) in enumerate(
-                ((300.0, 2), (270.0, 2), (255.0, 1), (300.0, 0), (270.0, 0))
+                ((300.0, 0), (270.0, 0), (300.0, 2), (270.0, 2), (255.0, 1))
             )
         ]
-        command, memory = self.r.decide(ego, rows, self.r.Memory(), "transform", None)
+        # Each lane has two real cars: no load-reducing free fill can override
+        # the newly arrived head's 15m phase relation to either outer lane.
+        self.assertEqual([sum(c.lane == lane for c in (ego, *rows)) for lane in range(3)], [2, 2, 2])
+        command, memory = self.r.decide(ego, rows, self.r.Memory(joining=True), "transform", None)
         self.assertAlmostEqual(command.target_x, 285.0)
-        self.assertTrue(memory.joining)
+        self.assertAlmostEqual(command.speed, self.r.CRUISE)
+        self.assertIsNone(command.reference)
+        self.assertIsNone(command.lane)
+        self.assertFalse(memory.joining)
+        shifted = [replace(c, x=c.x + 1.0) if c.x == 300.0 else c for c in rows]
+        perturbed, _ = self.r.decide(ego, shifted, self.r.Memory(joining=True), "transform", None)
+        self.assertAlmostEqual(perturbed.target_x, 286.0)
+        self.assertAlmostEqual(perturbed.speed, self.r.CRUISE + .06)
+        self.assertIsNone(perturbed.lane)
 
     def test_a_free_head_does_not_chase_its_own_positive_offset(self):
         ego = self.car(0, 700.0, 2)
@@ -407,20 +436,20 @@ class NativeRulesTests(unittest.TestCase):
         self.assertAlmostEqual(command.speed, self.r.CRUISE + 2.0 * self.r.SPEED_RELAXATION)
         self.assertAlmostEqual(command.speed, self.r._request(ego, command.target_x, self.r.CRUISE))
 
-    def test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640(self):
-        ego = self.car(0, 639.0, 1)
-        rows = [
-            self.car(i + 1, x, lane)
-            for i, (x, lane) in enumerate(
-                ((654.0, 2), (654.0, 1), (624.0, 1), (609.0, 0), (594.0, 0))
-            )
-        ]
-        command, memory = self.r.decide(ego, rows, self.r.Memory(), "transform")
-        self.assertEqual(command.lane, 2)
-        command, _ = self.r.decide(
-            replace(ego, x=642.0), [replace(c, x=c.x + 3.0) for c in rows], memory, "transform"
-        )
-        self.assertNotEqual(command.lane, 2)
+    def test_visible_ending_traffic_cancels_only_unstarted_entry_before_640(self):
+        ego = self.car(0, 625.0, 1)
+        rows = [self.car(1, 640.0, 0), self.car(2, 640.0, 2), self.car(3, 670.0, 2)]
+        memory = self.r.Memory(lane_target=2, joining=True)
+        command, changed = self.r.decide(ego, rows, memory, "transform")
+        self.assertLess(ego.x, 640.0)
+        self.assertEqual((command.lane, command.reason), (0, "fill_layer"))
+        self.assertEqual(changed.lane_target, 0)
+        self.assertEqual(changed.gap, (1, None))
+        for active in (replace(ego, vy=.2), replace(ego, pending_lane=2)):
+            with self.subTest(vy=active.vy, pending=active.pending_lane):
+                command, changed = self.r.decide(active, rows, memory, "transform")
+                self.assertEqual((command.lane, command.reason), (2, "executing"))
+                self.assertEqual(changed.lane_target, 2)
 
     def test_opposite_sides_do_not_both_fill_the_same_physical_corridor(self):
         cars = [

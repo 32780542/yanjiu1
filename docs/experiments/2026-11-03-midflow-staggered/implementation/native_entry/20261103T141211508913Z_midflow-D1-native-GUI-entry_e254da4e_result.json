@@ -1,0 +1,37 @@
+{
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-B",
+    "-m",
+    "pytest",
+    "tests/test_native_gui_entry.py",
+    "-q"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 300.0,
+  "started_utc": "2026-11-03T14:12:11.510213+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 76564,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 5.125,
+  "ended_utc": "2026-11-03T14:12:16.649188+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "41a894d093a07d2ca301f3eb3dd6d01edd687429aca2576824f465f74ae08fa0",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "archive_errors": {}
+}

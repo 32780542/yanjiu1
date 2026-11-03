@@ -1,0 +1,28 @@
+{
+  "source_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "lines": 423,
+  "source_rebuild_bytes_verified": true,
+  "self_contract_green": "results/operations/20261103T130121604487Z_midflow-D1-self-green_559f1f1f",
+  "primary_contract_green": "results/operations/20261103T130122373910Z_midflow-D1-scope-green_e654afdf",
+  "final_primary_contract_green": "results/operations/20261103T130542607172Z_midflow-D1-receiving-scope-final_715273b7",
+  "primary_test_count": 10,
+  "self_contract_test_count": 1,
+  "NOA_random_states": 1000,
+  "NOA_maps_per_state": 2,
+  "physical_safe_comparisons": 1000,
+  "public_CF_comparisons": 1000,
+  "D0_D1_10000_log": "results/operations/20261103T130244351052Z_midflow-D1-10000-self-audit_013d03af",
+  "D0_D1_totals": {
+    "normal_equal": 5000,
+    "normal_different": 0,
+    "boundary_equal": 4932,
+    "boundary_different": 68,
+    "boundary_with_self_pollution": 1068,
+    "NOA_cases": 2448,
+    "NOA_different": 0
+  },
+  "full_core_functions_except_fill_decide_AST_equal_to_S": true,
+  "response_cost_and_cf_cached_AST_equal_to_S": true,
+  "no_new_parameters_state_waiting_or_gate": true,
+  "no_traffic_simulation": true
+}

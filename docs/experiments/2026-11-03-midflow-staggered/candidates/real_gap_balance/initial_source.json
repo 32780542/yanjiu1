@@ -1,0 +1,14 @@
+{
+  "source_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_real_gap_balance\\native_rules.py",
+  "source_sha256": "69b80cf07e858a2553824d200be56f0a207f703b919bb18abe5c730e9b5b3eea",
+  "lines": 423,
+  "frozen_S_blob": "1aa86344af2a269053cd4fcda9d58168697daf17:variants/phase5g_pure_formation/noa/native_rules.py",
+  "parent_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "changed_functions": [
+    "_fill",
+    "_decide"
+  ],
+  "candidate": "real gap and projected future-resource balance",
+  "added_memory_parameters_waiting_or_safety_gate": false,
+  "no_traffic_simulation": true
+}

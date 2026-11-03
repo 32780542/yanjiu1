@@ -1,7 +1,7 @@
 """直接运行真实 SUMO 3→2 局部编队变换；窗口随首次计算逐步推进。"""
 
 # ===================== 用户配置区 =====================
-FLOW_VEH_H_LANE = 1250.0  # 每车道每小时请求数，三车道独立来车
+FLOW_VEH_H_LANE = 1750.0  # 每车道每小时请求数，三车道独立来车
 DEMAND_DURATION_S = 600.0  # 来车持续时间；之后最多留 300 秒排空
 RANDOM_SEED = 1
 SHOW_GUI = True
@@ -31,7 +31,7 @@ from experiments.native_sumo import run_case  # noqa: E402
 class NativeDemoConfig:
     mode: str = "transform"
     scenario: str = "lane_drop"
-    flow_veh_h_lane: float = 1250.0
+    flow_veh_h_lane: float = 1750.0
     demand_duration_s: float = 600.0
     seed: int = 1
     show_gui: bool = True

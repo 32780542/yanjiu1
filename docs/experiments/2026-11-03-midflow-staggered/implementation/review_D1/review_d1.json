@@ -1,0 +1,132 @@
+{
+  "D1_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "frozen_S_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "original_contract_tests": 11,
+  "original_contracts_passed": true,
+  "original_tests_unchanged": true,
+  "Git_transport_replaced_in_memory_with_identical_frozen_S": true,
+  "core_AST_changes_only": [
+    "_fill",
+    "_decide"
+  ],
+  "public_response_cost_AST_equal": true,
+  "identity_and_neighbor_private_field_checks": 700,
+  "outside_perception_checks": 700,
+  "actual_new_fill_same_gap_bindings": 25,
+  "winner_veto_witness": {
+    "cars": [
+      {
+        "track": 0,
+        "x": 700.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 1,
+        "x": 670.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 640.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 3,
+        "x": 700.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "counts": [
+      3,
+      1
+    ],
+    "hypothetical_delta_Phi": -2,
+    "outputs": [
+      {
+        "ego": {
+          "track": 0,
+          "x": 700.0,
+          "y": 1.65,
+          "speed": 28.8,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        "local_fill": 1,
+        "mandatory_priority": true,
+        "command": {
+          "speed": 28.8,
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": 700.0,
+          "reference": null,
+          "formation_state": 1
+        },
+        "memory": {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      },
+      {
+        "ego": {
+          "track": 1,
+          "x": 670.0,
+          "y": 1.65,
+          "speed": 28.8,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        "local_fill": null,
+        "mandatory_priority": false,
+        "command": {
+          "speed": 28.8,
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": 670.0,
+          "reference": 0,
+          "formation_state": 1
+        },
+        "memory": {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      }
+    ],
+    "scope": "unchanged priority can veto the selected winner; no automatic next-winner promotion"
+  },
+  "protected_sources_and_tests_unchanged": true,
+  "production_not_used_as_S_oracle": true,
+  "no_simulation": true,
+  "no_git": true
+}

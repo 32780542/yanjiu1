@@ -1,0 +1,11 @@
+--- D1/noa/native_rules.py
++++ DP/noa/native_rules.py
+@@ -147,7 +147,7 @@
+                 linked = True
+                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+                 error += difference / max(1, pair_lanes - 1)
+-    phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
++    phase_speed = 0.0
+     if following[2] is not None:
+         if phase_speed * (following[0] - ego.speed) < 0.0:
+             phase_speed = 0.0

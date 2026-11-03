@@ -1,0 +1,1357 @@
+{
+  "seed": 202611032102,
+  "snapshots": 10000,
+  "totals": {
+    "normal_equal": 5000,
+    "normal_different": 0,
+    "boundary_equal": 4932,
+    "boundary_different": 68,
+    "boundary_with_self_pollution": 1068,
+    "NOA_cases": 2448,
+    "NOA_different": 0
+  },
+  "assertion": "Every changed command/memory snapshot had a measured off-center candidate included as its own target-gap member in D0; no all-state equality claim.",
+  "qualification": "Local state samples only; not traffic rollouts or collision-free trajectory proof.",
+  "examples": [
+    {
+      "index": 5074,
+      "mode": "formation",
+      "drop_x": null,
+      "ego": {
+        "track": 0,
+        "x": 447.9187190314901,
+        "y": 4.949999999999999,
+        "speed": 19.161154106707368,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 357.9187190314901,
+          "y": 8.25,
+          "speed": 30.167473276026612,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 627.9187190314901,
+          "y": 0.1499999999999999,
+          "speed": 26.131369990452924,
+          "lane": 0,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 492.9187190314901,
+          "y": 1.65,
+          "speed": 15.275304867298233,
+          "lane": 0,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 492.9187190314901,
+          "y": 5.85,
+          "speed": 23.76491048336036,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 387.9187190314901,
+          "y": 7.35,
+          "speed": 17.21324883791351,
+          "lane": 2,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 6,
+          "x": 462.9187190314901,
+          "y": 1.65,
+          "speed": 15.065066791355136,
+          "lane": 0,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 7,
+          "x": 627.9187190314901,
+          "y": 9.75,
+          "speed": 15.193049841668909,
+          "lane": 2,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.2fa0b94d3dab2p+4",
+          "lane": 2,
+          "reason": "fill_layer",
+          "target_x": "0x1.b86b312ba2768p+8",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 2,
+          "gap": [
+            4,
+            5
+          ],
+          "joining": true
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.57950bbb44ed3p+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.d71e5189f09a9p+8",
+          "reference": 4,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 4,
+          "lane": 2,
+          "x": 492.9187190314901,
+          "y": 5.85,
+          "vy": 0.0,
+          "with_self": [
+            560.4187190314901,
+            19.478980162514635,
+            [
+              7,
+              4
+            ]
+          ],
+          "without_self": [
+            507.9187190314901,
+            16.20314933979121,
+            [
+              7,
+              5
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5144,
+      "mode": "transform",
+      "drop_x": null,
+      "ego": {
+        "track": 0,
+        "x": 387.2192831544281,
+        "y": 6.75,
+        "speed": 24.713681451151192,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 327.2192831544281,
+          "y": 7.35,
+          "speed": 20.242080883499206,
+          "lane": 2,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 357.2192831544281,
+          "y": 3.15,
+          "speed": 29.272078606317827,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 507.2192831544281,
+          "y": 3.4499999999999993,
+          "speed": 21.329308075462805,
+          "lane": 1,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 402.2192831544281,
+          "y": 9.75,
+          "speed": 17.630913546244848,
+          "lane": 2,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 462.2192831544281,
+          "y": 4.049999999999999,
+          "speed": 16.196635186517685,
+          "lane": 1,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.4780665751b8fp+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.77b20bbd81bc7p+8",
+          "reference": 4,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.4780665751b8fp+4",
+          "lane": 1,
+          "reason": "fill_layer",
+          "target_x": "0x1.99b822f0d8d52p+8",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 1,
+          "gap": [
+            5,
+            2
+          ],
+          "joining": true
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 1,
+          "lane": 1,
+          "x": 327.2192831544281,
+          "y": 7.35,
+          "vy": -0.05,
+          "with_self": [
+            342.2192831544281,
+            24.757079744908516,
+            [
+              2,
+              1
+            ]
+          ],
+          "without_self": [
+            342.2192831544281,
+            29.272078606317827,
+            [
+              2,
+              null
+            ]
+          ]
+        },
+        {
+          "candidate_track": 0,
+          "lane": 1,
+          "x": 387.2192831544281,
+          "y": 6.75,
+          "vy": 0.0,
+          "with_self": [
+            424.7192831544281,
+            20.45515831883444,
+            [
+              5,
+              0
+            ]
+          ],
+          "without_self": [
+            409.7192831544281,
+            22.734356896417758,
+            [
+              5,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5161,
+      "mode": "transform",
+      "drop_x": null,
+      "ego": {
+        "track": 0,
+        "x": 698.2050174109575,
+        "y": 6.449999999999999,
+        "speed": 23.083061614731868,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 773.2050174109575,
+          "y": 3.4499999999999993,
+          "speed": 17.11616565204082,
+          "lane": 1,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 773.2050174109575,
+          "y": 8.25,
+          "speed": 16.922794191615235,
+          "lane": 2,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 878.2050174109575,
+          "y": 2.55,
+          "speed": 20.316820278576856,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 818.2050174109575,
+          "y": 8.25,
+          "speed": 15.437114811225683,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 608.2050174109575,
+          "y": 1.65,
+          "speed": 21.547857615375225,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 6,
+          "x": 668.2050174109575,
+          "y": 3.4499999999999993,
+          "speed": 19.65881996167616,
+          "lane": 1,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 7,
+          "x": 608.2050174109575,
+          "y": 5.85,
+          "speed": 16.009730074951843,
+          "lane": 1,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 8,
+          "x": 773.2050174109575,
+          "y": 1.65,
+          "speed": 25.259128335063608,
+          "lane": 0,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.84ee91634da49p+4",
+          "lane": 0,
+          "reason": "fill_layer",
+          "target_x": "0x1.685a3e02b1962p+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 0,
+          "gap": [
+            8,
+            6
+          ],
+          "joining": true
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.54f489ca03969p+4",
+          "lane": 2,
+          "reason": "fill_layer",
+          "target_x": "0x1.595a3e02b1962p+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 2,
+          "gap": [
+            2,
+            7
+          ],
+          "joining": true
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 0,
+          "lane": 2,
+          "x": 698.2050174109575,
+          "y": 6.449999999999999,
+          "vy": 0.0,
+          "with_self": [
+            735.7050174109575,
+            20.00292790317355,
+            [
+              2,
+              0
+            ]
+          ],
+          "without_self": [
+            690.7050174109575,
+            16.46626213328354,
+            [
+              2,
+              7
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5195,
+      "mode": "transform",
+      "drop_x": 1000.0,
+      "ego": {
+        "track": 0,
+        "x": 824.8426944150808,
+        "y": 4.049999999999999,
+        "speed": 30.55352002365569,
+        "lane": 1,
+        "vy": -0.05,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 944.8426944150808,
+          "y": 2.55,
+          "speed": 18.774614615338546,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 869.8426944150808,
+          "y": 9.15,
+          "speed": 29.806565010661345,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 734.8426944150808,
+          "y": 6.449999999999999,
+          "speed": 15.834312948490172,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 899.8426944150808,
+          "y": 8.25,
+          "speed": 27.29329552211899,
+          "lane": 2,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 734.8426944150808,
+          "y": 0.1499999999999999,
+          "speed": 24.421903515081766,
+          "lane": 0,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 6,
+          "x": 899.8426944150808,
+          "y": 4.049999999999999,
+          "speed": 17.23329153222744,
+          "lane": 1,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 7,
+          "x": 1004.8426944150808,
+          "y": 4.949999999999999,
+          "speed": 26.34854696350005,
+          "lane": 1,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 8,
+          "x": 869.8426944150808,
+          "y": 4.949999999999999,
+          "speed": 19.396746434354725,
+          "lane": 1,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.d21f62f212ffep+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.a32ced10d5659p+9",
+          "reference": 8,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.c2888ad47e532p+4",
+          "lane": 0,
+          "reason": "fill_layer",
+          "target_x": "0x1.98abdd691ca5ap+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 0,
+          "gap": [
+            6,
+            5
+          ],
+          "joining": true
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 0,
+          "lane": 0,
+          "x": 824.8426944150808,
+          "y": 4.049999999999999,
+          "vy": -0.05,
+          "with_self": [
+            862.3426944150808,
+            23.893405777941567,
+            [
+              6,
+              0
+            ]
+          ],
+          "without_self": [
+            817.3426944150808,
+            20.827597523654603,
+            [
+              6,
+              5
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5201,
+      "mode": "transform",
+      "drop_x": null,
+      "ego": {
+        "track": 0,
+        "x": 515.0096290726398,
+        "y": 7.35,
+        "speed": 21.091355646966228,
+        "lane": 2,
+        "vy": -0.05,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 425.00962907263977,
+          "y": 4.949999999999999,
+          "speed": 18.92624910116958,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 485.00962907263977,
+          "y": 7.35,
+          "speed": 24.679494348824086,
+          "lane": 2,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 590.0096290726398,
+          "y": 6.449999999999999,
+          "speed": 19.276664164657795,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.6a211d3b29474p+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.01813b86840a1p+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.69e6325ba8a21p+4",
+          "lane": 1,
+          "reason": "fill_layer",
+          "target_x": "0x1.0cc13b86840a1p+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 1,
+          "gap": [
+            3,
+            2
+          ],
+          "joining": true
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 2,
+          "lane": 1,
+          "x": 485.00962907263977,
+          "y": 7.35,
+          "vy": -0.05,
+          "with_self": [
+            500.00962907263977,
+            22.885424997895157,
+            [
+              0,
+              2
+            ]
+          ],
+          "without_self": [
+            470.00962907263977,
+            20.008802374067905,
+            [
+              0,
+              1
+            ]
+          ]
+        },
+        {
+          "candidate_track": 0,
+          "lane": 1,
+          "x": 515.0096290726398,
+          "y": 7.35,
+          "vy": -0.05,
+          "with_self": [
+            552.5096290726398,
+            20.18400990581201,
+            [
+              3,
+              0
+            ]
+          ],
+          "without_self": [
+            537.5096290726398,
+            21.97807925674094,
+            [
+              3,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5210,
+      "mode": "formation",
+      "drop_x": null,
+      "ego": {
+        "track": 0,
+        "x": 468.9191840470828,
+        "y": 8.25,
+        "speed": 18.7420090383145,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 543.9191840470828,
+          "y": 0.1499999999999999,
+          "speed": 25.500094948248446,
+          "lane": 0,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 378.9191840470828,
+          "y": 3.4499999999999993,
+          "speed": 17.23541917513169,
+          "lane": 1,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 483.9191840470828,
+          "y": 8.25,
+          "speed": 16.171156945845844,
+          "lane": 2,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 648.9191840470828,
+          "y": 4.949999999999999,
+          "speed": 29.9718245417756,
+          "lane": 1,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 513.9191840470828,
+          "y": 8.25,
+          "speed": 25.253136042640545,
+          "lane": 2,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 6,
+          "x": 543.9191840470828,
+          "y": 4.949999999999999,
+          "speed": 27.868685601721765,
+          "lane": 1,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 7,
+          "x": 588.9191840470828,
+          "y": 3.4499999999999993,
+          "speed": 15.990960737451045,
+          "lane": 1,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 8,
+          "x": 513.9191840470828,
+          "y": 2.55,
+          "speed": 30.91462855966293,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.1d759e1d0874dp+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.ce79b7d13f19fp+8",
+          "reference": 3,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.2756798a74bc2p+4",
+          "lane": 1,
+          "reason": "fill_layer",
+          "target_x": "0x1.be6b4fa54d39cp+8",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 1,
+          "gap": [
+            8,
+            2
+          ],
+          "joining": true
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 8,
+          "lane": 1,
+          "x": 513.9191840470828,
+          "y": 2.55,
+          "vy": 0.0,
+          "with_self": [
+            528.9191840470828,
+            29.391657080692347,
+            [
+              6,
+              8
+            ]
+          ],
+          "without_self": [
+            461.4191840470828,
+            22.552052388426727,
+            [
+              6,
+              2
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5385,
+      "mode": "transform",
+      "drop_x": 1000.0,
+      "ego": {
+        "track": 0,
+        "x": 834.6669900420384,
+        "y": 4.949999999999999,
+        "speed": 27.327574310666936,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 1014.6669900420384,
+          "y": 0.1499999999999999,
+          "speed": 17.556242797504524,
+          "lane": 0,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 804.6669900420384,
+          "y": 4.949999999999999,
+          "speed": 16.367918477196014,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 909.6669900420384,
+          "y": 8.25,
+          "speed": 27.51631968787101,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 954.6669900420384,
+          "y": 9.15,
+          "speed": 25.312760488261034,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 774.6669900420384,
+          "y": 0.1499999999999999,
+          "speed": 21.103018714245543,
+          "lane": 0,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 6,
+          "x": 879.6669900420384,
+          "y": 3.4499999999999993,
+          "speed": 29.150285208602305,
+          "lane": 1,
+          "vy": -0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 7,
+          "x": 1014.6669900420384,
+          "y": 5.85,
+          "speed": 16.806983262972494,
+          "lane": 1,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 8,
+          "x": 954.6669900420384,
+          "y": 1.65,
+          "speed": 28.356694786397377,
+          "lane": 0,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 9,
+          "x": 804.6669900420384,
+          "y": 6.75,
+          "speed": 27.388334684785935,
+          "lane": 2,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 10,
+          "x": 1014.6669900420384,
+          "y": 8.25,
+          "speed": 19.682526024740994,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.a6ff8c7d5eadap+4",
+          "lane": 0,
+          "reason": "fill_layer",
+          "target_x": "0x1.9d955fee00a80p+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 0,
+          "gap": [
+            6,
+            5
+          ],
+          "joining": true
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.caad24ef328d1p+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.a975b49d221fdp+9",
+          "reference": 6,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 6,
+          "lane": 0,
+          "x": 879.6669900420384,
+          "y": 3.4499999999999993,
+          "vy": -0.05,
+          "with_self": [
+            917.1669900420384,
+            28.75348999749984,
+            [
+              8,
+              6
+            ]
+          ],
+          "without_self": [
+            864.6669900420384,
+            24.72985675032146,
+            [
+              8,
+              5
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5400,
+      "mode": "transform",
+      "drop_x": 1000.0,
+      "ego": {
+        "track": 0,
+        "x": 497.41285425614853,
+        "y": 5.85,
+        "speed": 26.204020277807007,
+        "lane": 1,
+        "vy": -0.05,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 572.4128542561485,
+          "y": 5.85,
+          "speed": 25.782179256640543,
+          "lane": 1,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 467.41285425614853,
+          "y": 6.449999999999999,
+          "speed": 21.524385801790473,
+          "lane": 1,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 467.41285425614853,
+          "y": 6.75,
+          "speed": 19.159266580501317,
+          "lane": 2,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 617.4128542561485,
+          "y": 4.949999999999999,
+          "speed": 19.46187121208055,
+          "lane": 1,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 5,
+          "x": 437.41285425614853,
+          "y": 4.949999999999999,
+          "speed": 29.477889939519166,
+          "lane": 1,
+          "vy": 0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 6,
+          "x": 407.41285425614853,
+          "y": 3.15,
+          "speed": 22.367890220880057,
+          "lane": 0,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 7,
+          "x": 572.4128542561485,
+          "y": 2.55,
+          "speed": 20.146394498709718,
+          "lane": 0,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 8,
+          "x": 617.4128542561485,
+          "y": 2.55,
+          "speed": 21.321835457687882,
+          "lane": 0,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 9,
+          "x": 437.41285425614853,
+          "y": 1.65,
+          "speed": 30.846010768361566,
+          "lane": 0,
+          "vy": -0.2,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 10,
+          "x": 677.4128542561485,
+          "y": 9.15,
+          "speed": 20.866778673978963,
+          "lane": 2,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 11,
+          "x": 512.4128542561485,
+          "y": 4.949999999999999,
+          "speed": 18.11668750804096,
+          "lane": 1,
+          "vy": 0.05,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "D0": [
+        {
+          "speed": "0x1.4da1d55b8c61dp+4",
+          "lane": null,
+          "reason": "formation_follow",
+          "target_x": "0x1.e49f09920a00ap+8",
+          "reference": 11,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": null,
+          "joining": false
+        }
+      ],
+      "D1": [
+        {
+          "speed": "0x1.4da1d55b8c61dp+4",
+          "lane": 2,
+          "reason": "fill_layer",
+          "target_x": "0x1.03f4d86884161p+9",
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 2,
+          "gap": [
+            1,
+            2
+          ],
+          "joining": true
+        }
+      ],
+      "self_member_events": [
+        {
+          "candidate_track": 2,
+          "lane": 2,
+          "x": 467.41285425614853,
+          "y": 6.449999999999999,
+          "vy": 0.05,
+          "with_self": [
+            482.41285425614853,
+            23.86420303979874,
+            [
+              0,
+              2
+            ]
+          ],
+          "without_self": [
+            482.41285425614853,
+            22.681643429154164,
+            [
+              0,
+              3
+            ]
+          ]
+        },
+        {
+          "candidate_track": 0,
+          "lane": 2,
+          "x": 497.41285425614853,
+          "y": 5.85,
+          "vy": -0.05,
+          "with_self": [
+            534.9128542561485,
+            25.993099767223775,
+            [
+              1,
+              0
+            ]
+          ],
+          "without_self": [
+            519.9128542561485,
+            23.65328252921551,
+            [
+              1,
+              2
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

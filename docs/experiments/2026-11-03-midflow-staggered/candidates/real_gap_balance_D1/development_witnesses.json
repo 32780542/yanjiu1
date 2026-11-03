@@ -1,0 +1,230 @@
+[
+  {
+    "name": "complete_actual_layers",
+    "ego": {
+      "track": 0,
+      "x": 685.0,
+      "y": 4.949999999999999,
+      "speed": 28.8,
+      "lane": 1,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 640.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 640.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 3,
+        "x": 670.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 4,
+        "x": 670.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 5,
+        "x": 700.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 6,
+        "x": 700.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 7,
+        "x": 625.0,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 8,
+        "x": 655.0,
+        "y": 4.949999999999999,
+        "speed": 28.8,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 9,
+        "x": 730.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 10,
+        "x": 610.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 11,
+        "x": 610.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "command": {
+      "speed": 28.8,
+      "lane": 0,
+      "reason": "fill_layer",
+      "target_x": 685.0,
+      "reference": null,
+      "formation_state": 1
+    },
+    "memory": {
+      "lane_target": 0,
+      "gap": [
+        5,
+        3
+      ],
+      "joining": true
+    },
+    "scored_target": 685.0,
+    "scored_gap": [
+      5,
+      3
+    ]
+  },
+  {
+    "name": "early_receiving",
+    "ego": {
+      "track": 0,
+      "x": 625.0,
+      "y": 4.949999999999999,
+      "speed": 28.8,
+      "lane": 1,
+      "vy": 0.0,
+      "acceleration": 0.0,
+      "time": 0.0,
+      "pending_lane": null
+    },
+    "rows": [
+      {
+        "track": 1,
+        "x": 640.0,
+        "y": 1.65,
+        "speed": 28.8,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 2,
+        "x": 640.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      {
+        "track": 3,
+        "x": 670.0,
+        "y": 8.25,
+        "speed": 28.8,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      }
+    ],
+    "command": {
+      "speed": 28.8,
+      "lane": 0,
+      "reason": "fill_layer",
+      "target_x": 625.0,
+      "reference": null,
+      "formation_state": 1
+    },
+    "memory": {
+      "lane_target": 0,
+      "gap": [
+        1,
+        null
+      ],
+      "joining": true
+    },
+    "scored_target": 625.0,
+    "scored_gap": [
+      1,
+      null
+    ]
+  }
+]

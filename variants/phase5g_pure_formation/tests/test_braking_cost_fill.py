@@ -9,11 +9,23 @@ def car(track, x, lane, speed=28.8):
 
 class BrakingCostFillTests(unittest.TestCase):
     def useful_fill(self):
-        return car(0, 285.0, 0), [car(1, 300.0, 2), car(2, 270.0, 2),
-                                 car(3, 255.0, 1), car(4, 300.0, 0), car(5, 270.0, 0)]
+        return car(0, 285.0, 0), [car(1, 270.0, 2), car(2, 240.0, 2),
+                                 car(3, 255.0, 1), car(4, 255.0, 0), car(5, 225.0, 0)]
+
+    def assert_real_load_reducing_opportunity(self, ego, rows):
+        counts = [sum(c.lane == lane for c in (ego, *rows)) for lane in range(3)]
+        after = list(counts)
+        after[ego.lane] -= 1
+        after[1] += 1
+        self.assertLess(sum(n*n for n in after), sum(n*n for n in counts))
+        self.assertTrue(r._clear(ego, rows, 1))
+        target, _, gap = r._merge_target(ego, rows, 1)
+        self.assertLessEqual(abs(target - ego.x), r.GAP)
+        self.assertEqual(gap, (None, 3))
 
     def test_equal_speed_useful_fill_is_still_accepted(self):
         ego, rows = self.useful_fill()
+        self.assert_real_load_reducing_opportunity(ego, rows)
         self.assertEqual(r._fill(ego, rows, 3), 1)
         command, _ = r.decide(ego, rows, r.Memory(), "formation", None)
         self.assertEqual((command.lane, command.reason), (1, "fill_layer"))
@@ -30,9 +42,11 @@ class BrakingCostFillTests(unittest.TestCase):
 
     def test_a_lower_braking_alternative_wins_equal_formation_benefit(self):
         ego, rows = self.useful_fill()
-        # Geometry ties favour lane 2 in the baseline. Both options meet the
+        # Geometry alone favours lane 2. Both options meet the
         # 10 m/s2 follower bound, but lane 2 adds 0.76 m/s response loss.
         rows.append(car(6, 285.0, 2, 25.0))
+        self.assert_real_load_reducing_opportunity(ego, rows)
+        self.assert_real_load_reducing_opportunity(rows[-1], [ego, *rows[:-1]])
         self.assertEqual(r._fill(ego, rows, 3), 1)
 
     def test_severe_follower_bound_cannot_be_offset_by_large_old_lane_release(self):
@@ -59,6 +73,8 @@ class BrakingCostFillTests(unittest.TestCase):
         self.assertTrue(callable(helper), "missing public same-frame CF estimator")
         ego, rows = self.useful_fill()
         alternative = car(6, 285.0, 2, 25.0)
+        self.assert_real_load_reducing_opportunity(ego, [*rows, alternative])
+        self.assert_real_load_reducing_opportunity(alternative, [ego, *rows])
         moved = replace(alternative, lane=1, y=4.95)
         new_rear = rows[2]
         after_speed = helper(new_rear, [ego, *rows, moved])

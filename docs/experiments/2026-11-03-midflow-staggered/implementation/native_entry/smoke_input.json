@@ -1,0 +1,268 @@
+{
+  "case": {
+    "mode": "transform",
+    "seed": 1,
+    "flow_veh_h_lane": 1750.0,
+    "demand_duration_s": 20.0,
+    "scenario": "lane_drop",
+    "max_time_s": 120.0,
+    "step_s": 0.1,
+    "lane_change_duration_s": 1.0,
+    "gui": false,
+    "diagnostic": false,
+    "gui_delay_ms": null,
+    "gui_auto_zoom": null,
+    "gui_wait_before_close": false,
+    "runtime": {
+      "python_version": "3.12.9",
+      "python_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+      "scipy_version": "1.18.1"
+    },
+    "observation_scope": "private local tracks: 200m ahead, 100m behind",
+    "reference_is_full_paper_reproduction": null,
+    "reference_description": null
+  },
+  "arrivals": [
+    {
+      "vehicle_id": "v1_00001",
+      "requested_s": 0.1,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00002",
+      "requested_s": 0.2,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00004",
+      "requested_s": 0.4,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00008",
+      "requested_s": 0.8,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00008",
+      "requested_s": 0.8,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00016",
+      "requested_s": 1.6,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00028",
+      "requested_s": 2.8,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00029",
+      "requested_s": 2.9,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00031",
+      "requested_s": 3.1,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00034",
+      "requested_s": 3.4,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00040",
+      "requested_s": 4.0,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00042",
+      "requested_s": 4.2,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00055",
+      "requested_s": 5.5,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00056",
+      "requested_s": 5.6,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00073",
+      "requested_s": 7.3,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00080",
+      "requested_s": 8.0,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00104",
+      "requested_s": 10.4,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00114",
+      "requested_s": 11.4,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00115",
+      "requested_s": 11.5,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00117",
+      "requested_s": 11.7,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00124",
+      "requested_s": 12.4,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00132",
+      "requested_s": 13.2,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00142",
+      "requested_s": 14.2,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00143",
+      "requested_s": 14.3,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v2_00178",
+      "requested_s": 17.8,
+      "lane": 2,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v0_00179",
+      "requested_s": 17.9,
+      "lane": 0,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00179",
+      "requested_s": 17.9,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00184",
+      "requested_s": 18.4,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00187",
+      "requested_s": 18.7,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    },
+    {
+      "vehicle_id": "v1_00198",
+      "requested_s": 19.8,
+      "lane": 1,
+      "x": 0.0,
+      "speed": 28.8
+    }
+  ],
+  "physical": {
+    "length": 4.0,
+    "width": 1.8,
+    "minGap": 1.5,
+    "tau": 0.2,
+    "accel": 5.0,
+    "decel": 10.0,
+    "emergencyDecel": 30.0,
+    "maxSpeed": 33.3,
+    "speedFactor": 1.0,
+    "speedDev": 0.0,
+    "sigma": 0.0,
+    "carFollowModel": "IDM",
+    "emissionClass": "HBEFA3/PC_G_EU4"
+  },
+  "speed_mode": 31,
+  "lane_change_mode": 512,
+  "source_sha256": {
+    "experiments/native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+    "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+    "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "noa/native_rules.py": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+    "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+    "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "positions_step_s": 0.1,
+  "insertion": "SUMO native route departures; no Python entry gate",
+  "positions_schema": "time_s, states[id]=[x,y,speed,acceleration]",
+  "formation_state_schema": "formation_states[id]=0|1",
+  "longitudinal_coordinate": "SUMO lane position + upstream edge offset; vehicle front",
+  "lateral_coordinate": "1.65 + 3.3*lane + measured lane offset"
+}

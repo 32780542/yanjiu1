@@ -1,0 +1,8 @@
+  sumo-gui: D:\yanjiu1\SUMO\sumo-1.27.1\bin\sumo-gui.exe
+  netconvert: D:\yanjiu1\SUMO\sumo-1.27.1\bin\netconvert.exe
+  TraCI: D:\yanjiu1\SUMO\sumo-1.27.1\tools\traci\__init__.py
+  真实运行器: D:\yanjiu1\keyan1\variants\phase5g_pure_formation\experiments\native_sumo.py
+  运行环境: {'python_version': '3.12.9', 'python_executable': 'C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe', 'scipy_version': '1.18.1'}
+  配置: NativeDemoConfig(mode='transform', scenario='lane_drop', flow_veh_h_lane=1750.0, demand_duration_s=600.0, seed=1, show_gui=True, gui_delay_ms=40, auto_zoom=True, wait_before_close=True)
+  巡航 28.8m/s；最高 33.3m/s；1000m 处 3→2，1200m 出口。
+自检通过：没有启动 SUMO，也没有创建运行目录。

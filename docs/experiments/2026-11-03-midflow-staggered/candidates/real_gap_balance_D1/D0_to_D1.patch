@@ -1,0 +1,11 @@
+--- parent/noa/native_rules.py
++++ real_gap_balance_D1/noa/native_rules.py
+@@ -253,7 +253,7 @@
+         for lane in (car.lane - 1, car.lane + 1):
+             if not 0 <= lane < lanes or 2 * (counts[lane] - counts[car.lane] + 1) >= 0:
+                 continue
+-            target, _, _ = _merge_target(car, observed, lane)
++            target, _, _ = _merge_target(car, (c for c in observed if c.track != car.track), lane)
+             if abs(target - car.x) > GAP or not _clear(car, observed, lane):
+                 continue
+             cost = response_cost(car, lane)

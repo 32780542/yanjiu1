@@ -1,0 +1,43 @@
+{
+  "installed_source_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "tests_on_disk": true,
+  "module_injection": false,
+  "test_files": [
+    "tests/test_native_rules.py",
+    "tests/test_native_sumo.py",
+    "tests/test_native_comparison.py",
+    "tests/test_native_recovery.py",
+    "tests/test_global_reference.py",
+    "tests/test_complete_layers.py",
+    "tests/test_bottleneck_attribution.py",
+    "tests/test_own_lane_execution.py",
+    "tests/test_head_group_rules.py",
+    "tests/test_common_pair.py",
+    "tests/test_ending_pair_scope.py",
+    "tests/test_formation_state.py",
+    "tests/test_time_headway.py",
+    "tests/test_braking_cost_fill.py",
+    "tests/test_local_staggered_rules.py",
+    "tests/test_local_formation_balance.py"
+  ],
+  "source_and_test_hashes": {
+    "noa/native_rules.py": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+    "tests/test_native_rules.py": "147f5168306cfe4e904a06dbecaa91805539c2069735e92dc7d5e83793d2d035",
+    "tests/test_native_sumo.py": "7f49f0eeed51aa2218577a2400dfdb49efa29223cdb3e7404897d8784a1f20c4",
+    "tests/test_native_comparison.py": "543b55291f7f7e507211571a249baf16a2a8ba7aca04e87283ad5e7b73177356",
+    "tests/test_native_recovery.py": "79d863d442e29dc126754bb4144b4da63e90ed1d2fb2fced4b98e5847d017a1b",
+    "tests/test_global_reference.py": "0b4ecb87c7197b421db41b98d67cbde3fbfc70fa1468697e94ffa1dbc6cd228c",
+    "tests/test_complete_layers.py": "04991d71b9719f0a947e746e49c94537a148865a0896c24e8eb3d07c0664c494",
+    "tests/test_bottleneck_attribution.py": "9591e4f557d77b31ea8da1d2fedfb2bb35ffb95576c08cd21fb8fbc1d01e6a9b",
+    "tests/test_own_lane_execution.py": "290a84c7a38e8b5b1ef2afd5e278197210d41658cf4db7e340db0b8cb418a8ab",
+    "tests/test_head_group_rules.py": "97d72193653737d95e857fd48a57064f49f779ddd869222d5099292889d606a5",
+    "tests/test_common_pair.py": "9e1c66bac2f2dae963cf6e18f13fdfffd1fb8d9abd4db4a06b10f2fd16ead8d6",
+    "tests/test_ending_pair_scope.py": "590a6101f1f3f0f743443333d3522cf9e8122f884b502ee0deefc36ffac63ac7",
+    "tests/test_formation_state.py": "b518b6461a9372dee3a14a8c7daf925819d4130fe8e7f51e9f8cd0d131565895",
+    "tests/test_time_headway.py": "d7730fddb9bd4feb229b88fa4db4e5f74889ec8c7879a6874f1965724e9e19c7",
+    "tests/test_braking_cost_fill.py": "6377ea192c17b9f1dd0a24a5a828d5917f5cd6650533909aa2c774a32fe17308",
+    "tests/test_local_staggered_rules.py": "b149f07dfb5307c25a4b4b87842d3dcc804eca79f2f58541dc43eaaf0302bfc7",
+    "tests/test_local_formation_balance.py": "5973ef9f9760d133c2f5fcf6c0b681285a83b58ab0d01d5b41dcd516f256e26e"
+  },
+  "returncode": 0
+}

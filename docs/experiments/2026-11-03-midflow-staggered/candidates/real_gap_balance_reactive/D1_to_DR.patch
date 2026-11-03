@@ -1,0 +1,10 @@
+--- D1/noa/native_rules.py
++++ DR/noa/native_rules.py
+@@ -207,7 +207,6 @@
+         if abs(car.vy) > 0.1:
+             lateral = car.y / LANE_WIDTH - 0.5
+             resource = max(0, min(2, ceil(lateral) if car.vy > 0 else floor(lateral)))
+-        resource = min(resource, 1) if future else resource
+         if resource < lanes:
+             counts[resource] += 1
+     observed = (ego, *rows)

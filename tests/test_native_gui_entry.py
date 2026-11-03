@@ -20,12 +20,12 @@ from experiments import native_sumo as native
 
 
 class NativeEntrypointTests(unittest.TestCase):
-    def test_defaults_select_real_1250_lane_drop_transform(self):
+    def test_defaults_select_real_1750_lane_drop_transform(self):
         config = runrun.build_config()
         self.assertTrue(hasattr(config, "mode"), "the entry still builds the historical demo")
         self.assertEqual(config.mode, "transform")
         self.assertEqual(config.scenario, "lane_drop")
-        self.assertEqual(config.flow_veh_h_lane, 1250.0)
+        self.assertEqual(config.flow_veh_h_lane, 1750.0)
         self.assertEqual(config.demand_duration_s, 600.0)
         self.assertEqual(config.seed, 1)
         self.assertTrue(config.show_gui)

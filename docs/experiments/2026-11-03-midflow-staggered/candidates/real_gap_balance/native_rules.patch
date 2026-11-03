@@ -1,0 +1,148 @@
+--- parent/noa/native_rules.py
++++ real_gap_balance/noa/native_rules.py
+@@ -1,7 +1,7 @@
+ """每车独立的跟驰、形成与车道减少规则；输入仅为本车及可见邻车。"""
+ 
+ from dataclasses import dataclass, replace
+-from math import sqrt
++from math import sqrt, ceil, floor
+ 
+ 
+ CRUISE, MAX_SPEED, GAP = 28.8, 33.3, 30.0
+@@ -198,39 +198,18 @@
+     return min(_front_following(car, rows)[0], safe_speed(car, rows))
+ 
+ 
+-def _fill(ego, rows, lanes):
+-    """保留形成收益，优先选择同帧CF响应损失较小且后车无需强制动的补位。"""
+-    component = _component(ego, rows)
+-    cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0)
+-    if len(cars) < lanes:
+-        return None
+-    members = tuple(c for c in cars if c.lane < lanes)
+-
+-    def phase(lane):
+-        return _phase(lane, lanes)
+-
+-    anchor = max(
+-        (c for c in component if c.lane < lanes), key=lambda c: (c.x + phase(c.lane), c.lane, c.x)
+-    )
+-    base = anchor.x + phase(anchor.lane)
+-    near = base - round((base - ego.x - phase(ego.lane)) / GAP) * GAP
+-    centers = [near + k * GAP for k in range(-3, 4)]
+-
+-    def matches(center, lane):
+-        return [c for c in cars if c.lane == lane and abs(c.x - (center - phase(lane))) <= 2.0]
+-
+-    full = [
+-        center
+-        for center in centers
+-        if all(len(matches(center, lane)) == 1 for lane in range(lanes))
+-    ]
+-    candidates = [
+-        c
+-        for c in members
+-        if c.track != anchor.track
+-        and abs(c.vy) < 0.1
+-        and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+-    ]
++def _fill(ego, rows, lanes, future=False):
++    """实际gap执行机会使局部车道资源计数平方和严格下降；不设全局格点。"""
++    cars = tuple(c for c in _component(ego, rows) if abs(c.x - ego.x) <= 90.0)
++    counts = [0] * lanes
++    for car in cars:
++        resource = car.lane
++        if abs(car.vy) > 0.1:
++            lateral = car.y / LANE_WIDTH - 0.5
++            resource = max(0, min(2, ceil(lateral) if car.vy > 0 else floor(lateral)))
++        resource = min(resource, 1) if future else resource
++        if resource < lanes:
++            counts[resource] += 1
+     observed = (ego, *rows)
+     costs, before_speeds = {}, {}
+ 
+@@ -268,40 +247,20 @@
+         return cost
+ 
+     choices = []
+-    for center in centers:
+-        window = [c for c in component if c.lane < lanes and center - 60.0 <= c.x <= center + 30.0]
+-        counts = [sum(c.lane == lane for c in window) for lane in range(lanes)]
+-        if not any(matches(center, lane) for lane in range(lanes)):
++    for car in cars:
++        if car.lane >= lanes or abs(car.vy) >= 0.1:
+             continue
+-        for lane in range(lanes):
+-            target = center - phase(lane)
+-            if any(_occupies(c, lane) and abs(c.x - target) < CLEARANCE for c in cars):
++        for lane in (car.lane - 1, car.lane + 1):
++            if not 0 <= lane < lanes or 2 * (counts[lane] - counts[car.lane] + 1) >= 0:
+                 continue
+-            for car in candidates:
+-                if car not in window:
+-                    continue
+-                boundary = min(car.lane, lane)
+-                imbalance = sum(counts[: boundary + 1]) - (boundary + 1) * len(window) / lanes
+-                after = imbalance + (1 if lane <= boundary else -1)
+-                balances = abs(after) < abs(imbalance) - 1e-9
+-                references = [
+-                    c
+-                    for c in members
+-                    if c.track != car.track and abs(c.x - (center - phase(c.lane))) <= 2.0
+-                ]
+-                if (
+-                    abs(car.lane - lane) == 1
+-                    and balances
+-                    and abs(car.x - target) <= GAP
+-                    and references
+-                    and _clear(car, cars, lane)
+-                ):
+-                    reference = max(references, key=lambda c: (c.lane, c.x))
+-                    target = reference.x + phase(reference.lane) - phase(lane)
+-                    cost = response_cost(car, lane)
+-                    if cost is not None:
+-                        score = (cost, -center, abs(target - car.x), -car.x, -car.lane, -lane)
+-                        choices.append((score, car, lane))
++            target, _, _ = _merge_target(car, observed, lane)
++            if abs(target - car.x) > GAP or not _clear(car, observed, lane):
++                continue
++            cost = response_cost(car, lane)
++            if cost is not None:
++                score = (cost, -car.x, abs(target - car.x), -target, -car.lane, -lane,
++                         car.y, car.speed, car.vy)
++                choices.append((score, car, lane))
+     if not choices:
+         return None
+     _, car, lane = min(choices, key=lambda item: item[0])
+@@ -327,9 +286,12 @@
+         raise ValueError("Unknown driving mode: " + mode)
+     rows = tuple(c for c in neighbors if -100.0 <= c.x - ego.x <= 200.0)
+     preparing = drop_x is not None and ego.x >= drop_x - 360.0 and (ego.x < drop_x or ego.lane == 2)
++    receiving = preparing or (mode == "transform" and drop_x is not None and any(
++        c.lane == 2 and abs(c.x - ego.x) <= 90.0 and drop_x - 360.0 <= c.x <= drop_x
++        for c in rows))
+     lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
+     organized = mode != "noa"
+-    future_lanes = 2 if preparing and mode == "transform" else lanes
++    future_lanes = 2 if receiving and mode == "transform" else lanes
+     following_lanes = lanes if ego.lane == 2 else future_lanes
+     speed, target, reference, formation_state = (
+         _following(
+@@ -362,7 +324,7 @@
+         not moving
+         and ego.pending_lane is None
+         and (
+-            (preparing and memory.lane_target == 2)
++            (receiving and memory.lane_target == 2)
+             or _mandatory_priority(ego, rows, memory.lane_target, drop_x)
+         )
+     ):
+@@ -402,7 +364,7 @@
+         return action(speed, None, "approach_gap", target), memory
+ 
+     if organized and not memory.joining:
+-        lane = _fill(ego, rows, 2 if preparing else lanes)
++        lane = _fill(ego, rows, 2 if receiving else lanes, receiving and mode == "transform")
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):
+                 memory = Memory(lane_target=lane, joining=True)

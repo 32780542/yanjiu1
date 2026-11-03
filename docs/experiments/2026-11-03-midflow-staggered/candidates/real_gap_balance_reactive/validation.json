@@ -1,0 +1,20 @@
+{
+  "source_sha256": "89a9299f0dd043600846f7e5d7239e68d079053a75e4d32e442f0619fbab6811",
+  "lines": 422,
+  "parent_sha256": "2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a",
+  "source_rebuild_bytes_verified": true,
+  "red_log": "results/operations/20261103T130846214908Z_midflow-DR-red_1f7c80f2",
+  "green_log": "results/operations/20261103T130939967685Z_midflow-DR-green_5defe767",
+  "tests_run": 5,
+  "tests_applicable": 4,
+  "not_applicable_skipped": 1,
+  "NOA_states": 1000,
+  "NOA_maps_per_state": 2,
+  "safe_speed_comparisons": 1000,
+  "public_CF_comparisons": 1000,
+  "source_diff_exactly_one_line": true,
+  "row_permutation_count": 24,
+  "ID_bijection_checked": true,
+  "no_traffic_simulation": true,
+  "nonmap_formation_and_transform_hex_exact_D1_states": 1000
+}
