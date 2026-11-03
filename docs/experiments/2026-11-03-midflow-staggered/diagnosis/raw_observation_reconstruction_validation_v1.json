@@ -1,0 +1,14 @@
+{
+  "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_S_long_formation_demo\\S2400\\formed45\\20261103T072704840232Z_lane_drop_transform_s1_e52616",
+  "source": "Existing full S geometric demo; no simulation",
+  "raw_diagnostic_samples": 35568,
+  "lateral_velocity_differences": 35523,
+  "max_abs_vy_error": 7.993605777301127e-14,
+  "event_replayed_lane_mismatches": 0,
+  "naive_y_rounding_lane_mismatches": 7,
+  "sha256": {
+    "positions.jsonl.gz": "4df508bdcc630d147087f685a121c085eb441abda8ba6429248ddad4818e0fb3",
+    "diagnostic.jsonl.gz": "79210aee4cc76e8276276363e959be3b45fc4cb4c59b84f2a756e3989e25d60f",
+    "trips.json": "2da17ddd795838dffca445ad45613aa5f95c69ed3f24c8057e9d12e5f417ccf3"
+  }
+}

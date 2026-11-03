@@ -1,0 +1,43 @@
+{
+  "figures": [
+    {
+      "file": "seed91_all_lanes_speed_spacetime.png",
+      "pixels": [
+        3104,
+        2977
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "png_sha256": "ca8c1b92d3b128216f693e2f4b5a86ca5ece2b7da304efdef0f15253dc8fbbc1",
+      "svg_sha256": "50111b0e604e3c8ee52df70aba7243d0529ef654a3d1b4c859d38507e368d82e",
+      "visually_reviewed": true,
+      "review": "Shared full0\u201333.3 color scale; both policy columns and all flow rows clear;640/1000 lines and white empty bins visible; legend, footer and colorbar do not overlap."
+    },
+    {
+      "file": "seed91_2000_actual_lane2_speed_spacetime.png",
+      "pixels": [
+        3104,
+        1420
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "png_sha256": "56bb66689b2b753b4d9c2e2b918de8aac7c6f3ddb692b58bc9039aa3ca7a0651",
+      "svg_sha256": "1c7727d2559dfa17948783c9dfd505cdf918820648aef732b6956066b54dfc47",
+      "visually_reviewed": true,
+      "review": "Shared full0\u201333.3 color scale; both policy columns and all flow rows clear;640/1000 lines and white empty bins visible; legend, footer and colorbar do not overlap."
+    }
+  ],
+  "visual_review_pending": false,
+  "bin_rows_all_lanes": 14400,
+  "bin_rows_lane2": 4800,
+  "runmap_cases": 6,
+  "visual_review_passed": true,
+  "source_sha256_checks": 82,
+  "bin_csv_rows_checked": 19200,
+  "nonempty_bin_mean_checks": 17535,
+  "all_lane_speed_sum_max_absolute_error": 5.587935447692871e-09
+}

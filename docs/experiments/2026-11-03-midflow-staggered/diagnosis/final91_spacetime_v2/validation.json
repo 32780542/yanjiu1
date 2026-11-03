@@ -1,0 +1,59 @@
+{
+  "verified_utc": "2026-11-03T15:29:48.486365+00:00",
+  "source_sha256_checks": 82,
+  "cases": 6,
+  "window_frames": 30000,
+  "bin_csv_rows": 19200,
+  "all_lane_speed_sum_max_absolute_error": 5.587935447692871e-09,
+  "csv": [
+    {
+      "file": "flow1500_NOA_all_lanes_bins.csv",
+      "rows": 2400,
+      "samples_n": 273633,
+      "speed_sum_mps": 7771314.745112005
+    },
+    {
+      "file": "flow1500_D1_all_lanes_bins.csv",
+      "rows": 2400,
+      "samples_n": 270087,
+      "speed_sum_mps": 7770680.578075846
+    },
+    {
+      "file": "flow1750_NOA_all_lanes_bins.csv",
+      "rows": 2400,
+      "samples_n": 329481,
+      "speed_sum_mps": 9234898.13075707
+    },
+    {
+      "file": "flow1750_D1_all_lanes_bins.csv",
+      "rows": 2400,
+      "samples_n": 325255,
+      "speed_sum_mps": 9235220.07290682
+    },
+    {
+      "file": "flow2000_NOA_all_lanes_bins.csv",
+      "rows": 2400,
+      "samples_n": 383834,
+      "speed_sum_mps": 10360854.744695898
+    },
+    {
+      "file": "flow2000_NOA_lane2_bins.csv",
+      "rows": 2400,
+      "samples_n": 77967,
+      "speed_sum_mps": 1981445.1427492506
+    },
+    {
+      "file": "flow2000_D1_all_lanes_bins.csv",
+      "rows": 2400,
+      "samples_n": 372112,
+      "speed_sum_mps": 10376893.570685219
+    },
+    {
+      "file": "flow2000_D1_lane2_bins.csv",
+      "rows": 2400,
+      "samples_n": 68393,
+      "speed_sum_mps": 1946206.4531270862
+    }
+  ],
+  "source_scope": "Original positions/events seal SHA, original input/result/trips90-case audit SHA, six source snapshots per run. Streamed every physical sample; no trajectories cached."
+}
