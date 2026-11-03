@@ -38,15 +38,15 @@ python scripts/run_logged.py --label cohort_P12_P --timeout 900 -- python "$coho
 
 只读工具为[cohort_probe.py](../tools/cohort_probe.py)。逐车在实际`positions.jsonl.gz`中找相邻实测位置`x_a<1000≤x_b`，用相应时间做线性内插：
 
-\[
+$$
 t_{1000}=t_a+(t_b-t_a)\frac{1000-x_a}{x_b-x_a}.
-\]
+$$
 
 每车自由行驶基准来自它自己的第一帧实际时间与位置，而非输入文件的depart或tripinfo：
 
-\[
+$$
 t_{free}=t_0+\frac{1000-x_0}{28.8},\qquad delay=t_{1000}-t_{free}.
-\]
+$$
 
 这样保留并排／交错的实际初始几何，同时不把每车起始位置差直接当作额外延误。提前通过导致的负延误照实保留。没有实际跨越括号的车保留缺失，不用出口时刻代替；全45车平均与最后通过仅在45车都有实际通过记录时给出。
 

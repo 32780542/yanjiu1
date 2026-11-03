@@ -39,6 +39,8 @@ C12在50米内建立普通跟驰链，之后可在200米内继续跟当前真实
 
 仅形成而不主动变换的方案、纯NOA、形成并变换的方案分开运行。车辆输出的状态1只表示本车已有编队关系，允许仍在调距；NOA始终为0。状态1的总人数与真实交错几何分别评价。
 
+当前C12的受影响148项测试实际通过；根入口实时GUI的20秒来车演示30/30辆安全完成。[原始测试与窗口记录](docs/experiments/2026-11-04-timegap-staggered/data/verification/README.md)已保存；独立复核结论见[最终证据验收](docs/experiments/2026-11-04-timegap-staggered/stage/final_evidence_review.md)。
+
 ## 打开实时SUMO窗口
 
 在VS Code运行本目录的 `runrun.py`，或执行：
@@ -76,7 +78,7 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 
 ## 版本与历史
 
-版本管理使用 [GitHub仓库](https://github.com/32780542/yanjiu1)，远端名为 `yanjiu1`；`origin`是历史仓库。本轮分支为 `research/20261104-timegap-staggered`。代码候选只保留小型规则源与变更，实验复用同一组引擎文件，不复制整套项目。
+版本管理使用 [GitHub仓库](https://github.com/32780542/yanjiu1)，远端名为 `yanjiu1`；`origin`是历史仓库。`main`与本轮 `research/20261104-timegap-staggered` 同步保存当前C12成果。代码候选只保留小型规则源与变更，实验复用同一组引擎文件，不复制整套项目。
 
 11月3日D1及其负荷/成本规则保存在 [D1历史报告](docs/experiments/2026-11-03-midflow-staggered/README.md) 和Git历史中。其数据属于当时方法与基线，与当前C12分别保存。本轮已在云端归档核验后，定点释放1,650,262,592字节原始大轨迹；这是实际删除文件之和，新增实验数据另计。关键逐步轨迹、失败和未完成记录保留，见[数据与存储说明](docs/experiments/2026-11-04-timegap-staggered/data/evidence/README.md)。此前约1.70GB清理属于上一轮，不重复计入本轮。
 

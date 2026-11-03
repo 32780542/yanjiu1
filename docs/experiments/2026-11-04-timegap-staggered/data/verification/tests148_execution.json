@@ -1,0 +1,44 @@
+{
+  "command": [
+    "python",
+    "-X",
+    "utf8",
+    "-B",
+    "variants/phase5g_pure_formation/tests/run_native_contracts.py",
+    "test_native_rules",
+    "test_physical_following",
+    "test_time_headway",
+    "test_user_timegap",
+    "test_formation_state",
+    "test_own_lane_execution",
+    "test_native_sumo",
+    "test_global_reference",
+    "test_native_comparison",
+    "test_bottleneck_attribution"
+  ],
+  "cwd": "D:\\yanjiu1\\keyan1",
+  "timeout_s": 240.0,
+  "started_utc": "2026-11-03T20:57:51.292329+00:00",
+  "status": "completed",
+  "python_version": "3.12.9 (tags/v3.12.9:fdb8142, Feb  4 2025, 15:27:58) [MSC v.1942 64 bit (AMD64)]",
+  "runner_executable": "C:\\Users\\84335\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+  "tree_policy": "private_windows_job",
+  "runner_sha256": "28674a3563b50d22a1cb512e49d1a519ed84baee0bb8cf33c9e2dbcf0cb4cef5",
+  "pid": 79076,
+  "execution_status": "completed",
+  "tree_cleanup": {
+    "method": "windows_job",
+    "confirmed": true,
+    "active_processes": 0
+  },
+  "returncode": 0,
+  "child_returncode": 0,
+  "elapsed_s": 16.89,
+  "ended_utc": "2026-11-03T20:58:08.188997+00:00",
+  "archive_status": "complete",
+  "log_hashes": {
+    "stdout.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr.log": "05106a153bc89b635dc8ae464ad673bbc226a56a44a277ee36e55a472f14731a"
+  },
+  "archive_errors": {}
+}
