@@ -1,4 +1,4 @@
-"""Installed C8 contracts: local information, monotone moves and actual slots."""
+"""Installed C12 contracts: local chains, monotone moves and actual slots."""
 from dataclasses import replace
 import random
 import unittest
@@ -136,6 +136,51 @@ class NativeRulesTests(unittest.TestCase):
         self.assertIsNone(command.reference)
         self.assertGreater(command.speed, ego.speed)
         self.assertIsNone(memory.front)
+
+    def test_an_ordinary_chain_starts_with_a_real_front_within_fifty_metres(self):
+        ego = car(0, 100, speed=20)
+        for mode in ('formation', 'transform'):
+            with self.subTest(mode=mode):
+                near, memory = self.command(ego, (car(1, 150, speed=20),), mode, None)
+                self.assertEqual((near.reference, memory.front, near.formation_state), (1, 1, 1))
+                self.assertAlmostEqual(near.target_x, 150 - (5.5 + .85 * 20))
+                for distance in (50.01, 80., 200.):
+                    with self.subTest(distance=distance):
+                        fresh, own = self.command(
+                            ego, (car(1, ego.x + distance, speed=20),), mode, None)
+                        self.assertIsNone(fresh.reference)
+                        self.assertIsNone(own.front)
+                        self.assertEqual(fresh.formation_state, 0)
+                        self.assertAlmostEqual(fresh.target_x, ego.x)
+                        self.assertAlmostEqual(fresh.speed, 20 + .2 * (28.8 - 20))
+
+    def test_an_existing_chain_tracks_the_current_front_then_releases_on_loss(self):
+        ego = car(0, 100, speed=20)
+        for mode in ('formation', 'transform'):
+            with self.subTest(mode=mode):
+                _, memory = self.command(ego, (car(1, 122.5, speed=20),), mode, None)
+                self.assertEqual(memory.front, 1)
+                for distance in (80., 200.):
+                    with self.subTest(distance=distance):
+                        replacement = car(2, ego.x + distance, speed=20)
+                        # The old front is still sensed on another lane, outside the phase graph.
+                        old = car(1, 195, lane=1, speed=20)
+                        command, own = self.command(
+                            ego, (replacement, old), mode, None, memory)
+                        target = replacement.x - (5.5 + .85 * ego.speed)
+                        expected = min(33.3, 20 + .2 * (.3 * (target - ego.x)))
+                        self.assertEqual((command.reference, own.front, command.formation_state), (2, 2, 1))
+                        self.assertAlmostEqual(command.target_x, target)
+                        self.assertAlmostEqual(command.speed, expected)
+                for rows in ((), (car(2, 300.01, speed=20),)):
+                    with self.subTest(rows=rows):
+                        lost, released = self.command(ego, rows, mode, None, memory)
+                        self.assertEqual((lost.reference, released.front, lost.formation_state), (None, None, 0))
+                        returned, own = self.command(
+                            ego, (car(2, 180, speed=20),), mode, None, released)
+                        self.assertIsNone(returned.reference)
+                        self.assertIsNone(own.front)
+                        self.assertAlmostEqual(returned.speed, 20 + .2 * (28.8 - 20))
 
 
 if __name__ == '__main__':

@@ -42,8 +42,10 @@ class LocalFormationStateTests(unittest.TestCase):
     def test_selected_forward_cth_reference_counts_beyond_the_near_phase_graph(self):
         for x in (150., 150.01, 300.):
             with self.subTest(front_x=x):
-                command, _ = rules.decide(car(0, 100), (car(1, x),), rules.Memory(), 'transform', None)
+                command, memory = rules.decide(
+                    car(0, 100), (car(1, x),), rules.Memory(front=9), 'transform', None)
                 self.assertEqual(command.reference, 1)
+                self.assertEqual(memory.front, 1)
                 self.assertEqual(command.formation_state, 1)
         self.assertEqual(self.state(car(0, 100), (car(1, 300.01),)), 0)
         self.assertEqual(self.state(car(0, 100), (car(1, 49.99),)), 0)
@@ -136,18 +138,52 @@ class FormationStateStatisticsTests(unittest.TestCase):
 
 
 class InstalledStateRecordingTests(unittest.TestCase):
-    def test_state_only_fix_preserves_archived_C8_controls_and_own_memory(self):
+    def archived_cases(self):
         fixture = json.loads((Path(__file__).parent / 'fixtures/c8_before_state_reporting.json').read_text())
-        for row in fixture['cases']:
+        return {row['name']: row for row in fixture['cases']}
+
+    def archived_command(self, row):
+        return rules.decide(
+            rules.Vehicle(**row['ego']), tuple(rules.Vehicle(**c) for c in row['neighbors']),
+            rules.Memory(**row['memory']), row['mode'], row['drop_x'])
+
+    def test_archived_C8_noa_and_real_slot_controls_and_memory_remain_unchanged(self):
+        cases = self.archived_cases()
+        for name in ('noa_visible_remote_front', 'left_real_slot'):
+            row = cases[name]
             with self.subTest(case=row['name']):
-                command, after = rules.decide(
-                    rules.Vehicle(**row['ego']), tuple(rules.Vehicle(**c) for c in row['neighbors']),
-                    rules.Memory(**row['memory']), row['mode'], row['drop_x'])
+                command, after = self.archived_command(row)
                 control = asdict(command)
                 state = control.pop('formation_state')
                 self.assertEqual(control, row['control'])
                 self.assertEqual(asdict(after), row['after'])
                 self.assertEqual(state, 0 if row['mode'] == 'noa' else 1)
+
+    def test_archived_C8_near_following_keeps_control_but_now_remembers_its_reference(self):
+        row = self.archived_cases()['ordinary_following']
+        command, after = self.archived_command(row)
+        control = asdict(command)
+        self.assertEqual(control.pop('formation_state'), 1)
+        self.assertEqual(control, row['control'])
+        self.assertIsNone(row['after']['front'])
+        self.assertEqual(after, rules.Memory(front=command.reference))
+        self.assertEqual(after.front, 1)
+
+    def test_archived_C8_fresh_far_inputs_now_need_a_previously_established_chain(self):
+        cases = self.archived_cases()
+        for name, phase_speed in (('stopped_far_front', 0.), ('slow_far_front_with_phase', -1.1625)):
+            row = cases[name]
+            with self.subTest(case=name):
+                command, after = self.archived_command(row)
+                ego = rules.Vehicle(**row['ego'])
+                self.assertIsNone(command.reference)
+                self.assertEqual(after, rules.Memory())
+                self.assertAlmostEqual(command.target_x, ego.x + phase_speed / .3)
+                self.assertAlmostEqual(command.speed, .2 * (28.8 + phase_speed))
+                self.assertEqual(command.formation_state, int(name == 'slow_far_front_with_phase'))
+                # Preserve the historical behavior as evidence of the intentional method change.
+                self.assertEqual(row['control']['reference'], 1)
+                self.assertNotEqual(command.speed, row['control']['speed'])
 
     def test_real_sumo_records_every_local_state_without_exposing_it_to_neighbors(self):
         initial = [

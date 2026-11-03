@@ -1,0 +1,198 @@
+{
+  "status": "registered_locked",
+  "registered_utc": "2026-11-03T20:35:21.064190+00:00",
+  "formal_started": true,
+  "research_deadline_local": "2026-11-04T08:00:00+08:00",
+  "acceptance_note": "30 s formation / 10 s holding deadline canceled; research work deadline unchanged",
+  "selected_sources": [
+    {
+      "candidate": "C12_200",
+      "path": "tmp/staggered_bottleneck/candidates/20261104_C12_200/native_rules.py",
+      "sha256": "d24524bb74aa3ac1e1e45afbf4fc577de56bfce440153d237357f7f988ac487b"
+    },
+    {
+      "candidate": "C12_300",
+      "path": "tmp/staggered_bottleneck/candidates/20261104_C12_300/native_rules.py",
+      "sha256": "e9dda2f6d0ae8b77b56908019a6dd9f3c3c8ef218175f003a6dcade0a9191e1c"
+    },
+    {
+      "candidate": "P12_200",
+      "path": "tmp/staggered_bottleneck/candidates/20261104_P12_200/native_rules.py",
+      "sha256": "3f0c0e88642c9528c3b0cb23b34c4417f3aa326e918d9d42ccfb2c13051fc11c"
+    },
+    {
+      "candidate": "P12_300",
+      "path": "tmp/staggered_bottleneck/candidates/20261104_P12_300/native_rules.py",
+      "sha256": "afff29c1db94a7116997deeea0122be5289381fc628a16f753e220ea204570e6"
+    }
+  ],
+  "selection_authority": "root locked C12 main and P12 matched parallel at 2026-11-04 approximately 04:33 +08; no further source changes",
+  "runtime_base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+  "runtime_root": "variants/phase5g_pure_formation",
+  "runtime_override": "native_rules.py only",
+  "controller_parameters": {
+    "headway_s": 0.85,
+    "cruise_speed_mps": 28.8,
+    "max_speed_mps": 33.3,
+    "road_preview_m": [
+      200,
+      300
+    ]
+  },
+  "seeds": [
+    211,
+    212,
+    213,
+    214,
+    215
+  ],
+  "flow_veh_h_lane": [
+    1500,
+    1750,
+    2000
+  ],
+  "demand_duration_s": 600,
+  "max_time_s": 1200,
+  "batches": [
+    {
+      "name": "20261104_formal600_main_drop_211_215_r01",
+      "geometry": "main",
+      "previews": [
+        200,
+        300
+      ],
+      "scenarios": [
+        "lane_drop"
+      ],
+      "modes": [
+        "noa",
+        "formation",
+        "transform"
+      ],
+      "cases": 90
+    },
+    {
+      "name": "20261104_formal600_main_straight_211_215_r01",
+      "geometry": "main",
+      "previews": [
+        200
+      ],
+      "scenarios": [
+        "straight3"
+      ],
+      "modes": [
+        "noa",
+        "formation",
+        "transform"
+      ],
+      "cases": 45
+    },
+    {
+      "name": "20261104_formal600_parallel_drop_211_215_r01",
+      "geometry": "parallel",
+      "previews": [
+        200,
+        300
+      ],
+      "scenarios": [
+        "lane_drop"
+      ],
+      "modes": [
+        "transform"
+      ],
+      "cases": 30
+    },
+    {
+      "name": "20261104_formal600_parallel_straight_211_215_r01",
+      "geometry": "parallel",
+      "previews": [
+        200
+      ],
+      "scenarios": [
+        "straight3"
+      ],
+      "modes": [
+        "transform"
+      ],
+      "cases": 15
+    }
+  ],
+  "total_main_cases": 135,
+  "total_matched_parallel_cases": 45,
+  "sequence": "main drop then main straight, consume main once, then parallel drop and parallel straight; no overlap of our simulation pools",
+  "resources": {
+    "jobs": 3,
+    "root_long_noa_jobs": 1,
+    "combined_job_limit": 4,
+    "worker_timeout_s": 1800,
+    "outer_timeout_s": 7200
+  },
+  "metrics": {
+    "primary": "mean_system_time_s = exit-request",
+    "secondary": [
+      "mean_travel_time_s = exit-entry",
+      "mean_entry_wait_s = entry-request",
+      "fuel_g_per_km"
+    ],
+    "mechanism": [
+      "actual lane-change completion positions/counts",
+      "ending-lane stopped vehicle counts/exposure",
+      "direct binary participation flag",
+      "actual D(v) formation geometry and whole-cohort pre-first-exit stability"
+    ]
+  },
+  "contrasts": [
+    "main transform-noa",
+    "main formation-noa",
+    "main transform-formation",
+    "parallel transform-main transform, same preview and demand",
+    "road DID = lane_drop contrast - matched straight3 contrast, per seed then mean"
+  ],
+  "aggregation": "equal-weight paired seed means, separately by flow/scenario/preview/mode/reference_mode; report all seed directions",
+  "straight_preview_sharing": "300 uses the actual 200 straight case for corresponding mode/geometry: no drop exists, ROAD_PREVIEW has no behavior effect; reference candidate ID remains explicit; no duplicate independent case count",
+  "eligibility": "reuse old sealed evaluator; same demand, parameters and nonrule source; require safe/full completed protocol eligible pair; retain failed and incomplete rows, no completed-subset efficiency inference",
+  "raw_retention": "all raw retained, including errors/time limits; old failed batches remain separate",
+  "source_lock": "fill exact four paths and supplied hashes and register timestamp before first formal case; no algorithm edits or formal-driven tuning after lock",
+  "selection_reason": "C12 full-cohort 45 recovery matched C8 numerically; fixes an established real longitudinal relation being dropped when its physical predecessor is replaced; no new fields, area, threshold, or formal-driven tuning",
+  "control_source_lines": 316,
+  "reference_identity": "C12_200/noa and C12_300/noa are the formal same-source common NOA. Parallel contrasts use corresponding main C12 transform/noa, with actual source identities explicit.",
+  "first_batch_started_local": "2026-11-04T04:35:35.559482+08:00",
+  "first_batch": "tmp/staggered_bottleneck/20261104_formal600_main_drop_211_215_r01",
+  "first_batch_operation": "results/operations/20261103T203535559482Z_timegap-formal600-main-drop-211215_69497c1c",
+  "mechanism_reporting_amendment": {
+    "requested_by": "root during formal simulation, before any formal performance report consumption",
+    "recorded_utc": "2026-11-03T20:52:32.591886+00:00",
+    "basis": "already-consumed per_case.csv only; no raw rescan or new eligibility condition",
+    "grouping": [
+      "actual_candidate",
+      "preview",
+      "scenario",
+      "flow",
+      "mode"
+    ],
+    "aggregation": "equal seed means; all five actual seed rows retained. For an undefined per-seed relation duration, preserve null rather than zero. Do not confuse equal-seed mean participation fraction with pooled vehicle-time weighting.",
+    "columns": [
+      "flag_mean_participants",
+      "flag_participation_rate",
+      "flag_mean_episode_s",
+      "region_mean_speed_mps",
+      "region_low_speed_vehicle_s",
+      "flow_1000m_veh_h",
+      "stop_sample_vehicle_s",
+      "merge_2to1_mean_x_m",
+      "merge_2to1_completions",
+      "max_lane_completions_per_vehicle",
+      "vehicles_more_than_two_lane_completions"
+    ],
+    "region_m": [
+      800,
+      1000
+    ],
+    "time_window_s": [
+      100,
+      600
+    ],
+    "lc_max_note": "report per-seed maxima, their equal-seed mean and full group maximum separately; retain per-seed over2 counts",
+    "straight_note": "300 uses the actual200 straight source; any shared table view remains explicitly labeled and is not an extra independent sample"
+  }
+}

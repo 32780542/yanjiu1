@@ -8,7 +8,6 @@ WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.
 LENGTH, STANDSTILL, BRAKING, RESPONSE = 4., 1.5, 10., .2
 HEADWAY = .85
 ROAD_PREVIEW = 200.
-GAP = LENGTH + STANDSTILL + HEADWAY * CRUISE
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,7 +66,7 @@ def _request(ego, target, reference_speed):
     return max(0., min(MAX_SPEED, ego.speed + SPEED_RELAXATION * (desired - ego.speed)))
 
 
-def _phase(lane, lanes, speed=CRUISE):
+def _phase(lane, speed=CRUISE):
     return desired_spacing(speed) / 2 if lane % 2 else 0.
 
 
@@ -76,11 +75,11 @@ def _physical_phase(car, lanes, speed=None):
     lateral = max(0., min(lanes - 1, car.y / LANE_WIDTH - .5))
     lower = int(lateral)
     upper = min(lower + 1, lanes - 1)
-    return _phase(lower, lanes, speed) + (lateral - lower) * (
-        _phase(upper, lanes, speed) - _phase(lower, lanes, speed))
+    return _phase(lower, speed) + (lateral - lower) * (
+        _phase(upper, speed) - _phase(lower, speed))
 
 
-def _pair_error(car, peer, lanes, phase_boundary=None):
+def _pair_error(car, peer, lanes):
     speed = (car.speed + peer.speed) / 2
     return (peer.x - car.x + _physical_phase(peer, 3, speed)
             - _physical_phase(car, 3, speed)), lanes
@@ -96,7 +95,7 @@ def _front_following(ego, rows, distance=50.):
     return _request(ego, target, front.speed), target, front.track, 1
 
 
-def _following(ego, rows, lanes=3, phase_boundary=None):
+def _following(ego, rows, lanes=3):
     """在真实前车跟驰上，用实车互选形成半时距错位。"""
     following = _front_following(ego, rows)
     cars = (ego, *rows)
@@ -239,7 +238,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
     if not transition:
         speed, target, reference, linked = formed
         local = _front_following(ego, rows)
-        if local[2] is None and physical[2] is not None:
+        if local[2] is None and physical[2] is not None and memory.front is not None:
             # Close the visible 50-200 m hole without cancelling soft phase again.
             speed = max(0., min(MAX_SPEED, physical[0] + formed[0] - _request(ego, ego.x, CRUISE)))
             target, reference = physical[1], physical[2]
@@ -288,7 +287,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
         speed, reference = _request(ego, target, anchor.speed), anchor.track
     if physical[2] is not None and (transition or plan is not None):
         speed = min(speed, physical[0])
-    own = Memory(lane_target=plan, front=anchor.track if anchor is not None else None)
+    own = Memory(lane_target=plan, front=anchor.track if anchor is not None else reference)
     reason = ('forward_change' if lane is not None else 'forward_approach' if plan is not None
               else 'forward_follow')
     return Command(speed, lane, reason, target, reference, int(linked or reference is not None)), own

@@ -1,6 +1,6 @@
-# C8实际安装测试迁移
+# C8历史与C12实际安装测试迁移
 
-2026-11-04。生产规则已由root冻结为C8。本单元只编辑`variants/phase5g_pure_formation/tests`与本文；不改规则、engine、README，不操作Git，不运行旧阶段整套。按writing-plans记录当前单元，执行顺序如下。
+2026-11-04。最初生产C8的迁移与状态红绿记录保留在下文；root随后安装C12，当前合同及最新执行见末节。本单元只编辑`variants/phase5g_pure_formation/tests`与本文；不改规则、engine、README，不操作Git，不运行旧阶段整套。按writing-plans记录当前单元，执行顺序如下。
 
 ## 直接依赖盘点
 
@@ -23,29 +23,29 @@
 
 | 当前模块 | 测试数 | 覆盖职责 |
 | --- | ---: | --- |
-| test_native_rules | 18 | 200m道路边界、前200/后100观测裁剪、实际运动跟进、不读取邻车pending、formation不自由换道、2→1→0单向接入、真实F−D与后侧D、半D误差不增、ID重标/顺序不变 |
+| test_native_rules | 20 | 近50m建链、远200m维持与真实前驱替换/释放；200m道路边界、前200/后100观测裁剪、实际运动跟进、不读取邻车pending、formation不自由换道、2→1→0单向接入、真实F−D与后侧D、半D误差不增、ID重标/顺序不变 |
 | test_physical_following | 8 | 共用制动、跨线双道占用、相对速度8m走廊、低速entry-D≥16、真实前车优先、低速远孔假停车最小反例 |
 | test_time_headway | 7 | 精确h=.85、D(v)、巡航间距29.98m、同前车动态跟驰 |
 | test_user_timegap | 8 | 用户时距/相位/可见缩道/反应式NOA合同；原文件保留未改 |
-| test_formation_state | 16 | 实际已选200m跟驰/真实slot关系=1、NOA=0、关系消失、直接0/1统计、真实SUMO落盘、旧C8非state输出/Memory对照 |
+| test_formation_state | 18 | 实际已选200m跟驰/真实slot关系=1、NOA=0、关系消失、直接0/1统计、真实SUMO落盘；保留旧C8五输入，分别验证仍等价与有意改变的行为 |
 | test_own_lane_execution | 10 | 真实旧pending race、严格完成/超时、自身pending与邻车信息隔离、真实native适配器 |
 | test_native_sumo | 17 | 原生需求/道路/执行/共用safe_speed/失败与碰撞保存/真实短测 |
 | test_global_reference | 15 | 独立集中参考保持原合同，未因C8改动 |
 | test_native_comparison | 31 | 真实磁盘记录复算、0/1状态完整性、配对与不完整运行保留 |
 | test_bottleneck_attribution | 14 | 实际越线/暴露积分/删失与DID输入比较 |
-| **受影响安装组** | **144** | 当前测试定义总数 |
+| **受影响安装组** | **148** | 当前C12测试定义总数；C8统一状态版当时为144项 |
 | test_native_recovery（另跑） | 15 | 独立磁盘恢复评价器，未修改 |
 | 根tests/test_native_gui_entry.py（另跑） | 9 | 根入口参数、GUI连接生命周期与check，不修改root测试 |
 
 `run_native_contracts.py`只将真实variant与tests路径放到导入入口，并按显式模块列表顺序运行；没有旧阶段全量发现或并行SUMO。
 
-后续复现当前受影响安装组的明确入口（144项；本次补状态后未再次执行整组）：
+C8迁移当时受影响安装组的明确入口（当时144项；该次补状态后未再次执行整组）：
 
 ```powershell
 python -X utf8 -B scripts/run_logged.py --label c8_native_contracts --timeout 240 -- python -X utf8 -B variants/phase5g_pure_formation/tests/run_native_contracts.py test_native_rules test_physical_following test_time_headway test_user_timegap test_formation_state test_own_lane_execution test_native_sumo test_global_reference test_native_comparison test_bottleneck_attribution
 ```
 
-当前最终实际执行的窄范围状态入口（16项，含原5个固定控制/Memory场景）：
+C8统一状态版最后实际执行的窄范围状态入口（当时16项，含原5个固定控制/Memory场景）：
 
 ```powershell
 python -X utf8 -B scripts/run_logged.py --label c8_unified_relation_flag_green --timeout 90 -- python -X utf8 -B variants/phase5g_pure_formation/tests/run_native_contracts.py test_formation_state
@@ -79,7 +79,7 @@ python -X utf8 -B scripts/run_logged.py --label c8_unified_relation_flag_green -
 
 根headless结果位于`tmp/staggered_bottleneck/20261104_C8_root_smoke/20261103T191224176087Z_lane_drop_transform_s1_7813ba`。该smoke在状态补正前运行，只复用运动/安全/排空结果，不将旧participation值当作新状态版结果。GUI实际窗口由root另行验证，本单元未打开或修改GUI。
 
-## 当前结论
+## C8迁移当时的结论
 
 C8当前测试接口已完成迁移；共用安全、本车执行反馈、局部信息边界和真实磁盘统计保留。测试暴露的200m关系漏报已交root并由其作纯状态补正，相关红绿与不改变控制的对照证据已保存。没有改驾驶规则以迎合旧测试，也没有重跑旧阶段整套。随后新增的真实slot关系遗漏见下节。
 
@@ -90,3 +90,24 @@ C8当前测试接口已完成迁移；共用安全、本车执行反馈、局部
 `20261103T193745129998Z_c8_real_slot_anchor_flag_red_9d44edc0`实际运行两个方法：原far-front方法通过；新slot方法的held-plan、own-pending两个子例只在state 0≠1处失败，运动输出和Memory断言均先通过。该边界说明仅在远孔分支补linked还不够，合同应覆盖最终所有非NOA真实reference。新增测试使当前flag模块16项、受影响组144项。
 
 root已从原C8安装统一出口版：最终非NOA flag为`int(linked or reference is not None)`，远孔分支恢复原二元赋值，NOA早返回仍0。实际磁盘317行，单文件SHA与root冻结标识`279e676a1de7b542cc3074523cff6a4ef151710662e57e113ebb5a5aa8d8377c`一致。最终仅运行`test_formation_state`：16项、1.323 s、退出0；包括far-front、held-slot、own-pending、真实SUMO状态落盘与原5场景的控制/Memory不变对照。未重跑整组、根smoke或旧阶段。本单元没有编辑生产，当前没有未处理的flag测试失败。
+
+## C12关系生命周期迁移
+
+root安装C12后，普通纵向关系的合同有意改变：真实前驱在近50m内先建立关系；已有关系可在前200m内继续使用当前真实前驱，即使新前驱替换了旧track；无真实前驱或失见则释放。fresh80不会主动建链，`Memory.front`保存普通已选主引用，仍不能读邻车私有状态。真实已选关系的0/1语义不变，NOA仍为0。本次只迁移三个测试文件，不修改生产、引擎或历史夹具。
+
+- `test_native_rules`新增两个生命周期方法，分别覆盖50m/50.01m/80m/200m边界，以及实际前驱替换、旧前驱仍在别道可见、200.01m失见、空观测释放和fresh80返回不重建。formation与transform均运行，并直接断言动态D与正常跟驰请求。
+- 两个低速远孔反例现在明确给本车已建立的Memory；继续验证C6松弛基准合成错误不会将远孔闭合变成假停车，不再要求fresh远车主动追赶。
+- 原C8五输入JSON完整保留。NOA与真实slot仍比较完整非state控制及Memory；近距正常跟驰保持控制，但明确要求普通主引用写入Memory；两个fresh远孔输入改为新合同的明确数学断言，并保留旧reference与旧速度作为方法变更证据。旧C8“5场景完全等价”的绿测仅对当时C8状态修正版有效，不延伸到C12。
+- far-front状态用例改为已有关系且新前驱track不同，验证实际选定的200m关系仍报告1。真实slot、NOA、关系消失与直接0/1统计继续保留。
+
+`20261103T204014440914Z_c12_pure_chain_contracts_c6ffb65b`经`run_logged.py`执行纯规则及无SUMO状态/夹具组：**60项，0.012 s，退出0**。静态发现当前10模块共148项。`test_user_timegap`保留未改。该纯组没有启动SUMO；收到root空1槽通知后，完整受影响组按单job实际运行一次。
+
+当前完整组实际入口：
+
+```powershell
+python -X utf8 -B scripts/run_logged.py --label c12_native_installed_regression --timeout 240 -- python -X utf8 -B variants/phase5g_pure_formation/tests/run_native_contracts.py test_native_rules test_physical_following test_time_headway test_user_timegap test_formation_state test_own_lane_execution test_native_sumo test_global_reference test_native_comparison test_bottleneck_attribution
+```
+
+`20261103T205751291328Z_c12_native_installed_regression_1ce11d3c`实际结果：**148项，16.150 s，全部通过，退出0**（wrapper 16.89 s）。覆盖已安装C12规则、新关系生命周期、真实SUMO状态落盘、本车pending/横移执行、共用安全、真实磁盘比较与归因。未修改源或引擎，没有跳过失败，没有重跑旧阶段、根smoke或GUI。进程已结束，并已通知root释放仿真槽。
+
+root随后另跑最终安装版实际GUI：`20261103T205840996769Z_C12-final-live-GUI_af56d19a`，20秒需求，30请求/发车/完成，gui=true、drained、碰撞0/瞬移0，实际仿真到61.2秒，耗时33.623秒。Windows窗口列表实际返回`native.net.xml - SUMO 1.27.1`；一次截图调用因参数形状不符未成功，窗口结束后没有仅为截图重跑。此前C8界面的43.3秒运行截图仍是界面证据；最终C12以实际GUI进程、窗口识别和落盘结果为据。

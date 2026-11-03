@@ -1,4 +1,4 @@
-"""Common physical following and preserved low-speed counterexamples for C8."""
+"""Common safety and low-speed counterexamples on an established C12 chain."""
 from dataclasses import replace
 from math import sqrt
 import unittest
@@ -11,8 +11,8 @@ def car(track, x, lane=0, speed=28.8):
 
 
 class PhysicalFollowingTests(unittest.TestCase):
-    def command(self, ego, rows=(), mode='transform', drop=None):
-        return r.decide(ego, tuple(rows), r.Memory(), mode, drop)[0]
+    def command(self, ego, rows=(), mode='transform', drop=None, memory=None):
+        return r.decide(ego, tuple(rows), memory or r.Memory(), mode, drop)[0]
 
     def test_all_modes_obey_the_same_stopped_front_safety_limit(self):
         ego, front = car(0, 100, speed=25), car(1, 110, speed=0)
@@ -35,11 +35,11 @@ class PhysicalFollowingTests(unittest.TestCase):
         self.assertEqual(r.safe_speed(ego, (adjacent,)), r.MAX_SPEED)
         self.assertGreater(self.command(ego, (adjacent,), mode='formation').speed, 20)
 
-    def test_far_visible_front_is_followed_without_the_old_low_speed_zero_artifact(self):
+    def test_established_far_front_is_followed_without_the_old_low_speed_zero_artifact(self):
         # C6's 50-200 m branch subtracted 28.8 from an already relaxed speed.
         ego, front = car(0, 900.951, 1, 0), car(1, 1078.776, 1, 20)
         expected = .2 * (20 + .3 * (1078.776 - 5.5 - 900.951))
-        command = self.command(ego, (front,))
+        command = self.command(ego, (front,), memory=r.Memory(front=front.track))
         self.assertAlmostEqual(command.speed, expected)
         self.assertGreater(command.speed, 10)
         self.assertEqual(command.reference, front.track)
@@ -47,7 +47,7 @@ class PhysicalFollowingTests(unittest.TestCase):
     def test_far_hole_with_a_phase_peer_keeps_a_positive_low_speed_request(self):
         ego, front = car(0, 900, 1, 0), car(1, 1050, 1, 20)
         peer = car(2, 895, 0, 0)
-        command = self.command(ego, (front, peer))
+        command = self.command(ego, (front, peer), memory=r.Memory(front=front.track))
         self.assertGreater(command.speed, 5)
         self.assertLessEqual(command.speed, r.safe_speed(ego, (front, peer)))
 
