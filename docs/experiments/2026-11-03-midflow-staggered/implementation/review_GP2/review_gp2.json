@@ -1,0 +1,188 @@
+{
+  "GP2_sha256": "37306e86a8e0e1045763bf54ebb3adca60ebc489dde6925a61553240ad0195cc",
+  "frozen_S_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "oracle_sha256": "a24adc6bee09319fd1d71eb05c468be76bed54b41d9dd8e55caa43731fbe91f6",
+  "pure_function_only": true,
+  "no_simulation": true,
+  "no_git": true,
+  "states": 600,
+  "complete_scope_hex_comparisons": 3000,
+  "active_target0_hex_comparisons": 245,
+  "no_resource_complete_S_hex_comparisons": 230,
+  "held_relabel_permutation_private_field_checks": 24,
+  "outside_perception_noninterference": true,
+  "interposed_vehicle_invalidates_held_pair": true,
+  "protected_sources_unchanged": true,
+  "behavior_boundaries": {
+    "shortest_nominal_T_not_earliest_current_admission": {
+      "ego": {
+        "track": 0,
+        "x": 680.0,
+        "y": 8.25,
+        "speed": 10.0,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 590.0,
+          "y": 4.949999999999999,
+          "speed": 10.0,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 650.0,
+          "y": 4.949999999999999,
+          "speed": 20.0,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 710.0,
+          "y": 4.949999999999999,
+          "speed": 20.0,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 4,
+          "x": 810.0,
+          "y": 4.949999999999999,
+          "speed": 20.0,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "fresh_plan": [
+        656.7395833333334,
+        15.0,
+        [
+          2,
+          1
+        ],
+        5.0
+      ],
+      "held_plan": [
+        672.5138888888889,
+        20.0,
+        [
+          3,
+          2
+        ],
+        10.11111111111111
+      ],
+      "fresh_output": [
+        {
+          "speed": 9.841750000000001,
+          "lane": null,
+          "reason": "approach_gap",
+          "target_x": 656.7395833333334,
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": null,
+          "gap": [
+            2,
+            1
+          ],
+          "joining": false
+        }
+      ],
+      "current_pair_held_output": [
+        {
+          "speed": 10.351669484361793,
+          "lane": 1,
+          "reason": "merge",
+          "target_x": 672.5138888888889,
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 1,
+          "gap": [
+            3,
+            2
+          ],
+          "joining": true
+        }
+      ]
+    },
+    "current_CTH_band_not_rear_braking_guarantee": {
+      "ego": {
+        "track": 0,
+        "x": 730.0,
+        "y": 8.25,
+        "speed": 10.0,
+        "lane": 2,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "rows": [
+        {
+          "track": 1,
+          "x": 709.48,
+          "y": 4.949999999999999,
+          "speed": 20.0,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 850.0,
+          "y": 4.949999999999999,
+          "speed": 28.8,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "output": [
+        {
+          "speed": 10.38959352491275,
+          "lane": 1,
+          "reason": "merge",
+          "target_x": 695.1438888888889,
+          "reference": null,
+          "formation_state": 1
+        },
+        {
+          "lane_target": 1,
+          "gap": [
+            2,
+            1
+          ],
+          "joining": true
+        }
+      ],
+      "rear_safe_speed_static_full_insertion": 18.109699152399063,
+      "scope": "static counterfactual; actual lateral trajectory is not simulated"
+    }
+  }
+}

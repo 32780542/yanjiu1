@@ -1,0 +1,21 @@
+{
+  "base_commit": "1aa86344af2a269053cd4fcda9d58168697daf17",
+  "parent_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "source_sha256": "3e2a722f997713e6ad504bce22d741c39d58b1ad6808765a5b9b8d62a68a1007",
+  "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_bound_real_gap\\native_rules.py",
+  "lines": 514,
+  "changed_functions": [
+    "_gap_plan",
+    "_gap_clear",
+    "_join_speed",
+    "_decide"
+  ],
+  "exact_reverse": true,
+  "no_V_F_C5_source_stacking": true,
+  "no_new_vehicle_state_memory_or_tunable_gain": true,
+  "domain": "transform map preparation; initial/active destination lane1 only",
+  "nominal_assumptions": "visible real F/R remain constant-speed over map-derived horizon",
+  "no_traffic_simulation": true,
+  "initial_draft_sha256": "b794f4f69c86cbf65860e486658739c868a28a7f4c925b685ade12fb8d2fe429",
+  "builder_reproduces_source": true
+}

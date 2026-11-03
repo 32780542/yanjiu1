@@ -1,0 +1,21 @@
+{
+  "parent_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_bound_real_gap\\native_rules.py",
+  "parent_sha256": "3e2a722f997713e6ad504bce22d741c39d58b1ad6808765a5b9b8d62a68a1007",
+  "frozen_s_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "source_sha256": "37306e86a8e0e1045763bf54ebb3adca60ebc489dde6925a61553240ad0195cc",
+  "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_bound_real_gap_v2\\native_rules.py",
+  "lines": 523,
+  "changed_functions_from_GP": [
+    "_gap_plan",
+    "_gap_clear"
+  ],
+  "no_V_F_C5_source_stacking": true,
+  "strategy": "CTH-compatible admission within bound real gap",
+  "horizon_priority": "held feasible pair first; then shortest of Cai5s/map remaining; then J",
+  "no_new_vehicle_state_memory_or_tuned_gain": true,
+  "no_traffic_simulation": true,
+  "builder_reproduces_source": true,
+  "current_admission_tracking_tolerance_m": 2.0,
+  "numerical_interval_inversion_tolerance": "one machine ulp of ego.x+ego.v*T, not a physical gain",
+  "initial_strict_draft_sha256": "2f424a12bade8e5c8356e1a89141f1aaf68945f0aae7d2e15c2eeb3018afbc3a"
+}

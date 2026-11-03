@@ -1,0 +1,417 @@
+{
+  "source_sha256": {
+    "GP": "3e2a722f997713e6ad504bce22d741c39d58b1ad6808765a5b9b8d62a68a1007",
+    "GP2": "37306e86a8e0e1045763bf54ebb3adca60ebc489dde6925a61553240ad0195cc"
+  },
+  "scope": "pure local snapshots; no traffic simulation",
+  "cases": [
+    {
+      "name": "rear_deficit705",
+      "ego_x_m": 705.0,
+      "ego_v_mps": 28.8,
+      "map_remaining_horizon_s": 9.243055555555555,
+      "versions": {
+        "GP": {
+          "command": {
+            "speed": 30.3,
+            "lane": 1,
+            "reason": "merge",
+            "target_x": 730.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": null,
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ]
+        },
+        "GP2": {
+          "command": {
+            "speed": 29.16,
+            "lane": null,
+            "reason": "approach_gap",
+            "target_x": 720.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": null,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": false
+          },
+          "plan": [
+            720.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            5.0
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 864.0,
+          "nominal_future_CTH_window_m": [
+            864.0,
+            884.0
+          ],
+          "T_s": 5.0
+        }
+      }
+    },
+    {
+      "name": "front_deficit755",
+      "ego_x_m": 755.0,
+      "ego_v_mps": 28.8,
+      "map_remaining_horizon_s": 7.506944444444445,
+      "versions": {
+        "GP": {
+          "command": {
+            "speed": 28.64029588528113,
+            "lane": 1,
+            "reason": "merge",
+            "target_x": 740.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": [
+            740.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            7.506944444444445
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 956.2,
+          "nominal_future_CTH_window_m": [
+            936.2,
+            956.2
+          ],
+          "T_s": 7.506944444444445
+        },
+        "GP2": {
+          "command": {
+            "speed": 28.44,
+            "lane": null,
+            "reason": "approach_gap",
+            "target_x": 740.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": null,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": false
+          },
+          "plan": [
+            740.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            5.0
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 884.0,
+          "nominal_future_CTH_window_m": [
+            864.0,
+            884.0
+          ],
+          "T_s": 5.0
+        }
+      }
+    },
+    {
+      "name": "band719",
+      "ego_x_m": 719.0,
+      "ego_v_mps": 28.8,
+      "map_remaining_horizon_s": 8.756944444444445,
+      "versions": {
+        "GP": {
+          "command": {
+            "speed": 29.46,
+            "lane": 1,
+            "reason": "merge",
+            "target_x": 730.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": null,
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ]
+        },
+        "GP2": {
+          "command": {
+            "speed": 28.824,
+            "lane": 1,
+            "reason": "merge",
+            "target_x": 720.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": [
+            720.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            5.0
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 864.0,
+          "nominal_future_CTH_window_m": [
+            864.0,
+            884.0
+          ],
+          "T_s": 5.0
+        }
+      }
+    },
+    {
+      "name": "band721",
+      "ego_x_m": 721.0,
+      "ego_v_mps": 28.8,
+      "map_remaining_horizon_s": 8.6875,
+      "versions": {
+        "GP": {
+          "command": {
+            "speed": 28.8,
+            "lane": 1,
+            "reason": "merge",
+            "target_x": 721.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": [
+            721.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            8.6875
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 971.2,
+          "nominal_future_CTH_window_m": [
+            970.2,
+            971.2
+          ],
+          "T_s": 8.6875
+        },
+        "GP2": {
+          "command": {
+            "speed": 28.8,
+            "lane": 1,
+            "reason": "merge",
+            "target_x": 721.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": [
+            721.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            5.0
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 865.0,
+          "nominal_future_CTH_window_m": [
+            864.0,
+            884.0
+          ],
+          "T_s": 5.0
+        }
+      }
+    },
+    {
+      "name": "own_pending705",
+      "ego_x_m": 705.0,
+      "ego_v_mps": 28.8,
+      "map_remaining_horizon_s": 9.243055555555555,
+      "versions": {
+        "GP": {
+          "command": {
+            "speed": 30.3,
+            "lane": 1,
+            "reason": "executing",
+            "target_x": 730.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": null,
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ]
+        },
+        "GP2": {
+          "command": {
+            "speed": 29.16,
+            "lane": 1,
+            "reason": "executing",
+            "target_x": 720.0,
+            "reference": null,
+            "formation_state": 1
+          },
+          "memory": {
+            "lane_target": 1,
+            "gap": [
+              2,
+              1
+            ],
+            "joining": true
+          },
+          "plan": [
+            720.0,
+            28.8,
+            [
+              2,
+              1
+            ],
+            5.0
+          ],
+          "actual_CTH_window_m": [
+            720.0,
+            740.0
+          ],
+          "actual_tracking_band_m": [
+            718.0,
+            742.0
+          ],
+          "nominal_terminal_x_m": 864.0,
+          "nominal_future_CTH_window_m": [
+            864.0,
+            884.0
+          ],
+          "T_s": 5.0
+        }
+      }
+    }
+  ]
+}

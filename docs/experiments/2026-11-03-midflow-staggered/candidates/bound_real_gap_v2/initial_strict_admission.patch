@@ -1,0 +1,70 @@
+--- GP/noa/native_rules.py
++++ GP2/noa/native_rules.py
+@@ -193,39 +193,46 @@
+     remaining = (drop_x - ego.x) / CRUISE - 1.0
+     if remaining <= 0.0 or not 0.0 <= ego.speed <= MAX_SPEED:
+         return None
+-    T, v = max(0.1, remaining), ego.speed
++    v = ego.speed
+     ordered = sorted((c for c in rows if _occupies(c, lane)), key=lambda c: (c.x, c.y, c.speed, c.vy))
+     choices = []
+-    for rear, front in zip(ordered, ordered[1:]):
+-        u = (front.speed + rear.speed) / 2
+-        if front.x <= rear.x or not 0.0 <= u <= MAX_SPEED:
+-            continue
+-        E, origin = u - v, ego.x + v * T
+-        low = max(rear.x + rear.speed * T + LENGTH + STANDSTILL + HEADWAY * rear.speed - origin,
+-                  (-BRAKING * T*T + 2*E*T) / 6, (-5.0 * T*T + 4*E*T) / 6,
+-                  T / 3 * (u - 2*v - sqrt(v*u)))
+-        high = min(front.x + front.speed * T - LENGTH - STANDSTILL - HEADWAY * u - origin,
+-                   drop_x - u - origin,
+-                   (5.0 * T*T + 2*E*T) / 6, (BRAKING * T*T + 4*E*T) / 6,
+-                   T / 3 * (MAX_SPEED + u - 2*v + sqrt((MAX_SPEED-v)*(MAX_SPEED-u))))
+-        if low > high:
+-            continue
+-        D = max(low, min(high, E*T/2))
+-        cost = 12*D*D/T**3 - 12*D*E/T**2 + 4*E*E/T
+-        gap = (front.track, rear.track)
+-        score = (gap != held, cost, front.x, rear.x, front.speed, rear.speed)
+-        choices.append((score, origin + D - u*T, u, gap, T))
++    for T in sorted({min(5.0, max(0.1, remaining)), max(0.1, remaining)}):
++        for rear, front in zip(ordered, ordered[1:]):
++            u = (front.speed + rear.speed) / 2
++            if front.x <= rear.x or not 0.0 <= u <= MAX_SPEED:
++                continue
++            E, origin = u - v, ego.x + v * T
++            low = max(rear.x + rear.speed * T + LENGTH + STANDSTILL + HEADWAY * rear.speed - origin,
++                      (-BRAKING * T*T + 2*E*T) / 6, (-5.0 * T*T + 4*E*T) / 6,
++                      T / 3 * (u - 2*v - sqrt(v*u)))
++            high = min(front.x + front.speed * T - LENGTH - STANDSTILL - HEADWAY * u - origin,
++                       drop_x - u - origin,
++                       (5.0 * T*T + 2*E*T) / 6, (BRAKING * T*T + 4*E*T) / 6,
++                       T / 3 * (MAX_SPEED + u - 2*v + sqrt((MAX_SPEED-v)*(MAX_SPEED-u))))
++            if low > high:
++                continue
++            D = max(low, min(high, E*T/2))
++            cost = 12*D*D/T**3 - 12*D*E/T**2 + 4*E*E/T
++            gap = (front.track, rear.track)
++            score = (gap != held, T, cost, front.x, rear.x, front.speed, rear.speed)
++            choices.append((score, origin + D - u*T, u, gap, T))
+     return min(choices, key=lambda choice: choice[0])[1:] if choices else None
+ 
+ 
+ def _gap_clear(ego, rows, lane, gap, drop_x, continuing=False):
+     if _gap_plan(ego, rows, lane, gap, drop_x) is None:
+         return continuing or _clear(ego, rows, lane)
++    if continuing or ego.pending_lane == lane:
++        return True
+     by_track = {c.track: c for c in rows}
+     if gap is None or any(key is not None and key not in by_track for key in gap):
+         return False
+     front, rear = (by_track.get(key) for key in gap)
+-    return (front is None or ego.x <= front.x) and (rear is None or rear.x <= ego.x) and _clear(ego, rows, lane)
++    if front is None or rear is None:
++        return False
++    low = rear.x + LENGTH + STANDSTILL + HEADWAY * rear.speed
++    high = front.x - LENGTH - STANDSTILL - HEADWAY * ego.speed
++    return low <= ego.x <= high and _clear(ego, rows, lane)
+ 
+ 
+ def _join_speed(ego, rows, memory, lane, drop_x=None):

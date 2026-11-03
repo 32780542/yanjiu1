@@ -1,0 +1,107 @@
+--- S/noa/native_rules.py
++++ GP/noa/native_rules.py
+@@ -188,7 +188,51 @@
+     return target, reference.speed, gap
+ 
+ 
+-def _join_speed(ego, rows, memory, lane):
++def _gap_plan(ego, rows, lane, held, drop_x):
++    """Visible real pairs, constant-speed nominal CTH windows and bounded cubics."""
++    remaining = (drop_x - ego.x) / CRUISE - 1.0
++    if remaining <= 0.0 or not 0.0 <= ego.speed <= MAX_SPEED:
++        return None
++    T, v = max(0.1, remaining), ego.speed
++    ordered = sorted((c for c in rows if _occupies(c, lane)), key=lambda c: (c.x, c.y, c.speed, c.vy))
++    choices = []
++    for rear, front in zip(ordered, ordered[1:]):
++        u = (front.speed + rear.speed) / 2
++        if front.x <= rear.x or not 0.0 <= u <= MAX_SPEED:
++            continue
++        E, origin = u - v, ego.x + v * T
++        low = max(rear.x + rear.speed * T + LENGTH + STANDSTILL + HEADWAY * rear.speed - origin,
++                  (-BRAKING * T*T + 2*E*T) / 6, (-5.0 * T*T + 4*E*T) / 6,
++                  T / 3 * (u - 2*v - sqrt(v*u)))
++        high = min(front.x + front.speed * T - LENGTH - STANDSTILL - HEADWAY * u - origin,
++                   drop_x - u - origin,
++                   (5.0 * T*T + 2*E*T) / 6, (BRAKING * T*T + 4*E*T) / 6,
++                   T / 3 * (MAX_SPEED + u - 2*v + sqrt((MAX_SPEED-v)*(MAX_SPEED-u))))
++        if low > high:
++            continue
++        D = max(low, min(high, E*T/2))
++        cost = 12*D*D/T**3 - 12*D*E/T**2 + 4*E*E/T
++        gap = (front.track, rear.track)
++        score = (gap != held, cost, front.x, rear.x, front.speed, rear.speed)
++        choices.append((score, origin + D - u*T, u, gap, T))
++    return min(choices, key=lambda choice: choice[0])[1:] if choices else None
++
++
++def _gap_clear(ego, rows, lane, gap):
++    by_track = {c.track: c for c in rows}
++    if gap is None or any(key is not None and key not in by_track for key in gap):
++        return False
++    front, rear = (by_track.get(key) for key in gap)
++    return (front is None or ego.x <= front.x) and (rear is None or rear.x <= ego.x) and _clear(ego, rows, lane)
++
++
++def _join_speed(ego, rows, memory, lane, drop_x=None):
++    plan = _gap_plan(ego, rows, lane, memory.gap, drop_x) if drop_x is not None and lane == 1 else None
++    if plan is not None:
++        target, speed, gap, T = plan
++        acceleration = 6*(target-ego.x)/T**2 + 4*(speed-ego.speed)/T
++        speed = max(0.0, min(MAX_SPEED, ego.speed + 0.1*acceleration))
++        return speed, target, replace(memory, gap=gap)
+     target, speed, gap = _merge_target(ego, rows, lane, memory.gap)
+     return _request(ego, target, speed), target, replace(memory, gap=gap)
+ 
+@@ -329,6 +373,7 @@
+     preparing = drop_x is not None and ego.x >= drop_x - 360.0 and (ego.x < drop_x or ego.lane == 2)
+     lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
+     organized = mode != "noa"
++    planner_drop = drop_x if mode == "transform" and preparing else None
+     future_lanes = 2 if preparing and mode == "transform" else lanes
+     following_lanes = lanes if ego.lane == 2 else future_lanes
+     speed, target, reference, formation_state = (
+@@ -376,11 +421,12 @@
+             memory = replace(memory, lane_target=None, gap=None)
+         else:
+             speed, target, memory = (
+-                _join_speed(ego, rows, memory, memory.lane_target)
++                _join_speed(ego, rows, memory, memory.lane_target, planner_drop)
+                 if organized
+                 else (CRUISE, None, memory)
+             )
+-            if moving or _clear(ego, rows, memory.lane_target):
++            if (_gap_clear(ego, rows, 1, memory.gap) if planner_drop is not None and memory.lane_target == 1
++                    else moving or _clear(ego, rows, memory.lane_target)):
+                 return action(speed, memory.lane_target, "executing", target), memory
+             return action(speed, None, "approach_join", target), memory
+     if memory.joining and (
+@@ -392,10 +438,13 @@
+ 
+ 
+     if preparing and ego.lane == 2:
+-        target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
+-        memory = replace(memory, gap=gap)
+-        speed = _request(ego, target, gap_speed)
+-        if _clear(ego, rows, 1):
++        if organized and planner_drop is not None:
++            speed, target, memory = _join_speed(ego, rows, memory, 1, planner_drop)
++        else:
++            target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
++            memory = replace(memory, gap=gap)
++            speed = _request(ego, target, gap_speed)
++        if (_gap_clear(ego, rows, 1, memory.gap) if planner_drop is not None else _clear(ego, rows, 1)):
+             return action(speed, 1, "merge", target), replace(
+                 memory, lane_target=1, joining=organized
+             )
+@@ -406,7 +455,9 @@
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):
+                 memory = Memory(lane_target=lane, joining=True)
+-                speed, target, memory = _join_speed(ego, rows, memory, lane)
++                speed, target, memory = _join_speed(ego, rows, memory, lane, planner_drop)
++                if planner_drop is not None and lane == 1 and not _gap_clear(ego, rows, 1, memory.gap):
++                    return action(speed, None, "approach_join", target), memory
+                 return action(speed, lane, "fill_layer", target), memory
+ 
+     if mode == "noa":

@@ -1,0 +1,19 @@
+{
+  "scope": "pure-function contracts, nominal polynomial checks, source audit; no traffic simulation",
+  "source_sha256": "37306e86a8e0e1045763bf54ebb3adca60ebc489dde6925a61553240ad0195cc",
+  "preserved_GP_sha256": "3e2a722f997713e6ad504bce22d741c39d58b1ad6808765a5b9b8d62a68a1007",
+  "initial_incorrect_road_fixture": "results/operations/20261103T113534763617Z_midflow-GP2-admission-red_9d28ecd8",
+  "initial_fixture_correction": "M705 has no GP plan once road high is included; M755 is a genuine GP admission counterexample",
+  "corrected_red": "results/operations/20261103T113816830597Z_midflow-GP2-corrected-red_c4759859",
+  "initial_strict_draft_check": "results/operations/20261103T114030028727Z_midflow-GP2-initial-check_9b36fdab",
+  "tracking_band_and_machine_boundary_red": "results/operations/20261103T114219474250Z_midflow-GP2-tracking-band-red_a9a7cb68",
+  "green_admission_scope": "results/operations/20261103T114323307108Z_midflow-GP2-green_d83cfa4d",
+  "green_tests": 9,
+  "scope_physical_snapshots": 450,
+  "green_nominal_bounds": "results/operations/20261103T114323333480Z_midflow-GP2-nominal-bounds_33fb7de1",
+  "nominal_states": 1600,
+  "all_green_exit_codes": 0,
+  "production_modified": false,
+  "traffic_benefit_verified": false,
+  "global_safety_or_convergence_proved": false
+}

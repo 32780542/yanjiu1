@@ -1,0 +1,53 @@
+--- GP2/noa/native_rules.py
++++ GP2_G0/noa/native_rules.py
+@@ -387,18 +387,8 @@
+     planner_drop = drop_x if mode == "transform" and preparing else None
+     future_lanes = 2 if preparing and mode == "transform" else lanes
+     following_lanes = lanes if ego.lane == 2 else future_lanes
+-    speed, target, reference, formation_state = (
+-        _following(
+-            ego,
+-            rows,
+-            following_lanes,
+-            drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
+-        )
+-        if organized
+-        else _front_following(ego, rows)
+-    )
+-    if not organized:
+-        formation_state = 0
++    speed, target, reference, _ = _front_following(ego, rows)
++    formation_state = 0
+ 
+     def action(speed, lane, reason, target_x=None, reference=None):
+         return Command(speed, lane, reason, target_x, reference, formation_state)
+@@ -461,17 +451,7 @@
+             )
+         return action(speed, None, "approach_gap", target), memory
+ 
+-    if organized and not memory.joining:
+-        lane = _fill(ego, rows, 2 if preparing else lanes)
+-        if lane is not None:
+-            if not _mandatory_priority(ego, rows, lane, drop_x):
+-                memory = Memory(lane_target=lane, joining=True)
+-                speed, target, memory = _join_speed(ego, rows, memory, lane, planner_drop)
+-                if planner_drop is not None and lane == 1 and not _gap_clear(ego, rows, 1, memory.gap, planner_drop):
+-                    return action(speed, None, "approach_join", target), memory
+-                return action(speed, lane, "fill_layer", target), memory
+-
+-    if mode == "noa":
++    if mode in ("noa", "transform"):
+         front = min(
+             (c for c in rows if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x, default=None
+         )
+@@ -494,9 +474,7 @@
+                 lane = max(options, key=free_distance)
+                 if free_distance(lane) > front.x - ego.x + 15.0:
+                     return action(speed, lane, "normal_overtake"), Memory(lane_target=lane)
+-    reason = (
+-        "join_follow" if memory.joining else "formation_follow" if organized else "normal_follow"
+-    )
++    reason = "join_follow" if memory.joining else "normal_follow"
+     return action(speed, None, reason, target, reference), memory
+ 
+ 
