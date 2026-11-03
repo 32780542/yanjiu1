@@ -1,0 +1,17 @@
+{
+  "archive": "20261103_heldout_E40_lane_drop_20.tar.gz",
+  "sha256": "065cdc785ce78ec1c61cf4301c10a548d4e52f34348b5077da7c559e7f37d845",
+  "bytes": 15375436,
+  "case_count": 20,
+  "under_20mb": true,
+  "partition": {
+    "rule": "complete preplanned road group, independent of outcomes",
+    "scenario": "lane_drop",
+    "full_plan_cases": 40,
+    "partition_cases": 20,
+    "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_heldout_E40",
+    "original_protocol_sha256": "cb999d3885e47411136703d9f1d512d91b00f2a31f3b505f7d7b8d4a777ed414",
+    "original_manifest_sha256": "202b15087dedb9c6896c76f6ebfe0da08a8d5ff0224d1c0f6a01c66d112e822f"
+  },
+  "index_sha256": "605ed04bfd6e65ed18c58acb4b3fa93ecab54c99560eba8520fb21569a1db365"
+}

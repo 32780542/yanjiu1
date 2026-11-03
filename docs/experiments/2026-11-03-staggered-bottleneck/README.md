@@ -2,6 +2,10 @@
 
 本轮按用户授权持续迭代至北京时间17:00；达到独立验证的良好版本时提前交付。原目录为 `D:/yanjiu1/keyan1`，Git起点177f7a3，研究分支 `research/20261103-staggered-bottleneck`。本页当前为进行中记录，不是最终采用报告。
 
+当前已完成E的90例验证，以及J2fast在新种子31–35的80例配对验证。J2fast在3→2的2250/2500每道系统时间分别改善6.66%/5.68%，每档五个种子均改善；直路分别改善1.05%/.85%，瓶颈收益更大，燃油仍增加。[J2fast配对表](validation31_J2fast80/tables.md)保留全部四流量及两道路。E使用另一组种子21–25，结果见[原始表](E_heldout90/tables.md)与[独立重算](review_E_heldout.md)，不能把不同种子均值直接当作候选优劣排名。
+
+几何方面，J2全体局部相位耦合已使45辆预成形车完成交错变换；24辆随机初态仍留一处约59米孔。L只在相邻道实车直接证明这个单格空位时衔接实际前车；[同输入真实轨迹](formation_demo_L_long/README.md)中，24辆全体在场、下游15秒后同道CTH最大误差降至约.12米，45辆表现保留。L正在原1200米道路进行40例新种子交通验证及[1800秒持续需求确认](long1800_protocol.md)。2400米长下游仅用于全体在场的几何观察，不混入效率表。生产主入口此时仍为原TM，最终选源以后再安装。
+
 ## 已确认的问题
 
 [旧结果重新诊断](diagnosis/diagnosis.md)表明，500–1250每道基本接近巡航，1500平均仍接近自由流但有少量长停滞。NOA1500均值42.471秒，巡航参考41.667秒；五种子25/3660辆超过60秒。大幅改善平均时间需要检验真正有瓶颈积聚的需求，不能削弱NOA来扩大差值。
@@ -16,7 +20,13 @@
 | [C](candidates/effective_handoff/method.md) | helper必须当前能腾位且腾位确实解除阻挡 | 10例完成，结果混合，2500仍有明显负效益 |
 | [D](candidates/continuous_phase/method.md) | 存续车道保持原交错相位 | 10例完成，小幅/混合，未解决高流量拥堵 |
 | [NF/NC/NP/NH](ablations/README.md) | 分别关闭自由补位、提前协作、队首相位、helper | 用于定位环节；包括未排空结果 |
-| [E](candidates/direct_gap/method.md) | 删除提前等待链，继续用真实F/R间隙变换 | 444行，等价NC；600秒需求筛查中 |
+| [E](candidates/direct_gap/method.md) | 删除提前等待链，继续用真实F/R间隙变换 | 444行，等价NC；90例验证全部安全排空 |
+| H | 队首仅按实际先后确定交错 | 负效益/几何不充分，不采用 |
+| [J2/JT2](methods/J_JT_local_coupling.md) | 全体实车互选相位；固定15米与速度伸缩分别试验 | J2实际几何更好，JT2未优于J2 |
+| [J2fast](candidates/local_phase_coupling_fast/method.md) | 同帧重复CF计算缓存 | 命令/安全精确、实际positions逐字节等价；450行 |
+| K | 低速减弱相位反馈 | 八例筛查没有改善，不采用 |
+| [L](candidates/local_vacancy_bridge/method.md) | 相邻道实车证明后衔接单个空格 | 459行；24辆孔恢复，交通长批进行中 |
+| [LP0](candidates/phase_off_L/method.md) | 仅关闭L的额外纵向相位速度 | 保留自由补位几何，检验相位的增量作用 |
 
 候选源码从固定Git重建到本轮临时目录；各目录保存补丁、源SHA与合同测试记录。A/C/D独立[源码与影子审查](review_candidates.md)及[机器结果](review_candidates_verification.json)覆盖NOA不变、局部信息、跟踪号重标和远车不影响。主入口此时仍为原TM，不以候选替换未经正式验证的默认程序。
 

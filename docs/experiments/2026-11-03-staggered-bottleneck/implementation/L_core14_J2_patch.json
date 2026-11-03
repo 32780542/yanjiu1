@@ -1,0 +1,1864 @@
+{
+  "original_started_path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\operations\\20261030T011348789879Z_literature-TM-final-core_219b48fd\\started.json",
+  "original_started_sha256": "b30de6fd42cc6de54b3f6a249250967e383b15f68c4dd4f3cdcd520f866d875c",
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\local_vacancy_bridge\\native_rules.py",
+  "rules_sha256": "e0707d0e8443e074a24de27524618417d0f8d8daff36b703a9a3a9066c47605a",
+  "selected_files": [
+    "tests/test_native_rules.py",
+    "tests/test_native_sumo.py",
+    "tests/test_native_comparison.py",
+    "tests/test_native_recovery.py",
+    "tests/test_global_reference.py",
+    "tests/test_complete_layers.py",
+    "tests/test_bottleneck_attribution.py",
+    "tests/test_own_lane_execution.py",
+    "tests/test_head_group_rules.py",
+    "tests/test_common_pair.py",
+    "tests/test_ending_pair_scope.py",
+    "tests/test_formation_state.py",
+    "tests/test_time_headway.py",
+    "tests/test_braking_cost_fill.py"
+  ],
+  "immutable_file_hashes": {
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\noa\\native_rules.py": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\direct_gap\\native_rules.py": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\local_vacancy_bridge\\native_rules.py": "e0707d0e8443e074a24de27524618417d0f8d8daff36b703a9a3a9066c47605a",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py": "8268ce10f51dbccffd4c0ba4a066f0e3d1a2027dfb6465c60ce92e0f103cad1b",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_sumo.py": "7f49f0eeed51aa2218577a2400dfdb49efa29223cdb3e7404897d8784a1f20c4",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_comparison.py": "543b55291f7f7e507211571a249baf16a2a8ba7aca04e87283ad5e7b73177356",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_recovery.py": "79d863d442e29dc126754bb4144b4da63e90ed1d2fb2fced4b98e5847d017a1b",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_global_reference.py": "0b4ecb87c7197b421db41b98d67cbde3fbfc70fa1468697e94ffa1dbc6cd228c",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_complete_layers.py": "04991d71b9719f0a947e746e49c94537a148865a0896c24e8eb3d07c0664c494",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_bottleneck_attribution.py": "9591e4f557d77b31ea8da1d2fedfb2bb35ffb95576c08cd21fb8fbc1d01e6a9b",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_own_lane_execution.py": "290a84c7a38e8b5b1ef2afd5e278197210d41658cf4db7e340db0b8cb418a8ab",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py": "259f87e9586ee8a7a0d6a8205effb81cfa5e14b1acd91a1b1ab2dfcffb3b64f2",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_common_pair.py": "19b37a3ab25926232f9d31d3b77f1698ad3382712d8dcb5bbb7fbc5fb694aecb",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_ending_pair_scope.py": "5adb387ad5b9f05ed10fafe7b550e4d8e52997894e98c3e920dfb57f8892d07b",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_formation_state.py": "ceaf248a3094737f2e15c2fbf336c8915d49a3007206ac4418798a12754def6c",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_time_headway.py": "d7730fddb9bd4feb229b88fa4db4e5f74889ec8c7879a6874f1965724e9e19c7",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_braking_cost_fill.py": "10789e6a64c99476c835625481424961df024d2a9588fa094c8bfbc570879ac2",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\archived_rules_source.py": "253d1c644b0e3a139b80e698554dab1515b8dbbcc58e57467f60ca2512426269",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-four-flow-attribution\\portable_H\\source\\noa\\native_rules.py": "77c0111530560db30e97dc466bcdaf276a78cb7dd7192767e9a2d51b97eab2d2",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-four-flow-attribution\\portable_P\\source\\noa\\native_rules.py": "8d112d79dce42b68fc4aba986aa52b5241c3ee4e8b6d8061cd04b80bcdb75864",
+    "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-10-29-local-formation-state\\evidence.tar.gz": "09388ef1dd8539e2468a5634b59e45d1e8a81d120c1d623fe70ed037188c41f7"
+  },
+  "physical_sources_or_tests_edited": false,
+  "in_memory_test_patch": "docs\\experiments\\2026-11-03-staggered-bottleneck\\implementation\\J2_test_migration.patch",
+  "in_memory_patch_sha256": "13aaefe37d8fd7705da74a00499a2b40601519c7df611072fce57ac9706a4640",
+  "patched_test_source_hashes": {
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py": "7040a00ac4a7104f14d714afeb98af4eed7ae5b01f2421d0c7fff528f32fa356",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py": "833b225c52be3a93e56ef1e7554a9025ee5e83d86afacefee8049988bd602b0c",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_common_pair.py": "9e1c66bac2f2dae963cf6e18f13fdfffd1fb8d9abd4db4a06b10f2fd16ead8d6",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_ending_pair_scope.py": "590a6101f1f3f0f743443333d3522cf9e8122f884b502ee0deefc36ffac63ac7",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_formation_state.py": "b518b6461a9372dee3a14a8c7daf925819d4130fe8e7f51e9f8cd0d131565895"
+  },
+  "applied_test_source_hashes": {
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_native_rules.py": "7040a00ac4a7104f14d714afeb98af4eed7ae5b01f2421d0c7fff528f32fa356",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_head_group_rules.py": "833b225c52be3a93e56ef1e7554a9025ee5e83d86afacefee8049988bd602b0c",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_common_pair.py": "9e1c66bac2f2dae963cf6e18f13fdfffd1fb8d9abd4db4a06b10f2fd16ead8d6",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_ending_pair_scope.py": "590a6101f1f3f0f743443333d3522cf9e8122f884b502ee0deefc36ffac63ac7",
+    "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\tests\\test_formation_state.py": "b518b6461a9372dee3a14a8c7daf925819d4130fe8e7f51e9f8cd0d131565895"
+  },
+  "collected_nodeids": [
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_complete_local_unit_does_not_race_a_distant_unit",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_free_head_does_not_chase_its_own_positive_offset",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_free_head_rejoins_cross_lane_alignment_after_lateral_completion",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_front_that_left_its_lane_does_not_keep_an_old_speed_reference",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_head_keeps_cruise_without_a_cross_lane_position_error",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_new_lane_head_uses_the_exact_lane_phase",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_rear_upper_lane_car_does_not_command_the_flow_head_to_stop",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_after_middle_moves_ending_front_can_merge",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_aligned_group_can_follow_a_temporary_slow_reference",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_closing_limit_protects_both_physically_occupied_lanes",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_crossing_reference_keeps_position_and_damped_speed_corrections_bounded",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ending_front_uses_safe_space_without_waiting_for_other_plans",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_equal_phase_error_prefers_nearer_physical_peer_without_track_order",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_equal_speed_target_gap_keeps_cruise",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_executing_helper_keeps_the_actual_receiving_gap",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_following_a_braking_front_keeps_the_physical_stopping_distance",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_free_lane_ahead_does_not_slow_a_merging_leader",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_local_track_permutation_and_remote_cars_do_not_change_action",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_mandatory_merge_continues_until_actual_lane_exit",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_middle_car_has_no_assigned_helper_role_in_direct_gap_policy",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_noa_is_a_working_mandatory_merge_policy",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_nonadjacent_lane_head_does_not_pull_the_local_head_phase",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_occupied_target_lane_is_not_overwritten",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ongoing_front_transfer_does_not_choose_a_second_helper",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_opposite_sides_do_not_both_fill_the_same_physical_corridor",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_physical_phase_interpolates_continuously_independent_of_lane_index",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_position_and_relative_speed_feedback_has_a_gradual_response",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_rejected_lane_request_keeps_adjusting_the_physical_gap",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_retained_head_couples_to_actual_ending_peer_without_a_fake_front",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_retained_head_keeps_the_physical_zero_fifteen_phase",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_retained_lanes_restore_their_missing_cell_before_the_drop",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_selected_local_cell_survives_lateral_motion_and_completion",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_submitted_own_lane_request_keeps_tracking_the_actual_gap",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_transform_approaches_current_gap_without_skipping_its_front",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_two_lane_reforming_can_still_observe_an_unmerged_car_behind",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_unit_head_does_not_build_a_formation_chain_to_a_visible_distant_front",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_upstream_extra_car_fills_the_nearby_missing_middle_slot",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_upstream_fill_does_not_send_a_less_populated_lane_to_a_crowded_one",
+    "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_visible_front_sequence_follows_the_nearest_physical_front",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_common_lane_execution_guard_uses_current_physical_neighborhood",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_generated_network_really_drops_lane_two_at_1000m",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_independent_bernoulli_streams_exactly_use_1250_probability",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_lane_completion_uses_center_and_stopped_lateral_motion",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_local_observations_are_clipped_and_use_private_tracks",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_native_runner_module_exists",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_recorded_collision_and_incomplete_noa_cannot_be_reported_as_completed",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_routes_submit_every_request_without_a_python_entry_gate",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_straight_network_preserves_all_three_lanes",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_unfinished_cohort_exposes_only_explicit_completed_subset_means",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_zero_flow_and_invalid_time_are_explicit",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_actual_lane_completion_is_later_than_lane_index_flip",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_all_modes_apply_the_same_public_safe_speed_to_execution",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_failed_simulation_preserves_original_error_and_partial_accounting",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_first_collision_or_teleport_stops_and_saves_the_current_frame",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_global_strategy_uses_full_state_and_local_execution_safety",
+    "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_ten_second_native_smoke_keeps_every_request_and_records_physics",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_all_empty_states_with_departed_vehicles_are_audit_failure",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_csv_and_json_outputs_are_saved_without_overwriting_old_report",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_declared_reports_cannot_be_replaced_by_geometric_inference",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_demand_mismatch_is_retained_and_not_compared",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_different_actuation_limits_are_not_paired",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_duplicate_seed_scenario_mode_is_an_explicit_error",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_earlier_merge_followed_by_reentry_is_not_final_merge_completion",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_empty_position_trace_is_audit_failure",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_every_physical_vehicle_requires_a_flag",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_full_trace_allows_zero_or_one_step_start_and_float_roundoff",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_global_label_is_explicit_and_straight_road_has_whole_region",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_incomplete_seed_blocks_success_only_mean_performance",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_late_first_sample_is_audit_failure",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_legacy_unrecorded_limits_remain_readable_but_do_not_match_shaped_runs",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_metadata_records_current_offline_auditor_and_layer_evaluator",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_midpoint_or_completed_motion_after_drop_is_not_counted",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_input_actuation_value_cannot_match_the_result",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_interior_sample_is_audit_failure",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_mode_for_a_seed_is_not_silently_dropped_from_paired_mean",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_physical_parameters_are_not_silently_treated_as_equal",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_paired_differences_have_candidate_minus_baseline_sign",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_parameter_and_source_version_mismatches_are_not_paired",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_position_gaps_are_checked_against_declared_sampling_interval",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_recomputes_trip_metrics_and_complete_layers_from_real_artifacts",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_recorded_summary_is_checked_against_direct_state_recount",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_result_and_input_actuation_limits_must_agree",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_result_and_input_simulation_parameters_must_agree",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_self_reported_case_uses_direct_flags_without_complete_layer_detection",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_snapshot_digest_is_verified_against_saved_source_bytes",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_truncated_position_tail_blocks_pair_and_group_means",
+    "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_unsafe_run_is_retained_even_if_result_claims_safe",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_coarse_interval_uses_the_same_left_held_confirmation_clock",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_exact_seconds_from_formed_three_lanes_to_adjustment_and_two_lanes",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_exit_after_confirmation_does_not_undo_observed_recovery",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_less_than_one_second_two_lane_membership_does_not_recover",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_local_clock_membership_matches_frozen_complete_layers_mature",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_manifest_saves_json_and_both_reviewable_csv_tables",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_mode_only_changes_interpretation_not_event_detection",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_no_adjusting_subject_has_undefined_conditional_statistics",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_nonrecovery_until_exit_is_censored_instead_of_zero_delay",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_odd_original_cohort_does_not_gate_recovered_even_subset",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_one_layer_is_not_a_recovered_group",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_recording_end_without_recovery_is_censored",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_short_upstream_membership_is_not_prior_formation",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_straight_road_is_explicitly_not_a_lane_drop_recovery",
+    "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_tail_arrival_does_not_reset_confirmed_prefix_relationships",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_departures_are_pruned_without_restarting_the_structural_clock",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_empty_input_has_no_commands_or_assignments",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_groups_split_only_above_50m_longitudinal_neighbour_distance",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_incomplete_layer_fills_front_slots_before_rear_slots",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_lane_request_requires_current_and_one_second_8m_clearance",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_new_arrival_cruises_until_next_structural_plan",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_one_to_one_assignment_preserves_source_lane_front_to_rear_order",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_physical_order_makes_results_independent_of_ids_and_input_order",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_plan_is_fixed_for_five_seconds_and_targets_move_at_cruise",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_preparation_starts_at_640_and_none_keeps_three_lanes",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_private_track_labels_do_not_bypass_central_clearance",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_six_cars_switch_from_three_lanes_two_layers_to_two_lanes_three",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_speed_is_capped_and_each_lane_request_is_one_adjacent_step",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_started_adjacent_change_is_held_until_lateral_completion",
+    "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_three_lane_six_targets_have_same_lane_30_and_cross_lane_15",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_actual_boundary_exit_is_censored_not_internal_break",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_all_region_vehicles_remain_in_participation_denominator",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_complete_prefix_does_not_wait_for_unformed_tail",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_components_never_overlap",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_empty_file_and_invalid_time_are_explicit",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_equal_largest_blocks_choose_the_front_block",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_extra_internal_vehicle_and_crossing_vehicle_cannot_be_hidden",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_internal_physical_break_is_reported",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_irregular_time_weights_and_one_second_confirmation",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_largest_closed_block_is_selected_before_forward_pairs",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_missing_middle_lane_cannot_be_hidden",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_missing_vehicle_predicted_to_cross_boundary_is_censored",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_new_tail_does_not_reset_formed_prefix",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_one_second_sampling_can_alias_between_sample_breaks",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_parallel_two_cars_are_not_a_complete_layer",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_phase_tolerance_applies_between_all_lanes",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_position_speed_and_center_tolerances",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_regions_do_not_compare_three_to_two_lane_relations",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_single_layer_is_separate_from_main_scale",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_sixty_meter_missing_layer_does_not_connect",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_smaller_unoccupied_blocks_are_selected_after_the_largest",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_three_lane_two_layer_and_two_lane_three_layer_are_six_cars",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_threshold_is_integrated_inside_long_sampling_interval",
+    "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_unconfirmed_reappearance_does_not_count_a_second_break",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_constant_speed_gates_segments_and_full_region_exposure",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_duplicate_flow_seed_scenario_mode_is_rejected",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_empty_truncated_and_nonmonotonic_trace_are_ineligible",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_first_observation_beyond_gate_is_left_censored",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_global_and_vehicle_gaps_never_interpolate_crossings",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_linear_interpolation_uses_adjacent_measured_samples",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_manifest_pairs_flows_separately_and_uses_noa_minus_transform_reduction",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_missing_seed_and_incomplete_run_suppress_all_seed_mean",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_missing_vehicle_samples_at_entry_or_before_exit_are_ineligible",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_nonzero_difference_in_differences_separates_upstream_and_bottleneck",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_source_mismatch_and_formation_ablation_are_explicit",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_stationary_samples_count_vehicle_seconds_and_strict_speed_threshold",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_unpassed_and_unobserved_requests_remain_and_suppress_means",
+    "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_window_flow_counts_first_crossings_in_inclusive_100_to_600",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_actual_lateral_motion_survives_request_timeout",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_completed_request_releases_before_its_time_window_ends",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_expired_unstarted_request_releases_without_claiming_completion",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_native_adapter_reports_own_request_without_neighbor_intent",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_noa_also_keeps_own_submitted_target_during_response_latency",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_only_ego_receives_pending_and_neighbor_reobservation_stays_physical",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_pending_target_waits_for_strict_completion_not_loose_rule_tolerance",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_real_submitted_request_survives_centered_response_and_then_merges",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_settled_nonadjacent_helper_memory_cannot_block_necessary_merge",
+    "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_submitted_target_corrects_stale_helper_before_native_motion",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_head_seventy_meters_away_is_outside_the_mutual_group",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_internal_a2_keeps_front_a1_and_couples_to_actual_body_b1",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_internal_b1_keeps_front_c1_and_couples_to_actual_body_a2",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_real_lane_one_head_a1_uses_fixed_phase_of_actual_c1",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_real_lane_zero_head_c1_uses_fixed_phase_of_actual_a1",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_same_lane_front_seventy_meters_away_is_still_not_a_formation_link",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_three_lane_two_layer_perfect_lattice_is_steady",
+    "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_two_lane_three_layer_perfect_lattice_is_steady",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_NOA_is_unchanged_even_with_compressed_rears",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_all_actual_front_body_actions_remain_H_exact",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_compressed_free_head_still_obeys_visible_stopped_front_safety_cap",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_compressed_rear_does_not_change_the_head_phase_action",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_cross_boundary_pair_uses_same_raw_and_normalized_geometry_both_ways",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_mode_dispatch_uses_640_for_transform_and_1000_for_formation",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_near_rear_never_adds_free_head_speed_without_a_peer",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_nearest_search_and_head_action_use_the_same_common_pair_configuration",
+    "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_raw_pair_uses_fixed_physical_phase_and_keeps_historical_H_distinct",
+    "variants/phase5g_pure_formation/tests/test_ending_pair_scope.py::test_actual_ending_lane_keeps_three_lane_pair_geometry",
+    "variants/phase5g_pure_formation/tests/test_ending_pair_scope.py::test_ending_unit_approaches_its_actual_gap_without_a_distant_head_wait",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_actual_cross_lane_body_relation_counts_without_a_head_flag",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_actual_following_relation_counts_during_adjustment",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_distant_front_and_rear_do_not_extend_the_relation",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_exactly_aligned_heads_still_report_one",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_isolated_vehicle_has_no_relation",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_leading_vehicle_counts_its_visible_following_chain",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_noa_does_not_report_formation_even_in_perfect_geometry",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_relation_disappearance_resets_without_a_waiting_timer",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_switching_to_noa_clears_the_self_report",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_direct_vehicle_time_and_continuous_one_episodes",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_invalid_bit_and_backward_time_are_rejected",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_last_frame_is_not_extrapolated_and_snapshot_is_read_only",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_zero_is_distinguished_from_absent_vehicle_time",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::StateOnlyChangeTests::test_control_and_memory_match_frozen_P_across_local_states",
+    "variants/phase5g_pure_formation/tests/test_formation_state.py::StateOnlyChangeTests::test_real_sumo_records_every_local_state_without_exposing_it_to_neighbors",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_cruise_equilibrium_is_still_thirty_metres",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_noa_and_formation_share_longitudinal_following_without_noa_membership",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_noa_has_no_cross_lane_alignment_and_far_front_is_safety_only",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_spacing_uses_own_speed_and_true_nearest_predecessor",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_stopped_front_keeps_current_geometric_safety_cap",
+    "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_track_relabeling_and_remote_vehicle_do_not_change_motion",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_a_lower_braking_alternative_wins_equal_formation_benefit",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_cf_model_keeps_safety_for_front_outside_formation_chain",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_cf_model_uses_actual_same_lane_front_and_existing_public_limits",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_complete_layers_are_not_dismantled",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_cost_ranking_alternative_is_below_separate_severe_braking_bound",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_equal_speed_useful_fill_is_still_accepted",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_mandatory_merge_remains_available_despite_severe_follower_cost",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_neighbor_private_actuation_fields_do_not_change_fill",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_remote_cars_outside_ego_perception_do_not_change_decision",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_severe_follower_bound_cannot_be_offset_by_large_old_lane_release",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_target_follower_severe_braking_rejects_discretionary_fill",
+    "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_track_renaming_and_observation_order_do_not_change_selection"
+  ],
+  "returncode": 0,
+  "reports": [
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_complete_local_unit_does_not_race_a_distant_unit",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_free_head_does_not_chase_its_own_positive_offset",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_free_head_rejoins_cross_lane_alignment_after_lateral_completion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_free_merging_head_keeps_cruise_while_its_rear_car_slows",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_front_that_left_its_lane_does_not_keep_an_old_speed_reference",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_head_keeps_cruise_without_a_cross_lane_position_error",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_new_lane_head_uses_the_exact_lane_phase",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_a_rear_upper_lane_car_does_not_command_the_flow_head_to_stop",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_after_middle_moves_ending_front_can_merge",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_aligned_car_tracks_temporary_reference_speed_without_extra_acceleration",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_aligned_group_can_follow_a_temporary_slow_reference",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_closing_limit_protects_both_physically_occupied_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_crossing_reference_keeps_position_and_damped_speed_corrections_bounded",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ending_front_uses_safe_space_without_waiting_for_other_plans",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_equal_phase_error_prefers_nearer_physical_peer_without_track_order",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_equal_speed_target_gap_keeps_cruise",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_executing_helper_keeps_the_actual_receiving_gap",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_following_a_braking_front_keeps_the_physical_stopping_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_free_lane_ahead_does_not_slow_a_merging_leader",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_local_track_permutation_and_remote_cars_do_not_change_action",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_mandatory_merge_continues_until_actual_lane_exit",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_middle_car_has_no_assigned_helper_role_in_direct_gap_policy",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_near_front_forms_a_chain_but_far_front_remains_only_safety_observed",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_noa_is_a_working_mandatory_merge_policy",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_nonadjacent_lane_head_does_not_pull_the_local_head_phase",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_occupied_target_lane_is_not_overwritten",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ongoing_front_transfer_does_not_choose_a_second_helper",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_opposite_sides_do_not_both_fill_the_same_physical_corridor",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_ordinary_merge_tracks_the_safe_gap_already_beside_the_car",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_physical_phase_interpolates_continuously_independent_of_lane_index",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_position_and_relative_speed_feedback_has_a_gradual_response",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_rejected_lane_request_keeps_adjusting_the_physical_gap",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_retained_head_couples_to_actual_ending_peer_without_a_fake_front",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_retained_head_keeps_the_physical_zero_fifteen_phase",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_retained_lanes_restore_their_missing_cell_before_the_drop",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_selected_local_cell_survives_lateral_motion_and_completion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_submitted_own_lane_request_keeps_tracking_the_actual_gap",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_transform_approaches_current_gap_without_skipping_its_front",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_two_lane_reforming_can_still_observe_an_unmerged_car_behind",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_unit_head_does_not_build_a_formation_chain_to_a_visible_distant_front",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_upstream_extra_car_fills_the_nearby_missing_middle_slot",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_upstream_fill_does_not_send_a_less_populated_lane_to_a_crowded_one",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_rules.py::NativeRulesTests::test_visible_front_sequence_follows_the_nearest_physical_front",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_common_lane_execution_guard_uses_current_physical_neighborhood",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_generated_network_really_drops_lane_two_at_1000m",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_independent_bernoulli_streams_exactly_use_1250_probability",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_lane_completion_uses_center_and_stopped_lateral_motion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_local_observations_are_clipped_and_use_private_tracks",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_native_runner_module_exists",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_recorded_collision_and_incomplete_noa_cannot_be_reported_as_completed",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_routes_submit_every_request_without_a_python_entry_gate",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_straight_network_preserves_all_three_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_unfinished_cohort_exposes_only_explicit_completed_subset_means",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeDemandTests::test_zero_flow_and_invalid_time_are_explicit",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_actual_lane_completion_is_later_than_lane_index_flip",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_all_modes_apply_the_same_public_safe_speed_to_execution",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_all_modes_apply_the_same_public_safe_speed_to_execution",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_all_modes_apply_the_same_public_safe_speed_to_execution",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_all_modes_apply_the_same_public_safe_speed_to_execution",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_all_modes_apply_the_same_public_safe_speed_to_execution",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_failed_simulation_preserves_original_error_and_partial_accounting",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_first_collision_or_teleport_stops_and_saves_the_current_frame",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_first_collision_or_teleport_stops_and_saves_the_current_frame",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_first_collision_or_teleport_stops_and_saves_the_current_frame",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_global_strategy_uses_full_state_and_local_execution_safety",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_sumo.py::NativeIntegrationTests::test_ten_second_native_smoke_keeps_every_request_and_records_physics",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_all_empty_states_with_departed_vehicles_are_audit_failure",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_csv_and_json_outputs_are_saved_without_overwriting_old_report",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_declared_reports_cannot_be_replaced_by_geometric_inference",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_demand_mismatch_is_retained_and_not_compared",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_different_actuation_limits_are_not_paired",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_different_actuation_limits_are_not_paired",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_different_actuation_limits_are_not_paired",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_duplicate_seed_scenario_mode_is_an_explicit_error",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_earlier_merge_followed_by_reentry_is_not_final_merge_completion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_empty_position_trace_is_audit_failure",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_every_physical_vehicle_requires_a_flag",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_full_trace_allows_zero_or_one_step_start_and_float_roundoff",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_full_trace_allows_zero_or_one_step_start_and_float_roundoff",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_full_trace_allows_zero_or_one_step_start_and_float_roundoff",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_global_label_is_explicit_and_straight_road_has_whole_region",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_incomplete_seed_blocks_success_only_mean_performance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_late_first_sample_is_audit_failure",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_legacy_unrecorded_limits_remain_readable_but_do_not_match_shaped_runs",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_metadata_records_current_offline_auditor_and_layer_evaluator",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_midpoint_or_completed_motion_after_drop_is_not_counted",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_input_actuation_value_cannot_match_the_result",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_interior_sample_is_audit_failure",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_mode_for_a_seed_is_not_silently_dropped_from_paired_mean",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_missing_physical_parameters_are_not_silently_treated_as_equal",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_paired_differences_have_candidate_minus_baseline_sign",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_parameter_and_source_version_mismatches_are_not_paired",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_position_gaps_are_checked_against_declared_sampling_interval",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_recomputes_trip_metrics_and_complete_layers_from_real_artifacts",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_recorded_summary_is_checked_against_direct_state_recount",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_result_and_input_actuation_limits_must_agree",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_result_and_input_actuation_limits_must_agree",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_result_and_input_actuation_limits_must_agree",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_result_and_input_simulation_parameters_must_agree",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_self_reported_case_uses_direct_flags_without_complete_layer_detection",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_snapshot_digest_is_verified_against_saved_source_bytes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_truncated_position_tail_blocks_pair_and_group_means",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_comparison.py::NativeComparisonTests::test_unsafe_run_is_retained_even_if_result_claims_safe",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_coarse_interval_uses_the_same_left_held_confirmation_clock",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_exact_seconds_from_formed_three_lanes_to_adjustment_and_two_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_exit_after_confirmation_does_not_undo_observed_recovery",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_less_than_one_second_two_lane_membership_does_not_recover",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_local_clock_membership_matches_frozen_complete_layers_mature",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_manifest_saves_json_and_both_reviewable_csv_tables",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_mode_only_changes_interpretation_not_event_detection",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_no_adjusting_subject_has_undefined_conditional_statistics",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_nonrecovery_until_exit_is_censored_instead_of_zero_delay",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_odd_original_cohort_does_not_gate_recovered_even_subset",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_one_layer_is_not_a_recovered_group",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_recording_end_without_recovery_is_censored",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_short_upstream_membership_is_not_prior_formation",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_straight_road_is_explicitly_not_a_lane_drop_recovery",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_native_recovery.py::NativeRecoveryTests::test_tail_arrival_does_not_reset_confirmed_prefix_relationships",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_departures_are_pruned_without_restarting_the_structural_clock",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_empty_input_has_no_commands_or_assignments",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_groups_split_only_above_50m_longitudinal_neighbour_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_incomplete_layer_fills_front_slots_before_rear_slots",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_lane_request_requires_current_and_one_second_8m_clearance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_lane_request_requires_current_and_one_second_8m_clearance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_lane_request_requires_current_and_one_second_8m_clearance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_new_arrival_cruises_until_next_structural_plan",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_one_to_one_assignment_preserves_source_lane_front_to_rear_order",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_physical_order_makes_results_independent_of_ids_and_input_order",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_plan_is_fixed_for_five_seconds_and_targets_move_at_cruise",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_preparation_starts_at_640_and_none_keeps_three_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_preparation_starts_at_640_and_none_keeps_three_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_preparation_starts_at_640_and_none_keeps_three_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_preparation_starts_at_640_and_none_keeps_three_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_preparation_starts_at_640_and_none_keeps_three_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_private_track_labels_do_not_bypass_central_clearance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_six_cars_switch_from_three_lanes_two_layers_to_two_lanes_three",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_speed_is_capped_and_each_lane_request_is_one_adjacent_step",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_started_adjacent_change_is_held_until_lateral_completion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_global_reference.py::GlobalReferenceTests::test_three_lane_six_targets_have_same_lane_30_and_cross_lane_15",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_actual_boundary_exit_is_censored_not_internal_break",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_all_region_vehicles_remain_in_participation_denominator",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_complete_prefix_does_not_wait_for_unformed_tail",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_components_never_overlap",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_empty_file_and_invalid_time_are_explicit",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_equal_largest_blocks_choose_the_front_block",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_extra_internal_vehicle_and_crossing_vehicle_cannot_be_hidden",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_internal_physical_break_is_reported",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_irregular_time_weights_and_one_second_confirmation",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_largest_closed_block_is_selected_before_forward_pairs",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_missing_middle_lane_cannot_be_hidden",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_missing_vehicle_predicted_to_cross_boundary_is_censored",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_new_tail_does_not_reset_formed_prefix",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_one_second_sampling_can_alias_between_sample_breaks",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_parallel_two_cars_are_not_a_complete_layer",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_phase_tolerance_applies_between_all_lanes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_position_speed_and_center_tolerances",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_regions_do_not_compare_three_to_two_lane_relations",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_single_layer_is_separate_from_main_scale",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_sixty_meter_missing_layer_does_not_connect",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_smaller_unoccupied_blocks_are_selected_after_the_largest",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_three_lane_two_layer_and_two_lane_three_layer_are_six_cars",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_three_lane_two_layer_and_two_lane_three_layer_are_six_cars",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_three_lane_two_layer_and_two_lane_three_layer_are_six_cars",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_three_lane_two_layer_and_two_lane_three_layer_are_six_cars",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_threshold_is_integrated_inside_long_sampling_interval",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_complete_layers.py::CompleteLayersTests::test_unconfirmed_reappearance_does_not_count_a_second_break",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_constant_speed_gates_segments_and_full_region_exposure",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_duplicate_flow_seed_scenario_mode_is_rejected",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_empty_truncated_and_nonmonotonic_trace_are_ineligible",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_first_observation_beyond_gate_is_left_censored",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_global_and_vehicle_gaps_never_interpolate_crossings",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_global_and_vehicle_gaps_never_interpolate_crossings",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_global_and_vehicle_gaps_never_interpolate_crossings",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_linear_interpolation_uses_adjacent_measured_samples",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_manifest_pairs_flows_separately_and_uses_noa_minus_transform_reduction",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_missing_seed_and_incomplete_run_suppress_all_seed_mean",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_missing_vehicle_samples_at_entry_or_before_exit_are_ineligible",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_nonzero_difference_in_differences_separates_upstream_and_bottleneck",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_source_mismatch_and_formation_ablation_are_explicit",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_stationary_samples_count_vehicle_seconds_and_strict_speed_threshold",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_unpassed_and_unobserved_requests_remain_and_suppress_means",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_bottleneck_attribution.py::BottleneckAttributionTests::test_window_flow_counts_first_crossings_in_inclusive_100_to_600",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_actual_lateral_motion_survives_request_timeout",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_completed_request_releases_before_its_time_window_ends",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_expired_unstarted_request_releases_without_claiming_completion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_native_adapter_reports_own_request_without_neighbor_intent",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_noa_also_keeps_own_submitted_target_during_response_latency",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_only_ego_receives_pending_and_neighbor_reobservation_stays_physical",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_pending_target_waits_for_strict_completion_not_loose_rule_tolerance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_real_submitted_request_survives_centered_response_and_then_merges",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_real_submitted_request_survives_centered_response_and_then_merges",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_real_submitted_request_survives_centered_response_and_then_merges",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_real_submitted_request_survives_centered_response_and_then_merges",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_real_submitted_request_survives_centered_response_and_then_merges",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_settled_nonadjacent_helper_memory_cannot_block_necessary_merge",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_own_lane_execution.py::OwnLaneExecutionTests::test_submitted_target_corrects_stale_helper_before_native_motion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_head_seventy_meters_away_is_outside_the_mutual_group",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_internal_a2_keeps_front_a1_and_couples_to_actual_body_b1",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_internal_b1_keeps_front_c1_and_couples_to_actual_body_a2",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_real_lane_one_head_a1_uses_fixed_phase_of_actual_c1",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_real_lane_zero_head_c1_uses_fixed_phase_of_actual_a1",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_same_lane_front_seventy_meters_away_is_still_not_a_formation_link",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_three_lane_two_layer_perfect_lattice_is_steady",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_head_group_rules.py::E11RulesTests::test_two_lane_three_layer_perfect_lattice_is_steady",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_NOA_is_unchanged_even_with_compressed_rears",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_all_actual_front_body_actions_remain_H_exact",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_compressed_free_head_still_obeys_visible_stopped_front_safety_cap",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_compressed_rear_does_not_change_the_head_phase_action",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_cross_boundary_pair_uses_same_raw_and_normalized_geometry_both_ways",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_mode_dispatch_uses_640_for_transform_and_1000_for_formation",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_near_rear_never_adds_free_head_speed_without_a_peer",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_nearest_search_and_head_action_use_the_same_common_pair_configuration",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_common_pair.py::CommonPairHeadTests::test_raw_pair_uses_fixed_physical_phase_and_keeps_historical_H_distinct",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_ending_pair_scope.py::test_actual_ending_lane_keeps_three_lane_pair_geometry",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_ending_pair_scope.py::test_ending_unit_approaches_its_actual_gap_without_a_distant_head_wait",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_actual_cross_lane_body_relation_counts_without_a_head_flag",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_actual_following_relation_counts_during_adjustment",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_distant_front_and_rear_do_not_extend_the_relation",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_exactly_aligned_heads_still_report_one",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_isolated_vehicle_has_no_relation",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_leading_vehicle_counts_its_visible_following_chain",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_noa_does_not_report_formation_even_in_perfect_geometry",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_relation_disappearance_resets_without_a_waiting_timer",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::LocalFormationStateTests::test_switching_to_noa_clears_the_self_report",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_direct_vehicle_time_and_continuous_one_episodes",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_invalid_bit_and_backward_time_are_rejected",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_last_frame_is_not_extrapolated_and_snapshot_is_read_only",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::FormationStateStatisticsTests::test_zero_is_distinguished_from_absent_vehicle_time",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::StateOnlyChangeTests::test_control_and_memory_match_frozen_P_across_local_states",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_formation_state.py::StateOnlyChangeTests::test_real_sumo_records_every_local_state_without_exposing_it_to_neighbors",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_cruise_equilibrium_is_still_thirty_metres",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_noa_and_formation_share_longitudinal_following_without_noa_membership",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_noa_has_no_cross_lane_alignment_and_far_front_is_safety_only",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_same_speed_equilibrium_at_each_time_headway_distance",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_spacing_uses_own_speed_and_true_nearest_predecessor",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_stopped_front_keeps_current_geometric_safety_cap",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_time_headway.py::TimeHeadwayTests::test_track_relabeling_and_remote_vehicle_do_not_change_motion",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_a_lower_braking_alternative_wins_equal_formation_benefit",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_cf_model_keeps_safety_for_front_outside_formation_chain",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_cf_model_uses_actual_same_lane_front_and_existing_public_limits",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_complete_layers_are_not_dismantled",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_cost_ranking_alternative_is_below_separate_severe_braking_bound",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_equal_speed_useful_fill_is_still_accepted",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_mandatory_merge_remains_available_despite_severe_follower_cost",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_mandatory_merge_remains_available_despite_severe_follower_cost",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_mandatory_merge_remains_available_despite_severe_follower_cost",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "SubtestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_mandatory_merge_remains_available_despite_severe_follower_cost",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_neighbor_private_actuation_fields_do_not_change_fill",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_remote_cars_outside_ego_perception_do_not_change_decision",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_severe_follower_bound_cannot_be_offset_by_large_old_lane_release",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_target_follower_severe_braking_rejects_discretionary_fill",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    },
+    {
+      "nodeid": "variants/phase5g_pure_formation/tests/test_braking_cost_fill.py::BrakingCostFillTests::test_track_renaming_and_observation_order_do_not_change_selection",
+      "when": "call",
+      "outcome": "passed",
+      "report_type": "TestReport"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+--- local_phase_coupling_physical/noa/native_rules.py
++++ local_phase_coupling_fast/noa/native_rules.py
+@@ -221,7 +221,12 @@
+         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+     ]
+     observed = (ego, *rows)
+-    costs = {}
++    costs, before_speeds = {}, {}
++
++    def cf_cached(car, snapshot, cache):
++        if car.track not in cache:
++            cache[car.track] = cf_speed(car, snapshot)
++        return cache[car.track]
+ 
+     def response_cost(car, lane):
+         key = (car.track, lane)
+@@ -236,17 +241,18 @@
+         moved = replace(car, lane=lane, y=(lane + 0.5) * LANE_WIDTH, vy=0.0)
+         after = tuple(moved if c.track == car.track else c for c in observed)
+         new_rear = followers[0]
++        after_speeds = {}
+         # Native SUMO already uses a fixed 0.1 s frame and BRAKING=10 m/s2.
+         # Bound the target follower separately; release elsewhere cannot pay it off.
+-        if new_rear is not None and cf_speed(new_rear, after) < new_rear.speed - BRAKING * 0.1 - 1e-9:
++        if new_rear is not None and cf_cached(new_rear, after, after_speeds) < new_rear.speed - BRAKING * 0.1 - 1e-9:
+             costs[key] = None
+             return None
+         affected = [car]
+         for follower in followers:
+             if follower is not None and all(c.track != follower.track for c in affected):
+                 affected.append(follower)
+-        cost = sum(max(0.0, cf_speed(c, observed) - cf_speed(
+-            moved if c.track == car.track else c, after)) for c in affected)
++        cost = sum(max(0.0, cf_cached(c, observed, before_speeds) - cf_cached(
++            moved if c.track == car.track else c, after, after_speeds)) for c in affected)
+         costs[key] = cost
+         return cost
+ 
+@@ -425,9 +431,12 @@
+     """按前车继续制动后的停止位置，保留0.2s响应和车身净距。"""
+     limit = MAX_SPEED
+     response_speed = BRAKING * RESPONSE
++    occupied = tuple(lane for lane in range(3) if _occupies(ego, lane))
+     for front in neighbors:
+-        shared = any(_occupies(ego, lane) and _occupies(front, lane) for lane in range(3))
+-        if 0.0 < front.x - ego.x <= 200.0 and shared:
++        if not 0.0 < front.x - ego.x <= 200.0:
++            continue
++        shared = any(_occupies(front, lane) for lane in occupied)
++        if shared:
+             free = max(0.0, front.x - ego.x - LENGTH - STANDSTILL)
+             stopping = (
+                 sqrt(response_speed**2 + front.speed**2 + 2 * BRAKING * free) - response_speed

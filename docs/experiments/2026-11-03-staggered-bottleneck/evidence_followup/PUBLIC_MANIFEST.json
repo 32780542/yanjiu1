@@ -1,0 +1,185 @@
+{
+  "format": "followup-publication-v1",
+  "archives": [
+    {
+      "archive": "20261103_E1250_screen180_2.tar.gz",
+      "sha256": "065b55f5cf4310a494829943d978154184bdd74203973e42b026a9b042786633",
+      "bytes": 435268,
+      "case_count": 2,
+      "member_count": 69,
+      "index_sha256": "e1b437602b5a4970228fa2508ed34343a04cdf7afce1ae0b1c7bf8dde8ae4d5e",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true,
+      "evidence_classification": "exploratory_complete_plan"
+    },
+    {
+      "archive": "20261103_H_screen180_8.tar.gz",
+      "sha256": "1c553dc1fa621618ba32ad5b6b8f2e81941340772b07a25dc04bc73b82e9437f",
+      "bytes": 2155094,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "7102c749caa1543d17f2b02be529f7b572da3a27b867dff750b81bf80624e8b4",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true,
+      "evidence_classification": "exploratory_complete_plan"
+    },
+    {
+      "archive": "20261103_J2_JT2_screen180_16.tar.gz",
+      "sha256": "14d21b789e6fb86e3c1fdf2e0e0c73015b86cd5b56c434b0aba03b8b144356f1",
+      "bytes": 4203809,
+      "case_count": 16,
+      "member_count": 318,
+      "index_sha256": "fde2d8364fb27132f43fd80d25735cfb2eafcfe921d7083282643cc747987c10",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true,
+      "evidence_classification": "exploratory_complete_plan"
+    },
+    {
+      "archive": "20261103_J2_long600_8_unfinalized.tar.gz",
+      "sha256": "01d1a8e03e59eb65d53b562847fc13fe6220b424ba0fceccfbf366fa7013e5cc",
+      "bytes": 7134102,
+      "planned_cases": 8,
+      "sealed_cases": 7,
+      "unfinalized_cases": 1,
+      "raw_payload_included": false,
+      "raw_index_bytes": 23878232,
+      "scope": "Full eight-case J2 plan; seven sealed cases verified, one unfinalized execution failure archived without physical metrics. Partial raw remains local, SHA/bytes indexed only.",
+      "evidence_classification": "7_sealed_1_unverified_execution_failure"
+    },
+    {
+      "archive": "20261103_J2fast_retry600_1.tar.gz",
+      "sha256": "08d1f24d91e100ef66bcac857e3f3b8a62718e6a39a9b4d79110dd7e9d68ccea",
+      "bytes": 1042850,
+      "case_count": 1,
+      "member_count": 52,
+      "index_sha256": "fdf859eb00f221186a98b78f319ed1fbd5a4cd8fd75179f024cdfcc32c577880",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true,
+      "evidence_classification": "separate_retry_does_not_replace_failure"
+    },
+    {
+      "archive": "20261103_J_JT_screen180_16.tar.gz",
+      "sha256": "422c00f4268cb481513305ff90c51d58337d0add3175e56e20fc63fee65720e0",
+      "bytes": 4205209,
+      "case_count": 16,
+      "member_count": 318,
+      "index_sha256": "63ed7156d806e53d4d64369d9bd7ad141815cb093c76d1f3c2bebd70d1a3cd9b",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true,
+      "evidence_classification": "diagnostic_known_one_sided_preparation_adjacency"
+    },
+    {
+      "archive": "20261103_K_screen180_8.tar.gz",
+      "sha256": "863669e63959c4a319fff000cbb1144097700046c62f3c9155842b3504897989",
+      "bytes": 2135274,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "578b3a250df88b95884bf1bd4c5e922713a654ba090f38456aea84ae021bfecd",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true,
+      "evidence_classification": "negative_not_adopted"
+    }
+  ],
+  "total_archive_bytes": 21311606,
+  "planned_attempts": 59,
+  "sealed_attempts": 58,
+  "unverified_execution_failures": 1,
+  "partial_raw_indexed_bytes": 23878232,
+  "partial_raw_payload_included": false,
+  "formal31_results_included": false,
+  "frozen_package_stage_sha256": "3b202af61ed2a8aab66415dce4afad4204d5077e500f16b6b7684bfde50d11e7",
+  "files": {
+    "20261103_E1250_screen180_2.tar.gz": {
+      "sha256": "065b55f5cf4310a494829943d978154184bdd74203973e42b026a9b042786633",
+      "bytes": 435268
+    },
+    "20261103_E1250_screen180_2.tar.manifest.json": {
+      "sha256": "ad48f7262a0a09006f7922c5d137366c5b24be1306941149e7a3908f1fb63d3d",
+      "bytes": 469
+    },
+    "20261103_E1250_screen180_2.tar.verification.json": {
+      "sha256": "5b68d3d01fdbf41d391f5b69513d9a3de1e2cb75708d1b3908df01f7a2575d56",
+      "bytes": 21873
+    },
+    "20261103_H_screen180_8.tar.gz": {
+      "sha256": "1c553dc1fa621618ba32ad5b6b8f2e81941340772b07a25dc04bc73b82e9437f",
+      "bytes": 2155094
+    },
+    "20261103_H_screen180_8.tar.manifest.json": {
+      "sha256": "726e8fffe249c348b06733b48d5363d01f90b7ed9ad60b463ae7611ee241c03d",
+      "bytes": 467
+    },
+    "20261103_H_screen180_8.tar.verification.json": {
+      "sha256": "b977858ca05620d64614fbf3a598e64bb3fe3333767867e4bf7a24440180982f",
+      "bytes": 85092
+    },
+    "20261103_J2_JT2_screen180_16.tar.gz": {
+      "sha256": "14d21b789e6fb86e3c1fdf2e0e0c73015b86cd5b56c434b0aba03b8b144356f1",
+      "bytes": 4203809
+    },
+    "20261103_J2_JT2_screen180_16.tar.manifest.json": {
+      "sha256": "4b67028fb4840198ada244ba0a2e01f9017ef5ae4c2f505046ac4d4c7a6fcd83",
+      "bytes": 474
+    },
+    "20261103_J2_JT2_screen180_16.tar.verification.json": {
+      "sha256": "0c4d8d4c9153810bcef4b784a64bd6efe93e79a236faf740ffad37284791533f",
+      "bytes": 169881
+    },
+    "20261103_J2_long600_8_unfinalized.tar.gz": {
+      "sha256": "01d1a8e03e59eb65d53b562847fc13fe6220b424ba0fceccfbf366fa7013e5cc",
+      "bytes": 7134102
+    },
+    "20261103_J2_long600_8_unfinalized.tar.manifest.json": {
+      "sha256": "9ceaca2867ef6428e085ba2715b6ed35557974569f9698ae47da29afd12b1b97",
+      "bytes": 492
+    },
+    "20261103_J2_long600_8_unfinalized.tar.verification.json": {
+      "sha256": "b4bdebd10abf33aafee33bb403231615d2e20cc6ffdd6e4ddc0b77331a9fbc7c",
+      "bytes": 2716
+    },
+    "20261103_J2fast_retry600_1.tar.gz": {
+      "sha256": "08d1f24d91e100ef66bcac857e3f3b8a62718e6a39a9b4d79110dd7e9d68ccea",
+      "bytes": 1042850
+    },
+    "20261103_J2fast_retry600_1.tar.manifest.json": {
+      "sha256": "5440ec0b04133d53a02ddb58e466f168ed37185a53818a122083308433848b1e",
+      "bytes": 470
+    },
+    "20261103_J2fast_retry600_1.tar.verification.json": {
+      "sha256": "c7f2dde6e3f2222420412b9cbf5f5d08127ffc67ae2512023908d7fa89936510",
+      "bytes": 11628
+    },
+    "20261103_J_JT_screen180_16.tar.gz": {
+      "sha256": "422c00f4268cb481513305ff90c51d58337d0add3175e56e20fc63fee65720e0",
+      "bytes": 4205209
+    },
+    "20261103_J_JT_screen180_16.tar.manifest.json": {
+      "sha256": "924ea5645086ce8eb2d7a91c001be0c677477f196fe5dba0b38e69afdee66a13",
+      "bytes": 472
+    },
+    "20261103_J_JT_screen180_16.tar.verification.json": {
+      "sha256": "4d1acf8d27e75d4281a761e94dc0063240747b5d68fae948e716e00f75ad1597",
+      "bytes": 169730
+    },
+    "20261103_K_screen180_8.tar.gz": {
+      "sha256": "863669e63959c4a319fff000cbb1144097700046c62f3c9155842b3504897989",
+      "bytes": 2135274
+    },
+    "20261103_K_screen180_8.tar.manifest.json": {
+      "sha256": "0be1d128c02bcb0e15f08e8e1b8953ab0d0d2ea4dea8982a5bedc407406afc7c",
+      "bytes": 467
+    },
+    "20261103_K_screen180_8.tar.verification.json": {
+      "sha256": "74337929db3e699e4b913271e20624923fa76cfee2d79174e630aadcfc7d96ed",
+      "bytes": 85029
+    },
+    "RAW_LOCAL_RETENTION.json": {
+      "sha256": "1a4e787097a3876e787f5da31cc297ebbf4bf806027f424534126b4a01b8f0f5",
+      "bytes": 868
+    },
+    "README.md": {
+      "sha256": "175226dc881ba776bfaefe2e845163d67ca0b8156fc370226f6d682b98ac40b5",
+      "bytes": 3702
+    }
+  }
+}

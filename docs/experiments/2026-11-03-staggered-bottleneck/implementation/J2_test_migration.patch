@@ -1,0 +1,282 @@
+--- a/variants/phase5g_pure_formation/tests/test_native_rules.py
++++ b/variants/phase5g_pure_formation/tests/test_native_rules.py
+@@ -54,12 +54,15 @@
+         ego = self.car(0, 100.0, 2)
+         self.assertAlmostEqual(self.command(ego, [self.car(1, 130.0, 2)], drop=None).speed, 28.8)
+ 
+-    def test_middle_front_car_makes_room_in_the_other_retained_lane(self):
++    def test_middle_car_has_no_assigned_helper_role_in_direct_gap_policy(self):
+         cars = self.six()
+         ego = replace(cars[2], track=0)
+         others = [c for i, c in enumerate(cars) if i != 2]
+         others = [replace(c, track=i + 1) for i, c in enumerate(others)]
+-        self.assertEqual(self.command(ego, others).lane, 0)
++        command, memory = self.r.decide(ego, others, self.r.Memory(), "transform")
++        self.assertIsNone(command.lane)
++        self.assertIsNone(memory.lane_target)
++        self.assertNotIn(command.reason, ("make_room", "prepare_room", "open_gap"))
+ 
+     def test_ending_front_uses_safe_space_without_waiting_for_other_plans(self):
+         cars = self.six()
+@@ -123,17 +126,16 @@
+         ]
+         self.assertEqual(self.command(ego, others, mode="formation", drop=None).lane, 1)
+ 
+-    def test_equal_distance_actual_heads_use_signed_geometry_not_track_order(self):
++    def test_equal_phase_error_prefers_nearer_physical_peer_without_track_order(self):
+         ego = self.car(0, 300.0, 0)
+-        # Both peers are actual heads (>50m apart), equally close in phase.
++        # The peers have equal |dx+15|=26, but physical distances are 41 and 11m.
+         others = [self.car(99, 259.0, 1), self.car(1, 311.0, 1)]
+         a = self.r._following(ego, others, 3)
+         changed = [replace(c, track=100-c.track) for c in reversed(others)]
+-        b = self.r._following(ego, changed, 3)
+-        self.assertEqual(a, b)
+-        self.assertLess(a[1], ego.x)
+-        self.assertLess(a[0], self.r.CRUISE)
+-        self.assertLessEqual(abs(self.r.POSITION_GAIN * (a[1] - ego.x)), 2.0 + 1e-9)
++        self.assertEqual(a, self.r._following(ego, changed, 3))
++        self.assertAlmostEqual(a[1], ego.x + 2.0 / self.r.POSITION_GAIN)
++        self.assertAlmostEqual(a[0], self.r.CRUISE + 2.0 * self.r.SPEED_RELAXATION)
++        self.assertIsNone(a[2])
+ 
+     def test_transform_approaches_current_gap_without_skipping_its_front(self):
+         ego = self.car(0, 700.0, 2)
+@@ -176,10 +178,15 @@
+         others[0] = replace(others[0], y=6.6, vy=-3.3)
+         self.assertIsNone(self.command(ego, others).lane)
+ 
+-    def test_retained_lane_head_does_not_follow_an_ending_car_behind(self):
++    def test_retained_head_couples_to_actual_ending_peer_without_a_fake_front(self):
+         ego = self.car(0, 700.0, 1)
+-        a = self.command(ego, [self.car(1, 670.0, 2)])
+-        self.assertAlmostEqual(a.speed, 28.8)
++        peer = self.car(1, 670.0, 2)
++        a = self.command(ego, [peer])
++        # dx=-30 and phi(peer)-phi(ego)=-15; a three-lane edge clips at -2m/s.
++        self.assertIsNone(a.reference)
++        self.assertAlmostEqual(a.target_x, ego.x - 2.0 / self.r.POSITION_GAIN)
++        self.assertAlmostEqual(a.speed, self.r.CRUISE - 2.0 * self.r.SPEED_RELAXATION)
++        self.assertEqual(a.formation_state, 1)
+ 
+     def test_closing_a_stopped_car_has_the_same_response_limit_in_all_modes(self):
+         ego = self.car(0, 100.0, 2, 20.0)
+@@ -267,7 +274,7 @@
+         others = [
+             self.car(i + 1, x, lane)
+             for i, (x, lane) in enumerate(
+-                ((800.0, 1), (770.0, 1), (740.0, 1), (785.0, 0), (725.0, 0))
++                ((770.0, 1), (740.0, 1), (710.0, 1), (785.0, 0), (725.0, 0))
+             )
+         ]
+         command = self.command(ego, others)
+@@ -307,9 +314,18 @@
+                 )
+             )
+         ]
+-        before = self.command(ego, others)
+-        after = self.command(replace(ego, x=641.0), [replace(c, x=c.x + 2.0) for c in others])
+-        self.assertAlmostEqual(after.target_x, before.target_x + 2.0)
++        after_ego = replace(ego, x=641.0)
++        shifted = [replace(c, x=c.x + 2.0) for c in others]
++        before_follow = self.r._following(ego, others, 3, 640.0)
++        after_follow = self.r._following(after_ego, shifted, 3, 640.0)
++        self.assertEqual((before_follow[2], after_follow[2]), (1, 1))
++        self.assertAlmostEqual(after_follow[1], before_follow[1] + 2.0)
++        command, memory = self.r.decide(after_ego, shifted, self.r.Memory(), "transform")
++        self.assertEqual(command.reason, "approach_gap")
++        self.assertIsNone(command.lane)
++        self.assertEqual(memory.gap, (4, 3))
++        self.assertAlmostEqual(command.target_x, (shifted[2].x + shifted[3].x) / 2)
++        self.assertLessEqual(command.speed, self.r.safe_speed(after_ego, shifted))
+ 
+     def test_selected_local_cell_survives_lateral_motion_and_completion(self):
+         ego = self.car(0, 285.0, 0)
+@@ -339,13 +355,13 @@
+         command, _ = self.r.decide(moving, rows, memory, "transform")
+         self.assertAlmostEqual(command.speed, 28.8)
+ 
+-    def test_a_helper_tracks_the_gap_while_the_rear_opens_space(self):
++    def test_submitted_own_lane_request_keeps_tracking_the_actual_gap(self):
+         cars = self.six()
+         ego = replace(cars[2], track=0)
+         rows = [
+             replace(c, track=i + 1) for i, c in enumerate(c for j, c in enumerate(cars) if j != 2)
+         ]
+-        _, memory = self.r.decide(ego, rows, self.r.Memory(), "transform")
++        memory = self.r.Memory(lane_target=0, joining=True)
+         moved = [
+             replace(c, x=650.0, speed=20.0) if c.lane == 0 and c.x == 670.0 else c for c in rows
+         ]
+@@ -380,15 +396,15 @@
+         self.assertEqual(command, fresh)
+         self.assertIsNone(command.reference)
+ 
+-    def test_a_retained_head_adopts_the_two_lane_phase(self):
++    def test_retained_head_keeps_the_physical_zero_fifteen_phase(self):
+         ego = self.car(0, 700.0, 0)
+         reference = self.car(1, 700.0, 1)
+-        memory = self.r.Memory()
+-        command, _ = self.r.decide(ego, [reference], memory, "transform")
+-        self.assertEqual((self.r._phase(0, 2), self.r._phase(1, 2)), (15.0, 0.0))
+-        self.assertLess(command.target_x, ego.x)
+-        self.assertLess(command.speed, self.r.CRUISE)
+-        self.assertLessEqual(abs(self.r.POSITION_GAIN * (command.target_x - ego.x)), 2.0 + 1e-9)
++        command, _ = self.r.decide(ego, [reference], self.r.Memory(), "transform")
++        self.assertEqual((self.r._phase(0, 2), self.r._phase(1, 2)), (0.0, 15.0))
++        self.assertEqual((self.r._phase(0, 3), self.r._phase(1, 3)), (0.0, 15.0))
++        # Same-x outer->middle error is +15, not the former two-lane -15.
++        self.assertAlmostEqual(command.target_x, ego.x + 2.0 / self.r.POSITION_GAIN)
++        self.assertAlmostEqual(command.speed, self.r.CRUISE + 2.0 * self.r.SPEED_RELAXATION)
+         self.assertAlmostEqual(command.speed, self.r._request(ego, command.target_x, self.r.CRUISE))
+ 
+     def test_an_unstarted_fill_does_not_enter_the_ending_lane_after_640(self):
+@@ -464,8 +480,8 @@
+         rows = [self.car(1, 700.0, 0), self.car(2, 655.0, 1)]
+         memory = self.r.Memory(lane_target=1, gap=(None, 2), joining=True)
+         command, memory = self.r.decide(ego, rows, memory, "transform")
+-        self.assertGreater(command.speed, 28.8)
+-        self.assertGreater(command.target_x, ego.x)
++        self.assertAlmostEqual(command.speed, self.r.CRUISE - 2.0 * self.r.SPEED_RELAXATION)
++        self.assertAlmostEqual(command.target_x, ego.x - 2.0 / self.r.POSITION_GAIN)
+         self.assertLessEqual(abs(self.r.POSITION_GAIN * (command.target_x-ego.x)), 2.0 + 1e-9)
+         self.assertAlmostEqual(command.speed, self.r._request(ego, command.target_x, self.r.CRUISE))
+         self.assertIsNone(memory.lane_target)
+--- a/variants/phase5g_pure_formation/tests/test_head_group_rules.py
++++ b/variants/phase5g_pure_formation/tests/test_head_group_rules.py
+@@ -30,34 +30,49 @@
+             ego, tuple(c for c in self.cars.values() if c.track != ego.track), 2
+         )[:3]
+ 
+-    def test_real_lane_zero_head_c1_shares_phase_by_slowing(self):
++    def test_real_lane_zero_head_c1_uses_fixed_phase_of_actual_a1(self):
+         ego, (speed, target, reference) = self.command("C1")
++        peer = self.cars["A1"]
++        # The existing 11.537m separation needs +3.463m in fixed 0/15 geometry.
++        error = peer.x - ego.x + 15.0
+         self.assertIsNone(reference)
+-        self.assertAlmostEqual(target, ego.x - 2.0 / 0.3)
+-        self.assertLess(speed, ego.speed - 0.1)
+-
+-    def test_real_lane_one_head_a1_shares_phase_by_accelerating(self):
+-        ego, (speed, target, reference) = self.command("A1")
+-        self.assertIsNone(reference)
+-        self.assertAlmostEqual(target, ego.x + 2.0 / 0.3)
++        self.assertLess(abs(r.POSITION_GAIN * error), 2.0)
++        self.assertAlmostEqual(target, ego.x + error)
+         self.assertAlmostEqual(speed, r._request(ego, target, r.CRUISE))
+         self.assertGreater(speed, ego.speed)
+ 
+-    def test_internal_b1_follows_only_its_physical_front_c1(self):
++    def test_real_lane_one_head_a1_uses_fixed_phase_of_actual_c1(self):
++        ego, (speed, target, reference) = self.command("A1")
++        peer = self.cars["C1"]
++        error = peer.x - ego.x - 15.0
++        self.assertIsNone(reference)
++        self.assertLess(abs(r.POSITION_GAIN * error), 2.0)
++        self.assertAlmostEqual(target, ego.x + error)
++        self.assertAlmostEqual(speed, r._request(ego, target, r.CRUISE))
++        self.assertLess(speed, ego.speed)
++
++    def test_internal_b1_keeps_front_c1_and_couples_to_actual_body_a2(self):
+         ego, (speed, target, reference) = self.command("B1")
+-        front = self.cars["C1"]
++        front, peer = self.cars["C1"], self.cars["A2"]
+         distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+         self.assertEqual(reference, front.track)
+         self.assertAlmostEqual(target, front.x - distance)
+-        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
++        # The mutual B1/A2 body edge has e=+0.728852m, independently of CTH.
++        error = peer.x - ego.x + 15.0
++        phase_speed = max(-2.0, min(2.0, r.POSITION_GAIN * error))
++        expected = r._request(ego, front.x - distance, front.speed) + r.SPEED_RELAXATION * phase_speed
++        self.assertAlmostEqual(speed, max(0.0, min(r.MAX_SPEED, expected)))
+ 
+-    def test_internal_a2_follows_only_its_physical_front_a1(self):
++    def test_internal_a2_keeps_front_a1_and_couples_to_actual_body_b1(self):
+         ego, (speed, target, reference) = self.command("A2")
+-        front = self.cars["A1"]
++        front, peer = self.cars["A1"], self.cars["B1"]
+         distance = 5.5 + (30.0 - 5.5) / 28.8 * ego.speed
+         self.assertEqual(reference, front.track)
+         self.assertAlmostEqual(target, front.x - distance)
+-        self.assertAlmostEqual(speed, r._request(ego, front.x - distance, front.speed))
++        error = peer.x - ego.x - 15.0
++        phase_speed = max(-2.0, min(2.0, r.POSITION_GAIN * error))
++        expected = r._request(ego, front.x - distance, front.speed) + r.SPEED_RELAXATION * phase_speed
++        self.assertAlmostEqual(speed, max(0.0, min(r.MAX_SPEED, expected)))
+ 
+     def check_lattice(self, positions, lanes):
+         cars = tuple(car(i, x, lane) for i, (x, lane) in enumerate(positions))
+--- a/variants/phase5g_pure_formation/tests/test_common_pair.py
++++ b/variants/phase5g_pure_formation/tests/test_common_pair.py
+@@ -31,20 +31,24 @@
+             a=replace(a,x=boundary+1)
+             self.assertEqual(self.pair(a,b,3,boundary)[1],2)
+ 
+-    def test_straight_and_outside_phase_geometry_matches_H(self):
++    def test_raw_pair_uses_fixed_physical_phase_and_keeps_historical_H_distinct(self):
+         for x,lanes,boundary in [(400.,3,None),(400.,3,640.),(1100.,2,640.)]:
+             a,b=self.car(x,0),self.car(x+12,1,1)
+             error,count=self.pair(a,b,lanes,boundary)
+-            expected=(b.x+H._physical_phase(b,lanes))-(a.x+H._physical_phase(a,lanes))
+-            self.assertEqual(count,lanes);self.assertAlmostEqual(error,expected)
++            historical=(b.x+H._physical_phase(b,lanes))-(a.x+H._physical_phase(a,lanes))
++            self.assertEqual(count,lanes)
++            self.assertAlmostEqual(error,b.x-a.x+15.0)
++            # Frozen H still flips the retained two-lane phase; do not retarget H.
++            self.assertAlmostEqual(error-historical,0.0 if lanes==3 else 30.0)
+ 
+     def test_mode_dispatch_uses_640_for_transform_and_1000_for_formation(self):
+         self.pair(self.car(650,1),self.car(670,0,1),2,640.)
+         a,b=self.car(650,1),self.car(670,0,1)
+         formation=r.decide(a,(b,),r.Memory(),'formation',1000.)[0]
+         transform=r.decide(a,(b,),r.Memory(),'transform',1000.)[0]
+-        self.assertAlmostEqual(formation.speed,28.95)
+-        self.assertAlmostEqual(transform.speed,29.2)
++        # Fixed raw error 20-15=5; common counts 3/2 retain different normalization.
++        self.assertAlmostEqual(formation.speed,r.CRUISE+r.SPEED_RELAXATION*r.POSITION_GAIN*5/2)
++        self.assertAlmostEqual(transform.speed,r.CRUISE+r.SPEED_RELAXATION*r.POSITION_GAIN*5)
+         a,b=self.car(630,1),self.car(650,0,1)
+         ca=r.decide(a,(b,),r.Memory(),'transform',1000.)[0]
+         cb=r.decide(b,(a,),r.Memory(),'transform',1000.)[0]
+--- a/variants/phase5g_pure_formation/tests/test_ending_pair_scope.py
++++ b/variants/phase5g_pure_formation/tests/test_ending_pair_scope.py
+@@ -8,11 +8,17 @@
+     forward,count=r._pair_error(a,b,3,640)
+     backward,reverse_count=r._pair_error(b,a,2,640)
+     assert count==reverse_count==3
+-    assert forward==15 and backward==-15
++    assert (r._phase(1,3),r._phase(2,3))==(15.0,0.0)
++    # y=4.949999999999999 is continuously interpolated, not rounded to lane centre.
++    physical_phase=r._physical_phase(b,3)-r._physical_phase(a,3)
++    assert forward==physical_phase and backward==-physical_phase
++    assert forward==-backward
+ 
+-def test_separate_ending_unit_waits_using_its_actual_three_lane_phase():
++def test_ending_unit_approaches_its_actual_gap_without_a_distant_head_wait():
+     ego,front,middle=car(0,700,2),car(1,770,2),car(2,700,1)
+-    command,_=r.decide(ego,[front,middle],r.Memory(),'transform',1000)
+-    assert command.reason=='ending_follower'
++    command,memory=r.decide(ego,[front,middle],r.Memory(),'transform',1000)
++    assert command.reason=='approach_gap'
+     assert command.lane is None
++    assert memory.gap==(None,middle.track)
++    assert command.target_x==715.0
+     assert command.speed>r.CRUISE
+--- a/variants/phase5g_pure_formation/tests/test_formation_state.py
++++ b/variants/phase5g_pure_formation/tests/test_formation_state.py
+@@ -38,8 +38,11 @@
+     def test_exactly_aligned_heads_still_report_one(self):
+         self.assertEqual(self.state(car(0, 100), (car(1, 85, lane=1),)), 1)
+ 
+-    def test_other_lane_body_is_not_a_mutually_selected_head(self):
+-        self.assertEqual(self.state(car(0, 90), (car(1, 100, 1), car(2, 145, 1))), 0)
++    def test_actual_cross_lane_body_relation_counts_without_a_head_flag(self):
++        ego = car(0, 90)
++        body, front = car(1, 100, 1), car(2, 145, 1)
++        self.assertEqual(rules._front_following(body, (ego, front))[2], front.track)
++        self.assertEqual(self.state(ego, (body, front)), 1)
+ 
+     def test_distant_front_and_rear_do_not_extend_the_relation(self):
+         self.assertEqual(self.state(car(0, 100), (car(1, 150.01), car(2, 49.99))), 0)

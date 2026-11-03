@@ -1,0 +1,18 @@
+{
+  "source_sha256": "e0707d0e8443e074a24de27524618417d0f8d8daff36b703a9a3a9066c47605a",
+  "parent_sha256": "03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6",
+  "green_operation": "20261103T055058724110Z_L-vacancy-and-phase-corrected-contract-green_46b73541",
+  "tests": 30,
+  "subtests": 106,
+  "noa_cf_safety_saved_states_exact": 600,
+  "source_hashes": {
+    "tmp/staggered_bottleneck/candidates/local_vacancy_bridge/native_rules.py": "e0707d0e8443e074a24de27524618417d0f8d8daff36b703a9a3a9066c47605a",
+    "tmp/staggered_bottleneck/candidates/local_phase_coupling_fast/native_rules.py": "03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6",
+    "tmp/staggered_bottleneck/candidates/local_phase_coupling_physical/native_rules.py": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+    "tmp/staggered_bottleneck/candidates/direct_gap/native_rules.py": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+    "variants/phase5g_pure_formation/noa/native_rules.py": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317"
+  },
+  "source_and_prior_candidates_unchanged": true,
+  "no_traffic_run": true,
+  "original_tests_unedited": true
+}

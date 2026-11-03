@@ -1,0 +1,315 @@
+{
+  "batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40",
+  "manifest_sha256": "48602ca6f7b077a5c3fd54cf032280a112628bac0779159634719315eef65f5e",
+  "raw_file_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_31_lane_drop_noa\\20261103T052656260590Z_lane_drop_noa_s31_5d9c2d\\result.json": "f3a63d07dac2d5579a80a8a2c05107a218e58d8c2af1cc3d872f4915c2379291",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_31_lane_drop_noa\\20261103T052656260590Z_lane_drop_noa_s31_5d9c2d\\input.json": "80d382da13a7f609aa2f80e2bbecf3eac827680b742b74f0cc27f53f8a8a344f",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_31_straight3_noa\\20261103T052656259593Z_straight3_noa_s31_ceb75a\\result.json": "2b9419bf839d2a3f429ef27031f061fd3bde91948f29bba1ea7ab5fa83c3be69",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_31_straight3_noa\\20261103T052656259593Z_straight3_noa_s31_ceb75a\\input.json": "319dbd86ae124d9ebd451debedd74a8f824c8422297e451bd62515c10f86f160",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_32_lane_drop_noa\\20261103T052656259593Z_lane_drop_noa_s32_19de18\\result.json": "2372b5171fe2efbc9196fa26d704f653cc75bb5bf0b2d99d9909b80a841989dd",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_32_lane_drop_noa\\20261103T052656259593Z_lane_drop_noa_s32_19de18\\input.json": "2512d322921e331ce6e37d6fea4bc440af7e2068077aa31c02480a7531ee62f2",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_32_straight3_noa\\20261103T052656259593Z_straight3_noa_s32_f1b7c7\\result.json": "1a79fa8964d20f77b060c27de4fb2bb7aa6a31dfee3a5066a620c6cc609064ac",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_32_straight3_noa\\20261103T052656259593Z_straight3_noa_s32_f1b7c7\\input.json": "ee42b32d663724d568233b77715a49cbb7e6b465b2b2caab7766e7f169189807",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_33_lane_drop_noa\\20261103T052656260590Z_lane_drop_noa_s33_a341c6\\result.json": "4529a811ccd5588587484bda734d7b53cdaeeaeb14b83340db22fc13335bf396",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_33_lane_drop_noa\\20261103T052656260590Z_lane_drop_noa_s33_a341c6\\input.json": "f6fe70da3ebf1eea01ccf8b422cac9b9a4fedda59d9ad0a0cfc6f295f5fdd0d8",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_33_straight3_noa\\20261103T052656259593Z_straight3_noa_s33_9443b0\\result.json": "b27501a59002c592b63763df39f4931a0b81ca5e441d553e74f7632ce98aae22",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_33_straight3_noa\\20261103T052656259593Z_straight3_noa_s33_9443b0\\input.json": "bf55cc80cabc13c6235f7b6f499ccf3362d85021688d8452caaff9604f5af1e5",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_34_lane_drop_noa\\20261103T052746186933Z_lane_drop_noa_s34_84548c\\result.json": "ac694431eea05925cff2d2887e5ed064d7f6698834fb6d8dae5a18c57926f5c6",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_34_lane_drop_noa\\20261103T052746186933Z_lane_drop_noa_s34_84548c\\input.json": "52fa21ece7d0c20d9fc35d8c5304d689c12feb7813c5367533f4f0ffd5f801a4",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_34_straight3_noa\\20261103T052742621574Z_straight3_noa_s34_782f15\\result.json": "c0eec791a47f8cbfcec4bf2d2e1a4fcba4b7282a7092a1639fed32a9290e1fb7",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_34_straight3_noa\\20261103T052742621574Z_straight3_noa_s34_782f15\\input.json": "4c0f04e2454ad6a16863ba1b4f49ddb97cb5198b44747847f6f4c3bfbe99ca5b",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_35_lane_drop_noa\\20261103T052753806564Z_lane_drop_noa_s35_5c1510\\result.json": "afdc606bcaca41b352a5d671826336834a80873d1d04200e70150c20d2bb4c86",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_35_lane_drop_noa\\20261103T052753806564Z_lane_drop_noa_s35_5c1510\\input.json": "eb3e74c028df67093868431f41b18a307e15f3469eccf291ce68f8ae38e5b637",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_35_straight3_noa\\20261103T052749916870Z_straight3_noa_s35_7226aa\\result.json": "dcadb225f934d28a2ded7a9106421dc8ed4561e2e28fc0387228053068edf2e5",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_1250_35_straight3_noa\\20261103T052749916870Z_straight3_noa_s35_7226aa\\input.json": "07d1b554e2b116967ac3c496e6749bc3ee9871767ac2bdbbcd1224821fe66cc5",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_31_lane_drop_noa\\20261103T052802245847Z_lane_drop_noa_s31_628242\\result.json": "e8a8577efd0b1db64fc379fd86e04ba9e694349cb57cf59528f24736476fa7cf",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_31_lane_drop_noa\\20261103T052802245847Z_lane_drop_noa_s31_628242\\input.json": "74bbc0f5d9f8db23fa42119399c37449e0f38b5d923ab1d94c3f007abd64a7fe",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_31_straight3_noa\\20261103T052757876184Z_straight3_noa_s31_b3bd41\\result.json": "fc984a04b56c6d6d5db77e74969bef74d02ad38478320132f6a7251b12c0e26c",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_31_straight3_noa\\20261103T052757876184Z_straight3_noa_s31_b3bd41\\input.json": "bfd5623e863175f21b9d81414f7cd5797e43cf00a38eeef4b451d17d05cf997b",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_32_lane_drop_noa\\20261103T052834337405Z_lane_drop_noa_s32_1b36ae\\result.json": "d3ab6e9cff9b9e9239adbfbbe2cceb40a3270b370ecd75b16f753450c4f4157c",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_32_lane_drop_noa\\20261103T052834337405Z_lane_drop_noa_s32_1b36ae\\input.json": "de070b05f90c386208ee958e353298bcb02abcd125f32a10d788a931256befac",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_32_straight3_noa\\20261103T052829038084Z_straight3_noa_s32_4621b4\\result.json": "6c40348dec04aeda47907c3c982a439ad58f858eafc006ff818e31ed99c3031f",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_32_straight3_noa\\20261103T052829038084Z_straight3_noa_s32_4621b4\\input.json": "98d39f6891092288125752d5aff9b6b4a3b9538d352e90b5db84504497129eae",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_33_lane_drop_noa\\20261103T052845350769Z_lane_drop_noa_s33_98d162\\result.json": "4259ca1a483947c98d8db029cf87114910fcc3ad8031ec5aa362539dda725cd9",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_33_lane_drop_noa\\20261103T052845350769Z_lane_drop_noa_s33_98d162\\input.json": "3c2413cf0cb4bd9366beafd1fb815bdb7ac8b06ff86fb7510cad4612d4ea2a14",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_33_straight3_noa\\20261103T052839557803Z_straight3_noa_s33_14d132\\result.json": "26a273eb7c7ba1febc50fc4bc49651b1a6ae06b61b796c483e2da9629f882e23",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_33_straight3_noa\\20261103T052839557803Z_straight3_noa_s33_14d132\\input.json": "719cb3baca2f181ea985fe4a07f5135d3c8755758c8b3247a2209f12c97583c0",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_34_lane_drop_noa\\20261103T052938016975Z_lane_drop_noa_s34_24f6cc\\result.json": "c880db84fef6206c537d63134ecd0d12e307ab94e898f5a0252638064aa2e724",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_34_lane_drop_noa\\20261103T052938016975Z_lane_drop_noa_s34_24f6cc\\input.json": "b007c1fe10f4cef392406d4d16f9cb4d4516cf75bd4d4e0197c1cd4a682be841",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_34_straight3_noa\\20261103T052926009457Z_straight3_noa_s34_c6a510\\result.json": "b5406c1cf87f95d13fe506a9c21c1d69a1df321c0bb3724bee0b635d3b7c6f7a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_34_straight3_noa\\20261103T052926009457Z_straight3_noa_s34_c6a510\\input.json": "8e56ff7327791206b767727fcfe414415ae098fa2c0bb85b93786db3bece0b12",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_35_lane_drop_noa\\20261103T053007754270Z_lane_drop_noa_s35_80ba31\\result.json": "24ad5b1e631acb30434782a637f705bdcce6f870b2448ac4e65fcdbe6cef0688",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_35_lane_drop_noa\\20261103T053007754270Z_lane_drop_noa_s35_80ba31\\input.json": "7dad85e0e247fb5e8eabbc319f4e9b38a26b34c0b10a321636379634ebc20781",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_35_straight3_noa\\20261103T053001147528Z_straight3_noa_s35_81c151\\result.json": "e68a2b0be1415e65fb97cc06f154846e1458b6743a84bcaec93a945c02a883cf",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2000_35_straight3_noa\\20261103T053001147528Z_straight3_noa_s35_81c151\\input.json": "04e642e28627a670a4282b3a14901874f0997a1be53ec58476b429ee00ea442d",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_31_lane_drop_noa\\20261103T053027575710Z_lane_drop_noa_s31_e09be5\\result.json": "552a89b8654a99587ea2469cf5758e4775f22a8d4d748198392db66cee6750a0",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_31_lane_drop_noa\\20261103T053027575710Z_lane_drop_noa_s31_e09be5\\input.json": "39f62b753006b62009ede1530c83eae9ee78396a516e6c247de901fe7b2f3bdb",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_31_straight3_noa\\20261103T053019888551Z_straight3_noa_s31_902971\\result.json": "b524df544d8c4a02056fb6fe28c8bc478abb5b4f2474af83b77ba1771cb736ed",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_31_straight3_noa\\20261103T053019888551Z_straight3_noa_s31_902971\\input.json": "253c976069355271588cd5ab831c0fdcb29e373a9e17e7990539311c20b6f3aa",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_32_lane_drop_noa\\20261103T053114214159Z_lane_drop_noa_s32_5d4642\\result.json": "c7879ebc98f43bf2960f06935dc7ce25f62fc4e1f27ae1b51b517aac64410f1a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_32_lane_drop_noa\\20261103T053114214159Z_lane_drop_noa_s32_5d4642\\input.json": "d5f25e0455de1a6b0a2745fba5a40a194adce600f94091392402b4fa5663cdbe",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_32_straight3_noa\\20261103T053054240017Z_straight3_noa_s32_4bd638\\result.json": "f838d498bf8f84fd55c6078ba69cf7bcd9998634fb3bbb14de92208ec6c98b61",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_32_straight3_noa\\20261103T053054240017Z_straight3_noa_s32_4bd638\\input.json": "5c5a9db208869e80152f54632c03677195a5ec4274300bd0d64fc43a2cab00ea",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_33_lane_drop_noa\\20261103T053143663013Z_lane_drop_noa_s33_2bb3ff\\result.json": "2766cc12f740b4d8603c6e7954ca512e206ffa5c89e4aff849888a0ad1fbfc42",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_33_lane_drop_noa\\20261103T053143663013Z_lane_drop_noa_s33_2bb3ff\\input.json": "4f778ae8be9da52e44e38b09a5e694e1550abdb303d6d5063f24e3e9eb7b74d9",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_33_straight3_noa\\20261103T053127821315Z_straight3_noa_s33_1df376\\result.json": "111bda88e77fd29a3257d4c326f75ed00b56e06739cba78eed0ffe241ffded1a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_33_straight3_noa\\20261103T053127821315Z_straight3_noa_s33_1df376\\input.json": "d0f9e814ff89c241215dfbfe23254141bfa8c5908982297a6ae42888a6a1328a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_34_lane_drop_noa\\20261103T053248258181Z_lane_drop_noa_s34_dd78c5\\result.json": "404288690d0cf321d473ff1990604d8ece911f350dbe66de9a26047b4c87f57c",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_34_lane_drop_noa\\20261103T053248258181Z_lane_drop_noa_s34_dd78c5\\input.json": "334785a78406a439ee5bf9f2e27d63b16aa107a780971d51857cf63318b8ff7d",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_34_straight3_noa\\20261103T053204338564Z_straight3_noa_s34_49e0bd\\result.json": "bbcdd362ce09fad930698e639878489e03810c7fb403e10312bb2bdccd1e2e12",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_34_straight3_noa\\20261103T053204338564Z_straight3_noa_s34_49e0bd\\input.json": "5ee1860fc189e8aba8c454a6a1950b165ac1caf6b0d20ce5a1d88dbdd7f57e5c",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_35_lane_drop_noa\\20261103T053342597307Z_lane_drop_noa_s35_403deb\\result.json": "245be053727253a547c27e88649036878e62fe97ec6ddc5e2ddd4bbb207f7eab",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_35_lane_drop_noa\\20261103T053342597307Z_lane_drop_noa_s35_403deb\\input.json": "050b18a2fc22e19c726e39de488f82d55dd010356ee8da8359f1bcae123c8afe",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_35_straight3_noa\\20261103T053259875879Z_straight3_noa_s35_e8d665\\result.json": "e0e6f34f412e05ab6143d8dba648a2f946a00da4308a107f6fc82c9d5291552a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2250_35_straight3_noa\\20261103T053259875879Z_straight3_noa_s35_e8d665\\input.json": "b66efd2a5562779cdcb89d318d4c365543379c00605779183b372c2146e102d9",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_31_lane_drop_noa\\20261103T053520003015Z_lane_drop_noa_s31_cd99d8\\result.json": "9ad09cb3ed332d94bf38e4cfb3dc549b588f08a0ad80d39495122ae3fd096db4",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_31_lane_drop_noa\\20261103T053520003015Z_lane_drop_noa_s31_cd99d8\\input.json": "8f44d811b9979548027ec17988fa258f8a08127fc753b45208c568c7a9f53a2d",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_31_straight3_noa\\20261103T053426737191Z_straight3_noa_s31_68bd45\\result.json": "c618556d96a2a91288a246e9958385a2634b1eb2a81d9f64e93bb2e53113acac",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_31_straight3_noa\\20261103T053426737191Z_straight3_noa_s31_68bd45\\input.json": "f990349d00c8dcc9e2aacefa62af043cb09215e6c6de522791c3dec7b49f2003",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_32_lane_drop_noa\\20261103T053547706424Z_lane_drop_noa_s32_bdd95b\\result.json": "b07f7ef0cc1cbdef8d5431a9d1d5ac36dd82c63049636b088666f6f643e04bed",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_32_lane_drop_noa\\20261103T053547706424Z_lane_drop_noa_s32_bdd95b\\input.json": "0d8011ed951200c3cfa191fb7ba0f13301b689a2a5921804e366c082c1f6ee8c",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_32_straight3_noa\\20261103T053532384041Z_straight3_noa_s32_65d02e\\result.json": "01c676b1da3586152b4628d31ca235c7abb3ee1388d6b92faf3f5f18858f09e0",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_32_straight3_noa\\20261103T053532384041Z_straight3_noa_s32_65d02e\\input.json": "1dae38174b000ce84987e868aacfabfe5f3086a49cf71dc4c6fa45104ea081a6",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_33_lane_drop_noa\\20261103T053646198673Z_lane_drop_noa_s33_ba2b6f\\result.json": "32ac2ff91b02bbecfc7ba1de7986a5b946529c865d6634d2f125f7add05046f0",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_33_lane_drop_noa\\20261103T053646198673Z_lane_drop_noa_s33_ba2b6f\\input.json": "a05fa2332400a3edd40d0660b8c7de7a7192da7109d21a073c4d2930b98e730a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_33_straight3_noa\\20261103T053633176231Z_straight3_noa_s33_057679\\result.json": "e8853ca6320f9dfb651a6c13cb67b876b5d1885c1f207ebc4698bb3322cd6260",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_33_straight3_noa\\20261103T053633176231Z_straight3_noa_s33_057679\\input.json": "6135e672b94c61f0b22c62f7a8025d2dda6bd61c79d49f0bb74672a0e5d580f0",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_34_lane_drop_noa\\20261103T053809049437Z_lane_drop_noa_s34_b92551\\result.json": "aba115e73de559fe6e25c13bde15867b18133d02733000d1cb2d700fa1a44c60",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_34_lane_drop_noa\\20261103T053809049437Z_lane_drop_noa_s34_b92551\\input.json": "c6710e17279a2b18a67a61b4b20815081b700aeb7aa932fc1f2cb7965e2d6c97",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_34_straight3_noa\\20261103T053702613964Z_straight3_noa_s34_7fcd9f\\result.json": "b0f0e3dc30aff339a2253e999e94ecc978bc76f6d32367718ade2565c5c08267",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_34_straight3_noa\\20261103T053702613964Z_straight3_noa_s34_7fcd9f\\input.json": "d4729ce26f763214808740748f5f9011de0d8d798722731c96a4b3149dbb43d5",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_35_lane_drop_noa\\20261103T053931073168Z_lane_drop_noa_s35_7b7ed0\\result.json": "b7926bcde738970090c525fd730252dbb295278e587f78a618b1a6624bad688b",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_35_lane_drop_noa\\20261103T053931073168Z_lane_drop_noa_s35_7b7ed0\\input.json": "66e44803bc51751c8a7f19156d644fb042761fd666640ca4b8ce9366e4235d44",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_35_straight3_noa\\20261103T053903487526Z_straight3_noa_s35_204ae9\\result.json": "a70a3ddaf85ef66283eb6999b9b9383634509dc0f668b176fad564e2cfa5ec0a",
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_validation31_NOA40\\cases\\TM_2500_35_straight3_noa\\20261103T053903487526Z_straight3_noa_s35_204ae9\\input.json": "e8819b79509d4a246fe480c1b156840f16f033c7af3e6bddfdd4c8248bd72cdd"
+  },
+  "groups": [
+    {
+      "flow": 1250.0,
+      "scenario": "lane_drop",
+      "cases": 5,
+      "mean_entry_wait_s": 0.042459250370202095,
+      "max_case_mean_entry_wait_s": 0.049672131147541265,
+      "mean_travel_time_s": 42.121552180910854,
+      "mean_system_time_s": 42.16401143128106
+    },
+    {
+      "flow": 1250.0,
+      "scenario": "straight3",
+      "cases": 5,
+      "mean_entry_wait_s": 0.042459250370202095,
+      "max_case_mean_entry_wait_s": 0.049672131147541265,
+      "mean_travel_time_s": 41.763337339549366,
+      "mean_system_time_s": 41.80579658991957
+    },
+    {
+      "flow": 2000.0,
+      "scenario": "lane_drop",
+      "cases": 5,
+      "mean_entry_wait_s": 0.13033435958733985,
+      "max_case_mean_entry_wait_s": 0.1560810810810809,
+      "mean_travel_time_s": 44.69575269385124,
+      "mean_system_time_s": 44.826087053438584
+    },
+    {
+      "flow": 2000.0,
+      "scenario": "straight3",
+      "cases": 5,
+      "mean_entry_wait_s": 0.13033435958733985,
+      "max_case_mean_entry_wait_s": 0.1560810810810809,
+      "mean_travel_time_s": 41.82197762571876,
+      "mean_system_time_s": 41.952311985306096
+    },
+    {
+      "flow": 2250.0,
+      "scenario": "lane_drop",
+      "cases": 5,
+      "mean_entry_wait_s": 0.17921011638314335,
+      "max_case_mean_entry_wait_s": 0.20077720207253896,
+      "mean_travel_time_s": 53.734478455071425,
+      "mean_system_time_s": 53.91368857145458
+    },
+    {
+      "flow": 2250.0,
+      "scenario": "straight3",
+      "cases": 5,
+      "mean_entry_wait_s": 0.17921011638314335,
+      "max_case_mean_entry_wait_s": 0.20077720207253896,
+      "mean_travel_time_s": 41.85433062386569,
+      "mean_system_time_s": 42.03354074024883
+    },
+    {
+      "flow": 2500.0,
+      "scenario": "lane_drop",
+      "cases": 5,
+      "mean_entry_wait_s": 0.32422939659958266,
+      "max_case_mean_entry_wait_s": 0.6101185770750992,
+      "mean_travel_time_s": 77.4032282827217,
+      "mean_system_time_s": 77.72745767932129
+    },
+    {
+      "flow": 2500.0,
+      "scenario": "straight3",
+      "cases": 5,
+      "mean_entry_wait_s": 0.2687449578393552,
+      "max_case_mean_entry_wait_s": 0.34458498023715417,
+      "mean_travel_time_s": 41.91836498357851,
+      "mean_system_time_s": 42.18710994141787
+    }
+  ],
+  "controller_only_cutoff_examples": [
+    {
+      "ego_speed": 28.8,
+      "front_speed": 15.0,
+      "front_gap": 49.999,
+      "NoA50": {
+        "command_speed": 27.23994,
+        "target": 119.999,
+        "reference": 1,
+        "safe_speed": 31.451158425381927,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 27.23994,
+        "target": 119.999,
+        "reference": 1,
+        "safe_speed": 31.451158425381927,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 15.0,
+      "front_gap": 50.001,
+      "NoA50": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 31.4517563066575,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 27.24006,
+        "target": 120.001,
+        "reference": 1,
+        "safe_speed": 31.4517563066575,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 15.0,
+      "front_gap": 55.0,
+      "NoA50": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 32.91418050019218,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 27.54,
+        "target": 125.0,
+        "reference": 1,
+        "safe_speed": 32.91418050019218,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 15.0,
+      "front_gap": 60.001,
+      "NoA50": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 28.8,
+      "front_gap": 49.999,
+      "NoA50": {
+        "command_speed": 29.999940000000002,
+        "target": 119.999,
+        "reference": 1,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 29.999940000000002,
+        "target": 119.999,
+        "reference": 1,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 28.8,
+      "front_gap": 50.001,
+      "NoA50": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 30.00006,
+        "target": 120.001,
+        "reference": 1,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 28.8,
+      "front_gap": 55.0,
+      "NoA50": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 30.3,
+        "target": 125.0,
+        "reference": 1,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      }
+    },
+    {
+      "ego_speed": 28.8,
+      "front_speed": 28.8,
+      "front_gap": 60.001,
+      "NoA50": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      },
+      "NoA60": {
+        "command_speed": 28.8,
+        "target": null,
+        "reference": null,
+        "safe_speed": 33.3,
+        "formation_state": 0
+      }
+    }
+  ],
+  "no_simulation": true
+}

@@ -1,0 +1,54 @@
+{
+  "no_new_simulations": true,
+  "no_controller_changes": true,
+  "old_archive_sha256_unchanged": {
+    "formation_demo": "b97209b2612c27a4d177ea1595c929ad7b468adf3ae49488cc44e60987433585",
+    "formation_demo_H": "fc2162df5ca3d7ca38653ff9755f7aea8c4a9ab9bdb07a59c6a368f092ecf1c3",
+    "formation_demo_J2": "0fbf28680ff8ea19ba855e145e1f96fc6c4aaa609ff8cc7f506be643b7a71ff9",
+    "formation_demo_JT2": "da47465d6bdae379a1e66d99e68b295626a1f1f16b322f14f016eaa96a1b4a66",
+    "formation_demo_long": "6fefa8466985a9bfdce30652f8c6bb163d6f3018882fe22d994000cfb453e766"
+  },
+  "controller_sha256": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+  "raw_inputs": {
+    "unformed24": {
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long_formation_demo_retry2\\J22400\\unformed24\\20261103T050605689343Z_lane_drop_transform_s1_95ba9e",
+      "diagnostic_sha256": "53714c8d4a75a1b495b89c37e58182b3a6d8eea96b1d400bc7947650fbaf9f02"
+    },
+    "formed45": {
+      "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long_formation_demo_retry2\\J22400\\formed45\\20261103T050605689343Z_lane_drop_transform_s1_b50881",
+      "diagnostic_sha256": "f16894fcedd35536b19b02dcb0d1b5411471b4a09f174e45ac06e942cf9c6b77"
+    }
+  },
+  "phase_function_extracted_verbatim_from_frozen_source": true,
+  "all_actual_adjacent_candidates": 13,
+  "actual_witnesses": [
+    {
+      "time_s": 52.8,
+      "ego_id": "unformed_l2_r05",
+      "front_id": "unformed_l2_r06",
+      "front_gap_m": 58.7923954043556,
+      "candidate_id": "unformed_l0_r05",
+      "lane": 0,
+      "x_m": 1718.228257998052,
+      "y_m": 1.65,
+      "speed_mps": 28.764815662444075,
+      "physical_phase_3_m": 0.0,
+      "q_m": 1718.228257998052,
+      "raw_signed_dx_from_ego_m": 43.854111731880494,
+      "within_50m_of_ego": true,
+      "strictly_between_ego_and_front": true,
+      "proposed_witness_residual_m": 0.06171632752489131,
+      "abs_residual_le_2m": true,
+      "proposed_actual_witness": true
+    }
+  ],
+  "all_vehicle_q_rows": 69,
+  "pair_history_rows": 6,
+  "full_presence_at_all_analyzed_times": true,
+  "output_sha256": {
+    "J2_24_t52p8_all_adjacent_candidates.csv": "2799dc24f552f25842e3dc49f77ea49ad74fc9d079f82e672f679640c882735c",
+    "actual_q_sequences.csv": "85488cf39cba41c306a13761830826f1ee0b2f045f5befc7f4c6ea58353de1d1",
+    "J2_45_tail_pair_local_history.csv": "6d44fb9abc708619fc4e0f9f6e4f862a74b6303cd38a0589f0b500b755d96961",
+    "README.md": "393dbe922d7eef9120b5a03c08c9a12c7a7272c7a2d7f1955ce48db68500b26c"
+  }
+}

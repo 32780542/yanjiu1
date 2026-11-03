@@ -1,0 +1,62 @@
+[
+  {
+    "demo": "unformed24",
+    "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_E_formation_demo\\unformed24\\20261103T035416202506Z_lane_drop_transform_s1_dc7fd3",
+    "n": 24,
+    "first_recorded_s": 0.1,
+    "all_entered_s_zero": true,
+    "first_frame_matches_requested_positions_exactly": true,
+    "last_vehicle_1100_s": 40.7,
+    "onroad_n_at_last1100": 7,
+    "safe": true,
+    "all_completed": true,
+    "actual_end_s": 44.2,
+    "mean_travel_time_s": 37.791666666666664,
+    "collisions": 0,
+    "teleports": 0,
+    "lane_change_completions": 12,
+    "formation_state": {
+      "vehicle_seconds": 906.9999999999994,
+      "participating_vehicle_seconds": 904.5999999999995,
+      "participation_rate": 0.9973539140022051,
+      "mean_participants": 20.512471655328785,
+      "peak_participants": 24,
+      "episodes": 25,
+      "mean_episode_s": 36.184,
+      "max_episode_s": 43.0
+    },
+    "ending_lane_observed_vehicles": 8,
+    "ending_lane_completed_before_drop": 8,
+    "ending_lane_completion_before_drop_rate": 1.0
+  },
+  {
+    "demo": "formed45",
+    "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_E_formation_demo\\formed45\\20261103T035416210929Z_lane_drop_transform_s1_5fbe5b",
+    "n": 45,
+    "first_recorded_s": 0.1,
+    "all_entered_s_zero": true,
+    "first_frame_matches_requested_positions_exactly": true,
+    "last_vehicle_1100_s": 45.7,
+    "onroad_n_at_last1100": 6,
+    "safe": true,
+    "all_completed": true,
+    "actual_end_s": 49.1,
+    "mean_travel_time_s": 37.17333333333333,
+    "collisions": 0,
+    "teleports": 0,
+    "lane_change_completions": 24,
+    "formation_state": {
+      "vehicle_seconds": 1672.8000000000004,
+      "participating_vehicle_seconds": 1668.3000000000009,
+      "participation_rate": 0.9973098995695842,
+      "mean_participants": 34.04693877551022,
+      "peak_participants": 45,
+      "episodes": 46,
+      "mean_episode_s": 36.267391304347825,
+      "max_episode_s": 48.0
+    },
+    "ending_lane_observed_vehicles": 15,
+    "ending_lane_completed_before_drop": 15,
+    "ending_lane_completion_before_drop_rate": 1.0
+  }
+]

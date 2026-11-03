@@ -1,0 +1,13 @@
+{
+  "parent_sha256": "03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6",
+  "source_sha256": "c5ed30e8c8f722959c97a9db86c857db22e8740a7d7d0c118d1c028ec7550dd2",
+  "changed_functions": [
+    "_front_following"
+  ],
+  "reverse_to_parent_exact": true,
+  "lines": 450,
+  "default_front_distance": 60.0,
+  "traffic_evaluation_mode": "noa only",
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\noa_range60\\native_rules.py",
+  "note": "The shared helper default changes all callers; do not interpret formation/fill as NOA sensitivity."
+}

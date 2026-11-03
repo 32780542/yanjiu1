@@ -785,3 +785,62 @@
 - 本轮runner/seal/summarize直接复用既有compact与traffic工具；原件hash+字段重提取和离线账本均通过后，仅unlink本轮cases内两个精确大文件，已释放数百MB。旧原件不动。10工具合同由父独立运行通过(operation `20261103T031642473662Z_staggered-tools-independent-contracts_7186ebac`)。审查发现小数flow:g路径碰撞与protocol逐案核对不足，工具agent正先写反例再修；当前整数流量不受路径问题影响，旧driver冻结不变，修后需重算摘要但不重仿真。
 
 **下一入口：**收集C10及消融24最终状态；等待TM16/E8长批，不覆盖旧输出。方法agent正在E上实现F本车自主单向疏解：lane1按自身[-60,+30]实车未来负荷和真实左道空隙选择横移，停止远处helper/强制开隙，准备区暂停反向自由补位；先合同再候选。尚未产生正式采用结论。下一次发布必须包含失败NH案例、全部负结果及真正交错贡献消融；继续工作到17:00或明显提升经过独立验证后交付。
+
+### 2026-11-03：方法子单元J/JT及物理邻接修正已冻结
+
+方法与准确原文边界见 `docs/experiments/2026-11-03-staggered-bottleneck/methods/J_JT_local_coupling.md`。E、生产与核心原tests未改。初版J/JT的旧12合同通过后发现准备区lane1按desired两道枚举、lane2按三道枚举，产生单边假互选；新增反例在旧hash上2个预期失败。父已启动的旧J/JT16例保持原protocol/hash，只作为已知该缺陷的诊断，不覆盖旧构建。
+
+- J2/JT2分别固定旧J/JT父源，只把_following的邻道枚举从lane<lanes改为lane<3；反向精确恢复、AST仅_following变化。新源441行，SHA分别 `895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689`、`b415daca538202594a1b12fc768ed3a60a9c30a2f37221625ef1bf3be331df48`。
+- 原12加新物理邻接4合同，16项及101子测试通过，operation `20261103T043803219979Z_J2-JT2-physical-and-original-contracts-green_2f3c2c7d`。低速平衡只约束有真实前车的body；自由head仍回CRUISE，互选边反对称也不等于节点限幅后整组速度零和。
+- 父独立fresh批 `20261103_J2_JT2_screen180_16`，operation `20261103T043907062587Z_staggered-J2-JT2-physical-coupling-screen16_edf36ab7` 已启动；不要重启或把静态合同当真实几何验收。继续检查24/45实际同道CTH、跨道错位和完整层，不以TT或0/1代替形成。
+
+J2正式核心迁移子单元已完成：固定E四项patch上212通过/13失败/37子测试通过，operation `20261103T050420987743Z_J2-core14-existing-E-migration_65e99752`。独立 `implementation/J2_test_migration.patch` 合并原E四项与J2十三项政策/连续物理相位表达合同，五文件、17项，未apply；内存验证operation `20261103T050839655099Z_J2-core14-migration-formula-check_3b74b31d` 为225项及37子测试全过。H/P三历史比较AST不变，未观察到真实front/CTH目标、安全、NOA、局部信息或执行回归失败。详见 `implementation/J2_test_migration.md`；不据此决定采用。
+
+计算热点独立三帧诊断也已封存，operation `20261103T051239115633Z_J2-three-recorded-frame-computational-profile_962ba695` 退出0。TM既有100/180/250秒帧、E/J2各一次，J2 decide累计.0549/.1912/.6944秒，其中_fill .0349/.1258/.6437秒。250秒费用来自原_fill反事实cf_speed/safe_speed，E同帧也需.6848秒；_physical_phase仅8.9ms。未改规则或构建J2fast，最小缓存建议及边界见 `implementation/J2_computational_profile.md`。父的J2_long6008及长路真实几何诊断继续原批，方法子单元未重跑交通。
+
+### 2026-11-03：J2fast纯计算重构验收完成
+
+父随后批准两函数优化；原J2未覆盖，新 `local_phase_coupling_fast` 源SHA `03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6`，450行/有效+8，仅safe_speed早过滤并复用ego占道、_fill当前before/after快照cf_speed缓存。全部停止位置/CF/排序/驾驶规则保持；不缓存相位、不跨帧缓存，不改生产或提交Git。方法及完整operations见本轮 `candidates/local_phase_coupling_fast/method.md`。
+
+优化前冻结10000原J2 oracle，四批比对30000三模式完整Command/Memory及10000 safe_speed的float.hex全部精确一致；原225+37按既有J2测试迁移内存运行全过。三既有帧profile墙钟old→fast为.0597→.0499、.2148→.1730、.7265→.2935秒，密集250秒帧约减59.6%，不外推为实际GUI幅度。
+
+同输入30秒需求的真实oldJ2/fast两例均59/59安全排空，734帧/26014车帧解压positions和全部trips逐字节相同，原件保留；batch `20261103_J2fast_equivalence30_2` 只作重构验收，不并入正式交通样本。联合核验operation `20261103T052625941703Z_J2fast-joined-oracle-core-real-trace-verification_7fa39a96` 退出0，verification.json封存。父若用fast重试计算超时case，必须新批新身份，不能改旧J2 worker timeout记录或声称旧原case已经fast完成。
+
+### 2026-11-03：L单格空位桥接候选已冻结，尚未跑交通
+
+父实际长路诊断发现同道58.792m断链，但相邻道witness投影与front−30仅差约.061m，批准L。新 `local_vacancy_bridge` 基于J2fast，仅_front_following增加默认50m可选distance，_following在原50m无front时允许最近60m真实front，且必须有ego/front之间的相邻道实车证明front−30位置（原2m层容差）。不靠同道count、成员/群号、全局slot；NoA/CF仍默认50，CTH目标公式不复制，安全和优先级未改。
+
+源SHA `e0707d0e8443e074a24de27524618417d0f8d8daff36b703a9a3a9066c47605a`，459行/有效+9，反向精确恢复J2fast。14专项加16原相位合同，30项/106子测试通过，operation `20261103T055058724110Z_L-vacancy-and-phase-corrected-contract-green_46b73541`。600已存局部state的完整NoA/Memory及cf_speed/safe_speed精确相同。原J2fast/J2/E/生产hash均保持，原tests未改，无Git提交。
+
+首次绿尝试只有一项测试自身把100/160/145场景误认为还有+.4相位，实际上witness按真实距离破平局选择front，ego无互选边；该例应仅CTH输出30.6。源未改，只按明确几何纠正测试，并重新在旧J2fast留预期红、新L留绿。全部失败保留在候选method.md。L的几何证明不是群成员证明，不能先宣称真实完整形成或交通改善；父独立筛查后再决定正式回归入口。候选资料位于本轮 `candidates/local_vacancy_bridge/`。
+
+### 2026-11-03：截至12:57，E交通验证完成，交错几何继续迭代
+
+**任务仍活动，截止今日17:00；尚未宣布整体成功。** 生产仍是511行TM SHA65142…41317，根README/系统说明尚未改成候选。研究分支已推 `eee0d4c`；main仍177f7a3。不要把文献候选或注入测试当成已安装默认版本。
+
+- E新种子21–25、每道1250/2000/2250/2500、两道路600需求/1200上限的NOA40/E40，以及2500的ENF/ENP各5例，**90例全部安全排空**，50配对有效。父报告 `E_heldout90/` 的操作 `20261103T043135692776Z_staggered-E-heldout90-full-paired-report_5d9aa9ac` 退出0、28秒；独立 `review_E_heldout.*` 核对全部原trip/flag/gate/region与表单元，最大误差9.86e−10。3→2系统时间2250由57.8299降53.5680秒、改善7.3698%；2500由84.4767降76.6668秒、改善9.2451%，两档均5/5种子改善。燃油仍各多3.1927/.6554g/km。phase关闭ENP在2500平均系统时间多2.1062秒，4/5更差，种子23是反例；不能只报均值或把所有收益称为相位收益。
+- E的600选择批8例已退出0、786.219秒；TM16批已结束，13封口成功，2250seed4与2500seed1/4 transform三个worker到1200秒**实际计算超时**、原result仍starting。物理是否能排空未定，不能称physical time_limit。完整原计划/小原件/成功13已另包，6份110.54MB partial raw只索引且仍在本地。
+- 已发布的短批七包114例，父额外独立离线核验operation `20261103T040659339939Z_staggered-public114-root-independent_6c5adb0c` 退出0、36.484秒，114归档/协议、112完成、NH两physical time_limit保留。`evidence_additional/` 七包54.51MB含后续选择批与TM16；`evidence_heldout/` 三包39.25MB含新E40/ablation10，NOA40的完整道路20/20分包在additional。所有单包<20MB，旧七包和旧normal工具SHA未改。NOA初次25MB超限attempt留本地publication_attempts，不在正式索引。
+- H只改队首先后，445行bfd308…51a4e；8例短批和同输入24/45真实demo均未达到联合目标。H45尾部部分相位接近15，但会保留超过50m的长空隙，24仍未恢复。其225核心在E四test迁移后218过/7旧相位政策或浮点预期失败；不采用、不改旧H/P资料。见formation_demo_H及implementation/H_core14_review.md。
+- 初版J/JT16例已全安全排空，作为已知准备区单边邻接的诊断保留；不要覆盖其hash。正确J2/JT2 fresh16也已全安全排空，1250/2000/2250/2500、seed1/4、lane_drop180/500。J2在2250 TT44.605/44.960、2500 53.445/49.991；JT2分别44.591/44.632、52.968/50.537。E/NC对应2250 45.023/44.802、2500 51.414/49.369，增量混合，不凭最好的单元采用。补充E1250两例180秒已完成，batch `20261103_E1250_screen180_2`，操作 `20261103T043332497235Z_staggered-E1250-compare-body-baseline2_034be0aa` 退出0、23.328秒。
+- E/H/J2/JT2同输入24辆未形成与45辆已形成的原1200m真实demo均已安全排空并保留全轨迹、固定帧、CTH误差及实际跨道dx。E/H未充分恢复交错；J2的24尾部多数接近15，但45尾部仍混合，JT2未优于J2。45精确初态outer35+30i、middle20+30i，方向正确且初始每车请求28.8。**原下游只有200m，而45辆两道巡航30m结构至少跨度660m**，整群不可能在队首退出前共同位于此下游。已授权E/J2各24/45的独立2400m几何诊断：仅冻结运行器build_network两处exit1200改2400，瓶颈仍1000、控制及初态不变；不得混入原1200效率表。见新formation_demo_long协议/后续结果，当前正在执行及绘图。
+- **活动长批只有J2选择8例需继续检查**：session11570，operation `20261103T045105896584Z_staggered-J2-local-body-long600-8_89569d8a`；batch `20261103_J2_long600_8`，source895c263…15689，1250/2000/2250/2500、seed1/4、lane_drop、600/1200、jobs4、worker1200。不要重复。J2/JT2新图的物理邻接与16+101专项已通过；尚未安装/未完成225核心迁移，也未作新种子正式采用验证。
+- E225核心最小四test迁移已在内存验证225+37通过，另E5通过；原tests和生产磁盘未修改，patch/原失败/注入身份局限保留implementation/。新全体相位控制需另评语义，不能把旧断言一概改数值或直接继承Meere/Zheng的通信图稳定性证明。
+
+**下一入口：**先查J2_long600 manifest/operation和2400几何诊断，不重跑已经完成的90正式/16短批。若E在足够下游可真实收敛，比较它与J2的收益/组织成本再择最简；若J2确实改进实际形成且保留瓶颈收益，用未参与选择的新种子31–35再验证。源选择前保持main默认TM。继续到17:00，除非联合目标（真实交错形成/变换、可归因的显著提效、必要回归、文档/GitHub交付）确实已完成。
+
+### 2026-11-03：14点后的验证与活动批次
+
+任务仍活动至17:00。生产TM未变，main未改。J2fast新31–35种子80例均安全排空并离线核验，报告validation31_J2fast80，operation060156350262Z_staggered-validation31-J2fast80-paired_b7eae8c6退出0。1250/2000/2250/2500每道drop系统时间改善.4766/2.1819/6.6560/5.6774%，每档5/5改善；straight为.5124/.9527/1.0498/.8451%。NOA2500平均系统77.7275秒、入口等待仅.3242秒，瓶颈区均速9.26m/s；不是原NOA没有拥堵或入口等待主导。燃油增加4.57/7.07/6.74/9.42g/km，保留真实代价。
+
+L单格空位衔接八例短筛全部安全排空，高2500比J2慢，不能只凭几何采用。真实同输入2400诊断中，L24 anchor+15全24在场、CTH误差-.1584至+.1157米（J2最大+28.9086）；L45与J2几何基本一致。L用真正邻道witness、实际front，未加全群/全满格要求。完整证据和图见formation_demo_L_long；旧26.9MB long档案正按完整E/J2 profile拆成各<20MB，原combined仍只读保留本地。
+
+**活动批不可重复启动：**
+- L40：tmp/staggered_bottleneck/20261103_validation31_L40，session1002，1250/2000/2250/2500、种子31–35、两道路600/1200、jobs6、1800秒单例墙钟；源e0707d...605a。
+- LP0纵向相位消融10：20261103_validation31_LP0_10，session54722，2250/2500、31–35、drop600/1200；仅phase_speed=0，所有fill交错几何/单格衔接/安全/关系旗标保留。专项红2/绿3，原日志保留。
+- NOA60距离敏感性16：20261103_NOA60_screen180_16，session38910，四流量1/4、两道路180/500，NOA模式；只默认front范围60，未改正式基线。
+- 1800秒确认：20261103_long1800_NOA4（session24643）与20261103_long1800_L4（session18584），2250/2500、种子41/42、drop、1800/3000、各jobs2、单例墙钟3000；原全程positions/events先保留，需另提取[100,1800)账本才能清理。原[100,600)口径保持，不能冒称全程。
+
+**纠正J2旧批失败分类：**J2_long600_8的2500seed4不是1200秒timeout。原worker operation20261103T045328528400Z_staggered-case-febc0e8ee5_9f6c50b6实为350.531秒执行崩溃，child3221225477/case4294967295、result仍starting。按execution_failure、物理完成未知保存；J2fast fresh重试已安全排空TT79.631，不能改写旧失败身份。先前摘要中的“可能计算超时”作废。其余原J2七例已封口。
+
+L沿J2同一最小测试迁移，225+37内存全通过（060346605028Z...00c09975），未改原tests。方法agent继续独立M相对速度反馈及N本车解除真实唯一阻挡；均先合同再短筛，不预定合并。出版agent归档后续负例、审查31报告；诊断agent封存L长路真实几何。根接着检查L40/消融/长1800结果，按证据择最简，源安装后跑真正磁盘回归并更新现行说明与Git。

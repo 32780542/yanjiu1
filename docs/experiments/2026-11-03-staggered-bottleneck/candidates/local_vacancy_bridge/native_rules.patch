@@ -1,0 +1,31 @@
+--- local_phase_coupling_fast/noa/native_rules.py
++++ local_vacancy_bridge/noa/native_rules.py
+@@ -101,10 +101,10 @@
+     return peer.x - car.x + phase, pair_lanes
+ 
+ 
+-def _front_following(ego, rows):
++def _front_following(ego, rows, distance=50.0):
+     """同一实际前车时距跟驰，供NOA和编队共用。"""
+     front = min(
+-        (c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)),
++        (c for c in rows if 0.0 < c.x - ego.x <= distance and _occupies(c, ego.lane, 0.0)),
+         key=lambda c: (c.x, c.y, c.speed), default=None,
+     )
+     if front is None:
+@@ -116,6 +116,15 @@
+ def _following(ego, rows, lanes, phase_boundary=None):
+     """真实前车CTH叠加实际相邻道互选相位；每车只输出自身速度。"""
+     following = _front_following(ego, rows)
++    if following[2] is None:
++        extended = _front_following(ego, rows, 2 * GAP)
++        front = next((c for c in rows if c.track == extended[2]), None)
++        if front is not None and any(
++            abs(c.lane - ego.lane) == 1 and ego.x < c.x < front.x
++            and abs(c.x + _physical_phase(c, 3) - _physical_phase(ego, 3) - (front.x - GAP)) <= 2.0
++            for c in rows
++        ):
++            following = extended
+     cars = (ego, *rows)
+ 
+     def nearest(car, lane):

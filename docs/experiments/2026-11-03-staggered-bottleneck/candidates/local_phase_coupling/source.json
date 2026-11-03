@@ -1,0 +1,16 @@
+{
+  "parent_candidate": "E",
+  "parent_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "baseline_e_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "source_sha256": "dd0b7f466de943976af8fe44e1f5b89dfbafe5ea8e86f6f242fcea7a22f75e53",
+  "changed_functions": [
+    "_phase",
+    "_pair_error",
+    "_following",
+    "_fill"
+  ],
+  "lines": 441,
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\local_phase_coupling\\native_rules.py",
+  "production_e_unchanged": true,
+  "noa_control_unchanged": true
+}

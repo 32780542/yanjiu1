@@ -1,0 +1,33 @@
+{
+  "fast_sha256": "03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6",
+  "parent_sha256": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+  "oracle_cases": 10000,
+  "exact_full_command_memory_decisions": 30000,
+  "exact_safe_speeds": 10000,
+  "core_tests": 225,
+  "core_subtests": 37,
+  "original_sources_tests_archives_unchanged": true,
+  "sumo_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_J2fast_equivalence30_2",
+  "sumo_demand_s": 30,
+  "sumo_cases": 2,
+  "vehicles_per_case": 59,
+  "input_only_rule_sha_different": true,
+  "exact_decompressed_files": {
+    "positions.jsonl.gz": {
+      "bytes": 2432170,
+      "sha256": "cb5b2686f760aa54b9b1a4641117c91b3f2970cb0fdab2fa715041bc04875ec7"
+    },
+    "trips.json": {
+      "bytes": 43831,
+      "sha256": "23be92c847bf3b4823b276c907611664b7dc0bfc7ad8a651d4a1160108cdfafb"
+    },
+    "trips.jsonl.gz": {
+      "bytes": 27557,
+      "sha256": "3d2ceaf2adbf8f08df1a2c02c1eb77899e84418f3ae4a32920b3d5d9b5cbcc1a"
+    }
+  },
+  "position_frames": 734,
+  "vehicle_frames": 26014,
+  "sumo_not_a_formal_traffic_sample": true,
+  "raw_originals_retained": true
+}

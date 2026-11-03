@@ -1,0 +1,16 @@
+{
+  "base_commit": "177f7a32088fb69efcc94d9acb72863e7e00e787",
+  "parent_candidate": "direct_gap",
+  "parent_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "source_sha256": "bfd3080c166f63d07e401a9f106a27ae82c1dbcb7df96d92eb4b922c39d51a4e",
+  "changed_functions": [
+    "_pair_error"
+  ],
+  "import_added": "math.copysign",
+  "lines": 445,
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\order_preserving_phase\\native_rules.py",
+  "production_unchanged": true,
+  "parent_unchanged": true,
+  "noa_control_unchanged": true,
+  "same_lane_cth_unchanged": true
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "demo": "unformed24",
+    "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_H_formation_demo\\unformed24\\20261103T041327898827Z_lane_drop_transform_s1_e5182e",
+    "n": 24,
+    "first_recorded_s": 0.1,
+    "all_entered_s_zero": true,
+    "first_frame_matches_requested_positions_exactly": true,
+    "last_vehicle_1100_s": 41.2,
+    "onroad_n_at_last1100": 7,
+    "safe": true,
+    "all_completed": true,
+    "actual_end_s": 44.5,
+    "mean_travel_time_s": 37.891666666666666,
+    "collisions": 0,
+    "teleports": 0,
+    "lane_change_completions": 12,
+    "formation_state": {
+      "vehicle_seconds": 909.399999999999,
+      "participating_vehicle_seconds": 906.5999999999992,
+      "participation_rate": 0.9969210468440733,
+      "mean_participants": 20.4189189189189,
+      "peak_participants": 24,
+      "episodes": 25,
+      "mean_episode_s": 36.263999999999996,
+      "max_episode_s": 43.8
+    },
+    "ending_lane_observed_vehicles": 8,
+    "ending_lane_completed_before_drop": 8,
+    "ending_lane_completion_before_drop_rate": 1.0
+  },
+  {
+    "demo": "formed45",
+    "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_H_formation_demo\\formed45\\20261103T041327936910Z_lane_drop_transform_s1_e3815f",
+    "n": 45,
+    "first_recorded_s": 0.1,
+    "all_entered_s_zero": true,
+    "first_frame_matches_requested_positions_exactly": true,
+    "last_vehicle_1100_s": 46.0,
+    "onroad_n_at_last1100": 6,
+    "safe": true,
+    "all_completed": true,
+    "actual_end_s": 49.5,
+    "mean_travel_time_s": 37.30444444444444,
+    "collisions": 0,
+    "teleports": 0,
+    "lane_change_completions": 24,
+    "formation_state": {
+      "vehicle_seconds": 1678.7000000000007,
+      "participating_vehicle_seconds": 1674.200000000002,
+      "participation_rate": 0.9973193542622275,
+      "mean_participants": 33.89068825910935,
+      "peak_participants": 45,
+      "episodes": 46,
+      "mean_episode_s": 36.39565217391304,
+      "max_episode_s": 48.4
+    },
+    "ending_lane_observed_vehicles": 15,
+    "ending_lane_completed_before_drop": 15,
+    "ending_lane_completion_before_drop_rate": 1.0
+  }
+]

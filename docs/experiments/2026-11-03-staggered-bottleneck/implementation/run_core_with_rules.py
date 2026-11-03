@@ -18,7 +18,7 @@ E_SHA = "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274"
 digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def memory_test_patch(patch_path):
+def memory_test_patch(patch_path, text_only=False):
     """Apply unified hunks to strings, retaining each original test __file__."""
     result, current, source, output, pointer = {}, None, None, [], 0
 
@@ -47,12 +47,15 @@ def memory_test_patch(patch_path):
         elif current is not None and line.startswith("+"):
             output.append(line[1:])
     finish()
-    evidence = json.loads(patch_path.with_name("test_migration_sources.json").read_text())
-    assert len(result) == len(evidence) == 2
+    evidence = json.loads(patch_path.with_name(patch_path.stem + "_sources.json").read_text())
+    assert len(result) == len(evidence) > 0
     for entry in evidence:
         path = (REPO / entry["path"]).resolve()
         assert digest(path) == entry["original_sha256"]
         assert hashlib.sha256(result[path].encode()).hexdigest() == entry["modified_text_sha256"]
+
+    if text_only:
+        return result
 
     applied = {}
 

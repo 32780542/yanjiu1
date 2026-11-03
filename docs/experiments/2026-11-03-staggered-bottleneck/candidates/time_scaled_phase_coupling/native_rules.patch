@@ -1,0 +1,11 @@
+--- J/variants/phase5g_pure_formation/noa/native_rules.py
++++ time_scaled_phase_coupling/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -98,7 +98,7 @@
+         else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
+     )
+     phase = _physical_phase(peer, 3) - _physical_phase(car, 3)
+-    return peer.x - car.x + phase, pair_lanes
++    return peer.x - car.x + phase * (LENGTH + STANDSTILL + HEADWAY * (car.speed + peer.speed) / 2) / GAP, pair_lanes
+ 
+ 
+ def _front_following(ego, rows):

@@ -1,0 +1,59 @@
+{
+  "frozen_runtime": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_J2_JT2_screen180_16\\sources\\J2",
+  "rules_sha256": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+  "initial_random_seed": 20261103,
+  "mode": "transform",
+  "scenario": "lane_drop",
+  "sumo_seed": 1,
+  "duration_s": 1,
+  "max_time_s": 120,
+  "diagnostic": true,
+  "original_positions_events_diagnostic_retained": true,
+  "fixed_snapshot_requested_times_s": [
+    0,
+    5,
+    10,
+    15,
+    20
+  ],
+  "final_snapshot": "First stored frame after every requested vehicle has observed x>=1100m, if before drainage",
+  "actual_t0_policy": "No t=0 physical frame is fabricated; first stored physical frame is shown with actual time; request t0 is separately labelled.",
+  "selected_geometry_ids": {
+    "unformed24": [
+      "unformed_l0_r04",
+      "unformed_l1_r04",
+      "unformed_l2_r04"
+    ],
+    "formed45": [
+      "formed_l0_r07",
+      "formed_l1_r07",
+      "formed_l2_r07"
+    ]
+  },
+  "initial_sha256": {
+    "unformed24": "f562a8f65fc4323730250f12c85f1998e925baf433e6e8f2bb93d7ee8607b0d4",
+    "formed45": "fd6481a12c991a6dd6398987d7e476c08883b7fffd169237e8bf06a46fb5ad89"
+  },
+  "initial_limits": {
+    "unformed24": {
+      "n": 24,
+      "min_x": 0.7155194964165865,
+      "max_x": 277.8125114281519
+    },
+    "formed45": {
+      "n": 45,
+      "min_x": 20,
+      "max_x": 455
+    }
+  },
+  "source_sha256": {
+    "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+    "experiments\\native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+    "noa\\native_rules.py": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+    "research\\common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+  },
+  "reference_input_source": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\formation_demo",
+  "comparison": "J2 and E use byte-identical initial JSONs; source rules are the only behavioral change",
+  "plotting_logic_equal_after_label_path_substitution": true,
+  "E_plot_tool_sha256": "0585a3b10276ce9018beb8f94b9be9a0b0cfc2be09c60aec5f1db0f168c2a949"
+}

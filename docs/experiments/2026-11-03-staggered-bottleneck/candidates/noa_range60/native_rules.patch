@@ -1,0 +1,15 @@
+--- local_phase_coupling_fast/noa/native_rules.py
++++ noa_range60/noa/native_rules.py
+@@ -101,10 +101,10 @@
+     return peer.x - car.x + phase, pair_lanes
+ 
+ 
+-def _front_following(ego, rows):
++def _front_following(ego, rows, distance=60.0):
+     """同一实际前车时距跟驰，供NOA和编队共用。"""
+     front = min(
+-        (c for c in rows if 0.0 < c.x - ego.x <= 50.0 and _occupies(c, ego.lane, 0.0)),
++        (c for c in rows if 0.0 < c.x - ego.x <= distance and _occupies(c, ego.lane, 0.0)),
+         key=lambda c: (c.x, c.y, c.speed), default=None,
+     )
+     if front is None:

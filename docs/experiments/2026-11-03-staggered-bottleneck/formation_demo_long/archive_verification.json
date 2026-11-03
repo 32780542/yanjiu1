@@ -1,0 +1,24 @@
+{
+  "archive": "evidence_reviewed.tar.gz",
+  "archive_sha256": "6fefa8466985a9bfdce30652f8c6bb163d6f3018882fe22d994000cfb453e766",
+  "archive_bytes": 26918689,
+  "archive_members_including_manifest": 245,
+  "all_member_hashes_rechecked": true,
+  "operation_directories": [
+    "20261103T050215354000Z_E2400-demo-formed45_80be89ad",
+    "20261103T050215393520Z_E2400-demo-unformed24_2b4f777b",
+    "20261103T050215393520Z_J22400-demo-unformed24_86ceb589",
+    "20261103T050215398809Z_J22400-demo-formed45_a6e2422e",
+    "20261103T050605212116Z_E2400-demo-unformed24-retry2_55ba1cd4",
+    "20261103T050605239722Z_E2400-demo-formed45-retry2_32430cf4",
+    "20261103T050605258142Z_J22400-demo-unformed24-retry2_930111f8",
+    "20261103T050605261494Z_J22400-demo-formed45-retry2_a4a2e4c5",
+    "20261103T050856869360Z_long-demo-full-group-extraction_d1f0ad83",
+    "20261103T051306018949Z_long-demo-academic-plots_73d79f95",
+    "20261103T051620082229Z_long-demo-extraction-explicit-exit-times_f73ebc9d",
+    "20261103T053235174074Z_long-demo-final-verification_7bae5af7"
+  ],
+  "includes_all_four_full_positions_events_diagnostic": true,
+  "includes_failed_pre_SUMO_attempts": true,
+  "no_pruning": true
+}

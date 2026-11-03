@@ -1,0 +1,14 @@
+{
+  "parent_sha256": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+  "source_sha256": "03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6",
+  "changed_functions": [
+    "_fill",
+    "safe_speed"
+  ],
+  "reverse_to_parent_exact": true,
+  "lines": 450,
+  "effective_line_increment": 8,
+  "oracle_metadata_sha256": "b067278cc50f533dfe92dd3a0dc86c1fe4728f40b42107297c96bcaf692326d2",
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\local_phase_coupling_fast\\native_rules.py",
+  "original_sources_unchanged": true
+}

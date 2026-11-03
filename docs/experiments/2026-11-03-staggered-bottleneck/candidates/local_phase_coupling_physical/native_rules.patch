@@ -1,0 +1,11 @@
+--- local_phase_coupling/variants/phase5g_pure_formation/noa/native_rules.py
++++ local_phase_coupling_physical/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -132,7 +132,7 @@
+     )
+     error = 0.0
+     for lane in (ego.lane - 1, ego.lane + 1):
+-        if 0 <= lane < lanes:
++        if 0 <= lane < 3:
+             peer = nearest(ego, lane)
+             if peer is not None and nearest(peer, ego.lane) is ego:
+                 linked = True

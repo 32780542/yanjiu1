@@ -1,0 +1,135 @@
+{
+  "states": 2000,
+  "random_seed": 202611030931,
+  "candidates": {
+    "local_phase_coupling_physical": {
+      "relative_to_parent": {
+        "changed_definitions": [
+          "_following"
+        ],
+        "module_globals_and_imports_unchanged": true,
+        "class_and_memory_definitions_unchanged": true,
+        "ordering_keys": [
+          "lambda c: (c.x, c.lane, c.y)",
+          "lambda c: (c.x, c.y, c.speed)",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+          "lambda item: item[0]",
+          "order",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "free_distance",
+          "lambda c: (c.lane, c.x)"
+        ],
+        "track_in_ordering_key": false
+      },
+      "relative_to_E": {
+        "changed_definitions": [
+          "_fill",
+          "_following",
+          "_pair_error",
+          "_phase"
+        ],
+        "module_globals_and_imports_unchanged": true,
+        "class_and_memory_definitions_unchanged": true,
+        "ordering_keys": [
+          "lambda c: (c.x, c.lane, c.y)",
+          "lambda c: (c.x, c.y, c.speed)",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+          "lambda item: item[0]",
+          "order",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "free_distance",
+          "lambda c: (c.lane, c.x)"
+        ],
+        "track_in_ordering_key": false
+      },
+      "noa_e_exact": 2000,
+      "retained_only_parent_exact": 6000,
+      "track_order_exact": 6000,
+      "remote_exact": 6000,
+      "pair_error_antisymmetric": 2000,
+      "preparation_middle_ending_body_increments": [
+        -0.3999999999999986,
+        0.3999999999999986
+      ]
+    },
+    "time_scaled_phase_coupling_physical": {
+      "relative_to_parent": {
+        "changed_definitions": [
+          "_following"
+        ],
+        "module_globals_and_imports_unchanged": true,
+        "class_and_memory_definitions_unchanged": true,
+        "ordering_keys": [
+          "lambda c: (c.x, c.lane, c.y)",
+          "lambda c: (c.x, c.y, c.speed)",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+          "lambda item: item[0]",
+          "order",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "free_distance",
+          "lambda c: (c.lane, c.x)"
+        ],
+        "track_in_ordering_key": false
+      },
+      "relative_to_E": {
+        "changed_definitions": [
+          "_fill",
+          "_following",
+          "_pair_error",
+          "_phase"
+        ],
+        "module_globals_and_imports_unchanged": true,
+        "class_and_memory_definitions_unchanged": true,
+        "ordering_keys": [
+          "lambda c: (c.x, c.lane, c.y)",
+          "lambda c: (c.x, c.y, c.speed)",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+          "lambda item: item[0]",
+          "order",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: c.x",
+          "lambda c: (c.x, c.y, c.speed, c.vy)",
+          "free_distance",
+          "lambda c: (c.lane, c.x)"
+        ],
+        "track_in_ordering_key": false
+      },
+      "noa_e_exact": 2000,
+      "retained_only_parent_exact": 6000,
+      "track_order_exact": 6000,
+      "remote_exact": 6000,
+      "pair_error_antisymmetric": 2000,
+      "preparation_middle_ending_body_increments": [
+        -0.3999999999999986,
+        0.3999999999999986
+      ]
+    }
+  },
+  "source_sha256": {
+    "direct_gap": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+    "local_phase_coupling": "dd0b7f466de943976af8fe44e1f5b89dfbafe5ea8e86f6f242fcea7a22f75e53",
+    "time_scaled_phase_coupling": "443e082742d1400ad03b4381e91cdace35cde522c48b6f11efd375ff89af287e",
+    "local_phase_coupling_physical": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+    "time_scaled_phase_coupling_physical": "b415daca538202594a1b12fc768ed3a60a9c30a2f37221625ef1bf3be331df48",
+    "production": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317"
+  },
+  "protected_sources_unchanged": true,
+  "driver_sha256": "50c78ab886d8c0e0b1f2f1d3c9eeba02f7614212d2df49e1ee36a7717dc36448",
+  "shared_driver_sha256": "871b3edc4bbffa14f86ce06647f3bd7e4089ba7ef7e710623e0c555ab0e7b1f8",
+  "simulations_run": false,
+  "limits": "Finite source/shadow checks do not establish congestion benefit, zero-sum node dynamics, or complete formation recovery. Head cruise recovery and existing task/safety overrides remain active."
+}

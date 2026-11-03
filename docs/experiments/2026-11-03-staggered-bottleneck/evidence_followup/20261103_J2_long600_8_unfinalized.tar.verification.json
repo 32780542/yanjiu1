@@ -1,0 +1,72 @@
+{
+  "planned_cases": 8,
+  "sealed_cases_verified": 7,
+  "unfinalized_cases": [
+    {
+      "identity": {
+        "candidate": "J2",
+        "flow": 2500.0,
+        "seed": 4,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      },
+      "classification": "unverified_execution_failure",
+      "case_returncode": 4294967295,
+      "operation_returncode": 3221225477,
+      "operation_status": "failed",
+      "elapsed_s": 350.531,
+      "worker_timeout_s": 1200.0,
+      "original_result_status": "starting",
+      "trips_present": false,
+      "physical_completion": "undetermined",
+      "eligible": false
+    }
+  ],
+  "original_repository_reads": [],
+  "original_paths_required": false,
+  "raw_index": [
+    {
+      "name": "events.jsonl.gz",
+      "relative": "20261103T045328872175Z_lane_drop_transform_s4_f88ad5/events.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_J2_long600_8\\cases\\J2_2500_4_lane_drop_transform\\20261103T045328872175Z_lane_drop_transform_s4_f88ad5\\events.jsonl.gz",
+      "sha256": "9590f44a9f4c4c8b30e75a26059bf9abd85beb45a81ab8e212889c127957b898",
+      "bytes": 80819,
+      "included": false,
+      "identity": {
+        "candidate": "J2",
+        "flow": 2500.0,
+        "seed": 4,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "positions.jsonl.gz",
+      "relative": "20261103T045328872175Z_lane_drop_transform_s4_f88ad5/positions.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_J2_long600_8\\cases\\J2_2500_4_lane_drop_transform\\20261103T045328872175Z_lane_drop_transform_s4_f88ad5\\positions.jsonl.gz",
+      "sha256": "177162872e813b85b35c4badc8dd57214213028606f09ac2e02066ce9ac9b654",
+      "bytes": 23797413,
+      "included": false,
+      "identity": {
+        "candidate": "J2",
+        "flow": 2500.0,
+        "seed": 4,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    }
+  ],
+  "raw_payload_included": false,
+  "raw_contents_verified": false,
+  "simulations_run": false,
+  "scope": "Full eight-case J2 plan; seven sealed cases verified, one unfinalized execution failure archived without physical metrics. Partial raw remains local, SHA/bytes indexed only.",
+  "archive_members_verified": 321,
+  "archive_original_bytes_compared": true,
+  "archives": [
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence_followup\\20261103_J2_long600_8_unfinalized.tar.gz",
+      "sha256": "01d1a8e03e59eb65d53b562847fc13fe6220b424ba0fceccfbf366fa7013e5cc",
+      "bytes": 7134102
+    }
+  ]
+}

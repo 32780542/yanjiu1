@@ -1,0 +1,206 @@
+{
+  "format": "staggered-additional-v1",
+  "archives": [
+    {
+      "archive": "20261103_E_formation_ablation180_18.tar.gz",
+      "sha256": "3783fb5a74abc217242e7f7dc28a6e1f3df15dd3dfcbc799deca4ace2481feed",
+      "bytes": 5074875,
+      "case_count": 18,
+      "member_count": 363,
+      "index_sha256": "17a2d9e76d9c0b25164450298d695be6cd79d8bc1007194facb2d967038fb138",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_E_long600_8.tar.gz",
+      "sha256": "183ec571a9d126f4c08e753d6eb3ffe87f51abd1ae414daea90cf9646ec344c8",
+      "bytes": 6098193,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "9dba3de88b91cb185126e7ca9d0ad0ad067443eff34dc392ce5a4738ecf175f1",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_ED_screen180_8.tar.gz",
+      "sha256": "ac1bf6759e4ce397a2afc4e940b8f3453075a64a235f23040e830d9ae50ee835",
+      "bytes": 2148771,
+      "case_count": 8,
+      "member_count": 171,
+      "index_sha256": "0fcee04a834aae143a66dfbc451c5a9b412407551d0a878a2e5abf95e59d18e5",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_F_factorial180_12.tar.gz",
+      "sha256": "75c7119f086ac96a64138c15a51a26248d90be100fc6e732a1ce942fa6bbdf56",
+      "bytes": 3612096,
+      "case_count": 12,
+      "member_count": 250,
+      "index_sha256": "d84926cb8c9b597d7d96715a754e6a9d4fe86dc1731f6ed868fb7855fdb1b117",
+      "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+      "under_20mb": true
+    },
+    {
+      "archive": "20261103_heldout_NOA40_lane_drop_20.tar.gz",
+      "sha256": "8e2e437f7ce72e3c3f3370ee7158a8aebcec471da6417883ef4f9b322fae0953",
+      "bytes": 13929146,
+      "case_count": 20,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road group, independent of outcomes",
+        "scenario": "lane_drop",
+        "full_plan_cases": 40,
+        "partition_cases": 20,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_heldout_NOA40",
+        "original_protocol_sha256": "22bede20cbf5b643684a2cfc9dbc83464122d104ecd498c0248850c207edbc11",
+        "original_manifest_sha256": "7d62335b041c9321f533096ee5d1ae91d710ad8cb63b16591c727339a93fc569"
+      },
+      "index_sha256": "4fb9601c3e365af7def459f8e70be665b4c5c0846d0e2fb685ee83a313249045"
+    },
+    {
+      "archive": "20261103_heldout_NOA40_straight3_20.tar.gz",
+      "sha256": "ed0e94bd9c1c45b3113c843a47f89d3f0e54cb282fccff32d66c10971d23f2df",
+      "bytes": 11334401,
+      "case_count": 20,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road group, independent of outcomes",
+        "scenario": "straight3",
+        "full_plan_cases": 40,
+        "partition_cases": 20,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_heldout_NOA40",
+        "original_protocol_sha256": "22bede20cbf5b643684a2cfc9dbc83464122d104ecd498c0248850c207edbc11",
+        "original_manifest_sha256": "7d62335b041c9321f533096ee5d1ae91d710ad8cb63b16591c727339a93fc569"
+      },
+      "index_sha256": "8abd479d6c7142a4c3d27c55932fef96701dec0710b6d6e086698d1288bec09b"
+    },
+    {
+      "archive": "20261103_TM_long600_16_unfinished.tar.gz",
+      "sha256": "8973ba3858ab646b3e1a2a4e4b60d3a1417ae415a1f276c28e7149cc5450331a",
+      "bytes": 12313235,
+      "planned_cases": 16,
+      "sealed_cases": 13,
+      "unverified_compute_timeouts": 3,
+      "raw_payload_included": false,
+      "raw_index_bytes": 110542673,
+      "scope": "13 sealed cases independently verified; 3 unfinalized compute timeouts archived as metadata only. All extant partial raw files remain local, SHA/bytes indexed only. No physical completion conclusion for these 3 cases."
+    }
+  ],
+  "total_archive_bytes": 54510717,
+  "normal_stage_attempts": 86,
+  "unfinished_full_plan": 16,
+  "unfinished_sealed_cases": 13,
+  "unverified_compute_timeouts": 3,
+  "partial_raw_included": false,
+  "partial_raw_remains_local": true,
+  "raw_bytes_indexed": 110542673,
+  "physical_completion_for_unfinalized": "undetermined",
+  "frozen_package_stage_sha256": "3b202af61ed2a8aab66415dce4afad4204d5077e500f16b6b7684bfde50d11e7",
+  "new_tool_sha256": {
+    "package_partition.py": "f79737278f4a6be84eaaee330f8d60998e2a4ed55ada13c44e4aa7f4289e201c",
+    "package_unfinished.py": "cf714ceb2e5d03cef2c3aa0dd9d48c2f45bad5b720a9824c1bcd973a81de11ba"
+  },
+  "files": {
+    "20261103_E_formation_ablation180_18.tar.gz": {
+      "sha256": "3783fb5a74abc217242e7f7dc28a6e1f3df15dd3dfcbc799deca4ace2481feed",
+      "bytes": 5074875
+    },
+    "20261103_E_formation_ablation180_18.tar.manifest.json": {
+      "sha256": "45c7fa1bbc9006b7abf623f6bf9800deef4773ef5e039217fad609315003f51e",
+      "bytes": 481
+    },
+    "20261103_E_formation_ablation180_18.tar.verification.json": {
+      "sha256": "4267a56088dc1ab6e33e4bb5a4702be24b447eb63697bc840eeabbab227f3799",
+      "bytes": 192185
+    },
+    "20261103_E_long600_8.tar.gz": {
+      "sha256": "183ec571a9d126f4c08e753d6eb3ffe87f51abd1ae414daea90cf9646ec344c8",
+      "bytes": 6098193
+    },
+    "20261103_E_long600_8.tar.manifest.json": {
+      "sha256": "5a1c4e616b6bd459f5d33a8f83a80b758c23c74587bf6f96e58fbbb6a9f118d9",
+      "bytes": 465
+    },
+    "20261103_E_long600_8.tar.verification.json": {
+      "sha256": "c031ae7083eee7ff298d7f32a73d96692f2db6c42f02bde34fa222fc490abbd2",
+      "bytes": 86398
+    },
+    "20261103_ED_screen180_8.tar.gz": {
+      "sha256": "ac1bf6759e4ce397a2afc4e940b8f3453075a64a235f23040e830d9ae50ee835",
+      "bytes": 2148771
+    },
+    "20261103_ED_screen180_8.tar.manifest.json": {
+      "sha256": "ac9fa8ca204e84eea657671ad4fc45db87fd0570d9e525e773cb533fa3cfc1fa",
+      "bytes": 468
+    },
+    "20261103_ED_screen180_8.tar.verification.json": {
+      "sha256": "2276a1560b13967d39e37a544374617c4a9a46eed6c66471e6d2431e5f19ba1c",
+      "bytes": 85222
+    },
+    "20261103_F_factorial180_12.tar.gz": {
+      "sha256": "75c7119f086ac96a64138c15a51a26248d90be100fc6e732a1ce942fa6bbdf56",
+      "bytes": 3612096
+    },
+    "20261103_F_factorial180_12.tar.manifest.json": {
+      "sha256": "e771e594f11a96a62c03838aa1bb67bed9d0f91c96be29d576c2967c056d8795",
+      "bytes": 472
+    },
+    "20261103_F_factorial180_12.tar.verification.json": {
+      "sha256": "c363802b27921175984649159855ea1a3b0b829b6594de6772c62936267230ed",
+      "bytes": 127721
+    },
+    "20261103_heldout_NOA40_lane_drop_20.tar.gz": {
+      "sha256": "8e2e437f7ce72e3c3f3370ee7158a8aebcec471da6417883ef4f9b322fae0953",
+      "bytes": 13929146
+    },
+    "20261103_heldout_NOA40_lane_drop_20.tar.manifest.json": {
+      "sha256": "f1dc53cbe3402e500b0700c7ce203abab8a328b2986cb54e4c7255cdb74c2a13",
+      "bytes": 779
+    },
+    "20261103_heldout_NOA40_lane_drop_20.tar.verification.json": {
+      "sha256": "125b24e52b791a52ef9823cdd0cea5b97b7d4f6e8125aecd045fa151d358f9c2",
+      "bytes": 212908
+    },
+    "20261103_heldout_NOA40_straight3_20.tar.gz": {
+      "sha256": "ed0e94bd9c1c45b3113c843a47f89d3f0e54cb282fccff32d66c10971d23f2df",
+      "bytes": 11334401
+    },
+    "20261103_heldout_NOA40_straight3_20.tar.manifest.json": {
+      "sha256": "fe08649ca30107999668581e83a21766fa0581adb4edaecd6cfa70262de3163b",
+      "bytes": 779
+    },
+    "20261103_heldout_NOA40_straight3_20.tar.verification.json": {
+      "sha256": "ce22fb224960656713a1de0dca35671f8342ce21a5c530ad9282abb7a3d7c26f",
+      "bytes": 210429
+    },
+    "20261103_TM_long600_16_unfinished.tar.gz": {
+      "sha256": "8973ba3858ab646b3e1a2a4e4b60d3a1417ae415a1f276c28e7149cc5450331a",
+      "bytes": 12313235
+    },
+    "20261103_TM_long600_16_unfinished.tar.manifest.json": {
+      "sha256": "1ac72e70d586b6da7a175fd3ca1bcebf7fecb46a6188d17f0e4ab2dff7eaebc8",
+      "bytes": 550
+    },
+    "20261103_TM_long600_16_unfinished.tar.verification.json": {
+      "sha256": "9d72b0743f1324780658673a2b39aded71f2f66b2038be3ad28365921bf7bf06",
+      "bytes": 6119
+    },
+    "RAW_LOCAL_RETENTION.json": {
+      "sha256": "5df5840e2b26c3415d613987b40b472423fd4ce33f06bb121d26b5cb802118d1",
+      "bytes": 2663
+    },
+    "README.md": {
+      "sha256": "8adff116563a2ce5b33be7e355319ef42330731117af0a689d9a2d7ec4a258c1",
+      "bytes": 5242
+    },
+    "verification_NOA40_partition_union.json": {
+      "sha256": "109f4c491240b03c27f02f090385a7dc1f19427c0ae62dbf236015c9595efb0d",
+      "bytes": 422754
+    },
+    "verification_TM16_offline.json": {
+      "sha256": "d0f8e9252ec9cd98ef60505871812edba027d02ef2817bf8c0dfefff5afe37c5",
+      "bytes": 6120
+    }
+  }
+}

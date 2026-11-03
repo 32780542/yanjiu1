@@ -1,0 +1,198 @@
+{
+  "physical_runs": 4,
+  "raw_frames": {
+    "E2400/unformed24": 859,
+    "E2400/formed45": 907,
+    "J22400/unformed24": 869,
+    "J22400/formed45": 906
+  },
+  "full_geometry_rows_rechecked": 109430,
+  "selected_rows_rechecked": 1242,
+  "pair_reference_rows_rechecked": 1512,
+  "registered_frames": 16,
+  "all_initial_vehicles_present_at_all_registered_downstream_frames": true,
+  "source_changes_exactly_two_network_coordinates": true,
+  "controller_and_five_other_sources_unchanged": true,
+  "original_inputs_byte_identical": true,
+  "png_svg_pairs": [
+    {
+      "png": "E2400\\formed45_downstream_all_states.png",
+      "pixels": [
+        4534,
+        3334
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\formed45_downstream_snapshots.png",
+      "pixels": [
+        4234,
+        2434
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\formed45_fixed_snapshots.png",
+      "pixels": [
+        4234,
+        2734
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\formed45_time_series.png",
+      "pixels": [
+        4534,
+        3034
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\unformed24_downstream_all_states.png",
+      "pixels": [
+        4534,
+        3334
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\unformed24_downstream_snapshots.png",
+      "pixels": [
+        4234,
+        2434
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\unformed24_fixed_snapshots.png",
+      "pixels": [
+        4234,
+        2734
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "E2400\\unformed24_time_series.png",
+      "pixels": [
+        4534,
+        3034
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\formed45_downstream_all_states.png",
+      "pixels": [
+        4534,
+        3334
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\formed45_downstream_snapshots.png",
+      "pixels": [
+        4234,
+        2434
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\formed45_fixed_snapshots.png",
+      "pixels": [
+        4234,
+        2734
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\formed45_time_series.png",
+      "pixels": [
+        4534,
+        3034
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\unformed24_downstream_all_states.png",
+      "pixels": [
+        4534,
+        3334
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\unformed24_downstream_snapshots.png",
+      "pixels": [
+        4234,
+        2434
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\unformed24_fixed_snapshots.png",
+      "pixels": [
+        4234,
+        2734
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    },
+    {
+      "png": "J22400\\unformed24_time_series.png",
+      "pixels": [
+        4534,
+        3034
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ]
+    }
+  ],
+  "all_16_figures_visually_reviewed": true,
+  "no_additional_simulations": true,
+  "all_non_archive_report_links_verified": true
+}

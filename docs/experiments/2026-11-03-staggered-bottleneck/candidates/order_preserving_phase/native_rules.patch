@@ -1,0 +1,25 @@
+--- E/variants/phase5g_pure_formation/noa/native_rules.py
++++ H/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -1,7 +1,7 @@
+ """每车独立的跟驰、形成与车道减少规则；输入仅为本车及可见邻车。"""
+ 
+ from dataclasses import dataclass, replace
+-from math import sqrt
++from math import copysign, sqrt
+ 
+ 
+ CRUISE, MAX_SPEED, GAP = 28.8, 33.3, 30.0
+@@ -97,9 +97,10 @@
+         if phase_boundary is None
+         else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
+     )
+-    return (
+-        (peer.x + _physical_phase(peer, pair_lanes)) - (car.x + _physical_phase(car, pair_lanes))
+-    ), pair_lanes
++    dx = peer.x - car.x
++    distance = abs(_physical_phase(peer, pair_lanes) - _physical_phase(car, pair_lanes))
++    sign_source = dx or (_physical_phase(car, 3) - _physical_phase(peer, 3)) or (car.y - peer.y)
++    return dx - copysign(distance, sign_source), pair_lanes
+ 
+ 
+ def _front_following(ego, rows):
