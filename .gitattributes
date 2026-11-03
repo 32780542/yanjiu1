@@ -29,6 +29,8 @@ docs/experiments/2026-11-03-staggered-bottleneck/**/*.svg -whitespace
 # Retain the evening study's exact source, ledger and receipt bytes.
 README.md -text
 docs/原生SUMO编队变换系统说明.md -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# This unchanged regression file was verified with its original CRLF bytes.
+variants/phase5g_pure_formation/tests/test_own_lane_execution.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/experiments/2026-11-03-midflow-staggered/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/experiments/2026-11-03-midflow-staggered/**/*.patch -whitespace
 docs/experiments/2026-11-03-midflow-staggered/**/*.svg -whitespace
