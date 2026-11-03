@@ -193,4 +193,4 @@ mechanism_per_seed.csv保留135个实际case；mechanism_means.csv按flow/previe
 
 报告目录：`tmp/staggered_bottleneck/20261104_formal600_main_211_215_report_r01`。新增信息/机制表只读取此处已消费CSV，未重新扫描raw、未增加评价门。
 
-drop runner0/3552.094 s；straight runner0/1246.312 s；主报告消费0/123.531 s。正式协议 `stage/formal_protocol_600.json` 于04:35:21登记、首批04:35:35启动。P12 matched parallel45另批接续，其负向结果也完整保留。补充NOA与h敏感性为固定事后检验，均不改主规则或重选参数。研究截止08:00仍有效。
+drop runner0/3552.094 s；straight runner0/1246.312 s；主报告消费0/123.531 s。正式协议 `stage/formal_protocol_600.json` 于04:35:21登记、首批04:35:35启动。P12 matched parallel45已完成，见formal600_parallel_summary.md，其负向结果也完整保留。补充NOA与h敏感性为固定事后检验，均不改主规则或重选参数。研究截止08:00仍有效。

@@ -1070,3 +1070,14 @@ root新增tools/plot_confirmation.py待正式主报告后用实际CSV生成三�
 runner正在固定h48矩阵（h=.75/1.0、200米、201/202、两road、NOA/T、三flow、600/1200），batch20261104_posthoc_headway600_201_202_r01，jobs3，session58589属runner，不重启、不扩流量。07:12完成23/48进程rc0，待完整消费；h.85主不重选。root另运行两种h相同24初态形成，均safe/drained24/24、无LC，30/60全体在场，60秒相位误差小于.003米；见stage/headway_formation24，单案例几何不算作h48交通。
 
 当前研究分支本地/上次已核对远端均a306；main仍历史D1，最终应在所有证据收齐后fast-forward。研究截止2026-11-04 08:00仍有效。下一入口：收齐h48与文稿、续传新81/P45/fullcohort档案，最终独立验收、main快进及云端核对。
+
+
+### 07:35更新：全部固定试验与独立验收完成
+
+正式180、long24、扩展NOA45、共同cap36、h48共333个持续交通/补充实际run全部safe/drained/all_completed，无碰撞、teleport或失败；6个固定车群几何另计。最终h runner0/1388.766s，消费0/39.063s，同h的缩道12/12时间改善；h1−.75的同mode两道路24个配对时间与fuel均增加，T在2000缩道的绝对时间代价16.873522s。主h=.85不重选。
+
+h摘要posthoc_headway_summary.md、data/posthoc_headway九文件、协议completed_posthoc129、计划均完成；h48紧凑归档6包28,056,604B逐成员核对通过，raw全保留。几何两h完整包合计3,765,727B，6个固定车群均有完整raw/diagnostic归档。CTG频率响应图新增4001点，已目视且独立复算H(z)残差1.89e−14，理想固定前驱边界写明。
+
+stage/final_evidence_review.md最终07:30复核所有333实际run，h摘要384数值单元格和复制9文件逐字节一致，未发现未修复的实质来源/数值错误。此前P胜数口述倒置已改为P8/C12 22；所有正式数据一直正确。源码仍316行d245...，148实际受影响测试及实时GUI证据不重复运行。当前文档95个入口的文件链接检查无缺失；新h链接将随最终链接检查统一复读。
+
+根README、系统说明、阶段报告、规则/全部函数、理论、论文主线、评价、数据/恢复与清理文档均已收齐。云端研究分支已再次核对0b54ed6d20d7e65c2e5b1e11ec7126402c428c0f（含main/P/long/strong/cap/fullcohort等），h最终资料待本次提交。下一步仅最终文件/链接检查、提交、main fast-forward和云端核对；不再加规则、改参数或扩大实验组。用户08:00截止仍有效。

@@ -62,5 +62,5 @@ C12_P12_dev180_summary.md：24例安全排空，C12对NOA12/12时间改善、对
 
 正式main135与matched parallel45已全部安全排空/消费，源仍锁定；见formal600_main_summary.md与formal600_parallel_summary.md。
 扩展NOA_front20045已完成，见posthoc_NOAfront200_summary.md；共同请求cap28.8组36已完成，见posthoc_speedcap288_summary.md。
-h=.75/1.00敏感性48正整组运行（200信息、两道路、201/202、NOA/T、600/1200、独立MAX33.3），不据结果改变主参数。
-事后源/顺序/同输入引用与时间决定见stage/posthoc_protocol_600.json；所有raw保留，08:00工作截止不变。
+h=.75/1.00敏感性48已全部安全排空/消费（200信息、两道路、201/202、NOA/T、600/1200、独立MAX33.3），见posthoc_headway_summary.md；主参数未重选。
+事后源/顺序/同输入引用与时间决定见stage/posthoc_protocol_600.json；三个事后组129例的raw全部保留；正式主与长时的定点清理见data/cleanup_final_plan.json。08:00工作截止不变。

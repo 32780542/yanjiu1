@@ -15,7 +15,7 @@
 
 方法来源见 [本轮依据](docs/experiments/2026-11-04-timegap-staggered/method_options.md) 和 [150篇文献库](docs/research/2026-10-30-literature-review/README.md)。文献库分别标明相关章节、摘要预览和仅题录的读取深度；采用细节以当前规则为准。
 
-**本轮仍在进行，截止为2026年11月4日08:00。** 最终C12于04:35登记锁定，211–215独立五种子的正式主135例、匹配并排45例、1800秒持续对照24例、扩展NOA45例与共同28.8 m/s上限36例已全部安全排空；时距补充正在收齐。开发结果与正式确认分别保存。
+**本轮实现与计划实验已完成。** C12于2026年11月4日04:35登记锁定，之后保持不变。正式主135例、匹配并排45例、1800秒持续24例、扩展NOA45例、共同速度上限36例、时距敏感性48例，共333条持续交通及补充实验，全部安全排空。六条固定车群几何另计；开发结果与正式确认分别保存。
 
 ## 当前已经验证到哪里
 
@@ -34,6 +34,8 @@ C12在50米内建立普通跟驰链，之后可在200米内继续跟当前真实
 相同需求的直路时间差在约0.11秒以内，瓶颈区域的低速和末道停止暴露明显减少；收益主要出现在缩道条件。低流量油耗增加，高流量600秒结果接近NOA；1800秒两种子持续对照的六格平均油耗仍增加，均保留实际数值。完整指标见[正式主结果](docs/experiments/2026-11-04-timegap-staggered/formal600_main_summary.md)与[1800秒结果](docs/experiments/2026-11-04-timegap-staggered/C12_long1800_summary.md)。
 
 交错在30个缩道配对中有22个略快，两种几何的时间差较小，当前收益主要由关系接续与提前收缩解释。把NOA真实前车跟驰范围扩到200米后，C12仍在27/30个缩道配对更快，高流量分别节省8.44和9.00秒；把双方指令速度上限共同设为28.8 m/s后，另两种子的12个缩道配对也全部更快。详见[并排消融](docs/experiments/2026-11-04-timegap-staggered/formal600_parallel_summary.md)、[扩展NOA](docs/experiments/2026-11-04-timegap-staggered/posthoc_NOAfront200_summary.md)与[共同速度上限](docs/experiments/2026-11-04-timegap-staggered/posthoc_speedcap288_summary.md)。45车控制探针的平均瓶颈延误小幅改善，最后一辆通过略晚；它与持续随机交通分别解释，详见[机制探针](docs/experiments/2026-11-04-timegap-staggered/stage/cohort_mechanism_report/report.md)。
+
+时距0.75 s和1.0 s的48例也全部完成，12个缩道模式配对均显示变换收益；但1.0 s相对0.75 s在2000流量下使编队系统时间增加16.87秒。参数增大带来的空间占用与效率代价，和同参数下的编队收益分别评价，详见[时距敏感性](docs/experiments/2026-11-04-timegap-staggered/posthoc_headway_summary.md)。
 
 仅形成而不主动变换的方案、纯NOA、形成并变换的方案分开运行。车辆输出的状态1只表示本车已有编队关系，允许仍在调距；NOA始终为0。状态1的总人数与真实交错几何分别评价。
 

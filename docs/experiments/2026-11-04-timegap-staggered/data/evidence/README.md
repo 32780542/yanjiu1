@@ -10,14 +10,15 @@
 | [formal_main_and_long](formal_main_and_long/index.json) | 159 | 21 | 124,049,409 | 正式主135例、长时24例 |
 | [formal_parallel](formal_parallel/index.json) | 45 | 9 | 27,939,623 | 五种子匹配并排新增45例 |
 | [posthoc_front_and_cap](posthoc_front_and_cap/index.json) | 81 | 18 | 48,839,564 | 扩展NOA45例、共同28.8上限36例 |
+| [posthoc_headways](posthoc_headways/index.json) | 48 | 6 | 28,056,604 | 0.75／1.00秒时距48例 |
 
-开发78例已发布在`f65333bfd94efbbe3957509e29baf56d7a77962f`，正式主及长时159例已发布在`a30605e9e13736e1a09358e2716528d5731ba9b6`。后续分组随本轮最终提交发布，提交位置以[GitHub分支历史](https://github.com/32780542/yanjiu1/commits/research/20261104-timegap-staggered/)为准。
+开发78例已发布在`f65333bfd94efbbe3957509e29baf56d7a77962f`，正式主及长时159例已发布在`a30605e9e13736e1a09358e2716528d5731ba9b6`。匹配并排、扩展NOA／共同上限及六条完整车群已发布在`0b54ed6d20d7e65c2e5b1e11ec7126402c428c0f`；时距48例随最终提交发布。提交位置以[GitHub分支历史](https://github.com/32780542/yanjiu1/commits/research/20261104-timegap-staggered/)为准。
 
 随后只清理其中seed202的30个成功NOA/transform案例的60个positions/events原始大文件，释放267,173,719字节。逐件先核对已发布Git归档，再调用原有路径与SHA检查的定点删除；全部seed201轨迹和seed202的formation模式轨迹保留，其余批次、错误与未完成原件未动。实际记录在[cleanup_development202.json](../cleanup_development202.json)。完整0/1、逐车时间和区域证据继续在归档中。
 
 第二次清理只处理已发布的正式主与长时四批数据。先比对Git提交中的归档、归档中各成员与本地紧凑证据，再由原删除工具逐件核对绝对路径与原SHA。77个成功案例的154个positions/events文件实际释放1,383,088,873字节；[cleanup_final_plan.json](../cleanup_final_plan.json)中逐例列出取舍与最终execution。正式seed211全组、长时seed201全组、关键反例及最差形成样本等82例的164个大轨迹仍在。独立验收逐件确认已删与保留文件符合清单。
 
-两次合计实际释放 **1,650,262,592字节**，约1.65 GB。这是删除大文件的总量，不扣除本轮新增实验和归档。其余成功反例即使清理全路大轨迹，逐车结果、0/1和区域证据仍按原值保留；失败、未完成及其他批次不在上述删除范围内。四组车群几何另有[完整逐步轨迹包](../cohort_trials/README.md)，用于观察形成、运动引导和恢复过程。
+两次合计实际释放 **1,650,262,592字节**，约1.65 GB。这是删除大文件的总量，不扣除本轮新增实验和归档。其余成功反例即使清理全路大轨迹，逐车结果、0/1和区域证据仍按原值保留；失败、未完成及其他批次不在上述删除范围内。四组车群几何另有[完整逐步轨迹包](../cohort_trials/README.md)，两条时距形成也保留[完整逐步包](../headway_formation24/README.md)，用于观察形成、运动引导和恢复过程。三个事后组129例的全路原轨迹仍全部在本机，未清理。
 
 分组保留原来的`cases/案例名/evidence/`相对结构。用tar解压到临时目录后，执行仓库原有工具：
 

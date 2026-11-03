@@ -1,5 +1,5 @@
 {
-  "status": "running_headway_after_formal_and_other_posthoc_completed",
+  "status": "completed_posthoc129",
   "registered_utc": "2026-11-03T20:45:15.201049+00:00",
   "source_selection": "fixed by root; no main-source or parameter reselection based on any result",
   "deadline_local": "2026-11-04T08:00:00+08:00",
@@ -130,9 +130,18 @@
     "nominal_reference_note": "nominal h.85 formal uses seeds211-215; do not label unpaired comparisons with h201/202 as a matched headway effect; no extra nominal rerun authorized",
     "activation_decision_utc": "2026-11-03T23:01:22.033200+00:00",
     "activation_basis": "about59 minutes remain to08:00; observed completed600s batches support whole fixed48 plus consumption; decision uses wall-time only, before reading speedcap result metrics",
-    "status": "running_fixed48",
+    "status": "completed",
     "controller_request_cap_mps": 33.3,
-    "headway_group_independent_of_speedcap_group": true
+    "headway_group_independent_of_speedcap_group": true,
+    "result": {
+      "report": "tmp/staggered_bottleneck/20261104_posthoc_headway600_201_202_report_r01",
+      "cases": 48,
+      "failed_cases": 0,
+      "eligible_pairs": 48,
+      "eligible_did_seeds": 24,
+      "geometry_reference": "stage/headway_formation24.md",
+      "human_summary": "posthoc_headway_summary.md"
+    }
   },
   "reporting": {
     "metrics": [
@@ -216,5 +225,7 @@
       "eligible_pairs": 18,
       "eligible_did_seeds": 12
     }
-  }
+  },
+  "actual_posthoc_runs": 129,
+  "actual_formal_plus_posthoc_runs": 309
 }
