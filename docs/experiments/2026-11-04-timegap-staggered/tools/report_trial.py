@@ -117,11 +117,14 @@ def stop_and_merge(run):
                         stopped.add(key)
                         stop_samples += 1
     trips = seal_case.read(Path(run) / "trips.json")
+    completion_counts = [len(trip.get("lane_completion_events", [])) for trip in trips]
     positions = [event["x"] for trip in trips for event in trip.get("lane_completion_events", [])
                  if event["from_lane"] == 2 and event["to_lane"] == 1]
     return dict(stop_vehicles=len(stopped), stop_sample_vehicle_s=.1 * stop_samples,
                 slow_vehicles=len(slow), slow_sample_vehicle_s=.1 * slow_samples,
                 ending_lane_min_speed_mps=minimum, merge_2to1_completions=len(positions),
+                max_lane_completions_per_vehicle=max(completion_counts, default=0),
+                vehicles_more_than_two_lane_completions=sum(count > 2 for count in completion_counts),
                 merge_2to1_mean_x_m=mean(positions) if positions else None,
                 merge_2to1_min_x_m=min(positions) if positions else None,
                 merge_2to1_max_x_m=max(positions) if positions else None)
