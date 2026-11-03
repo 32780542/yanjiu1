@@ -36,3 +36,5 @@ docs/experiments/2026-11-03-midflow-staggered/**/*.patch -whitespace
 docs/experiments/2026-11-03-midflow-staggered/**/*.svg -whitespace
 # Keep frozen rule and experiment data bytes when retrieving this study from Git.
 docs/experiments/2026-11-04-timegap-staggered/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Preserve the installed controller exactly as the frozen, executed source.
+variants/phase5g_pure_formation/noa/native_rules.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
