@@ -1,0 +1,30 @@
+{
+  "parent": "E/direct_gap",
+  "parent_source": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\direct_gap\\native_rules.py",
+  "parent_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "source_sha256": "17003bffc2e46a37c9b311a4ce51be5b821f8f0a100d38dec00485280e3ccef3",
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\ENF\\native_rules.py",
+  "interventions": [
+    [
+      "lane = _fill(ego, rows, 2 if preparing else lanes)",
+      "lane = None  # diagnostic ENF: disable discretionary formation fill"
+    ]
+  ],
+  "changed_definitions": [
+    "_decide"
+  ],
+  "compile_passed": true,
+  "inverse_reconstruction_exact": true,
+  "random_scene_seed": 202611030931,
+  "shadow_checks": {
+    "noa_exact": 1000,
+    "flag_exact_same_physical_frame": 1000,
+    "no_fill_outputs": 1000
+  },
+  "patch_sha256": "6e1608132baa382f0eb004617994caa191791454cb5f0acae1a53e6b51e5801b",
+  "limits": [
+    "Finite shadow scenes are not exhaustive behavior, safety, or efficiency proof.",
+    "ENP disables only cross-lane head speed correction; phase coordinates used by fill still remain.",
+    "Direct 0/1 output is unchanged on the same physical frame; evolved trajectories and participation may differ."
+  ]
+}

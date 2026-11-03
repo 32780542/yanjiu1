@@ -1,0 +1,47 @@
+{
+  "selected_cases": 36,
+  "merged_cases": 74,
+  "all_selected_safe_drained": true,
+  "merged_analysis": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_E_formation_ablation180_18_analysis",
+  "reference": "NC (behavior-equivalent E)",
+  "retained_merged_failed_cases": [
+    {
+      "candidate": "NH",
+      "flow": 2500.0,
+      "seed": 1,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "status": "time_limit",
+      "safe": true,
+      "all_completed": false,
+      "returncode": 0,
+      "seal_status": "verified",
+      "evidence_error": null,
+      "protocol_issues": [],
+      "error": null
+    },
+    {
+      "candidate": "NH",
+      "flow": 2500.0,
+      "seed": 4,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "status": "time_limit",
+      "safe": true,
+      "all_completed": false,
+      "returncode": 0,
+      "seal_status": "verified",
+      "evidence_error": null,
+      "protocol_issues": [],
+      "error": null
+    }
+  ],
+  "fixed_window_complete_selected": 0,
+  "metric_note": "full-region low-speed exposure integrates until each run drains; not a common fixed time window or capacity",
+  "source_sha256": {
+    "per_case.csv": "765302f97514dea8fbc4911ed0969e1a70259324e1fdc6036c3d828aa1ac9b21",
+    "paired.csv": "7615b2b016f2bd09a585d5e237d5b4393bb202a813add9499d92ae206ae1674c",
+    "summary.json": "0b39faaaa07c89c8665f5355e37daea87754d6ac1a697f93ad9eee974ab38ec3"
+  },
+  "analysis_tool_sha256": "f3475bf26c3ec25bd9932e9e487b4ce7cc03c243a966f457a652e4d327e9f45d"
+}

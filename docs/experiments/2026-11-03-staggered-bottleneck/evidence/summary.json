@@ -1,0 +1,84 @@
+{
+  "cases_verified": 114,
+  "protocol_verified": 114,
+  "original_repository_reads": [],
+  "original_paths_required": false,
+  "simulations_run": false,
+  "physical_safe_count": 114,
+  "all_completed_count": 112,
+  "pairs": 94,
+  "eligible_pairs": 92,
+  "scope": "Selected direct flags, observed gate brackets and measured-region ledgers; original JSON/six sources exact; full positions/events NOT included.",
+  "archive_members_verified": 2216,
+  "archive_original_bytes_compared": false,
+  "archives": [
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_TM_load180_32.tar.gz",
+      "sha256": "f63b99160eaf6daa6106bc5a220cdd52c78219002befc784ffa19de812f57494",
+      "bytes": 8092441
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_TM1250_180_8.tar.gz",
+      "sha256": "3361835b26c9a97efe85ecaf3189b02ebc701b1761fe7470e1f3f8cc9ae887e8",
+      "bytes": 1337987
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_A_screen180_20.tar.gz",
+      "sha256": "a355dcb2f6b4fcc86997c06c068022eeff1c94d63fa57de512b2ba1dda133b81",
+      "bytes": 5262557
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_D_screen180_10.tar.gz",
+      "sha256": "feba95f988d10d82659298b1e0c180f87d07f29467d34c7154b33cc63c2ce9d3",
+      "bytes": 2697876
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_C_screen180_10.tar.gz",
+      "sha256": "a40ffb9d35a765dd659ed0537ce4266e53912ebfbef8f7832b6becc6f3f427a2",
+      "bytes": 2687968
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_ablation180_24.tar.gz",
+      "sha256": "6387ef96c85e720eb7e5337ec11582e599f8815e18f0cc5ec047d3c130005af0",
+      "bytes": 7189855
+    },
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence\\20261103_F_screen180_10.tar.gz",
+      "sha256": "083b518750279a2316273eade426516a53350c9706f2c8524c56715e7b18cb64",
+      "bytes": 2637821
+    }
+  ],
+  "fixed_window_complete_count": 0,
+  "incomplete_cases": [
+    {
+      "candidate": "NH",
+      "flow": 2500.0,
+      "seed": 1,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "status": "time_limit",
+      "safe": true,
+      "all_completed": false,
+      "case_locator": "20261103_ablation180_24.tar.gz#stage/cases/0016/evidence",
+      "attribution_eligible": false,
+      "audit_issues": [
+        "censored_segment_times"
+      ]
+    },
+    {
+      "candidate": "NH",
+      "flow": 2500.0,
+      "seed": 4,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "status": "time_limit",
+      "safe": true,
+      "all_completed": false,
+      "case_locator": "20261103_ablation180_24.tar.gz#stage/cases/0017/evidence",
+      "attribution_eligible": false,
+      "audit_issues": [
+        "censored_segment_times"
+      ]
+    }
+  ]
+}

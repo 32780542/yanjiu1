@@ -6,6 +6,8 @@ that commit's TM rules; `NAME=path/to/native_rules.py` replaces only the rule fi
 Production sources are never edited. Each output directory must be new and below
 `tmp/staggered_bottleneck`. Every case has a separate `run_logged.py` operation,
 worker log, input/result/trips/source records, and final case record.
+All planned case output names are checked for collisions before any batch
+directory or worker is created, including collisions from rounded float flows.
 
 From the repository root, for example:
 
@@ -47,7 +49,9 @@ python -B scripts/run_logged.py --label staggered-example-analysis --timeout 600
 Outputs are `per_case.csv`, `paired.csv`, and `summary.json`. Duplicate
 candidate/flow/seed/scenario/mode identities, even across different stages, are
 errors. Missing reference cases and unsuccessful cases stay visible as rejected
-pairs. Default pairs are TM transform minus TM NOA and each candidate minus TM
+pairs. Every protocol task is matched to its manifest and byte-exact original
+input/result/trips, request digest, and frozen source hashes. Missing/unplanned
+cases and protocol mismatches remain visible and ineligible. Default pairs are TM transform minus TM NOA and each candidate minus TM
 at the same mode. Source, demand, parameter and eligibility checks and all paired
 differences reuse the existing methods; no averaging is introduced.
 

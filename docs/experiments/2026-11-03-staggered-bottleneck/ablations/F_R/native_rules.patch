@@ -1,0 +1,17 @@
+--- E/variants/phase5g_pure_formation/noa/native_rules.py
++++ F_R/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -377,6 +377,14 @@
+         memory = replace(memory, joining=False)
+ 
+ 
++    if preparing and mode == "transform" and ego.lane < 2:
++        window = [c for c in (ego, *rows) if ego.x - 60.0 <= c.x <= ego.x + 30.0]
++        pressure = sum(1 if c.lane in (1, 2) else -1 for c in window)
++        if ego.lane == 1 and pressure >= 2 and _clear(ego, rows, 0):
++            memory = Memory(lane_target=0, joining=True)
++            speed, target, memory = _join_speed(ego, rows, memory, 0)
++            return action(speed, 0, "local_relief", target), memory
++
+     if preparing and ego.lane == 2:
+         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
+         memory = replace(memory, gap=gap)

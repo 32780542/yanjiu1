@@ -1,0 +1,15 @@
+{
+  "candidate": "F_B",
+  "parent_e_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "parent_f_sha256": "f3a7acba6a812196d357cdccefb707ffec88df1e744d6f4dfc77ce26d916464d",
+  "source_sha256": "6f2ed98a4292b6e250ef7ccb1caacc3e34096a0ebadb03c713678f82c049e704",
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\F_B\\native_rules.py",
+  "lines": 448,
+  "changed_functions": [
+    "_decide"
+  ],
+  "reverse_to_e_exact": true,
+  "unaffected_command_memory_comparisons": 1000,
+  "policy_contracts": 2,
+  "production_e_f_unchanged": true
+}

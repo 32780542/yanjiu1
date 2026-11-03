@@ -1,0 +1,75 @@
+--- a/variants/phase5g_pure_formation/tests/test_native_rules.py
++++ b/variants/phase5g_pure_formation/tests/test_native_rules.py
+@@ -54,12 +54,15 @@
+         ego = self.car(0, 100.0, 2)
+         self.assertAlmostEqual(self.command(ego, [self.car(1, 130.0, 2)], drop=None).speed, 28.8)
+ 
+-    def test_middle_front_car_makes_room_in_the_other_retained_lane(self):
++    def test_middle_car_has_no_assigned_helper_role_in_direct_gap_policy(self):
+         cars = self.six()
+         ego = replace(cars[2], track=0)
+         others = [c for i, c in enumerate(cars) if i != 2]
+         others = [replace(c, track=i + 1) for i, c in enumerate(others)]
+-        self.assertEqual(self.command(ego, others).lane, 0)
++        command, memory = self.r.decide(ego, others, self.r.Memory(), "transform")
++        self.assertIsNone(command.lane)
++        self.assertIsNone(memory.lane_target)
++        self.assertNotIn(command.reason, ("make_room", "prepare_room", "open_gap"))
+ 
+     def test_ending_front_uses_safe_space_without_waiting_for_other_plans(self):
+         cars = self.six()
+@@ -307,9 +310,18 @@
+                 )
+             )
+         ]
+-        before = self.command(ego, others)
+-        after = self.command(replace(ego, x=641.0), [replace(c, x=c.x + 2.0) for c in others])
+-        self.assertAlmostEqual(after.target_x, before.target_x + 2.0)
++        after_ego = replace(ego, x=641.0)
++        shifted = [replace(c, x=c.x + 2.0) for c in others]
++        before_follow = self.r._following(ego, others, 3, 640.0)
++        after_follow = self.r._following(after_ego, shifted, 3, 640.0)
++        self.assertEqual((before_follow[2], after_follow[2]), (1, 1))
++        self.assertAlmostEqual(after_follow[1], before_follow[1] + 2.0)
++        command, memory = self.r.decide(after_ego, shifted, self.r.Memory(), "transform")
++        self.assertEqual(command.reason, "approach_gap")
++        self.assertIsNone(command.lane)
++        self.assertEqual(memory.gap, (4, 3))
++        self.assertAlmostEqual(command.target_x, (shifted[2].x + shifted[3].x) / 2)
++        self.assertLessEqual(command.speed, self.r.safe_speed(after_ego, shifted))
+ 
+     def test_selected_local_cell_survives_lateral_motion_and_completion(self):
+         ego = self.car(0, 285.0, 0)
+@@ -339,13 +351,13 @@
+         command, _ = self.r.decide(moving, rows, memory, "transform")
+         self.assertAlmostEqual(command.speed, 28.8)
+ 
+-    def test_a_helper_tracks_the_gap_while_the_rear_opens_space(self):
++    def test_submitted_own_lane_request_keeps_tracking_the_actual_gap(self):
+         cars = self.six()
+         ego = replace(cars[2], track=0)
+         rows = [
+             replace(c, track=i + 1) for i, c in enumerate(c for j, c in enumerate(cars) if j != 2)
+         ]
+-        _, memory = self.r.decide(ego, rows, self.r.Memory(), "transform")
++        memory = self.r.Memory(lane_target=0, joining=True)
+         moved = [
+             replace(c, x=650.0, speed=20.0) if c.lane == 0 and c.x == 670.0 else c for c in rows
+         ]
+--- a/variants/phase5g_pure_formation/tests/test_ending_pair_scope.py
++++ b/variants/phase5g_pure_formation/tests/test_ending_pair_scope.py
+@@ -10,9 +10,11 @@
+     assert count==reverse_count==3
+     assert forward==15 and backward==-15
+ 
+-def test_separate_ending_unit_waits_using_its_actual_three_lane_phase():
++def test_ending_unit_approaches_its_actual_gap_without_a_distant_head_wait():
+     ego,front,middle=car(0,700,2),car(1,770,2),car(2,700,1)
+-    command,_=r.decide(ego,[front,middle],r.Memory(),'transform',1000)
+-    assert command.reason=='ending_follower'
++    command,memory=r.decide(ego,[front,middle],r.Memory(),'transform',1000)
++    assert command.reason=='approach_gap'
+     assert command.lane is None
++    assert memory.gap==(None,middle.track)
++    assert command.target_x==715.0
+     assert command.speed>r.CRUISE

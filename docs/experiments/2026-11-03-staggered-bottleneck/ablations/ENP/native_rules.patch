@@ -1,0 +1,11 @@
+--- a/E/native_rules.py
++++ b/ENP/native_rules.py
+@@ -144,7 +144,7 @@
+                 linked = True
+                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+                 error += difference / max(1, pair_lanes - 1)
+-    phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
++    phase_speed = 0.0  # diagnostic ENP: disable cross-lane head speed correction
+     target = ego.x + phase_speed / POSITION_GAIN
+     return _request(ego, target, CRUISE), target, None, int(linked)
+ 

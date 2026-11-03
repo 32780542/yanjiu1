@@ -1,0 +1,20 @@
+[
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_native_rules.py",
+    "original_sha256": "8268ce10f51dbccffd4c0ba4a066f0e3d1a2027dfb6465c60ce92e0f103cad1b",
+    "modified_text_sha256": "c5e4c305b36234e71a135cc4ea45ccc8c8f630a87e7f75d42f34f84190487a27",
+    "changed_tests": [
+      "test_middle_front_car_makes_room_in_the_other_retained_lane",
+      "test_an_ending_lane_follower_does_not_get_a_virtual_merged_rank_at_640",
+      "test_a_helper_tracks_the_gap_while_the_rear_opens_space"
+    ]
+  },
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_ending_pair_scope.py",
+    "original_sha256": "5adb387ad5b9f05ed10fafe7b550e4d8e52997894e98c3e920dfb57f8892d07b",
+    "modified_text_sha256": "055e289e8ee8c3a1155e5b006873b3e6ab768c2ead04bd48268619d8e54dd78f",
+    "changed_tests": [
+      "test_separate_ending_unit_waits_using_its_actual_three_lane_phase"
+    ]
+  }
+]

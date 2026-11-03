@@ -1,0 +1,30 @@
+{
+  "parent": "E/direct_gap",
+  "parent_source": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\direct_gap\\native_rules.py",
+  "parent_sha256": "04d739353f73ba2b309d18047baacb2abf6e362356f6b1b25865a1c62cf60274",
+  "source_sha256": "df622344b79f15fbad783b1b0e57f3901e32e984dcd555db9e48a9cfbebef63e",
+  "rules_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\ENP\\native_rules.py",
+  "interventions": [
+    [
+      "phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))",
+      "phase_speed = 0.0  # diagnostic ENP: disable cross-lane head speed correction"
+    ]
+  ],
+  "changed_definitions": [
+    "_following"
+  ],
+  "compile_passed": true,
+  "inverse_reconstruction_exact": true,
+  "random_scene_seed": 202611030931,
+  "shadow_checks": {
+    "noa_exact": 1000,
+    "flag_exact_same_physical_frame": 1000,
+    "no_fill_outputs": 0
+  },
+  "patch_sha256": "b5d40eed433449bbc5a5730c5dd912e2f35d772a067ace6a6bfa0feb20ad6a99",
+  "limits": [
+    "Finite shadow scenes are not exhaustive behavior, safety, or efficiency proof.",
+    "ENP disables only cross-lane head speed correction; phase coordinates used by fill still remain.",
+    "Direct 0/1 output is unchanged on the same physical frame; evolved trajectories and participation may differ."
+  ]
+}

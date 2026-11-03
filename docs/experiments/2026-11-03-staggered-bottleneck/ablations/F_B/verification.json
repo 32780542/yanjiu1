@@ -1,0 +1,249 @@
+{
+  "cases": 24,
+  "matched_requests": true,
+  "common_physical_and_other_sources": true,
+  "source_files_verified": 144,
+  "original_e_nc_equivalence": "see review_direct_relief.md; no new simulation",
+  "provenance": [
+    {
+      "candidate": "E_NC",
+      "flow": 2000,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_ablation180_24\\cases\\NC_2000_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "6c81b663d8d764533f54a3ec24eae7ba1854eb1140bf51afda06eb61815f1f3d",
+      "result_sha256": "31181e7d9d3fca9ecfefe016762f201a5c5177b8e2649c4afa627697c4c6561b",
+      "input_sha256": "c194d65300d92e6d7150379623933e949fa24054906a60257a27f36ef8d77cfe",
+      "trips_sha256": "ce1eb99fc49f0bbcbc11479ce77ea8473d3b0d5d10c4c6090050dbd83f792283"
+    },
+    {
+      "candidate": "F",
+      "flow": 2000,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_screen180_10\\cases\\F_2000_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "9039e292bee7d24942e0e3654cb2a2c97c04f91de5785ec18d84dfdedf2d1b3b",
+      "result_sha256": "a758cf44fb72c3483bdfd6baa28342a5ccd3c2b6182ee6128d59ed48b55e6727",
+      "input_sha256": "a17ed8f3991c893c1d35ca3d5b9df096e89c972eabd30e566a5b2091700b1982",
+      "trips_sha256": "78d82909da7ede8c2c354ed68064c4964b30d7aefeb100267941706a01b8db35"
+    },
+    {
+      "candidate": "F_B",
+      "flow": 2000,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_B_2000_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "6d531a21d30804654537ab0e9d76a9e4a23ad70a965196dca84489caf9d82ef5",
+      "result_sha256": "f3aa54e2e9662acc9f30483cf49d097899f939afa3ddb3670bd7c08eaf1db56f",
+      "input_sha256": "92240af6df18774b2e3f9c355c25e5413c1d9a71417787d95da7de74ae8cde94",
+      "trips_sha256": "5ec0c67becbfd23d7768bb5314a45b72c1197e70a827bcd8aea625892b633c8f"
+    },
+    {
+      "candidate": "F_R",
+      "flow": 2000,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_R_2000_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "e41ffe6a76f49584e5b33d3c832380daa1739b63c5307c9ec2a3b791d1e14a2e",
+      "result_sha256": "e6ecbfc3af9c18c073853a71389de539fd6eb013e6e569c2a83b5027f879a404",
+      "input_sha256": "e567c7baadd254a7645a1e792fad53d4bd0e0b7e9aee8cd2c345eaf041738a28",
+      "trips_sha256": "a5cdb6b8fc737b6a9f6b9927e398a0531216ba5738115cc1a54b14932c324c90"
+    },
+    {
+      "candidate": "E_NC",
+      "flow": 2000,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_ablation180_24\\cases\\NC_2000_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "06e44cf383b4ac670fe97d2c400c35d599ae7865f230a6acafd840d8d3406d6b",
+      "result_sha256": "acc3e1be482c273b0708d004fae7fb4be23b1807017ef5257178048ffc81c650",
+      "input_sha256": "951ef20f2bdac9a379ed01a78b92f4e4cd85070b302958ba17848c7faeb9ed3e",
+      "trips_sha256": "896b56374252fff2568ac8f72f7e4f8e25c6a186017ca1bc0a4247a910c3ddaf"
+    },
+    {
+      "candidate": "F",
+      "flow": 2000,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_screen180_10\\cases\\F_2000_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "0327ba3fc4155032c8f9222939e4d3824adf5d7ba252b8021882bbc4230b5805",
+      "result_sha256": "b6cc083830d12b61b559c44ed6bca14c5e42fd67f388371c92d320767af27291",
+      "input_sha256": "7d156a89d2db9744c8a56bcf4da11c9096ea3737561d8401bdeea6e4c73e890f",
+      "trips_sha256": "77f3608421c96b64d5b7697311c121ef8ea57a5e3828415f7162a0a07f4a5bef"
+    },
+    {
+      "candidate": "F_B",
+      "flow": 2000,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_B_2000_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "fd6064581f6c79a87ec549831205fec6814f820d908c4de66b715a9b12cf5ead",
+      "result_sha256": "89302755520204766aa463cc596b7053eefffee829436cf8a65b32272b410b09",
+      "input_sha256": "0a71714f9a04c4af63aff3e670d0837e4d93536e8c7d0da09b1a7f269a9c03f7",
+      "trips_sha256": "6f895838f1653485ea0c6f5376044203ff2d6a6bbf568cd2cf8568155da3c0f1"
+    },
+    {
+      "candidate": "F_R",
+      "flow": 2000,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_R_2000_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "3a6b8ad64a959f3408995e19bbb10ae0bd0890b9ee30eec9b8c141f546e82984",
+      "result_sha256": "2108aea9d72ce90f4e25371a59751c5846b2e0c9a0a48b8d041ff21bfb5bf7ea",
+      "input_sha256": "d620f4ea3f533353339a1e79354f949ffc8cf832a857bc01822202cad6097a09",
+      "trips_sha256": "97785fde6c08544444d62eeb6bd47620e6d3e028ba7a84b38f13ee227e5cc6c3"
+    },
+    {
+      "candidate": "E_NC",
+      "flow": 2250,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_ablation180_24\\cases\\NC_2250_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "599e042551558a9bcee4ee91cb97078998b2b5a889caf7ebc654b666a416ac39",
+      "result_sha256": "26dd26706682639aa0337153a16dc69cf483e0a33302cfb53eef7d2fa426e516",
+      "input_sha256": "143c0fd676f55bcc147545747550f06aa25238a2246bad02795207f1f8ad7b58",
+      "trips_sha256": "c84dc775d3b6f31bce62c63523a695958c63d711849c517326ed7e1d7b4156da"
+    },
+    {
+      "candidate": "F",
+      "flow": 2250,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_screen180_10\\cases\\F_2250_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "37e6d26ffb516f1caccdc72a2d207d57be0af7fa1bbda9f92e9716acfad47849",
+      "result_sha256": "fc20e7bf391155bff5e3de55b91d2877a27f4ead0328116af36cd2b4855498bd",
+      "input_sha256": "845dc7d38a7a73a8b3efc77a9dfa6db9655371c00b3efc7621393db1fdfa95c5",
+      "trips_sha256": "26129e4ee25d5bf5c1a13af8a8a56133386ab91350f520cf9307149b3eba26e0"
+    },
+    {
+      "candidate": "F_B",
+      "flow": 2250,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_B_2250_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "eb73aec89edc72a081871c59f3f9d84a84ea8c0d6fd74a91081144f266a80f83",
+      "result_sha256": "08e3a06d6771cfbfecec35e3f5efe039b44aafe991b44ed5aaf80cc203ac76c3",
+      "input_sha256": "13648dde7545761825907bae8890cb654e564214eaab562428720fae9f93a621",
+      "trips_sha256": "b192a582ffd95631197a2653297c99c8617c41c6c5b74475fd24957f0f03dbf0"
+    },
+    {
+      "candidate": "F_R",
+      "flow": 2250,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_R_2250_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "7a19c257d64d961a75c12e2ec8a8ede584f9f5866e3dd58a18a1268f083e9a83",
+      "result_sha256": "38ef2bed1bd620b571ec0bb647687f884a6646c0dd12d55e1a72bcba65385680",
+      "input_sha256": "e53397fc2ac483d4f345c69874b70e2a601b4dc5d914132a55429b78f576ef54",
+      "trips_sha256": "1d8fbcc2d5c643c2913276808aebd67f6a14be8c55e3482834f85d7a2d3b485a"
+    },
+    {
+      "candidate": "E_NC",
+      "flow": 2250,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_ablation180_24\\cases\\NC_2250_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "f30388e9a78930faac04bb450827238a89fb10fc7d20083a4a3ddcd05b7049b0",
+      "result_sha256": "5490437b08eee43d85768a992e772b430d64162ce362d4e7bb2e6d4f17ec0aae",
+      "input_sha256": "077bc1a6555d61c31c58a06a9479f4799df1a0c1045c0c5c4eda65a419c1dd4e",
+      "trips_sha256": "0e9f5b2dd1b4b4784e8a7d118f6104e834ed05dffdd1646025ddf69578dfff8d"
+    },
+    {
+      "candidate": "F",
+      "flow": 2250,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_screen180_10\\cases\\F_2250_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "e5d5369df317b0796ea7448547cc93576abe5efc61aca55ea2d510e94d08c0a7",
+      "result_sha256": "f1bc6297f76915638711d6553c5a7acbbda6724e91f7ca05ef6cff7b5b774a32",
+      "input_sha256": "de44171aefd1748ec04793c9e524d4f7146e1ae226695f7b283792d691251120",
+      "trips_sha256": "37a907ca9b12074b48b2583762224df616f0d875f1e0707c80d385cdab4fa9c6"
+    },
+    {
+      "candidate": "F_B",
+      "flow": 2250,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_B_2250_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "cfb8090c9061bdc4a77d8f30347edd5920ff2bb7d7c958a5aecc1107f21ee5e2",
+      "result_sha256": "b4e93256a723a12a03fd2749dc80d442f11077fc41fa795b66f83c8818b4c5f6",
+      "input_sha256": "1fb58c69d07f720a089f653b37bfcd196bcd52662e76206a88e8aea88fc274dc",
+      "trips_sha256": "0c809b9afd8c64fe9889776f98d3ed9ada41e0a913bfab1ca003240473e6a191"
+    },
+    {
+      "candidate": "F_R",
+      "flow": 2250,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_R_2250_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "16dddf4bae4a8c20d9b3878fc5f13c853a3a1d1681b7d7c959b8ae37ab3258f2",
+      "result_sha256": "ca14d93254ec6cb405b9f902dcf231543fcc91b0b623e5d1bcf79eb013f79758",
+      "input_sha256": "356680c2c977e57e493efe609e1c106eed4ed4926c0d49191b2c5ba05304b53b",
+      "trips_sha256": "e5f16b68c1fa7f9f90a05705881e3a888ab9caaa5bcdc32cd0ccc2cae6f46828"
+    },
+    {
+      "candidate": "E_NC",
+      "flow": 2500,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_ablation180_24\\cases\\NC_2500_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "116535275af866d1011c3c5bdaa122e01d3bb1d8baf5aa4e04c1d8b8a3feb1c1",
+      "result_sha256": "27b4eb7bc647b233251d9b254ceae6db4002471782fca9de3aa47fab53c9b07c",
+      "input_sha256": "697d9954a5983857fcab634cc642732fe0928ee86f89c28295de73592210f0e7",
+      "trips_sha256": "4b4c2427774d1ef3e9e6288f8dc674b04513584673f980f62353ee479938595a"
+    },
+    {
+      "candidate": "F",
+      "flow": 2500,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_screen180_10\\cases\\F_2500_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "b8c354c3e1de6ccbdfbb502db529efd2f1dcdf030160908b097f01b54e936b96",
+      "result_sha256": "2dbcfea11777284d91d1b92194de72d6c6b4a5a7905546fbaaa5c4c819cf82cb",
+      "input_sha256": "3c0e38f0f94232937cde88ab417ee60eb6b4163324d29122fcb1296a42a526ce",
+      "trips_sha256": "da633cfa22cf5d529fa5bc1f377bbbb26a3a74ac4a64200d9b8df567ae0703cd"
+    },
+    {
+      "candidate": "F_B",
+      "flow": 2500,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_B_2500_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "63c795a29224947565093ea5615a8c8addefd41de329361e8cc2234db6058b66",
+      "result_sha256": "5870fc6119d343596ec7de5d9cec8a7a07280210cb15b1943a9418cbea1640fb",
+      "input_sha256": "2ba8055c22b752bb012e84afc17d164578e936e01780aabfe57af22e6fe3cb64",
+      "trips_sha256": "f40abf625bdda0a9cb145ec7a03deedc7a66cd74a403f986720fa3ec8b590ba5"
+    },
+    {
+      "candidate": "F_R",
+      "flow": 2500,
+      "seed": 1,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_R_2500_1_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "f88bdac4d218b76e65343e1f338b8ff8caad9dd83e8a684717fb4a02cf00c996",
+      "result_sha256": "0c930ad7bc370a7754888da094060ccaded7c1c08ea1f3ef52d21fb20a3dbf06",
+      "input_sha256": "955c2a0af5f3c694d5ae20667a0a4681f0c77c46f3b5e9cae1b0b3973648fc47",
+      "trips_sha256": "853d534ca7107451fbf4eb01cb360643f5a7f4696feff96b8f6568e3dd78ec90"
+    },
+    {
+      "candidate": "E_NC",
+      "flow": 2500,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_ablation180_24\\cases\\NC_2500_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "c76063a48066b701ab8a96d9c7e6b7874cee2f6fb95f69ea5f28538435a4d4ac",
+      "result_sha256": "77aa96464de317fdeb71695aa659caa7c1fe6c4d686154bed9599cc66230ff0a",
+      "input_sha256": "c84b51fdff72be99624b2a27f1f53463ca2d33a241c28f74eebc7ab5187a7a07",
+      "trips_sha256": "00de752cd8df037b1957856a5deb17fd73eced7f38a28152eced5c9cd2f0a723"
+    },
+    {
+      "candidate": "F",
+      "flow": 2500,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_screen180_10\\cases\\F_2500_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "bab99c90508bf71c7e7524d9d7ea429c6b281b34c9feb18379f04799ed6bb797",
+      "result_sha256": "ee161b092b2318dd7d54ea72dc304110c6055d151d65a5081bd347432f5b5d2a",
+      "input_sha256": "26903b55fc6de16ecd139d36ab1d83422f1482571ec655871649c838d1e7a122",
+      "trips_sha256": "7a1e25d2af669284876694647793c350a57c459152a647216172bfd46d9a6564"
+    },
+    {
+      "candidate": "F_B",
+      "flow": 2500,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_B_2500_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "20a1ed83cc909f70d9cea9753ff08858837437b9c1ffd840ba0fcd14defb58b2",
+      "result_sha256": "e532b4a1e651e2ce685c73e305379c32ce82d28778a67383288e9f94cb8ffaea",
+      "input_sha256": "f6ac53a801798834711c6cfd99c06f7c4a5c9e3408b67c5e03708061498819b3",
+      "trips_sha256": "3c556152ba0ba821d8fc2a34bf8b1306c34d0272309e7ad12caf2b42750ce134"
+    },
+    {
+      "candidate": "F_R",
+      "flow": 2500,
+      "seed": 4,
+      "case_record": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_F_factorial180_12\\cases\\F_R_2500_4_lane_drop_transform\\case_record.json",
+      "case_record_sha256": "af47a60abfe6bf0a53c6368d286c496ace6ff6a18c2d381698f3b4a6ced743e5",
+      "result_sha256": "8059f0f4df4b446ee1b0ac2a2faa9f8bfb6371e41dc182d5a4893611d1a57b0d",
+      "input_sha256": "052292d4ca256eb1a859456bde57f2873d1ffeb63ca88d01cc7968b57033ac1b",
+      "trips_sha256": "8152ef6e18ccc084caf1cb33ef8f9d9121a22893b4216ebbe261b5fe4ad0450e"
+    }
+  ]
+}

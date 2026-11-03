@@ -1,0 +1,13 @@
+--- E/variants/phase5g_pure_formation/noa/native_rules.py
++++ F_B/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -377,6 +377,10 @@
+         memory = replace(memory, joining=False)
+ 
+ 
++    if preparing and mode == "transform" and ego.lane < 2:
++        reason = "join_follow" if memory.joining else "formation_follow"
++        return action(speed, None, reason, target, reference), memory
++
+     if preparing and ego.lane == 2:
+         target, gap_speed, gap = _merge_target(ego, rows, 1, memory.gap)
+         memory = replace(memory, gap=gap)
