@@ -1,0 +1,79 @@
+{
+  "cases": 160,
+  "pairs": 80,
+  "groups": 16,
+  "complete_disjoint_matrix": {
+    "cases": 160,
+    "plan": "2 methods x 8 flows x 5 original seeds x 2 roads",
+    "rule_sha256": {
+      "TM": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+      "S": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f"
+    }
+  },
+  "archived_case_fields": [
+    "candidate",
+    "flow",
+    "seed",
+    "scenario",
+    "mode",
+    "mean_travel_time_s",
+    "mean_system_time_s",
+    "mean_entry_wait_s",
+    "fuel_g_per_km",
+    "mean_segment_100_600_s",
+    "mean_segment_640_1100_s",
+    "region_density_veh_km_lane",
+    "region_mean_speed_mps",
+    "region_low_speed_vehicle_s",
+    "flow_1000m_veh_h",
+    "lane_change_completions",
+    "flag_participation_rate",
+    "flag_mean_participants",
+    "flag_peak_participants",
+    "flag_mean_episode_s",
+    "safe",
+    "all_completed",
+    "protocol_verified",
+    "evidence_verified",
+    "input_sha256",
+    "result_sha256",
+    "trips_sha256",
+    "source_version_sha256",
+    "rules_sha256",
+    "demand_sha256",
+    "parameters_sha256",
+    "nonrule_source_sha256"
+  ],
+  "primary_pair_metrics": [
+    "mean_travel_time_s",
+    "mean_system_time_s",
+    "mean_entry_wait_s",
+    "fuel_g_per_km",
+    "mean_segment_100_600_s",
+    "mean_segment_640_1100_s",
+    "region_density_veh_km_lane",
+    "region_mean_speed_mps",
+    "region_low_speed_vehicle_s",
+    "flow_1000m_veh_h",
+    "lane_change_completions",
+    "flag_participation_rate",
+    "flag_mean_participants",
+    "flag_peak_participants",
+    "flag_mean_episode_s"
+  ],
+  "comparisons": {
+    "archived_case_vs_report": 5120,
+    "archived_pair_vs_report": 3600
+  },
+  "max_absolute_numeric_errors": {
+    "archived_case_vs_report": 0.0,
+    "archived_pair_vs_report": 1.4210854715202004e-14
+  },
+  "original_archive_byte_checks": true,
+  "all_archives_offline_verified": true,
+  "original_repository_reads": [],
+  "original_paths_required": false,
+  "full_positions_included": false,
+  "generic_single_method_package_pairs_are_not_formal_method_comparisons": true,
+  "tool_sha256": "9672b3c330b7cee66339a12216e2638683588e23dca89b7ecd58885395c250b7"
+}

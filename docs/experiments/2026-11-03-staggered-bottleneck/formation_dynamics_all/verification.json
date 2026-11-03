@@ -1,0 +1,113 @@
+{
+  "cases": [
+    {
+      "version": "E2400",
+      "demo": "unformed24",
+      "anchor_s": 37.3,
+      "first_exit_s": 73.5,
+      "frames": 362
+    },
+    {
+      "version": "E2400",
+      "demo": "formed45",
+      "anchor_s": 42.3,
+      "first_exit_s": 67.4,
+      "frames": 251
+    },
+    {
+      "version": "J22400",
+      "demo": "unformed24",
+      "anchor_s": 37.8,
+      "first_exit_s": 73.8,
+      "frames": 360
+    },
+    {
+      "version": "J22400",
+      "demo": "formed45",
+      "anchor_s": 41.8,
+      "first_exit_s": 67.6,
+      "frames": 258
+    },
+    {
+      "version": "L2400",
+      "demo": "unformed24",
+      "anchor_s": 38.1,
+      "first_exit_s": 73.8,
+      "frames": 357
+    },
+    {
+      "version": "L2400",
+      "demo": "formed45",
+      "anchor_s": 41.8,
+      "first_exit_s": 67.6,
+      "frames": 258
+    },
+    {
+      "version": "M2400",
+      "demo": "unformed24",
+      "anchor_s": 37.9,
+      "first_exit_s": 73.8,
+      "frames": 359
+    },
+    {
+      "version": "M2400",
+      "demo": "formed45",
+      "anchor_s": 41.6,
+      "first_exit_s": 67.6,
+      "frames": 260
+    }
+  ],
+  "all_continuous_frames_independently_rechecked": 2465,
+  "all_raw_pairs_independently_rechecked": 80727,
+  "fixed_extra_state_rows_rechecked": 552,
+  "extra_frames": 16,
+  "all_extra_full_initial_present": true,
+  "figures": [
+    {
+      "name": "formed45_continuous_dynamics.png",
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "pixels": [
+        5134,
+        3034
+      ]
+    },
+    {
+      "name": "formed45_fixed_extra_20_25_xy.png",
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "pixels": [
+        4534,
+        4234
+      ]
+    },
+    {
+      "name": "unformed24_continuous_dynamics.png",
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "pixels": [
+        5134,
+        3034
+      ]
+    },
+    {
+      "name": "unformed24_fixed_extra_20_25_xy.png",
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "pixels": [
+        4534,
+        4234
+      ]
+    }
+  ],
+  "all_four_figures_visually_reviewed": true,
+  "no_new_simulations": true
+}

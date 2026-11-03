@@ -1,0 +1,37 @@
+[
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_native_rules.py",
+    "original_sha256": "8268ce10f51dbccffd4c0ba4a066f0e3d1a2027dfb6465c60ce92e0f103cad1b",
+    "modified_text_sha256": "7040a00ac4a7104f14d714afeb98af4eed7ae5b01f2421d0c7fff528f32fa356",
+    "m_changed_tests": []
+  },
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_head_group_rules.py",
+    "original_sha256": "259f87e9586ee8a7a0d6a8205effb81cfa5e14b1acd91a1b1ab2dfcffb3b64f2",
+    "modified_text_sha256": "af13b630b2a2e9218f77d7d6e59ccae1b7447ed5acf1b257792f6a48822b9ba8",
+    "m_changed_tests": [
+      "test_internal_a2_keeps_front_a1_and_couples_to_actual_body_b1",
+      "test_internal_b1_keeps_front_c1_and_couples_to_actual_body_a2",
+      "test_real_lane_one_head_a1_uses_fixed_phase_of_actual_c1",
+      "test_real_lane_zero_head_c1_uses_fixed_phase_of_actual_a1"
+    ]
+  },
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_common_pair.py",
+    "original_sha256": "19b37a3ab25926232f9d31d3b77f1698ad3382712d8dcb5bbb7fbc5fb694aecb",
+    "modified_text_sha256": "9e1c66bac2f2dae963cf6e18f13fdfffd1fb8d9abd4db4a06b10f2fd16ead8d6",
+    "m_changed_tests": []
+  },
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_ending_pair_scope.py",
+    "original_sha256": "5adb387ad5b9f05ed10fafe7b550e4d8e52997894e98c3e920dfb57f8892d07b",
+    "modified_text_sha256": "590a6101f1f3f0f743443333d3522cf9e8122f884b502ee0deefc36ffac63ac7",
+    "m_changed_tests": []
+  },
+  {
+    "path": "variants/phase5g_pure_formation/tests/test_formation_state.py",
+    "original_sha256": "ceaf248a3094737f2e15c2fbf336c8915d49a3007206ac4418798a12754def6c",
+    "modified_text_sha256": "b518b6461a9372dee3a14a8c7daf925819d4130fe8e7f51e9f8cd0d131565895",
+    "m_changed_tests": []
+  }
+]

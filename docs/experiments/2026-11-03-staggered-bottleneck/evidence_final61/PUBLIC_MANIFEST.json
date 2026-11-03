@@ -1,0 +1,361 @@
+{
+  "format": "locked-final61-complete-matrix-v1",
+  "archives": [
+    {
+      "archive": "20261103_final61_NOA80_lane_drop_high15.tar.gz",
+      "sha256": "34d8dd2542cfccae2200bd35f51a50a54a07dce566b77e6d4091defbd99e0788",
+      "bytes": 11844081,
+      "case_count": 15,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "lane_drop",
+        "profile": "high",
+        "full_plan_cases": 80,
+        "partition_cases": 15,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_NOA80",
+        "original_protocol_sha256": "7e61aa351822caf435e1231cb507c3b7694a19045bb0fac8cd6165b53ba999cd",
+        "original_manifest_sha256": "76ad9486ffae0c16d098cbe639cbcc471c1b5e9c67b10886e0ab03b21fa700b5"
+      },
+      "index_sha256": "9de923083749075a37912670af4041c1be13e159604e7b07078f3fb9b57c57fa"
+    },
+    {
+      "archive": "20261103_final61_NOA80_lane_drop_low25.tar.gz",
+      "sha256": "c823d2e2bd1f9b9913411daed318d638e3539a08d022fa660dc6c75f503a2d75",
+      "bytes": 8902731,
+      "case_count": 25,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "lane_drop",
+        "profile": "low",
+        "full_plan_cases": 80,
+        "partition_cases": 25,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_NOA80",
+        "original_protocol_sha256": "7e61aa351822caf435e1231cb507c3b7694a19045bb0fac8cd6165b53ba999cd",
+        "original_manifest_sha256": "76ad9486ffae0c16d098cbe639cbcc471c1b5e9c67b10886e0ab03b21fa700b5"
+      },
+      "index_sha256": "b30ecaf1f00bad213f00228c92dad34885dc1db7f537da29bab7b7d1df1b6cba"
+    },
+    {
+      "archive": "20261103_final61_NOA80_straight3_high15.tar.gz",
+      "sha256": "9060a5bce972d5d540e97c1b575030ebc4a1040f1a30c470effac867d7528d24",
+      "bytes": 9564299,
+      "case_count": 15,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "straight3",
+        "profile": "high",
+        "full_plan_cases": 80,
+        "partition_cases": 15,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_NOA80",
+        "original_protocol_sha256": "7e61aa351822caf435e1231cb507c3b7694a19045bb0fac8cd6165b53ba999cd",
+        "original_manifest_sha256": "76ad9486ffae0c16d098cbe639cbcc471c1b5e9c67b10886e0ab03b21fa700b5"
+      },
+      "index_sha256": "d4523fee7c6f09601e38349686e6069e4394edc905f4c20cbc45e8c05761e5d2"
+    },
+    {
+      "archive": "20261103_final61_NOA80_straight3_low25.tar.gz",
+      "sha256": "0ed6d27714c9ffb558d119bcc553b8c8e2610ec1e05d493c92d081de2de01b31",
+      "bytes": 7463708,
+      "case_count": 25,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "straight3",
+        "profile": "low",
+        "full_plan_cases": 80,
+        "partition_cases": 25,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_NOA80",
+        "original_protocol_sha256": "7e61aa351822caf435e1231cb507c3b7694a19045bb0fac8cd6165b53ba999cd",
+        "original_manifest_sha256": "76ad9486ffae0c16d098cbe639cbcc471c1b5e9c67b10886e0ab03b21fa700b5"
+      },
+      "index_sha256": "8c339593df507009985e02d2316e0e3d78b10425af78901f2a92777ad855968e"
+    },
+    {
+      "archive": "20261103_final61_S80_lane_drop_high15.tar.gz",
+      "sha256": "634b045a193de0b008c86345f30e7b31fe997ba8e11cc598c0eaf99334767227",
+      "bytes": 12679786,
+      "case_count": 15,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "lane_drop",
+        "profile": "high",
+        "full_plan_cases": 80,
+        "partition_cases": 15,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_S80",
+        "original_protocol_sha256": "36f52598e855c4a7154fe2eacdaa40fcbb7a3b59323bbe04f2c6b3ca1b7b2fc5",
+        "original_manifest_sha256": "3cde2a69338b6592d25c63ee7a90b4d8950c3f57cd79920aed4232fc37c1d707"
+      },
+      "index_sha256": "bb1c834fbc7187501dd50fef141026c2068ddbc02e6f752f8164ed2f2dfcc86b"
+    },
+    {
+      "archive": "20261103_final61_S80_lane_drop_low25.tar.gz",
+      "sha256": "7806c00e49477e5cc29ec1ebb04b6b0b986d5afb37714f97e4ddac9f7b17a57e",
+      "bytes": 10780846,
+      "case_count": 25,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "lane_drop",
+        "profile": "low",
+        "full_plan_cases": 80,
+        "partition_cases": 25,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_S80",
+        "original_protocol_sha256": "36f52598e855c4a7154fe2eacdaa40fcbb7a3b59323bbe04f2c6b3ca1b7b2fc5",
+        "original_manifest_sha256": "3cde2a69338b6592d25c63ee7a90b4d8950c3f57cd79920aed4232fc37c1d707"
+      },
+      "index_sha256": "e343e9d3a1acfd6e2a5a1d1a7bea3e4c2f72b310db316153211b0fa2c5a8d538"
+    },
+    {
+      "archive": "20261103_final61_S80_straight3_high15.tar.gz",
+      "sha256": "4ac19c05d33853cc3d745235ee51e01f61eed90f28882332a44b38a6a928e0f4",
+      "bytes": 11940455,
+      "case_count": 15,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "straight3",
+        "profile": "high",
+        "full_plan_cases": 80,
+        "partition_cases": 15,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_S80",
+        "original_protocol_sha256": "36f52598e855c4a7154fe2eacdaa40fcbb7a3b59323bbe04f2c6b3ca1b7b2fc5",
+        "original_manifest_sha256": "3cde2a69338b6592d25c63ee7a90b4d8950c3f57cd79920aed4232fc37c1d707"
+      },
+      "index_sha256": "645d854537cba2f015112f310314b7d7348a6413c5a6a26878894e7bb766e145"
+    },
+    {
+      "archive": "20261103_final61_S80_straight3_low25.tar.gz",
+      "sha256": "38d300c95941d574ac11e28d6fd3c555aa45bd806af1fe2a1007bbf2db84e5f9",
+      "bytes": 10034033,
+      "case_count": 25,
+      "under_20mb": true,
+      "partition": {
+        "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+        "scenario": "straight3",
+        "profile": "low",
+        "full_plan_cases": 80,
+        "partition_cases": 25,
+        "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_S80",
+        "original_protocol_sha256": "36f52598e855c4a7154fe2eacdaa40fcbb7a3b59323bbe04f2c6b3ca1b7b2fc5",
+        "original_manifest_sha256": "3cde2a69338b6592d25c63ee7a90b4d8950c3f57cd79920aed4232fc37c1d707"
+      },
+      "index_sha256": "aab5619b1028d7b0d7c8c62d26050ac8870dacfc6cfc49d582359719675925a9"
+    }
+  ],
+  "case_count": 160,
+  "formal_pairs": 80,
+  "formal_groups": 16,
+  "total_archive_bytes": 83209939,
+  "partition_coverage": {
+    "cases": 160,
+    "plan": "2 methods x 8 flows x 5 original seeds x 2 roads",
+    "rule_sha256": {
+      "TM": "65142b448412325357bab0bdcdc6fa6caaa75cddef2c6a498ab4d49454441317",
+      "S": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f"
+    }
+  },
+  "full_positions_included": false,
+  "source_locked_before_unblinding": true,
+  "files": {
+    "20261103_final61_NOA80_lane_drop_high15.tar.gz": {
+      "sha256": "34d8dd2542cfccae2200bd35f51a50a54a07dce566b77e6d4091defbd99e0788",
+      "bytes": 11844081
+    },
+    "20261103_final61_NOA80_lane_drop_high15.tar.manifest.json": {
+      "sha256": "ce26d6f2db6e245fb3627dc091cb4dd8b4fbc3adfdd48b55b3dc100094087be6",
+      "bytes": 824
+    },
+    "20261103_final61_NOA80_lane_drop_high15.tar.verification.json": {
+      "sha256": "7be81393959f6cd41a80bde6ad3d78e726ac809a23bf7fbeab339739a9d62262",
+      "bytes": 159901
+    },
+    "20261103_final61_NOA80_lane_drop_low25.tar.gz": {
+      "sha256": "c823d2e2bd1f9b9913411daed318d638e3539a08d022fa660dc6c75f503a2d75",
+      "bytes": 8902731
+    },
+    "20261103_final61_NOA80_lane_drop_low25.tar.manifest.json": {
+      "sha256": "129d5a03daeb86aaae89ac1c52a4834daa34eab5e2754da7f126876ccc178f7e",
+      "bytes": 821
+    },
+    "20261103_final61_NOA80_lane_drop_low25.tar.verification.json": {
+      "sha256": "6eb5a6803e9783d95e37b00511cbdd13681a34a28c21ef2a0a0dec88a89cda19",
+      "bytes": 265389
+    },
+    "20261103_final61_NOA80_straight3_high15.tar.gz": {
+      "sha256": "9060a5bce972d5d540e97c1b575030ebc4a1040f1a30c470effac867d7528d24",
+      "bytes": 9564299
+    },
+    "20261103_final61_NOA80_straight3_high15.tar.manifest.json": {
+      "sha256": "6bf3d277cda77c93384349da392da123f5b06ac4fa58a582ab768b8d19d1c88e",
+      "bytes": 823
+    },
+    "20261103_final61_NOA80_straight3_high15.tar.verification.json": {
+      "sha256": "25c0729c65b1bc3a9f4f3a3276f1b1b73c16c7466400031f208e0c4a8950d10b",
+      "bytes": 158329
+    },
+    "20261103_final61_NOA80_straight3_low25.tar.gz": {
+      "sha256": "0ed6d27714c9ffb558d119bcc553b8c8e2610ec1e05d493c92d081de2de01b31",
+      "bytes": 7463708
+    },
+    "20261103_final61_NOA80_straight3_low25.tar.manifest.json": {
+      "sha256": "b7c767275c417d349d774851e11456e583284622e52bb3e6f9b753ad4d0dbdb0",
+      "bytes": 821
+    },
+    "20261103_final61_NOA80_straight3_low25.tar.verification.json": {
+      "sha256": "f5966363fae18547754b4c35d9ae3024c4f59034d93956c4827ea19111b8814d",
+      "bytes": 262872
+    },
+    "20261103_final61_S80_lane_drop_high15.tar.gz": {
+      "sha256": "634b045a193de0b008c86345f30e7b31fe997ba8e11cc598c0eaf99334767227",
+      "bytes": 12679786
+    },
+    "20261103_final61_S80_lane_drop_high15.tar.manifest.json": {
+      "sha256": "3197d13f5d2acf8ea8c120c1468dfb74a3fc6658b38dd69a0568d239cdbc5edc",
+      "bytes": 820
+    },
+    "20261103_final61_S80_lane_drop_high15.tar.verification.json": {
+      "sha256": "ad2e5237dace9be3304df0f15f3c1b33eec6ce9e0c1f5939890b5c1646a333d4",
+      "bytes": 162371
+    },
+    "20261103_final61_S80_lane_drop_low25.tar.gz": {
+      "sha256": "7806c00e49477e5cc29ec1ebb04b6b0b986d5afb37714f97e4ddac9f7b17a57e",
+      "bytes": 10780846
+    },
+    "20261103_final61_S80_lane_drop_low25.tar.manifest.json": {
+      "sha256": "456b994c54066ed869312abde76a6885a32662d1eec3b826eeafa39e3ddacd11",
+      "bytes": 818
+    },
+    "20261103_final61_S80_lane_drop_low25.tar.verification.json": {
+      "sha256": "60c6337a8c46208cfdcedecff4a2fad372fd2a7566dfc6341dc2d70dcaf1f251",
+      "bytes": 267103
+    },
+    "20261103_final61_S80_straight3_high15.tar.gz": {
+      "sha256": "4ac19c05d33853cc3d745235ee51e01f61eed90f28882332a44b38a6a928e0f4",
+      "bytes": 11940455
+    },
+    "20261103_final61_S80_straight3_high15.tar.manifest.json": {
+      "sha256": "bb2fbb7fa140dd18df0c6fcca12a7092369e342e8db243b10e5f23f55ec653e5",
+      "bytes": 820
+    },
+    "20261103_final61_S80_straight3_high15.tar.verification.json": {
+      "sha256": "a319af2c94e3d7ee8c3f867f8936b991caa493c5c5ca28da49f4209f51daed74",
+      "bytes": 160885
+    },
+    "20261103_final61_S80_straight3_low25.tar.gz": {
+      "sha256": "38d300c95941d574ac11e28d6fd3c555aa45bd806af1fe2a1007bbf2db84e5f9",
+      "bytes": 10034033
+    },
+    "20261103_final61_S80_straight3_low25.tar.manifest.json": {
+      "sha256": "cf7ce143caa0d354ac8cdc4bddcb2efa280aefd7f381f09ca743c692b3cf818d",
+      "bytes": 818
+    },
+    "20261103_final61_S80_straight3_low25.tar.verification.json": {
+      "sha256": "d4e2a06b8e13a8aff297f6db5942fc604713851488192cc36d33781d4190c34c",
+      "bytes": 267056
+    },
+    "archive_report_crosscheck.json": {
+      "sha256": "9ac19090148bf9e6a1553d310e41c728f51cd169d11201ff509c69b440e504b2",
+      "bytes": 2273
+    },
+    "README.md": {
+      "sha256": "1f7643b8537f9558fd7a0f5b1cc00926880125240c296052aa619af42c6d6901",
+      "bytes": 3129
+    }
+  },
+  "related_reports": {
+    "final61_S160\\flow_means.csv": {
+      "sha256": "00ee6ded281a1bb3e5f2ad8266ec884657c0c495361f09e6b58c634ab845446d",
+      "bytes": 12747
+    },
+    "final61_S160\\paired_seeds.csv": {
+      "sha256": "a90174b40edfcea42ba35661acea6de73dc2617d2e74f83177433d4e1a053c7c",
+      "bytes": 130363
+    },
+    "final61_S160\\per_case.csv": {
+      "sha256": "683156aa6b252cfa9d8d67a4de942f7deab6247d19149f4ceadf513b4cd528a1",
+      "bytes": 495820
+    },
+    "final61_S160\\summary.json": {
+      "sha256": "0234281cc4e4a23b438af8ae16682665356d63e89a72dce698694571e756c24d",
+      "bytes": 44132
+    },
+    "final61_S160\\tables.md": {
+      "sha256": "6f8394dccd0bf6b4b4c5d200dd418a9ec0ad37b076398766e434a67adfad7e22",
+      "bytes": 1906
+    },
+    "review_final61_S160.json": {
+      "sha256": "3404126e57b7fbcf4d209c08c10d92d3f9cda41eab5d47dff027b8e846e4f62b",
+      "bytes": 56751
+    },
+    "review_final61_S160.md": {
+      "sha256": "8a17df06daf8c2c805da18c3fbe9c1848c9f8ff6db01b875733d391b4ba5ea11",
+      "bytes": 2388
+    },
+    "matched_nonformation31_and_S170\\flow_means.csv": {
+      "sha256": "c48f8ed1eb2aa79249472e9f633ae35140a593c95f9ee9bdf46c1c657bbc808b",
+      "bytes": 19391
+    },
+    "matched_nonformation31_and_S170\\LP0_addendum.md": {
+      "sha256": "773c4b3b86ab13a65faee0ae6a3f88a69a92a35d227e0f97cc73018c0eef84db",
+      "bytes": 1694
+    },
+    "matched_nonformation31_and_S170\\paired_seeds.csv": {
+      "sha256": "6f7e94e4ba8c082c1afc2ec7e609cc6e7dfac68b2c99026fac87c34a26fbe176",
+      "bytes": 207913
+    },
+    "matched_nonformation31_and_S170\\per_case.csv": {
+      "sha256": "124090f3896730bd9a65a5895df86cc177f7fc8aaa670e9c28fcde6c969fbe13",
+      "bytes": 538519
+    },
+    "matched_nonformation31_and_S170\\README.md": {
+      "sha256": "1334dc74e92f785b22a1468e1337960b6e8308c176c2723c9ec716d152b26120",
+      "bytes": 1995
+    },
+    "matched_nonformation31_and_S170\\summary.json": {
+      "sha256": "e4738bce41457a217e61eac6e66c017908d298ec7481cacd99ebcbb2f2653af8",
+      "bytes": 87965
+    },
+    "matched_nonformation31_and_S170\\tables.md": {
+      "sha256": "9d9faf6e2a05a267686a557a5e36c6123c5390f42abf13b7c440adc071f70b0e",
+      "bytes": 3229
+    },
+    "implementation\\LP0_S_phase_zero_equivalence.json": {
+      "sha256": "bbf67c9d4cea9c907e1d3fa3a07fefce54b44d30e087a95e5a709388bd7c4e22",
+      "bytes": 4495
+    }
+  },
+  "tools": {
+    "package_stage.py": {
+      "sha256": "3b202af61ed2a8aab66415dce4afad4204d5077e500f16b6b7684bfde50d11e7",
+      "bytes": 17728
+    },
+    "package_partition.py": {
+      "sha256": "f79737278f4a6be84eaaee330f8d60998e2a4ed55ada13c44e4aa7f4289e201c",
+      "bytes": 8693
+    },
+    "package_final_partition.py": {
+      "sha256": "4d94925cab6e16c17d842af73fad0c1a0e0b81eef0e4eadae80db17c60c4aa9c",
+      "bytes": 9332
+    },
+    "report_paired.py": {
+      "sha256": "88990f7bb18853d6e8278af5e41c1cf0079532b137dd6cd4b20275497e803ebd",
+      "bytes": 6188
+    },
+    "review_final61_S160.py": {
+      "sha256": "2213aca006745623a19505f2dfcd18711c1938a05590bc0deef94979dd48890d",
+      "bytes": 10808
+    },
+    "review_E_heldout.py": {
+      "sha256": "fe6af55a743309702fbaf6f6fd5862b85b3a244b0c96d1bdddeda52f55ae69cc",
+      "bytes": 15787
+    },
+    "catalog_final61.py": {
+      "sha256": "9672b3c330b7cee66339a12216e2638683588e23dca89b7ecd58885395c250b7",
+      "bytes": 7757
+    }
+  }
+}

@@ -1,0 +1,182 @@
+[
+  {
+    "candidate": "TM",
+    "mode": "noa",
+    "flow": 2250.0,
+    "seed": 41,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2250_41_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2250_41_lane_drop_noa\\evidence\\traffic\\cases\\b7bfc494efebd009",
+    "case_json_sha256": "7d3fa82def723657090004844e8e3acd2258a97477709f2bf5db4ad5650e5210",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "ed4f9e138c0f57a79135d0908b0c38c0b29fedf812a275f79a30a26969d796fb",
+      "gate_brackets.jsonl.gz": "bdfee3a09d90c168656b2165ebb71106c3de846dde13d930627b565fc28693bd",
+      "vehicles.json.gz": "eb99095a83b94651e50d11cfd3658f886815891a8d567a3199ee8068878d159c"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18775,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1877.6,
+    "gate_observed_count": 19818,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "TM",
+    "mode": "noa",
+    "flow": 2250.0,
+    "seed": 42,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2250_42_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2250_42_lane_drop_noa\\evidence\\traffic\\cases\\3a8f74344a8f3cfc",
+    "case_json_sha256": "25d049ad079dd10c2fa323302bf8e9681c6a96819cb6d3ad02323d45edacf2e5",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "2ece7e3624274df65df9965a826adcd000b2ed88c96cbccd0b91fbc8ea7d2de5",
+      "gate_brackets.jsonl.gz": "44757e0d2d76471c593a3b9520a88ced6c004278047cf2a9694d0e01fe6bef28",
+      "vehicles.json.gz": "f139dcaf4409990ea60e00c85732057ad260bceabefdb65d2f57988702a290fc"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 19151,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1915.2,
+    "gate_observed_count": 20472,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "TM",
+    "mode": "noa",
+    "flow": 2500.0,
+    "seed": 41,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2500_41_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2500_41_lane_drop_noa\\evidence\\traffic\\cases\\d1556175a5e61e04",
+    "case_json_sha256": "d9f15fdfcdf7ff7460624af418170c8ad5cc844194fc2f0c82da4c0a7c350781",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "24eadfec1627f970518f6ede41991cc2ecc5b745934ae9c3adee2f39400277ae",
+      "gate_brackets.jsonl.gz": "483a5c839bf9ae82cdaf3f6a9fc06f17ef52879fc9d09b80253b8646245aa206",
+      "vehicles.json.gz": "808acc1f394d9ee7d569f95617d74bb3ed891ccacdd3a56e1390f3b8a968b753"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 20520,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 2052.1,
+    "gate_observed_count": 22146,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "TM",
+    "mode": "noa",
+    "flow": 2500.0,
+    "seed": 42,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2500_42_lane_drop_noa\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_NOA4\\cases\\TM_2500_42_lane_drop_noa\\evidence\\traffic\\cases\\01c1f33a3e823bee",
+    "case_json_sha256": "4a52e8597628b0defab37f6c3634f6fc6aafb80976c077e0b6d0424dc754a06d",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "aade7e3756edec04e4f317ff37b61bc0c07158e4d7761418d68e75538e063d2e",
+      "gate_brackets.jsonl.gz": "6eda4117b47746ef4483adb7a98f75b054d5ddec4b0f36653f5d832d4c6f2c4f",
+      "vehicles.json.gz": "2c03e36e9c038c056c0f2be0eb5f43a9029815cf27355cad5bad1abb2ce6a46d"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 20802,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 2080.3,
+    "gate_observed_count": 22710,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "L",
+    "mode": "transform",
+    "flow": 2250.0,
+    "seed": 41,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_L4\\cases\\L_2250_41_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_L4\\cases\\L_2250_41_lane_drop_transform\\evidence\\traffic\\cases\\53a22bb51a1bc4c2",
+    "case_json_sha256": "5abb1cb1e840ecd8a2f565bf433300987a590687483f83f63d0cd5c737508fe4",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "2db4869c0a296978413b073145769822b3ce65ba8fc4379bfe66779110816bfc",
+      "gate_brackets.jsonl.gz": "cfd36129669fb34a473cbbe9d583a1cf91838ab49114a9a15c04865b45e32c08",
+      "vehicles.json.gz": "9d93fe04347245aff7fcd6ec6b094a92e6b1742e0f043451cc42890a9ddcd05d"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18687,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1868.8,
+    "gate_observed_count": 19818,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  },
+  {
+    "candidate": "L",
+    "mode": "transform",
+    "flow": 2250.0,
+    "seed": 42,
+    "scenario": "lane_drop",
+    "evidence_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_L4\\cases\\L_2250_42_lane_drop_transform\\evidence",
+    "ledger_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_L4\\cases\\L_2250_42_lane_drop_transform\\evidence\\traffic\\cases\\658c310913196279",
+    "case_json_sha256": "80786de9e68f802cb768d64b6cbec14ee154830d512d7f774b3e3328307079f1",
+    "ledger_sha256": {
+      "region_steps.jsonl.gz": "2f0cb7a41a7b640bf254ffd872620615dfab31075fc359cb63ff8619d44714e5",
+      "gate_brackets.jsonl.gz": "74830b39604596b85bd1cc3e7fb3d76001b28492467b754fd5d15bb68ddf7ee9",
+      "vehicles.json.gz": "7bd15b83faf79a3884fb59ebbab74fb3df5f318eafd29b94a67c680fbd50826e"
+    },
+    "source_method_sha256": {
+      "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+      "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+      "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+      "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+      "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+    },
+    "ledger_rows": 18747,
+    "first_interval_start_s": 0.1,
+    "last_interval_end_s": 1874.8,
+    "gate_observed_count": 20472,
+    "trace_complete_input": true,
+    "extended_window_complete": true,
+    "original_100_600_exactly_reconstructed": true
+  }
+]

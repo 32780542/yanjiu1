@@ -1,0 +1,26 @@
+--- L/noa/native_rules.py
++++ MN/noa/native_rules.py
+@@ -146,7 +146,7 @@
+             if peer is not None and nearest(peer, ego.lane) is ego:
+                 linked = True
+                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+-                error += difference / max(1, pair_lanes - 1)
++                error += (difference + (peer.speed - ego.speed) / POSITION_GAIN) / max(1, pair_lanes - 1)
+     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+     if following[2] is not None:
+         speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))
+@@ -400,6 +400,14 @@
+         return action(speed, None, "approach_gap", target), memory
+ 
+     if organized and not memory.joining:
++        if not moving and preparing and ego.lane == 1 and _clear(ego, rows, 0) and any(
++            c.lane == 2 and c.x >= drop_x - 360.0 and abs(c.x - ego.x) <= 50.0
++            and not _clear(c, (ego, *rows), 1) and _clear(c, rows, 1)
++            for c in rows
++        ):
++            memory = Memory(lane_target=0, joining=True)
++            speed, target, memory = _join_speed(ego, rows, memory, 0)
++            return action(speed, 0, "release_ending", target), memory
+         lane = _fill(ego, rows, 2 if preparing else lanes)
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):

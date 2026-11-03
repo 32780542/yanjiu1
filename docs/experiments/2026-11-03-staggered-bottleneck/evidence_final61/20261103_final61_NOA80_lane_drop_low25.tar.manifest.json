@@ -1,0 +1,18 @@
+{
+  "archive": "20261103_final61_NOA80_lane_drop_low25.tar.gz",
+  "sha256": "c823d2e2bd1f9b9913411daed318d638e3539a08d022fa660dc6c75f503a2d75",
+  "bytes": 8902731,
+  "case_count": 25,
+  "under_20mb": true,
+  "partition": {
+    "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+    "scenario": "lane_drop",
+    "profile": "low",
+    "full_plan_cases": 80,
+    "partition_cases": 25,
+    "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_NOA80",
+    "original_protocol_sha256": "7e61aa351822caf435e1231cb507c3b7694a19045bb0fac8cd6165b53ba999cd",
+    "original_manifest_sha256": "76ad9486ffae0c16d098cbe639cbcc471c1b5e9c67b10886e0ab03b21fa700b5"
+  },
+  "index_sha256": "b30ecaf1f00bad213f00228c92dad34885dc1db7f537da29bab7b7d1df1b6cba"
+}

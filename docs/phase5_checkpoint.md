@@ -814,6 +814,32 @@ J2正式核心迁移子单元已完成：固定E四项patch上212通过/13失败
 
 首次绿尝试只有一项测试自身把100/160/145场景误认为还有+.4相位，实际上witness按真实距离破平局选择front，ego无互选边；该例应仅CTH输出30.6。源未改，只按明确几何纠正测试，并重新在旧J2fast留预期红、新L留绿。全部失败保留在候选method.md。L的几何证明不是群成员证明，不能先宣称真实完整形成或交通改善；父独立筛查后再决定正式回归入口。候选资料位于本轮 `candidates/local_vacancy_bridge/`。
 
+L正式225核心已用原J2迁移patch动态注入核验，225项/37子测试全过，operation `20261103T060346605028Z_L-core14-existing-J2-migration_00c09975`；无需新增L迁移patch，原tests/历史H/P保持，见 `implementation/L_core14_review.md`。
+
+NoA60独立敏感性候选源 `c5ed30e8c8f722959c97a9db86c857db22e8740a7d7d0c118d1c028ec7550dd2`，450行，仅默认_front_following范围改60，所有公式/gains/安全未改，只供NoA模式比较。八项/4子合同先4预期红后全绿，operation `20261103T060834910993Z_NOA60-range-contract-green-utf8_447a5d54`。原validation31_NOA40只读审计：2500 lane_drop五seed平均TT77.403s、入口等待.324s，不能说高流量NoA原本不堵或延误主要在入口；源码确有50m目标速度切换，但未证实它造成不真实实际减速。源/编码失败/审计数据见 `candidates/noa_range60/method.md`，父统一跑交通，本子单元未仿真。
+
+M独立父L源 `a286110cf2e14904152b63c9a66f960496f5f7f04ab0097b8d7ed00353db4762`，459行，仅互选边加入相对速度项 `.3*e+v_peer−v_ego`，无新gain/邻接/Memory。专项9项/20子测试全过，原L30原样审计28通过/2失败/106子通过：原安全例被阻尼降到cap以下，旧“无lane2等价J0”不适用于新增PD；均记录明确公式原因，未改旧tests。见 `candidates/local_phase_velocity_damping/method.md`。父可独立screen，M不叠N；下一方法N仍从L做本车唯一占用释放，不做多阻挡协商或禁止自由fill。
+
+M正式225迁移已封存：父在J2 patch上221+37通过/4个head_group公式失败；新 `implementation/M_test_migration.patch` 相对J2内存文本只改四项为明确PD推导，AST硬断言只有这四函数变，完整patch SHA `025ed9b5d153bca6bcabb79d2b7c3ea6310afc051548e9ce68b67df0b5ee43f2`。operation `20261103T062835037426Z_M-core14-four-PD-migration-verified_923c8ffb`，225项/37子测试全过；git apply --check通过但未apply。原tests及历史H/P冻结比较均保持，见 `implementation/M_test_migration.md`，不能把L30的两个历史增量政策冲突抹掉。
+
+N独立父L源 `5d21af5456e816c927116a66895db29d03fada7b28057ecef266b60a0d92a0d6`，467行/有效+8，只有_decide在既有执行优先后加本车唯一阻挡释放。not moving复用原布尔量，organized非joining、preparing lane1，左clear且邻近准备区ending当前mid不clear、只移去ego后clear才提交release_ending，原_join_speed/Memory/实际安全不变，失败继续_fill。专项先4预期红后15项/4子绿；原L30不改仍30项/106子全绿，operations `20261103T062633179994Z_N-local-unique-blocker-release-green_30da860f` 与 `20261103T062633182176Z_N-inherited-L30-unmodified-contract-audit_9b497dda`。600 NoA/CF/safe精确，终止车等实际占用消失才并入，详情 `candidates/local_conflict_release/method.md`。
+
+NoA60/M/N及L225/M225材料联合源hash和实际回归核对保存在 `implementation/NOA60_M_N_verification.json`。方法子单元没有新交通仿真或Git提交；原生产仍TM、原tests只读。父负责M正式40/1800与N独立短筛，不能把N叠到M批或先称采用。
+
+### 2026-11-03：MN精确合并与LP0复用证明完成
+
+父确认M/N各自短筛增益后批准仅合两条改动。独立MN源 `de14e066ac74f84d21cbd0d06fcf4abde1cfcc5f033ceea26d2824905935d18e`，467行，目录 `candidates/local_phase_damping_release`。build硬断言M+N=N+M逐字一致、能分别逆回两父、相对L AST仅_following/_decide、Memory类AST完全相同。联合原M9/N15先在单父留预期红，再MN 24项/24子全绿，operation `20261103T063800433683Z_MN-M9-N15-contracts-green_6263db7c`。原16相位审计15通过/1历史J0精确增量政策冲突/101子通过，旧测试不改。父统一MN8/正式筛查，方法子单元未跑交通/Git或改生产。
+
+固定LP0 SHA `64a134fee75ae628779b81e497fca1de6b095a2f1828493c573ee2dacc455eb4` 已证明严格等价M整个phase_speed置0：仅error死变量累加式不同，后续无Load，移去dead store后整模块AST相同。6000有效state×三模式=18000完整Command/Memory及6000 safe_speed均float.hex精确一致，operation `20261103T064115772840Z_LP0-M-phase-zero-AST-and-6000-equivalence_9c111b61`退出0。虚拟M0只在内存，不改LP0源/旧hash/protocol；可以复用同输入/物理/非控制源的已有LP0作为M-phase0消融，不需重复仿真。**不等价MN-phase0**，因为MN还有N释放。证据与dataflow说明在 `implementation/LP0_M_phase_zero_equivalence.md/json`。
+
+### 2026-11-03：G0/G0N匹配非形成归因对照已冻结
+
+父要求不能把NF删除全部自主换道的损失都称交错优势，故独立G0（父M）/G0N（父N）：_following仅原_front_following并强制state0；_fill改原NoA慢前车超车择空提案，原_decide逐字不动，保留真实gap并入/Memory执行/硬安全，G0N保留N原八行释放。两新源只差N八行，已作硬字节证明。mandatory_priority仍由原caller guard保留（它只阻唯一lane0→1候选），准备区lanes2不进closing，未加drop/gain/供给参数。
+
+G0 `matched_nonformation` 源SHA `1ca965ae0cbaa373f97c48757ca54ddaa907fc839d1a3ef62e962d5fa498b1a6`，337行；G0N `matched_nonformation_release` 源SHA `d4124d14568b282585395efd118a9ea434adcd1f73b40ae08159d97184b6302f`，345行。合同先在原M/N红，新两版12项/28子全绿，operation `20261103T065931252301Z_G0-G0N-matched-nonformation-green_63e9c57e`。每版600完整NoA/Memory精确不变，1200 formed-mode输出flag0，真实gap/正在横移执行对父控制一致（仅flag0），慢前车自主超车及N实际释放等待都覆盖。无新交通、生产/tests/Git未动。
+
+必须用transform作为matched-nonformation control，不能冒充原纯NoA：它仍沿用形成版本gap/Memory流程。日志旧`fill_layer`在此仅表示非形成自主超车；不要据该字符串计交错补位。M−G0、N−G0N识别整体额外形成策略包（相位、witness/head响应、几何），不是单独几何项；G0N−G0识别纯N礼让。完整归因边界/源码证据在 `candidates/matched_nonformation/method.md` 及两源source/patch/verification，root统一同输入仿真后判定。
+
 ### 2026-11-03：截至12:57，E交通验证完成，交错几何继续迭代
 
 **任务仍活动，截止今日17:00；尚未宣布整体成功。** 生产仍是511行TM SHA65142…41317，根README/系统说明尚未改成候选。研究分支已推 `eee0d4c`；main仍177f7a3。不要把文献候选或注入测试当成已安装默认版本。
@@ -844,3 +870,29 @@ L单格空位衔接八例短筛全部安全排空，高2500比J2慢，不能只�
 **纠正J2旧批失败分类：**J2_long600_8的2500seed4不是1200秒timeout。原worker operation20261103T045328528400Z_staggered-case-febc0e8ee5_9f6c50b6实为350.531秒执行崩溃，child3221225477/case4294967295、result仍starting。按execution_failure、物理完成未知保存；J2fast fresh重试已安全排空TT79.631，不能改写旧失败身份。先前摘要中的“可能计算超时”作废。其余原J2七例已封口。
 
 L沿J2同一最小测试迁移，225+37内存全通过（060346605028Z...00c09975），未改原tests。方法agent继续独立M相对速度反馈及N本车解除真实唯一阻挡；均先合同再短筛，不预定合并。出版agent归档后续负例、审查31报告；诊断agent封存L长路真实几何。根接着检查L40/消融/长1800结果，按证据择最简，源安装后跑真正磁盘回归并更新现行说明与Git。
+
+### 2026-11-03 16:00：S已实际安装，系统说明稿交审
+
+当前生产已经由root于15:40安装S，SHA `8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f`，461行；完整 `S_test_migration.patch` 已应用到原核心测试五文件。旧记录中的生产TM/原tests未改只描述当时状态，不再是当前磁盘状态；不要用旧注入记录的原SHA检查去重建/覆盖当前S。root正在真实磁盘15文件、GUI9、--check及smoke，最终61_S80与long1800_S4按原冻结身份运行，不重启或据运行中结果改规则。
+
+本次最后两个独立候选：LT（父L，只_pair_error加对称D(v均值)相位一行）源 `8a773793ccba5eb5e0ecae7f1b02083a8571d7e77f5a1f5f5f78b13eb6596593`，6项/15子通过、NoA300 exact、巡航900三模式完整输出对L exact；S（父L，仅两行CF/phase冲突优先）7项/5子通过、NoA300 exact。两版分别以四项/两项明确公式迁移完成原225项/37子测试内存全绿，历史记录在 `implementation/LT_S_verification.json`；这些是安装前单元证据，实际安装回归由root记录。LT/S源、method、patch及全部失败均保留，不增加新候选。
+
+人类可读S现行系统稿已交root：`docs/experiments/2026-11-03-staggered-bottleneck/implementation/selected_S_system_draft.md`，204行，最新SHA `b4533fcb97f2bc1e2c6036d368a283c607d9f18c938ca4b20f1605215f4fb28d`。按实际已安装S核对28个显式类/方法含嵌套helper全部覆盖，包含全部规则、优先级、CTH/全体相位/witness/S、fill成本、gap/Memory/安全/0-1、引擎/GUI、Bernoulli与指标；历史链接按canonical docs位置编排且已核实。验证为 `selected_S_system_draft_validation_v2.json`，旧validation保留。稿未填最终61数字/通过结论；方法agent没有替换canonical/README或执行Git，等待root审后采用。
+# 2026-11-03最终接续入口
+
+当前实际已安装S（461行），SHA8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f；不是本文件历史段落中的TM。先读根README、docs/原生SUMO编队变换系统说明.md与docs/experiments/2026-11-03-staggered-bottleneck/README.md。本轮最终160例/80配对及1800秒八例均已全安全排空，代码锁定后未再调整。最终云端提交和清理记录见本文件末尾。
+
+
+### 2026-11-03最终采用S：完整验证与交付
+
+S已安装到D:/yanjiu1/keyan1/variants/phase5g_pure_formation/noa/native_rules.py，461行，源SHA8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f。15:32锁源，61性能揭盲后未再调整驾驶规则。源代码比原TM少50行；删除等待链，保留CTH、全体互选、实际邻道witness单格衔接，新增两行真实CF/phase冲突优先。根README与204行现行系统说明已重写全部规则/方法，当前默认仍1250每道/600秒实时GUI。
+
+- 最终61–65种子八流量两道路：NoA80/S80全部安全排空，80有效配对，原件和ledger独立重构1,073,264标量，最大差8.29e-10。2250/2500 drop系统改善15.8138%/14.3397%均5/5；直路仅1.0832%/1.1828%。扣直路后额外缩道节省8.92979/11.58336秒，均5/5。500/drop三例各慢.00756/.01245/.03074秒保留。80对燃油均增加，高两档+3.9079/+4.8132g/km。见final61_S160、review_final61_S160及evidence_final61八包83,209,939B。
+- 31组匹配170例/120对：S对原NOA改善9.9257/13.1778%；对G0保留普通超车/相同gap执行的非形成对照再好4.4914/7.9962%；对LP0再好2.2034/3.0524%，各5/5。独立AST及18000完整输出+6000safe hex证实LP0严格等价S-phase0，口径为含CTH优先门禁的phase子系统关闭。S对NOA60同输入仍好8.2674/11.5320%，各5/5，独立原件核对通过。
+- 24/45两原输入真实几何：全体在场+25时CTH误差最大绝对值.003431/.010751米，实际跨道错位约±15m。45需660m跨度，几何观察exit2400、瓶颈仍1000，仅两行路网坐标改变；全部效率保持exit1200。完整positions/诊断/固定帧/8图封包13.24MB，source/input逐字核对。M/Q持续残余、LP0并排及65m孔、LT尾部慢恢复、N高流量负结果均保留未采用。
+- 1800秒NoA4/S4，2250/2500种子41/42，八例全安全排空；完整系统60.5523→48.3923s（20.0818%）、139.2342→115.2271s（17.2423%）。2500路内行程109.6771→100.4880s，入口等待29.5571→14.7391s，仍过饱和；燃油+2.9946/+2.3692g/km。延长[100,1800)原ledger全部独立重算，32原始帧抽核。long_window_NOA_S1800双包11.65/12.51MB；六个非选中case精确删除12新raw文件，释放574,580,621B；2250seed42双源全raw保留本地。旧失败raw不动。
+- 真正磁盘源+15测试文件：233项、43子测试通过（op074310250518Z...571ded58），GUI9通过、自检通过，根入口22/22真实安全排空（op074618893710Z...ef6b72b9）。完整340188B根smoke与日志包保留38成员。独立代码审查未发现可证实现问题。原五文件测试按完整S最小迁移，历史H/P引用未改，不用注入结果代替安装验收。
+- iteration3共18包/16批/186原计划，178sealed+8真实compute timeout，158,687,058B、最大16.70MB；全计划/失败原件/操作与partial raw索引保留，物理完成未知。其32raw共1,291,519,466B仍原位，含失败16raw813,903,124B。已有39工具合同全过。M/Q临时BelowNormal只属计算上下文，不以walltime作驾驶排名。
+- .gitattributes增加本轮证据-byte保真；Git仅用户yanjiu1远端，origin历史仓库不推。选定代码、文档、表和紧凑证据即将推研究分支及main；实际最终commit以云端指针和最终消息为准。未纳入用户PDF、run.ps1、MagicMock或旧文献抓取助手，未做整库本地备份。
+
+任务研究目标已有直接支持：局部交错形成/变换及缩道提效同时验证。燃油增加是当前清楚的代价；并不报告Cai原集中算法数值排名。所有本轮运行已结束，接续无需重复整套。先读本轮最终报告与当前S实际源即可。

@@ -1,0 +1,18 @@
+{
+  "archive": "20261103_final61_S80_lane_drop_low25.tar.gz",
+  "sha256": "7806c00e49477e5cc29ec1ebb04b6b0b986d5afb37714f97e4ddac9f7b17a57e",
+  "bytes": 10780846,
+  "case_count": 25,
+  "under_20mb": true,
+  "partition": {
+    "rule": "complete preplanned road and fixed flow profile, independent of outcomes",
+    "scenario": "lane_drop",
+    "profile": "low",
+    "full_plan_cases": 80,
+    "partition_cases": 25,
+    "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_final61_S80",
+    "original_protocol_sha256": "36f52598e855c4a7154fe2eacdaa40fcbb7a3b59323bbe04f2c6b3ca1b7b2fc5",
+    "original_manifest_sha256": "3cde2a69338b6592d25c63ee7a90b4d8950c3f57cd79920aed4232fc37c1d707"
+  },
+  "index_sha256": "e343e9d3a1acfd6e2a5a1d1a7bea3e4c2f72b310db316153211b0fa2c5a8d538"
+}

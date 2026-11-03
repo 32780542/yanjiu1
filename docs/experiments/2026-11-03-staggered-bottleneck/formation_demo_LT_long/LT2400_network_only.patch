@@ -1,0 +1,17 @@
+--- original/experiments/native_sumo.py
++++ LT2400/experiments/native_sumo.py
+@@ -161,12 +161,12 @@
+     directory = Path(directory)
+     directory.mkdir(parents=True, exist_ok=True)
+     nodes, edges, connections = ET.Element("nodes"), ET.Element("edges"), ET.Element("connections")
+-    for name, x in (("entry", 0), ("bottleneck", 1000), ("exit", 1200)):
++    for name, x in (("entry", 0), ("bottleneck", 1000), ("exit", 2400)):
+         ET.SubElement(nodes, "node", id=name, x=str(x), y="0", type="priority", radius="0")
+     retained = 2 if scenario == "lane_drop" else 3
+     for name, source, target, count, x0, x1 in (
+         ("upstream", "entry", "bottleneck", 3, 0, 1000),
+-        ("downstream", "bottleneck", "exit", retained, 1000, 1200),
++        ("downstream", "bottleneck", "exit", retained, 1000, 2400),
+     ):
+         edge = ET.SubElement(
+             edges,

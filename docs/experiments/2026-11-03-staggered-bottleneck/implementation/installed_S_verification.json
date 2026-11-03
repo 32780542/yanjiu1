@@ -1,0 +1,64 @@
+{
+  "source_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "controller_lines": 461,
+  "core_tests": 233,
+  "core_subtests": 43,
+  "gui_entry_tests": 9,
+  "tests_on_disk": true,
+  "module_injection": false,
+  "operations": {
+    "core": {
+      "operation": "20261103T074310250518Z_staggered-installed-S-core15_571ded58",
+      "returncode": 0,
+      "result_sha256": "bc4f17bc95cc1d1b9d73b6591e741c1e58e2de433cdfb9564bc0f2fe2fe13150",
+      "stdout_sha256": "c3c1f13bf36b183641fe951c14112b81c15e77fefb675b3b0ff029bed1ceaf42"
+    },
+    "gui": {
+      "operation": "20261103T074310329014Z_staggered-installed-S-GUI-entry-contracts_10183102",
+      "returncode": 0,
+      "result_sha256": "c9d80d4c3d9fe9fe07daabe681c31aca7befd8ae038ec77c5b34aadb54afac4b",
+      "stdout_sha256": "9f1f0fb8bb3aa3b3b572fc13baba5ab7c476307cdac67e9997aa4dd3a8bdddf2"
+    },
+    "check": {
+      "operation": "20261103T074310303357Z_staggered-installed-S-dependency-check_cc5699b7",
+      "returncode": 0,
+      "result_sha256": "3a94c35574173b32764aa8fc7aca6d841df000e655c7b92f039d3a7625b559d3",
+      "stdout_sha256": "6bfcc17d0feb24237084e37e4b98b58f4e5bed05709cbe53ceb95d0476d64d0c"
+    },
+    "smoke": {
+      "operation": "20261103T074618893710Z_staggered-installed-S-real-root-smoke_ef6b72b9",
+      "returncode": 0,
+      "result_sha256": "b814cb0baf78d0af9e08f1f045633adcefa35a366b43baf0974f415048595fa3",
+      "stdout_sha256": "23c4403f78384832d232b993f5b60e22982cf88f29e51d1669ad59d4d45b81f2"
+    }
+  },
+  "smoke": {
+    "run": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\results\\native_flow\\20261103T074619565471Z_lane_drop_transform_s1_2ffed2",
+    "status": "drained",
+    "requested": 22,
+    "completed": 22,
+    "collisions": 0,
+    "teleports": 0,
+    "actual_end_s": 61.7,
+    "input_sha256": "88d39b1fe2b1b6497e785d2da4a029dd9007a1627abc768fc5a7d3262bcc3f6c",
+    "result_sha256": "a394ec9f9ae9355e12ee51eb1dbc423994cee2ceb9f437de2d1a35d2b60732c4",
+    "source_sha256": {
+      "experiments/native_sumo.py": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+      "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    }
+  },
+  "independent_review": "selected_S_code_review.md",
+  "traffic_confirmation": "separately reported; not inferred from unit or smoke results",
+  "full_smoke_archive": {
+    "file": "installed_S_root_smoke.tar.gz",
+    "bytes": 340188,
+    "sha256": "c6a28b7e676f6855f4d97ed884cd6f21c9c53a251dadfd51f45dde76de73e1c4",
+    "members_verified": 38,
+    "original_bytes_compared": true,
+    "complete_smoke_positions_events_included": true
+  }
+}

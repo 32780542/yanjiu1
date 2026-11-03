@@ -1,0 +1,33 @@
+{
+  "original_J2_sha256": "895c263f471772482551ea695bc8071e28ad076753cc093762f09a3a43a15689",
+  "actual_J2fast_sha256": "03ce8f468bdce13b9db82b7122eeeeb3d688128f3c3c5bb9dd34ab62df28c6a6",
+  "structure": {
+    "changed_definitions": [
+      "_fill",
+      "safe_speed"
+    ],
+    "module_globals_and_imports_unchanged": true,
+    "class_and_memory_definitions_unchanged": true,
+    "ordering_keys": [
+      "lambda c: (c.x, c.lane, c.y)",
+      "lambda c: (c.x, c.y, c.speed)",
+      "lambda c: (c.x, c.y, c.speed, c.vy)",
+      "lambda c: (c.x + phase(c.lane), c.lane, c.x)",
+      "lambda item: item[0]",
+      "order",
+      "lambda c: c.x",
+      "lambda c: c.x",
+      "lambda c: c.x",
+      "lambda c: (c.x, c.y, c.speed, c.vy)",
+      "free_distance",
+      "lambda c: (c.lane, c.x)"
+    ],
+    "track_in_ordering_key": false
+  },
+  "exact_command_and_memory_comparisons": 6000,
+  "states": 2000,
+  "seed": 202611030931,
+  "source_unchanged": true,
+  "simulations_run": false,
+  "scope": "Actual fast _fill and safe_speed work optimization compared against original J2; finite shadow equality, not geometric convergence proof"
+}

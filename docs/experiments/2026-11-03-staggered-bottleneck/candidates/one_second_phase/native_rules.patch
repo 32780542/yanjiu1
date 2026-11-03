@@ -1,0 +1,11 @@
+--- M/native_rules.py
++++ Q/native_rules.py
+@@ -146,7 +146,7 @@
+             if peer is not None and nearest(peer, ego.lane) is ego:
+                 linked = True
+                 difference, pair_lanes = _pair_error(ego, peer, lanes, phase_boundary)
+-                error += (difference + (peer.speed - ego.speed) / POSITION_GAIN) / max(1, pair_lanes - 1)
++                error += (difference + 1.0 * (peer.speed - ego.speed)) / max(1, pair_lanes - 1)
+     phase_speed = max(-2.0, min(2.0, POSITION_GAIN * error))
+     if following[2] is not None:
+         speed = max(0.0, min(MAX_SPEED, following[0] + SPEED_RELAXATION * phase_speed))

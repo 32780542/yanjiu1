@@ -1,0 +1,118 @@
+[
+  {
+    "version": "S2400",
+    "demo": "unformed24",
+    "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_S_long_formation_demo\\S2400\\unformed24\\20261103T072704903189Z_lane_drop_transform_s1_fec87e",
+    "initial_n": 24,
+    "safe": true,
+    "all_completed": true,
+    "actual_end_s": 85.6,
+    "mean_travel_time_s": 79.47916666666667,
+    "collisions": 0,
+    "teleports": 0,
+    "lane_change_completions": 12,
+    "anchor_last_first1000_s": 36.9,
+    "registered_downstream_times_s": [
+      36.9,
+      41.9,
+      46.9,
+      51.9
+    ],
+    "first_actual_exit_s": 73.5,
+    "first_missing_initial_frame_s": 73.6,
+    "all_initial_present_at_all_registered_frames": true,
+    "network": {
+      "downstream": [
+        {
+          "length_m": 1400.0,
+          "shape": "1000.00,1.65 2400.00,1.65"
+        },
+        {
+          "length_m": 1400.0,
+          "shape": "1000.00,4.95 2400.00,4.95"
+        }
+      ],
+      "upstream": [
+        {
+          "length_m": 1000.0,
+          "shape": "0.00,1.65 1000.00,1.65"
+        },
+        {
+          "length_m": 1000.0,
+          "shape": "0.00,4.95 1000.00,4.95"
+        },
+        {
+          "length_m": 1000.0,
+          "shape": "0.00,8.25 1000.00,8.25"
+        }
+      ]
+    },
+    "source_sha256": {
+      "experiments/native_sumo.py": "bfc93f69c0f7820562a8c1c4103c95d181445f8e2e2c3570d58cd47b20df475c",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+      "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "flag_participation_rate": 0.9996854521625167
+  },
+  {
+    "version": "S2400",
+    "demo": "formed45",
+    "case_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_S_long_formation_demo\\S2400\\formed45\\20261103T072704840232Z_lane_drop_transform_s1_e52616",
+    "initial_n": 45,
+    "safe": true,
+    "all_completed": true,
+    "actual_end_s": 90.6,
+    "mean_travel_time_s": 79.04,
+    "collisions": 0,
+    "teleports": 0,
+    "lane_change_completions": 24,
+    "anchor_last_first1000_s": 41.7,
+    "registered_downstream_times_s": [
+      41.7,
+      46.7,
+      51.7,
+      56.7
+    ],
+    "first_actual_exit_s": 67.6,
+    "first_missing_initial_frame_s": 67.7,
+    "all_initial_present_at_all_registered_frames": true,
+    "network": {
+      "downstream": [
+        {
+          "length_m": 1400.0,
+          "shape": "1000.00,1.65 2400.00,1.65"
+        },
+        {
+          "length_m": 1400.0,
+          "shape": "1000.00,4.95 2400.00,4.95"
+        }
+      ],
+      "upstream": [
+        {
+          "length_m": 1000.0,
+          "shape": "0.00,1.65 1000.00,1.65"
+        },
+        {
+          "length_m": 1000.0,
+          "shape": "0.00,4.95 1000.00,4.95"
+        },
+        {
+          "length_m": 1000.0,
+          "shape": "0.00,8.25 1000.00,8.25"
+        }
+      ]
+    },
+    "source_sha256": {
+      "experiments/native_sumo.py": "bfc93f69c0f7820562a8c1c4103c95d181445f8e2e2c3570d58cd47b20df475c",
+      "experiments/global_reference.py": "b10a3b450c4c9b13968aefeff4fcb3c248e84cd7dabd2f8be3be8de74bf14279",
+      "experiments/complete_layers.py": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+      "noa/native_rules.py": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+      "run_native_flow.py": "986431e85af09e2e4610d5be5570ea0860606717e94ca64a1167f07f3f9c3e24",
+      "research/common.py": "de1cfb560b4b842c6d5c813bdbec7fcb0cce6b4027994911b91e5ef6b7cc2c5c"
+    },
+    "flag_participation_rate": 0.9998594242015296
+  }
+]

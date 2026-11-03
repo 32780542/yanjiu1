@@ -1,0 +1,52 @@
+{
+  "actual_cases": 160,
+  "actual_eligible_pairs": 80,
+  "unchanged_original_and_copied_table_hashes": true,
+  "raster_cells_rechecked": 17000,
+  "all_nonempty_means_exactly_sum_divided_by_count": true,
+  "selected_full_raw_retained_hash_verified": true,
+  "all_three_figures_visually_reviewed": true,
+  "plots": [
+    {
+      "figure": "system_time_and_paired_improvement",
+      "pixels": [
+        3394,
+        2134
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "png_sha256": "a3de86d74d295c153a1e153fb1e1083e625fe3b6636867da4056b86bfa0c5eb2",
+      "svg_sha256": "529720fe71bb9d29aa2c1aa1054f39e0c39950eb671db1786aed6ea80750901e"
+    },
+    {
+      "figure": "fuel_cost_paired",
+      "pixels": [
+        3094,
+        1114
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "png_sha256": "441e2f309782ae2f7a6d503df26963a3706d3d001f66ebe8a2b93be125ee1d33",
+      "svg_sha256": "e65298086385cc50c779341f8ae4e918b79dbcae6c2f5765554a7ffc322ebf29"
+    },
+    {
+      "figure": "long1800_2250_seed42_speed_raster",
+      "pixels": [
+        3657,
+        1324
+      ],
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "png_sha256": "af5a59f4091d644a322e3b564568da1665d3861d3fc2fa8a5b141c5272896633",
+      "svg_sha256": "1bc3e49c61fe56eca9777f1de12724ff3e393c71a07af8ad8741c5e12ba17106"
+    }
+  ],
+  "no_new_simulations": true,
+  "no_new_formation_or_efficiency_threshold": true
+}

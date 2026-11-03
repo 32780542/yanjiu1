@@ -31,20 +31,24 @@ class CommonPairHeadTests(unittest.TestCase):
             a=replace(a,x=boundary+1)
             self.assertEqual(self.pair(a,b,3,boundary)[1],2)
 
-    def test_straight_and_outside_phase_geometry_matches_H(self):
+    def test_raw_pair_uses_fixed_physical_phase_and_keeps_historical_H_distinct(self):
         for x,lanes,boundary in [(400.,3,None),(400.,3,640.),(1100.,2,640.)]:
             a,b=self.car(x,0),self.car(x+12,1,1)
             error,count=self.pair(a,b,lanes,boundary)
-            expected=(b.x+H._physical_phase(b,lanes))-(a.x+H._physical_phase(a,lanes))
-            self.assertEqual(count,lanes);self.assertAlmostEqual(error,expected)
+            historical=(b.x+H._physical_phase(b,lanes))-(a.x+H._physical_phase(a,lanes))
+            self.assertEqual(count,lanes)
+            self.assertAlmostEqual(error,b.x-a.x+15.0)
+            # Frozen H still flips the retained two-lane phase; do not retarget H.
+            self.assertAlmostEqual(error-historical,0.0 if lanes==3 else 30.0)
 
     def test_mode_dispatch_uses_640_for_transform_and_1000_for_formation(self):
         self.pair(self.car(650,1),self.car(670,0,1),2,640.)
         a,b=self.car(650,1),self.car(670,0,1)
         formation=r.decide(a,(b,),r.Memory(),'formation',1000.)[0]
         transform=r.decide(a,(b,),r.Memory(),'transform',1000.)[0]
-        self.assertAlmostEqual(formation.speed,28.95)
-        self.assertAlmostEqual(transform.speed,29.2)
+        # Fixed raw error 20-15=5; common counts 3/2 retain different normalization.
+        self.assertAlmostEqual(formation.speed,r.CRUISE+r.SPEED_RELAXATION*r.POSITION_GAIN*5/2)
+        self.assertAlmostEqual(transform.speed,r.CRUISE+r.SPEED_RELAXATION*r.POSITION_GAIN*5)
         a,b=self.car(630,1),self.car(650,0,1)
         ca=r.decide(a,(b,),r.Memory(),'transform',1000.)[0]
         cb=r.decide(b,(a,),r.Memory(),'transform',1000.)[0]

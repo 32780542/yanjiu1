@@ -1,0 +1,10 @@
+--- local_vacancy_bridge/noa/native_rules.py
++++ local_time_scaled_phase/noa/native_rules.py
+@@ -98,6 +98,7 @@
+         else (2 if max(car.lane, peer.lane) < 2 and min(car.x, peer.x) >= phase_boundary else 3)
+     )
+     phase = _physical_phase(peer, 3) - _physical_phase(car, 3)
++    phase *= (LENGTH + STANDSTILL + HEADWAY * (car.speed + peer.speed) / 2) / GAP
+     return peer.x - car.x + phase, pair_lanes
+ 
+ 

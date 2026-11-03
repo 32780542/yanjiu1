@@ -1,0 +1,11 @@
+{
+  "archive": "20261103_long1800_M4_unfinished.tar.gz",
+  "sha256": "a0b60d4dc2264e0cf948874548971bd3ac539807180fb4750e49774cfeba807b",
+  "bytes": 6977199,
+  "planned_cases": 4,
+  "sealed_cases": 2,
+  "unfinalized_cases": 2,
+  "raw_payload_included": false,
+  "raw_index_bytes": 273345569,
+  "scope": "Full original four-case long1800 plan; two sealed cases verified, two unfinalized compute timeouts retained without physical metrics. All extant partial raw remains local, SHA/bytes indexed only. Physical completion of timed-out cases is undetermined. Wall-clock runtimes are not performance comparisons; the operator reports active M/Q workers were temporarily lowered to BelowNormal around15:20, without changing physical inputs."
+}

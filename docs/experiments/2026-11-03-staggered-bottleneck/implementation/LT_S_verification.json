@@ -1,0 +1,25 @@
+{
+  "LT": {
+    "source_sha256": "8a773793ccba5eb5e0ecae7f1b02083a8571d7e77f5a1f5f5f78b13eb6596593",
+    "specialized_tests": 6,
+    "specialized_subtests": 15,
+    "noa_full_exact_cases": 300,
+    "core_tests": 225,
+    "core_subtests": 37,
+    "migration_patch_sha256": "9251ed43197480774aab90a36c39343efaca5f0e60d1687f2ff2eefebb1ba22c",
+    "original_sources_tests_archives_unchanged": true,
+    "cruise_full_command_memory_exact_cases_three_modes": 900
+  },
+  "S": {
+    "source_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+    "specialized_tests": 7,
+    "specialized_subtests": 5,
+    "noa_full_exact_cases": 300,
+    "core_tests": 225,
+    "core_subtests": 37,
+    "migration_patch_sha256": "09c5600ef947cd056aaa1748523c9d498119eced5b3cb633d0f2bc341bae3d46",
+    "original_sources_tests_archives_unchanged": true
+  },
+  "independent_candidates_not_combined": true,
+  "no_new_traffic_simulation_or_git": true
+}

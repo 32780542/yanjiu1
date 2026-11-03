@@ -1,0 +1,183 @@
+{
+  "planned_cases": 4,
+  "sealed_cases_verified": 2,
+  "unfinalized_cases": [
+    {
+      "identity": {
+        "candidate": "Q",
+        "flow": 2500.0,
+        "seed": 41,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      },
+      "classification": "unverified_compute_timeout",
+      "case_returncode": 124,
+      "operation_returncode": 124,
+      "child_returncode": 1,
+      "operation_status": "timeout",
+      "elapsed_s": 3000.078,
+      "worker_timeout_s": 3000.0,
+      "original_result_status": "starting",
+      "trips_present": false,
+      "physical_completion": "undetermined",
+      "eligible": false
+    },
+    {
+      "identity": {
+        "candidate": "Q",
+        "flow": 2500.0,
+        "seed": 42,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      },
+      "classification": "unverified_compute_timeout",
+      "case_returncode": 124,
+      "operation_returncode": 124,
+      "child_returncode": 1,
+      "operation_status": "timeout",
+      "elapsed_s": 3000.109,
+      "worker_timeout_s": 3000.0,
+      "original_result_status": "starting",
+      "trips_present": false,
+      "physical_completion": "undetermined",
+      "eligible": false
+    }
+  ],
+  "original_repository_reads": [],
+  "original_paths_required": false,
+  "raw_index": [
+    {
+      "name": "events.jsonl.gz",
+      "relative": "20261103T070340689865Z_lane_drop_transform_s41_d37b53/events.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2250_41_lane_drop_transform\\20261103T070340689865Z_lane_drop_transform_s41_d37b53\\events.jsonl.gz",
+      "sha256": "00ba4168cffb47f324843ffb6e581dd98f46d264d857d979e34bf1ebc7a236dc",
+      "bytes": 279059,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2250.0,
+        "seed": 41,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "positions.jsonl.gz",
+      "relative": "20261103T070340689865Z_lane_drop_transform_s41_d37b53/positions.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2250_41_lane_drop_transform\\20261103T070340689865Z_lane_drop_transform_s41_d37b53\\positions.jsonl.gz",
+      "sha256": "1115e91d25e9cdd4f0fd92004bc0bec4230577dd7faed6bcc839d48f5de42817",
+      "bytes": 54008183,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2250.0,
+        "seed": 41,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "events.jsonl.gz",
+      "relative": "20261103T070340686875Z_lane_drop_transform_s42_6ba2f1/events.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2250_42_lane_drop_transform\\20261103T070340686875Z_lane_drop_transform_s42_6ba2f1\\events.jsonl.gz",
+      "sha256": "eadb38c3fce08cebb3abc16061f332d68d6c16956d097a6ff1a30daccff9951a",
+      "bytes": 298231,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2250.0,
+        "seed": 42,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "positions.jsonl.gz",
+      "relative": "20261103T070340686875Z_lane_drop_transform_s42_6ba2f1/positions.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2250_42_lane_drop_transform\\20261103T070340686875Z_lane_drop_transform_s42_6ba2f1\\positions.jsonl.gz",
+      "sha256": "409e8aa22fd2961ab8dc0e51d23d755bae36f0ae04303c70a74df15148a12c5f",
+      "bytes": 57569235,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2250.0,
+        "seed": 42,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "events.jsonl.gz",
+      "relative": "20261103T071747212123Z_lane_drop_transform_s41_558b3c/events.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2500_41_lane_drop_transform\\20261103T071747212123Z_lane_drop_transform_s41_558b3c\\events.jsonl.gz",
+      "sha256": "de4b34e81b64b3fb2169f82dee89f7e39b45cb0628b01f21a913a05c28b63089",
+      "bytes": 162788,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2500.0,
+        "seed": 41,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "positions.jsonl.gz",
+      "relative": "20261103T071747212123Z_lane_drop_transform_s41_558b3c/positions.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2500_41_lane_drop_transform\\20261103T071747212123Z_lane_drop_transform_s41_558b3c\\positions.jsonl.gz",
+      "sha256": "5eb4fd18c6d94bd60f3e0173fd513c7b03861ab01e6bb968d6fc5a8c6ac92887",
+      "bytes": 84871576,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2500.0,
+        "seed": 41,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "events.jsonl.gz",
+      "relative": "20261103T071854867886Z_lane_drop_transform_s42_5937ad/events.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2500_42_lane_drop_transform\\20261103T071854867886Z_lane_drop_transform_s42_5937ad\\events.jsonl.gz",
+      "sha256": "4a9bf3b7e7022b323ce214008cf79acb5e7ce0fb6374a7bff40a226770492577",
+      "bytes": 162783,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2500.0,
+        "seed": 42,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    },
+    {
+      "name": "positions.jsonl.gz",
+      "relative": "20261103T071854867886Z_lane_drop_transform_s42_5937ad/positions.jsonl.gz",
+      "local_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_long1800_Q4\\cases\\Q_2500_42_lane_drop_transform\\20261103T071854867886Z_lane_drop_transform_s42_5937ad\\positions.jsonl.gz",
+      "sha256": "3605b5fc5d87d8c76daefc628ff2553430c6fa7d8797c0e33c4165ffb4bfe540",
+      "bytes": 79082378,
+      "included": false,
+      "identity": {
+        "candidate": "Q",
+        "flow": 2500.0,
+        "seed": 42,
+        "scenario": "lane_drop",
+        "mode": "transform"
+      }
+    }
+  ],
+  "raw_payload_included": false,
+  "raw_contents_verified": false,
+  "simulations_run": false,
+  "scope": "Full original four-case long1800 plan; two sealed cases verified, two unfinalized compute timeouts retained without physical metrics. All extant partial raw remains local, SHA/bytes indexed only. Physical completion of timed-out cases is undetermined. Wall-clock runtimes are not performance comparisons; the operator reports active M/Q workers were temporarily lowered to BelowNormal around15:20, without changing physical inputs.",
+  "archive_members_verified": 162,
+  "archive_original_bytes_compared": true,
+  "archives": [
+    {
+      "path": "D:\\yanjiu1\\keyan1\\docs\\experiments\\2026-11-03-staggered-bottleneck\\evidence_iteration3\\20261103_long1800_Q4_unfinished.tar.gz",
+      "sha256": "c418b077a94452672863146db8ab884f737ef33c9d0918551f0756216361fd82",
+      "bytes": 6954007
+    }
+  ]
+}
