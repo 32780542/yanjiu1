@@ -60,3 +60,5 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 版本保存在[GitHub仓库](https://github.com/32780542/yanjiu1)。远端 `yanjiu1` 对应该仓库，`origin`是历史仓库。各候选保存补丁和源SHA；数据按完整计划分组封包，单包小于20MB，逐件核验后清理本轮可替代大轨迹，不复制整份项目存版本。选定几何案例保留完整轨迹；未封口失败原件及状态继续保存。
 
 历史[TM报告](docs/experiments/2026-10-30-rule-trials/研究结果与采用说明.md)、[P验收](docs/2026-10-29-P独立验收报告.md)及[Cai原文对照](docs/Cai2024全局方案对照依据.md)保留原版本含义。历史自建global入口继续存档，现行结论来自同输入的实际NOA、编队和匹配对照。
+
+本轮已清理约1.05GB可替代轨迹；失败原件及关键完整轨迹保留。详见[存储复核](docs/experiments/2026-11-03-staggered-bottleneck/storage_cleanup_final/README.md)。
