@@ -26,3 +26,7 @@ docs/experiments/2026-10-30-rule-trials/figures/*.svg -whitespace
 docs/experiments/2026-11-03-staggered-bottleneck/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 docs/experiments/2026-11-03-staggered-bottleneck/**/*.patch -whitespace
 docs/experiments/2026-11-03-staggered-bottleneck/**/*.svg -whitespace
+# Retain the evening study's exact source, ledger and receipt bytes.
+docs/experiments/2026-11-03-midflow-staggered/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+docs/experiments/2026-11-03-midflow-staggered/**/*.patch -whitespace
+docs/experiments/2026-11-03-midflow-staggered/**/*.svg -whitespace

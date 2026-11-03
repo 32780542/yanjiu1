@@ -1,0 +1,34 @@
+--- S/noa/native_rules.py
++++ V/noa/native_rules.py
+@@ -113,7 +113,7 @@
+     return _request(ego, target, front.speed), target, front.track, 1
+ 
+ 
+-def _following(ego, rows, lanes, phase_boundary=None):
++def _following(ego, rows, lanes, phase_boundary=None, merge_bounds=None):
+     """真实前车CTH叠加实际相邻道互选相位；每车只输出自身速度。"""
+     following = _front_following(ego, rows)
+     if following[2] is None:
+@@ -125,6 +125,14 @@
+             for c in rows
+         ):
+             following = extended
++    if merge_bounds is not None and ego.lane == 1:
++        projected = tuple(
++            replace(c, lane=1, y=1.5 * LANE_WIDTH, vy=0.0) for c in rows
++            if c.lane == 2 and merge_bounds[0] <= c.x < merge_bounds[1]
++        )
++        anticipated = _front_following(ego, (*rows, *projected))
++        if anticipated[0] < following[0]:
++            following = anticipated
+     cars = (ego, *rows)
+ 
+     def nearest(car, lane):
+@@ -337,6 +345,7 @@
+             rows,
+             following_lanes,
+             drop_x - 360.0 if mode == "transform" and drop_x is not None else drop_x,
++            (drop_x - 360.0, drop_x) if preparing and mode == "transform" else None,
+         )
+         if organized
+         else _front_following(ego, rows)

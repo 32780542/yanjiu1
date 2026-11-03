@@ -1,0 +1,21 @@
+..F.F..
+======================================================================
+FAIL: test_opposite_phase_acceleration_cannot_cancel_projected_cth (__main__.PremergeTopologyTests.test_opposite_phase_acceleration_cannot_cancel_projected_cth)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-11-03-midflow-staggered\tests\test_premerge_topology.py", line 54, in test_opposite_phase_acceleration_cannot_cancel_projected_cth
+    self.assertEqual(command.reference, merging.track)
+AssertionError: 1 != 2
+
+======================================================================
+FAIL: test_receiving_car_establishes_following_before_lateral_occupancy (__main__.PremergeTopologyTests.test_receiving_car_establishes_following_before_lateral_occupancy)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-11-03-midflow-staggered\tests\test_premerge_topology.py", line 47, in test_receiving_car_establishes_following_before_lateral_occupancy
+    self.assertEqual(command.reference, merging.track)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 7 tests in 6.892s
+
+FAILED (failures=2)

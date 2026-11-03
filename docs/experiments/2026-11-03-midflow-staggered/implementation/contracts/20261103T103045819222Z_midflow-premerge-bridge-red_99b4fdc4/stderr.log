@@ -1,0 +1,41 @@
+..F.....
+======================================================================
+FAIL: test_no_projected_front_preserves_the_real_single_vacancy_bridge (__main__.PremergeTopologyTests.test_no_projected_front_preserves_the_real_single_vacancy_bridge)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-11-03-midflow-staggered\tests\test_premerge_topology.py", line 72, in test_no_projected_front_preserves_the_real_single_vacancy_bridge
+    self.assertEqual(exact(r.decide(ego, rows, r.Memory(), "transform")),
+AssertionError: Lists differ: [{'speed': '0x1.ccccccccccccdp+4', 'lane': None, 'reason'[148 chars]lse}] != [{'speed': '0x1.e99999999999ap+4', 'lane': None, 'reason'[145 chars]lse}]
+
+First differing element 0:
+{'speed': '0x1.ccccccccccccdp+4', 'lane': None, 'reason'[93 chars]': 0}
+{'speed': '0x1.e99999999999ap+4', 'lane': None, 'reason'[90 chars]': 1}
+
+- [{'formation_state': 0,
+?                      ^
+
++ [{'formation_state': 1,
+?                      ^
+
+    'lane': None,
+    'reason': 'formation_follow',
+-   'reference': None,
+?                ^^^^
+
++   'reference': 1,
+?                ^
+
+-   'speed': '0x1.ccccccccccccdp+4',
++   'speed': '0x1.e99999999999ap+4',
+-   'target_x': '0x1.5e00000000000p+9'},
+?                    ^^
+
++   'target_x': '0x1.6d00000000000p+9'},
+?                    ^^
+
+   {'gap': None, 'joining': False, 'lane_target': None}]
+
+----------------------------------------------------------------------
+Ran 8 tests in 6.817s
+
+FAILED (failures=1)

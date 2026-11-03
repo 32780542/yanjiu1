@@ -1,0 +1,13 @@
+.....F...
+======================================================================
+FAIL: test_receiver_before_boundary_can_see_a_merger_already_preparing (__main__.PremergeTopologyTests.test_receiver_before_boundary_can_see_a_merger_already_preparing)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\yanjiu1\keyan1\docs\experiments\2026-11-03-midflow-staggered\tests\test_premerge_topology.py", line 48, in test_receiver_before_boundary_can_see_a_merger_already_preparing
+    self.assertEqual(command.reference, 2)
+AssertionError: 1 != 2
+
+----------------------------------------------------------------------
+Ran 9 tests in 7.803s
+
+FAILED (failures=1)
