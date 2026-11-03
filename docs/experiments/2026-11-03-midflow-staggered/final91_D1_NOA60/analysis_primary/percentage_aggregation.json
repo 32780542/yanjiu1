@@ -1,0 +1,6 @@
+{
+  "existing_column": "system_improvement_percent retained unchanged = ratio_of_means",
+  "explicit_ratio_column": "system_improvement_percent_ratio_of_means",
+  "seed_equal_percent_column": "system_improvement_percent_mean_of_paired_percent",
+  "policy": "mean of five per-seed -100delta/reference percentages; absolute seconds and DID unchanged"
+}

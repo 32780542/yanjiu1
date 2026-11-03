@@ -1,0 +1,17 @@
+{
+  "archive": "evidence_lane_drop30.tar.gz",
+  "sha256": "d6526fdf4888718d7011dcf037f360b4b2d053ce85d94824f4ba2f7544cf6bd0",
+  "bytes": 19465309,
+  "case_count": 30,
+  "under_20mb": true,
+  "partition": {
+    "rule": "complete preplanned road group, independent of outcomes",
+    "scenario": "lane_drop",
+    "full_plan_cases": 60,
+    "partition_cases": 30,
+    "original_batch": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60",
+    "original_protocol_sha256": "24aab64613868c4a0b31db1d2e0aa4f451f808ee43007345b5148ecaec0f3f1f",
+    "original_manifest_sha256": "2d1103df04a2816a18b88e55e86b73ba250c5a49c2c6a7ad1d77a2956af965dd"
+  },
+  "index_sha256": "6c36a3db8417f3479363938c78a7f1876f6d0d87971ef43ebc447fbf5f898c24"
+}

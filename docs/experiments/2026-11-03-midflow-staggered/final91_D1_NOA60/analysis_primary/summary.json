@@ -1,0 +1,518 @@
+{
+  "batches": [
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60"
+  ],
+  "case_count": 60,
+  "evidence_verified_count": 60,
+  "protocol_verified_count": 60,
+  "planned_task_count": 60,
+  "protocol_sha256": {
+    "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261103_midflow_final91_D1_NOA60": "24aab64613868c4a0b31db1d2e0aa4f451f808ee43007345b5148ecaec0f3f1f"
+  },
+  "physical_safe_count": 60,
+  "drained_count": 60,
+  "pair_count": 30,
+  "pair_eligible_count": 30,
+  "fixed_window_complete_count": 60,
+  "fixed_traffic_window_s": [
+    100,
+    600
+  ],
+  "window_policy": "Unchanged original [100,600) region ledger; partial observed exposure retained in region_window, formal incomplete-window metrics stay null.",
+  "failed_cases": [],
+  "low_speed_cases": [
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 91,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4627.300000000032,
+        "mean_n": 9.254600000000064,
+        "density_veh_km_lane": 15.42433333333344,
+        "mean_speed_mps": 28.177389224294377,
+        "low_speed_vehicle_s": 8.299999999999983,
+        "low_speed_fraction": 0.0017937025911438475,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 92,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4521.799999999997,
+        "mean_n": 9.043599999999994,
+        "density_veh_km_lane": 15.072666666666658,
+        "mean_speed_mps": 28.217282324658203,
+        "low_speed_vehicle_s": 15.09999999999988,
+        "low_speed_fraction": 0.003339378123756002,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 92,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4445.799999999979,
+        "mean_n": 8.891599999999958,
+        "density_veh_km_lane": 14.819333333333264,
+        "mean_speed_mps": 28.69359086839012,
+        "low_speed_vehicle_s": 0.10000000000002274,
+        "low_speed_fraction": 2.249313959242953e-05,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 93,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4641.700000000032,
+        "mean_n": 9.283400000000062,
+        "density_veh_km_lane": 15.472333333333438,
+        "mean_speed_mps": 27.903111392578637,
+        "low_speed_vehicle_s": 50.79999999999998,
+        "low_speed_fraction": 0.010944266109399496,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 93,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4529.400000000011,
+        "mean_n": 9.058800000000021,
+        "density_veh_km_lane": 15.098000000000036,
+        "mean_speed_mps": 28.551789493919994,
+        "low_speed_vehicle_s": 24.200000000000003,
+        "low_speed_fraction": 0.0053428710204441975,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 94,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4530.000000000007,
+        "mean_n": 9.060000000000015,
+        "density_veh_km_lane": 15.100000000000025,
+        "mean_speed_mps": 27.430042692313847,
+        "low_speed_vehicle_s": 89.00000000000003,
+        "low_speed_fraction": 0.01964679911699777,
+        "max_simultaneous_low_speed": 3
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 94,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4320.199999999992,
+        "mean_n": 8.640399999999984,
+        "density_veh_km_lane": 14.40066666666664,
+        "mean_speed_mps": 28.739032992979432,
+        "low_speed_vehicle_s": 1.7000000000000455,
+        "low_speed_fraction": 0.0003935003009120061,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 95,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4788.200000000012,
+        "mean_n": 9.576400000000023,
+        "density_veh_km_lane": 15.960666666666706,
+        "mean_speed_mps": 27.97358270892234,
+        "low_speed_vehicle_s": 33.1999999999999,
+        "low_speed_fraction": 0.006933712042103467,
+        "max_simultaneous_low_speed": 3
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1500.0,
+      "seed": 95,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 4648.500000000011,
+        "mean_n": 9.297000000000022,
+        "density_veh_km_lane": 15.495000000000037,
+        "mean_speed_mps": 28.778893482286648,
+        "low_speed_vehicle_s": 3.4999999999999716,
+        "low_speed_fraction": 0.0007529310530278505,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 91,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5670.700000000062,
+        "mean_n": 11.341400000000123,
+        "density_veh_km_lane": 18.902333333333537,
+        "mean_speed_mps": 27.333641619878705,
+        "low_speed_vehicle_s": 80.40000000000003,
+        "low_speed_fraction": 0.01417814379177159,
+        "max_simultaneous_low_speed": 3
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 91,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5452.000000000071,
+        "mean_n": 10.904000000000142,
+        "density_veh_km_lane": 18.17333333333357,
+        "mean_speed_mps": 28.44298581010689,
+        "low_speed_vehicle_s": 18.69999999999999,
+        "low_speed_fraction": 0.0034299339691855734,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 92,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5971.4000000000115,
+        "mean_n": 11.942800000000023,
+        "density_veh_km_lane": 19.904666666666706,
+        "mean_speed_mps": 25.08292398087838,
+        "low_speed_vehicle_s": 507.8000000000001,
+        "low_speed_fraction": 0.08503868439561897,
+        "max_simultaneous_low_speed": 6
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 92,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5212.900000000036,
+        "mean_n": 10.425800000000072,
+        "density_veh_km_lane": 17.376333333333452,
+        "mean_speed_mps": 28.588983442547004,
+        "low_speed_vehicle_s": 4.0,
+        "low_speed_fraction": 0.0007673272075044547,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 93,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5487.500000000018,
+        "mean_n": 10.975000000000037,
+        "density_veh_km_lane": 18.29166666666673,
+        "mean_speed_mps": 27.11212571702163,
+        "low_speed_vehicle_s": 164.90000000000006,
+        "low_speed_fraction": 0.030050113895216314,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 94,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5461.600000000062,
+        "mean_n": 10.923200000000124,
+        "density_veh_km_lane": 18.20533333333354,
+        "mean_speed_mps": 26.28450429442156,
+        "low_speed_vehicle_s": 292.49999999999994,
+        "low_speed_fraction": 0.05355573458327168,
+        "max_simultaneous_low_speed": 5
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 94,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5053.400000000054,
+        "mean_n": 10.106800000000108,
+        "density_veh_km_lane": 16.844666666666846,
+        "mean_speed_mps": 28.384238446748824,
+        "low_speed_vehicle_s": 29.899999999999977,
+        "low_speed_fraction": 0.005916808485376114,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 95,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5788.199999999995,
+        "mean_n": 11.57639999999999,
+        "density_veh_km_lane": 19.293999999999986,
+        "mean_speed_mps": 27.583128623933245,
+        "low_speed_vehicle_s": 11.4999999999999,
+        "low_speed_fraction": 0.0019868007325247765,
+        "max_simultaneous_low_speed": 3
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 1750.0,
+      "seed": 95,
+      "scenario": "lane_drop",
+      "mode": "transform",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 5599.500000000022,
+        "mean_n": 11.199000000000044,
+        "density_veh_km_lane": 18.665000000000074,
+        "mean_speed_mps": 28.489554696406373,
+        "low_speed_vehicle_s": 1.099999999999909,
+        "low_speed_fraction": 0.0001964461112599169,
+        "max_simultaneous_low_speed": 1
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 91,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 7130.100000000021,
+        "mean_n": 14.260200000000042,
+        "density_veh_km_lane": 23.76700000000007,
+        "mean_speed_mps": 24.293637876976856,
+        "low_speed_vehicle_s": 479.2,
+        "low_speed_fraction": 0.06720803354791638,
+        "max_simultaneous_low_speed": 6
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 92,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 7056.200000000017,
+        "mean_n": 14.112400000000035,
+        "density_veh_km_lane": 23.520666666666724,
+        "mean_speed_mps": 24.261621250980298,
+        "low_speed_vehicle_s": 470.8999999999999,
+        "low_speed_fraction": 0.06673563674499004,
+        "max_simultaneous_low_speed": 6
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 93,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 6303.900000000018,
+        "mean_n": 12.607800000000037,
+        "density_veh_km_lane": 21.013000000000062,
+        "mean_speed_mps": 26.72649581986091,
+        "low_speed_vehicle_s": 136.69999999999993,
+        "low_speed_fraction": 0.02168498865781493,
+        "max_simultaneous_low_speed": 2
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 94,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 7017.300000000021,
+        "mean_n": 14.034600000000042,
+        "density_veh_km_lane": 23.39100000000007,
+        "mean_speed_mps": 23.625669912350535,
+        "low_speed_vehicle_s": 721.5000000000002,
+        "low_speed_fraction": 0.10281732290197057,
+        "max_simultaneous_low_speed": 6
+      }
+    },
+    {
+      "candidate": "D",
+      "flow": 2000.0,
+      "seed": 95,
+      "scenario": "lane_drop",
+      "mode": "noa",
+      "region_window": {
+        "start_s": 100.0,
+        "end_s": 600.0,
+        "duration_s": 500.0,
+        "observed_duration_s": 500.0,
+        "window_complete": true,
+        "vehicle_s": 7918.900000000098,
+        "mean_n": 15.837800000000195,
+        "density_veh_km_lane": 26.396333333333658,
+        "mean_speed_mps": 22.9589069358922,
+        "low_speed_vehicle_s": 2.30000000000004,
+        "low_speed_fraction": 0.0002904443799012503,
+        "max_simultaneous_low_speed": 1
+      }
+    }
+  ],
+  "original_raw_bytes_pruned": 0,
+  "method_sha256": {
+    "compact": "abbc7d110a2cec0c5997d4e8c7d9d545e1b6a085f700002976adb3b2551d2898",
+    "wrapper": "676508612d545b2173b103ce38d664c89445e463f200e9e880d87e56b2c73761",
+    "bottleneck_attribution": "deea86e38bf6de44eb130216fe4c9f370803171295002f99b790ec793b066ec9",
+    "native_comparison": "da1bf09d0f5fb8dfd9a56e60698b0678d36b402cbdb02c1721b3b78cd3ac4627",
+    "complete_layers": "4dc155c13ac78eb2f351529f9de92b82f8470250df9157561fc23a7932cfdb60",
+    "native_sumo": "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1"
+  },
+  "delta_definition": "candidate minus reference; source/demand/parameter/eligibility checks and differences reuse published tools"
+}
