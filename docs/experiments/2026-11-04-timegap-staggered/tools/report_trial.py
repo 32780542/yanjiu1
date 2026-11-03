@@ -39,18 +39,26 @@ def reuse_report(path):
     return rows
 
 
-def road_effect(pairs, drop_report, output):
+def road_effect(pairs, drop_report, output, straight_aliases=None):
     """DID consumes existing within-road pairs; it does not reevaluate old cases."""
     _, traffic = seal_case.tools()
-    drop = {(p["candidate"], p["flow"], p["seed"]): p
-            for p in read_report_rows(drop_report / "paired_seeds.csv")
-            if p["scenario"] == "lane_drop" and p["reference_mode"] == "noa"}
+    drop_source = read_report_rows(drop_report / "paired_seeds.csv") if drop_report else pairs
+    drop = {(p["candidate"], p["mode"], p["reference_mode"], p["flow"], p["seed"]): p
+            for p in drop_source if p["scenario"] == "lane_drop"}
+    aliases = dict(value.split("=", 1) for value in (straight_aliases or []))
+    straight_pairs = [pair for pair in pairs if pair["scenario"] == "straight3"]
+    requested = [(pair, pair["candidate"]) for pair in straight_pairs]
+    requested.extend((pair, candidate) for pair in straight_pairs for candidate, source in aliases.items()
+                     if pair["candidate"] == source and candidate != source)
     rows = []
-    for straight in pairs:
-        key = straight["candidate"], straight["flow"], straight["seed"]
+    for straight, candidate in requested:
+        key = (candidate, straight["mode"], straight["reference_mode"],
+               straight["flow"], straight["seed"])
         lane_drop = drop.get(key)
         valid = bool(lane_drop and lane_drop["pair_eligible"] and straight["pair_eligible"])
-        row = dict(candidate=key[0], flow=key[1], seed=key[2], eligible=valid,
+        row = dict(candidate=key[0], mode=key[1], reference_mode=key[2], flow=key[3], seed=key[4],
+                   comparison=lane_drop["comparison"] if lane_drop else straight["comparison"], eligible=valid,
+                   straight_target_candidate=straight["candidate"], straight_comparison=straight["comparison"],
                    drop_reference_candidate=lane_drop.get("reference_candidate") if lane_drop else None,
                    straight_reference_candidate=straight.get("reference_candidate"))
         for metric in METRICS:
@@ -60,9 +68,12 @@ def road_effect(pairs, drop_report, output):
         rows.append(row)
     traffic.write_rows(output / "road_did_seeds.csv", rows)
     means = []
-    for flow in sorted({row["flow"] for row in rows}):
-        members = [row for row in rows if row["flow"] == flow]
-        row = dict(flow=flow, seeds=len(members), eligible=all(r["eligible"] for r in members))
+    identities = sorted({(row["candidate"], row["mode"], row["reference_mode"], row["flow"]) for row in rows})
+    for candidate, mode, reference_mode, flow in identities:
+        members = [row for row in rows if (row["candidate"], row["mode"], row["reference_mode"], row["flow"])
+                   == (candidate, mode, reference_mode, flow)]
+        row = dict(candidate=candidate, mode=mode, reference_mode=reference_mode, flow=flow,
+                   comparison=members[0]["comparison"], seeds=len(members), eligible=all(r["eligible"] for r in members))
         for prefix in ("drop_delta_", "straight_delta_", "did_"):
             for metric in METRICS:
                 values = [r[prefix + metric] for r in members]
@@ -72,8 +83,11 @@ def road_effect(pairs, drop_report, output):
         means.append(row)
     traffic.write_rows(output / "road_did_means.csv", means)
     seal_case.write(output / "road_did_summary.json", dict(eligible_seeds=sum(r["eligible"] for r in rows), means=means,
-        drop_report_reused=str(drop_report), formula="DID=(transform-NOA)_drop-(transform-NOA)_straight, within seed; equal seed means",
+        drop_report_reused=str(drop_report) if drop_report else None,
+        formula="DID=(target mode-reference mode)_drop-(target mode-reference mode)_straight; within seed, equal seed means",
         reference_identity="Per-seed reference candidates recorded in road_did_seeds.csv; common NOA definitions confirmed before execution",
+        straight_aliases=aliases,
+        scope="Matching candidate or explicitly named straight alias, target/reference mode, flow and seed; no automatic candidate alias",
         share_definition="ratio of equal-seed mean straight system delta to mean drop system delta; not mean per-seed percentages"))
 
 
@@ -81,17 +95,19 @@ def cross_pairs(cases, mappings):
     _, traffic = seal_case.tools()
     index = summarize.unique(cases)
     pairs = []
-    for target, specification in (mapping.split("=", 1) for mapping in mappings):
+    for target_specification, specification in (mapping.split("=", 1) for mapping in mappings):
+        target, target_separator, target_mode = target_specification.partition("/")
+        target_mode = target_mode if target_separator else "transform"
         reference, separator, reference_mode = specification.partition("/")
         for case in cases:
-            if case["candidate"] != target or case["mode"] != "transform":
+            if case["candidate"] != target or case["mode"] != target_mode:
                 continue
             for mode in ((reference_mode,) if separator else ("noa", "transform")):
                 other = index.get((reference, case["flow"], case["seed"], case["scenario"], mode))
                 a, b = other.get("_run") if other else None, case["_run"]
-                pair = traffic.pair(a, b, target + "-minus-" + reference + "_" + mode,
-                                    "same_following_complete_strategy" if mode == "noa" else "shape_mechanism_comparison")
-                pair.update(candidate=target, reference_candidate=reference, reference_mode=mode, mode="transform")
+                pair = traffic.pair(a, b, target + "/" + target_mode + "=" + reference + "/" + mode,
+                                    "explicit_same_input_mode_contrast" if target == reference else "explicit_same_input_rule_contrast")
+                pair.update(candidate=target, reference_candidate=reference, reference_mode=mode, mode=target_mode)
                 for metric in (*traffic.METRICS, *("flag_" + key for key in seal_case.tools()[0].FLAGS)):
                     pair["reference_" + metric] = a.get(metric) if a else None
                     pair["candidate_" + metric] = b.get(metric)
@@ -132,14 +148,15 @@ def stop_and_merge(run):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--batch", required=True, type=Path)
+    parser.add_argument("--batch", required=True, type=Path, nargs="+")
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--reuse-report", type=Path)
-    parser.add_argument("--compare", nargs="+", help="explicit TARGET=REFERENCE[/MODE], e.g. C2_200=A200/noa")
+    parser.add_argument("--compare", nargs="+", help="explicit TARGET/MODE=REFERENCE/MODE; omitted target mode defaults to transform")
     parser.add_argument("--road-drop-report", type=Path, help="already-consumed drop pairs for a straight-road DID")
+    parser.add_argument("--road-straight-alias", nargs="+", help="explicit DROP_CANDIDATE=STRAIGHT_CANDIDATE, e.g. C8_300=C8_200")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
-    records = summarize.protocol_records(args.batch)
+    records = [record for batch in args.batch for record in summarize.protocol_records(batch)]
     cases = []
     for record in records:
         case = summarize.load_case(record)
@@ -158,24 +175,27 @@ def main():
     traffic.write_rows(args.output / "paired_seeds.csv", pairs)
     groups = defaultdict(list)
     for pair in pairs:
-        groups[pair["candidate"], pair["flow"], pair["comparison"]].append(pair)
+        groups[pair["candidate"], pair["mode"], pair["flow"], pair["scenario"], pair["comparison"]].append(pair)
     rows = []
-    for (candidate, flow, comparison), group in sorted(groups.items()):
-        item = dict(candidate=candidate, flow=flow, comparison=comparison, seeds=len(group), eligible=all(p["pair_eligible"] for p in group))
+    for (candidate, mode, flow, scenario, comparison), group in sorted(groups.items()):
+        item = dict(candidate=candidate, mode=mode, flow=flow, scenario=scenario, comparison=comparison,
+                    reference_candidate=group[0].get("reference_candidate"), reference_mode=group[0].get("reference_mode"),
+                    seeds=len(group), eligible=all(p["pair_eligible"] for p in group))
         for metric in METRICS:
             for prefix in ("reference_", "candidate_", "delta_"):
                 values = [p.get(prefix + metric) for p in group]
                 item[prefix + metric] = mean(values) if item["eligible"] and all(v is not None for v in values) else None
         rows.append(item)
     traffic.write_rows(args.output / "flow_means.csv", rows)
-    if args.road_drop_report:
-        road_effect(pairs, args.road_drop_report, args.output)
+    if args.road_drop_report or {pair["scenario"] for pair in pairs} >= {"lane_drop", "straight3"}:
+        road_effect(pairs, args.road_drop_report, args.output, args.road_straight_alias)
     bad = [c for c in cases if not c.get("safe") or not c.get("all_completed") or not c.get("protocol_verified")
            or not c.get("evidence_verified") or c.get("returncode") != 0 or c.get("status") != "drained"]
-    seal_case.write(args.output / "summary.json", dict(case_count=len(cases), eligible_pairs=sum(p["pair_eligible"] for p in pairs),
+    seal_case.write(args.output / "summary.json", dict(batches=[str(batch) for batch in args.batch],
+        case_count=len(cases), eligible_pairs=sum(p["pair_eligible"] for p in pairs),
         failed_cases=[{k: c.get(k) for k in ("candidate", "flow", "seed", "mode", "status", "safe", "all_completed", "completed", "requested",
                                              "returncode", "seal_status", "error", "protocol_issues")} for c in bad],
-        means=rows, pair_definition="transform minus explicitly named reference NOA/transform" if args.compare else "transform minus same-source NOA",
+        means=rows, pair_definition="Explicit target/mode minus reference/mode; scenario and target mode grouped separately" if args.compare else "transform minus same-source NOA",
         reference_report_reused=str(args.reuse_report) if args.reuse_report else None,
         raw_observation="x in [900,1000), |y-8.25|<=.15 m; stop v<.1, slow v<1 m/s; sampled .1-s exposure; actual 2->1 completion events"))
     return 0 if all(c.get("protocol_verified") and c.get("evidence_verified") for c in cases) else 1

@@ -1,97 +1,57 @@
-# 2026-11-04 时距交错：实验调度页
+# C8持续开发与正式前计划
 
-工作目录 `D:/yanjiu1/keyan1`；截止北京时间 2026-11-04 08:00。本页只复用旧工具，不改生产代码、不另建 worktree/full copy。
-已读根 AGENTS 与 STS；旧尝试只读。候选路径由主代理给出后才启动；正式 seed 211–215 在规则锁定后才用。
+研究工作目录 D:/yanjiu1/keyan1；工作截止仍为北京时间2026-11-04 08:00。
+用户取消的是“最后发车后30秒形成/10秒保持”的形成验收窗口，不是研究截止。
+原317行C8为当前生产及持续开发基准：延长观察从70 s起全45车交替、44/44持续到109.1 s首次离场，392帧；100 s半D MAE=.000328 m，22次LC且无重复。
+54例消费已完成；因道路上形成相位成熟度仍须独立检验，另做joint03去旧方向门的12例短筛，结果与交通代价并列，最终控制尚未锁定。
+04:15锁定前最后四源C8b/P8b（phase .6/raw限±5）24例已完成，48个配对合格，见C8b_P8b_dev180_summary.md；无正式。
+最后形成拓扑C11/P11四源317行已冻结，24短例180/600用jobs2（root长NOA1+几何1合计4），04:25前据完整结果锁最终控制；正式仍未揭。
+root单job长NOA1800/2700仅开发201/202、两preview三flow12例，后续长主法配对复用，不重跑该NoA；不由本组代管。
+C9/C10b不继续叠加；C10实现异常与C10b未达全链的结果独立保留，见对应summary。
 
-## 固定输入与候选身份
+## 固定控制与输入
 
-- 只测每道 1500/1750/2000 veh/h；共同 `HEADWAY=.85`、`CRUISE=28.8`、`MAX_SPEED=33.3`。
-- 主矩阵是 `lane_drop` 的 ROAD_PREVIEW=200/300 m 两种道路观察条件；200 m 无额外警示，300 m 统一警示。
-- 同一 A/B 规则族的 200/300 文件仅道路可见范围常量不同。A/B 具体形状机制及文件名由主代理登记。
-- 共用反应式 NOA：跟驰、普通受阻超车、可见末端约束、安全间隙接受；不做 gap 中点对齐或组织式补位。
-- A/B 的 NOA 分支确认完全相同后，每种 preview 只运行 A 的 NOA，作为 A/B 主比较参考，避免重复仿真。
-- 旧提前 NOA/旧 D1/S 只作附加参考；不混入本轮主样本、开发或正式种子统计。
-- 若主代理要求区分一般直路组织收益，再为入选版本加 `straight3` 同输入配对；不预先扩大筛查矩阵。
+- 冻结源：tmp/staggered_bottleneck/candidates/20261104_forward_gap_C8_200/native_rules.py；C8_300同目录模式。
+- 200/300仅ROAD_PREVIEW不同；h=.85，CRUISE=28.8，MAX_SPEED=33.3；不改共同物理、原生入口或安全层。
+- 只测1500/1750/2000 veh/h/道；开发seed201/202。
+- 正式seed211–215仍未揭；规则锁定及主代理明确指示后才运行，不提前借正式结果改规则。
+- 单车只用有限局部观测与自身记忆，不引入D1负荷均衡、成本排名或中心调度。
+- root统一安装、Git与push；不建worktree/fullcopy。旧尝试目录与raw只读。
+- 当前54例仍为原C8，已知50–200 m闭孔实际reference的linked有一行记录遗漏；控制动作不受影响，旧flag仅开发历史，不据参与率调参。正式/主报告拟用状态补正版C8S，尚未启动。
 
-## 复用入口与源契约
+## 当前54例持续开发
 
-`docs/experiments/2026-11-03-staggered-bottleneck/tools/runner.py` 从 `177f7a3` 冻结十个运行/配置文件，`NAME=path.py` 只替换 `noa/native_rules.py`。
-候选须保留旧引擎导入的 `Vehicle, Memory, decide, safe_speed` 及 Command 字段；`Memory()` 可空构造，`formation_state` 严格为 int 0/1。
-旧引擎仍传入真实 `drop_x`，新规则必须先在内部裁剪道路观测，再做任何分支；不改物理、原生入口、GUI 或安全层。
-所有输出均是新的 `tmp/staggered_bottleneck/20261104_*` 目录，不传 `--prune-raw`。raw、失败和反向结果全部保留。
-旧 runner 自带封包流程可直接运行；不叠加新的哈希清单或验证循环。总结只调用实际消费数据所需的既有接口。
+| 批次 | 候选 | 道路 | 模式 | seeds/flows | demand/max-time | 例数 |
+| --- | --- | --- | --- | --- | --- | ---: |
+| drop r01 | C8_200、C8_300 | lane_drop | noa/formation/transform | 201/202；三流量 | 600/1200 s | 36 |
+| straight r01 | C8_200 | straight3 | noa/formation/transform | 201/202；三流量 | 600/1200 s | 18 |
 
-## 顺序与数量
+旧runner不能对两个候选指定不同道路集合，因此拆成两个新批顺序执行，总jobs=3；root安装/烟雾留一个资源。
+worker-timeout=1800 s、外层run_logged硬上限7200 s；所有raw保留，不传--prune-raw。
+drop 36例与straight 18例均全安全排空/封包，统一一次消费已完成；结果见C8_dev600_summary.md。joint03短12例亦已完成，见C8_joint03_dev180_summary.md；正式未启动。
 
-| 阶段 | seeds | demand/max-time(s) | 每个 preview | 总数 |
-| --- | --- | --- | --- | --- |
-| 开发短筛 | 201,202 | 180/600 | A/B transform 各6 + 共用NOA6 | 36 |
-| 入选持续 | 201,202 | 600/1200 | 入选transform6 + 同源NOA6 | 24 |
-| 锁源正式 | 211–215 | 600/1200 | 入选transform15 + 同源NOA15 | 60 |
+## 复用命令
 
-600 s 持续阶段先完成再决定锁源；有失败仍保留记录。未明确锁源不执行正式。若 A/B NOA 不同，不复用，先由主代理统一共用基线。
-180 s 用于安全、排空、主旅行指标和机制筛查；固定区域窗仍为 [100,600)，不足完整窗的正式区域指标保持 null，不当容量证据。
+从仓库根目录执行；旧runner冻结177f7a3的十个运行/配置文件，只用NAME=path替换规则文件。
 
-实际第一批按主代理指示先跑 A200/A300，各三流量×201/202×noa/transform=12例，共24例；B尚未加入。
-批目录 `tmp/staggered_bottleneck/20261104_A_dev180_201_202_r01`，180/600、jobs3、worker1800/outer7200，完整 raw 保留。
-消费脚本 `tools/report_trial.py` 直接复用旧 summarize/seal 接口，候选内部配对，另单遍读取 raw 描述末道停车及真实2→1完成位置。
-第二批 `20261104_B_dev180_201_202_r01` 按主代理指示仅 B200/B300 transform，各三流量×201/202，共12例；冻结305行与候选字节相同。
-其消费用 `--reuse-report tmp/staggered_bottleneck/20261104_A_dev180_201_202_report_r01 --compare B200=A200 B300=A300`，显式报告 B−A/noa 与 B−A/transform，不重跑NOA。
-第三批 `20261104_C_dev180_201_202_r01` 使用主代理冻结311行的 C200/C300，仅transform共12例，180/600、jobs3；主代理已确认14公共定义与A相同。
-消费继续复用同一A报告，映射 `--compare C200=A200 C300=A300`；不重读A raw、不重跑A验证或NOA，不先执行持续/正式。
-随后按主代理要求补 `20261104_C_straight_dev180_201_202_r01`：仅C200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
-该直路报告用 `--road-drop-report tmp/staggered_bottleneck/20261104_C_dev180_201_202_report_r01` 读取既有缩道配对，逐seed计算道路DID；不重跑C300直路。
-第四版 `20261104_C2_dev180_201_202_r01` 用315行C2_200/C2_300，三流量×201/202×transform=12例，180/600、jobs3。
-复用C报告内A-noa与C-transform，显式比较 `C2_200=A200/noa C2_200=C200/transform C2_300=A300/noa C2_300=C300/transform`；不先持续/正式。
-按主代理要求补 `20261104_C2_straight_dev180_201_202_r01`：仅C2_200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
-C2自身DID读取C2缩道既有报告；不复用C直路，不锁源或执行持续/正式。
-第五版 `20261104_C3_dev180_201_202_r01` 用319行C3_200/C3_300，同12例缩道180/600、jobs3；复用C2消费表中A-noa和C2-transform。
-显式比较 `C3_200=A200/noa C3_200=C2_200/transform C3_300=A300/noa C3_300=C2_300/transform`；不正式。
-按主代理要求补 `20261104_C3_straight_dev180_201_202_r01`：仅C3_200、straight3、三流量×201/202×noa/transform=12例，180/600、jobs3。
-C3自身道路DID读取C3缩道既有报告；不复用C2直路，独立保留本版证据。
-第六版 `20261104_C4_dev180_201_202_r01` 用318行C4_200/C4_300，同12例缩道180/600、jobs3；复用C2消费表中A-noa与C2-transform。
-显式比较 `C4_200=A200/noa C4_200=C2_200/transform C4_300=A300/noa C4_300=C2_300/transform`，不先直路/持续/正式。
-第七轮 `20261104_C5RG_dev180_201_202_r01` 同时跑314行C5R与317行C5G，两preview×三流量×201/202=24例缩道transform，180/600、jobs3。
-复用C4消费表，主列各自−A/noa及同preview G−R，次列R−C2、G−C4；不再验证旧数据，不先直路或正式。
-第八版 `20261104_C6_dev180_201_202_r01` 用320行C6_200/C6_300，同12例缩道transform、180/600、jobs3，在C5运行和消费结束后顺序启动。
-复用C5报告比较C6−A/noa、C6−C5R；本批仍仅transform/单缩道，不提前扩多模式或多道路接口。
-第九版 `20261104_C7_dev180_201_202_r01` 用320行C7_200/C7_300，同12例缩道180/600、jobs3，仅修C6远孔速度基准；复用C6报告比较C7−A/noa与C7−C6。
-C6保留为含已定位bug的历史结果，不能据此否定修复后的形成准则；C7本批不先直路或正式。
-随后补 `20261104_C7_straight_dev180_201_202_r01`：仅C7_200直路transform六例，180/600、jobs3；复用C3直路NOA，显式C7_200=C3_200/noa。
-其自身DID读取C7缩道既有配对，记录drop参考A200与straight参考C3_200，公共NOA相同；不重跑NOA，完成后等C8。
-第十版 `20261104_C8_dev180_201_202_r01` 用317行C8_200/C8_300，同12例缩道transform、180/600、jobs3，在C7直路消费结束后顺序启动。
-复用C7报告比较C8−A/noa与C8−C7；本批仅单缩道/transform，不正式。
-随后补 `20261104_C8_straight_dev180_201_202_r01`：仅C8_200直路transform六例，180/600、jobs3，复用C3直路NOA并计算C8自身DID。
-不重跑NOA，不改C8；结果独立保留，暂不正式。
-第十一版 `20261104_C9_dev180_201_202_r01` 用320行C9_200/C9_300，同12例缩道transform、180/600、jobs3；仅替换left接收关系，复用C8报告中A-noa与C8-transform。
-显式主对C9−A/noa、次对C9−C8；保留全部raw与LC上限，不正式。
+    python -B scripts/run_logged.py --label timegap-C8-dev600-drop-201202 --timeout 7200 -- python -B docs/experiments/2026-11-03-staggered-bottleneck/tools/runner.py --candidate C8_200=tmp/staggered_bottleneck/candidates/20261104_forward_gap_C8_200/native_rules.py C8_300=tmp/staggered_bottleneck/candidates/20261104_forward_gap_C8_300/native_rules.py --stage C8_dev600 --flows 1500 1750 2000 --seeds 201 202 --scenarios lane_drop --modes noa formation transform --duration 600 --max-time 1200 --jobs 3 --worker-timeout 1800 --output tmp/staggered_bottleneck/20261104_C8_dev600_drop_201_202_r01
 
-## 可直接填写的 PowerShell 命令
+    python -B scripts/run_logged.py --label timegap-C8-dev600-straight-201202 --timeout 7200 -- python -B docs/experiments/2026-11-03-staggered-bottleneck/tools/runner.py --candidate C8_200=tmp/staggered_bottleneck/candidates/20261104_forward_gap_C8_200/native_rules.py --stage C8_dev600 --flows 1500 1750 2000 --seeds 201 202 --scenarios straight3 --modes noa formation transform --duration 600 --max-time 1200 --jobs 3 --worker-timeout 1800 --output tmp/staggered_bottleneck/20261104_C8_dev600_straight_201_202_r01
 
-以下变量中的候选路径须替换为主代理交付文件；命令模板不表示已经运行。每次重试更新 r01 后缀。
+重试必须用新后缀；断流先看已有进程/manifest/log，不把未收到最终消息当方法失败，也不盲目重启。
 
-```powershell
-$Tools='docs/experiments/2026-11-03-staggered-bottleneck/tools'
-$Stage='docs/experiments/2026-11-04-timegap-staggered'
-$P=200  # 完成后以300再执行；ROAD_PREVIEW由源文件定义，runner没有此参数
-$A="A$P"; $B="B$P"
-$AFile="$Stage/candidates/$A.py"; $BFile="$Stage/candidates/$B.py"
-$Base="tmp/staggered_bottleneck/20261104_dev180_p${P}_noa_r01"
-$Trial="tmp/staggered_bottleneck/20261104_dev180_p${P}_AB_r01"
-python -B scripts/run_logged.py --label "timegap-dev180-p${P}-noa" --timeout 3600 -- python -B "$Tools/runner.py" --candidate "$A=$AFile" --stage dev180 --flows 1500 1750 2000 --seeds 201 202 --scenarios lane_drop --modes noa --duration 180 --max-time 600 --worker-timeout 1200 --jobs 4 --output $Base
-python -B scripts/run_logged.py --label "timegap-dev180-p${P}-AB" --timeout 5400 -- python -B "$Tools/runner.py" --candidate "$A=$AFile" "$B=$BFile" --stage dev180 --flows 1500 1750 2000 --seeds 201 202 --scenarios lane_drop --modes transform --duration 180 --max-time 600 --worker-timeout 1200 --jobs 4 --output $Trial
-python -B scripts/run_logged.py --label "timegap-dev180-p${P}-summary" --timeout 1200 -- python -B "$Tools/summarize.py" --batch $Base $Trial --reference $A --output "tmp/staggered_bottleneck/20261104_dev180_p${P}_summary_r01"
-python -B scripts/run_logged.py --label "timegap-dev180-p${P}-pairedB" --timeout 1200 -- python -B "$Tools/report_paired.py" --batch $Base $Trial --baseline $A --target $B --output "tmp/staggered_bottleneck/20261104_dev180_p${P}_pairedB_r01"
-```
+## 必要消费
 
-持续/正式直接复用 runner 命令：入选候选单独 `--modes noa transform`，duration/max-time 改 600/1200；持续 seeds=201 202，正式 seeds=211 212 213 214 215。
-输出分别用 `20261104_dev600_p{P}_{candidate}_r01` / `20261104_final600_p{P}_{candidate}_r01`；外层 timeout 7200、worker-timeout 1800，jobs 4。
-同一 candidate/flow/seed/scenario/mode 在多 batch 重复时，summarize 会拒绝；因此短筛、持续、正式分别总结，不合并重复身份。
+复用旧sealed-case evaluator，tools/report_trial.py仅扩实际所需接口：显式TARGET/MODE=REFERENCE/MODE、目标mode与scenario分别分组。
+两preview分别输出transform−NOA、formation−NOA、transform−formation；不把两道路或两目标模式均值混合。
+600 s只消费本轮新需求，不能拿180 s旧NoA作600 s参考；跨道路DID按同flow/seed先算再等权平均，并保留实际参考身份。
+主指标并列系统时间、路内时间、入口等待、fuel；不作单一成本排序。固定区域窗沿用[100,600)，不换窗、不填补不完整指标。
+形成直接0/1与真实D(v)几何分开；实际LC完成位置/单车最大LC、超过两次车辆数从原已读trips描述，不能以flag高替代全链恢复。
+安全、未完成、负向结果、实现异常及封包失败全部保留，拒绝配对也输出；不新建审计器或重复旧验证。
 
-## 决策与报告口径
+## 历史入口
 
-主指标并列：系统时间、路内旅行时间、入口等待、fuel g/km；逐 seed 配对差和等权汇总均保留，不以单一成本排名取代机制判断。
-安全/排空/未完成/封包失败按原状态报告，不能把不合格 case 悄悄丢弃。200/300 分开主表，跨范围差异不冒称纯结构收益。
-形成用直接 0/1 统计；它不等于单队规模，也不替代真实 D(v)=4+1.5+.85v 的几何恢复。
-机制优先复用 raw/trips 的实际换道请求/完成位置，检查队尾在瓶颈后是否恢复交错与动态间距；不要只画理想格点。
-已有 evaluator 的 `per_case.csv/paired.csv/summary.json` 与 `report_paired.py` 的逐种子/等权表供主代理汇总；root 统一 Git/push。
+180 s各候选与直路归因分别在A/B/C/C2/C3/C4/C5RG/C6/C7/C8/C9/C10b对应summary中，原raw均保留。
+C6标记为含远孔速度基准bug历史；C7是一行修复后独立复验，不继承C6效率判断。
+C10_implementation_error_summary.md保留11异常/1完整、一次实际末帧重放与旧封包器末帧错位；不以异常C10作效率对照。
+C10b_dev180_summary.md保留正常交通正负结果及43/44几何不采用结论。正式前不重跑这些旧批。

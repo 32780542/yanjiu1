@@ -242,7 +242,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
         if local[2] is None and physical[2] is not None:
             # Close the visible 50-200 m hole without cancelling soft phase again.
             speed = max(0., min(MAX_SPEED, physical[0] + formed[0] - _request(ego, ego.x, CRUISE)))
-            target, reference, linked = physical[1], physical[2], 1
+            target, reference = physical[1], physical[2]
     else:
         linked = int(front is not None or formed[3])
 
@@ -291,7 +291,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
     own = Memory(lane_target=plan, front=anchor.track if anchor is not None else None)
     reason = ('forward_change' if lane is not None else 'forward_approach' if plan is not None
               else 'forward_follow')
-    return Command(speed, lane, reason, target, reference, linked), own
+    return Command(speed, lane, reason, target, reference, int(linked or reference is not None)), own
 
 
 def safe_speed(ego, neighbors):

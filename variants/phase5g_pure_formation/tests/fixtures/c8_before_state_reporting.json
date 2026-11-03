@@ -1,0 +1,264 @@
+{
+  "source": "tmp\\staggered_bottleneck\\20261104_C8_45_drop_geometry\\source\\noa\\native_rules.py",
+  "source_sha256": "6f843466fd3e48f5ae3683f32371466343d49e6a3bef4d473a65b48d443c5e16",
+  "cases": [
+    {
+      "name": "stopped_far_front",
+      "ego": {
+        "track": 0,
+        "x": 900.951,
+        "y": 4.949999999999999,
+        "speed": 0,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "neighbors": [
+        {
+          "track": 1,
+          "x": 1078.776,
+          "y": 4.949999999999999,
+          "speed": 20,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "memory": {
+        "lane_target": null,
+        "front": null
+      },
+      "mode": "transform",
+      "drop_x": null,
+      "control": {
+        "speed": 14.339500000000005,
+        "lane": null,
+        "reason": "forward_follow",
+        "target_x": 1073.276,
+        "reference": 1
+      },
+      "after": {
+        "lane_target": null,
+        "front": null
+      },
+      "archived_state": 0
+    },
+    {
+      "name": "slow_far_front_with_phase",
+      "ego": {
+        "track": 0,
+        "x": 900,
+        "y": 4.949999999999999,
+        "speed": 0,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "neighbors": [
+        {
+          "track": 1,
+          "x": 1050,
+          "y": 4.949999999999999,
+          "speed": 20,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 895,
+          "y": 1.65,
+          "speed": 0,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "memory": {
+        "lane_target": null,
+        "front": null
+      },
+      "mode": "formation",
+      "drop_x": null,
+      "control": {
+        "speed": 12.4375,
+        "lane": null,
+        "reason": "forward_follow",
+        "target_x": 1044.5,
+        "reference": 1
+      },
+      "after": {
+        "lane_target": null,
+        "front": null
+      },
+      "archived_state": 1
+    },
+    {
+      "name": "ordinary_following",
+      "ego": {
+        "track": 0,
+        "x": 100,
+        "y": 1.65,
+        "speed": 20,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "neighbors": [
+        {
+          "track": 1,
+          "x": 122.5,
+          "y": 1.65,
+          "speed": 20,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "memory": {
+        "lane_target": null,
+        "front": null
+      },
+      "mode": "transform",
+      "drop_x": null,
+      "control": {
+        "speed": 20.0,
+        "lane": null,
+        "reason": "forward_follow",
+        "target_x": 100.0,
+        "reference": 1
+      },
+      "after": {
+        "lane_target": null,
+        "front": null
+      },
+      "archived_state": 1
+    },
+    {
+      "name": "noa_visible_remote_front",
+      "ego": {
+        "track": 0,
+        "x": 100,
+        "y": 1.65,
+        "speed": 20,
+        "lane": 0,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "neighbors": [
+        {
+          "track": 1,
+          "x": 170,
+          "y": 1.65,
+          "speed": 18,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "memory": {
+        "lane_target": null,
+        "front": null
+      },
+      "mode": "noa",
+      "drop_x": null,
+      "control": {
+        "speed": 28.8,
+        "lane": 1,
+        "reason": "normal_overtake",
+        "target_x": null,
+        "reference": null
+      },
+      "after": {
+        "lane_target": 1,
+        "front": null
+      },
+      "archived_state": 0
+    },
+    {
+      "name": "left_real_slot",
+      "ego": {
+        "track": 0,
+        "x": 810,
+        "y": 4.949999999999999,
+        "speed": 20,
+        "lane": 1,
+        "vy": 0.0,
+        "acceleration": 0.0,
+        "time": 0.0,
+        "pending_lane": null
+      },
+      "neighbors": [
+        {
+          "track": 1,
+          "x": 835,
+          "y": 4.949999999999999,
+          "speed": 20,
+          "lane": 1,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 2,
+          "x": 860,
+          "y": 1.65,
+          "speed": 20,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        },
+        {
+          "track": 3,
+          "x": 760,
+          "y": 1.65,
+          "speed": 20,
+          "lane": 0,
+          "vy": 0.0,
+          "acceleration": 0.0,
+          "time": 0.0,
+          "pending_lane": null
+        }
+      ],
+      "memory": {
+        "lane_target": null,
+        "front": null
+      },
+      "mode": "transform",
+      "drop_x": 1000,
+      "control": {
+        "speed": 20.15,
+        "lane": 0,
+        "reason": "forward_change",
+        "target_x": 837.5,
+        "reference": 2
+      },
+      "after": {
+        "lane_target": 0,
+        "front": 2
+      },
+      "archived_state": 1
+    }
+  ]
+}

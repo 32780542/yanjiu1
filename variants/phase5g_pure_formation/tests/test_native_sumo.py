@@ -210,7 +210,6 @@ class NativeDemandTests(unittest.TestCase):
 
 
 class NativeIntegrationTests(unittest.TestCase):
-    @unittest.skipUnless((ROOT / "noa/native_rules.py").is_file(), "main agent is implementing native rules")
     def test_failed_simulation_preserves_original_error_and_partial_accounting(self):
         from experiments import native_sumo as native
 

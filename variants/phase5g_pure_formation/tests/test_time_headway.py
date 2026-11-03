@@ -17,7 +17,7 @@ class TimeHeadwayTests(unittest.TestCase):
     def test_same_speed_equilibrium_at_each_time_headway_distance(self):
         for speed in (5.0, 10.0, 20.0, 28.8, 31.0):
             with self.subTest(speed=speed):
-                distance = 5.5 + (30 - 5.5) / 28.8 * speed
+                distance = 5.5 + .85 * speed
                 ego, front = self.car(0, 100, speed), self.car(7, 100 + distance, speed)
                 self.assertAlmostEqual(self.command(ego, (front,), "transform").speed, speed)
 
@@ -31,15 +31,15 @@ class TimeHeadwayTests(unittest.TestCase):
 
     def test_spacing_uses_own_speed_and_true_nearest_predecessor(self):
         ego = self.car(0, 100, 20)
-        distance = 5.5 + (30 - 5.5) / 28.8 * ego.speed
+        distance = 5.5 + .85 * ego.speed
         front = self.car(8, 100 + distance, 27)
         far = self.car(1, 148, 3)
         command = self.command(ego, (far, front), "transform")
         self.assertEqual(command.reference, front.track)
         self.assertAlmostEqual(command.speed, 20 + .2 * (27 - 20))
 
-    def test_cruise_equilibrium_is_still_thirty_metres(self):
-        ego, front = self.car(0, 100), self.car(5, 130)
+    def test_cruise_equilibrium_is_the_actual_dynamic_twenty_nine_point_nine_eight(self):
+        ego, front = self.car(0, 100), self.car(5, 129.98)
         self.assertAlmostEqual(self.command(ego, (front,), "transform").speed, 28.8)
 
     def test_noa_has_no_cross_lane_alignment_and_far_front_is_safety_only(self):

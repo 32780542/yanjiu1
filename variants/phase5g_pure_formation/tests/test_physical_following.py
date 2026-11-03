@@ -1,122 +1,75 @@
-"""以真实前车构建跟驰链，跨道对齐不复制邻车的速度。"""
-
+"""Common physical following and preserved low-speed counterexamples for C8."""
 from dataclasses import replace
+from math import sqrt
 import unittest
 
-from noa.native_rules import Memory, Vehicle, decide
+from noa import native_rules as r
 
 
-def car(track, x, lane, speed=28.8):
-    return Vehicle(track, x, (lane + 0.5) * 3.3, speed, lane)
+def car(track, x, lane=0, speed=28.8):
+    return r.Vehicle(track, x, (lane + .5) * r.LANE_WIDTH, speed, lane)
 
 
 class PhysicalFollowingTests(unittest.TestCase):
-    def test_nearest_real_front_defines_the_same_lane_distance(self):
-        ego = car(0, 100.0, 0)
-        rows = [car(1, 145.0, 0), car(2, 190.0, 2), car(3, 130.0, 1), car(4, 175.0, 1)]
-        command, _ = decide(ego, rows, Memory(), "formation", None)
-        self.assertAlmostEqual(command.target_x, 115.0)
+    def command(self, ego, rows=(), mode='transform', drop=None):
+        return r.decide(ego, tuple(rows), r.Memory(), mode, drop)[0]
 
-    def test_a_head_does_not_copy_a_stopped_adjacent_cars_speed(self):
-        ego = car(0, 100.0, 0)
-        command, _ = decide(ego, [car(1, 100.0, 1, 0.0)], Memory(), "formation", None)
-        self.assertGreaterEqual(command.speed, 26.8)
-        self.assertLessEqual(command.speed, 30.8)
+    def test_all_modes_obey_the_same_stopped_front_safety_limit(self):
+        ego, front = car(0, 100, speed=25), car(1, 110, speed=0)
+        cap = sqrt(2 ** 2 + 2 * 10 * (10 - 4 - 1.5)) - 2
+        for mode in ('noa', 'formation', 'transform'):
+            with self.subTest(mode=mode):
+                self.assertAlmostEqual(r.safe_speed(ego, (front,)), cap)
+                self.assertLessEqual(self.command(ego, (front,), mode).speed, cap)
 
-    def test_real_negative_reference_cycle_has_no_cross_lane_speed_feedback(self):
-        a = car(0, 682.365, 1, 0.0)
-        b = car(1, 655.258, 0, 0.0)
-        for ego, other in ((a, b), (replace(b, track=0), replace(a, track=1))):
-            command, _ = decide(ego, [other], Memory(), "transform")
-            self.assertGreaterEqual(command.speed, 26.8)
+    def test_a_straddling_ego_is_protected_in_both_occupied_lanes(self):
+        ego = replace(car(0, 100), y=3.3, vy=-3.3)
+        for lane in (0, 1):
+            with self.subTest(lane=lane):
+                front = car(1, 110, lane, 0)
+                self.assertLess(r.safe_speed(ego, (front,)), 10)
+                self.assertLessEqual(self.command(ego, (front,)).speed, r.safe_speed(ego, (front,)))
 
-    def test_a_join_is_finished_longitudinally_before_another_free_fill(self):
-        ego = car(0, 154.827, 0)
-        rows = [car(1, 329.59, 0), car(2, 106.27, 0), car(3, 147.81, 2), car(4, 190.27, 2)]
-        memory = Memory(joining=True)
-        command, memory = decide(ego, rows, memory, "formation", None)
-        self.assertIsNone(command.lane)
-        self.assertTrue(memory.joining)
+    def test_parked_adjacent_body_is_not_a_same_lane_braking_reference(self):
+        ego, adjacent = car(0, 100), car(1, 110, 1, 0)
+        self.assertEqual(r.safe_speed(ego, (adjacent,)), r.MAX_SPEED)
+        self.assertGreater(self.command(ego, (adjacent,), mode='formation').speed, 20)
 
-    def test_heads_align_the_first_row_instead_of_accepting_a_one_row_offset(self):
-        ego = car(0, 700.0, 1)
-        rows = [car(1, 715.0, 0), car(2, 685.0, 0), car(3, 655.0, 0)]
-        command, _ = decide(ego, rows, Memory(), "transform")
-        self.assertAlmostEqual(command.target_x, 730.0)
-        self.assertAlmostEqual(command.speed, 30.8)
+    def test_far_visible_front_is_followed_without_the_old_low_speed_zero_artifact(self):
+        # C6's 50-200 m branch subtracted 28.8 from an already relaxed speed.
+        ego, front = car(0, 900.951, 1, 0), car(1, 1078.776, 1, 20)
+        expected = .2 * (20 + .3 * (1078.776 - 5.5 - 900.951))
+        command = self.command(ego, (front,))
+        self.assertAlmostEqual(command.speed, expected)
+        self.assertGreater(command.speed, 10)
+        self.assertEqual(command.reference, front.track)
 
-    def test_entering_a_real_gap_does_not_target_its_rear_car_position(self):
-        ego = car(0, 700.0, 0)
-        rows = [car(1, 715.0, 1), car(2, 685.0, 1)]
-        memory = Memory(lane_target=1, joining=True)
-        command, _ = decide(ego, rows, memory, "formation", None)
-        self.assertAlmostEqual(command.target_x, 700.0)
-        self.assertAlmostEqual(command.speed, 28.8)
+    def test_far_hole_with_a_phase_peer_keeps_a_positive_low_speed_request(self):
+        ego, front = car(0, 900, 1, 0), car(1, 1050, 1, 20)
+        peer = car(2, 895, 0, 0)
+        command = self.command(ego, (front, peer))
+        self.assertGreater(command.speed, 5)
+        self.assertLessEqual(command.speed, r.safe_speed(ego, (front, peer)))
 
-    def test_an_ending_follower_can_use_its_own_safe_nonconflicting_gap(self):
-        ego = car(0, 670.0, 2)
-        rows = [car(1, 700.0, 2), car(2, 685.0, 1), car(3, 655.0, 1), car(4, 700.0, 0), car(5, 670.0, 0)]
-        command, _ = decide(ego, rows, Memory(), "transform")
-        self.assertEqual(command.lane, 1)
+    def test_compatible_phase_is_kept_but_cannot_reverse_a_real_front_correction(self):
+        ego, front = car(0, 100), car(1, 125)
+        base = self.command(ego, (front,), mode='formation').speed
+        opposed = self.command(ego, (front, car(2, 100, 1)), mode='formation').speed
+        compatible = self.command(ego, (front, car(2, 70, 1)), mode='formation').speed
+        self.assertLess(base, ego.speed)
+        self.assertAlmostEqual(opposed, base)
+        self.assertLessEqual(compatible, base)
 
-    def test_free_fill_yields_to_a_visible_necessary_merge_in_the_same_corridor(self):
-        # 六车19.9s的原生状态：C2仍在640m后，A2已需要合流。
-        ego = car(0, 638.1680428294391, 0, 24.706310124799895)
-        rows = [
-            Vehicle(i + 1, x, y, v, lane, vy)
-            for i, (x, y, v, lane, vy) in enumerate(
-                (
-                    (670.2407335937487, 4.95, 28.8, 1, -3.3),
-                    (640.301311460154, 8.25, 29.20071420948352, 2, 0.0),
-                    (653.7268887439401, 3.3, 25.9832397458757, 0, -3.3),
-                    (623.9575306373935, 4.95, 26.383560086641776, 1, 0.0),
-                    (668.3399999999987, 1.65, 26.8, 0, 0.0),
-                )
-            )
-        ]
-        command, _ = decide(ego, rows, Memory(), "transform")
-        self.assertIsNone(command.lane)
-        self.assertNotEqual(command.reason, "fill_layer")
+    def test_closing_corridor_is_rejected_using_relative_speed(self):
+        ego, rear = car(0, 100, 2, 10), car(1, 88, 1, 30)
+        self.assertFalse(r._clear(ego, (rear,), 1))
+        self.assertIsNone(self.command(ego, (rear,), drop=200).lane)
 
-    def test_an_unstarted_free_request_yields_when_a_necessary_merge_arrives(self):
-        ego = car(0, 638.0, 0)
-        rows = [car(1, 640.0, 2), car(2, 670.0, 1), car(3, 610.0, 1)]
-        command, memory = decide(ego, rows, Memory(lane_target=1, joining=True), "transform")
-        self.assertIsNone(command.lane)
-        self.assertIsNone(memory.lane_target)
-
-    def test_normal_overtaking_also_yields_the_conflicting_mandatory_corridor(self):
-        ego = car(0, 638.0, 0, 20.0)
-        rows = [car(1, 660.0, 0, 20.0), car(2, 640.0, 2, 20.0)]
-        command, _ = decide(ego, rows, Memory(), "noa")
-        self.assertIsNone(command.lane)
-
-    def test_a_gap_passed_by_the_car_is_replaced_before_lateral_entry(self):
-        # v19原生88.5s：原F/R都已在本车后，不能仍追其后方中点。
-        ego = car(0, 684.284, 2, 8.0)
-        rows = [car(1, 660.209, 1, 2.0), car(2, 643.585, 1, 0.0), car(3, 703.546, 1, 22.03)]
-        memory = Memory(lane_target=1, gap=(1, 2), joining=True)
-        command, memory = decide(ego, rows, memory, "transform")
-        self.assertGreater(command.target_x, 660.209)
-        self.assertGreater(command.speed, 0.0)
-        self.assertEqual(memory.gap, (3, 1))
-
-    def test_ordinary_merge_keeps_its_underlying_formation_following(self):
-        ego = car(0, 700.0, 0)
-        rows = [car(1, 745.0, 0), car(2, 730.0, 1), car(3, 760.0, 2)]
-        command, _ = decide(ego, rows, Memory(), "formation")
-        self.assertAlmostEqual(command.target_x, 715.0)
-        self.assertGreater(command.speed, 28.8)
-
-    def test_ordinary_formation_does_not_fill_an_announced_ending_lane(self):
-        ego = car(0, 700.0, 1)
-        rows = [
-            car(i + 1, x, lane)
-            for i, (x, lane) in enumerate(((715.0, 2), (715.0, 1), (685.0, 1), (670.0, 0), (655.0, 0)))
-        ]
-        command, _ = decide(ego, rows, Memory(), "formation")
-        self.assertNotEqual(command.lane, 2)
+    def test_low_speed_entry_slot_keeps_two_unchanged_eight_metre_clearances(self):
+        self.assertEqual(r._entry_spacing(0), 16)
+        self.assertEqual(r._entry_spacing(5), 16)
+        self.assertAlmostEqual(r._entry_spacing(20), 5.5 + .85 * 20)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

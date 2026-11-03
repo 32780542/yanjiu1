@@ -1,4 +1,4 @@
-"""Run original formation tapes with a frozen rule file and a 2400 m exit."""
+"""Run original formation tapes with a frozen rule file and a longer observation road."""
 import argparse
 import json
 from pathlib import Path
@@ -20,7 +20,10 @@ def main():
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--demo', choices=('unformed24', 'formed45'), required=True)
     p.add_argument('--scenario', choices=('straight3', 'lane_drop'), required=True)
+    p.add_argument('--exit-m', type=int, default=2400)
     a = p.parse_args()
+    if a.exit_m < 1200:
+        p.error('The observation exit must be at least 1200 m.')
     assert not a.output.exists(), 'Keep earlier attempts; choose a new output.'
     source = a.output / 'source'
     for name in FILES:
@@ -29,8 +32,8 @@ def main():
         if name == 'experiments/native_sumo.py':
             text = raw.decode()
             assert text.count('("exit", 1200)') == text.count('retained, 1000, 1200)') == 1
-            raw = text.replace('("exit", 1200)', '("exit", 2400)').replace(
-                'retained, 1000, 1200)', 'retained, 1000, 2400)').encode()
+            raw = text.replace('("exit", 1200)', f'("exit", {a.exit_m})').replace(
+                'retained, 1000, 1200)', f'retained, 1000, {a.exit_m})').encode()
         target = source / name
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(raw)
@@ -40,7 +43,7 @@ def main():
                '--max-time', '240', '--scenario', a.scenario, '--initial', str(tape),
                '--diagnostic', '--output-base', str(a.output / 'run')]
     protocol = {'demo': a.demo, 'scenario': a.scenario, 'rules': str(a.rules),
-                'initial': str(tape), 'exit_m': 2400, 'bottleneck_m': 1000,
+                'initial': str(tape), 'exit_m': a.exit_m, 'bottleneck_m': 1000,
                 'purpose': 'formation geometry; not a traffic-efficiency comparison', 'command': command}
     (a.output / 'protocol.json').write_text(json.dumps(protocol, indent=2) + '\n', encoding='utf-8')
     raise SystemExit(subprocess.call(command, cwd=ROOT))

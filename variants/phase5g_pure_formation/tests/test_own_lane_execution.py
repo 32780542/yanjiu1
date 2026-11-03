@@ -40,9 +40,11 @@ class OwnLaneExecutionTests(unittest.TestCase):
         self.assertIn("pending_lane", rules.Vehicle.__dataclass_fields__, "missing own feedback field")
         return replace(ego, pending_lane=pending)
 
-    def test_real_submitted_request_survives_centered_response_and_then_merges(self):
+    def test_real_submitted_request_survives_latency_and_releases_before_new_road_observation(self):
         ego, rows = self.frame(372.2)
-        command, memory = rules.decide(ego, rows, rules.Memory(), "transform")
+        # The recorded historical driver requested 1->2. C8 no longer creates
+        # that discretionary move, but must honor its own already submitted actuation.
+        command, memory = rules.decide(self.with_pending(ego, 2), rows, rules.Memory(), "transform")
         self.assertEqual(command.lane, 2)
         self.assertTrue(native.lane_request_is_safe(ego, rows, command.lane))
         attempt = (command.lane, ego.time)
@@ -59,13 +61,17 @@ class OwnLaneExecutionTests(unittest.TestCase):
         self.assertTrue(native.lane_change_is_complete(ego, 2))
         self.assertIsNone(self.pending(ego, attempt))
         command, memory = rules.decide(self.with_pending(ego, None), rows, memory, "transform")
-        self.assertEqual((command.reason, command.lane, memory.lane_target), ("merge", 1, 1))
+        self.assertIsNone(command.lane)
+        self.assertIsNone(memory.lane_target)
+        # A newly observed road end can now require 2->1; old actuation is no map.
+        command, memory = rules.decide(ego, rows, memory, "transform", drop_x=800.)
+        self.assertEqual((command.lane, memory.lane_target), (1, 1))
 
     def test_settled_nonadjacent_helper_memory_cannot_block_necessary_merge(self):
         ego, rows = self.frame(373.4)
-        stale = rules.Memory(lane_target=0, gap=(4, 1), joining=True)
-        command, memory = rules.decide(ego, rows, stale, "transform")
-        self.assertEqual((command.reason, command.lane, memory.lane_target), ("merge", 1, 1))
+        stale = rules.Memory(lane_target=0, front=4)
+        command, memory = rules.decide(ego, rows, stale, "transform", drop_x=800.)
+        self.assertEqual((command.lane, memory.lane_target), (1, 1))
 
     def test_submitted_target_corrects_stale_helper_before_native_motion(self):
         ego, rows = self.frame(372.3)
@@ -77,7 +83,7 @@ class OwnLaneExecutionTests(unittest.TestCase):
         ego = self.with_pending(rules.Vehicle(0, 700.0, 8.18, 25.0, 2, 0.08), 2)
         self.assertFalse(native.lane_change_is_complete(ego, 2))
         command, memory = rules.decide(ego, (), rules.Memory(lane_target=2), "transform")
-        self.assertEqual((command.reason, command.lane, memory.lane_target), ("executing", 2, 2))
+        self.assertEqual((command.lane, memory.lane_target), (2, 2))
 
     def test_actual_lateral_motion_survives_request_timeout(self):
         ego = rules.Vehicle(0, 700.0, 6.6, 25.0, 1, 3.3, time=5.0)
@@ -125,9 +131,9 @@ class OwnLaneExecutionTests(unittest.TestCase):
         with TemporaryDirectory() as tmp, patch.object(rules, "decide", side_effect=inspect):
             native.run_case(mode="transform", flow=0.0, duration=1.0, max_time=2.0,
                             output_base=tmp, initial=[
-                                dict(id="ending", depart=0.0, lane=2, x=700.0, speed=28.8),
-                                dict(id="middle", depart=0.0, lane=1, x=730.0, speed=28.8),
-                                dict(id="left", depart=0.0, lane=0, x=680.0, speed=28.8)])
+                                dict(id="ending", depart=0.0, lane=2, x=810.0, speed=28.8),
+                                dict(id="middle", depart=0.0, lane=1, x=840.0, speed=28.8),
+                                dict(id="left", depart=0.0, lane=0, x=790.0, speed=28.8)])
         self.assertTrue(observed)
         self.assertTrue(any(pending == 1 and lane == 2
                             for _, lane, vy, pending, _ in observed),
