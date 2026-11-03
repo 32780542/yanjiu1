@@ -1,0 +1,21 @@
+{
+  "base_s_path": "D:\\yanjiu1\\keyan1\\variants\\phase5g_pure_formation\\noa\\native_rules.py",
+  "base_s_sha256": "8bdaa210e7aa7e72e8ae5e6b4a6642e38adc80b2a3416653624752fbf685d12f",
+  "parent_revision_path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_future_resources\\native_rules.py",
+  "parent_revision_sha256": "e4b18ac1a61970b9f45e6815725b036a35e91e6773dc6afdcd2032b64daba7e7",
+  "path": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\candidates\\midflow_future_resources_v2\\native_rules.py",
+  "source_sha256": "d07c82501e3e86ce06529779b9c0bacd9469fd9654cc43c6dcd1c81bb21f8be4",
+  "changed_functions_from_f": [
+    "_fill"
+  ],
+  "changed_functions_from_s": [
+    "_fill",
+    "_decide"
+  ],
+  "no_V_projection": true,
+  "no_new_state_memory_or_tunable_parameter": true,
+  "future_vacancy_uses_existing_CLEARANCE": 8.0,
+  "enabled_scope": "transform and preparing only",
+  "strategy": "future-resource lane choice, actual-gap execution",
+  "specified_future_slot_tracking": false
+}

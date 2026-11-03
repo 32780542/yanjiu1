@@ -1,0 +1,12 @@
+--- F/noa/native_rules.py
++++ F2/noa/native_rules.py
+@@ -279,7 +279,8 @@
+             continue
+         for lane in range(lanes):
+             target = center - phase(lane)
+-            if future and matches(center, lane):
++            if future and any(resource_lane(c) == lane and abs(c.x - target) < CLEARANCE
++                              for c in cars):
+                 continue
+             if any(_occupies(c, lane) and abs(c.x - target) < CLEARANCE for c in cars):
+                 continue

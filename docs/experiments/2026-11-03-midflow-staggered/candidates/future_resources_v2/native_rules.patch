@@ -1,0 +1,74 @@
+--- S/noa/native_rules.py
++++ F2/noa/native_rules.py
+@@ -198,26 +198,29 @@
+     return min(_front_following(car, rows)[0], safe_speed(car, rows))
+ 
+ 
+-def _fill(ego, rows, lanes):
++def _fill(ego, rows, lanes, future=False):
+     """保留形成收益，优先选择同帧CF响应损失较小且后车无需强制动的补位。"""
+     component = _component(ego, rows)
+     cars = tuple(c for c in component if abs(c.x - ego.x) <= 90.0)
+     if len(cars) < lanes:
+         return None
+-    members = tuple(c for c in cars if c.lane < lanes)
++    def resource_lane(car):
++        return min(car.lane, 1) if future else car.lane
++
++    members = tuple(c for c in cars if resource_lane(c) < lanes)
+ 
+     def phase(lane):
+-        return _phase(lane, lanes)
++        return _phase(min(lane, 1) if future else lane, lanes)
+ 
+     anchor = max(
+-        (c for c in component if c.lane < lanes), key=lambda c: (c.x + phase(c.lane), c.lane, c.x)
++        (c for c in component if resource_lane(c) < lanes), key=lambda c: (c.x + phase(c.lane), c.lane, c.x)
+     )
+     base = anchor.x + phase(anchor.lane)
+     near = base - round((base - ego.x - phase(ego.lane)) / GAP) * GAP
+     centers = [near + k * GAP for k in range(-3, 4)]
+ 
+     def matches(center, lane):
+-        return [c for c in cars if c.lane == lane and abs(c.x - (center - phase(lane))) <= 2.0]
++        return [c for c in cars if resource_lane(c) == lane and abs(c.x - (center - phase(c.lane))) <= 2.0]
+ 
+     full = [
+         center
+@@ -227,7 +230,7 @@
+     candidates = [
+         c
+         for c in members
+-        if c.track != anchor.track
++        if c.lane < lanes and c.track != anchor.track
+         and abs(c.vy) < 0.1
+         and not any(abs(c.x - (center - phase(c.lane))) <= 2.0 for center in full)
+     ]
+@@ -269,12 +272,16 @@
+ 
+     choices = []
+     for center in centers:
+-        window = [c for c in component if c.lane < lanes and center - 60.0 <= c.x <= center + 30.0]
+-        counts = [sum(c.lane == lane for c in window) for lane in range(lanes)]
++        window = [c for c in component if resource_lane(c) < lanes
++                  and center - 60.0 <= (c.x + phase(c.lane) if future else c.x) <= center + 30.0]
++        counts = [sum(resource_lane(c) == lane for c in window) for lane in range(lanes)]
+         if not any(matches(center, lane) for lane in range(lanes)):
+             continue
+         for lane in range(lanes):
+             target = center - phase(lane)
++            if future and any(resource_lane(c) == lane and abs(c.x - target) < CLEARANCE
++                              for c in cars):
++                continue
+             if any(_occupies(c, lane) and abs(c.x - target) < CLEARANCE for c in cars):
+                 continue
+             for car in candidates:
+@@ -402,7 +409,7 @@
+         return action(speed, None, "approach_gap", target), memory
+ 
+     if organized and not memory.joining:
+-        lane = _fill(ego, rows, 2 if preparing else lanes)
++        lane = _fill(ego, rows, 2 if preparing else lanes, future=preparing and mode == "transform")
+         if lane is not None:
+             if not _mandatory_priority(ego, rows, lane, drop_x):
+                 memory = Memory(lane_target=lane, joining=True)
