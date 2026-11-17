@@ -1,4 +1,4 @@
-"""Test transform-only rule variants under the frozen transferred IDM physics."""
+"""Test an exact rule variant under the frozen transferred IDM physics."""
 
 import argparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -26,23 +26,27 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("output", type=Path)
     parser.add_argument("--flows", nargs="+", type=int, choices=(1500, 1750, 2000), default=[2000, 1750])
+    parser.add_argument("--seeds", nargs="+", type=int, default=[211, 212])
+    parser.add_argument("--mode", choices=("noa", "transform"), default="transform")
+    parser.add_argument("--profile", choices=("transfer", "tau_only"), default="transfer")
     parser.add_argument("--jobs", type=int, choices=(1, 2, 3, 4), default=4)
     parser.add_argument("--rules", type=Path, help="An exact candidate file. Default removes the lane-0 speculative cue.")
     args = parser.parse_args()
     batch = args.output.resolve()
-    assert batch.parent == RUNS and not batch.exists() and len(set(args.flows)) == len(args.flows)
+    assert batch.parent == RUNS and not batch.exists()
+    assert all(len(set(values)) == len(values) for values in (args.flows, args.seeds))
     batch.mkdir()
-    hashes = freeze(batch, TRANSFER / "src/control")["transfer"]
-    assert hashes == read_json(TRANSFER / "protocol.json")["hashes"]["transfer"]
-    rules = batch / "src/transfer" / RULES
+    hashes = freeze(batch, TRANSFER / "src/control")[args.profile]
+    assert hashes == read_json(TRANSFER / "protocol.json")["hashes"][args.profile]
+    rules = batch / "src" / args.profile / RULES
     source = rules.read_bytes()
     modified = args.rules.read_bytes() if args.rules else remove_cascade(source)
     assert modified != source
     compile(modified, str(rules), "exec")
     rules.write_bytes(modified)
     hashes[RULES] = digest(modified)
-    tasks = [dict(profile="transfer", flow=flow, seed=seed, mode="transform")
-             for flow in args.flows for seed in (211, 212)]
+    tasks = [dict(profile=args.profile, flow=flow, seed=seed, mode=args.mode)
+             for flow in args.flows for seed in args.seeds]
     (batch / "run.py").write_bytes(Path(__file__).read_bytes())
     write_json(batch / "protocol.json", dict(tasks=tasks, hashes=hashes, jobs=args.jobs,
                                             treatment=str(args.rules.resolve()) if args.rules else

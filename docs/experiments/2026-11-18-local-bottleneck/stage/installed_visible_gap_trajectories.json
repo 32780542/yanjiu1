@@ -1,0 +1,39 @@
+{
+  "flow": 1500,
+  "seed": 211,
+  "frozen": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_noa_local_gap6_r02\\case\\control_1500_211_noa\\20261117T174216180394Z_lane_drop_noa_s211_1973a9",
+  "production": "D:\\yanjiu1\\keyan1\\tmp\\nov18_matlab\\gap_production_r01\\20261117T175647652618Z_lane_drop_noa_s211_d43b67",
+  "case_metadata_diff": {
+    "road_observation_m": [
+      null,
+      200.0
+    ]
+  },
+  "source_sha256_diff": {
+    "experiments/native_sumo.py": [
+      "bc22273fa224206e03dd896fb7b386a5d28ce3526fddebfa6bf7d7c93caaa1d1",
+      "767012c319576819a3cd669dd4358e95e575a9494f81a9eb7b27fe42d560b0ea"
+    ],
+    "noa/native_rules.py": [
+      "12109048e1c643fa9cbf807df02494e9d53509a9a2792e622968bd3f2c9640c1",
+      "907bdafa1f31341d6791fb177413f1d568e52cb69cbff1cb6aaa6c2e3d11da42"
+    ]
+  },
+  "trace": {
+    "trips.json": {
+      "bytes": 490814,
+      "sha256": "69ddf50df95535f1645ed1a10296fae502a597132d3a28f435568ad4c22934fa",
+      "byte_identical": true
+    },
+    "positions.jsonl.gz": {
+      "bytes": 27656558,
+      "sha256": "9397a80832dc1c57faac8fecb3eb6c4680a619cd11857e15f010e68f527dd8b4",
+      "byte_identical": true
+    },
+    "events.jsonl.gz": {
+      "bytes": 271696,
+      "sha256": "6bf1b321e315694cb1a36acb846b971627254978dcb9ad707c0ba3e07158a3f2",
+      "byte_identical": true
+    }
+  }
+}

@@ -122,17 +122,18 @@ def main():
     parser.add_argument("--jobs", type=int, choices=(1, 2, 3, 4), default=4)
     parser.add_argument("--profiles", nargs="+", choices=tuple(PROFILES), default=["transfer"])
     parser.add_argument("--flows", nargs="+", type=int, choices=(1500, 1750, 2000), default=[1500, 1750, 2000])
+    parser.add_argument("--seeds", nargs="+", type=int, default=[211, 212])
+    parser.add_argument("--modes", nargs="+", choices=("noa", "transform"), default=["noa", "transform"])
     parser.add_argument("--source", type=Path, default=SOURCE)
     args = parser.parse_args()
     batch = args.output.resolve()
     assert batch.parent == ROOT / "tmp/staggered_bottleneck" and not batch.exists()
-    assert len(set(args.flows)) == len(args.flows) and len(set(args.profiles)) == len(args.profiles)
+    assert all(len(set(values)) == len(values) for values in (args.flows, args.profiles, args.seeds, args.modes))
     batch.mkdir()
     hashes = freeze(batch, args.source.resolve())
     (batch / "run.py").write_bytes(Path(__file__).read_bytes())
     tasks = [dict(profile=profile, flow=flow, seed=seed, mode=mode)
-             for flow, profile, seed, mode in itertools.product(args.flows, args.profiles, (211, 212),
-                                                               ("noa", "transform"))]
+             for flow, profile, seed, mode in itertools.product(args.flows, args.profiles, args.seeds, args.modes)]
     write_json(batch / "protocol.json", dict(tasks=tasks, hashes=hashes, jobs=args.jobs,
                                             frozen_from=str(args.source.resolve())))
     print(json.dumps(dict(batch=str(batch), planned=len(tasks))), flush=True)
