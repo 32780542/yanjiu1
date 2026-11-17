@@ -391,6 +391,31 @@ class NativeIntegrationTests(unittest.TestCase):
                 self.assertEqual(action["safe_speed_cap_mps"], 7.0)
                 self.assertLessEqual(action["speed"], 7.0)
 
+    def test_control_receives_only_the_road_end_within_its_view(self):
+        from experiments import native_sumo as native
+        from noa import native_rules
+
+        seen = {}
+
+        decide = native_rules.decide
+
+        def record(ego, neighbors, memory, mode, drop_x):
+            seen[round(ego.x)] = drop_x
+            return decide(ego, neighbors, memory, mode, drop_x)
+
+        with TemporaryDirectory() as tmp, patch.object(native_rules, "decide", side_effect=record):
+            native.run_case(
+                mode="noa",
+                duration=0.1,
+                max_time=0.1,
+                output_base=tmp,
+                initial=[
+                    dict(id="far", depart=0.0, lane=2, x=600.0, speed=28.8),
+                    dict(id="near", depart=0.0, lane=2, x=850.0, speed=28.8),
+                ],
+            )
+        self.assertEqual(seen, {600: None, 850: 1000.0})
+
     def test_actual_lane_completion_is_later_than_lane_index_flip(self):
         from experiments import native_sumo as native
         from noa import native_rules

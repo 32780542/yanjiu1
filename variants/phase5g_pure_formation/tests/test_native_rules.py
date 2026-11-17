@@ -67,6 +67,30 @@ class NativeRulesTests(unittest.TestCase):
         self.assertAlmostEqual(command.target_x, 860 - (5.5 + .85 * 20))
         self.assertEqual(memory.front, rows[1].track)
 
+    def test_ending_lane_keeps_its_front_until_a_merge_can_start(self):
+        ego = car(0, 850, 2, 20)
+        current = car(1, 879, 2, 18)
+        target = car(2, 870, 1, 12)
+        blocker = car(3, 847, 1, 22)
+        command, memory = self.command(ego, (current, target, blocker))
+        self.assertIsNone(command.lane)
+        self.assertEqual(command.reference, current.track)
+        self.assertEqual(memory.lane_target, 1)
+
+        command, _ = self.command(ego, (current, target), memory=memory)
+        self.assertEqual((command.lane, command.reference), (1, target.track))
+
+    def test_noa_matches_the_visible_target_front_while_its_merge_is_blocked(self):
+        ego = car(0, 850, 2, 20)
+        current = car(1, 879, 2, 18)
+        target = car(2, 870, 1, 12)
+        blocker = car(3, 847, 1, 22)
+        command, _ = self.command(ego, (current, target, blocker), mode='noa')
+        self.assertIsNone(command.lane)
+        self.assertEqual((command.reason, command.reference, command.formation_state),
+                         ('merge_wait', target.track, 0))
+        self.assertAlmostEqual(command.target_x, target.x - r.desired_spacing(ego.speed))
+
     def test_a_current_eight_metre_corridor_is_not_a_full_rear_entry_slot(self):
         ego, rows = self.slot_scene()
         rows = (rows[0], rows[1], car(3, 820, 0, 20))

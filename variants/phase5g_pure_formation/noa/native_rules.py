@@ -124,7 +124,7 @@ def _following(ego, rows, lanes=3):
     return _request(ego, target, CRUISE), target, None, int(linked)
 
 
-def _reactive(ego, rows, memory, drop_x, overtake=True):
+def _reactive(ego, rows, memory, drop_x):
     """普通跟驰、当前间隙接受和受阻超车；不追踪合流间隙中点。"""
     speed, target, reference, _ = _front_following(ego, rows)
     lane = ego.pending_lane
@@ -136,24 +136,28 @@ def _reactive(ego, rows, memory, drop_x, overtake=True):
     if drop_x is not None and ego.lane == 2:
         if _clear(ego, rows, 1):
             return Command(speed, 1, 'merge', target, reference), Memory(lane_target=1)
+        anchor = _actual_front(ego, rows, 1)
+        if anchor is not None:
+            approach_x = anchor.x - _entry_spacing(ego.speed)
+            approach_speed = _request(ego, approach_x, anchor.speed)
+            if approach_speed < speed:
+                speed, target, reference = approach_speed, approach_x, anchor.track
         return Command(speed, None, 'merge_wait', target, reference), Memory()
-    if overtake:
-        front = min((c for c in rows if c.lane == ego.lane and c.x > ego.x),
-                    key=lambda c: c.x, default=None)
-        if front is not None and ego.speed < CRUISE - 2 and front.speed < CRUISE - 2:
-            lanes = 2 if drop_x is not None and ego.x >= drop_x else 3
-            options = [lane for lane in (ego.lane - 1, ego.lane + 1)
-                       if 0 <= lane < lanes and not (drop_x is not None and lane == 2)
-                       and _clear(ego, rows, lane)]
+    front = min((c for c in rows if c.lane == ego.lane and c.x > ego.x),
+                key=lambda c: c.x, default=None)
+    if front is not None and ego.speed < CRUISE - 2 and front.speed < CRUISE - 2:
+        lanes = 2 if drop_x is not None else 3
+        options = [lane for lane in (ego.lane - 1, ego.lane + 1)
+                   if 0 <= lane < lanes and _clear(ego, rows, lane)]
 
-            def free_distance(lane):
-                return min((c.x - ego.x for c in rows if c.lane == lane and c.x > ego.x),
-                           default=200.)
+        def free_distance(lane):
+            return min((c.x - ego.x for c in rows if c.lane == lane and c.x > ego.x),
+                       default=200.)
 
-            if options:
-                lane = max(options, key=free_distance)
-                if free_distance(lane) > front.x - ego.x + 15.:
-                    return Command(speed, lane, 'normal_overtake', target, reference), Memory(lane_target=lane)
+        if options:
+            lane = max(options, key=free_distance)
+            if free_distance(lane) > front.x - ego.x + 15.:
+                return Command(speed, lane, 'normal_overtake', target, reference), Memory(lane_target=lane)
     return Command(speed, None, 'normal_follow', target, reference), Memory()
 
 
@@ -234,8 +238,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
     speed = _request(ego, target, front.speed) if front is not None else CRUISE
     reference = front.track if front is not None else None
     formed = _following(ego, rows)
-    transition = access or front is not None and front.track != physical[2]
-    if not transition:
+    if not access:
         speed, target, reference, linked = formed
         local = _front_following(ego, rows)
         if local[2] is None and physical[2] is not None and memory.front is not None:
@@ -282,10 +285,11 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
     else:
         plan = None
 
-    if plan is not None and anchor is not None:
+    # A blocked mandatory merge keeps the current lane's longitudinal reference.
+    if plan is not None and anchor is not None and (lane is not None or not mandatory):
         target = anchor.x - _entry_spacing(ego.speed)
         speed, reference = _request(ego, target, anchor.speed), anchor.track
-    if physical[2] is not None and (transition or plan is not None):
+    if physical[2] is not None and (access or plan is not None):
         speed = min(speed, physical[0])
     own = Memory(lane_target=plan, front=anchor.track if anchor is not None else reference)
     reason = ('forward_change' if lane is not None else 'forward_approach' if plan is not None

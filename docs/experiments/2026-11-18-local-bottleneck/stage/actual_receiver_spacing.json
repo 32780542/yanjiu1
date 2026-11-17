@@ -1,0 +1,74 @@
+[
+  {
+    "flow": 1500.0,
+    "seed": 211,
+    "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_receiver_spacing6_r01\\cases\\ActualReceiveSpacing_1500_211_lane_drop_transform\\20261117T175242474266Z_lane_drop_transform_s211_19675f",
+    "control_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_local_merge12_r01\\cases\\KeepFront_1500_211_lane_drop_transform\\20261117T172334974917Z_lane_drop_transform_s211_136b26",
+    "mean_system_time_s": 40.47493403693932,
+    "change_mean_system_time_s": 0.0,
+    "mean_entry_wait_s": 0.0708443271767808,
+    "change_mean_entry_wait_s": 0.0,
+    "fuel_g_per_km": 74.42197863896217,
+    "change_fuel_g_per_km": 0.0
+  },
+  {
+    "flow": 1500.0,
+    "seed": 212,
+    "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_receiver_spacing6_r01\\cases\\ActualReceiveSpacing_1500_212_lane_drop_transform\\20261117T175242475575Z_lane_drop_transform_s212_45f515",
+    "control_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_local_merge12_r01\\cases\\KeepFront_1500_212_lane_drop_transform\\20261117T172334973920Z_lane_drop_transform_s212_3dc2d0",
+    "mean_system_time_s": 40.3562099871959,
+    "change_mean_system_time_s": 0.0,
+    "mean_entry_wait_s": 0.09859154929577493,
+    "change_mean_entry_wait_s": 0.0,
+    "fuel_g_per_km": 74.89581287878788,
+    "change_fuel_g_per_km": 0.0
+  },
+  {
+    "flow": 1750.0,
+    "seed": 211,
+    "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_receiver_spacing6_r01\\cases\\ActualReceiveSpacing_1750_211_lane_drop_transform\\20261117T175242472937Z_lane_drop_transform_s211_80f2fd",
+    "control_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_local_merge12_r01\\cases\\KeepFront_1750_211_lane_drop_transform\\20261117T172334974917Z_lane_drop_transform_s211_96141f",
+    "mean_system_time_s": 41.083066361556064,
+    "change_mean_system_time_s": 0.09462242562928935,
+    "mean_entry_wait_s": 0.10274599542334088,
+    "change_mean_entry_wait_s": 0.0,
+    "fuel_g_per_km": 76.65302131960335,
+    "change_fuel_g_per_km": 0.14517190122043644
+  },
+  {
+    "flow": 1750.0,
+    "seed": 212,
+    "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_receiver_spacing6_r01\\cases\\ActualReceiveSpacing_1750_212_lane_drop_transform\\20261117T175242472937Z_lane_drop_transform_s212_b85775",
+    "control_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_local_merge12_r01\\cases\\KeepFront_1750_212_lane_drop_transform\\20261117T172334973920Z_lane_drop_transform_s212_064639",
+    "mean_system_time_s": 41.4261692650334,
+    "change_mean_system_time_s": 0.15356347438752493,
+    "mean_entry_wait_s": 0.12917594654788447,
+    "change_mean_entry_wait_s": 0.0,
+    "fuel_g_per_km": 77.26969043244246,
+    "change_fuel_g_per_km": 0.31639238121751134
+  },
+  {
+    "flow": 2000.0,
+    "seed": 211,
+    "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_receiver_spacing6_r01\\cases\\ActualReceiveSpacing_2000_211_lane_drop_transform\\20261117T175405096084Z_lane_drop_transform_s211_69fc61",
+    "control_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_local_merge12_r01\\cases\\KeepFront_2000_211_lane_drop_transform\\20261117T172334974917Z_lane_drop_transform_s211_1eb9c8",
+    "mean_system_time_s": 43.11432835820896,
+    "change_mean_system_time_s": 0.5846766169154236,
+    "mean_entry_wait_s": 0.1668656716417908,
+    "change_mean_entry_wait_s": 0.001691542288557335,
+    "fuel_g_per_km": 79.70201367330016,
+    "change_fuel_g_per_km": 0.5478300248756085
+  },
+  {
+    "flow": 2000.0,
+    "seed": 212,
+    "run_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_receiver_spacing6_r01\\cases\\ActualReceiveSpacing_2000_212_lane_drop_transform\\20261117T175411829841Z_lane_drop_transform_s212_8d8db2",
+    "control_dir": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_local_merge12_r01\\cases\\KeepFront_2000_212_lane_drop_transform\\20261117T172334974917Z_lane_drop_transform_s212_fa08ca",
+    "mean_system_time_s": 44.95735150925024,
+    "change_mean_system_time_s": -1.0166504381694281,
+    "mean_entry_wait_s": 0.21061343719571599,
+    "change_mean_entry_wait_s": 0.0006815968841284714,
+    "fuel_g_per_km": 81.40263575949368,
+    "change_fuel_g_per_km": -0.703613396624462
+  }
+]

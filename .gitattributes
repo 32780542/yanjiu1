@@ -39,3 +39,6 @@ docs/experiments/2026-11-04-timegap-staggered/** -text whitespace=blank-at-eol,b
 docs/experiments/2026-11-04-public-preview/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Preserve the installed controller exactly as the frozen, executed source.
 variants/phase5g_pure_formation/noa/native_rules.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve frozen November 18 research source and evidence bytes.
+docs/experiments/2026-11-18-local-bottleneck/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

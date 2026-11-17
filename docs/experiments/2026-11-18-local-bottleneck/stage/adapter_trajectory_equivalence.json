@@ -1,0 +1,42 @@
+[
+  {
+    "flow": 1500,
+    "mode": "noa",
+    "requested": 758,
+    "control": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_formal600_main_drop_211_215_r01\\cases\\C12_200_1500_211_lane_drop_noa\\20261103T203538664684Z_lane_drop_noa_s211_2c736c",
+    "current": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_production_equivalence\\1500_noa\\20261117T172654498598Z_lane_drop_noa_s211_794e69",
+    "trips_equal": true,
+    "positions.jsonl.gz": true,
+    "events.jsonl.gz": true
+  },
+  {
+    "flow": 1500,
+    "mode": "transform",
+    "requested": 758,
+    "control": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_formal600_main_drop_211_215_r01\\cases\\C12_200_1500_211_lane_drop_transform\\20261103T203538664684Z_lane_drop_transform_s211_27dc5e",
+    "current": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_production_equivalence\\1500_transform\\20261117T172654495356Z_lane_drop_transform_s211_220cd1",
+    "trips_equal": true,
+    "positions.jsonl.gz": true,
+    "events.jsonl.gz": true
+  },
+  {
+    "flow": 2000,
+    "mode": "noa",
+    "requested": 1005,
+    "control": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_formal600_main_drop_211_215_r01\\cases\\C12_200_2000_211_lane_drop_noa\\20261103T205018566669Z_lane_drop_noa_s211_c11f71",
+    "current": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_production_equivalence\\2000_noa\\20261117T172654509704Z_lane_drop_noa_s211_73138b",
+    "trips_equal": true,
+    "positions.jsonl.gz": true,
+    "events.jsonl.gz": true
+  },
+  {
+    "flow": 2000,
+    "mode": "transform",
+    "requested": 1005,
+    "control": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261104_formal600_main_drop_211_215_r01\\cases\\C12_200_2000_211_lane_drop_transform\\20261103T205215547641Z_lane_drop_transform_s211_820956",
+    "current": "D:\\yanjiu1\\keyan1\\tmp\\staggered_bottleneck\\20261118_production_equivalence\\2000_transform\\20261117T172654509704Z_lane_drop_transform_s211_2fb8cf",
+    "trips_equal": true,
+    "positions.jsonl.gz": true,
+    "events.jsonl.gz": true
+  }
+]

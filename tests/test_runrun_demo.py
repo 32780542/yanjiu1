@@ -197,7 +197,7 @@ class SimpleFormationConfigurationTests(unittest.TestCase):
 
     def test_runrun_entry_uses_native_demand_duration(self):
         import runrun
-        self.assertEqual(runrun.build_config().demand_duration_s, 600.0)
+        self.assertEqual(runrun.DEMAND_DURATION_S, 600.0)
 
     def test_default_simple_config_resolves_only_current_dependencies(self):
         paths = gui.validate_simple_config(

@@ -1,14 +1,16 @@
 # 局部感知的时距交错编队与车道收缩
 
-工作目录：**D:\yanjiu1\keyan1**。当前研究版本为 **C12：时距交错形成与单向收缩**，316行规则集中在 [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py)。每辆车根据前200米、后100米内各车道车辆的实际运动和自身记忆，计算自己的速度与换道动作。
+工作目录：**D:\yanjiu1\keyan1**。当前方法以 C12 时距交错为基础，缩道时按真实空隙接续。现行车辆规则集中在 [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py)。每辆车根据前200米、后100米内各车道车辆的实际运动和自身记忆，计算自己的速度与换道动作。
 
 同道目标车头间距为 **D(v)=5.5+0.85v 米**，相邻道错开半D。巡航28.8 m/s时，对应29.98米与14.99米。三道变两道时，终止道车辆进入相邻存续道，中道车辆沿实际交错空位向另一存续道接续；每次横移都向存续方向进行。
+
+11 月 18 日更新了缩道观察边界与终止道车辆的跟驰参考。当前默认在 200 米内直接看到终止道，等待空隙时继续跟随当前车道，能够并入后才切换目标道参考。MATLAB 普通 HDV 的拥堵复跑、同输入实验和源码阅读顺序见[本次缩道研究](docs/experiments/2026-11-18-local-bottleneck/README.md)。
 
 11 月 4 日续跑比较了 300、500、600 米公共预警，并检验了提前空位规则 L6。阶段报告包含五种子配对、1800 秒持续流、两种固定车群初态、候选代码和窗口运行命令。 [公共预警续跑报告](docs/experiments/2026-11-04-public-preview/README.md)
 
 ## 从这里了解当前工程
 
-1. [系统说明](docs/原生SUMO编队变换系统说明.md)：方法目的、执行流程、代码结构和运行方法。
+1. [当前源码阅读](docs/experiments/2026-11-18-local-bottleneck/代码阅读.md)与[历史系统说明](docs/原生SUMO编队变换系统说明.md)：方法目的、执行流程、代码结构和运行方法。
 2. [逐条规则与全部函数](docs/experiments/2026-11-04-timegap-staggered/规则逐条说明.md)：每条跟驰、形成、接收、换道、安全规则的条件、动作与源码位置。
 3. [本轮研究进展](docs/experiments/2026-11-04-timegap-staggered/README.md)：采用和未采用的版本、实际数据及当前结论。
 4. [评价口径](docs/experiments/2026-11-04-timegap-staggered/evaluation.md)：交通效率、油耗、直接0/1参与统计与真实队形指标。
@@ -17,7 +19,7 @@
 
 方法来源见 [本轮依据](docs/experiments/2026-11-04-timegap-staggered/method_options.md) 和 [150篇文献库](docs/research/2026-10-30-literature-review/README.md)。文献库分别标明相关章节、摘要预览和仅题录的读取深度；采用细节以当前规则为准。
 
-**本轮实现与计划实验已完成。** C12于2026年11月4日04:35登记锁定，之后保持不变。正式主135例、匹配并排45例、1800秒持续24例、扩展NOA45例、共同速度上限36例、时距敏感性48例，共333条持续交通及补充实验，全部安全排空。六条固定车群几何另计；开发结果与正式确认分别保存。
+**11 月 4 日试验已完成。** 冻结 C12 于2026年11月4日04:35登记锁定，之后保持不变。正式主135例、匹配并排45例、1800秒持续24例、扩展NOA45例、共同速度上限36例、时距敏感性48例，共333条持续交通及补充实验，全部安全排空。六条固定车群几何另计；开发结果与正式确认分别保存。
 
 ## 当前已经验证到哪里
 
@@ -41,7 +43,7 @@ C12在50米内建立普通跟驰链，之后可在200米内继续跟当前真实
 
 仅形成而不主动变换的方案、纯NOA、形成并变换的方案分开运行。车辆输出的状态1只表示本车已有编队关系，允许仍在调距；NOA始终为0。状态1的总人数与真实交错几何分别评价。
 
-当前C12的受影响148项测试实际通过；根入口实时GUI的20秒来车演示30/30辆安全完成。[原始测试与窗口记录](docs/experiments/2026-11-04-timegap-staggered/data/verification/README.md)已保存；独立复核结论见[最终证据验收](docs/experiments/2026-11-04-timegap-staggered/stage/final_evidence_review.md)。
+11 月 4 日冻结 C12 的受影响148项测试通过；根入口实时GUI的20秒来车演示30/30辆安全完成。[原始测试与窗口记录](docs/experiments/2026-11-04-timegap-staggered/data/verification/README.md)已保存；独立复核结论见[最终证据验收](docs/experiments/2026-11-04-timegap-staggered/stage/final_evidence_review.md)。
 
 ## 打开实时SUMO窗口
 
@@ -53,7 +55,7 @@ python -B runrun.py --check
 python -B runrun.py
 ```
 
-窗口与第一次计算同步：每计算一步，SUMO推进0.1秒。默认每道1750辆/h、来车600秒、seed1。默认道路为0–1000米三道、1000–1200米两道；本车在离终止位置200米时直接看到缩道。
+窗口随第一次计算逐步推进，每步0.1秒。你可以手动平移和缩放，运行器不会自动重设镜头。默认每道1750辆/h、来车600秒、seed1。默认道路为0–1000米三道、1000–1200米两道；本车在离终止位置200米时直接看到缩道。
 
 ```powershell
 python -B runrun.py --duration 60 --max-time 240 --gui-delay-ms 20 --no-wait

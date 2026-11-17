@@ -20,19 +20,7 @@ from experiments import native_sumo as native
 
 
 class NativeEntrypointTests(unittest.TestCase):
-    def test_defaults_select_real_1750_lane_drop_transform(self):
-        config = runrun.build_config()
-        self.assertTrue(hasattr(config, "mode"), "the entry still builds the historical demo")
-        self.assertEqual(config.mode, "transform")
-        self.assertEqual(config.scenario, "lane_drop")
-        self.assertEqual(config.flow_veh_h_lane, 1750.0)
-        self.assertEqual(config.demand_duration_s, 600.0)
-        self.assertEqual(config.seed, 1)
-        self.assertTrue(config.show_gui)
-        self.assertEqual(config.gui_delay_ms, 40)
-        self.assertTrue(config.wait_before_close)
-
-    def test_main_runs_directly_with_native_gui_without_a_menu(self):
+    def test_main_runs_directly_with_native_gui_and_manual_camera(self):
         self.assertTrue(hasattr(runrun, "run_case"), "the entry must call native run_case")
         with TemporaryDirectory() as tmp:
             directory = Path(tmp)
@@ -47,8 +35,13 @@ class NativeEntrypointTests(unittest.TestCase):
                     runrun.main([], input_fn=lambda _: self.fail("no menu"), output_fn=lambda _: None), 0
                 )
             self.assertEqual(run.call_args.kwargs["mode"], "transform")
+            self.assertEqual(run.call_args.kwargs["scenario"], "lane_drop")
+            self.assertEqual(run.call_args.kwargs["flow"], 1750.0)
             self.assertEqual(run.call_args.kwargs["duration"], 600.0)
+            self.assertEqual(run.call_args.kwargs["seed"], 1)
             self.assertTrue(run.call_args.kwargs["gui"])
+            self.assertEqual(run.call_args.kwargs["gui_delay_ms"], 40)
+            self.assertFalse(run.call_args.kwargs["auto_zoom"])
             self.assertTrue(run.call_args.kwargs["wait_before_close"])
 
     def test_short_headless_command_disables_gui_and_wait(self):
@@ -72,6 +65,7 @@ class NativeEntrypointTests(unittest.TestCase):
             self.assertFalse(run.call_args.kwargs["gui"])
             self.assertFalse(run.call_args.kwargs["wait_before_close"])
             self.assertEqual(run.call_args.kwargs["duration"], 2.0)
+            self.assertEqual(run.call_args.kwargs["gui_delay_ms"], 5)
             self.assertEqual(run.call_args.kwargs["max_time"], 3.0)
 
     def test_check_reports_native_dependencies_without_launching_sumo(self):

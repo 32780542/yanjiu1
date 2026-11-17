@@ -487,10 +487,11 @@ def run_case(
     GUI displays this first calculation. Interactive callers may inspect its
     final frame before pressing Enter; final tripinfo is sealed after closing.
     """
-    from noa.native_rules import Memory, Vehicle, decide, safe_speed
+    from noa.native_rules import ROAD_PREVIEW, Memory, Vehicle, decide, safe_speed
 
     if mode not in MODES or scenario not in SCENARIOS:
         raise ValueError("unknown mode or scenario")
+    lane_end = 1000.0 if scenario == "lane_drop" else None
     _ticks(duration)
     max_time = duration + 300.0 if max_time is None else float(max_time)
     _ticks(max_time)
@@ -526,6 +527,7 @@ def run_case(
             if mode == "global"
             else "private local tracks: 200m ahead, 100m behind"
         ),
+        road_observation_m=ROAD_PREVIEW if lane_end is not None and mode != "global" else None,
         reference_is_full_paper_reproduction=False if mode == "global" else None,
         reference_description=(
             "Cai-style centralized assignment reference; not a full Cai2024 reproduction"
@@ -812,9 +814,7 @@ def run_case(
                             )
                             for index, (key, state) in enumerate(states.items())
                         }
-                        global_commands = planner.commands(
-                            global_states, now, 1000.0 if scenario == "lane_drop" else None
-                        )
+                        global_commands = planner.commands(global_states, now, lane_end)
                     for key in ordered:
                         # This view is used by the common execution guard in all
                         # modes. Only distributed strategies receive it as input.
@@ -828,12 +828,15 @@ def run_case(
                         if planner is not None:
                             command = global_commands[key]
                         else:
+                            visible_end = (
+                                lane_end if lane_end is not None and lane_end - ego.x <= ROAD_PREVIEW else None
+                            )
                             command, memories[key] = decide(
                                 ego,
                                 neighbors,
                                 memories[key],
                                 mode=mode,
-                                drop_x=1000.0 if scenario == "lane_drop" else None,
+                                drop_x=visible_end,
                             )
                             formation_states[key] = command.formation_state
                         if not math.isfinite(command.speed):
