@@ -25,7 +25,7 @@ def measure(folder, method, flow, seed, writer):
     if hdv:
         safe = result["all_arrived"] and result["collision_log_lines"] == 0
         trip_file, route_file = "trips.xml", "hdv.rou.xml"
-        if result.get("profile") == "shared_noa":
+        if result.get("profile") in ("shared_noa", "hdv_headway"):
             route_file = "native.rou.xml"
     else:
         safe = result["status"] == "drained" and result["collisions"] == 0
@@ -34,18 +34,29 @@ def measure(folder, method, flow, seed, writer):
         raise ValueError(f"行程未正常结束 {folder}")
     shared_type = route_file == "native.rou.xml"
     # netconvert 的注释含运行时间和绝对路径；只比较仿真实际读取的网络内容。
+    route_bytes = (run / route_file).read_bytes()
+    routes = ET.fromstring(route_bytes)
+    vehicle_type = routes.find("vType")
+    tau = float(vehicle_type.attrib["tau"])
+    shared_inputs = None
     network_hash = routes_hash = ""
     road_limit = None
     if shared_type:
         network = ET.parse(run / "native.net.xml").getroot()
         road_limit, = {float(lane.attrib["speed"]) for lane in network.findall("edge/lane")}
         network_hash = sha256(ET.tostring(network)).hexdigest()
-        routes_hash = sha256((run / route_file).read_bytes()).hexdigest()
+        routes_hash = sha256(route_bytes).hexdigest()
+        # 配对时只允许普通车采用约定的 IDM 时距，原始文件哈希单独保留。
+        expected_tau = 0.65 if result.get("profile") == "hdv_headway" else 0.2
+        if tau != expected_tau:
+            raise ValueError(f"车型 IDM 时距与方案不符 {folder}: {tau}")
+        vehicle_type.set("tau", "0.2")
+        shared_inputs = network_hash, sha256(ET.tostring(routes)).digest()
 
     # 发车清单只校对配对输入，统计表的车辆和时间来自实际 tripinfo。
     demand = [(v.get("id"), v.get("departLane"), float(v.get("depart")),
                float(v.get("departPos")), float(v.get("departSpeed")))
-              for v in ET.parse(run / route_file).iter("vehicle")]
+              for v in routes.iter("vehicle")]
     stamps = {}
     for vehicle in ET.parse(run / trip_file).iter("tripinfo"):
         key = vehicle.attrib["id"]
@@ -70,7 +81,7 @@ def measure(folder, method, flow, seed, writer):
         raise ValueError(f"逐车行程与 SUMO 汇总不一致 {folder}")
     first = min(entry for entry, _ in stamps.values())
     last = max(exit_ for _, exit_ in stamps.values())
-    return demand, dict(method=method, flow=flow, seed=seed, vehicles=len(travel),
+    return demand, shared_inputs, dict(method=method, flow=flow, seed=seed, vehicles=len(travel),
                         total_travel_s=sum(travel) / 10, mean_travel_s=actual_mean,
                         entered_before_600=len(early), early_total_travel_s=sum(early) / 10,
                         early_mean_travel_s=mean(early) / 10,
@@ -78,7 +89,7 @@ def measure(folder, method, flow, seed, writer):
                         first_entry_to_last_exit_s=(last - first) / 10,
                         exits_before_600=sum(end < 6000 for _, end in stamps.values()),
                         profile=result.get("profile", "shared_noa"), network_sha256=network_hash,
-                        routes_sha256=routes_hash, road_limit_mps=road_limit)
+                        routes_sha256=routes_hash, road_limit_mps=road_limit, idm_tau_s=tau)
 
 
 def main():
@@ -101,12 +112,11 @@ def main():
                 shared_inputs = None
                 for method in methods:
                     folder = args.batch / f"{method}_f{flow}_s{seed}"
-                    demand, row = measure(folder, method, flow, seed, writer)
+                    demand, inputs, row = measure(folder, method, flow, seed, writer)
                     if reference is not None and demand != reference:
                         raise ValueError(f"三道发车清单有差异 {folder}")
                     reference = demand
-                    if row["profile"] == "shared_noa":
-                        inputs = row["network_sha256"], row["routes_sha256"]
+                    if inputs is not None:
                         if shared_inputs is not None and inputs != shared_inputs:
                             raise ValueError(f"共同车型、路由或道路不一致 {folder}")
                         shared_inputs = inputs

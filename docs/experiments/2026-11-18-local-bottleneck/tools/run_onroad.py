@@ -17,7 +17,9 @@ def main():
     parser.add_argument("--legacy-sumo-home", type=Path)
     parser.add_argument("--jobs", type=int, default=8)
     parser.add_argument("--road-limit", type=float, choices=(28.8, 33.3), default=33.3)
-    parser.add_argument("--original-hdv", action="store_true", help="复跑旧版车型对照")
+    profiles = parser.add_mutually_exclusive_group()
+    profiles.add_argument("--original-hdv", action="store_true", help="复跑旧版车型对照")
+    profiles.add_argument("--matched-tau", action="store_true", help="复跑共同底层 IDM 时距的对照")
     args = parser.parse_args()
     if bool(args.matlab_data) != bool(args.legacy_sumo_home):
         parser.error("原环境复跑需要同时提供 --matlab-data 和 --legacy-sumo-home")
@@ -41,6 +43,8 @@ def main():
                 cmd += ["--matlab-data", args.matlab_data, "--sumo-home", args.legacy_sumo_home]
             elif args.original_hdv:
                 cmd.append("--original-hdv")
+            elif args.matched_tau:
+                cmd.append("--matched-tau")
         if mode != "hdv_matlab":
             cmd += ["--road-limit", str(args.road_limit)]
         with (folder / "run.log").open("w", encoding="utf-8") as log:

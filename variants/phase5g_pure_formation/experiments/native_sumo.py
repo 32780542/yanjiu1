@@ -232,9 +232,10 @@ def build_network(directory, scenario="lane_drop", road_limit=33.3):
     return net
 
 
-def write_routes(directory, requests):
+def write_routes(directory, requests, *, tau=None):
     root = ET.Element("routes")
-    ET.SubElement(root, "vType", id="CAV_ICV", **{key: str(value) for key, value in PHYSICAL.items()})
+    model = PHYSICAL if tau is None else {**PHYSICAL, "tau": tau}
+    ET.SubElement(root, "vType", id="CAV_ICV", **{key: str(value) for key, value in model.items()})
     ET.SubElement(root, "route", id="through", edges="upstream downstream")
     for row in requests:
         ET.SubElement(

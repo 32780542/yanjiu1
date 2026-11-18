@@ -64,10 +64,10 @@ Cai 普通车控制换上 NOA 车型后，2000 档在现行路网的均值由原
 
 ```powershell
 $study = 'docs/experiments/2026-11-18-local-bottleneck/tools'
-python -B scripts/run_logged.py --label matched333 --timeout 5400 -- python -B "$study/run_onroad.py" tmp/repeat333 --road-limit 33.3
+python -B scripts/run_logged.py --label matched333 --timeout 5400 -- python -B "$study/run_onroad.py" tmp/repeat333 --road-limit 33.3 --matched-tau
 python -B "$study/summarize_onroad.py" tmp/repeat333 tmp/report333
-python -B scripts/run_logged.py --label matched288 --timeout 5400 -- python -B "$study/run_onroad.py" tmp/repeat288 --road-limit 28.8
+python -B scripts/run_logged.py --label matched288 --timeout 5400 -- python -B "$study/run_onroad.py" tmp/repeat288 --road-limit 28.8 --matched-tau
 python -B "$study/summarize_onroad.py" tmp/repeat288 tmp/report288
 ```
 
-默认的 `run_cai_hdv.py` 使用共同的 NOA 车型。在项目道路上复现早期普通 HDV 的结果时，传入 `--original-hdv`。单车对照沿用每种方法各自的运行入口，使用流量 2000、种子 311、需求时长 1 秒和截止时刻 90 秒。这段需求只产生一辆车。[批量运行](tools/run_onroad.py) · [逐车复算](tools/summarize_onroad.py)
+`run_cai_hdv.py` 默认使用 0.65 秒的普通车 IDM 时距。复现本页的 0.20 秒共同车型实验时，传入 `--matched-tau`。复现早期完整 HDV 车型时，传入 `--original-hdv`。单车对照沿用每种方法各自的运行入口，使用流量 2000、种子 311、需求时长 1 秒和截止时刻 90 秒。这段需求只产生一辆车。[批量运行](tools/run_onroad.py) · [逐车复算](tools/summarize_onroad.py)

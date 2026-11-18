@@ -30,7 +30,7 @@ class LocalVehicle:
 
 
 class NativeDemandTests(unittest.TestCase):
-    def test_cai_controller_uses_the_exact_noa_type_and_requests(self):
+    def test_cai_headway_is_the_only_change_to_the_common_input(self):
         from experiments.native_sumo import arrival_tape, write_routes
         from run_cai_hdv import scenario
 
@@ -42,7 +42,9 @@ class NativeDemandTests(unittest.TestCase):
             cai_dir.mkdir()
             with patch("run_cai_hdv.build_network"):
                 _, routes = scenario(cai_dir, requests, None)
-            self.assertEqual(routes.read_bytes(), expected)
+                self.assertEqual(routes.read_bytes(), expected.replace(b'tau="0.2"', b'tau="0.65"'))
+                _, matched = scenario(cai_dir, requests, None, matched_tau=True)
+                self.assertEqual(matched.read_bytes(), expected)
 
     def test_lane_completion_uses_center_and_stopped_lateral_motion(self):
         from experiments import native_sumo as native
