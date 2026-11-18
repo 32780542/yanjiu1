@@ -47,7 +47,7 @@ def measure(folder, method, flow, seed, writer):
         network_hash = sha256(ET.tostring(network)).hexdigest()
         routes_hash = sha256(route_bytes).hexdigest()
         # 配对时只允许普通车采用约定的 IDM 时距，原始文件哈希单独保留。
-        expected_tau = 0.65 if result.get("profile") == "hdv_headway" else 0.2
+        expected_tau = result.get("idm_tau_s", 0.65) if result.get("profile") == "hdv_headway" else 0.2
         if tau != expected_tau:
             raise ValueError(f"车型 IDM 时距与方案不符 {folder}: {tau}")
         vehicle_type.set("tau", "0.2")

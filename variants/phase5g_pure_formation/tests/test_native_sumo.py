@@ -42,6 +42,8 @@ class NativeDemandTests(unittest.TestCase):
             cai_dir.mkdir()
             with patch("run_cai_hdv.build_network"):
                 _, routes = scenario(cai_dir, requests, None)
+                self.assertEqual(routes.read_bytes(), expected.replace(b'tau="0.2"', b'tau="0.85"'))
+                _, routes = scenario(cai_dir, requests, None, hdv_tau=0.65)
                 self.assertEqual(routes.read_bytes(), expected.replace(b'tau="0.2"', b'tau="0.65"'))
                 _, matched = scenario(cai_dir, requests, None, matched_tau=True)
                 self.assertEqual(matched.read_bytes(), expected)

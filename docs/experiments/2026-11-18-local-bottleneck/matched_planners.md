@@ -70,4 +70,4 @@ python -B scripts/run_logged.py --label matched288 --timeout 5400 -- python -B "
 python -B "$study/summarize_onroad.py" tmp/repeat288 tmp/report288
 ```
 
-`run_cai_hdv.py` 默认使用 0.65 秒的普通车 IDM 时距。复现本页的 0.20 秒共同车型实验时，传入 `--matched-tau`。复现早期完整 HDV 车型时，传入 `--original-hdv`。单车对照沿用每种方法各自的运行入口，使用流量 2000、种子 311、需求时长 1 秒和截止时刻 90 秒。这段需求只产生一辆车。[批量运行](tools/run_onroad.py) · [逐车复算](tools/summarize_onroad.py)
+`run_cai_hdv.py` 默认使用 0.85 秒的普通车 IDM 时距。上一轮的 0.65 秒配置可用 `--hdv-tau 0.65` 复现。[当前三组结果](headway085.md) 复现本页的 0.20 秒共同车型实验时，传入 `--matched-tau`。复现早期完整 HDV 车型时，传入 `--original-hdv`。单车对照沿用每种方法各自的运行入口，使用流量 2000、种子 311、需求时长 1 秒和截止时刻 90 秒。这段需求只产生一辆车。[批量运行](tools/run_onroad.py) · [逐车复算](tools/summarize_onroad.py)
