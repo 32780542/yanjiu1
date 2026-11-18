@@ -19,6 +19,13 @@ HDV = dict(id="CAV_HDV", carFollowModel="IDM", length="4", minGap="2", tau="0.65
            guiShape="passenger", color="255,0,0")
 
 
+def set_cai_lane_model(vehicle_api, vehicle):
+    # SUMO 只在创建换道模型时继承这两个协作子权重，运行中需要一并赋值。
+    vehicle_api.setParameter(vehicle, "laneChangeModel.lcSpeedGain", HDV["lcSpeedGain"])
+    for key in ("lcCooperative", "lcCooperativeSpeed", "lcCooperativeRoundabout"):
+        vehicle_api.setParameter(vehicle, "laneChangeModel." + key, HDV["lcCooperative"])
+
+
 def scenario(directory, requests, matlab_data, original_hdv=False, road_limit=33.3):
     if not matlab_data and not original_hdv:
         return build_network(directory, road_limit=road_limit), write_routes(directory, requests)
@@ -73,9 +80,7 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
                 traci.vehicle.setSpeedMode(vehicle, 31)
                 traci.vehicle.setLaneChangeMode(vehicle, 1621)
                 if shared_type:
-                    # 只写这辆车的换道决策权重；所有车辆继续共用项目 vType。
-                    for key in ("lcSpeedGain", "lcCooperative"):
-                        traci.vehicle.setParameter(vehicle, "laneChangeModel." + key, HDV[key])
+                    set_cai_lane_model(traci.vehicle, vehicle)
             teleports += state[tc.VAR_TELEPORT_STARTING_VEHICLES_NUMBER]
             if state[tc.VAR_MIN_EXPECTED_VEHICLES] == 0:
                 break

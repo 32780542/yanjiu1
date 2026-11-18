@@ -224,6 +224,32 @@ class NativeDemandTests(unittest.TestCase):
 
 
 class NativeIntegrationTests(unittest.TestCase):
+    def test_shared_vehicle_keeps_the_cai_lane_changer_weights_at_runtime(self):
+        from research.common import binary, lock_traci
+        from run_cai_hdv import run
+
+        traci = lock_traci()
+        weights = []
+        keys = ("lcSpeedGain", "lcCooperative", "lcCooperativeSpeed", "lcCooperativeRoundabout")
+        step = traci.simulationStep
+        with TemporaryDirectory() as temp:
+            for original_type in (True, False):
+                sample = {}
+
+                def observed_step():
+                    if not sample and traci.vehicle.getIDList():
+                        vehicle = traci.vehicle.getIDList()[0]
+                        for key in keys:
+                            sample[key] = float(traci.vehicle.getParameter(vehicle, "laneChangeModel." + key))
+                    step()
+
+                with patch.object(traci, "simulationStep", observed_step):
+                    run(traci, binary("sumo"), Path(temp) / str(original_type), 2000, 311, 1,
+                        90, None, False, original_hdv=original_type)
+                self.assertEqual(set(keys), set(sample))
+                weights.append(sample)
+        self.assertEqual(weights[0], weights[1])
+
     def test_failed_simulation_preserves_original_error_and_partial_accounting(self):
         from experiments import native_sumo as native
 

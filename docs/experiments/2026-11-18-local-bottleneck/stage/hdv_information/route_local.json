@@ -1,0 +1,78 @@
+{
+  "car": "v2_00001",
+  "x": 0.0,
+  "entry": [
+    [
+      "upstream_0",
+      1000.0,
+      0.0,
+      0,
+      true,
+      [
+        "upstream_0"
+      ]
+    ],
+    [
+      "upstream_1",
+      1000.0,
+      0.0,
+      0,
+      true,
+      [
+        "upstream_1"
+      ]
+    ],
+    [
+      "upstream_2",
+      1000.0,
+      0.0,
+      0,
+      true,
+      [
+        "upstream_2"
+      ]
+    ]
+  ],
+  "release_x": 801.3045589133163,
+  "after": [
+    [
+      "upstream_0",
+      1200.0,
+      0.0,
+      0,
+      true,
+      [
+        "upstream_0",
+        "downstream_0"
+      ]
+    ],
+    [
+      "upstream_1",
+      1200.0,
+      0.0,
+      0,
+      true,
+      [
+        "upstream_1",
+        "downstream_1"
+      ]
+    ],
+    [
+      "upstream_2",
+      1000.0,
+      0.0,
+      -1,
+      false,
+      [
+        "upstream_2"
+      ]
+    ]
+  ],
+  "lane_change": {
+    "time": "24.90",
+    "pos": "817.82",
+    "from": "upstream_2",
+    "to": "upstream_1",
+    "reason": "strategic|urgent"
+  }
+}
