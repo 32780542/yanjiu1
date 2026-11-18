@@ -18,6 +18,52 @@ class NativeRulesTests(unittest.TestCase):
         return car(0, 810, 1, 20), (
             car(1, 835, 1, 20), car(2, 860, 0, 20), car(3, 760, 0, 20))
 
+    def test_an_unbalanced_three_lane_group_can_fill_before_seeing_the_drop(self):
+        group = [car(i, x, lane) for i, (x, lane) in enumerate(
+            ((135, 0), (103, 0), (73, 0), (44, 0), (121, 1), (96, 2)))]
+        for mode in ('formation', 'transform', 'noa'):
+            moves = []
+            for ego in group:
+                rows = [other for other in group if other is not ego]
+                command, _ = self.command(ego, rows, mode=mode, drop=None)
+                if command.lane is not None:
+                    moves.append((ego.lane, command.lane, command.reason))
+            self.assertEqual(moves, [] if mode == 'noa' else [(0, 1, 'formation_fill')])
+
+    def test_balanced_staggered_group_stays_in_its_lanes(self):
+        group = [car(i, x, lane) for i, (x, lane) in enumerate(
+            ((135, 0), (105, 0), (120, 1), (90, 1), (135, 2), (105, 2)))]
+        for ego in group:
+            command, _ = self.command(ego, [c for c in group if c is not ego], drop=None)
+            self.assertIsNone(command.lane)
+
+    def test_same_lane_counts_do_not_prove_the_middle_layer_is_vacant(self):
+        ego = car(0, 117, 0)
+        neighbors = [car(1, 135, 0), car(2, 85, 0), car(3, 136, 2)]
+        vacant = [*neighbors, car(4, 87, 1)]
+        occupied = [*neighbors, car(4, 107.5, 1)]
+        for scene in (vacant, occupied):
+            self.assertTrue(r._clear(ego, scene, 1))
+        self.assertEqual(self.command(ego, vacant, drop=None)[0].lane, 1)
+        self.assertIsNone(self.command(ego, occupied, drop=None)[0].lane)
+
+    def test_a_head_using_visible_outer_lane_references_reports_participation(self):
+        ego = car(0, 135, 0)
+        command, _ = self.command(ego, (car(1, 108, 2), car(2, 78, 2)), drop=None)
+        self.assertEqual((command.reason, command.formation_state), ('formation_align', 1))
+
+    def test_formation_fill_uses_geometry_not_track_numbers_or_other_groups(self):
+        ego = car(0, 103)
+        group = [car(1, 135), car(2, 73), car(3, 44), car(4, 121, 1), car(5, 96, 2)]
+        cmd, _ = self.command(ego, group, drop=None)
+        self.assertEqual((cmd.lane, cmd.reason), (1, 'formation_fill'))
+        remapped = [replace(c, track=100 - c.track, pending_lane=0) for c in reversed(group)]
+        remote = [car(99, 199, 1), car(98, 222, 1), car(97, 248, 2)]
+        other, _ = self.command(replace(ego, track=50), remapped + remote, drop=None)
+        self.assertEqual((other.speed, other.lane, other.reason), (cmd.speed, cmd.lane, cmd.reason))
+        occupied = [*group, car(6, ego.x + 4, 1)]
+        self.assertIsNone(self.command(ego, occupied, drop=None)[0].lane)
+
     def test_all_modes_ignore_a_road_boundary_outside_two_hundred_metres(self):
         ego = car(0, 799.999, 2)
         for mode in ('noa', 'formation', 'transform'):
@@ -126,7 +172,8 @@ class NativeRulesTests(unittest.TestCase):
         ego, rows = self.slot_scene()
         ego = replace(ego, x=700)
         rows = tuple(replace(c, x=c.x - 110) for c in rows)
-        self.assertIsNone(self.command(ego, rows, drop=None)[0].lane)
+        cmd, _ = self.command(ego, rows, drop=None)
+        self.assertEqual((cmd.lane, cmd.reason), (2, 'formation_fill'))
 
     def test_transform_moves_are_only_toward_retained_lanes(self):
         rng = random.Random(20261104)

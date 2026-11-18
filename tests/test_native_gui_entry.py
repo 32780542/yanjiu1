@@ -1,5 +1,6 @@
 """The default entry computes native SUMO steps while its GUI is open."""
 
+import gzip
 import io
 import inspect
 import json
@@ -17,10 +18,43 @@ VARIANT = Path(__file__).resolve().parents[1] / "variants/phase5g_pure_formation
 if str(VARIANT) not in sys.path:
     sys.path.insert(0, str(VARIANT))
 from experiments import native_sumo as native
+from experiments.complete_layers import groups_at
 import run_native_flow
 
 
 class NativeEntrypointTests(unittest.TestCase):
+    def test_formation_demo_uses_an_unbalanced_stream_on_a_three_lane_road(self):
+        with TemporaryDirectory() as tmp:
+            directory = Path(tmp)
+            result = dict(status="drained", requested=12, departed=12, completed=12, collisions=0, teleports=0)
+            (directory / "result.json").write_text(json.dumps(result))
+            with patch.object(runrun, "run_case", return_value=directory) as run:
+                runrun.main(["--formation-demo"], output_fn=lambda _: None)
+        args = run.call_args.kwargs
+        self.assertEqual(args["scenario"], "straight3")
+        self.assertTrue(args["gui"])
+        self.assertFalse(args["auto_zoom"])
+        vehicles = args["initial"]
+        self.assertEqual([sum(v["lane"] == lane for v in vehicles) for lane in range(3)], [6, 4, 2])
+        self.assertEqual({v["x"] for v in vehicles}, {0})
+        self.assertEqual(len({v["depart"] for v in vehicles}), 12)
+
+    def test_native_formation_demo_reaches_four_physical_staggered_layers(self):
+        with TemporaryDirectory() as tmp:
+            self.assertEqual(runrun.main(["--formation-demo", "--headless", "--output-base", tmp],
+                                         output_fn=lambda _: None), 0)
+            run, = Path(tmp).iterdir()
+            result = json.loads((run / "result.json").read_bytes())
+            self.assertEqual((result["completed"], result["collisions"], result["teleports"]), (12, 0, 0))
+            self.assertGreater(result["action_reasons"]["formation_fill"], 0)
+            longest = consecutive = 0
+            with gzip.open(run / "positions.jsonl.gz", "rt", encoding="utf-8") as stream:
+                for line in stream:
+                    states = json.loads(line)["states"]
+                    formed = any(group["size"] == 12 for group in groups_at(states, 3))
+                    consecutive = consecutive + 1 if formed else 0
+                    longest = max(consecutive, longest)
+            self.assertGreaterEqual(longest * native.STEP, 1.)
     def test_mode_comparison_gui_keeps_camera_under_user_control(self):
         with TemporaryDirectory() as tmp:
             folder = Path(tmp)
@@ -50,7 +84,7 @@ class NativeEntrypointTests(unittest.TestCase):
             self.assertEqual(run.call_args.kwargs["scenario"], "lane_drop")
             self.assertEqual(run.call_args.kwargs["flow"], 1750.0)
             self.assertEqual(run.call_args.kwargs["duration"], 600.0)
-            self.assertEqual(run.call_args.kwargs["seed"], 1)
+            self.assertEqual(run.call_args.kwargs["seed"], runrun.RANDOM_SEED)
             self.assertTrue(run.call_args.kwargs["gui"])
             self.assertEqual(run.call_args.kwargs["gui_delay_ms"], 40)
             self.assertFalse(run.call_args.kwargs["auto_zoom"])

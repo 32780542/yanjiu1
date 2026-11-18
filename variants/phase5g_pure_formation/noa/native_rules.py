@@ -94,6 +94,61 @@ def _front_following(ego, rows, distance=50.):
     return _request(ego, target, front.speed), target, front.track, 1
 
 
+def _local_group(ego, rows):
+    """只取本车视野内、相邻纵向间隔至多 50 米的车群。"""
+    cars = sorted((ego, *rows), key=lambda c: (c.x, c.lane))
+    first = last = cars.index(ego)
+    while first and cars[first].x - cars[first - 1].x <= 50.:
+        first -= 1
+    while last + 1 < len(cars) and cars[last + 1].x - cars[last].x <= 50.:
+        last += 1
+    return cars[first:last + 1]
+
+
+def _formation_fill(ego, group, rows):
+    """从队首往后找能补前方缺位的车；每辆车只执行自己的决定。"""
+    sizes = [sum(c.lane == lane for c in group) for lane in range(3)]
+    if max(sizes) - min(sizes) < 2:
+        return None
+    if any(abs(c.vy) > .05 or abs(c.y - (c.lane + .5) * LANE_WIDTH) > .05 for c in group):
+        return None
+    # 从前向后读取实际占道。每辆车只在自己这一层能往前补一个位置时考虑换道。
+    counts = [0, 0, 0]
+    tails = [None, None, None]
+    for car in reversed(group):
+        source = car.lane
+        dest = min(range(3), key=lambda lane: (counts[lane], abs(lane - source), lane))
+        if counts[source] > counts[dest]:
+            step = source + (1 if dest > source else -1)
+            front = tails[dest]
+            gap = desired_spacing(car.speed)
+            slot = (front.x - gap if front is not None else
+                    group[-1].x + _phase(group[-1].lane, car.speed) - _phase(dest, car.speed))
+            vacant = all(c.lane != dest or abs(c.x - slot) >= gap / 2 for c in group)
+            if vacant and counts[step] <= counts[source] and _clear(car, group, step):
+                # 先让前面的候选车补，一次只跨相邻一道。
+                return step if car is ego and _clear(ego, rows, step) else None
+        if car is ego:
+            break
+        counts[source] += 1
+        tails[source] = car
+    return None
+
+
+def _layer_target(ego, group):
+    """把各道实车位置按同道层距和邻道半层错位换算到本车所在层。"""
+    spacing = desired_spacing(ego.speed)
+    rank = [0, 0, 0]
+    origin = 0.
+    for car in reversed(group):
+        offset = rank[car.lane] * spacing + _phase(car.lane, ego.speed)
+        origin += car.x + offset
+        if car is ego:
+            own_offset = offset
+        rank[car.lane] += 1
+    return origin / len(group) - own_offset
+
+
 def _following(ego, rows):
     """本车在同一帧观测中双向匹配邻车，再微调速度形成半个车头间距的错位。"""
     following = _front_following(ego, rows)
@@ -282,6 +337,17 @@ def _decide(ego, neighbors, memory, mode, two_lane_target):
                 lane = plan
     else:
         plan = None
+        if not access and not two_lane_target:
+            group = _local_group(ego, rows)
+            if len(group) >= 3:
+                lane = _formation_fill(ego, group, rows)
+                if lane is not None:
+                    return Command(speed, lane, 'formation_fill', target, reference, 1), Memory(lane, reference)
+                target = _layer_target(ego, group)
+                speed = _request(ego, target, CRUISE)
+                if physical[1] is not None and physical[1] < ego.x:
+                    speed = min(speed, physical[0])
+                return Command(speed, None, 'formation_align', target, reference, 1), Memory(front=reference)
 
     # 终止道还并不进去时，先跟本车道前车。可以开始并入时才接续目标道前车。
     if plan is not None and anchor is not None and (lane is not None or not mandatory):

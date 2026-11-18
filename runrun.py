@@ -5,6 +5,7 @@ FLOW_VEH_H_LANE = 1750.0  # 每车道每小时请求数，三车道独立来车
 DEMAND_DURATION_S = 600.0  # 来车持续时间；之后最多留 300 秒排空
 RANDOM_SEED = 1  # 来车随机种子
 GUI_DELAY_MS = 40  # 每个 0.1 秒仿真步的 GUI 延时；0 为最快
+FORMATION_DEMO = False  # True 看 12 辆车在三车道直路补位；False 看连续车流通过缩道
 
 import argparse
 import json
@@ -30,7 +31,7 @@ def _validate(duration, gui_delay_ms):
         raise ValueError("GUI_DELAY_MS 必须是非负整数")
 
 
-def _check(gui, duration, gui_delay_ms, output_fn):
+def _check(gui, gui_delay_ms, output_fn):
     for name in ("sumo-gui" if gui else "sumo", "netconvert"):
         path = Path(native.binary(name))
         if not path.is_file():
@@ -40,10 +41,9 @@ def _check(gui, duration, gui_delay_ms, output_fn):
     output_fn(f"  TraCI: {traci.__file__}")
     output_fn(f"  真实运行器: {Path(native.__file__).resolve()}")
     output_fn(f"  运行环境: {native.runtime_metadata()}")
-    output_fn(f"  每道 {FLOW_VEH_H_LANE:g} 辆/h，来车 {duration:g} 秒，随机种子 {RANDOM_SEED}。")
     if gui:
         output_fn(f"  窗口每步延时 {gui_delay_ms} ms，支持手动平移和缩放。")
-    output_fn("  巡航 28.8m/s；最高 33.3m/s；1000m 处 3→2，1200m 出口。")
+    output_fn("  巡航 28.8 m/s，最高 33.3 m/s，1200 m 处驶出。")
     output_fn("自检通过：没有启动 SUMO，也没有创建运行目录。")
 
 
@@ -51,24 +51,38 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="只检查依赖与配置")
     parser.add_argument("--headless", action="store_true", help="不打开窗口，不等待输入")
-    parser.add_argument("--duration", type=float, default=DEMAND_DURATION_S, help="来车时长，秒")
+    parser.add_argument("--formation-demo", action=argparse.BooleanOptionalAction, default=FORMATION_DEMO,
+                        help="在三车道直路观察 12 辆车由 6/4/2 补成四层交错队形")
+    parser.add_argument("--duration", type=float, help="连续车流的来车时长，秒")
     parser.add_argument("--max-time", type=float, help="绝对仿真时间上限，秒")
     parser.add_argument("--gui-delay-ms", type=int, default=GUI_DELAY_MS, help="每步 GUI 延时，毫秒")
     parser.add_argument("--no-wait", action="store_true", help="运行结束后立即封存退出")
     parser.add_argument("--output-base", type=Path, help="结果根目录；每次新建独立子目录")
     args = parser.parse_args(argv)
     gui = not args.headless
-    _validate(args.duration, args.gui_delay_ms)
+    initial = None
+    if args.formation_demo:
+        if args.duration is not None:
+            parser.error("--duration 用于连续车流；队形演示使用固定的 12 辆来车")
+        lanes = (0, 0, 1, 0, 2, 0, 1, 0, 1, 2, 1, 0)
+        initial = [dict(lane=lane, depart=round(i * .7, 1), x=0, speed=28.8) for i, lane in enumerate(lanes)]
+        duration = 8.
+        output_fn("三车道直路演示。12 辆车从入口逐辆发车，三道分别出发 6、4、2 辆。")
+    else:
+        duration = DEMAND_DURATION_S if args.duration is None else args.duration
+        output_fn(f"连续车流。每道 {FLOW_VEH_H_LANE:g} 辆/h，来车 {duration:g} 秒，随机种子 {RANDOM_SEED}。"
+                  "1000 m 处三道变两道。")
+    _validate(duration, args.gui_delay_ms)
     if args.check:
-        _check(gui, args.duration, args.gui_delay_ms, output_fn)
+        _check(gui, args.gui_delay_ms, output_fn)
         return 0
-    output_fn(f"实时 SUMO：{FLOW_VEH_H_LANE:g} 辆/h/车道，局部编队形成与 3→2 变换。")
     directory = run_case(
         mode="transform",
-        scenario="lane_drop",
+        scenario="straight3" if args.formation_demo else "lane_drop",
         seed=RANDOM_SEED,
         flow=FLOW_VEH_H_LANE,
-        duration=args.duration,
+        initial=initial,
+        duration=duration,
         gui=gui,
         gui_delay_ms=args.gui_delay_ms,
         auto_zoom=False,
