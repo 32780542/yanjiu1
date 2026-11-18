@@ -56,7 +56,7 @@
 
 ```powershell
 $study = 'docs/experiments/2026-11-18-local-bottleneck/tools'
-python -B scripts/run_logged.py --label onroad-repeat --timeout 5400 -- python -B "$study/run_onroad.py" tmp/onroad_repeat --matlab-data D:/matlab_huipu_2000/traci_tls/data --legacy-sumo-home 'C:/Program Files (x86)/DLR/Sumo'
+python -B scripts/run_logged.py --label onroad-repeat --timeout 5400 -- python -B "$study/run_onroad.py" tmp/onroad_repeat --original-hdv --matlab-data D:/matlab_huipu_2000/traci_tls/data --legacy-sumo-home 'C:/Program Files (x86)/DLR/Sumo'
 python -B "$study/summarize_onroad.py" tmp/onroad_repeat tmp/onroad_report_repeat --with-matlab
 ```
 

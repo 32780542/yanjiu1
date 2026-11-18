@@ -154,7 +154,7 @@ def _write_xml(path, root):
     return path
 
 
-def build_network(directory, scenario="lane_drop"):
+def build_network(directory, scenario="lane_drop", road_limit=33.3):
     """Generate two real edges, with zero internal length and fixed lane centers."""
     if scenario not in SCENARIOS:
         raise ValueError(f"unknown scenario: {scenario}")
@@ -174,7 +174,7 @@ def build_network(directory, scenario="lane_drop"):
             id=name,
             attrib={"from": source, "to": target},
             numLanes=str(count),
-            speed="33.3",
+            speed=str(road_limit),
             width="3.3",
             length=str(x1 - x0),
             spreadType="center",
@@ -478,6 +478,7 @@ def run_case(
     wait_before_close=False,
     input_fn=input,
     output_fn=print,
+    road_limit=33.3,
 ):
     """Run a paired native request tape. Return the unique evidence directory.
 
@@ -513,6 +514,7 @@ def run_case(
         flow_veh_h_lane=flow,
         demand_duration_s=duration,
         scenario=scenario,
+        road_limit_mps=road_limit,
         max_time_s=max_time,
         step_s=STEP,
         lane_change_duration_s=1.0,
@@ -585,7 +587,7 @@ def run_case(
             from experiments.global_reference import GlobalPlanner
 
             planner = GlobalPlanner()
-        net = build_network(directory, scenario)
+        net = build_network(directory, scenario, road_limit)
         routes = write_routes(directory, requests)
         traci = lock_traci()
         tc = traci.constants
@@ -846,7 +848,7 @@ def run_case(
                         safety_cap = safe_speed(ego, neighbors)
                         if not math.isfinite(safety_cap):
                             raise ValueError("non-finite common safe speed")
-                        executed_speed = min(33.3, max(0.0, min(command.speed, safety_cap)))
+                        executed_speed = max(0.0, min(command.speed, safety_cap, road_limit, PHYSICAL["maxSpeed"]))
                         conn.vehicle.setSpeed(key, executed_speed)
                         if command.speed > safety_cap + 1e-9:
                             execution["safe_speed_limited_ticks"] += 1

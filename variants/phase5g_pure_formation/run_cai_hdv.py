@@ -1,4 +1,4 @@
-"""用 Cai 的普通 HDV 车型跑完全程。每辆车由 SUMO 自己跟驰和换道。"""
+"""在项目的 NOA 车型上运行 Cai 普通车的跟驰与换道。可指定历史 HDV 车型。"""
 
 import argparse
 import json
@@ -8,7 +8,7 @@ from statistics import mean
 import sys
 import xml.etree.ElementTree as ET
 
-from experiments.native_sumo import STEP, arrival_tape, build_network, write_json
+from experiments.native_sumo import STEP, arrival_tape, build_network, write_json, write_routes
 from research.common import sumo_home
 
 
@@ -19,7 +19,9 @@ HDV = dict(id="CAV_HDV", carFollowModel="IDM", length="4", minGap="2", tau="0.65
            guiShape="passenger", color="255,0,0")
 
 
-def scenario(directory, requests, matlab_data):
+def scenario(directory, requests, matlab_data, original_hdv=False, road_limit=33.3):
+    if not matlab_data and not original_hdv:
+        return build_network(directory, road_limit=road_limit), write_routes(directory, requests)
     if matlab_data:
         source = ET.parse(matlab_data / "cross.rou.xml")
         vehicle_type = source.find("./vType[@id='CAV_HDV']")
@@ -28,7 +30,7 @@ def scenario(directory, requests, matlab_data):
     else:
         vehicle_type = ET.Element("vType", **HDV, maxSpeed="33.3", speedFactor="1", speedDev="0")
         route = ET.Element("route", id="through", edges="upstream downstream")
-        network = build_network(directory)
+        network = build_network(directory, road_limit=road_limit)
     routes = ET.Element("routes")
     routes.extend((vehicle_type, route))
     for row in requests:
@@ -41,10 +43,12 @@ def scenario(directory, requests, matlab_data):
     return network, file
 
 
-def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, gui):
+def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, gui,
+        original_hdv=False, road_limit=33.3):
     directory.mkdir(parents=True, exist_ok=False)
     requests = arrival_tape(seed, flow, duration)
-    network, routes = scenario(directory, requests, matlab_data)
+    network, routes = scenario(directory, requests, matlab_data, original_hdv, road_limit)
+    shared_type = not matlab_data and not original_hdv
     trips, log = directory / "trips.xml", directory / "sumo.log"
     command = [str(binary), "-n", str(network), "-r", str(routes), "--step-length", str(STEP),
                "--lanechange.duration", "1", "--seed", str(seed), "--route-steps", "0",
@@ -52,6 +56,8 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
                "--error-log", str(log), "--tripinfo-output", str(trips)]
     if not matlab_data:
         command.extend(["--collision.mingap-factor", "0", "--collision.check-junctions", "true"])
+    if shared_type:
+        command.extend(["--device.emissions.probability", "1", "--duration-log.disable", "true"])
     if gui:
         command.extend(["--start", "--quit-on-end"])
     version = traci.start(command)
@@ -66,6 +72,10 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
             for vehicle in state[tc.VAR_DEPARTED_VEHICLES_IDS]:
                 traci.vehicle.setSpeedMode(vehicle, 31)
                 traci.vehicle.setLaneChangeMode(vehicle, 1621)
+                if shared_type:
+                    # 只写这辆车的换道决策权重；所有车辆继续共用项目 vType。
+                    for key in ("lcSpeedGain", "lcCooperative"):
+                        traci.vehicle.setParameter(vehicle, "laneChangeModel." + key, HDV[key])
             teleports += state[tc.VAR_TELEPORT_STARTING_VEHICLES_NUMBER]
             if state[tc.VAR_MIN_EXPECTED_VEHICLES] == 0:
                 break
@@ -77,7 +87,8 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
     all_arrived = completed.keys() == expected.keys()
     warnings = log.read_text(encoding="utf-8", errors="replace").lower().splitlines()
     collisions = sum("collision" in line or "collid" in line for line in warnings)
-    result = dict(profile="matlab" if matlab_data else "project", sumo=version, flow=flow,
+    profile = "matlab" if matlab_data else ("shared_noa" if shared_type else "project")
+    result = dict(profile=profile, sumo=version, flow=flow,
                   seed=seed, duration_s=duration, requested=len(expected), completed=len(completed),
                   all_arrived=all_arrived, teleports=teleports, collision_log_lines=collisions)
     if all_arrived and completed:
@@ -98,9 +109,13 @@ def main():
     parser.add_argument("--max-time", type=float, default=1800)
     parser.add_argument("--output", type=Path, required=True, help="每次运行使用新的输出目录")
     parser.add_argument("--matlab-data", type=Path, help="使用原始路网和车型的 traci_tls/data 目录")
+    parser.add_argument("--original-hdv", action="store_true", help="在项目道路上复跑历史普通 HDV 车型")
+    parser.add_argument("--road-limit", type=float, choices=(28.8, 33.3), default=33.3)
     parser.add_argument("--sumo-home", type=Path, help="对应版本的 SUMO 安装目录，默认使用项目版本")
     parser.add_argument("--gui", action="store_true")
     args = parser.parse_args()
+    if args.matlab_data and (args.original_hdv or args.road_limit != 33.3):
+        parser.error("--matlab-data 使用其自带的路网与车型")
     if args.max_time < args.duration:
         parser.error("--max-time must cover --duration")
     home = (args.sumo_home or sumo_home()).resolve()
@@ -117,7 +132,7 @@ def main():
         for seed in args.seeds:
             directory = args.output.resolve() / f"f{flow}_s{seed}"
             if not run(traci, binary, directory, flow, seed, args.duration, args.max_time,
-                       args.matlab_data, args.gui):
+                       args.matlab_data, args.gui, args.original_hdv, args.road_limit):
                 successful = False
     return 0 if successful else 1
 

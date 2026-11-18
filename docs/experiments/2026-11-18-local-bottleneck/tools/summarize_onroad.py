@@ -3,6 +3,7 @@
 import argparse
 import csv
 import gzip
+from hashlib import sha256
 import json
 from math import isclose
 from pathlib import Path
@@ -24,11 +25,22 @@ def measure(folder, method, flow, seed, writer):
     if hdv:
         safe = result["all_arrived"] and result["collision_log_lines"] == 0
         trip_file, route_file = "trips.xml", "hdv.rou.xml"
+        if result.get("profile") == "shared_noa":
+            route_file = "native.rou.xml"
     else:
         safe = result["status"] == "drained" and result["collisions"] == 0
         trip_file, route_file = "sumo_tripinfo.xml", "native.rou.xml"
     if not safe or result["teleports"]:
         raise ValueError(f"行程未正常结束 {folder}")
+    shared_type = route_file == "native.rou.xml"
+    # netconvert 的注释含运行时间和绝对路径；只比较仿真实际读取的网络内容。
+    network_hash = routes_hash = ""
+    road_limit = None
+    if shared_type:
+        network = ET.parse(run / "native.net.xml").getroot()
+        road_limit, = {float(lane.attrib["speed"]) for lane in network.findall("edge/lane")}
+        network_hash = sha256(ET.tostring(network)).hexdigest()
+        routes_hash = sha256((run / route_file).read_bytes()).hexdigest()
 
     # 发车清单只校对配对输入，统计表的车辆和时间来自实际 tripinfo。
     demand = [(v.get("id"), v.get("departLane"), float(v.get("depart")),
@@ -37,6 +49,8 @@ def measure(folder, method, flow, seed, writer):
     stamps = {}
     for vehicle in ET.parse(run / trip_file).iter("tripinfo"):
         key = vehicle.attrib["id"]
+        if shared_type and (vehicle.get("vType") != "CAV_ICV" or float(vehicle.get("speedFactor")) != 1):
+            raise ValueError(f"实际行程采用了其他车型或速度倍率 {folder} {key}")
         # 原始记录以 0.1 秒为步长，换成整数步再相减。
         entry, exit_ = (round(float(vehicle.attrib[k]) * 10) for k in ("depart", "arrival"))
         duration = exit_ - entry
@@ -61,7 +75,10 @@ def measure(folder, method, flow, seed, writer):
                         entered_before_600=len(early), early_total_travel_s=sum(early) / 10,
                         early_mean_travel_s=mean(early) / 10,
                         first_entry_s=first / 10, last_exit_s=last / 10,
-                        first_entry_to_last_exit_s=(last - first) / 10)
+                        first_entry_to_last_exit_s=(last - first) / 10,
+                        exits_before_600=sum(end < 6000 for _, end in stamps.values()),
+                        profile=result.get("profile", "shared_noa"), network_sha256=network_hash,
+                        routes_sha256=routes_hash, road_limit_mps=road_limit)
 
 
 def main():
@@ -81,22 +98,30 @@ def main():
         for flow in (1500, 1750, 2000):
             for seed in range(311, 316):
                 reference = None
+                shared_inputs = None
                 for method in methods:
                     folder = args.batch / f"{method}_f{flow}_s{seed}"
                     demand, row = measure(folder, method, flow, seed, writer)
                     if reference is not None and demand != reference:
                         raise ValueError(f"三道发车清单有差异 {folder}")
                     reference = demand
+                    if row["profile"] == "shared_noa":
+                        inputs = row["network_sha256"], row["routes_sha256"]
+                        if shared_inputs is not None and inputs != shared_inputs:
+                            raise ValueError(f"共同车型、路由或道路不一致 {folder}")
+                        shared_inputs = inputs
                     cases.append(row)
             for method in methods:
                 group = [c for c in cases if c["method"] == method and c["flow"] == flow]
                 count = sum(c["vehicles"] for c in group)
                 early = sum(c["entered_before_600"] for c in group)
                 summaries.append(dict(method=method, flow=flow, vehicles=count,
+                                      road_limit_mps=group[0]["road_limit_mps"],
                                       mean_travel_s=sum(c["total_travel_s"] for c in group) / count,
                                       seed_equal_mean_s=mean(c["mean_travel_s"] for c in group),
                                       entered_before_600=early,
                                       early_mean_travel_s=sum(c["early_total_travel_s"] for c in group) / early,
+                                      outlet_flow_first_600_veh_h=6 * mean(c["exits_before_600"] for c in group),
                                       mean_first_entry_to_last_exit_s=mean(c["first_entry_to_last_exit_s"] for c in group)))
     write_csv(args.output / "cases.csv", cases)
     write_csv(args.output / "summary.csv", summaries)

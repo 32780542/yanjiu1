@@ -67,14 +67,14 @@
 
 ```powershell
 cd D:\yanjiu1\keyan1
-python variants/phase5g_pure_formation/run_cai_hdv.py --flows 2000 --seeds 311 --gui --output tmp/hdv_gui_2000_311
+python variants/phase5g_pure_formation/run_cai_hdv.py --original-hdv --flows 2000 --seeds 311 --gui --output tmp/hdv_gui_2000_311
 ```
 
 下面两条命令分别跑完三档流量和五个种子。输出目录中的每个案例都含实际使用的发车文件、逐车行程 XML 和时间汇总。
 
 ```powershell
 $hdv = 'variants/phase5g_pure_formation/run_cai_hdv.py'
-python $hdv --flows 1500 1750 2000 --seeds 311 312 313 314 315 --output tmp/hdv_project_repeat
+python $hdv --original-hdv --flows 1500 1750 2000 --seeds 311 312 313 314 315 --output tmp/hdv_project_repeat
 python $hdv --flows 1500 1750 2000 --seeds 311 312 313 314 315 --matlab-data D:/matlab_huipu_2000/traci_tls/data --sumo-home 'C:/Program Files (x86)/DLR/Sumo' --output tmp/hdv_matlab_repeat
 ```
 

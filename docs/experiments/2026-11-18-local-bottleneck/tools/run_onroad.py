@@ -16,6 +16,8 @@ def main():
     parser.add_argument("--matlab-data", type=Path)
     parser.add_argument("--legacy-sumo-home", type=Path)
     parser.add_argument("--jobs", type=int, default=8)
+    parser.add_argument("--road-limit", type=float, choices=(28.8, 33.3), default=33.3)
+    parser.add_argument("--original-hdv", action="store_true", help="复跑旧版车型对照")
     args = parser.parse_args()
     if bool(args.matlab_data) != bool(args.legacy_sumo_home):
         parser.error("原环境复跑需要同时提供 --matlab-data 和 --legacy-sumo-home")
@@ -37,6 +39,10 @@ def main():
                    "--output", folder]
             if mode == "hdv_matlab":
                 cmd += ["--matlab-data", args.matlab_data, "--sumo-home", args.legacy_sumo_home]
+            elif args.original_hdv:
+                cmd.append("--original-hdv")
+        if mode != "hdv_matlab":
+            cmd += ["--road-limit", str(args.road_limit)]
         with (folder / "run.log").open("w", encoding="utf-8") as log:
             subprocess.run([sys.executable, "-X", "utf8", "-B", *cmd, "--duration", "600",
                             "--max-time", "1800"], stdout=log, stderr=subprocess.STDOUT, check=True)

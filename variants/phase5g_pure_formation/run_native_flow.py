@@ -14,6 +14,7 @@ def main(argv=None):
     parser.add_argument("--flow", type=float, default=1250.0)
     parser.add_argument("--duration", type=float, default=600.0)
     parser.add_argument("--scenario", choices=SCENARIOS, default="lane_drop")
+    parser.add_argument("--road-limit", type=float, choices=(28.8, 33.3), default=33.3)
     parser.add_argument("--output-base", type=Path)
     parser.add_argument("--max-time", type=float)
     parser.add_argument("--gui", action="store_true")
@@ -38,6 +39,7 @@ def main(argv=None):
             flow=args.flow,
             duration=args.duration,
             scenario=scenario,
+            road_limit=args.road_limit,
             output_base=args.output_base,
             gui=args.gui,
             auto_zoom=False,
