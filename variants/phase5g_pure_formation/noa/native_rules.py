@@ -8,6 +8,7 @@ WIDTH, LANE_WIDTH, CLEARANCE = 1.8, 3.3, 8.
 LENGTH, STANDSTILL, BRAKING, RESPONSE = 4., 1.5, 10., .2
 HEADWAY = .85
 ROAD_PREVIEW = 200.
+FRONT_VIEW, REAR_VIEW, GROUP_GAP = 200., 100., 50.
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,9 +99,9 @@ def _local_group(ego, rows):
     """只取本车视野内、相邻纵向间隔至多 50 米的车群。"""
     cars = sorted((ego, *rows), key=lambda c: (c.x, c.lane))
     first = last = cars.index(ego)
-    while first and cars[first].x - cars[first - 1].x <= 50.:
+    while first and cars[first].x - cars[first - 1].x <= GROUP_GAP:
         first -= 1
-    while last + 1 < len(cars) and cars[last + 1].x - cars[last].x <= 50.:
+    while last + 1 < len(cars) and cars[last + 1].x - cars[last].x <= GROUP_GAP:
         last += 1
     return cars[first:last + 1]
 
@@ -273,7 +274,7 @@ def _vacancy(ego, rows, lane, held=None):
 def _decide(ego, neighbors, memory, mode, two_lane_target):
     if mode not in ('noa', 'formation', 'transform'):
         raise ValueError('Unknown driving mode: ' + mode)
-    rows = tuple(c for c in neighbors if -100. <= c.x - ego.x <= 200.)
+    rows = tuple(c for c in neighbors if -REAR_VIEW <= c.x - ego.x <= FRONT_VIEW)
     if mode == 'noa':
         return _reactive(ego, rows, memory, two_lane_target)
     moving = abs(ego.vy) > .1 or abs(ego.y - (ego.lane + .5) * LANE_WIDTH) > .15
@@ -339,7 +340,10 @@ def _decide(ego, neighbors, memory, mode, two_lane_target):
         plan = None
         if not access and not two_lane_target:
             group = _local_group(ego, rows)
-            if len(group) >= 3:
+            # 一端外侧还有一个完整连接距离可看，才从这段车群数层补位。
+            end_visible = (group[-1].x - ego.x <= FRONT_VIEW - GROUP_GAP
+                           or ego.x - group[0].x <= REAR_VIEW - GROUP_GAP)
+            if len(group) >= 3 and end_visible:
                 lane = _formation_fill(ego, group, rows)
                 if lane is not None:
                     return Command(speed, lane, 'formation_fill', target, reference, 1), Memory(lane, reference)
@@ -349,8 +353,14 @@ def _decide(ego, neighbors, memory, mode, two_lane_target):
                     speed = min(speed, physical[0])
                 return Command(speed, None, 'formation_align', target, reference, 1), Memory(front=reference)
 
-    # 终止道还并不进去时，先跟本车道前车。可以开始并入时才接续目标道前车。
-    if plan is not None and anchor is not None and (lane is not None or not mandatory):
+    if mandatory and lane is None and anchor is not None:
+        # 等候合流时，对齐接收道两辆实车之间的中点，并跟上中点的移动速度。
+        rear = max((c for c in rows if c.x <= ego.x and _occupies(c, 1, 0.)),
+                   key=lambda c: c.x, default=None)
+        if rear is not None:
+            target = (anchor.x + rear.x) / 2
+            speed, reference = _request(ego, target, (anchor.speed + rear.speed) / 2), anchor.track
+    elif plan is not None and anchor is not None:
         target = anchor.x - _entry_spacing(ego.speed)
         speed, reference = _request(ego, target, anchor.speed), anchor.track
     if physical[2] is not None and (access or plan is not None):

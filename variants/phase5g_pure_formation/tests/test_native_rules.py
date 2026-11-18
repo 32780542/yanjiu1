@@ -37,6 +37,19 @@ class NativeRulesTests(unittest.TestCase):
             command, _ = self.command(ego, [c for c in group if c is not ego], drop=None)
             self.assertIsNone(command.lane)
 
+    def test_layer_counting_needs_one_visible_end_of_the_group(self):
+        ego = car(0, 300)
+        for rear, head, can_count in ((220, 460, False), (220, 450, True), (250, 460, True)):
+            positions = (rear, 260, 340, 380, 420, head)
+            neighbors = [car(i + 1, x) for i, x in enumerate(positions)]
+            for mode in ('formation', 'transform'):
+                with self.subTest(rear=rear, head=head, mode=mode):
+                    command, _ = self.command(ego, neighbors, mode=mode, drop=None)
+                    self.assertEqual(command.reason in ('formation_fill', 'formation_align'), can_count)
+                    if not can_count:
+                        self.assertIsNone(command.lane)
+                        self.assertEqual(command.reference, neighbors[2].track)
+
     def test_same_lane_counts_do_not_prove_the_middle_layer_is_vacant(self):
         ego = car(0, 117, 0)
         neighbors = [car(1, 135, 0), car(2, 85, 0), car(3, 136, 2)]
@@ -128,15 +141,23 @@ class NativeRulesTests(unittest.TestCase):
         self.assertAlmostEqual(command.target_x, 860 - (5.5 + .85 * 20))
         self.assertEqual(memory.front, rows[1].track)
 
-    def test_ending_lane_keeps_its_front_until_a_merge_can_start(self):
+    def test_waiting_merger_uses_both_observed_gap_boundaries(self):
         ego = car(0, 850, 2, 20)
         current = car(1, 879, 2, 18)
         target = car(2, 870, 1, 12)
         blocker = car(3, 847, 1, 22)
         command, memory = self.command(ego, (current, target, blocker))
         self.assertIsNone(command.lane)
-        self.assertEqual(command.reference, current.track)
+        self.assertEqual(command.reference, target.track)
+        self.assertEqual(command.target_x, (target.x + blocker.x) / 2)
+        self.assertAlmostEqual(command.speed, r._request(ego, 858.5, 17.))
         self.assertEqual(memory.lane_target, 1)
+
+        # 只见到近处的接收道前车时，继续跟自己的前车等候。
+        one_boundary = replace(target, x=ego.x + 4.)
+        command, _ = self.command(ego, (current, one_boundary))
+        self.assertIsNone(command.lane)
+        self.assertEqual(command.reference, current.track)
 
         command, _ = self.command(ego, (current, target), memory=memory)
         self.assertEqual((command.lane, command.reference), (1, target.track))
