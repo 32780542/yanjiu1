@@ -1,4 +1,4 @@
-"""Recreate the evidence-analysis files paired with the November 4 exports."""
+"""Restore the original analysis files used to verify a sealed experiment."""
 
 from argparse import ArgumentParser
 from pathlib import Path
@@ -29,10 +29,15 @@ FILES = (
 def main():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument("directory", type=Path, help="New folder for the 13 frozen analysis files")
-    directory = parser.parse_args().directory.resolve()
+    parser.add_argument("--revision", default=PIN, help="Git commit recorded for the analysis files")
+    args = parser.parse_args()
+    revision = subprocess.check_output(
+        ["git", "rev-parse", "--verify", "--end-of-options", args.revision + "^{commit}"], cwd=REPO, text=True
+    ).strip()
+    directory = args.directory.resolve()
     directory.mkdir(parents=True)
     for relative in FILES:
-        data = subprocess.check_output(["git", "show", f"{PIN}:{relative}"], cwd=REPO)
+        data = subprocess.check_output(["git", "show", f"{revision}:{relative}"], cwd=REPO)
         destination = directory / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         destination.write_bytes(data)

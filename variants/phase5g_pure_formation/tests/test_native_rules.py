@@ -30,6 +30,21 @@ class NativeRulesTests(unittest.TestCase):
                 command, memory = self.command(car(0, 800, 2), mode=mode)
                 self.assertEqual((command.lane, memory.lane_target), (1, 1))
 
+    def test_noa_overtaking_uses_only_lanes_present_downstream(self):
+        ego = car(0, 1020, 1, 10)
+        rows = (car(1, 1040, 1, 10), car(2, 1020, 0, 10))
+        self.assertEqual(self.command(ego, rows, mode='noa', drop=None)[0].lane, 2)
+        command, _ = r.decide(ego, rows, r.Memory(), 'noa', None, lane_count=2)
+        self.assertIsNone(command.lane)
+
+    def test_transform_continues_slot_moves_on_observed_two_lane_road(self):
+        ego, rows = self.slot_scene()
+        ego = replace(ego, x=ego.x + 250)
+        rows = tuple(replace(peer, x=peer.x + 250) for peer in rows)
+        decision = r.decide(ego, rows, r.Memory(), 'transform', None, lane_count=2)
+        self.assertEqual(decision[0].lane, 0)
+        self.assertEqual(decision, self.command(ego, rows))
+
     def test_outside_front_and_rear_observations_do_not_change_the_action(self):
         ego, rows = self.slot_scene()
         outside = (car(91, ego.x + 200.001, 0, 0), car(92, ego.x - 100.001, 1, 33.3))

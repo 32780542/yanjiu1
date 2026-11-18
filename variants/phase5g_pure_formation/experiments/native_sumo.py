@@ -825,11 +825,12 @@ def run_case(
                         ego, neighbors = local.observe(key, states, ordered, xs)
                         # Only ego receives its own submitted request feedback.
                         ego = replace(ego, pending_lane=pending)
+                        lane_count = 2 if lane_end is not None and ego.x >= lane_end else 3
                         if planner is not None:
                             command = global_commands[key]
                         else:
                             visible_end = (
-                                lane_end if lane_end is not None and lane_end - ego.x <= ROAD_PREVIEW else None
+                                lane_end if lane_end is not None and 0 <= lane_end - ego.x <= ROAD_PREVIEW else None
                             )
                             command, memories[key] = decide(
                                 ego,
@@ -837,6 +838,7 @@ def run_case(
                                 memories[key],
                                 mode=mode,
                                 drop_x=visible_end,
+                                lane_count=lane_count,
                             )
                             formation_states[key] = command.formation_state
                         if not math.isfinite(command.speed):
@@ -854,9 +856,7 @@ def run_case(
                             execution["lane_requested_ticks"] += 1
                             if key in lane_attempts or abs(physical.vy) > 0.05:
                                 execution["lane_motion_in_progress"] += 1
-                            elif requested_lane >= (
-                                2 if scenario == "lane_drop" and ego.x >= 1000 else 3
-                            ) or not lane_request_is_safe(ego, neighbors, requested_lane):
+                            elif requested_lane >= lane_count or not lane_request_is_safe(ego, neighbors, requested_lane):
                                 execution["local_lane_guard_rejected"] += 1
                             else:
                                 conn.vehicle.changeLane(key, requested_lane, 1.0)

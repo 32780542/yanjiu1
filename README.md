@@ -12,9 +12,9 @@
 
 ## 从这里了解当前工程
 
-1. [当前源码阅读](docs/experiments/2026-11-18-local-bottleneck/代码阅读.md)与[历史系统说明](docs/原生SUMO编队变换系统说明.md)：方法目的、执行流程、代码结构和运行方法。
-2. [逐条规则与全部函数](docs/experiments/2026-11-04-timegap-staggered/规则逐条说明.md)：每条跟驰、形成、接收、换道、安全规则的条件、动作与源码位置。
-3. [本轮研究进展](docs/experiments/2026-11-04-timegap-staggered/README.md)：采用和未采用的版本、实际数据及当前结论。
+1. 从一次逐帧决策读到每个辅助函数，见[现行规则与源码阅读](docs/experiments/2026-11-18-local-bottleneck/代码阅读.md)。
+2. 查三种流量的纯 NOA、局部交错、简化集中式实测数据，见[本轮研究报告](docs/experiments/2026-11-18-local-bottleneck/README.md)。
+3. 看一串真实换道如何发生，以及只形成队形、启动变换和限制引导前车的区别，见[变换机制与消融](docs/experiments/2026-11-18-local-bottleneck/变换机制.md)。
 4. [评价口径](docs/experiments/2026-11-04-timegap-staggered/evaluation.md)：交通效率、油耗、直接0/1参与统计与真实队形指标。
 5. [论文主线与证据安排](docs/experiments/2026-11-04-timegap-staggered/论文主线与证据安排.md)：研究问题、贡献、对照和图表安排。
 6. [执行检查点](docs/phase5_checkpoint.md)：从末尾读取最新已完成工作、正在运行的批次和下一入口。
@@ -77,7 +77,7 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 | [native_sumo.py](variants/phase5g_pure_formation/experiments/native_sumo.py) | 来车、局部跟踪、原生SUMO执行、逐步记录 |
 | [run_native_flow.py](variants/phase5g_pure_formation/run_native_flow.py) | 单次实验命令行入口 |
 | [native_comparison.py](variants/phase5g_pure_formation/experiments/native_comparison.py) | 同输入比较与逐车统计 |
-| [本轮实验工具](docs/experiments/2026-11-04-timegap-staggered/tools) | 表格消费与实际轨迹绘图 |
+| [本轮实验工具](docs/experiments/2026-11-18-local-bottleneck/tools) | 同输入对照、轨迹分析、位置统计与速度时空图 |
 | [受影响测试](variants/phase5g_pure_formation/tests/run_native_contracts.py) | 明确模块的真实磁盘合同入口 |
 
 每车只保存自己的目标道与主前驱关联；执行空位接续时，前驱字段优先保存空位锚车。控制器不读取全局编队表、其他车辆的私有状态或统计结果。记录器可以读取全路轨迹，用于科研评价。

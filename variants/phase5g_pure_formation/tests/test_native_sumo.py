@@ -395,26 +395,32 @@ class NativeIntegrationTests(unittest.TestCase):
         from experiments import native_sumo as native
         from noa import native_rules
 
-        seen = {}
-
+        seen = []
         decide = native_rules.decide
 
-        def record(ego, neighbors, memory, mode, drop_x):
-            seen[round(ego.x)] = drop_x
-            return decide(ego, neighbors, memory, mode, drop_x)
+        def record(ego, neighbors, memory, mode, drop_x, **road):
+            seen.append((ego.x, drop_x, road.get("lane_count")))
+            return decide(ego, neighbors, memory, mode, drop_x, **road)
 
         with TemporaryDirectory() as tmp, patch.object(native_rules, "decide", side_effect=record):
             native.run_case(
                 mode="noa",
                 duration=0.1,
-                max_time=0.1,
+                max_time=2.0,
                 output_base=tmp,
                 initial=[
                     dict(id="far", depart=0.0, lane=2, x=600.0, speed=28.8),
-                    dict(id="near", depart=0.0, lane=2, x=850.0, speed=28.8),
+                    dict(id="near", depart=0.0, lane=2, x=800.0, speed=28.8),
+                    dict(id="crossing", depart=0.0, lane=0, x=995.0, speed=28.8),
                 ],
             )
-        self.assertEqual(seen, {600: None, 850: 1000.0})
+        self.assertTrue(any(x > 1000 for x, _, _ in seen))
+        self.assertTrue(all(end is None for x, end, _ in seen if x > 1000))
+        self.assertIn((600.0, None, 3), seen)
+        self.assertIn((800.0, 1000.0, 3), seen)
+        for x, end, lanes in seen:
+            self.assertEqual(end, 1000.0 if 800 <= x <= 1000 else None)
+            self.assertEqual(lanes, 2 if x >= 1000 else 3)
 
     def test_actual_lane_completion_is_later_than_lane_index_flip(self):
         from experiments import native_sumo as native

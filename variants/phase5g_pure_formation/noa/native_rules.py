@@ -123,7 +123,7 @@ def _following(ego, rows):
     return _request(ego, target, CRUISE), target, None, int(linked)
 
 
-def _reactive(ego, rows, memory, drop_x):
+def _reactive(ego, rows, memory, two_lane_target):
     """纯 NOA 跟随实际前车，受阻时可超车，见到缩道后寻找安全并入机会。"""
     speed, target, reference, _ = _front_following(ego, rows)
     lane = ego.pending_lane
@@ -132,7 +132,7 @@ def _reactive(ego, rows, memory, drop_x):
         lane = memory.lane_target
     if lane is not None:
         return Command(speed, lane, 'executing', target, reference), Memory(lane_target=lane)
-    if drop_x is not None and ego.lane == 2:
+    if two_lane_target and ego.lane == 2:
         if _clear(ego, rows, 1):
             return Command(speed, 1, 'merge', target, reference), Memory(lane_target=1)
         anchor = _actual_front(ego, rows, 1)
@@ -145,7 +145,7 @@ def _reactive(ego, rows, memory, drop_x):
     front = min((c for c in rows if c.lane == ego.lane and c.x > ego.x),
                 key=lambda c: c.x, default=None)
     if front is not None and ego.speed < CRUISE - 2 and front.speed < CRUISE - 2:
-        lanes = 2 if drop_x is not None else 3
+        lanes = 2 if two_lane_target else 3
         options = [lane for lane in (ego.lane - 1, ego.lane + 1)
                    if 0 <= lane < lanes and _clear(ego, rows, lane)]
 
@@ -215,21 +215,20 @@ def _vacancy(ego, rows, lane, held=None):
     return front, target
 
 
-def _decide(ego, neighbors, memory, mode, drop_x=1000.):
+def _decide(ego, neighbors, memory, mode, two_lane_target):
     if mode not in ('noa', 'formation', 'transform'):
         raise ValueError('Unknown driving mode: ' + mode)
     rows = tuple(c for c in neighbors if -100. <= c.x - ego.x <= 200.)
-    known = drop_x if drop_x is not None and drop_x - ego.x <= ROAD_PREVIEW else None
     if mode == 'noa':
-        return _reactive(ego, rows, memory, known)
+        return _reactive(ego, rows, memory, two_lane_target)
     moving = abs(ego.vy) > .1 or abs(ego.y - (ego.lane + .5) * LANE_WIDTH) > .15
     current = _actual_front(ego, rows, ego.lane)
     guided = (mode == 'transform' and ego.lane == 2
               and current is not None and current.vy < -.1)
-    mandatory = ego.lane == 2 and (known is not None or guided or memory.lane_target == 1)
-    front = _queue_front(ego, rows, known is not None) if mode == 'transform' else current
+    mandatory = ego.lane == 2 and (two_lane_target or guided or memory.lane_target == 1)
+    front = _queue_front(ego, rows, two_lane_target) if mode == 'transform' else current
     physical = _front_following(ego, rows, 200.)
-    access = ((known is not None and any(c.lane == 2 for c in (ego, *rows)))
+    access = ((two_lane_target and any(c.lane == 2 for c in (ego, *rows)))
               or mandatory or front is not None and front.track != physical[2]
               or moving or ego.pending_lane is not None)
     d = _entry_spacing(ego.speed) if access else desired_spacing(ego.speed)
@@ -263,7 +262,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
         if _clear(ego, rows, 1):
             lane = 1
     elif (mode == 'transform' and ego.lane == 1
-          and (known is not None or any(c.vy < -.1 for c in rows) or plan is not None)):
+          and (two_lane_target or any(c.vy < -.1 for c in rows) or plan is not None)):
         vacancy = _vacancy(ego, rows, plan, memory.front) if plan is not None else None
         if vacancy is None:
             plan = None
@@ -310,10 +309,13 @@ def safe_speed(ego, neighbors):
     return limit
 
 
-def decide(ego, neighbors, memory, mode, drop_x=1000.):
-    command, memory = _decide(ego, neighbors, memory, mode, drop_x)
+def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3):
+    """下游只需本地车道数。旧调用传入缩道位置时，仍按本车位置判断两道接续。"""
+    distance_to_end = drop_x - ego.x if drop_x is not None else float('inf')
+    two_lane_target = lane_count == 2 or distance_to_end <= ROAD_PREVIEW
+    command, memory = _decide(ego, neighbors, memory, mode, two_lane_target)
     limit = safe_speed(ego, neighbors)
-    if drop_x is not None and drop_x - ego.x <= ROAD_PREVIEW and ego.lane == 2:
-        distance = max(0., drop_x - ego.x - STANDSTILL)
+    if distance_to_end <= ROAD_PREVIEW and ego.lane == 2:
+        distance = max(0., distance_to_end - STANDSTILL)
         limit = min(limit, sqrt((BRAKING * RESPONSE) ** 2 + 2 * BRAKING * distance) - BRAKING * RESPONSE)
     return replace(command, speed=min(command.speed, limit)), memory
