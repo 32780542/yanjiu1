@@ -66,15 +66,17 @@ def freeze(batch, source):
 
 def execute(batch, task, hashes):
     profile, flow, seed, mode = (task[k] for k in ("profile", "flow", "seed", "mode"))
+    duration = task.get("duration", 600)
+    max_time = task.get("max_time", 1200)
     ident = f"{profile}_{flow}_{seed}_{mode}"
     folder = batch / "case" / ident
     folder.mkdir(parents=True)
     cli = batch / "src" / profile / "run_native_flow.py"
     command = [sys.executable, "-B", str(ROOT / "scripts/run_logged.py"),
-               "--label", "n18-phys-" + ident, "--timeout", "1800", "--",
+               "--label", "n18-phys-" + ident, "--timeout", str(min(7200, max(1800, duration * 3))), "--",
                sys.executable, "-X", "utf8", "-B", str(cli),
                "--flow", str(flow), "--seed", str(seed), "--scenario", "lane_drop",
-               "--mode", mode, "--duration", "600", "--max-time", "1200",
+               "--mode", mode, "--duration", str(duration), "--max-time", str(max_time),
                "--output-base", str(folder)]
     with (folder / "worker.log").open("wb") as log:
         worker = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT)
@@ -104,7 +106,7 @@ def execute(batch, task, hashes):
         assert {(name, inp["case"][name]) for name in ("seed", "mode", "scenario", "flow_veh_h_lane",
                                                      "demand_duration_s", "max_time_s")} == {
             ("seed", seed), ("mode", mode), ("scenario", "lane_drop"), ("flow_veh_h_lane", flow),
-            ("demand_duration_s", 600), ("max_time_s", 1200),
+            ("demand_duration_s", duration), ("max_time_s", max_time),
         }
         assert inp["speed_mode"] == 31 and inp["lane_change_mode"] == 512
         task["physical"] = inp["physical"]
@@ -124,15 +126,19 @@ def main():
     parser.add_argument("--flows", nargs="+", type=int, choices=(1500, 1750, 2000), default=[1500, 1750, 2000])
     parser.add_argument("--seeds", nargs="+", type=int, default=[211, 212])
     parser.add_argument("--modes", nargs="+", choices=("noa", "transform"), default=["noa", "transform"])
+    parser.add_argument("--duration", type=int, default=600)
+    parser.add_argument("--max-time", type=int, default=1200)
     parser.add_argument("--source", type=Path, default=SOURCE)
     args = parser.parse_args()
+    if not 0 < args.duration < args.max_time:
+        parser.error("require 0 < duration < max-time")
     batch = args.output.resolve()
     assert batch.parent == ROOT / "tmp/staggered_bottleneck" and not batch.exists()
     assert all(len(set(values)) == len(values) for values in (args.flows, args.profiles, args.seeds, args.modes))
     batch.mkdir()
     hashes = freeze(batch, args.source.resolve())
     (batch / "run.py").write_bytes(Path(__file__).read_bytes())
-    tasks = [dict(profile=profile, flow=flow, seed=seed, mode=mode)
+    tasks = [dict(profile=profile, flow=flow, seed=seed, mode=mode, duration=args.duration, max_time=args.max_time)
              for flow, profile, seed, mode in itertools.product(args.flows, args.profiles, args.seeds, args.modes)]
     write_json(batch / "protocol.json", dict(tasks=tasks, hashes=hashes, jobs=args.jobs,
                                             frozen_from=str(args.source.resolve())))
