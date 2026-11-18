@@ -18,6 +18,7 @@
 4. [评价口径](docs/experiments/2026-11-04-timegap-staggered/evaluation.md)：交通效率、油耗、直接0/1参与统计与真实队形指标。
 5. [论文主线与证据安排](docs/experiments/2026-11-04-timegap-staggered/论文主线与证据安排.md)：研究问题、贡献、对照和图表安排。
 6. [执行检查点](docs/phase5_checkpoint.md)：从末尾读取最新已完成工作、正在运行的批次和下一入口。
+7. [交错与并排的四组对照、纯 HDV 的全程时间](docs/experiments/2026-11-18-local-bottleneck/factorial_hdv.md)。含普通 HDV 的实时仿真命令，以及两套道路环境的逐车数据。
 
 方法来源见 [本轮依据](docs/experiments/2026-11-04-timegap-staggered/method_options.md) 和 [150篇文献库](docs/research/2026-10-30-literature-review/README.md)。文献库分别标明相关章节、摘要预览和仅题录的读取深度；采用细节以当前规则为准。
 
