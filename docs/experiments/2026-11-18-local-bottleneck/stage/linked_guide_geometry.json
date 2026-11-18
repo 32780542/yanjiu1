@@ -1,0 +1,181 @@
+{
+  "cohort_size": 45,
+  "bottleneck_m": 1000,
+  "exit_m": 3600,
+  "step_s": 0.1,
+  "first_alternating_definition": "First recorded step with all 45 cars centered in lanes 0/1 and alternating in longitudinal order, abs(vy)<0.05 m/s and lateral center error <0.05 m.",
+  "error_definition": "At 100 s, mean absolute error over 44 adjacent longitudinal pairs from half of 5.5+0.85*pair_mean_speed, in m.",
+  "lane_changes_definition": "Count of completed lateral moves across all trip records.",
+  "reader": "docs/experiments/2026-11-04-public-preview/read_cohort.py",
+  "geometry_entry": "docs/experiments/2026-11-04-timegap-staggered/geometry_trial.py",
+  "pairs": [
+    {
+      "design": "formed45_initial",
+      "initial": "docs/experiments/2026-11-03-staggered-bottleneck/formation_demo_D1/formed45_initial.json",
+      "initial_sha256": "fd6481a12c991a6dd6398987d7e476c08883b7fffd169237e8bf06a46fb5ad89",
+      "identical_case_inputs_except_rules_hash": true,
+      "streams_identical": {
+        "positions.jsonl.gz": true,
+        "events.jsonl.gz": true,
+        "diagnostic.jsonl.gz": true,
+        "trips.json": true
+      },
+      "KeepFront": {
+        "run": "tmp/staggered_bottleneck/20261118_shape_check/KeepFront_formed45_initial/run/20261117T172858113706Z_lane_drop_transform_s1_2d312f",
+        "rules_sha256": "ad7a0187235d22a7cf1055faf5125b01ca7d30aa6a7dcbb42fe2cea7899e6a17",
+        "geometry": {
+          "trial": "KeepFront_formed45_initial",
+          "safe": true,
+          "status": "drained",
+          "completed": 45,
+          "first_alternating_s": 70.0,
+          "last_alternating_s": 109.2,
+          "error_m": {
+            "70.0": 0.8324569479911871,
+            "80.0": 0.059408342780951855,
+            "100.0": 0.00032757078673889046
+          },
+          "lane_changes": 22
+        },
+        "safety": {
+          "status": "drained",
+          "safe": true,
+          "requested": 45,
+          "departed": 45,
+          "completed": 45,
+          "pending_final": 0,
+          "onroad_final": 0,
+          "collisions": 0,
+          "teleports": 0
+        },
+        "sumo_version": "SUMO 1.27.1",
+        "stream_sha256": {
+          "positions.jsonl.gz": "ed14999ed821a0f92fb9c3a957121e43ca996524fb860430c0650f43bda7e124",
+          "events.jsonl.gz": "b1c3f9c03d6ceaf5dec2c169056810b92b16934e2ee6dfdb9889c5ce7ad56a86",
+          "diagnostic.jsonl.gz": "5af8894a2528889e09f0de8c5d1e28a6ab1e4fb20c1a6d6e0a777e38d2c110ca",
+          "trips.json": "22e001de8a4765db053fd3b2f5a9f2fc2260d1a90dcdbc86ef71acc1eb324734"
+        }
+      },
+      "LinkedGuide": {
+        "run": "tmp/staggered_bottleneck/20261118_linked_guide_geometry_r01/LinkedGuide_formed45_initial/run/20261118T014913798240Z_lane_drop_transform_s1_b34bc1",
+        "rules_sha256": "707e8754e5af1b03fb0ff30ebaaffa62a226a2de55be690929f38a44e70d820d",
+        "geometry": {
+          "trial": "LinkedGuide_formed45_initial",
+          "safe": true,
+          "status": "drained",
+          "completed": 45,
+          "first_alternating_s": 70.0,
+          "last_alternating_s": 109.2,
+          "error_m": {
+            "70.0": 0.8324569479911871,
+            "80.0": 0.059408342780951855,
+            "100.0": 0.00032757078673889046
+          },
+          "lane_changes": 22
+        },
+        "safety": {
+          "status": "drained",
+          "safe": true,
+          "requested": 45,
+          "departed": 45,
+          "completed": 45,
+          "pending_final": 0,
+          "onroad_final": 0,
+          "collisions": 0,
+          "teleports": 0
+        },
+        "sumo_version": "SUMO 1.27.1",
+        "stream_sha256": {
+          "positions.jsonl.gz": "ed14999ed821a0f92fb9c3a957121e43ca996524fb860430c0650f43bda7e124",
+          "events.jsonl.gz": "b1c3f9c03d6ceaf5dec2c169056810b92b16934e2ee6dfdb9889c5ce7ad56a86",
+          "diagnostic.jsonl.gz": "5af8894a2528889e09f0de8c5d1e28a6ab1e4fb20c1a6d6e0a777e38d2c110ca",
+          "trips.json": "22e001de8a4765db053fd3b2f5a9f2fc2260d1a90dcdbc86ef71acc1eb324734"
+        }
+      }
+    },
+    {
+      "design": "middle_head45_initial",
+      "initial": "docs/experiments/2026-11-04-public-preview/data/middle_head45_initial.json",
+      "initial_sha256": "99baf1eaf913cd66f325e802f68756e7a04bec8758d285830ee489d61ca20bb3",
+      "identical_case_inputs_except_rules_hash": true,
+      "streams_identical": {
+        "positions.jsonl.gz": true,
+        "events.jsonl.gz": true,
+        "diagnostic.jsonl.gz": true,
+        "trips.json": true
+      },
+      "KeepFront": {
+        "run": "tmp/staggered_bottleneck/20261118_shape_check/KeepFront_middle_head45_initial/run/20261117T172858132464Z_lane_drop_transform_s1_d66381",
+        "rules_sha256": "ad7a0187235d22a7cf1055faf5125b01ca7d30aa6a7dcbb42fe2cea7899e6a17",
+        "geometry": {
+          "trial": "KeepFront_middle_head45_initial",
+          "safe": true,
+          "status": "drained",
+          "completed": 45,
+          "first_alternating_s": 64.7,
+          "last_alternating_s": 108.7,
+          "error_m": {
+            "70.0": 0.46058063008030276,
+            "80.0": 0.022609126040345536,
+            "100.0": 0.0001728533524533676
+          },
+          "lane_changes": 22
+        },
+        "safety": {
+          "status": "drained",
+          "safe": true,
+          "requested": 45,
+          "departed": 45,
+          "completed": 45,
+          "pending_final": 0,
+          "onroad_final": 0,
+          "collisions": 0,
+          "teleports": 0
+        },
+        "sumo_version": "SUMO 1.27.1",
+        "stream_sha256": {
+          "positions.jsonl.gz": "3a9b6f836bbd79ea16eb126019812814ff960e46e9c7f928696b55c735afe1a6",
+          "events.jsonl.gz": "31ae243a4a5a8f27cbe5eff8f5c6ba34c2fbd728fdd05880ace39c5262a35454",
+          "diagnostic.jsonl.gz": "fd6d5379385aed27b5212c8f1f6d9941f5159ac78031048fdd210222643ec488",
+          "trips.json": "374c03a6cc16b6c4cb9485ac285d114b15e377a38c76e6353b0649e4c663d9ea"
+        }
+      },
+      "LinkedGuide": {
+        "run": "tmp/staggered_bottleneck/20261118_linked_guide_geometry_r01/LinkedGuide_middle_head45_initial/run/20261118T014913416187Z_lane_drop_transform_s1_d7b891",
+        "rules_sha256": "707e8754e5af1b03fb0ff30ebaaffa62a226a2de55be690929f38a44e70d820d",
+        "geometry": {
+          "trial": "LinkedGuide_middle_head45_initial",
+          "safe": true,
+          "status": "drained",
+          "completed": 45,
+          "first_alternating_s": 64.7,
+          "last_alternating_s": 108.7,
+          "error_m": {
+            "70.0": 0.46058063008030276,
+            "80.0": 0.022609126040345536,
+            "100.0": 0.0001728533524533676
+          },
+          "lane_changes": 22
+        },
+        "safety": {
+          "status": "drained",
+          "safe": true,
+          "requested": 45,
+          "departed": 45,
+          "completed": 45,
+          "pending_final": 0,
+          "onroad_final": 0,
+          "collisions": 0,
+          "teleports": 0
+        },
+        "sumo_version": "SUMO 1.27.1",
+        "stream_sha256": {
+          "positions.jsonl.gz": "3a9b6f836bbd79ea16eb126019812814ff960e46e9c7f928696b55c735afe1a6",
+          "events.jsonl.gz": "31ae243a4a5a8f27cbe5eff8f5c6ba34c2fbd728fdd05880ace39c5262a35454",
+          "diagnostic.jsonl.gz": "fd6d5379385aed27b5212c8f1f6d9941f5159ac78031048fdd210222643ec488",
+          "trips.json": "374c03a6cc16b6c4cb9485ac285d114b15e377a38c76e6353b0649e4c663d9ea"
+        }
+      }
+    }
+  ]
+}

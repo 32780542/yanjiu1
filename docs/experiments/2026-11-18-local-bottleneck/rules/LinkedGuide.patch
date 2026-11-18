@@ -1,0 +1,11 @@
+--- a/variants/phase5g_pure_formation/noa/native_rules.py
++++ b/variants/phase5g_pure_formation/noa/native_rules.py
+@@ -226,7 +226,7 @@
+     moving = abs(ego.vy) > .1 or abs(ego.y - (ego.lane + .5) * LANE_WIDTH) > .15
+     current = _actual_front(ego, rows, ego.lane)
+     guided = (mode == 'transform' and ego.lane == 2
+-              and current is not None and current.vy < -.1)
++              and current is not None and memory.front == current.track and current.vy < -.1)
+     mandatory = ego.lane == 2 and (known is not None or guided or memory.lane_target == 1)
+     front = _queue_front(ego, rows, known is not None) if mode == 'transform' else current
+     physical = _front_following(ego, rows, 200.)
