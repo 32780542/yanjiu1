@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1020" viewBox="0 0 1536 1020" role="img" aria-labelledby="title desc">
+<title id="title">三车道缩为两车道时的分布式编队变换</title>
+<desc id="desc">每辆车独立读取局部观测与自身计划。终止道车辆使用合流走廊或跟踪移动空隙的中点。中道车辆接收前车，受阻且另一存续道有空位时可以向内接续。另一存续道车辆调整跟驰。所有动作经过安全检查，下一步重新观测。</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 1 1 L 9 5 L 1 9 z" fill="#526778"/></marker></defs>
+<style>text {font-family:'Microsoft YaHei','Noto Sans SC',sans-serif; fill:#162c3c} .edge {fill:none;stroke:#526778;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}</style>
+<rect x="0" y="0" width="1536" height="1020" rx="0" fill="#ffffff" stroke="none" stroke-width="1"/>
+<text x="37" y="58" text-anchor="start" style="font-size:39px;font-weight:700;fill:#162c3c">三车道缩为两车道时，每辆车怎样变换队形？</text>
+<text x="39" y="92" text-anchor="start" style="font-size:21px;font-weight:400;fill:#485d6c">2 道在前方终止，1 道与 0 道继续通行。每辆车根据自己的观测单独决策。</text>
+<rect x="180" y="116" width="1176" height="71" rx="5" fill="#eef3f7" stroke="#a4bac8" stroke-width="1.25"/>
+<text x="768" y="146" text-anchor="middle" style="font-size:22px;font-weight:700;fill:#162c3c">每 0.1 秒，观察三条车道前 200 米、后 100 米内的实车，并读取本车未完成的计划</text>
+<text x="768" y="169" text-anchor="middle" style="font-size:18px;font-weight:400;fill:#485d6c">正在横移时继续原动作。准备发起新动作时，按本车所在车道进入下方分支。</text>
+<path d="M768 187V205 M268 205H1268" fill="none" stroke="#526778" stroke-width="1.75"/>
+<path class="edge" d="M268 205V225"/>
+<path class="edge" d="M768 205V225"/>
+<path class="edge" d="M1268 205V225"/>
+<rect x="26" y="227" width="484" height="636" rx="8" fill="#fff" stroke="#bbc8cf" stroke-width="1.1"/>
+<rect x="27" y="228" width="482" height="60" rx="0" fill="#284b63" stroke="none" stroke-width="1"/>
+<text x="47" y="266" text-anchor="start" style="font-size:25px;font-weight:700;fill:#ffffff">2 道　终止道车辆</text>
+<rect x="526" y="227" width="484" height="636" rx="8" fill="#fff" stroke="#bbc8cf" stroke-width="1.1"/>
+<rect x="527" y="228" width="482" height="60" rx="0" fill="#236260" stroke="none" stroke-width="1"/>
+<text x="547" y="266" text-anchor="start" style="font-size:25px;font-weight:700;fill:#ffffff">1 道　直接接收车辆</text>
+<rect x="1026" y="227" width="484" height="636" rx="8" fill="#fff" stroke="#bbc8cf" stroke-width="1.1"/>
+<rect x="1027" y="228" width="482" height="60" rx="0" fill="#405572" stroke="none" stroke-width="1"/>
+<text x="1047" y="266" text-anchor="start" style="font-size:25px;font-weight:700;fill:#ffffff">0 道　另一存续道车辆</text>
+<path d="M55 318H315L328 363.5L315 409H55L42 363.5Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="185" y="346.5" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">需要并入 1 道吗？</text>
+<text x="185" y="369.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">本车看到缩道，或最近前车向内横移，</text>
+<text x="185" y="392.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">或本车已有并入 1 道的计划</text>
+<path class="edge" d="M328 363.5H384"/>
+<text x="356" y="355.5" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<rect x="385" y="332.5" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="440.5" y="358" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">维持常规</text>
+<text x="440.5" y="381" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#165f60">编队行驶</text>
+<path class="edge" d="M185 409V465"/>
+<text x="197" y="442.5" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<path d="M55 466H315L328 500.5L315 535H55L42 500.5Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="185" y="495" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">向 1 道横移的</text>
+<text x="185" y="518" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#485d6c">走廊安全吗？</text>
+<path class="edge" d="M328 500.5H384"/>
+<text x="356" y="492.5" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<rect x="385" y="469.5" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="440.5" y="495" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">请求换道</text>
+<text x="440.5" y="518" text-anchor="middle" style="font-size:18px;font-weight:700;fill:#165f60">2 → 1</text>
+<path class="edge" d="M185 535V599"/>
+<text x="197" y="572.5" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<path d="M55 600H315L328 637L315 674H55L42 637Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="185" y="631.5" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">能看到接收道空隙的</text>
+<text x="185" y="654.5" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#485d6c">前车和后车吗？</text>
+<path class="edge" d="M328 637H384"/>
+<text x="356" y="629" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<rect x="385" y="606" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="440.5" y="631.5" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">继续原有</text>
+<text x="440.5" y="654.5" text-anchor="middle" style="font-size:17px;font-weight:400;fill:#165f60">跟驰</text>
+<path class="edge" d="M185 674V741"/>
+<text x="197" y="713" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<rect x="42" y="742" width="286" height="86" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="185" y="768" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#165f60">留在 2 道，跟踪空隙中点</text>
+<text x="185" y="791" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#165f60">位置取前后车位置的均值</text>
+<text x="185" y="814" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#165f60">参考速度取前后车速度的均值</text>
+<rect x="542" y="306" width="286" height="93" rx="5" fill="#eef3f7" stroke="#a4bac8" stroke-width="1.25"/>
+<text x="685" y="335.5" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">更新纵向跟驰对象</text>
+<text x="685" y="358.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">看到缩道或 2 道前车向内横移，且</text>
+<text x="685" y="381.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">它可并入时，与本道前车取最近者</text>
+<path class="edge" d="M685 399V430"/>
+<path d="M555 431H815L828 475.5L815 520H555L542 475.5Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="685" y="458.5" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">需要向 0 道找位吗？</text>
+<text x="685" y="481.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">见缩道或邻车向内横移，且前方受阻。</text>
+<text x="685" y="504.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">已有计划时优先复查原空位</text>
+<path class="edge" d="M828 475.5H884"/>
+<text x="856" y="467.5" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<rect x="885" y="444.5" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="940.5" y="470" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">沿用当前</text>
+<text x="940.5" y="493" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#165f60">跟驰或编队</text>
+<path class="edge" d="M685 520V550"/>
+<text x="697" y="540.5" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<path d="M555 551H815L828 596L815 641H555L542 596Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="685" y="579" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">0 道有合适的实车空位吗？</text>
+<text x="685" y="602" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">在前车后一个接入间距处查空位，</text>
+<text x="685" y="625" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">核对前后净空与半间距错位</text>
+<path class="edge" d="M828 596H884"/>
+<text x="856" y="588" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<rect x="885" y="565" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="940.5" y="590.5" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">留在 1 道</text>
+<text x="940.5" y="613.5" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#165f60">继续跟驰</text>
+<path class="edge" d="M685 641V675"/>
+<text x="697" y="663.5" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<path d="M555 676H815L828 707L815 738H555L542 707Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="685" y="713" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">向 0 道的走廊安全吗？</text>
+<path class="edge" d="M828 707H884"/>
+<text x="856" y="699" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<rect x="885" y="676" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="940.5" y="701.5" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">对准空位</text>
+<text x="940.5" y="724.5" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#165f60">等待横移</text>
+<path class="edge" d="M685 738V781"/>
+<text x="697" y="765" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<rect x="542" y="782" width="286" height="55" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="685" y="815.5" text-anchor="middle" style="font-size:20px;font-weight:700;fill:#165f60">请求换道　1 → 0</text>
+<rect x="1042" y="312" width="286" height="93" rx="5" fill="#eef3f7" stroke="#a4bac8" stroke-width="1.25"/>
+<text x="1185" y="341.5" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">观察 1 道的前方车辆</text>
+<text x="1185" y="364.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">它已向 0 道横移，或本车已见缩道</text>
+<text x="1185" y="387.5" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">且它前方有可并入 1 道的 2 道车</text>
+<path class="edge" d="M1185 405V450"/>
+<path d="M1055 451H1315L1328 494.5L1315 538H1055L1042 494.5Z" fill="#fff7e8" stroke="#ba985e" stroke-width="1.3"/>
+<text x="1185" y="489" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#162c3c">有符合上述条件、且能</text>
+<text x="1185" y="512" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#485d6c">安全进入 0 道的前车吗？</text>
+<path class="edge" d="M1328 494.5H1384"/>
+<text x="1356" y="486.5" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#485d6c">否</text>
+<rect x="1385" y="463.5" width="111" height="62" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="1440.5" y="489" text-anchor="middle" style="font-size:17px;font-weight:700;fill:#165f60">沿用当前</text>
+<text x="1440.5" y="512" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#165f60">跟驰或编队</text>
+<path class="edge" d="M1185 538V589"/>
+<text x="1197" y="569" text-anchor="start" style="font-size:15px;font-weight:700;fill:#485d6c">是</text>
+<rect x="1042" y="590" width="286" height="78" rx="12" fill="#e6f3ef" stroke="#51948c" stroke-width="1.25"/>
+<text x="1185" y="623.5" text-anchor="middle" style="font-size:19px;font-weight:700;fill:#165f60">把它纳入前车候选</text>
+<text x="1185" y="646.5" text-anchor="middle" style="font-size:16px;font-weight:400;fill:#165f60">与本道实际前车取最近者跟驰</text>
+<path d="M1048 703H1488" fill="none" stroke="#cfd9df" stroke-width="1"/>
+<text x="1049" y="736" text-anchor="start" style="font-size:18px;font-weight:700;fill:#485d6c">从 0 道车的视角看</text>
+<text x="1049" y="772" text-anchor="start" style="font-size:16px;font-weight:700;fill:#485d6c">1 道</text>
+<text x="1049" y="816" text-anchor="start" style="font-size:16px;font-weight:700;fill:#485d6c">0 道</text>
+<path d="M1093 783H1481" fill="none" stroke="#acbac4" stroke-width="1.5" stroke-dasharray="7 6"/>
+<rect x="1247" y="745" width="73" height="26" rx="7" fill="#267d75" stroke="none" stroke-width="1"/>
+<text x="1283.5" y="764" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#fff">候选车</text>
+<rect x="1103" y="795" width="68" height="26" rx="7" fill="#475e78" stroke="none" stroke-width="1"/>
+<text x="1137" y="814" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#fff">本车</text>
+<rect x="1375" y="795" width="91" height="26" rx="7" fill="#475e78" stroke="none" stroke-width="1"/>
+<text x="1420.5" y="814" text-anchor="middle" style="font-size:15px;font-weight:700;fill:#fff">本道前车</text>
+<path class="edge" d="M1306 774l22 20"/>
+<text x="1314" y="844" text-anchor="middle" style="font-size:15px;font-weight:400;fill:#485d6c">行驶方向  →</text>
+<path d="M268 863V878" fill="none" stroke="#6b7c86" stroke-width="1.6"/>
+<path d="M768 863V878" fill="none" stroke="#6b7c86" stroke-width="1.6"/>
+<path d="M1268 863V878" fill="none" stroke="#6b7c86" stroke-width="1.6"/>
+<path d="M268 878H1268" fill="none" stroke="#6b7c86" stroke-width="1.6"/>
+<path class="edge" d="M768 878V896"/>
+<rect x="26" y="898" width="1484" height="97" rx="7" fill="#edf3f6" stroke="#839aa9" stroke-width="1.3"/>
+<text x="49" y="934" text-anchor="start" style="font-size:24px;font-weight:700;fill:#162c3c">共同执行</text>
+<text x="182" y="933" text-anchor="start" style="font-size:20px;font-weight:400;fill:#162c3c">横移前检查车身占道、当前及 1 秒后的间隔（至少 8 米）和前后次序。每次只跨相邻一道。</text>
+<text x="182" y="969" text-anchor="start" style="font-size:19px;font-weight:400;fill:#485d6c">纵向速度受实际前车制约。仍在 2 道时还须能在道端前停住。SUMO 推进一步后重新观测。</text>
+</svg>
