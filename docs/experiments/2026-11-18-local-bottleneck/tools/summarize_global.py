@@ -1,4 +1,4 @@
-"""Audit the existing centralized reference against frozen C12_200 observations."""
+"""Audit the simplified centralized reference against paired local observations."""
 
 import argparse
 import csv
@@ -14,6 +14,7 @@ from summarize_shared_physics import (
 
 FLOWS = (1500, 1750, 2000)
 SEEDS = (211, 212)
+DEFAULT_REPORT = HISTORICAL / "data/formal600_main/per_case.csv"
 MODES = ("noa", "transform", "global")
 TIMES = (200, 400, 550)
 CASE_KEYS = (
@@ -26,7 +27,7 @@ NETWORK_FILES = ("native.nod.xml", "native.edg.xml", "native.con.xml", "native.r
 ENDPOINTS = ("status", "safe", "all_completed", "requested", "departed", "completed", "pending_final",
              "onroad_final", "actual_end_s", "collisions", "teleports", "error")
 METRICS = ("mean_system_time_s", "mean_travel_time_s", "mean_entry_wait_s", "mean_segment_800_1100_s",
-           "flow_1000m_veh_h", "region_mean_speed_mps", "region_low_speed_vehicle_s",
+           "flow_1000m_veh_h", "exit_flow_veh_h", "region_mean_speed_mps", "region_low_speed_vehicle_s",
            "stop_sample_vehicle_s", "fuel_g_per_km", "merge_2to1_mean_x_m")
 
 
@@ -61,16 +62,16 @@ def same_input(run, source, result, historical, old_source, old_result):
             and all(digest(historical / file) == digest(run / file) for file in NETWORK_FILES))
 
 
-def summarize(batch, out):
-    history_path = HISTORICAL / "data/formal600_main/per_case.csv"
+def summarize(batch, out, history_path=DEFAULT_REPORT, candidate="C12_200", seeds=SEEDS):
     history = {(row["flow"], row["seed"], row["mode"]): row for row in read_report_rows(history_path)
-               if row["candidate"] == "C12_200" and row["scenario"] == "lane_drop"}
+               if row["candidate"] == candidate and row["scenario"] == "lane_drop"}
     frozen = read_json(batch / "src/freeze.json")["sha256"]
     assert all(digest(batch / "src" / path) == sha for path, sha in frozen.items())
     rows = []
     snapshots = []
+    pairs = []
     for flow in FLOWS:
-        for seed in SEEDS:
+        for seed in seeds:
             case = batch / "cases" / f"{flow}_{seed}"
             worker_exit = int((case / "worker_exit.txt").read_text(encoding="utf-8").strip())
             result_files = list(case.glob("*/result.json"))
@@ -99,6 +100,14 @@ def summarize(batch, out):
                 issues.append(f"worker_exit_{worker_exit}")
             mode_rows["global"] = case_row(flow, seed, "global", run, result, measured, matched,
                                            audit["attribution_eligible"] and worker_exit == 0, issues)
+            for mode in MODES[:-1]:
+                local, reference = mode_rows[mode], mode_rows["global"]
+                eligible = local["eligible"] and reference["eligible"]
+                pair = dict(flow=flow, seed=seed, local_mode=mode, eligible=eligible)
+                for key in METRICS:
+                    a, b = local[key], reference[key]
+                    pair[f"local_minus_global_{key}"] = a - b if eligible and a is not None and b is not None else None
+                pairs.append(pair)
             for mode, row in mode_rows.items():
                 rows.append(row)
                 if flow == 1500:
@@ -118,14 +127,14 @@ def summarize(batch, out):
                 if eligible and all(row[name] is not None for row in mode_rows) else None for name in METRICS
             }))
     out.mkdir(parents=True, exist_ok=True)
-    for name, table in (("cases", rows), ("means", means), ("speed_samples", snapshots)):
+    for name, table in (("cases", rows), ("means", means), ("pairs", pairs), ("speed_samples", snapshots)):
         with (out / f"{name}.csv").open("w", newline="", encoding="utf-8") as stream:
             writer = csv.DictWriter(stream, fieldnames=list(table[0]))
             writer.writeheader()
             writer.writerows(table)
     (out / "audit.json").write_text(json.dumps(dict(
-        batch=str(batch.relative_to(ROOT)), historical_report=str(history_path.relative_to(ROOT)),
-        source_sha256=frozen, cases=rows, means=means, speed_samples=snapshots,
+        batch=str(batch.relative_to(ROOT)), historical_report=str(history_path.relative_to(ROOT)), candidate=candidate,
+        seeds=list(seeds), source_sha256=frozen, cases=rows, means=means, pairs=pairs, speed_samples=snapshots,
         reference="Simplified Cai-style centralized assignment implemented in native SUMO",
         speed_sample_window=dict(x_m=[975, 1025], t_radius_s=5, weighting="each vehicle at each recorded 0.1 s step"),
     ), allow_nan=False, indent=2) + "\n", encoding="utf-8")
@@ -134,12 +143,17 @@ def summarize(batch, out):
 def case_row(flow, seed, mode, run, result, metrics, matched, eligible, issues):
     return dict(flow=flow, seed=seed, mode=mode, run=str(run.relative_to(ROOT)), matched=matched,
                 eligible=matched and eligible, audit_issues=issues, **{key: result.get(key) for key in ENDPOINTS},
-                **{key: metrics.get(key) for key in METRICS})
+                **{key: metrics.get(key, result.get(key)) for key in METRICS})
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("batch", type=Path)
     parser.add_argument("out", type=Path)
+    parser.add_argument("--history-report", type=Path, default=DEFAULT_REPORT)
+    parser.add_argument("--candidate", default="C12_200")
+    parser.add_argument("--seeds", type=int, nargs="+", default=SEEDS)
     args = parser.parse_args()
-    summarize(args.batch.resolve(), args.out.resolve())
+    if len(set(args.seeds)) != len(args.seeds):
+        parser.error("--seeds must be unique")
+    summarize(args.batch.resolve(), args.out.resolve(), args.history_report.resolve(), args.candidate, args.seeds)

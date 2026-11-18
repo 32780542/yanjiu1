@@ -1,4 +1,4 @@
-"""前向虚拟合流跟驰与真实编队空位接续。"""
+"""单车根据局部观测计算跟驰速度和相邻车道换道请求。"""
 from dataclasses import dataclass, replace
 from math import sqrt
 
@@ -66,23 +66,22 @@ def _request(ego, target, reference_speed):
     return max(0., min(MAX_SPEED, ego.speed + SPEED_RELAXATION * (desired - ego.speed)))
 
 
-def _phase(lane, speed=CRUISE):
+def _phase(lane, speed):
     return desired_spacing(speed) / 2 if lane % 2 else 0.
 
 
-def _physical_phase(car, lanes, speed=None):
-    speed = car.speed if speed is None else speed
-    lateral = max(0., min(lanes - 1, car.y / LANE_WIDTH - .5))
+def _physical_phase(car, speed):
+    """横移途中，按车辆实际横向位置在两个车道的交错目标之间插值。"""
+    lateral = max(0., min(2, car.y / LANE_WIDTH - .5))
     lower = int(lateral)
-    upper = min(lower + 1, lanes - 1)
+    upper = min(lower + 1, 2)
     return _phase(lower, speed) + (lateral - lower) * (
         _phase(upper, speed) - _phase(lower, speed))
 
 
-def _pair_error(car, peer, lanes):
+def _pair_error(car, peer):
     speed = (car.speed + peer.speed) / 2
-    return (peer.x - car.x + _physical_phase(peer, 3, speed)
-            - _physical_phase(car, 3, speed)), lanes
+    return peer.x - car.x + _physical_phase(peer, speed) - _physical_phase(car, speed)
 
 
 def _front_following(ego, rows, distance=50.):
@@ -95,14 +94,14 @@ def _front_following(ego, rows, distance=50.):
     return _request(ego, target, front.speed), target, front.track, 1
 
 
-def _following(ego, rows, lanes=3):
-    """在真实前车跟驰上，用实车互选形成半时距错位。"""
+def _following(ego, rows):
+    """本车在同一帧观测中双向匹配邻车，再微调速度形成半个车头间距的错位。"""
     following = _front_following(ego, rows)
     cars = (ego, *rows)
 
     def nearest(car, lane):
         return min((c for c in cars if c.lane == lane and abs(c.x - car.x) <= 50.),
-                   key=lambda c: (abs(_pair_error(car, c, lanes)[0]),
+                   key=lambda c: (abs(_pair_error(car, c)),
                                   abs(c.x - car.x), c.x, c.y, c.speed, c.vy), default=None)
 
     linked = bool(following[3]) or any(-50. <= c.x - ego.x < 0.
@@ -113,7 +112,7 @@ def _following(ego, rows, lanes=3):
             peer = nearest(ego, lane)
             if peer is not None and nearest(peer, ego.lane) is ego:
                 linked = True
-                error += _pair_error(ego, peer, lanes)[0] / max(1, lanes - 1)
+                error += _pair_error(ego, peer) / 2
     phase_speed = max(-2., min(2., POSITION_GAIN * error))
     if following[2] is not None:
         if phase_speed * (following[0] - ego.speed) < 0.:
@@ -125,7 +124,7 @@ def _following(ego, rows, lanes=3):
 
 
 def _reactive(ego, rows, memory, drop_x):
-    """普通跟驰、当前间隙接受和受阻超车；不追踪合流间隙中点。"""
+    """纯 NOA 跟随实际前车，受阻时可超车，见到缩道后寻找安全并入机会。"""
     speed, target, reference, _ = _front_following(ego, rows)
     lane = ego.pending_lane
     moving = abs(ego.vy) > .1 or abs(ego.y - (ego.lane + .5) * LANE_WIDTH) > .15
@@ -168,12 +167,12 @@ def _actual_front(ego, rows, lane):
 
 
 def _entry_spacing(speed):
-    # Two staggered half-pitches must each fit the unchanged 8 m corridor.
+    # 车并入交错中点后，前后两个半间距都要容得下 8 米换道净空。
     return max(desired_spacing(speed), 2 * CLEARANCE)
 
 
 def _queue_front(ego, rows, known):
-    """All references are strictly ahead; virtual insertion must be executable now."""
+    """从本车道前车和有条件汇入本车道的前方车辆中，跟随最近的一辆。"""
     actual = _actual_front(ego, rows, ego.lane)
     choices = [actual] if actual is not None else []
     if ego.lane in (0, 1):
@@ -192,7 +191,7 @@ def _queue_front(ego, rows, known):
 
 
 def _vacancy(ego, rows, lane, held=None):
-    """An actual front minus one entry pitch, with another full pitch behind."""
+    """以目标道实际前车为基准，检查其后一个接入间距处有无可持续的空位。"""
     front = _actual_front(ego, rows, lane)
     if front is None or held is not None and front.track != held:
         return None
@@ -210,7 +209,7 @@ def _vacancy(ego, rows, lane, held=None):
         predicted = offset + other.speed - front.speed
         if offset * predicted <= 0. or min(abs(offset), abs(predicted)) < d - 1e-9:
             return None
-        # A stopped adjacent front/rear inside 8 m cannot be yielded to by reversing.
+        # 贴在本车侧面的邻车仍占着横移走廊。
         if abs(other.x - ego.x) < CLEARANCE:
             return None
     return front, target
@@ -242,7 +241,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
         speed, target, reference, linked = formed
         local = _front_following(ego, rows)
         if local[2] is None and physical[2] is not None and memory.front is not None:
-            # Close the visible 50-200 m hole without cancelling soft phase again.
+            # 已建立的关系可跟到 200 米，保留相邻车道的交错调速量。
             speed = max(0., min(MAX_SPEED, physical[0] + formed[0] - _request(ego, ego.x, CRUISE)))
             target, reference = physical[1], physical[2]
     else:
@@ -285,7 +284,7 @@ def _decide(ego, neighbors, memory, mode, drop_x=1000.):
     else:
         plan = None
 
-    # A blocked mandatory merge keeps the current lane's longitudinal reference.
+    # 终止道还并不进去时，先跟本车道前车。可以开始并入时才接续目标道前车。
     if plan is not None and anchor is not None and (lane is not None or not mandatory):
         target = anchor.x - _entry_spacing(ego.speed)
         speed, reference = _request(ego, target, anchor.speed), anchor.track

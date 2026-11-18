@@ -17,9 +17,21 @@ VARIANT = Path(__file__).resolve().parents[1] / "variants/phase5g_pure_formation
 if str(VARIANT) not in sys.path:
     sys.path.insert(0, str(VARIANT))
 from experiments import native_sumo as native
+import run_native_flow
 
 
 class NativeEntrypointTests(unittest.TestCase):
+    def test_mode_comparison_gui_keeps_camera_under_user_control(self):
+        with TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            result = dict(status="drained", requested=0, departed=0, completed=0, pending_final=0,
+                          onroad_final=0, collisions=0, teleports=0, mean_travel_time_s=None, formation_state=None)
+            (folder / "result.json").write_text(json.dumps(result), encoding="utf-8")
+            with patch.object(run_native_flow, "run_case", return_value=folder) as run:
+                run_native_flow.main(["--gui", "--mode", "noa"])
+        self.assertTrue(run.call_args.kwargs["gui"])
+        self.assertFalse(run.call_args.kwargs["auto_zoom"])
+
     def test_main_runs_directly_with_native_gui_and_manual_camera(self):
         self.assertTrue(hasattr(runrun, "run_case"), "the entry must call native run_case")
         with TemporaryDirectory() as tmp:

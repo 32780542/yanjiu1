@@ -151,8 +151,8 @@ class NativeRulesTests(unittest.TestCase):
     def test_phase_uses_physical_lateral_position_not_the_midpoint_lane_index(self):
         crossing = replace(car(0, 100, 1, 20), y=6.6, vy=3.3)
         peer = car(1, 120, 0, 25)
-        self.assertEqual(r._pair_error(crossing, peer, 3),
-                         r._pair_error(replace(crossing, lane=2), peer, 3))
+        self.assertEqual(r._pair_error(crossing, peer),
+                         r._pair_error(replace(crossing, lane=2), peer))
 
     def test_free_head_has_no_private_group_or_old_front_speed_dependency(self):
         ego, rear = car(0, 100, 0, 10), car(1, 80, 0, 0)

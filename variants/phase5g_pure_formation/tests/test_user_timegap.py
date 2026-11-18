@@ -23,13 +23,12 @@ class UserTimeGapTests(unittest.TestCase):
                 distance = 5.5 + .85 * speed
                 ego = car(0, 100, speed=speed)
                 peer = car(1, 100 - distance / 2, lane=1, speed=speed)
-                error, _ = r._pair_error(ego, peer, 3)
+                error = r._pair_error(ego, peer)
                 self.assertAlmostEqual(error, 0.)
 
     def test_pair_error_is_antisymmetric_at_unequal_speeds(self):
         ego, peer = car(0, 100, speed=10), car(1, 93, lane=1, speed=16)
-        self.assertAlmostEqual(r._pair_error(ego, peer, 3)[0],
-                               -r._pair_error(peer, ego, 3)[0])
+        self.assertAlmostEqual(r._pair_error(ego, peer), -r._pair_error(peer, ego))
 
     def test_invisible_bottleneck_does_not_change_noa_motion(self):
         ego = car(0, 700, lane=2)

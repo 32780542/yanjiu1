@@ -40,6 +40,7 @@ def main(argv=None):
             scenario=scenario,
             output_base=args.output_base,
             gui=args.gui,
+            auto_zoom=False,
             initial=initial,
             max_time=args.max_time,
             diagnostic=args.diagnostic,

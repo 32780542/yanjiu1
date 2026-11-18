@@ -1,0 +1,36 @@
+[
+  {
+    "flow": 2000,
+    "seed": 311,
+    "mode": "noa",
+    "frozen_batch": "Current_2000_311_lane_drop_noa",
+    "production_dir": "tmp/staggered_bottleneck/20261118_readable_production_r01/noa/20261118T013634067775Z_lane_drop_noa_s311_e699f7",
+    "requested": 1025,
+    "completed": 1025,
+    "mean_system_time_s": 53.36195121951219,
+    "frozen_rules_sha256": "907bdafa1f31341d6791fb177413f1d568e52cb69cbff1cb6aaa6c2e3d11da42",
+    "installed_rules_sha256": "e1531c398625e8c8f678161fd014dcc6c6fefcfd3915aff0ac33bfdfbe439c78",
+    "identical_stream_sha256": {
+      "trips.json": "5df2db214d822c0a0b33964691730c199805a47a0ff26458f68002c06eeeabc1",
+      "positions.jsonl.gz": "c1390b70409653898beac39020ef31fd9392aaafc252cf750197a8229d60a443",
+      "events.jsonl.gz": "273235ca9412cc20a814175c1adea93467415b6ebf1ab37e20c73db5292b48e1"
+    }
+  },
+  {
+    "flow": 2000,
+    "seed": 311,
+    "mode": "transform",
+    "frozen_batch": "Current_2000_311_lane_drop_transform",
+    "production_dir": "tmp/staggered_bottleneck/20261118_readable_production_r01/transform/20261118T013634067775Z_lane_drop_transform_s311_4b907e",
+    "requested": 1025,
+    "completed": 1025,
+    "mean_system_time_s": 43.81658536585366,
+    "frozen_rules_sha256": "907bdafa1f31341d6791fb177413f1d568e52cb69cbff1cb6aaa6c2e3d11da42",
+    "installed_rules_sha256": "e1531c398625e8c8f678161fd014dcc6c6fefcfd3915aff0ac33bfdfbe439c78",
+    "identical_stream_sha256": {
+      "trips.json": "eb3352ee92974b0cab69778843ac0885b8635c628a3a12eb34109b538b056b64",
+      "positions.jsonl.gz": "f8f72378a5cd3f3bcf85c155a63fffa46860ae70c8d9095f3a634ace6251d572",
+      "events.jsonl.gz": "f6ddadba2d29e3502a3fa16c8d891426e9b5c3408f45e69637ad4bc796376df7"
+    }
+  }
+]
