@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-from experiments.native_sumo import MODES, SCENARIOS, run_case
+from experiments.native_sumo import MODES, SCENARIOS, run_case, upstream_lanes
 
 
 def main(argv=None):
@@ -28,7 +28,8 @@ def main(argv=None):
     args = parser.parse_args(argv)
     initial = json.loads(args.initial.read_text(encoding="utf-8-sig")) if args.initial else None
     cases = (
-        [(mode, seed, scenario) for scenario in args.scenarios for seed in args.seeds for mode in MODES]
+        [(mode, seed, scenario) for scenario in args.scenarios for seed in args.seeds for mode in MODES
+         if mode != "global" or upstream_lanes(scenario) == 3]
         if args.matrix
         else [(args.mode, args.seed, args.scenario)]
     )

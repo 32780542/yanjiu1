@@ -88,6 +88,21 @@ class NativeEntrypointTests(unittest.TestCase):
             states["crossing"] = (200. - 1.5 * half_gap, 3.3, speed)
             self.assertEqual(measure(states), (set(), 3))
 
+    def test_four_to_three_demo_forms_both_shapes_from_physical_positions(self):
+        report = VARIANT.parents[1] / "docs/experiments/2026-11-20-lane-drop/measure.py"
+        spec = importlib.util.spec_from_file_location("lane_drop_measure", report)
+        audit = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(audit)
+        with TemporaryDirectory() as tmp:
+            self.assertEqual(runrun.main(["--four-to-three-demo", "--headless", "--output-base", tmp],
+                                         output_fn=lambda _: None), 0)
+            run, = Path(tmp).iterdir()
+            row = audit.measure(run, cohort=True)
+        self.assertEqual((row["completed"], row["collisions"], row["teleports"]), (12, 0, 0))
+        self.assertEqual(row["crossing"], "4/4/4")
+        self.assertGreater(row["up_s"], 15.)
+        self.assertGreater(row["down_s"], 10.)
+
     def test_mode_comparison_gui_keeps_camera_under_user_control(self):
         with TemporaryDirectory() as tmp:
             folder = Path(tmp)
@@ -119,7 +134,7 @@ class NativeEntrypointTests(unittest.TestCase):
             self.assertEqual(run.call_args.kwargs["duration"], 600.0)
             self.assertEqual(run.call_args.kwargs["seed"], runrun.RANDOM_SEED)
             self.assertTrue(run.call_args.kwargs["gui"])
-            self.assertEqual(run.call_args.kwargs["gui_delay_ms"], 40)
+            self.assertEqual(run.call_args.kwargs["gui_delay_ms"], runrun.GUI_DELAY_MS)
             self.assertFalse(run.call_args.kwargs["auto_zoom"])
             self.assertTrue(run.call_args.kwargs["wait_before_close"])
 

@@ -1,8 +1,8 @@
 # 局部感知的时距交错编队与车道收缩
 
-当前版本在三车道上形成交错队形，遇到缩道后将同一批车辆重排为两道交错队形。每辆车观察前 200 米、后 100 米内各道实车，自行选择相邻车道并调整速度。速度相关的同道间距为 $D(v)=5.5+0.85v$ 米，两道相邻车辆错开半个间距。两道重排时，各车按自己看到的前后顺序交替选道，再把实车位置拟合到等距队形上。[当前完整规则、数学模型与验证](docs/experiments/2026-11-19-staggered-reconfiguration/README.md) · [控制器源码](variants/phase5g_pure_formation/noa/native_rules.py)
+每辆车根据前方 200 米和后方 100 米的实车位置，独立形成交错队形并在看到缩道后变换。三道形成时，末层优先补两侧。三变二时，每六个可见位置内优先让终止道车辆并入最近的存续道，保留两道交替。四变三时，每三辆按横向位置重排为一层。两道和三道重排均使用时距间距 $D(v)=5.5+0.85v$ 米。[当前规则与两种缩道的实测结果](docs/experiments/2026-11-20-lane-drop/README.md) · [控制器源码](variants/phase5g_pure_formation/noa/native_rules.py)
 
-在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --transform-demo`。12 辆车从三道 6/4/2 出发，在同一条路上排成 4/4/4，再通过缩道排成 6/6。运行 `python runrun.py` 看连续车流，运行 `python runrun.py --formation-demo` 单看三道形成。[2026.11.19 第一版云端存档](https://github.com/32780542/yanjiu1/tree/2026.11.19-v1)
+在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --four-to-three-demo --gui-delay-ms 40` 看同一批车从 3/3/3/3 变成 4/4/4。用 `--transform-demo` 看三变二，用 `--formation-demo` 单看三道形成。直接运行 `python runrun.py` 看连续车流。[改动前的 2026.11.20 第一版](https://github.com/32780542/yanjiu1/tree/2026.11.20-v1) · [11 月 19 日建模与实验](docs/experiments/2026-11-19-staggered-reconfiguration/README.md)
 
 11 月 4 日续跑比较了 300、500、600 米公共预警，并检验了提前空位规则 L6。阶段报告包含五种子配对、1800 秒持续流、两种固定车群初态、候选代码和窗口运行命令。 [公共预警续跑报告](docs/experiments/2026-11-04-public-preview/README.md)
 
@@ -54,7 +54,7 @@ python -B runrun.py --check
 python -B runrun.py
 ```
 
-窗口随第一次计算逐步推进，每步0.1秒。你可以手动平移和缩放，运行器不会自动重设镜头。默认每道 2000 辆/h、来车 600 秒、种子 6。默认道路为0–1000米三道、1000–1200米两道；本车在离终止位置200米时直接看到缩道。
+窗口随第一次计算逐步推进，每步0.1秒。你可以手动平移和缩放，运行器不会自动重设镜头。默认每道 1750 辆/h、来车 600 秒、种子 20。默认道路为0–1000米三道、1000–1200米两道；本车在离终止位置200米时直接看到缩道。
 
 ```powershell
 python -B runrun.py --duration 60 --max-time 240 --gui-delay-ms 20 --no-wait
@@ -70,7 +70,7 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --
 | 文件 | 工作 |
 | --- | --- |
 | [runrun.py](runrun.py) | 常用参数、实时窗口和自检 |
-| [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 局部观测、三道形成、两道几何投影与安全速度 |
+| [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 局部观测、多车道形成、两道与三道几何投影与安全速度 |
 | [native_sumo.py](variants/phase5g_pure_formation/experiments/native_sumo.py) | 来车、局部跟踪、原生SUMO执行、逐步记录 |
 | [run_native_flow.py](variants/phase5g_pure_formation/run_native_flow.py) | 单次实验命令行入口 |
 | [native_comparison.py](variants/phase5g_pure_formation/experiments/native_comparison.py) | 同输入比较与逐车统计 |

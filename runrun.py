@@ -1,8 +1,7 @@
 """直接运行真实 SUMO 3→2 局部编队变换；窗口随首次计算逐步推进。"""
 
 # 常用设置
-FLOW_VEH_H_LANE = 1750
-0.0  # 每车道每小时流量，三车道独立来车
+FLOW_VEH_H_LANE = 1750.0  # 每车道每小时流量，三车道独立来车
 DEMAND_DURATION_S = 600.0  # 来车持续时间；之后最多留 300 秒排空
 RANDOM_SEED = 20  # 来车随机种子
 GUI_DELAY_MS = 1000  # 每个 0.1 秒仿真步的 GUI 延时；0 为最快
@@ -53,6 +52,7 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     parser.add_argument("--check", action="store_true", help="只检查依赖与配置")
     parser.add_argument("--headless", action="store_true", help="不打开窗口，不等待输入")
     demos = parser.add_mutually_exclusive_group()
+    demos.add_argument("--four-to-three-demo", action="store_true", help="观察 12 辆车从四道三层重排成三道四层")
     demos.add_argument("--transform-demo", action="store_true", help="观察同一批 12 辆从三道四层变成两道六层")
     demos.add_argument("--formation-demo", action=argparse.BooleanOptionalAction, default=FORMATION_DEMO,
                         help="在三车道直路观察 12 辆车由 6/4/2 补成四层交错队形")
@@ -64,13 +64,23 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     args = parser.parse_args(argv)
     gui = not args.headless
     initial = None
-    if args.formation_demo or args.transform_demo:
+    scenario = "lane_drop"
+    if args.formation_demo or args.transform_demo or args.four_to_three_demo:
         if args.duration is not None:
             parser.error("--duration 用于连续车流；队形演示使用固定的 12 辆来车")
         lanes = (0, 0, 1, 0, 2, 0, 1, 0, 1, 2, 1, 0)
+        if args.four_to_three_demo:
+            lanes = (0, 1, 2, 3, 0, 2, 1, 0, 3, 0, 1, 2)
+            scenario = "four_to_three_demo"
+        elif args.transform_demo:
+            scenario = "formation_demo"
+        else:
+            scenario = "straight3"
         initial = [dict(lane=lane, depart=round(i * .7, 1), x=0, speed=28.8) for i, lane in enumerate(lanes)]
         duration = 8.
-        if args.transform_demo:
+        if args.four_to_three_demo:
+            output_fn("交错队形变换演示。四道 1600 米后缩成三道，再行驶 1000 米。")
+        elif args.transform_demo:
             output_fn("交错队形变换演示。三道 1600 米后缩成两道，再行驶 1000 米。")
         else:
             output_fn("三车道直路演示。12 辆车从入口逐辆发车，三道分别出发 6、4、2 辆。")
@@ -84,7 +94,7 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
         return 0
     directory = run_case(
         mode="transform",
-        scenario="formation_demo" if args.transform_demo else "straight3" if args.formation_demo else "lane_drop",
+        scenario=scenario,
         seed=RANDOM_SEED,
         flow=FLOW_VEH_H_LANE,
         initial=initial,

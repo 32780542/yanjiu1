@@ -25,7 +25,7 @@ import math
 from pathlib import Path
 
 from experiments.complete_layers import evaluate_layers
-from experiments.native_sumo import FormationStateStats, ROAD_LAYOUT
+from experiments.native_sumo import FormationStateStats, ROAD_LAYOUT, upstream_lanes
 
 SOURCES = (
     "experiments/native_sumo.py",
@@ -85,7 +85,7 @@ def _sha(path):
     return digest.hexdigest()
 
 
-def _position_evidence(path, *, report_states=False):
+def _position_evidence(path, *, report_states=False, ending_lane=2):
     last_ending, first, previous, max_step = {}, None, None, None
     sample_count = nonempty_frames = 0
     stats, reports_seen = FormationStateStats() if report_states else None, False
@@ -109,7 +109,7 @@ def _position_evidence(path, *, report_states=False):
             elif stats is not None and not frame.get("unsafe"):
                 raise ValueError("missing_formation_state_trace")
             for vehicle, state in frame["states"].items():
-                if abs(state[1] - 8.25) <= 0.3:
+                if abs(state[1] - 3.3 * (ending_lane + .5)) <= 0.3:
                     last_ending[vehicle] = time_s
     evidence = dict(
         first_position_sample_s=first,
@@ -236,7 +236,8 @@ def load_case(path):
     try:
         positions = path / "positions.jsonl.gz"
         reporting = bool(source.get("formation_state_schema"))
-        ending, evidence = _position_evidence(positions, report_states=reporting)
+        incoming = upstream_lanes(config["scenario"])
+        ending, evidence = _position_evidence(positions, report_states=reporting, ending_lane=incoming-1)
         state_stats = evidence.pop("formation_state_stats", None)
         row.update(evidence)
         row["positions_sha256"] = _sha(positions)
@@ -278,23 +279,23 @@ def load_case(path):
         else:
             row["formation_metric"] = "historical_complete_layers"
             regions = (
-                (("upstream", 3, (0.0, approach - 360.0)), ("downstream", 2, (approach, approach + downstream)))
-                if retained == 2
+                (("upstream", incoming, (0.0, approach - 360.0)), ("downstream", retained, (approach, approach + downstream)))
+                if retained < incoming
                 else (("whole", 3, (0.0, approach + downstream)),)
             )
             for prefix, lanes, region in regions:
                 layers = evaluate_layers(positions, lanes, region=region)
                 row.update({prefix + "_" + key: layers[key] for key in LAYER_FIELDS})
-        if retained == 2:
+        if retained < incoming:
             trace = all("lane_completion_events" in t for t in trips)
             merged = {
                 t["vehicle_id"]
                 for t in trips
                 for e in t.get("lane_completion_events", [])
-                if e["from_lane"] == 2
-                and e["to_lane"] == 1
+                if e["from_lane"] == incoming - 1
+                and e["to_lane"] == retained - 1
                 and e["x"] < approach
-                and abs(e.get("y", float("inf")) - 4.95) < 0.05
+                and abs(e.get("y", float("inf")) - 3.3 * (retained - .5)) < 0.05
                 and abs(e.get("vy", float("inf"))) < 0.05
                 and t["vehicle_id"] in ending
                 and e["time_s"] >= ending[t["vehicle_id"]]

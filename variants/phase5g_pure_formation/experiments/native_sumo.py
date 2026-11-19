@@ -30,7 +30,8 @@ LANE_WIDTH = 3.3
 MODES = ("noa", "formation", "transform", "global")
 # Upstream length, downstream length, surviving lanes. Only the demo extends the road.
 ROAD_LAYOUT = {"lane_drop": (1000, 200, 2), "straight3": (1000, 200, 3),
-              "formation_demo": (1600, 1000, 2)}
+              "formation_demo": (1600, 1000, 2), "four_to_three": (1000, 200, 3),
+              "four_to_three_demo": (1600, 1000, 3)}
 SCENARIOS = tuple(ROAD_LAYOUT)
 PHYSICAL = dict(
     length=4.0,
@@ -112,22 +113,26 @@ def _ticks(duration):
     return ticks
 
 
-def arrival_tape(seed=1, flow=1250.0, duration=600.0):
+def upstream_lanes(scenario):
+    return 4 if scenario in ("four_to_three", "four_to_three_demo") else 3
+
+
+def arrival_tape(seed=1, flow=1250.0, duration=600.0, lanes=3):
     """Independent per-lane Bernoulli draws, shared unchanged across all modes."""
     ticks = _ticks(duration)
     probability = flow * STEP / 3600
     if not 0 <= probability <= 1:
         raise ValueError("per-lane flow must be in [0, 36000] vehicles/hour")
-    streams = [random.Random(f"continuous-arrival:{seed}:{lane}") for lane in range(3)]
+    streams = [random.Random(f"continuous-arrival:{seed}:{lane}") for lane in range(lanes)]
     return [
         dict(vehicle_id=f"v{lane}_{tick:05d}", requested_s=tick / 10.0, lane=lane, x=0.0, speed=28.8)
         for tick in range(ticks)
-        for lane in range(3)
+        for lane in range(lanes)
         if streams[lane].random() < probability
     ]
 
 
-def initial_tape(initial, approach=1000):
+def initial_tape(initial, approach=1000, lanes=3):
     rows = []
     for index, row in enumerate(initial):
         request = dict(
@@ -138,7 +143,7 @@ def initial_tape(initial, approach=1000):
             speed=float(row.get("speed", 28.8)),
         )
         if (
-            request["lane"] not in (0, 1, 2)
+            request["lane"] not in range(lanes)
             or not 0 <= request["x"] < approach
             or not 0 <= request["speed"] <= 33.3
             or request["requested_s"] < 0
@@ -169,7 +174,7 @@ def build_network(directory, scenario="lane_drop", road_limit=33.3):
     for name, x in (("entry", 0), ("bottleneck", approach), ("exit", exit_x)):
         ET.SubElement(nodes, "node", id=name, x=str(x), y="0", type="priority", radius="0")
     for name, source, target, count, x0, x1 in (
-        ("upstream", "entry", "bottleneck", 3, 0, approach),
+        ("upstream", "entry", "bottleneck", upstream_lanes(scenario), 0, approach),
         ("downstream", "bottleneck", "exit", retained, approach, exit_x),
     ):
         edge = ET.SubElement(
@@ -318,9 +323,9 @@ class LocalTracks:
         self.next_tracks.pop(ego_id, None)
 
 
-def lane_request_is_safe(ego, neighbors, target_lane):
+def lane_request_is_safe(ego, neighbors, target_lane, lane_count=3):
     """Common physical 8 m target clearance, followed by native SUMO gap checks."""
-    if target_lane not in (0, 1, 2) or abs(target_lane - ego.lane) != 1:
+    if target_lane not in range(lane_count) or abs(target_lane - ego.lane) != 1:
         return False
     target_y = LANE_WIDTH * (target_lane + 0.5)
     for other in neighbors:
@@ -498,13 +503,16 @@ def run_case(
     if mode not in MODES or scenario not in SCENARIOS:
         raise ValueError("unknown mode or scenario")
     approach, downstream, retained = ROAD_LAYOUT[scenario]
-    lane_end = float(approach) if retained == 2 else None
+    incoming = upstream_lanes(scenario)
+    if mode == "global" and incoming != 3:
+        raise ValueError("The Cai reference planner supports three upstream lanes")
+    lane_end = float(approach) if retained < incoming else None
     _ticks(duration)
     max_time = duration + 300.0 if max_time is None else float(max_time)
     _ticks(max_time)
     if type(gui_delay_ms) is not int or gui_delay_ms < 0:
         raise ValueError("gui_delay_ms must be a non-negative integer")
-    requests = arrival_tape(seed, flow, duration) if initial is None else initial_tape(initial, approach)
+    requests = arrival_tape(seed, flow, duration, incoming) if initial is None else initial_tape(initial, approach, incoming)
     base = Path(output_base) if output_base is not None else ROOT / "results/native_flow"
     name = (
         datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -718,7 +726,7 @@ def run_case(
                             data[tc.VAR_ACCELERATION],
                             now,
                         )
-                        if lane_end is not None and lane == 2:
+                        if lane_end is not None and lane == incoming - 1:
                             ending_lane_seen.add(key)
                         motion = lane_motions.get(key)
                         if motion is not None and lane_change_is_complete(states[key], motion[0]):
@@ -833,7 +841,8 @@ def run_case(
                         ego, neighbors = local.observe(key, states, ordered, xs)
                         # Only ego receives its own submitted request feedback.
                         ego = replace(ego, pending_lane=pending)
-                        lane_count = 2 if lane_end is not None and ego.x >= lane_end else 3
+                        downstream_edge = ego.x >= approach
+                        lane_count = retained if downstream_edge else incoming
                         if planner is not None:
                             command = global_commands[key]
                         else:
@@ -847,6 +856,7 @@ def run_case(
                                 mode=mode,
                                 drop_x=visible_end,
                                 lane_count=lane_count,
+                                downstream=downstream_edge and lane_end is not None,
                             )
                             formation_states[key] = command.formation_state
                         if not math.isfinite(command.speed):
@@ -864,7 +874,7 @@ def run_case(
                             execution["lane_requested_ticks"] += 1
                             if key in lane_attempts or abs(physical.vy) > 0.05:
                                 execution["lane_motion_in_progress"] += 1
-                            elif requested_lane >= lane_count or not lane_request_is_safe(ego, neighbors, requested_lane):
+                            elif requested_lane >= lane_count or not lane_request_is_safe(ego, neighbors, requested_lane, lane_count):
                                 execution["local_lane_guard_rejected"] += 1
                             else:
                                 conn.vehicle.changeLane(key, requested_lane, 1.0)
@@ -968,7 +978,7 @@ def run_case(
         ending_completed = {
             event["vehicle_id"]
             for event in lane_completions
-            if event["from_lane"] == 2 and event["to_lane"] == 1 and lane_end is not None and event["x"] < lane_end
+            if event["from_lane"] == incoming - 1 and event["to_lane"] == retained - 1 and lane_end is not None and event["x"] < lane_end
         }
         write_json(directory / "trips.json", trip_rows)
         with gzip.open(directory / "trips.jsonl.gz", "wt", encoding="utf-8", compresslevel=3) as stream:
