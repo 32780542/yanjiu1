@@ -6,9 +6,11 @@ import os
 from pathlib import Path
 from statistics import mean
 import sys
+import time
 import xml.etree.ElementTree as ET
 
-from experiments.native_sumo import STEP, arrival_tape, build_network, write_json, write_routes
+from experiments.native_sumo import (ROAD_LAYOUT, STEP, arrival_tape, build_network, initial_tape,
+                                     upstream_lanes, write_json, write_routes)
 from research.common import sumo_home
 
 
@@ -26,10 +28,11 @@ def set_cai_lane_model(vehicle_api, vehicle):
         vehicle_api.setParameter(vehicle, "laneChangeModel." + key, HDV["lcCooperative"])
 
 
-def scenario(directory, requests, matlab_data, original_hdv=False, road_limit=33.3, matched_tau=False, hdv_tau=.85):
+def scenario(directory, requests, matlab_data, original_hdv=False, road_limit=33.3, matched_tau=False, hdv_tau=.85,
+             *, road="lane_drop"):
     if not matlab_data and not original_hdv:
         tau = None if matched_tau else hdv_tau
-        return build_network(directory, road_limit=road_limit), write_routes(directory, requests, tau=tau)
+        return build_network(directory, road, road_limit), write_routes(directory, requests, tau=tau)
     if matlab_data:
         source = ET.parse(matlab_data / "cross.rou.xml")
         vehicle_type = source.find("./vType[@id='CAV_HDV']")
@@ -38,7 +41,7 @@ def scenario(directory, requests, matlab_data, original_hdv=False, road_limit=33
     else:
         vehicle_type = ET.Element("vType", **HDV, maxSpeed="33.3", speedFactor="1", speedDev="0")
         route = ET.Element("route", id="through", edges="upstream downstream")
-        network = build_network(directory, road_limit=road_limit)
+        network = build_network(directory, road, road_limit)
     routes = ET.Element("routes")
     routes.extend((vehicle_type, route))
     for row in requests:
@@ -52,10 +55,14 @@ def scenario(directory, requests, matlab_data, original_hdv=False, road_limit=33
 
 
 def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, gui,
-        original_hdv=False, road_limit=33.3, matched_tau=False, hdv_tau=.85):
+        original_hdv=False, road_limit=33.3, matched_tau=False, hdv_tau=.85, *,
+        road="lane_drop", initial=None, gui_delay_ms=0, wait_before_close=False, input_fn=input):
     directory.mkdir(parents=True, exist_ok=False)
-    requests = arrival_tape(seed, flow, duration)
-    network, routes = scenario(directory, requests, matlab_data, original_hdv, road_limit, matched_tau, hdv_tau)
+    lanes = upstream_lanes(road)
+    requests = (arrival_tape(seed, flow, duration, lanes) if initial is None
+                else initial_tape(initial, ROAD_LAYOUT[road][0], lanes))
+    network, routes = scenario(directory, requests, matlab_data, original_hdv, road_limit, matched_tau, hdv_tau,
+                               road=road)
     shared_type = not matlab_data and not original_hdv
     trips, log = directory / "trips.xml", directory / "sumo.log"
     command = [str(binary), "-n", str(network), "-r", str(routes), "--step-length", str(STEP),
@@ -77,6 +84,8 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
                                     tc.VAR_TELEPORT_STARTING_VEHICLES_NUMBER))
         for _ in range(round(max_time / STEP)):
             traci.simulationStep()
+            if gui and gui_delay_ms:
+                time.sleep(gui_delay_ms / 1000)
             state = traci.simulation.getSubscriptionResults()
             for vehicle in state[tc.VAR_DEPARTED_VEHICLES_IDS]:
                 traci.vehicle.setSpeedMode(vehicle, 31)
@@ -86,6 +95,11 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
             teleports += state[tc.VAR_TELEPORT_STARTING_VEHICLES_NUMBER]
             if state[tc.VAR_MIN_EXPECTED_VEHICLES] == 0:
                 break
+        if gui and wait_before_close and sys.stdin.isatty():
+            try:
+                input_fn("检查完毕后按 Enter 关闭 SUMO 并保存行程结果...")
+            except (EOFError, KeyboardInterrupt):
+                pass
     finally:
         traci.close()
 
@@ -97,7 +111,7 @@ def run(traci, binary, directory, flow, seed, duration, max_time, matlab_data, g
     profile = "matlab" if matlab_data else "project"
     if shared_type:
         profile = "shared_noa" if matched_tau else "hdv_headway"
-    result = dict(profile=profile, sumo=version, flow=flow,
+    result = dict(mode="hdv", scenario="matlab" if matlab_data else road, profile=profile, sumo=version, flow=flow,
                   seed=seed, duration_s=duration, requested=len(expected), completed=len(completed),
                   all_arrived=all_arrived, teleports=teleports, collision_log_lines=collisions)
     if profile == "hdv_headway":

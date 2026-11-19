@@ -12,6 +12,7 @@ from tempfile import TemporaryDirectory
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
+import xml.etree.ElementTree as ET
 
 import runrun
 
@@ -32,6 +33,41 @@ def shape_assessment():
 
 
 class NativeEntrypointTests(unittest.TestCase):
+    def test_each_model_runs_the_same_demand_on_each_selected_road(self):
+        with TemporaryDirectory() as tmp, patch.object(runrun, "RANDOM_SEED", 20), patch.object(runrun, "FLOW_VEH_H_LANE", 1750):
+            for lanes, scenario in ((3, "lane_drop"), (4, "four_to_three")):
+                demand = None
+                for model, mode in (("hdv", "hdv"), ("noa", "noa"), ("formation", "transform")):
+                    with self.subTest(model=model, lanes=lanes):
+                        base = Path(tmp) / f"{lanes}_{model}"
+                        args = ["--model", model, "--lanes", str(lanes), "--duration", "12",
+                                "--headless", "--output-base", str(base)]
+                        self.assertEqual(runrun.main(args, output_fn=lambda _: None), 0)
+                        run, = base.iterdir()
+                        result = json.loads((run / "result.json").read_bytes())
+                        self.assertEqual((result["mode"], result["scenario"]), (mode, scenario))
+                        self.assertGreater(result["completed"], 0)
+                        self.assertEqual(result["completed"], result["requested"])
+                        net = ET.parse(next(run.glob("*.net.xml")))
+                        for edge, count in (("upstream", lanes), ("downstream", lanes - 1)):
+                            self.assertEqual(len(net.findall(f"./edge[@id='{edge}']/lane")), count)
+                        routes = ET.parse(next(run.glob("*.rou.xml")))
+                        tape = [v.attrib for v in routes.findall("vehicle")]
+                        self.assertEqual({int(v["departLane"]) for v in tape}, set(range(lanes)))
+                        if demand is None:
+                            demand = tape
+                        self.assertEqual(tape, demand)
+                        if model == "hdv":
+                            self.assertEqual(result["idm_tau_s"], .85)
+
+    def test_file_settings_apply_on_run_and_explicit_cli_flags_override_them(self):
+        with patch.object(runrun, "MODEL", "HDV"), patch.object(runrun, "LANE_COUNT", 4):
+            for options, model, lanes in (([], "HDV", "4 道缩至 3"), (["--model", "NOA", "--lanes", "3"], "NOA", "3 道缩至 2")):
+                output = []
+                self.assertEqual(runrun.main(["--check", *options], output_fn=output.append), 0)
+                self.assertIn(model, output[0])
+                self.assertIn(lanes, output[1])
+
     def test_formation_demo_uses_an_unbalanced_stream_on_a_three_lane_road(self):
         with TemporaryDirectory() as tmp:
             directory = Path(tmp)

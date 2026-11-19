@@ -1,5 +1,7 @@
 # 局部感知的时距交错编队与车道收缩
 
+在根目录的 `runrun.py` 顶部设置 `MODEL` 和 `LANE_COUNT`，保存后点运行即可打开 SUMO 窗口。`MODEL` 可选 `"hdv"`（普通车，IDM 时距 0.85 秒）、`"noa"`（纯 NOA）或 `"formation"`（交错编队形成与变换）。`LANE_COUNT` 填 `3` 看三变二，填 `4` 看四变三。命令行参数可覆盖这次运行的设置，例如 `python runrun.py --model hdv --lanes 4`。
+
 每辆车根据前方 200 米和后方 100 米的实车位置，独立形成交错队形并在看到缩道后变换。三道形成时，末层优先补两侧。三变二时，每六个可见位置内优先让终止道车辆并入最近的存续道，保留两道交替。四变三时，每三辆按横向位置重排为一层。两道和三道重排均使用时距间距 $D(v)=5.5+0.85v$ 米。[当前规则与两种缩道的实测结果](docs/experiments/2026-11-20-lane-drop/README.md) · [控制器源码](variants/phase5g_pure_formation/noa/native_rules.py)
 
 在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --four-to-three-demo --gui-delay-ms 40` 看同一批车从 3/3/3/3 变成 4/4/4。用 `--transform-demo` 看三变二，用 `--formation-demo` 单看三道形成。直接运行 `python runrun.py` 看连续车流。[改动前的 2026.11.20 第一版](https://github.com/32780542/yanjiu1/tree/2026.11.20-v1) · [11 月 19 日建模与实验](docs/experiments/2026-11-19-staggered-reconfiguration/README.md)
