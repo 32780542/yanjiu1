@@ -1,18 +1,14 @@
 # 局部感知的时距交错编队与车道收缩
 
-工作目录：**D:\yanjiu1\keyan1**。当前方法以 C12 时距交错为基础，缩道时按真实空隙接续。现行车辆规则集中在 [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py)。每辆车根据前200米、后100米内各车道车辆的实际运动和自身记忆，计算自己的速度与换道动作。
+当前版本在三车道上形成交错队形，遇到缩道后将同一批车辆重排为两道交错队形。每辆车观察前 200 米、后 100 米内各道实车，自行选择相邻车道并调整速度。速度相关的同道间距为 $D(v)=5.5+0.85v$ 米，两道相邻车辆错开半个间距。两道重排时，各车按自己看到的前后顺序交替选道，再把实车位置拟合到等距队形上。[当前完整规则、数学模型与验证](docs/experiments/2026-11-19-staggered-reconfiguration/README.md) · [控制器源码](variants/phase5g_pure_formation/noa/native_rules.py)
 
-同道目标车头间距为 **D(v)=5.5+0.85v 米**，相邻道错开半D。巡航28.8 m/s时，对应29.98米与14.99米。三道变两道时，终止道车辆进入相邻存续道，中道车辆沿实际交错空位向另一存续道接续；缩道变换时每次只跨相邻一道。
-
-当前版本中，两组车辆均在距终止点 200 米时看见缩道。纯 NOA 主动跟驰、受阻超车和寻找并入空隙。交错编队还会观察前车向相邻道的实际横移，并在存续车道接续队形。编队车等待并入时，能看到接收道前后两辆车便跟踪两车之间的空隙，速度同时受本车道前车约束。
-
-运行 `python runrun.py --formation-demo` 可以看到 12 辆车由 6/4/2 排成 4/4/4，从第 29.3 秒开始保持完整交错队形 15.1 秒。用 `python runrun.py` 看连续车流经过三变二。现版给车群补位增加了可见端点判断，并让等待合流的车跟上接收道真实空隙的中点。2000 辆/h/道、五组相同来车下，普通车、纯 NOA、现版编队的平均路内行程分别为 **206.75、51.80、44.48 秒/车**。普通车采用 0.85 秒 IDM 时距，两种局部方法的上层目标时距均为 0.85 秒。[拥堵定位、当前结果与数学推导](docs/experiments/2026-11-18-formation-efficiency/README.md) · [三道补位演示与截图](docs/experiments/2026-11-18-formation-fill/README.md) · [普通车实验](docs/experiments/2026-11-18-local-bottleneck/headway085.md) · [第一版存档](https://github.com/32780542/yanjiu1/tree/2026.11.18-v1)
+在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --transform-demo`。12 辆车从三道 6/4/2 出发，在同一条路上排成 4/4/4，再通过缩道排成 6/6。运行 `python runrun.py` 看连续车流，运行 `python runrun.py --formation-demo` 单看三道形成。[2026.11.19 第一版云端存档](https://github.com/32780542/yanjiu1/tree/2026.11.19-v1)
 
 11 月 4 日续跑比较了 300、500、600 米公共预警，并检验了提前空位规则 L6。阶段报告包含五种子配对、1800 秒持续流、两种固定车群初态、候选代码和窗口运行命令。 [公共预警续跑报告](docs/experiments/2026-11-04-public-preview/README.md)
 
-## 从这里了解当前工程
+## 历史基准与工程资料
 
-1. 从一次逐帧决策读到每个辅助函数，见[现行规则与源码阅读](docs/experiments/2026-11-18-local-bottleneck/代码阅读.md)。
+1. 从一次逐帧决策读到每个辅助函数，见[11 月 18 日规则与源码阅读](docs/experiments/2026-11-18-local-bottleneck/代码阅读.md)。
 2. 查三种流量的纯 NOA、局部交错、简化集中式实测数据，见[本轮研究报告](docs/experiments/2026-11-18-local-bottleneck/README.md)。
 3. 看一串真实换道如何发生，以及只形成队形、启动变换和限制引导前车的区别，见[变换机制与消融](docs/experiments/2026-11-18-local-bottleneck/变换机制.md)。
 4. [评价口径](docs/experiments/2026-11-04-timegap-staggered/evaluation.md)：交通效率、油耗、直接0/1参与统计与真实队形指标。
@@ -58,7 +54,7 @@ python -B runrun.py --check
 python -B runrun.py
 ```
 
-窗口随第一次计算逐步推进，每步0.1秒。你可以手动平移和缩放，运行器不会自动重设镜头。默认每道1750辆/h、来车600秒、seed1。默认道路为0–1000米三道、1000–1200米两道；本车在离终止位置200米时直接看到缩道。
+窗口随第一次计算逐步推进，每步0.1秒。你可以手动平移和缩放，运行器不会自动重设镜头。默认每道 2000 辆/h、来车 600 秒、种子 6。默认道路为0–1000米三道、1000–1200米两道；本车在离终止位置200米时直接看到缩道。
 
 ```powershell
 python -B runrun.py --duration 60 --max-time 240 --gui-delay-ms 20 --no-wait
@@ -67,21 +63,21 @@ python -B variants/phase5g_pure_formation/run_native_flow.py --mode noa --flow 1
 python -B variants/phase5g_pure_formation/run_native_flow.py --mode transform --flow 1750 --duration 600 --max-time 1200 --gui
 ```
 
-观察lane2退入lane1、部分lane1车辆移入lane0，以及下游两道的纵向错位恢复。200米直接可见与300米公共道路预告作为两个独立实验条件；公共预告对所有对照方法同时提供，邻车感知范围不随之扩大。
+在道 2 结束后，可沿道 0 和道 1 观察车辆如何交替占位。当前入口使用 200 米直接视距。公共道路预告的历史试验见上方报告。
 
 ## 代码结构
 
 | 文件 | 工作 |
 | --- | --- |
 | [runrun.py](runrun.py) | 常用参数、实时窗口和自检 |
-| [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 数据类、跟驰、互选错位、实际空位、局部收缩与安全速度 |
+| [native_rules.py](variants/phase5g_pure_formation/noa/native_rules.py) | 局部观测、三道形成、两道几何投影与安全速度 |
 | [native_sumo.py](variants/phase5g_pure_formation/experiments/native_sumo.py) | 来车、局部跟踪、原生SUMO执行、逐步记录 |
 | [run_native_flow.py](variants/phase5g_pure_formation/run_native_flow.py) | 单次实验命令行入口 |
 | [native_comparison.py](variants/phase5g_pure_formation/experiments/native_comparison.py) | 同输入比较与逐车统计 |
 | [本轮实验工具](docs/experiments/2026-11-18-local-bottleneck/tools) | 同输入对照、轨迹分析、位置统计与速度时空图 |
 | [受影响测试](variants/phase5g_pure_formation/tests/run_native_contracts.py) | 明确模块的真实磁盘合同入口 |
 
-每车只保存自己的目标道与主前驱关联；执行空位接续时，前驱字段优先保存空位锚车。控制器不读取全局编队表、其他车辆的私有状态或统计结果。记录器可以读取全路轨迹，用于科研评价。
+每车保有自身横移进度和局部参考车跟踪号。记录器另外采集全路轨迹，用于测量队形与行程。
 
 ## 版本与历史
 

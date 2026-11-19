@@ -43,7 +43,7 @@ def _check(gui, gui_delay_ms, output_fn):
     output_fn(f"  运行环境: {native.runtime_metadata()}")
     if gui:
         output_fn(f"  窗口每步延时 {gui_delay_ms} ms，支持手动平移和缩放。")
-    output_fn("  巡航 28.8 m/s，最高 33.3 m/s，1200 m 处驶出。")
+    output_fn("  巡航 28.8 m/s，最高 33.3 m/s。")
     output_fn("自检通过：没有启动 SUMO，也没有创建运行目录。")
 
 
@@ -51,7 +51,9 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="只检查依赖与配置")
     parser.add_argument("--headless", action="store_true", help="不打开窗口，不等待输入")
-    parser.add_argument("--formation-demo", action=argparse.BooleanOptionalAction, default=FORMATION_DEMO,
+    demos = parser.add_mutually_exclusive_group()
+    demos.add_argument("--transform-demo", action="store_true", help="观察同一批 12 辆从三道四层变成两道六层")
+    demos.add_argument("--formation-demo", action=argparse.BooleanOptionalAction, default=FORMATION_DEMO,
                         help="在三车道直路观察 12 辆车由 6/4/2 补成四层交错队形")
     parser.add_argument("--duration", type=float, help="连续车流的来车时长，秒")
     parser.add_argument("--max-time", type=float, help="绝对仿真时间上限，秒")
@@ -61,13 +63,16 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     args = parser.parse_args(argv)
     gui = not args.headless
     initial = None
-    if args.formation_demo:
+    if args.formation_demo or args.transform_demo:
         if args.duration is not None:
             parser.error("--duration 用于连续车流；队形演示使用固定的 12 辆来车")
         lanes = (0, 0, 1, 0, 2, 0, 1, 0, 1, 2, 1, 0)
         initial = [dict(lane=lane, depart=round(i * .7, 1), x=0, speed=28.8) for i, lane in enumerate(lanes)]
         duration = 8.
-        output_fn("三车道直路演示。12 辆车从入口逐辆发车，三道分别出发 6、4、2 辆。")
+        if args.transform_demo:
+            output_fn("交错队形变换演示。三道 1600 米后缩成两道，再行驶 1000 米。")
+        else:
+            output_fn("三车道直路演示。12 辆车从入口逐辆发车，三道分别出发 6、4、2 辆。")
     else:
         duration = DEMAND_DURATION_S if args.duration is None else args.duration
         output_fn(f"连续车流。每道 {FLOW_VEH_H_LANE:g} 辆/h，来车 {duration:g} 秒，随机种子 {RANDOM_SEED}。"
@@ -78,7 +83,7 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
         return 0
     directory = run_case(
         mode="transform",
-        scenario="straight3" if args.formation_demo else "lane_drop",
+        scenario="formation_demo" if args.transform_demo else "straight3" if args.formation_demo else "lane_drop",
         seed=RANDOM_SEED,
         flow=FLOW_VEH_H_LANE,
         initial=initial,

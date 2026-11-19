@@ -3,6 +3,7 @@
 import gzip
 import io
 import inspect
+import importlib.util
 import json
 from pathlib import Path
 import subprocess
@@ -20,6 +21,14 @@ if str(VARIANT) not in sys.path:
 from experiments import native_sumo as native
 from experiments.complete_layers import groups_at
 import run_native_flow
+
+
+def shape_assessment():
+    report = VARIANT.parents[1] / "docs/experiments/2026-11-19-staggered-reconfiguration"
+    spec = importlib.util.spec_from_file_location("shape_assessment", report / "assess.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class NativeEntrypointTests(unittest.TestCase):
@@ -55,6 +64,30 @@ class NativeEntrypointTests(unittest.TestCase):
                     consecutive = consecutive + 1 if formed else 0
                     longest = max(consecutive, longest)
             self.assertGreaterEqual(longest * native.STEP, 1.)
+
+    def test_transform_demo_retains_the_same_twelve_in_both_physical_shapes(self):
+        with TemporaryDirectory() as tmp:
+            self.assertEqual(runrun.main(["--transform-demo", "--headless", "--output-base", tmp],
+                                         output_fn=lambda _: None), 0)
+            run, = Path(tmp).iterdir()
+            row = shape_assessment().measure(run, cohort=True)
+        self.assertEqual((row["completed"], row["collisions"], row["teleports"]), (12, 0, 0))
+        self.assertEqual((row["crossing0"], row["crossing1"], row["peak_down"]), (6, 6, 12))
+        self.assertGreater(row["three_longest_s"], 20.)
+        self.assertGreater(row["two_longest_s"], 25.)
+
+    def test_geometric_audit_accepts_slow_mirror_shapes_and_counts_every_intervening_car(self):
+        measure = shape_assessment().alternating_windows
+        speed = 12.
+        half_gap = (5.5 + .85 * speed) / 2
+        for first in (0, 1):
+            states = {i: (200. - i * half_gap, (.5 + (first + i) % 2) * 3.3, speed)
+                      for i in range(5)}
+            windows, peak = measure(states)
+            self.assertEqual((len(windows), peak), (2, 5))
+            states["crossing"] = (200. - 1.5 * half_gap, 3.3, speed)
+            self.assertEqual(measure(states), (set(), 3))
+
     def test_mode_comparison_gui_keeps_camera_under_user_control(self):
         with TemporaryDirectory() as tmp:
             folder = Path(tmp)
@@ -82,7 +115,7 @@ class NativeEntrypointTests(unittest.TestCase):
                 )
             self.assertEqual(run.call_args.kwargs["mode"], "transform")
             self.assertEqual(run.call_args.kwargs["scenario"], "lane_drop")
-            self.assertEqual(run.call_args.kwargs["flow"], 1750.0)
+            self.assertEqual(run.call_args.kwargs["flow"], runrun.FLOW_VEH_H_LANE)
             self.assertEqual(run.call_args.kwargs["duration"], 600.0)
             self.assertEqual(run.call_args.kwargs["seed"], runrun.RANDOM_SEED)
             self.assertTrue(run.call_args.kwargs["gui"])

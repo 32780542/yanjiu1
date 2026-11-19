@@ -1,4 +1,4 @@
-"""Installed C12 contracts: local chains, monotone moves and actual slots."""
+"""Distributed formation, shape projection, visibility and physical lane clearance."""
 from dataclasses import replace
 import random
 import unittest
@@ -116,10 +116,10 @@ class NativeRulesTests(unittest.TestCase):
         self.assertEqual(actual, expected)
         self.assertIsNone(actual[0].lane)
 
-    def test_only_actual_front_folding_guides_an_unwarned_ending_follower(self):
+    def test_a_front_changing_lane_does_not_trigger_the_followers_transformation(self):
         ego = car(0, 700, 2)
         front = replace(car(1, 730, 2), y=7.92, vy=-3.3)
-        self.assertEqual(self.command(ego, (front,), drop=None)[0].lane, 1)
+        self.assertIsNone(self.command(ego, (front,), drop=None)[0].lane)
         self.assertIsNone(self.command(ego, (front,), mode='formation', drop=None)[0].lane)
         self.assertIsNone(self.command(ego, (replace(front, x=670),), drop=None)[0].lane)
 
@@ -133,34 +133,47 @@ class NativeRulesTests(unittest.TestCase):
         self.assertIsNone(self.command(ego, rows, mode='formation')[0].lane)
         self.assertEqual(self.command(ego, rows)[0].lane, 0)
 
-    def test_left_fill_uses_the_actual_front_minus_dynamic_entry_spacing(self):
+    def test_each_vehicle_projects_visible_centres_to_its_own_half_gap_position(self):
         ego, rows = self.slot_scene()
         command, memory = self.command(ego, rows)
-        self.assertEqual(command.lane, 0)
-        self.assertEqual(command.reference, rows[1].track)
-        self.assertAlmostEqual(command.target_x, 860 - (5.5 + .85 * 20))
-        self.assertEqual(memory.front, rows[1].track)
+        h = r.desired_spacing(20) / 2
+        expected = (860 - 2*h + 835 - h + 810 + 760 + h) / 4
+        self.assertAlmostEqual(command.target_x, expected)
+        self.assertEqual((command.lane, command.reference, memory.front), (0, rows[0].track, rows[0].track))
+        shift = 34.
+        moved = replace(ego, x=ego.x + shift)
+        shifted, _ = self.command(moved, [replace(c, x=c.x + shift) for c in rows], drop=1000 + shift)
+        self.assertAlmostEqual(shifted.target_x, expected + shift)
+        self.assertEqual((shifted.speed, shifted.lane), (command.speed, command.lane))
 
-    def test_waiting_merger_uses_both_observed_gap_boundaries(self):
+    def test_isolated_tail_rejoins_only_within_reciprocal_sight(self):
+        ego = car(0, 810, 1)
+        for distance, joins in ((81., True), (100., True), (100.1, False)):
+            front = car(1, ego.x + distance, 1)
+            command, _ = self.command(ego, (front,))
+            self.assertEqual(bool(command.formation_state), joins)
+            self.assertEqual(command.lane, 0 if joins else None)
+            self.assertEqual(command.speed > ego.speed, joins)
+
+    def test_both_mirror_shapes_and_an_incomplete_last_pair_are_equilibria(self):
+        half = r.desired_spacing(r.CRUISE) / 2
+        for n in (5, 6):
+            for first in (0, 1):
+                group = [car(i, 930 - i*half, (first+i) % 2) for i in range(n)]
+                for ego in group:
+                    cmd, _ = self.command(ego, [other for other in group if other is not ego])
+                    self.assertAlmostEqual(cmd.target_x, ego.x)
+                    self.assertAlmostEqual(cmd.speed, r.CRUISE)
+                    self.assertIsNone(cmd.lane)
+                    self.assertEqual(cmd.formation_state, 1)
+
+    def test_a_blocked_lateral_target_waits_and_a_pending_move_finishes(self):
         ego = car(0, 850, 2, 20)
-        current = car(1, 879, 2, 18)
-        target = car(2, 870, 1, 12)
-        blocker = car(3, 847, 1, 22)
-        command, memory = self.command(ego, (current, target, blocker))
-        self.assertIsNone(command.lane)
-        self.assertEqual(command.reference, target.track)
-        self.assertEqual(command.target_x, (target.x + blocker.x) / 2)
-        self.assertAlmostEqual(command.speed, r._request(ego, 858.5, 17.))
-        self.assertEqual(memory.lane_target, 1)
-
-        # 只见到近处的接收道前车时，继续跟自己的前车等候。
-        one_boundary = replace(target, x=ego.x + 4.)
-        command, _ = self.command(ego, (current, one_boundary))
-        self.assertIsNone(command.lane)
-        self.assertEqual(command.reference, current.track)
-
-        command, _ = self.command(ego, (current, target), memory=memory)
-        self.assertEqual((command.lane, command.reference), (1, target.track))
+        blocker = car(1, 853, 1, 20)
+        self.assertIsNone(self.command(ego, (blocker,))[0].lane)
+        self.assertEqual(self.command(ego, (replace(blocker, x=880),))[0].lane, 1)
+        pending = replace(ego, lane=1, pending_lane=1)
+        self.assertEqual(self.command(pending, (replace(blocker, x=880),))[0].lane, 1)
 
     def test_noa_matches_the_visible_target_front_while_its_merge_is_blocked(self):
         ego = car(0, 850, 2, 20)
@@ -173,21 +186,14 @@ class NativeRulesTests(unittest.TestCase):
                          ('merge_wait', target.track, 0))
         self.assertAlmostEqual(command.target_x, target.x - r.desired_spacing(ego.speed))
 
-    def test_a_current_eight_metre_corridor_is_not_a_full_rear_entry_slot(self):
-        ego, rows = self.slot_scene()
-        rows = (rows[0], rows[1], car(3, 820, 0, 20))
-        self.assertTrue(r._clear(ego, rows, 0))
-        self.assertIsNone(self.command(ego, rows)[0].lane)
-
-    def test_fill_rejects_a_slot_that_increases_original_front_half_spacing_error(self):
-        ego, rows = self.slot_scene()
-        rows = (rows[0], car(2, 900, 0, 20), rows[2])
-        self.assertTrue(r._clear(ego, rows, 0))
-        self.assertIsNone(self.command(ego, rows)[0].lane)
-
-    def test_an_empty_target_lane_does_not_create_a_synthetic_slot(self):
-        ego, rows = self.slot_scene()
-        self.assertIsNone(self.command(ego, (rows[0],))[0].lane)
+    def test_either_surviving_lane_can_receive_a_missing_alternating_position(self):
+        for first in (0, 1):
+            front = car(1, 880, first)
+            follower = car(2, 850, first)
+            self.assertEqual(self.command(follower, (front,))[0].lane, 1 - first)
+            self.assertIsNone(self.command(follower, (front,), mode='formation')[0].lane)
+        solo, _ = self.command(car(0, 850, 1))
+        self.assertEqual((solo.lane, solo.formation_state), (None, 0))
 
     def test_unwarned_middle_car_does_not_start_a_static_preemptive_left_fill(self):
         ego, rows = self.slot_scene()
@@ -196,7 +202,7 @@ class NativeRulesTests(unittest.TestCase):
         cmd, _ = self.command(ego, rows, drop=None)
         self.assertEqual((cmd.lane, cmd.reason), (2, 'formation_fill'))
 
-    def test_transform_moves_are_only_toward_retained_lanes(self):
+    def test_transform_moves_are_adjacent_and_target_a_surviving_lane(self):
         rng = random.Random(20261104)
         for lane in range(3):
             for case in range(25):
@@ -204,7 +210,10 @@ class NativeRulesTests(unittest.TestCase):
                 rows = tuple(car(i + 1, ego.x + rng.uniform(-100, 200),
                                  rng.randrange(3), rng.uniform(0, 33.3)) for i in range(6))
                 with self.subTest(lane=lane, case=case):
-                    self.assertIn(self.command(ego, rows)[0].lane, (None, lane - 1) if lane else (None,))
+                    cmd = self.command(ego, rows)[0]
+                    if cmd.lane is not None:
+                        self.assertIn(cmd.lane, (0, 1))
+                        self.assertEqual(abs(cmd.lane - lane), 1)
 
     def test_ending_car_can_take_two_adjacent_left_moves_without_a_permanent_role(self):
         rows = (car(1, 885, 1, 20), car(2, 900, 0, 20))

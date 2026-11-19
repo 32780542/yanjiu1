@@ -1,0 +1,15 @@
+method,case,peak_down,two_longest_s,stable_pct,upstream_6plus_pct,completed,collisions,teleports
+head PD,stream; original road,12,0.2,76.019,22.059,12,0,0
+predecessor PD,stream; original road,6,0.0,36.478,22.059,12,0,0
+local projection,stream; original road,12,1.1,74.217,24.706,12,0,0
+50 m,dispersed 12; extended road,11,0.0,77.95,62.167,12,0,0
+65 m,dispersed 12; extended road,11,0.0,76.963,62.167,12,0,0
+80 m,dispersed 12; extended road,12,6.6,72.441,62.167,12,0,0
+100 m,dispersed 12; extended road,12,6.6,72.441,62.167,12,0,0
+50 m + isolated tail,dispersed 12; extended road,12,4.4,79.408,62.167,12,0,0
+existing upstream law,150 s; seed 6; flow 1500,14,,29.87,10.549,215,0,0
+two-lane PD used upstream,150 s; seed 6; flow 1500,11,,10.457,0.58,215,0,0
+existing upstream law,150 s; seed 6; flow 1750,14,,23.262,12.602,244,0,0
+two-lane PD used upstream,150 s; seed 6; flow 1750,10,,4.863,0.352,244,0,0
+existing upstream law,150 s; seed 6; flow 2000,14,,28.877,13.961,278,0,0
+two-lane PD used upstream,150 s; seed 6; flow 2000,13,,4.471,0.0,278,0,0

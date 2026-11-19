@@ -28,7 +28,10 @@ from research.common import ROOT, binary, lock_traci, tool_env
 STEP = 0.1
 LANE_WIDTH = 3.3
 MODES = ("noa", "formation", "transform", "global")
-SCENARIOS = ("lane_drop", "straight3")
+# Upstream length, downstream length, surviving lanes. Only the demo extends the road.
+ROAD_LAYOUT = {"lane_drop": (1000, 200, 2), "straight3": (1000, 200, 3),
+              "formation_demo": (1600, 1000, 2)}
+SCENARIOS = tuple(ROAD_LAYOUT)
 PHYSICAL = dict(
     length=4.0,
     width=1.8,
@@ -124,7 +127,7 @@ def arrival_tape(seed=1, flow=1250.0, duration=600.0):
     ]
 
 
-def initial_tape(initial):
+def initial_tape(initial, approach=1000):
     rows = []
     for index, row in enumerate(initial):
         request = dict(
@@ -136,7 +139,7 @@ def initial_tape(initial):
         )
         if (
             request["lane"] not in (0, 1, 2)
-            or not 0 <= request["x"] < 1000
+            or not 0 <= request["x"] < approach
             or not 0 <= request["speed"] <= 33.3
             or request["requested_s"] < 0
             or not all(math.isfinite(request[k]) for k in ("x", "speed", "requested_s"))
@@ -161,12 +164,13 @@ def build_network(directory, scenario="lane_drop", road_limit=33.3):
     directory = Path(directory)
     directory.mkdir(parents=True, exist_ok=True)
     nodes, edges, connections = ET.Element("nodes"), ET.Element("edges"), ET.Element("connections")
-    for name, x in (("entry", 0), ("bottleneck", 1000), ("exit", 1200)):
+    approach, downstream, retained = ROAD_LAYOUT[scenario]
+    exit_x = approach + downstream
+    for name, x in (("entry", 0), ("bottleneck", approach), ("exit", exit_x)):
         ET.SubElement(nodes, "node", id=name, x=str(x), y="0", type="priority", radius="0")
-    retained = 2 if scenario == "lane_drop" else 3
     for name, source, target, count, x0, x1 in (
-        ("upstream", "entry", "bottleneck", 3, 0, 1000),
-        ("downstream", "bottleneck", "exit", retained, 1000, 1200),
+        ("upstream", "entry", "bottleneck", 3, 0, approach),
+        ("downstream", "bottleneck", "exit", retained, approach, exit_x),
     ):
         edge = ET.SubElement(
             edges,
@@ -493,13 +497,14 @@ def run_case(
 
     if mode not in MODES or scenario not in SCENARIOS:
         raise ValueError("unknown mode or scenario")
-    lane_end = 1000.0 if scenario == "lane_drop" else None
+    approach, downstream, retained = ROAD_LAYOUT[scenario]
+    lane_end = float(approach) if retained == 2 else None
     _ticks(duration)
     max_time = duration + 300.0 if max_time is None else float(max_time)
     _ticks(max_time)
     if type(gui_delay_ms) is not int or gui_delay_ms < 0:
         raise ValueError("gui_delay_ms must be a non-negative integer")
-    requests = arrival_tape(seed, flow, duration) if initial is None else initial_tape(initial)
+    requests = arrival_tape(seed, flow, duration) if initial is None else initial_tape(initial, approach)
     base = Path(output_base) if output_base is not None else ROOT / "results/native_flow"
     name = (
         datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
@@ -702,7 +707,7 @@ def run_case(
                             continue
                         lane = int(data[tc.VAR_LANE_INDEX])
                         x = data[tc.VAR_LANEPOSITION] + (
-                            1000.0 if data[tc.VAR_ROAD_ID] == "downstream" else 0.0
+                            approach if data[tc.VAR_ROAD_ID] == "downstream" else 0.0
                         )
                         states[key] = PhysicalState(
                             x,
@@ -713,7 +718,7 @@ def run_case(
                             data[tc.VAR_ACCELERATION],
                             now,
                         )
-                        if scenario == "lane_drop" and lane == 2:
+                        if lane_end is not None and lane == 2:
                             ending_lane_seen.add(key)
                         motion = lane_motions.get(key)
                         if motion is not None and lane_change_is_complete(states[key], motion[0]):
@@ -963,7 +968,7 @@ def run_case(
         ending_completed = {
             event["vehicle_id"]
             for event in lane_completions
-            if event["from_lane"] == 2 and event["to_lane"] == 1 and event["x"] < 1000.0
+            if event["from_lane"] == 2 and event["to_lane"] == 1 and lane_end is not None and event["x"] < lane_end
         }
         write_json(directory / "trips.json", trip_rows)
         with gzip.open(directory / "trips.jsonl.gz", "wt", encoding="utf-8", compresslevel=3) as stream:

@@ -53,9 +53,9 @@ class PhysicalFollowingTests(unittest.TestCase):
 
     def test_compatible_phase_is_kept_but_cannot_reverse_a_real_front_correction(self):
         ego, front = car(0, 100), car(1, 125)
-        base = self.command(ego, (front,), mode='formation').speed
-        opposed = self.command(ego, (front, car(2, 100, 1)), mode='formation').speed
-        compatible = self.command(ego, (front, car(2, 70, 1)), mode='formation').speed
+        base = r._following(ego, (front,))[0]
+        opposed = r._following(ego, (front, car(2, 100, 1)))[0]
+        compatible = r._following(ego, (front, car(2, 70, 1)))[0]
         self.assertLess(base, ego.speed)
         self.assertAlmostEqual(opposed, base)
         self.assertLessEqual(compatible, base)

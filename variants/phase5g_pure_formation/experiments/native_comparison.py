@@ -25,7 +25,7 @@ import math
 from pathlib import Path
 
 from experiments.complete_layers import evaluate_layers
-from experiments.native_sumo import FormationStateStats
+from experiments.native_sumo import FormationStateStats, ROAD_LAYOUT
 
 SOURCES = (
     "experiments/native_sumo.py",
@@ -256,6 +256,7 @@ def load_case(path):
                 issues.append("position_trace_end_mismatch")
             if departed and not evidence["nonempty_position_frames"]:
                 issues.append("position_trace_has_no_vehicles")
+        approach, downstream, retained = ROAD_LAYOUT[config["scenario"]]
         if reporting:
             row["formation_metric"] = "local_state"
             if config["mode"] == "noa":
@@ -277,14 +278,14 @@ def load_case(path):
         else:
             row["formation_metric"] = "historical_complete_layers"
             regions = (
-                (("upstream", 3, (0.0, 640.0)), ("downstream", 2, (1000.0, 1200.0)))
-                if config["scenario"] == "lane_drop"
-                else (("whole", 3, (0.0, 1200.0)),)
+                (("upstream", 3, (0.0, approach - 360.0)), ("downstream", 2, (approach, approach + downstream)))
+                if retained == 2
+                else (("whole", 3, (0.0, approach + downstream)),)
             )
             for prefix, lanes, region in regions:
                 layers = evaluate_layers(positions, lanes, region=region)
                 row.update({prefix + "_" + key: layers[key] for key in LAYER_FIELDS})
-        if config["scenario"] == "lane_drop":
+        if retained == 2:
             trace = all("lane_completion_events" in t for t in trips)
             merged = {
                 t["vehicle_id"]
@@ -292,7 +293,7 @@ def load_case(path):
                 for e in t.get("lane_completion_events", [])
                 if e["from_lane"] == 2
                 and e["to_lane"] == 1
-                and e["x"] < 1000.0
+                and e["x"] < approach
                 and abs(e.get("y", float("inf")) - 4.95) < 0.05
                 and abs(e.get("vy", float("inf"))) < 0.05
                 and t["vehicle_id"] in ending
