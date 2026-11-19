@@ -1,9 +1,9 @@
 """直接运行真实 SUMO 3→2 局部编队变换；窗口随首次计算逐步推进。"""
 
 # 常用设置
-FLOW_VEH_H_LANE = 1750.0  # 每车道每小时请求数，三车道独立来车
+FLOW_VEH_H_LANE = 2000.0  # 每车道每小时流量，三车道独立来车
 DEMAND_DURATION_S = 600.0  # 来车持续时间；之后最多留 300 秒排空
-RANDOM_SEED = 1  # 来车随机种子
+RANDOM_SEED = 6  # 来车随机种子
 GUI_DELAY_MS = 40  # 每个 0.1 秒仿真步的 GUI 延时；0 为最快
 FORMATION_DEMO = False  # True 看 12 辆车在三车道直路补位；False 看连续车流通过缩道
 
