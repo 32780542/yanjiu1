@@ -65,17 +65,41 @@ class TransportControlTests(unittest.TestCase):
                     self.assertIn(cmd.proposal_lane, (None, ego.lane))
                     self.assertAlmostEqual(cmd.speed, rules.CRUISE)
 
-    def test_visible_half_layer_and_real_incomplete_tail_can_share_a_lane(self):
+    def test_four_lane_visible_half_layer_and_real_incomplete_tail_can_share_a_lane(self):
         d = rules.desired_spacing(rules.CRUISE)
-        for lanes in (2, 4):
-            group = [car(900 - d * (row + .5 * (lane % 2)), lane, lanes * row + lane)
-                     for row in range(18) for lane in range(lanes)]
-            group.append(car(900 - 18.5 * d, 1, 18 * lanes))
-            for ego in group:
-                cmd, _ = rules.decide(ego, [c for c in group if c is not ego], rules.Memory(),
-                                      "transform", None, lane_count=lanes)
-                self.assertEqual(cmd.proposal_lane, ego.lane)
-                self.assertAlmostEqual(cmd.target_x, ego.x)
+        group = [car(900 - d * (row + .5 * (lane % 2)), lane, 4 * row + lane)
+                 for row in range(18) for lane in range(4)]
+        group.append(car(900 - 18.5 * d, 1, 72))
+        for ego in group:
+            cmd, _ = rules.decide(ego, [c for c in group if c is not ego], rules.Memory(),
+                                  "transform", None, lane_count=4)
+            self.assertEqual(cmd.proposal_lane, ego.lane)
+            self.assertAlmostEqual(cmd.target_x, ego.x)
+
+    def test_two_lanes_have_no_empty_half_spacing_before_the_last_car(self):
+        d = rules.desired_spacing(rules.CRUISE)
+        # Cells 0,1,2,3,5 skip the preceding half of the final layer.
+        group = [car(650-index*d/2, index%2, track) for track,index in enumerate((0,1,2,3,5))]
+        targets = [choose_target(i, group, 2, d) for i in range(len(group))]
+        ordered = sorted(targets, key=lambda t: -t.x)
+        for a,b in zip(ordered, ordered[1:]):
+            self.assertAlmostEqual(a.x-b.x, d/2)
+            self.assertEqual(a.lane, 1-b.lane)
+        self.assertTrue(all(c.lane == t.lane for c,t in zip(group,targets)))
+        self.assertTrue(any(abs(c.x-t.x) > 1 for c,t in zip(group,targets)))
+
+    def test_unopened_outer_lane_limits_the_moves_that_can_be_started_inside(self):
+        d = rules.desired_spacing(rules.CRUISE)
+        group = [car(240-i*d/2, i%2, i) for i in range(6)]
+        planned = [choose_target(i, group, 3, d) for i in range(6)]
+        before = [choose_target(i, group, 3, d, opened_lanes=2) for i in range(6)]
+        moves = [(c.lane,t.lane) for c,t in zip(group,planned) if c.lane != t.lane]
+        self.assertCountEqual(moves, [(0,1), (1,2), (1,2)])
+        for c, final, waiting in zip(group,planned,before):
+            self.assertEqual((final.lane, final.gap, final.step_gap),
+                             (waiting.lane, waiting.gap, waiting.step_gap))
+            self.assertEqual(waiting.released, c.lane == final.lane)
+            self.assertTrue(final.released)
 
     def test_one_sensor_edge_companion_can_disappear_from_a_regular_band(self):
         from math import nextafter, inf

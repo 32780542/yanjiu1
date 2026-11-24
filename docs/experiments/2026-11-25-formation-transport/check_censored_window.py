@@ -10,13 +10,25 @@ from collections import Counter
 from functools import lru_cache
 import json
 import math
+import subprocess
+import tempfile
 from pathlib import Path
 from random import Random
 import sys
 from types import SimpleNamespace
 from unittest.mock import patch
 
-sys.path.insert(0,str(Path(__file__).resolve().parents[3]/"variants/phase5g_pure_formation"))
+# This audit uses the original tail convention of the first research
+# revision. The newer two-lane controller intentionally fills every half-slot.
+root = Path(__file__).resolve().parents[3]
+snapshot = tempfile.TemporaryDirectory(prefix="formation-crop-audit-")
+package = Path(snapshot.name) / "noa"
+package.mkdir()
+for name in ("__init__.py", "transport.py", "staggered.py"):
+    tracked = "variants/phase5g_pure_formation/noa/" + name
+    data = subprocess.check_output(["git", "show", "e186b8a:" + tracked], cwd=root)
+    (package / name).write_bytes(data)
+sys.path.insert(0, snapshot.name)
 from noa import staggered
 from noa.staggered import choose_target
 from noa.transport import solve_transport

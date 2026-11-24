@@ -254,7 +254,7 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
     target = choose_target(rank, group, lanes, spacing,
                            head_clipped=head_clipped, tail_clipped=tail_clipped,
                            sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW),
-                           forward_anchor=forward_anchor)
+                           forward_anchor=forward_anchor, opened_lanes=opened if opened < lanes else None)
     speed = _shape_speed(ego, target.x)
 
     predecessor = group[rank - 1].track if rank else None
@@ -270,7 +270,7 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
 
     lane = ego.pending_lane
     step = None
-    if target.lane != ego.lane and target.step_certified:
+    if target.lane != ego.lane and target.step_certified and target.released:
         step = ego.lane + (1 if target.lane > ego.lane else -1)
     since = memory.proposal_since if step == memory.proposed_step else ego.time
     persistent = transforming or ego.time - since >= LANE_CHANGE_TIME - 1e-8
