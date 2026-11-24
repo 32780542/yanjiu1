@@ -1,0 +1,83 @@
+--- a/noa/native_rules.py
++++ b/noa/native_rules.py
+@@ -223,6 +223,8 @@
+     from noa.staggered import choose_target
+ 
+     group = list(reversed(_local_group(ego, rows)))
++    anchor = None if transforming else min((car.x for car in rows if car.x > group[0].x),
++                                           default=None)
+     if len(group) == 1 and transforming and lanes == 2:
+         front = min((c for c in rows if 0 < c.x - ego.x <= REAR_VIEW),
+                     key=lambda c: (c.x, c.lane), default=None)
+@@ -231,7 +233,11 @@
+     if len(group) == 1:
+         if ego.lane >= lanes:
+             return _reactive(ego, rows, memory, lanes)
+-        return _solo_follow(ego, rows, memory)
++        command, next_memory = _solo_follow(ego, rows, memory)
++        if anchor is not None:
++            x = ego.x + _anchor_shift(anchor, ego.x, desired_spacing(ego.speed), 1)
++            command = replace(command, speed=_shape_speed(ego, x), target_x=x)
++        return command, next_memory
+ 
+     rank = group.index(ego)
+     spacing = desired_spacing(sum(c.speed for c in group) / len(group))
+@@ -240,10 +246,10 @@
+     target = choose_target(rank, group, lanes, spacing,
+                            head_clipped=head_clipped, tail_clipped=tail_clipped,
+                            sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW))
+-    acceleration = (SHAPE_FREQUENCY ** 2 * (target.x - ego.x)
+-                    + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
+-    accel = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
+-    speed = max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * accel))
++    target_x = target.x
++    if anchor is not None:
++        target_x += _anchor_shift(anchor, target.front_slot_x, spacing, len(group))
++    speed = _shape_speed(ego, target_x)
+ 
+     predecessor = group[rank - 1].track if rank else None
+     front_speed, front_x, front, _ = _front_following(ego, rows, FRONT_VIEW)
+@@ -265,10 +271,25 @@
+     if lane is None and step is not None and step < opened and persistent and _clear(ego, rows, step):
+         lane = step
+     reason = 'transform_transport' if transforming else 'formation_transport'
+-    return (Command(speed, lane, reason, target.x, predecessor, 1,
++    return (Command(speed, lane, reason, target_x, predecessor, 1,
+                     target.gap, target.certified, target.lane, target.step_gap, target.step_certified,
+                     target.refined),
+             Memory(lane, predecessor, proposed_step=step, proposal_since=since))
++
++
++ANCHOR_WEIGHT_BY_GROUP = False
++
++
++def _anchor_shift(anchor, fitted_front, spacing, group_size):
++    weight = group_size if ANCHOR_WEIGHT_BY_GROUP else 1
++    return weight / (group_size + weight) * max(0., anchor - spacing - fitted_front)
++
++
++def _shape_speed(ego, x):
++    acceleration = (SHAPE_FREQUENCY ** 2 * (x - ego.x)
++                    + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
++    accel = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
++    return max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * accel))
+ 
+ 
+ def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3, downstream=False,
+--- a/noa/staggered.py
++++ b/noa/staggered.py
+@@ -20,6 +20,7 @@
+     step_gap: float
+     step_certified: bool
+     refined: bool
++    front_slot_x: float
+ 
+ 
+ @lru_cache(maxsize=256)
+@@ -119,4 +120,5 @@
+     margin = 2 * len(group) * POSITION_ERROR_M * extent
+     confirmed = fit.action_lower_bound > 0
+     return Target(lane, x, fit.ego_gap, fit.ego_gap > margin,
+-                  fit.action_gap, confirmed, confirmed and fit.action_gap <= margin)
++                  fit.action_gap, confirmed, confirmed and fit.action_gap <= margin,
++                  origin - min(d for _, d in offsets))

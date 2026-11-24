@@ -38,7 +38,7 @@ def visibility(run, n):
     return initial, result
 
 
-def compare(source, output, include_visibility=False):
+def compare(source, output, include_visibility=False, tail_events=False):
     with source.open(encoding="utf-8", newline="") as stream:
         runs = list(csv.DictReader(stream))
     groups = {}
@@ -67,6 +67,14 @@ def compare(source, output, include_visibility=False):
             if views[0]!=views[1]:
                 raise ValueError(f"Initial sight windows differ for {key}")
             row.update({"initial_"+k: v for k,v in views[0].items()})
+        if tail_events:
+            for name, run in pair.items():
+                report = json.loads((source.parent/run["run"]).parent.joinpath("measure.json").read_bytes())
+                tail = report["after_last_downstream_shape_events"]
+                row[name+"_whole_run_completions"] = run["lane_change_completions"]
+                row[name+"_last_off_center_count"] = len(report["last_off_center_ids"])
+                for kind in ("midpoint","completed"):
+                    row[name+"_after_last_shape_"+kind] = tail[kind]["total"] if tail else None
         row["candidate_minus_base_lane_changes"] = int(b["lane_changes"])-int(a["lane_changes"])
         for stage in ("formation","transform","observed_population"):
             for stat in ("bound_total","actual_total","excess_total","bound_max","actual_max","excess_max"):
@@ -87,5 +95,6 @@ if __name__ == "__main__":
     parser.add_argument("source", type=Path)
     parser.add_argument("output", type=Path)
     parser.add_argument("--visibility", action="store_true", help="Read raw trajectories in the run CSV's directory")
+    parser.add_argument("--tail-events", action="store_true", help="Also report physical crossings after the last full shape")
     args = parser.parse_args()
-    compare(args.source,args.output,args.visibility)
+    compare(args.source,args.output,args.visibility,args.tail_events)
