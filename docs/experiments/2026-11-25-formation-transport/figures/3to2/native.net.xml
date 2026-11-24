@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-11-25T02:36:18.311915+08:00 by Eclipse SUMO netconvert 1.27.1
+<netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="D:\yanjiu1\keyan1\tmp\nov25study\selected_demo\3to2_s20_q1750\20261124T183617973338Z_formation_demo_transform_s20_dba0fe\native.nod.xml"/>
+        <edge-files value="D:\yanjiu1\keyan1\tmp\nov25study\selected_demo\3to2_s20_q1750\20261124T183617973338Z_formation_demo_transform_s20_dba0fe\native.edg.xml"/>
+        <connection-files value="D:\yanjiu1\keyan1\tmp\nov25study\selected_demo\3to2_s20_q1750\20261124T183617973338Z_formation_demo_transform_s20_dba0fe\native.con.xml"/>
+    </input>
+
+    <output>
+        <output-file value="D:\yanjiu1\keyan1\tmp\nov25study\selected_demo\3to2_s20_q1750\20261124T183617973338Z_formation_demo_transform_s20_dba0fe\native.net.xml"/>
+    </output>
+
+    <processing>
+        <offset.disable-normalization value="true"/>
+    </processing>
+
+    <junctions>
+        <no-internal-links value="true"/>
+        <junctions.corner-detail value="0"/>
+    </junctions>
+
+</netconvertConfiguration>
+-->
+
+<net version="1.20" limitTurnSpeed="5.50" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="0.00,0.00" convBoundary="0.00,0.00,2600.00,0.00" origBoundary="0.00,0.00,2600.00,8.25" projParameter="!"/>
+
+    <edge id="downstream" from="bottleneck" to="exit" priority="-1" spreadType="center" length="1000.00">
+        <lane id="downstream_0" index="0" speed="33.30" length="1000.00" width="3.30" customShape="1" shape="1600.00,1.65 2600.00,1.65"/>
+        <lane id="downstream_1" index="1" speed="33.30" length="1000.00" width="3.30" customShape="1" shape="1600.00,4.95 2600.00,4.95"/>
+    </edge>
+    <edge id="upstream" from="entry" to="bottleneck" priority="-1" spreadType="center" length="1600.00">
+        <lane id="upstream_0" index="0" speed="33.30" length="1600.00" width="3.30" customShape="1" shape="0.00,1.65 1600.00,1.65"/>
+        <lane id="upstream_1" index="1" speed="33.30" length="1600.00" width="3.30" customShape="1" shape="0.00,4.95 1600.00,4.95"/>
+        <lane id="upstream_2" index="2" speed="33.30" length="1600.00" width="3.30" customShape="1" shape="0.00,8.25 1600.00,8.25"/>
+    </edge>
+
+    <junction id="bottleneck" type="priority" x="1600.00" y="0.00" incLanes="upstream_0 upstream_1 upstream_2" intLanes="" shape="1600.00,6.60 1600.00,0.00 1600.00,9.90" radius="0.00">
+        <request index="0" response="00" foes="00"/>
+        <request index="1" response="00" foes="00"/>
+    </junction>
+    <junction id="entry" type="dead_end" x="0.00" y="0.00" incLanes="" intLanes="" shape="0.00,9.90 0.00,-0.00" radius="0.00"/>
+    <junction id="exit" type="dead_end" x="2600.00" y="0.00" incLanes="downstream_0 downstream_1" intLanes="" shape="2600.00,0.00 2600.00,6.60" radius="0.00"/>
+
+    <connection from="upstream" to="downstream" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from="upstream" to="downstream" fromLane="1" toLane="1" dir="s" state="M"/>
+
+</net>

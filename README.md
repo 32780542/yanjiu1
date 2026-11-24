@@ -1,10 +1,10 @@
-# 局部感知的时距交错编队与车道收缩
+# 局部感知的时距交错编队与车道数变化
 
 在根目录的 `runrun.py` 顶部设置 `MODEL` 和 `LANE_COUNT`，保存后点运行即可打开 SUMO 窗口。`MODEL` 可选 `"hdv"`（普通车，IDM 时距 0.85 秒）、`"noa"`（纯 NOA）或 `"formation"`（交错编队形成与变换）。`LANE_COUNT` 填 `3` 看三变二，填 `4` 看四变三。命令行参数可覆盖这次运行的设置，例如 `python runrun.py --model hdv --lanes 4`。
 
-每辆车根据前方 200 米和后方 100 米的实车位置，独立形成交错队形并在看到缩道后变换。三道形成时，末层优先补两侧。三变二时，每六个可见位置内优先让终止道车辆并入最近的存续道，保留两道交替。四变三时，每三辆按横向位置重排为一层。两道和三道重排均使用时距间距 $D(v)=5.5+0.85v$ 米。[当前规则与两种缩道的实测结果](docs/experiments/2026-11-20-lane-drop/README.md) · [控制器源码](variants/phase5g_pure_formation/noa/native_rules.py)
+11 月 25 日的研究从 GitHub 的 `11.24版` 恢复。形成时，每辆车用前方 200 米、后方 100 米内实际看到的车辆，拟合一段均匀的多车道交错队形。相邻车道错开半个同道间距，同道间距随车速变化，为 $5.5+0.85v$ 米。变换时，车辆在看见道路增减后更换目标车道集合。两阶段共用局部指派，依次减少单车最大跨道数、全队总跨道数和纵向调距。提交相邻横移前，本车计算测量误差是否足以推翻这一步，并检查真实间隙。[本轮研究进展、数学证明和时间线](docs/experiments/2026-11-25-formation-transport/README.md) · [单车控制](variants/phase5g_pure_formation/noa/native_rules.py) · [交错模板](variants/phase5g_pure_formation/noa/staggered.py) · [指派求解](variants/phase5g_pure_formation/noa/transport.py)
 
-在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --four-to-three-demo --gui-delay-ms 40` 看同一批车从 3/3/3/3 变成 4/4/4。用 `--transform-demo` 看三变二，用 `--formation-demo` 单看三道形成。直接运行 `python runrun.py` 看连续车流。[改动前的 2026.11.20 第一版](https://github.com/32780542/yanjiu1/tree/2026.11.20-v1) · [11 月 19 日建模与实验](docs/experiments/2026-11-19-staggered-reconfiguration/README.md)
+在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --layout 3to2 --transform-demo`，可在实时 SUMO 中看同一批 12 辆车先形成三道交错，再变为两道每道六辆。布局也可取 `4to3`、`2to3`、`3to4`。直接运行 `python runrun.py` 看连续车流。三车道末层优先补两侧，窗口可自由缩放和平移。[11 月 20 日旧版方法与实验](docs/experiments/2026-11-20-lane-drop/README.md) · [11 月 19 日建模与实验](docs/experiments/2026-11-19-staggered-reconfiguration/README.md)
 
 11 月 4 日续跑比较了 300、500、600 米公共预警，并检验了提前空位规则 L6。阶段报告包含五种子配对、1800 秒持续流、两种固定车群初态、候选代码和窗口运行命令。 [公共预警续跑报告](docs/experiments/2026-11-04-public-preview/README.md)
 
