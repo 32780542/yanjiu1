@@ -17,6 +17,25 @@ from noa import native_rules as rules
 
 
 class ExpandingRoadTests(unittest.TestCase):
+    def test_sparse_demo_starts_with_visible_separated_groups(self):
+        with TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            (folder / "result.json").write_text(json.dumps(dict(
+                status="drained", requested=24, departed=24, completed=24, collisions=0, teleports=0)))
+            for layout in ("3to2", "4to3", "2to3", "3to4"):
+                with self.subTest(layout=layout), patch.object(runrun, "run_case", return_value=folder) as run:
+                    runrun.main(["--layout", layout, "--sparse-platoon-demo"], output_fn=lambda _: None)
+                    case = run.call_args.kwargs
+                    tape = case["initial"]
+                    xs = sorted(c["x"] for c in tape)
+                    self.assertEqual((len(tape), xs[0], xs[-1]), (24, 70., 650.))
+                    biggest_gap = max(b-a for a,b in zip(xs, xs[1:]))
+                    self.assertGreater(biggest_gap, 50.)
+                    self.assertLessEqual(biggest_gap, 200.)
+                    self.assertEqual(native.ROAD_LAYOUT[case["scenario"]], (2800, 1000, int(layout[-1])))
+                    self.assertTrue(case["gui"])
+                    self.assertFalse(case["auto_zoom"])
+
     def test_long_demo_uses_chain24_and_2800_metres_on_every_layout(self):
         for layout in ("3to2", "4to3", "2to3", "3to4"):
             with self.subTest(layout=layout), TemporaryDirectory() as tmp:

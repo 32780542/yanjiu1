@@ -182,7 +182,7 @@ class InstalledStateRecordingTests(unittest.TestCase):
         self.assertIsNone(command.lane)
         self.assertIsNone(later.lane)
 
-    def test_archived_C8_fresh_far_inputs_now_need_a_previously_established_chain(self):
+    def test_visible_group_ahead_shifts_the_origin_without_establishing_a_far_follow_link(self):
         cases = self.archived_cases()
         for name in ('stopped_far_front', 'slow_far_front_with_phase'):
             row = cases[name]
@@ -193,19 +193,24 @@ class InstalledStateRecordingTests(unittest.TestCase):
                 self.assertIsNone(after.front)
                 peers = [rules.Vehicle(**c) for c in row['neighbors']]
                 near = [c for c in peers if abs(c.x - ego.x) <= rules.GROUP_GAP]
-                without_far = rules.decide(ego, near, rules.Memory(), row['mode'], row['drop_x'])
-                self.assertEqual((command, after), without_far)
+                without_far, own = rules.decide(ego, near, rules.Memory(), row['mode'], row['drop_x'])
+                self.assertEqual(after, own)
+                self.assertEqual(command, replace(without_far, target_x=command.target_x,
+                                                  speed=command.speed))
+                base = (ego.x + sum(c.x for c in near))/(1+len(near))
+                self.assertAlmostEqual(command.target_x, (base+peers[0].x-rules.desired_spacing(0.))/2)
+                self.assertAlmostEqual(command.speed, .5)
                 self.assertIsNone(command.lane)
                 self.assertEqual(command.formation_state, int(bool(near)))
                 if near:
-                    self.assertAlmostEqual(command.target_x, (ego.x + near[0].x)/2)
+                    self.assertAlmostEqual(without_far.target_x, (ego.x + near[0].x)/2)
                     self.assertEqual(command.proposal_lane, 2)
                     later, _ = rules.decide(replace(ego, time=rules.LANE_CHANGE_TIME), near, after,
                                             row['mode'], row['drop_x'])
                     self.assertEqual(later.lane, 2)
                 else:
-                    self.assertAlmostEqual(command.target_x, ego.x)
-                    self.assertAlmostEqual(command.speed, rules.SPEED_RELAXATION * rules.CRUISE)
+                    self.assertAlmostEqual(without_far.target_x, ego.x)
+                    self.assertAlmostEqual(without_far.speed, rules.SPEED_RELAXATION * rules.CRUISE)
                 self.assertEqual(row['control']['reference'], peers[0].track)
                 self.assertNotEqual(command.speed, row['control']['speed'])
 

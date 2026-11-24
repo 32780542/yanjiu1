@@ -11,6 +11,33 @@ def car(x, lane, track=0):
 
 
 class TransportControlTests(unittest.TestCase):
+    def test_visible_group_ahead_translates_slots_without_reassigning_them(self):
+        d = rules.desired_spacing(rules.CRUISE)
+        group = [car(115, 0, 1), car(100, 1, 2), car(115, 2, 3)]
+        group.sort(key=lambda c: (-c.x, -c.lane))
+        plain = [choose_target(i, group, 3, d) for i in range(3)]
+        anchored = [choose_target(i, group, 3, d, forward_anchor=210.) for i in range(3)]
+        shift = .5 * (210. - d - max(t.x for t in plain))
+        self.assertGreater(shift, 0.)
+        for base, moved in zip(plain, anchored):
+            self.assertAlmostEqual(moved.x, base.x + shift)
+            self.assertEqual((moved.lane, moved.gap, moved.step_gap),
+                             (base.lane, base.gap, base.step_gap))
+
+    def test_solo_vehicle_closes_a_visible_upstream_gap_without_claiming_membership(self):
+        ego = car(100, 0, 1)
+        ahead = car(200, 1, 2)
+        def act(peers, **road):
+            return rules.decide(ego, peers, rules.Memory(), "transform", None, **road)[0]
+        free = act([], lane_count=3)
+        cmd = act([ahead], lane_count=3)
+        self.assertGreater(cmd.speed, free.speed)
+        self.assertEqual((cmd.formation_state, cmd.lane), (0, None))
+        self.assertAlmostEqual(cmd.target_x, ego.x + .5*(100-rules.desired_spacing(ego.speed)))
+        self.assertEqual(act([replace(ahead, x=300.01)], lane_count=3), free)
+        self.assertEqual(act([replace(ahead, x=240)], lane_count=3, downstream=True),
+                         act([], lane_count=3, downstream=True))
+
     def test_local_projection_restores_a_fixed_six_car_shape_after_small_perturbations(self):
         d = rules.desired_spacing(rules.CRUISE)
         offsets = [d * (row + .5 * (lane % 2)) for row in range(2) for lane in range(3)]

@@ -94,15 +94,18 @@ class NativeRulesTests(unittest.TestCase):
         self.assertEqual(command.proposal_lane, ego.lane)
         self.assertLess(command.target_x, ego.x)
 
-    def test_formation_fill_uses_geometry_not_track_numbers_or_other_groups(self):
+    def test_track_numbers_leave_commands_unchanged_and_other_groups_only_shift_slots(self):
         ego = car(0, 103)
         group = [car(1, 135), car(2, 73), car(3, 44), car(4, 121, 1), car(5, 96, 2)]
         cmd = self.observe_upstream(ego, group)
         self.assertEqual(cmd.lane, 1)
         remapped = [replace(c, track=100 - c.track, pending_lane=0) for c in reversed(group)]
         remote = [car(99, 199, 1), car(98, 222, 1), car(97, 248, 2)]
+        renamed = self.observe_upstream(replace(ego, track=50), remapped)
+        self.assertEqual(renamed, replace(cmd, reference=100-cmd.reference))
         other = self.observe_upstream(replace(ego, track=50), remapped + remote)
-        self.assertEqual(other, replace(cmd, reference=100-cmd.reference))
+        self.assertGreater(other.target_x, renamed.target_x)
+        self.assertEqual(other, replace(renamed, target_x=other.target_x, speed=other.speed))
         occupied = [*group, car(6, ego.x + 4, 1)]
         self.assertIsNone(self.observe_upstream(ego, occupied).lane)
 
@@ -348,8 +351,9 @@ class NativeRulesTests(unittest.TestCase):
                         self.assertIsNone(fresh.reference)
                         self.assertIsNone(own.front)
                         self.assertEqual(fresh.formation_state, 0)
-                        self.assertAlmostEqual(fresh.target_x, ego.x)
-                        self.assertAlmostEqual(fresh.speed, 20 + .2 * (28.8 - 20))
+                        shift = .5 * (distance - r.desired_spacing(ego.speed))
+                        self.assertAlmostEqual(fresh.target_x, ego.x + shift)
+                        self.assertAlmostEqual(fresh.speed, 20.5)
 
     def test_an_existing_chain_tracks_the_current_front_then_releases_on_loss(self):
         ego = car(0, 100, speed=20)
@@ -379,7 +383,8 @@ class NativeRulesTests(unittest.TestCase):
                             ego, (car(2, 180, speed=20),), mode, None, released)
                         self.assertIsNone(returned.reference)
                         self.assertIsNone(own.front)
-                        self.assertAlmostEqual(returned.speed, 20 + .2 * (28.8 - 20))
+                        self.assertAlmostEqual(returned.target_x, ego.x + .5*(80-r.desired_spacing(20)))
+                        self.assertAlmostEqual(returned.speed, 20.5)
 
 
 if __name__ == '__main__':

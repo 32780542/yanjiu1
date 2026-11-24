@@ -101,8 +101,13 @@ def _balanced_offsets(group, lanes, spacing, head_clipped, tail_clipped):
                if layer or lane not in omitted]
 
 
+def anchored_x(x, head_x, spacing, forward_anchor):
+    """Fit the segment and the visible preceding tail with equal total weight."""
+    return x + .5 * max(0., forward_anchor - spacing - head_x)
+
+
 def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipped=False,
-                  sensor_bounds=None):
+                  sensor_bounds=None, forward_anchor=None):
     offsets = None
     if (head_clipped or tail_clipped) and sensor_bounds is not None:
         offsets = _observed_offsets(group, lanes, spacing, 0, sensor_bounds)
@@ -115,7 +120,10 @@ def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipp
     fit = solve_transport([(c.lane, c.x) for c in group], slots,
                           ego_index=rank, action="next_lane", position_error=POSITION_ERROR_M)
     lane, x = slots[fit.assignment[rank]]
-    extent = max(d for _, d in offsets) - min(d for _, d in offsets)
+    front_offset = min(d for _, d in offsets)
+    if forward_anchor is not None:
+        x = anchored_x(x, origin - front_offset, spacing, forward_anchor)
+    extent = max(d for _, d in offsets) - front_offset
     margin = 2 * len(group) * POSITION_ERROR_M * extent
     confirmed = fit.action_lower_bound > 0
     return Target(lane, x, fit.ego_gap, fit.ego_gap > margin,

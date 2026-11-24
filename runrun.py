@@ -80,6 +80,8 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
                        help="观察同一批 12 辆车在所选缩道或扩道上变换队形")
     demos.add_argument("--long-platoon-demo", dest="demo", action="store_const", const="long",
                        help="观察 24 辆车在 2800 米上游整队，再经过所选缩道或扩道")
+    demos.add_argument("--sparse-platoon-demo", dest="demo", action="store_const", const="sparse",
+                       help="观察互相可见但起初分开的 24 辆车先整队，再通过车道变化处")
     demos.add_argument("--formation-demo", dest="demo", action="store_const", const="straight",
                         help="在三车道直路观察 12 辆车由 6/4/2 补成四层交错队形")
     demos.add_argument("--no-formation-demo", "--no-transform-demo", dest="demo", action="store_const",
@@ -120,13 +122,18 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     output_fn(f"模型：{MODEL_NAMES[args.model]}")
     if args.demo != "flow" and args.duration is not None:
         parser.error("--duration 用于连续车流；队形演示使用固定发车表")
-    if args.demo == "long":
+    if args.demo in ("long", "sparse"):
         scenario = flow_scenario + "_long"
-        lanes = DEMO_ENTRY_LANES[lane_count]
-        initial = [dict(lane=lanes[i % len(lanes)], x=526-22*i, speed=28.8) for i in range(24)]
+        if args.demo == "sparse":
+            tape = VARIANT_ROOT / "configs/sparse_demo_8721.json"
+            initial = json.loads(tape.read_bytes())[layout]
+        else:
+            lanes = DEMO_ENTRY_LANES[lane_count]
+            initial = [dict(lane=lanes[i % len(lanes)], x=526-22*i, speed=28.8) for i in range(24)]
         duration = 8.
         approach, downstream, outgoing = native.ROAD_LAYOUT[scenario]
-        output_fn(f"24 辆车在 0 秒从 20–526 m 的初始位置同时发车。"
+        positions = [c["x"] for c in initial]
+        output_fn(f"24 辆车在 0 秒从 {min(positions):g}–{max(positions):g} m 的初始位置同时发车。"
                   f"{approach} m 处由 {lane_count} 道变为 {outgoing} 道，再行驶 {downstream} m。")
     elif args.demo != "flow":
         lanes = DEMO_ENTRY_LANES[lane_count]

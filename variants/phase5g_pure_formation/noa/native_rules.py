@@ -219,10 +219,20 @@ def safe_speed(ego, neighbors):
     return limit
 
 
+def _shape_speed(ego, target_x):
+    acceleration = (SHAPE_FREQUENCY ** 2 * (target_x - ego.x)
+                    + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
+    accel = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
+    return max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * accel))
+
+
 def _transport(ego, rows, memory, lanes, opened, transforming):
-    from noa.staggered import choose_target
+    from noa.staggered import anchored_x, choose_target
 
     group = list(reversed(_local_group(ego, rows)))
+    forward_anchor = None
+    if not transforming:
+        forward_anchor = min((c.x for c in rows if c.x > group[0].x), default=None)
     if len(group) == 1 and transforming and lanes == 2:
         front = min((c for c in rows if 0 < c.x - ego.x <= REAR_VIEW),
                     key=lambda c: (c.x, c.lane), default=None)
@@ -231,7 +241,11 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
     if len(group) == 1:
         if ego.lane >= lanes:
             return _reactive(ego, rows, memory, lanes)
-        return _solo_follow(ego, rows, memory)
+        command, memory = _solo_follow(ego, rows, memory)
+        if forward_anchor is not None and command.reference is None and command.lane is None:
+            x = anchored_x(ego.x, ego.x, desired_spacing(ego.speed), forward_anchor)
+            command = replace(command, speed=_shape_speed(ego, x), target_x=x)
+        return command, memory
 
     rank = group.index(ego)
     spacing = desired_spacing(sum(c.speed for c in group) / len(group))
@@ -239,11 +253,9 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
     tail_clipped = ego.x - group[-1].x > REAR_VIEW - GROUP_GAP
     target = choose_target(rank, group, lanes, spacing,
                            head_clipped=head_clipped, tail_clipped=tail_clipped,
-                           sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW))
-    acceleration = (SHAPE_FREQUENCY ** 2 * (target.x - ego.x)
-                    + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
-    accel = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
-    speed = max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * accel))
+                           sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW),
+                           forward_anchor=forward_anchor)
+    speed = _shape_speed(ego, target.x)
 
     predecessor = group[rank - 1].track if rank else None
     front_speed, front_x, front, _ = _front_following(ego, rows, FRONT_VIEW)
