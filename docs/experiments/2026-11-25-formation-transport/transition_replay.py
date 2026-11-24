@@ -14,7 +14,7 @@ from path_holdout_9800 import FILES, cell
 HERE = Path(__file__).resolve().parent
 
 
-def prepare(out, stages, cases):
+def prepare(out, stages, cases, source=None):
     out.mkdir(parents=True, exist_ok=False)
     (out / "tapes").mkdir()
     base_path = HERE / "path_holdout_9800_inputs.zip"
@@ -26,11 +26,15 @@ def prepare(out, stages, cases):
         for name in stages:
             directory = out/"frozen"/name
             (directory/"tmp").mkdir(parents=True)
-            overlay_files = overlay[name]
+            overlay_files = {} if source else overlay[name]
             hashes = dict(original["path"], **overlay_files)
             for key in FILES:
-                data = (archive.read(name+"/"+key) if key in overlay_files else
-                        base.read("frozen/path/"+key))
+                if source:
+                    data = (source/key).read_bytes()
+                    hashes[key] = sha256(data).hexdigest()
+                else:
+                    data = (archive.read(name+"/"+key) if key in overlay_files else
+                            base.read("frozen/path/"+key))
                 assert sha256(data).hexdigest() == hashes[key]
                 target = directory/key
                 target.parent.mkdir(parents=True,exist_ok=True)
@@ -49,7 +53,8 @@ def prepare(out, stages, cases):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("out",type=Path)
-    p.add_argument("--stage",choices=("cumulative","staged","subflow"),default="subflow")
+    p.add_argument("--stage",choices=("cumulative","staged","subflow","current"),default="subflow")
+    p.add_argument("--source",type=Path,help="Use with --stage current to test a new controller snapshot")
     p.add_argument("--roads",nargs="+",choices=("2to3","3to2"),default=["2to3","3to2"])
     p.add_argument("--sizes",nargs="+",type=int,choices=(12,24),default=[12,24])
     p.add_argument("--profiles",nargs="+",choices=("compact","long"),default=["compact","long"])
@@ -61,8 +66,10 @@ def main():
     if args.cell:
         stage,road,n,profile,seed = args.cell
         return cell(out,stage,road,int(n),profile,int(seed))
+    if (args.stage == "current") != bool(args.source):
+        p.error("--source and --stage current must be used together")
     cases = list(itertools.product(args.roads,args.sizes,args.profiles,args.seeds))
-    prepare(out,[args.stage],cases)
+    prepare(out,[args.stage],cases,args.source)
     def run(case):
         key = "_".join(map(str,case))
         with (out/(key+".log")).open("x",encoding="utf8") as log:

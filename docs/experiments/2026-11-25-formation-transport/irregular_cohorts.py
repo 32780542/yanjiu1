@@ -1,4 +1,4 @@
-"""Paired non-divisible cohorts on four roads. Each worker imports just its frozen controller."""
+"""Paired fixed cohorts on four roads. Each worker imports just its frozen controller."""
 import argparse
 from concurrent.futures import ThreadPoolExecutor
 import csv
@@ -14,6 +14,9 @@ from run_study import ROADS, hash_file
 HERE = Path(__file__).resolve().parent
 SIZES = (7, 11, 13, 17)
 cohorts.SPANS.update({n: {"compact":10.*n+25, "long":20.*n+160} for n in SIZES})
+for n in (12,24):
+    # Keep 20 m of same-lane separation possible even on a two-lane entry.
+    cohorts.SPANS[n]["compact"] = 10.*n + 5
 cohorts.ROADS.update({road: demo for road,(_,demo) in ROADS.items()})
 
 
@@ -43,9 +46,11 @@ def case(out, cell):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("out", type=Path)
-    ap.add_argument("--baseline", type=Path)
+    ap.add_argument("--baseline", type=Path, help="Optional paired reference, on roads it supports")
     ap.add_argument("--candidate", type=Path)
+    ap.add_argument("--roads", nargs="+", choices=tuple(ROADS), default=tuple(ROADS))
     ap.add_argument("--seeds",nargs="+",default=list(map(str,range(9901,9905))))
+    ap.add_argument("--sizes",type=int,nargs="+",choices=sorted(cohorts.SPANS),default=SIZES)
     ap.add_argument("--workers",type=int,default=4)
     ap.add_argument("--case",nargs=5)
     args=ap.parse_args()
@@ -54,7 +59,8 @@ def main():
         return case(out,args.case)
     out.mkdir(parents=True,exist_ok=False)
     (out/"tapes").mkdir()
-    models={"baseline":args.baseline, "candidate":args.candidate}
+    models={"baseline":args.baseline} if args.baseline is not None else {}
+    models["candidate"]=args.candidate
     for name,src in models.items():
         cohorts.freeze(src.resolve(),out/"frozen"/name)
     # Use the same original geometric test for both methods, with a strict
@@ -68,7 +74,7 @@ def main():
             return False
 """
     (out/"frozen/measure.py").write_text(measure[:start]+strict+measure[start:],encoding="utf8")
-    cells=list(product(ROADS, map(str,SIZES), ("compact","long"), args.seeds))
+    cells=list(product(args.roads, map(str,args.sizes), ("compact","long"), args.seeds))
     for road,n,profile,seed in cells:
         cohorts.write(out/"tapes"/("_".join((road,n,profile,seed))+".json"),
                       cohorts.make_tape(int(seed),road,int(n),profile))
@@ -83,13 +89,14 @@ def main():
     all_cases=[(method,*cell) for cell in cells for method in models]
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
         rows=list(pool.map(run,all_cases))
-    for a,b in zip(rows[::2],rows[1::2]):
-        assert a["first_frame_sha256"]==b["first_frame_sha256"] and a["tape_sha256"]==b["tape_sha256"]
+    if args.baseline is not None:
+        for a,b in zip(rows[::2],rows[1::2]):
+            assert a["first_frame_sha256"]==b["first_frame_sha256"] and a["tape_sha256"]==b["tape_sha256"]
     with (out/"summary.csv").open("x",newline="",encoding="utf8") as dest:
         writer=csv.DictWriter(dest,list(rows[0]))
         writer.writeheader()
         writer.writerows(rows)
-    print(f"{len(rows)//2} matched initial states, {len(rows)} SUMO runs")
+    print(f"{len(cells)} initial states, {len(rows)} SUMO runs")
 
 
 if __name__=="__main__":

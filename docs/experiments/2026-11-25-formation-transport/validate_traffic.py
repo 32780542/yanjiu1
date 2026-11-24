@@ -67,7 +67,7 @@ def run_audit(job):
     return audit_case(label, road, flow, seed, row_path, manifest, DATA[label][:3])
 
 
-def audit_case(label, road, flow, seed, row_path, manifest, design):
+def audit_case(label, road, flow, seed, row_path, manifest, design, *, physical_counts=False):
     panel,method,duration = design
     index = read(row_path)
     folder = ROOT/index["run_dir"]
@@ -121,10 +121,36 @@ def audit_case(label, road, flow, seed, row_path, manifest, design):
         routes_sha256=digest(ET.tostring(ET.parse(folder/"native.rou.xml").getroot())),
         physical_sha256=canonical([config[k] for k in ("physical","speed_mode","lane_change_mode","positions_step_s")]),
         run_dir=index["run_dir"])
+    if physical_counts:
+        out["source_manifest_sha256"] = canonical(manifest)
+        out["native_rules_sha256"] = manifest["noa/native_rules.py"]
+        out["staggered_sha256"] = manifest.get("noa/staggered.py","")
+        for region, short in (("upstream","up"),("downstream","down")):
+            for field in ("vehicle_samples","formed_vehicle_samples","peak_multilayer_size"):
+                out[f"{short}_{field}"] = index[f"{region}_{field}"]
+            n = out[f"{short}_vehicle_samples"]
+            made = out[f"{short}_formed_vehicle_samples"]
+            if n and abs(100*made/n-out[f"{short}_pct"])>1e-8:
+                raise ValueError(f"Geometry numerator differs in {folder}")
+        out["downstream_vehicle_s"] = persistence["downstream_vehicle_s"]
+        for h in (0,1,3,5):
+            out[f"held_{h}s_vehicle_s"] = persistence[f"held_{h}s_vehicle_s"]
+        counts = [sum(abs(e["to_lane"]-e["from_lane"]) for e in tr["lane_events"]) for tr in trips]
+        out["crossings_per_100"] = 100*crossings/complete if complete else None
+        out["vehicles_crossed"] = sum(n>0 for n in counts)
+        out["vehicles_crossed_twice_or_more"] = sum(n>=2 for n in counts)
+        out["vehicle_crossing_max"] = max(counts,default=0)
+        bins = [
+            sum(abs(e["to_lane"]-e["from_lane"]) for e in events if low <= e["x"] < high)
+            for low,high in ((0,800),(800,1000),(1000,float("inf")))
+        ]
+        if sum(bins)!=crossings:
+            raise ValueError(f"Crossing location ledger mismatch: {folder}")
+        out["upstream_crossings"],out["approach_crossings"],out["downstream_crossings"] = bins
     return out
 
 
-def compare(rows, candidate="selected"):
+def compare(rows, candidate="selected", outcomes=OUTCOMES):
     pairs = []
     by_key = {(r["panel"],r["road"],r["flow"],r["seed"],r["method"]): r for r in rows}
     for (panel,road,flow,seed,method),ref in by_key.items():
@@ -144,7 +170,7 @@ def compare(rows, candidate="selected"):
         delta = dict(panel=panel, road=road, flow=flow, seed=seed, reference=method, eligible=eligible,
             actual_entry_pairs=len(common), same_entry_time=sum(dt<1e-8 for dt in common),
             max_abs_entry_difference_s=max(common, default=None))
-        for field in OUTCOMES:
+        for field in outcomes:
             delta["delta_"+field] = test[field]-ref[field] if eligible else None
         pairs.append(delta)
     return pairs

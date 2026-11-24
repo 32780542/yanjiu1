@@ -11,6 +11,17 @@ def car(x, lane, track=0):
 
 
 class TransportControlTests(unittest.TestCase):
+    def test_equal_lane_counts_fit_the_cheaper_mirror_to_all_positions(self):
+        # Lane 0 owns the foremost car but lane 1 has the greater mean x.
+        group = [car(70, 0), car(67, 1), car(45, 1), car(10, 0)]
+        targets = [choose_target(i, group, 2, 30.) for i in range(len(group))]
+        self.assertEqual([target.lane for target in targets], [c.lane for c in group])
+        self.assertEqual(max(targets, key=lambda t: t.x).lane, 1)
+        # A phase tie at the 5 cm precision retains the observed leading lane.
+        group[-1] = car(41.9, 0)
+        targets = [choose_target(i, group, 2, 30.) for i in range(len(group))]
+        self.assertEqual(max(targets, key=lambda t: t.x).lane, 0)
+
     def test_visible_group_ahead_translates_slots_without_reassigning_them(self):
         d = rules.desired_spacing(rules.CRUISE)
         group = [car(115, 0, 1), car(100, 1, 2), car(115, 2, 3)]

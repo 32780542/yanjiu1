@@ -110,6 +110,29 @@ def check():
     return examples, tested
 
 
+def hidden_tail():
+    """Identical finite views which require different unique globally optimal ego actions."""
+    ego = 1
+    for count in (12, 24, 48):
+        for spacing in (28., 29.98, 32.):
+            slots = [(k%2, (1-k)*spacing/2) for k in range(count)]
+            a = list(slots)
+            a[ego] = (0, slots[ego][1])
+            b = a.copy()
+            a[10] = (1, slots[10][1])
+            visible = lambda cars: [car for car in cars if -100 <= car[1] <= 200]
+            assert visible(a) == visible(b) and len(visible(a)) < count
+            def fit(cars):
+                return solve_transport(cars,slots[:len(cars)],ego_index=ego,action="next_lane")
+            left, right, observed = fit(a), fit(b), fit(visible(a))
+            assert (left.total_crossings, left.action_lane, left.action_gap) == (0, 0, inf)
+            assert (right.total_crossings, right.action_lane, right.squared_displacement) == (1, 1, 0)
+            assert abs(right.action_gap-spacing**2/2) < 1e-8
+            if count == 12 and spacing == 29.98:
+                print("Identical views:", len(visible(a)), "cars; local action",observed.action_lane,
+                      "global actions",left.action_lane,right.action_lane,"gap",right.action_gap)
+
+
 def main():
     sample = json.loads((HERE / "ego_gap_example.json").read_bytes())
     vehicles, slots, ego = sample["vehicles"],sample["slots"],sample["ego_index"]
@@ -129,6 +152,7 @@ def main():
             print("  rank",i, "x",round(vehicles[i][1],3), "assigned",p[i],"alternative",p[j],
                   "new lane",slots[p[j]][0])
     print("Enumerated examples and exact rival slots:", *check())
+    hidden_tail()
 
 
 if __name__ == "__main__":

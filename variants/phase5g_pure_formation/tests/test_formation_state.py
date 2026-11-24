@@ -164,8 +164,10 @@ class InstalledStateRecordingTests(unittest.TestCase):
         front = min((c for c in peers if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x)
         self.assertEqual((cmd.reference, memory.front), (front.track, front.track))
         self.assertEqual((cmd.proposal_lane, cmd.lane, cmd.formation_state), (ego.lane, None, 1))
-        self.assertLess(cmd.target_x, ego.x)
-        self.assertLess(cmd.speed, ego.speed)
+        # The measured lane-1 pair leads in mean position. Its rear member
+        # occupies half-slot 2 and needs a small forward correction.
+        self.assertAlmostEqual(cmd.target_x, 810.625)
+        self.assertGreater(cmd.speed, ego.speed)
 
     def test_equal_cost_outer_roles_keep_following_speed_without_an_arbitrary_crossing(self):
         row = self.archived_cases()['ordinary_following']

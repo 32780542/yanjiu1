@@ -172,10 +172,9 @@ class NativeRulesTests(unittest.TestCase):
         ego, rows = self.slot_scene()
         command, memory = self.command(ego, rows)
         h = r.desired_spacing(20) / 2
-        # Both lanes already contain two cars. Preserve each lane and assign
-        # its front and rear to their nearest ordered longitudinal slots.
+        # Lane 1 has the greater mean x, so its cars occupy half-slots 0 and 2.
         origin = (860 + 835 + 810 + 760 + sum(i*h for i in range(4))) / 4
-        expected = origin - 3*h
+        expected = origin - 2*h
         self.assertAlmostEqual(command.target_x, expected)
         self.assertIsNone(command.lane)
         self.assertEqual((command.proposal_lane, command.reference, memory.front),

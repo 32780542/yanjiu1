@@ -33,6 +33,16 @@ def shape_assessment():
 
 
 class NativeEntrypointTests(unittest.TestCase):
+    def test_initial_demo_reads_an_experiment_departure_table(self):
+        with TemporaryDirectory() as tmp, patch.object(runrun, "_check"):
+            tape = Path(tmp) / "cohort.json"
+            tape.write_text(json.dumps([{"lane": 0, "x": 80, "speed": 28.8}]))
+            output = []
+            result = runrun.main(["--layout", "3to2", "--initial-demo", str(tape), "--check"],
+                                 output_fn=output.append)
+            self.assertEqual(result, 0)
+            self.assertTrue(any("cohort.json" in line and "1 辆车" in line for line in output))
+
     def test_each_model_runs_the_same_demand_on_each_selected_road(self):
         with TemporaryDirectory() as tmp, patch.object(runrun, "RANDOM_SEED", 20), patch.object(runrun, "FLOW_VEH_H_LANE", 1750):
             for selector, lanes, outgoing, scenario in (

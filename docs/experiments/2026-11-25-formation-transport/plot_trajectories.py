@@ -38,14 +38,17 @@ def representative(frames, members, lanes, lo, hi):
 
 
 def reference_slots(states, lanes):
-    """Fit a translation of the balanced 12-slot template with the audit spacing."""
-    if len(states) % lanes:
-        raise ValueError("This figure requires equal numbers of slots on each active lane")
+    """Fit one common origin to the occupied slots, including an incomplete tail."""
     gap = 5.5 + .85 * np.mean([s[2] for s in states.values()])
     columns = [sorted((s[0] for s in states.values() if lane_of(s[1]) == lane), reverse=True)
                for lane in range(lanes)]
+    counts = list(map(len, columns))
+    if max(counts)-min(counts)>1 or (lanes==3 and counts[1]>min(counts[0],counts[2])):
+        raise ValueError("The measured population does not fit a balanced tail")
     fits = []
     for phase in (range(2) if lanes == 2 else (0,)):
+        if lanes == 2 and counts[phase] < max(counts):
+            continue
         offsets = [(x, lane, (rank + ((lane + phase) % 2) / 2) * gap)
                    for lane, column in enumerate(columns) for rank, x in enumerate(column)]
         center = np.mean([x + offset for x, _, offset in offsets])

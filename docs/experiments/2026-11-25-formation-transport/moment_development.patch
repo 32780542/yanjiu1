@@ -1,0 +1,13 @@
+--- a/noa/staggered.py
++++ b/noa/staggered.py
+@@ -150,6 +150,10 @@
+         first = min(group[0].lane, 1)
+         if n % 2:
+             first = int(sum(c.lane == 0 for c in group) <= n // 2)
++        elif 2 * sum(c.lane == 0 for c in group) == n:
++            moment = sum((c.x-group[0].x)*(1 if c.lane == 0 else -1) for c in group)
++            if abs(moment) > n * POSITION_ERROR_M:
++                first = int(moment < 0)
+         offsets = [(first ^ (k % 2), spacing * (.5 * k)) for k in range(n)]
+     elif (head_clipped or tail_clipped) and sensor_bounds is not None:
+         offsets = _observed_offsets(group, lanes, spacing, 0, sensor_bounds)

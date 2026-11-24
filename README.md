@@ -4,6 +4,12 @@
 
 11 月 25 日的研究从 GitHub 的 `11.24版` 恢复。形成时，每辆车用前方 200 米、后方 100 米内实际看到的车辆，拟合一段均匀的多车道交错队形。相邻车道错开半个同道间距，同道间距随车速变化，为 $5.5+0.85v$ 米。变换时，车辆在看见道路增减后更换目标车道集合。两阶段共用局部指派，依次减少单车最大跨道数、全队总跨道数和纵向调距。提交相邻横移前，本车计算测量误差是否足以推翻这一步，并检查真实间隙。[本轮研究进展、数学证明和时间线](docs/experiments/2026-11-25-formation-transport/README.md) · [单车控制](variants/phase5g_pure_formation/noa/native_rules.py) · [交错模板](variants/phase5g_pure_formation/noa/staggered.py) · [指派求解](variants/phase5g_pure_formation/noa/transport.py)
 
+要看 11 辆车如何在三道形成 4/3/4、再在两道重排为 5/6，可直接使用下面的初态。仿真从第一步同步显示，5 辆车各跨过一条边界。[实测队形快照](docs/experiments/2026-11-25-formation-transport/figures/odd11_3to2.svg)
+
+```powershell
+python runrun.py --layout 3to2 --initial-demo docs/experiments/2026-11-25-formation-transport/figures/11car_3to2_9901.json
+```
+
 要看原本分开的车怎样组成一队，在仓库根目录运行 `python runrun.py --layout 3to2 --sparse-platoon-demo`。这 24 辆车实际从 70–650 m 各自起步。后一小队看见前一小队的队尾后，只把自己的纵向目标向前移；各车仍独立判断要不要换道。演示可切换四种道路。[可见空档的配对验证](docs/experiments/2026-11-25-formation-transport/splice/README.md)
 
 在 `D:\yanjiu1\keyan1` 运行 `python runrun.py --layout 3to2 --transform-demo`，可在实时 SUMO 中看同一批 12 辆车先形成三道交错，再变为两道每道六辆。布局也可取 `4to3`、`2to3`、`3to4`。直接运行 `python runrun.py` 看连续车流。三车道末层优先补两侧，窗口可自由缩放和平移。[11 月 20 日旧版方法与实验](docs/experiments/2026-11-20-lane-drop/README.md) · [11 月 19 日建模与实验](docs/experiments/2026-11-19-staggered-reconfiguration/README.md)

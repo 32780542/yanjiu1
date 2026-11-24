@@ -13,8 +13,6 @@ def extract(run):
     trace = run / "positions.jsonl.gz"
     config = json.loads((run/"input.json").read_bytes())
     ids = {car["vehicle_id"] for car in config["arrivals"]}
-    if len(ids) != 24:
-        raise ValueError("Expected the 24-vehicle cohort")
     with gzip.open(trace, "rt") as stream:
         frames = [(obj["time_s"], obj["states"]) for obj in map(json.loads, stream)]
     shots = []
@@ -48,7 +46,10 @@ def render(data, output):
         ax.set_title(f"{frame['label']}    ·    {frame['time_s']:.1f} s",loc="left",fontsize=10,fontweight="bold")
         ax.set_title(f"Front at {front:.0f} m",loc="right",fontsize=8)
     axes[-1].set_xlabel("Distance from cohort front  (m)")
-    fig.suptitle("3 to 2 lanes    |    The same 24 vehicles",x=.075,y=.95,ha="left",fontsize=14,fontweight="bold")
+    incoming, outgoing = (frame["lanes"] for frame in data["frames"])
+    count = len(data["frames"][0]["states"])
+    fig.suptitle(f"{incoming} to {outgoing} lanes    |    The same {count} vehicles",
+                 x=.075,y=.95,ha="left",fontsize=14,fontweight="bold")
     fig.text(.075,.082,"Numbers track measured vehicle fronts. Squares mark fitted staggered slots. Lane centers are 3.3 m apart.",fontsize=7.7)
     fig.text(.075,.035,f"SUMO   /   boundary {data['cut_m']:.0f} m   /   sample {data['step_s']:.1f} s   /   trace SHA-256 {data['trace_sha256'][:16]}",fontsize=7,color="#495761")
     fig.savefig(output,metadata={"Date":None})

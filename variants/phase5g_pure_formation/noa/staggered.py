@@ -107,6 +107,23 @@ def anchored_x(x, head_x, spacing, forward_anchor):
     return x + .5 * max(0., forward_anchor - spacing - head_x)
 
 
+def _leading_lane(group):
+    """Choose the mirror of a two-lane alternating sequence in this view."""
+    n = len(group)
+    lane0_count = sum(c.lane == 0 for c in group)
+    if n % 2:
+        # Put the extra slot on the more populated side to minimize crossings.
+        return int(lane0_count <= n // 2)
+    if 2 * lane0_count == n:
+        # With neither lane changing its population, J1-J0 is spacing times
+        # this first moment. A common origin cancels between the equal counts.
+        head = group[0].x
+        moment = sum((c.x - head) * (1 if c.lane == 0 else -1) for c in group)
+        if abs(moment) > n * POSITION_ERROR_M:
+            return int(moment < 0)
+    return group[0].lane
+
+
 def _open_road_allows(rank, group, slots, fit, opened, lanes):
     """Largest one-hop batch that fits the open part of an expanding road."""
     origin = group[rank].lane
@@ -144,13 +161,8 @@ def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipp
                   sensor_bounds=None, forward_anchor=None, opened_lanes=None):
     offsets = None
     if lanes == 2 and all(c.lane < lanes for c in group):
-        # Every consecutive slice alternates. For an odd count only the median
-        # sorted source changes destination between the two possible mirrors.
-        n = len(group)
-        first = min(group[0].lane, 1)
-        if n % 2:
-            first = int(sum(c.lane == 0 for c in group) <= n // 2)
-        offsets = [(first ^ (k % 2), spacing * (.5 * k)) for k in range(n)]
+        first = _leading_lane(group)
+        offsets = [(first ^ (k % 2), spacing * (.5 * k)) for k in range(len(group))]
     elif (head_clipped or tail_clipped) and sensor_bounds is not None:
         offsets = _observed_offsets(group, lanes, spacing, 0, sensor_bounds)
     if offsets is None:

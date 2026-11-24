@@ -1,0 +1,17 @@
+road,cohort,seed,flow,stage,views,actually_complete,certified_complete,same_action,different_action,different_target_lane,different_action_full_but_edge_flag,locally_positive_gap_but_different,uncertified_agree,certified_different
+2to3,chain24,20,1750.0,downstream,155,56,9,154,1,1,1,1,145,0
+2to3,chain24,20,1750.0,formation,165,0,0,165,0,0,0,0,165,0
+2to3,stream,20,1750.0,downstream,155,130,79,155,0,0,0,0,76,0
+2to3,stream,20,1750.0,formation,240,143,63,240,0,0,0,0,177,0
+3to2,chain24,20,1750.0,downstream,171,28,18,171,0,0,0,0,153,0
+3to2,chain24,20,1750.0,formation,160,13,0,153,7,7,0,7,153,0
+3to2,stream,20,1750.0,downstream,166,103,50,166,0,0,0,0,116,0
+3to2,stream,20,1750.0,formation,235,191,115,235,0,0,0,0,120,0
+3to4,chain24,20,1750.0,downstream,167,105,51,167,0,0,0,0,116,0
+3to4,chain24,20,1750.0,formation,160,13,0,153,7,7,0,7,153,0
+3to4,stream,20,1750.0,downstream,166,166,114,166,0,0,0,0,52,0
+3to4,stream,20,1750.0,formation,235,191,115,235,0,0,0,0,120,0
+4to3,chain24,20,1750.0,downstream,164,64,14,164,0,0,0,0,150,0
+4to3,chain24,20,1750.0,formation,175,34,5,172,3,3,0,3,167,0
+4to3,stream,20,1750.0,downstream,165,139,87,165,0,0,0,0,78,0
+4to3,stream,20,1750.0,formation,250,238,151,250,0,0,0,0,99,0

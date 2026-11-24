@@ -82,6 +82,8 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
                        help="观察 24 辆车在 2800 米上游整队，再经过所选缩道或扩道")
     demos.add_argument("--sparse-platoon-demo", dest="demo", action="store_const", const="sparse",
                        help="观察互相可见但起初分开的 24 辆车先整队，再通过车道变化处")
+    demos.add_argument("--initial-demo", type=Path, metavar="JSON",
+                       help="在 2800 米上游重现实验的逐车发车表（JSON 数组）")
     demos.add_argument("--formation-demo", dest="demo", action="store_const", const="straight",
                         help="在三车道直路观察 12 辆车由 6/4/2 补成四层交错队形")
     demos.add_argument("--no-formation-demo", "--no-transform-demo", dest="demo", action="store_const",
@@ -93,6 +95,8 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     parser.add_argument("--no-wait", action="store_true", help="运行结束后立即封存退出")
     parser.add_argument("--output-base", type=Path, help="结果根目录；每次新建独立子目录")
     args = parser.parse_args(argv)
+    if args.initial_demo is not None:
+        args.demo = "initial"
     if args.model not in MODEL_NAMES:
         parser.error('MODEL 可选 "hdv"、"noa" 或 "formation"')
     layout = args.layout
@@ -122,7 +126,17 @@ def main(argv=None, *, input_fn=input, output_fn=print) -> int:
     output_fn(f"模型：{MODEL_NAMES[args.model]}")
     if args.demo != "flow" and args.duration is not None:
         parser.error("--duration 用于连续车流；队形演示使用固定发车表")
-    if args.demo in ("long", "sparse"):
+    if args.demo == "initial":
+        scenario = flow_scenario + "_long"
+        try:
+            initial = json.loads(args.initial_demo.read_bytes())
+            if not isinstance(initial, list) or not initial or not all(isinstance(c, dict) for c in initial):
+                raise ValueError("需要非空的逐车记录数组")
+            duration = max(8., max(float(c.get("depart", 0.)) for c in initial) + .1)
+        except (OSError, ValueError, TypeError) as error:
+            parser.error(f"读取发车表失败：{error}")
+        output_fn(f"从 {args.initial_demo.name} 读取 {len(initial)} 辆车，在 {layout} 道路上重现实验。")
+    elif args.demo in ("long", "sparse"):
         scenario = flow_scenario + "_long"
         if args.demo == "sparse":
             tape = VARIANT_ROOT / "configs/sparse_demo_8721.json"
