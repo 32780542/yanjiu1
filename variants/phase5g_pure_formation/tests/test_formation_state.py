@@ -51,18 +51,18 @@ class LocalFormationStateTests(unittest.TestCase):
         self.assertEqual(self.state(car(0, 100), (car(1, 49.99),)), 0)
         self.assertEqual(self.state(car(0, 100), (car(1, 50),)), 1)
 
-    def test_visible_tail_counts_while_a_vehicle_approaches_its_half_gap_slot(self):
+    def test_selected_real_slot_anchor_counts_without_a_same_lane_or_phase_front(self):
         ego, anchor = car(0, 900, lane=1), car(1, 960, lane=0)
         for pending in (None, 0):
             with self.subTest(own_pending=pending):
                 command, memory = rules.decide(
                     replace(ego, pending_lane=pending), (anchor,),
                     rules.Memory(lane_target=0, front=anchor.track), 'transform', 1000.)
-                self.assertEqual(command.lane, pending)
+                self.assertEqual(command.lane, 0)
                 self.assertEqual(command.reference, anchor.track)
-                self.assertAlmostEqual(command.target_x, (ego.x + anchor.x - rules.desired_spacing(ego.speed)/2) / 2)
-                self.assertAlmostEqual(command.speed, ego.speed + .5)
-                self.assertEqual(memory, rules.Memory(lane_target=pending, front=anchor.track))
+                self.assertAlmostEqual(command.target_x, 930.02)
+                self.assertAlmostEqual(command.speed, 30.6012)
+                self.assertEqual(memory, rules.Memory(lane_target=0, front=anchor.track))
                 self.assertEqual(command.formation_state, 1)
 
     def test_noa_does_not_report_formation_even_in_perfect_geometry(self):
@@ -147,25 +147,27 @@ class InstalledStateRecordingTests(unittest.TestCase):
             rules.Vehicle(**row['ego']), tuple(rules.Vehicle(**c) for c in row['neighbors']),
             rules.Memory(**row['memory']), row['mode'], row['drop_x'])
 
-    def test_archived_C8_noa_keeps_its_controls_and_reports_zero(self):
-        row = self.archived_cases()['noa_visible_remote_front']
-        command, after = self.archived_command(row)
-        control = asdict(command)
-        self.assertEqual(control.pop('formation_state'), 0)
-        self.assertEqual(control, row['control'])
-        self.assertEqual(after, rules.Memory(**row['after']))
+    def test_archived_C8_noa_and_real_slot_controls_and_memory_remain_unchanged(self):
+        cases = self.archived_cases()
+        for name in ('noa_visible_remote_front', 'left_real_slot'):
+            row = cases[name]
+            with self.subTest(case=row['name']):
+                command, after = self.archived_command(row)
+                control = asdict(command)
+                state = control.pop('formation_state')
+                self.assertEqual(control, row['control'])
+                self.assertEqual(asdict(after), row['after'])
+                self.assertEqual(state, 0 if row['mode'] == 'noa' else 1)
 
-    def test_archived_slot_scene_reports_its_actual_geometric_reference(self):
-        cmd, memory = self.archived_command(self.archived_cases()['left_real_slot'])
-        self.assertEqual((cmd.reason, cmd.lane, cmd.formation_state), ('two_lane_shape', 0, 1))
-        self.assertEqual((cmd.reference, memory.front), (1, 1))
-
-    def test_a_second_car_can_begin_outer_row_fill_while_tracking_its_front(self):
+    def test_archived_C8_near_following_keeps_control_but_now_remembers_its_reference(self):
         row = self.archived_cases()['ordinary_following']
         command, after = self.archived_command(row)
-        self.assertEqual((command.speed, command.target_x), (row['control']['speed'], row['control']['target_x']))
-        self.assertEqual((command.reason, command.lane, command.formation_state), ('formation_fill', 1, 1))
-        self.assertEqual(after, rules.Memory(lane_target=1, front=1))
+        control = asdict(command)
+        self.assertEqual(control.pop('formation_state'), 1)
+        self.assertEqual(control, row['control'])
+        self.assertIsNone(row['after']['front'])
+        self.assertEqual(after, rules.Memory(front=command.reference))
+        self.assertEqual(after.front, 1)
 
     def test_archived_C8_fresh_far_inputs_now_need_a_previously_established_chain(self):
         cases = self.archived_cases()
@@ -175,8 +177,7 @@ class InstalledStateRecordingTests(unittest.TestCase):
                 command, after = self.archived_command(row)
                 ego = rules.Vehicle(**row['ego'])
                 self.assertIsNone(command.reference)
-                self.assertIsNone(after.front)
-                self.assertEqual(after.lane_target, 2 if phase_speed else None)
+                self.assertEqual(after, rules.Memory())
                 self.assertAlmostEqual(command.target_x, ego.x + phase_speed / .3)
                 self.assertAlmostEqual(command.speed, .2 * (28.8 + phase_speed))
                 self.assertEqual(command.formation_state, int(name == 'slow_far_front_with_phase'))

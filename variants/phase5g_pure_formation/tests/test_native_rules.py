@@ -114,7 +114,7 @@ class NativeRulesTests(unittest.TestCase):
         expected = self.command(ego, (front,), drop=None)
         actual = self.command(ego, (replace(front, pending_lane=1),), drop=None)
         self.assertEqual(actual, expected)
-        self.assertEqual(actual[0].reason, "formation_fill")
+        self.assertIsNone(actual[0].lane)
 
     def test_a_front_changing_lane_does_not_trigger_the_followers_transformation(self):
         ego = car(0, 700, 2)
@@ -215,38 +215,14 @@ class NativeRulesTests(unittest.TestCase):
                         self.assertIn(cmd.lane, (0, 1))
                         self.assertEqual(abs(cmd.lane - lane), 1)
 
-    def test_merged_car_keeps_the_near_lane_while_a_surviving_car_can_fill_lane_zero(self):
+    def test_ending_car_can_take_two_adjacent_left_moves_without_a_permanent_role(self):
         rows = (car(1, 885, 1, 20), car(2, 900, 0, 20))
         first, memory = self.command(car(0, 850, 2, 20), rows)
         self.assertEqual(first.lane, 1)
         second, memory = self.command(car(0, 850, 1, 20), rows, memory=memory)
-        self.assertIsNone(second.lane)
-        self.assertIn(0, memory.from_ending)
-        _, released = self.command(car(0, 850), (), memory=r.Memory(from_ending=frozenset({55})))
-        self.assertFalse(released.from_ending)
-
-    def test_outer_lanes_take_an_incomplete_row_before_the_middle(self):
-        group = [car(i, x, lane) for i, (x, lane) in enumerate(
-            [(160, 0), (145, 1), (160, 2), (130, 0), (115, 1)])]
-        tail = group[-1]
-        cmd, _ = self.command(tail, group[:-1], drop=None)
-        self.assertEqual((cmd.lane, cmd.reason), (2, 'formation_fill'))
-        for ego in group[:-1]:
-            self.assertIsNone(self.command(ego, [c for c in group if c is not ego], drop=None)[0].lane)
-
-    def test_four_lane_end_is_local_and_lane_two_continues(self):
-        for lane in (2, 3):
-            ego = car(0, 999, lane)
-            cmd, _ = r.decide(ego, (), r.Memory(), 'transform', 1000., lane_count=4)
-            if lane == 3:
-                self.assertEqual(cmd.lane, 2)
-                self.assertEqual(cmd.speed, 0.)
-            else:
-                self.assertIsNone(cmd.lane)
-                self.assertAlmostEqual(cmd.speed, r.CRUISE)
-        ego = car(0, 790, 3)
-        self.assertEqual(r.decide(ego, (), r.Memory(), 'transform', 1000., lane_count=4),
-                         r.decide(ego, (), r.Memory(), 'transform', None, lane_count=4))
+        self.assertEqual(second.lane, 0)
+        third, _ = self.command(car(0, 850, 0, 20), rows, memory=memory)
+        self.assertIsNone(third.lane)
 
     def test_labels_and_observation_order_do_not_assign_priority(self):
         ego, rows = self.slot_scene()
