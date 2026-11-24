@@ -102,7 +102,7 @@ def _balanced_offsets(group, lanes, spacing, head_clipped, tail_clipped):
 
 
 def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipped=False,
-                  sensor_bounds=None):
+                  sensor_bounds=None, history=()):
     offsets = None
     if (head_clipped or tail_clipped) and sensor_bounds is not None:
         offsets = _observed_offsets(group, lanes, spacing, 0, sensor_bounds)
@@ -113,10 +113,11 @@ def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipp
     origin = sum(c.x + d for c, (_, d) in zip(group, offsets)) / len(group)
     slots = [(lane, origin - d) for lane, d in offsets]
     fit = solve_transport([(c.lane, c.x) for c in group], slots,
-                          ego_index=rank, action="next_lane", position_error=POSITION_ERROR_M)
+                          ego_index=rank, action="next_lane", position_error=POSITION_ERROR_M, history=history)
     lane, x = slots[fit.assignment[rank]]
     extent = max(d for _, d in offsets) - min(d for _, d in offsets)
     margin = 2 * len(group) * POSITION_ERROR_M * extent
     confirmed = fit.action_lower_bound > 0
     return Target(lane, x, fit.ego_gap, fit.ego_gap > margin,
                   fit.action_gap, confirmed, confirmed and fit.action_gap <= margin)
+

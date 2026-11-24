@@ -48,6 +48,7 @@ class Memory:
     front: int | None = None
     proposed_step: int | None = None
     proposal_since: float = 0.
+    observed_steps: tuple = ()
 
 
 def desired_spacing(speed):
@@ -228,10 +229,15 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
                     key=lambda c: (c.x, c.lane), default=None)
         if front is not None:
             group = [front, ego]
+    history = ()
+    if transforming:
+        previous = {track:(lane, count) for track,lane,count in memory.observed_steps}
+        history = tuple((c.track, c.lane, count + abs(c.lane-old))
+                        for c in group for old,count in [previous.get(c.track,(c.lane,0))])
     if len(group) == 1:
-        if ego.lane >= lanes:
-            return _reactive(ego, rows, memory, lanes)
-        return _solo_follow(ego, rows, memory)
+        cmd, own = (_reactive(ego, rows, memory, lanes) if ego.lane >= lanes
+                    else _solo_follow(ego, rows, memory))
+        return cmd, replace(own, observed_steps=history)
 
     rank = group.index(ego)
     spacing = desired_spacing(sum(c.speed for c in group) / len(group))
@@ -239,7 +245,8 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
     tail_clipped = ego.x - group[-1].x > REAR_VIEW - GROUP_GAP
     target = choose_target(rank, group, lanes, spacing,
                            head_clipped=head_clipped, tail_clipped=tail_clipped,
-                           sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW))
+                           sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW),
+                           history=[count for _, _, count in history])
     acceleration = (SHAPE_FREQUENCY ** 2 * (target.x - ego.x)
                     + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
     accel = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
@@ -268,7 +275,7 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
     return (Command(speed, lane, reason, target.x, predecessor, 1,
                     target.gap, target.certified, target.lane, target.step_gap, target.step_certified,
                     target.refined),
-            Memory(lane, predecessor, proposed_step=step, proposal_since=since))
+            Memory(lane, predecessor, proposed_step=step, proposal_since=since, observed_steps=history))
 
 
 def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3, downstream=False,

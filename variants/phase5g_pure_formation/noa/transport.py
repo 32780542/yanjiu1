@@ -36,7 +36,7 @@ def lane_bounds(source_lanes, target_lanes):
 
 
 @lru_cache(maxsize=256)
-def _lane_constraints(source, target):
+def _lane_constraints(source, target, history=()):
     """Cache only lane counts/order geometry, never another observer's assignment."""
     bottleneck, total = lane_bounds(source, target)
     imbalance = Counter(source)
@@ -53,10 +53,23 @@ def _lane_constraints(source, target):
         potential[lane] = level
         flow += imbalance[lane]
         previous = lane
-    forbidden = [
-        [abs(a - b) > bottleneck or abs(a - b) != potential[b] - potential[a]
-         for b in target] for a in source
-    ]
+    direction_ok = [[abs(a-b) == potential[b]-potential[a] for b in target] for a in source]
+    def excluded(radius):
+        return [[not allowed or abs(a-b)+(history[i] if history else 0)>radius
+                 for b, allowed in zip(target,directions)]
+                for i,(a,directions) in enumerate(zip(source,direction_ok))]
+    if history:
+        low, high = max(bottleneck,max(history)), bottleneck+max(history)
+        while low < high:
+            trial = (low+high)//2
+            banned = excluded(trial)
+            order = linear_sum_assignment(banned)[1]
+            if any(banned[i][j] for i,j in enumerate(order)):
+                low = trial+1
+            else:
+                high = trial
+        bottleneck = low
+    forbidden = excluded(bottleneck)
     return bottleneck, total, forbidden
 
 
@@ -163,7 +176,7 @@ def _box_difference(chosen, allowed, xx, yy, x_unit, error):
     return sum(weights[i][j] for i,j in enumerate(alternative))
 
 
-def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_error=None):
+def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_error=None, history=()):
     """Minimize (max crossings, total crossings, sum squared longitudinal moves).
 
     Each row is (lane, x) in the same longitudinal frame. Assignment entries
@@ -195,6 +208,7 @@ def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_er
     slot_order = sorted(range(n), key=slots.__getitem__)
     source = tuple(index(vehicles[i][0]) for i in car_order)
     target = tuple(index(slots[j][0]) for j in slot_order)
+    used = tuple(history[i] for i in car_order) if any(history) else ()
     x = [float(vehicles[i][1]) for i in car_order]
     y = [float(slots[j][1]) for j in slot_order]
     if not all(map(isfinite, x)) or not all(map(isfinite, y)):
@@ -214,9 +228,9 @@ def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_er
                        if 0 <= j < n and source[j] == source[row]), default=inf)
             if action is not None:
                 action_lane, action_gap = source[row], inf
-        return TransportResult(tuple(assignment), 0, 0, squared, gap, action_lane, action_gap,
+        return TransportResult(tuple(assignment), max(used, default=0), 0, squared, gap, action_lane, action_gap,
                                inf if position_error is not None else None)
-    bottleneck, total, forbidden = _lane_constraints(source, target)
+    bottleneck, total, forbidden = _lane_constraints(source, target, used)
 
     # In a bijection, sum(x^2 + y^2) is constant. Centering x and y separately
     # also adds only a constant, avoiding cancellation from a distant road origin.
