@@ -1,6 +1,6 @@
 """Actual selected relations and direct, threshold-free state statistics."""
 
-from dataclasses import asdict, replace
+from dataclasses import replace
 import gzip
 import json
 from pathlib import Path
@@ -42,10 +42,11 @@ class LocalFormationStateTests(unittest.TestCase):
     def test_selected_forward_cth_reference_counts_beyond_the_near_phase_graph(self):
         for x in (150., 150.01, 300.):
             with self.subTest(front_x=x):
+                front = car(1, x)
                 command, memory = rules.decide(
-                    car(0, 100), (car(1, x),), rules.Memory(front=9), 'transform', None)
-                self.assertEqual(command.reference, 1)
-                self.assertEqual(memory.front, 1)
+                    car(0, 100), (front,), rules.Memory(front=9), 'transform', None)
+                self.assertEqual(command.reference, front.track)
+                self.assertEqual(memory.front, front.track)
                 self.assertEqual(command.formation_state, 1)
         self.assertEqual(self.state(car(0, 100), (car(1, 300.01),)), 0)
         self.assertEqual(self.state(car(0, 100), (car(1, 49.99),)), 0)
@@ -150,38 +151,62 @@ class InstalledStateRecordingTests(unittest.TestCase):
     def test_archived_C8_noa_keeps_its_controls_and_reports_zero(self):
         row = self.archived_cases()['noa_visible_remote_front']
         command, after = self.archived_command(row)
-        control = asdict(command)
-        self.assertEqual(control.pop('formation_state'), 0)
-        self.assertEqual(control, row['control'])
+        # Includes the original complete control record and the default empty
+        # assignment certificates. A NOA decision does not select a slot.
+        self.assertEqual(command, rules.Command(**row['control'], formation_state=0))
         self.assertEqual(after, rules.Memory(**row['after']))
 
     def test_archived_slot_scene_reports_its_actual_geometric_reference(self):
-        cmd, memory = self.archived_command(self.archived_cases()['left_real_slot'])
-        self.assertEqual((cmd.reason, cmd.lane, cmd.formation_state), ('two_lane_shape', 0, 1))
-        self.assertEqual((cmd.reference, memory.front), (1, 1))
+        row = self.archived_cases()['left_real_slot']
+        cmd, memory = self.archived_command(row)
+        ego = rules.Vehicle(**row['ego'])
+        peers = [rules.Vehicle(**c) for c in row['neighbors']]
+        front = min((c for c in peers if c.lane == ego.lane and c.x > ego.x), key=lambda c: c.x)
+        self.assertEqual((cmd.reference, memory.front), (front.track, front.track))
+        self.assertEqual((cmd.proposal_lane, cmd.lane, cmd.formation_state), (ego.lane, None, 1))
+        self.assertLess(cmd.target_x, ego.x)
+        self.assertLess(cmd.speed, ego.speed)
 
-    def test_a_second_car_can_begin_outer_row_fill_while_tracking_its_front(self):
+    def test_equal_cost_outer_roles_keep_following_speed_without_an_arbitrary_crossing(self):
         row = self.archived_cases()['ordinary_following']
         command, after = self.archived_command(row)
-        self.assertEqual((command.speed, command.target_x), (row['control']['speed'], row['control']['target_x']))
-        self.assertEqual((command.reason, command.lane, command.formation_state), ('formation_fill', 1, 1))
-        self.assertEqual(after, rules.Memory(lane_target=1, front=1))
+        ego = rules.Vehicle(**row['ego'])
+        front = rules.Vehicle(**row['neighbors'][0])
+        self.assertAlmostEqual(front.x - ego.x, rules.desired_spacing(ego.speed))
+        self.assertEqual(command.speed, row['control']['speed'])
+        self.assertAlmostEqual(command.target_x, (ego.x + front.x)/2)
+        self.assertEqual((command.reference, after.front), (front.track, front.track))
+        self.assertEqual((command.step_gap, command.step_certified, command.formation_state), (0., False, 1))
+        later, _ = rules.decide(replace(ego, time=rules.LANE_CHANGE_TIME), (front,), after,
+                                row['mode'], row['drop_x'])
+        self.assertIsNone(command.lane)
+        self.assertIsNone(later.lane)
 
     def test_archived_C8_fresh_far_inputs_now_need_a_previously_established_chain(self):
         cases = self.archived_cases()
-        for name, phase_speed in (('stopped_far_front', 0.), ('slow_far_front_with_phase', -1.1625)):
+        for name in ('stopped_far_front', 'slow_far_front_with_phase'):
             row = cases[name]
             with self.subTest(case=name):
                 command, after = self.archived_command(row)
                 ego = rules.Vehicle(**row['ego'])
                 self.assertIsNone(command.reference)
                 self.assertIsNone(after.front)
-                self.assertEqual(after.lane_target, 2 if phase_speed else None)
-                self.assertAlmostEqual(command.target_x, ego.x + phase_speed / .3)
-                self.assertAlmostEqual(command.speed, .2 * (28.8 + phase_speed))
-                self.assertEqual(command.formation_state, int(name == 'slow_far_front_with_phase'))
-                # Preserve the historical behavior as evidence of the intentional method change.
-                self.assertEqual(row['control']['reference'], 1)
+                peers = [rules.Vehicle(**c) for c in row['neighbors']]
+                near = [c for c in peers if abs(c.x - ego.x) <= rules.GROUP_GAP]
+                without_far = rules.decide(ego, near, rules.Memory(), row['mode'], row['drop_x'])
+                self.assertEqual((command, after), without_far)
+                self.assertIsNone(command.lane)
+                self.assertEqual(command.formation_state, int(bool(near)))
+                if near:
+                    self.assertAlmostEqual(command.target_x, (ego.x + near[0].x)/2)
+                    self.assertEqual(command.proposal_lane, 2)
+                    later, _ = rules.decide(replace(ego, time=rules.LANE_CHANGE_TIME), near, after,
+                                            row['mode'], row['drop_x'])
+                    self.assertEqual(later.lane, 2)
+                else:
+                    self.assertAlmostEqual(command.target_x, ego.x)
+                    self.assertAlmostEqual(command.speed, rules.SPEED_RELAXATION * rules.CRUISE)
+                self.assertEqual(row['control']['reference'], peers[0].track)
                 self.assertNotEqual(command.speed, row['control']['speed'])
 
     def test_real_sumo_records_every_local_state_without_exposing_it_to_neighbors(self):

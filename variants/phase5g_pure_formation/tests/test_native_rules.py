@@ -18,17 +18,37 @@ class NativeRulesTests(unittest.TestCase):
         return car(0, 810, 1, 20), (
             car(1, 835, 1, 20), car(2, 860, 0, 20), car(3, 760, 0, 20))
 
+    def observe_upstream(self, ego, rows, mode='transform'):
+        """Repeat the same physical observation at the proposal confirmation boundary."""
+        first, memory = self.command(ego, rows, mode=mode, drop=None)
+        before, memory = self.command(replace(ego, time=ego.time + r.LANE_CHANGE_TIME - .01),
+                                      rows, mode=mode, drop=None, memory=memory)
+        self.assertIsNone(first.lane)
+        self.assertIsNone(before.lane)
+        later, _ = self.command(replace(ego, time=ego.time + r.LANE_CHANGE_TIME),
+                                rows, mode=mode, drop=None, memory=memory)
+        return later
+
     def test_an_unbalanced_three_lane_group_can_fill_before_seeing_the_drop(self):
         group = [car(i, x, lane) for i, (x, lane) in enumerate(
             ((135, 0), (103, 0), (73, 0), (44, 0), (121, 1), (96, 2)))]
         for mode in ('formation', 'transform', 'noa'):
+            target_counts = [0, 0, 0]
             moves = []
             for ego in group:
                 rows = [other for other in group if other is not ego]
-                command, _ = self.command(ego, rows, mode=mode, drop=None)
+                command = self.observe_upstream(ego, rows, mode)
+                if command.proposal_lane is not None:
+                    target_counts[command.proposal_lane] += 1
                 if command.lane is not None:
-                    moves.append((ego.lane, command.lane, command.reason))
-            self.assertEqual(moves, [] if mode == 'noa' else [(0, 1, 'formation_fill')])
+                    self.assertTrue(r._clear(ego, rows, command.lane))
+                    moves.append((ego.lane, command.lane))
+            if mode == 'noa':
+                self.assertEqual(moves, [])
+                self.assertEqual(target_counts, [0, 0, 0])
+            else:
+                self.assertEqual(target_counts, [2, 2, 2])
+                self.assertCountEqual(moves, [(0, 1), (0, 1), (1, 2)])
 
     def test_balanced_staggered_group_stays_in_its_lanes(self):
         group = [car(i, x, lane) for i, (x, lane) in enumerate(
@@ -37,45 +57,54 @@ class NativeRulesTests(unittest.TestCase):
             command, _ = self.command(ego, [c for c in group if c is not ego], drop=None)
             self.assertIsNone(command.lane)
 
-    def test_layer_counting_needs_one_visible_end_of_the_group(self):
+    def test_clipped_groups_use_only_visible_cars_and_withhold_ambiguous_steps(self):
         ego = car(0, 300)
-        for rear, head, can_count in ((220, 460, False), (220, 450, True), (250, 460, True)):
+        for rear, head in ((220, 460), (220, 450), (250, 460)):
             positions = (rear, 260, 340, 380, 420, head)
             neighbors = [car(i + 1, x) for i, x in enumerate(positions)]
             for mode in ('formation', 'transform'):
                 with self.subTest(rear=rear, head=head, mode=mode):
-                    command, _ = self.command(ego, neighbors, mode=mode, drop=None)
-                    self.assertEqual(command.reason in ('formation_fill', 'formation_align'), can_count)
-                    if not can_count:
-                        self.assertIsNone(command.lane)
-                        self.assertEqual(command.reference, neighbors[2].track)
+                    command = self.observe_upstream(ego, neighbors, mode)
+                    outside = [car(93, ego.x-r.REAR_VIEW-.01, 1), car(94, ego.x+r.FRONT_VIEW+.01, 2)]
+                    self.assertEqual(command, self.observe_upstream(ego, neighbors+outside, mode))
+                    self.assertEqual(command.formation_state, 1)
+                    self.assertEqual(command.step_gap, 0.)
+                    self.assertIsNone(command.lane)
+                    self.assertEqual(command.reference, neighbors[2].track)
 
-    def test_same_lane_counts_do_not_prove_the_middle_layer_is_vacant(self):
+    def test_longitudinal_positions_affect_the_fit_even_with_identical_lane_counts(self):
         ego = car(0, 117, 0)
         neighbors = [car(1, 135, 0), car(2, 85, 0), car(3, 136, 2)]
         vacant = [*neighbors, car(4, 87, 1)]
         occupied = [*neighbors, car(4, 107.5, 1)]
         for scene in (vacant, occupied):
             self.assertTrue(r._clear(ego, scene, 1))
-        self.assertEqual(self.command(ego, vacant, drop=None)[0].lane, 1)
-        self.assertIsNone(self.command(ego, occupied, drop=None)[0].lane)
+        left, right = (self.observe_upstream(ego, scene) for scene in (vacant, occupied))
+        self.assertEqual((left.lane, right.lane), (1, 1))
+        self.assertAlmostEqual(right.target_x-left.target_x, (107.5-87)/5)
+        blocked = [*neighbors, car(4, ego.x+4, 1)]
+        self.assertFalse(r._clear(ego, blocked, 1))
+        self.assertIsNone(self.observe_upstream(ego, blocked).lane)
 
     def test_a_head_using_visible_outer_lane_references_reports_participation(self):
         ego = car(0, 135, 0)
         command, _ = self.command(ego, (car(1, 108, 2), car(2, 78, 2)), drop=None)
-        self.assertEqual((command.reason, command.formation_state), ('formation_align', 1))
+        self.assertEqual(command.formation_state, 1)
+        self.assertIsNone(command.reference)
+        self.assertEqual(command.proposal_lane, ego.lane)
+        self.assertLess(command.target_x, ego.x)
 
     def test_formation_fill_uses_geometry_not_track_numbers_or_other_groups(self):
         ego = car(0, 103)
         group = [car(1, 135), car(2, 73), car(3, 44), car(4, 121, 1), car(5, 96, 2)]
-        cmd, _ = self.command(ego, group, drop=None)
-        self.assertEqual((cmd.lane, cmd.reason), (1, 'formation_fill'))
+        cmd = self.observe_upstream(ego, group)
+        self.assertEqual(cmd.lane, 1)
         remapped = [replace(c, track=100 - c.track, pending_lane=0) for c in reversed(group)]
         remote = [car(99, 199, 1), car(98, 222, 1), car(97, 248, 2)]
-        other, _ = self.command(replace(ego, track=50), remapped + remote, drop=None)
-        self.assertEqual((other.speed, other.lane, other.reason), (cmd.speed, cmd.lane, cmd.reason))
+        other = self.observe_upstream(replace(ego, track=50), remapped + remote)
+        self.assertEqual(other, replace(cmd, reference=100-cmd.reference))
         occupied = [*group, car(6, ego.x + 4, 1)]
-        self.assertIsNone(self.command(ego, occupied, drop=None)[0].lane)
+        self.assertIsNone(self.observe_upstream(ego, occupied).lane)
 
     def test_all_modes_ignore_a_road_boundary_outside_two_hundred_metres(self):
         ego = car(0, 799.999, 2)
@@ -97,12 +126,14 @@ class NativeRulesTests(unittest.TestCase):
         self.assertIsNone(command.lane)
 
     def test_transform_continues_slot_moves_on_observed_two_lane_road(self):
-        ego, rows = self.slot_scene()
-        ego = replace(ego, x=ego.x + 250)
-        rows = tuple(replace(peer, x=peer.x + 250) for peer in rows)
-        decision = r.decide(ego, rows, r.Memory(), 'transform', None, lane_count=2)
-        self.assertEqual(decision[0].lane, 0)
-        self.assertEqual(decision, self.command(ego, rows))
+        ego, front = car(0, 850, 1), car(1, 880, 1)
+        upstream, _ = self.command(ego, (front,))
+        shift = 250.
+        downstream, _ = r.decide(replace(ego, x=ego.x+shift), (replace(front, x=front.x+shift),),
+                                 r.Memory(), 'transform', None, lane_count=2, downstream=True)
+        self.assertEqual((upstream.lane, downstream.lane), (0, 0))
+        self.assertAlmostEqual(downstream.target_x, upstream.target_x + shift)
+        self.assertAlmostEqual(downstream.speed, upstream.speed)
 
     def test_outside_front_and_rear_observations_do_not_change_the_action(self):
         ego, rows = self.slot_scene()
@@ -114,7 +145,8 @@ class NativeRulesTests(unittest.TestCase):
         expected = self.command(ego, (front,), drop=None)
         actual = self.command(ego, (replace(front, pending_lane=1),), drop=None)
         self.assertEqual(actual, expected)
-        self.assertEqual(actual[0].reason, "formation_fill")
+        self.assertEqual(actual[0].formation_state, 1)
+        self.assertIsNone(actual[0].lane)
 
     def test_a_front_changing_lane_does_not_trigger_the_followers_transformation(self):
         ego = car(0, 700, 2)
@@ -129,7 +161,7 @@ class NativeRulesTests(unittest.TestCase):
         self.assertIsNone(self.command(ego, (far,))[0].lane)
 
     def test_ordinary_formation_does_not_make_a_discretionary_slot_move(self):
-        ego, rows = self.slot_scene()
+        ego, rows = car(0, 850, 1), (car(1, 880, 1),)
         self.assertIsNone(self.command(ego, rows, mode='formation')[0].lane)
         self.assertEqual(self.command(ego, rows)[0].lane, 0)
 
@@ -137,9 +169,14 @@ class NativeRulesTests(unittest.TestCase):
         ego, rows = self.slot_scene()
         command, memory = self.command(ego, rows)
         h = r.desired_spacing(20) / 2
-        expected = (860 - 2*h + 835 - h + 810 + 760 + h) / 4
+        # Both lanes already contain two cars. Preserve each lane and assign
+        # its front and rear to their nearest ordered longitudinal slots.
+        origin = (860 + 835 + 810 + 760 + sum(i*h for i in range(4))) / 4
+        expected = origin - 3*h
         self.assertAlmostEqual(command.target_x, expected)
-        self.assertEqual((command.lane, command.reference, memory.front), (0, rows[0].track, rows[0].track))
+        self.assertIsNone(command.lane)
+        self.assertEqual((command.proposal_lane, command.reference, memory.front),
+                         (ego.lane, rows[0].track, rows[0].track))
         shift = 34.
         moved = replace(ego, x=ego.x + shift)
         shifted, _ = self.command(moved, [replace(c, x=c.x + shift) for c in rows], drop=1000 + shift)
@@ -199,8 +236,10 @@ class NativeRulesTests(unittest.TestCase):
         ego, rows = self.slot_scene()
         ego = replace(ego, x=700)
         rows = tuple(replace(c, x=c.x - 110) for c in rows)
-        cmd, _ = self.command(ego, rows, drop=None)
-        self.assertEqual((cmd.lane, cmd.reason), (2, 'formation_fill'))
+        cmd = self.observe_upstream(ego, rows)
+        self.assertEqual(cmd.proposal_lane, ego.lane)
+        self.assertIsNone(cmd.lane)
+        self.assertEqual(self.command(ego, rows), self.command(ego, rows, drop=None))
 
     def test_transform_moves_are_adjacent_and_target_a_surviving_lane(self):
         rng = random.Random(20261104)
@@ -221,18 +260,32 @@ class NativeRulesTests(unittest.TestCase):
         self.assertEqual(first.lane, 1)
         second, memory = self.command(car(0, 850, 1, 20), rows, memory=memory)
         self.assertIsNone(second.lane)
-        self.assertIn(0, memory.from_ending)
-        _, released = self.command(car(0, 850), (), memory=r.Memory(from_ending=frozenset({55})))
-        self.assertFalse(released.from_ending)
+        self.assertEqual(second.proposal_lane, 1)
+        self.assertIsNone(memory.proposed_step)
+        surviving, _ = self.command(car(0, 850, 1), (car(1, 880, 1),))
+        self.assertEqual(surviving.lane, 0)
+        solo, released = self.command(car(0, 850, 1), (), memory=memory)
+        self.assertEqual((solo.formation_state, solo.lane), (0, None))
+        self.assertIsNone(released.proposed_step)
 
     def test_outer_lanes_take_an_incomplete_row_before_the_middle(self):
         group = [car(i, x, lane) for i, (x, lane) in enumerate(
             [(160, 0), (145, 1), (160, 2), (130, 0), (115, 1)])]
         tail = group[-1]
-        cmd, _ = self.command(tail, group[:-1], drop=None)
-        self.assertEqual((cmd.lane, cmd.reason), (2, 'formation_fill'))
+        cmd = self.observe_upstream(tail, group[:-1])
+        self.assertEqual((cmd.proposal_lane, cmd.lane), (2, 2))
         for ego in group[:-1]:
-            self.assertIsNone(self.command(ego, [c for c in group if c is not ego], drop=None)[0].lane)
+            self.assertIsNone(self.observe_upstream(ego, [c for c in group if c is not ego]).lane)
+
+        # A real car fills the outer slot midway through confirmation. Once
+        # it leaves, the tail must confirm the newly vacant slot again.
+        peers = group[:-1]
+        filled = [*peers, car(8, tail.x+2, 2)]
+        memory = r.Memory()
+        for t, seen, proposed, allowed in ((0., peers, 2, None), (.6, filled, 1, None),
+                                           (.9, peers, 2, None), (1., peers, 2, None), (1.9, peers, 2, 2)):
+            command, memory = self.command(replace(tail, time=t), seen, drop=None, memory=memory)
+            self.assertEqual((command.proposal_lane, command.lane), (proposed, allowed))
 
     def test_four_lane_end_is_local_and_lane_two_continues(self):
         for lane in (2, 3):
@@ -281,9 +334,13 @@ class NativeRulesTests(unittest.TestCase):
         ego = car(0, 100, speed=20)
         for mode in ('formation', 'transform'):
             with self.subTest(mode=mode):
-                near, memory = self.command(ego, (car(1, 150, speed=20),), mode, None)
-                self.assertEqual((near.reference, memory.front, near.formation_state), (1, 1, 1))
-                self.assertAlmostEqual(near.target_x, 150 - (5.5 + .85 * 20))
+                front = car(1, 150, speed=20)
+                near, memory = self.command(ego, (front,), mode, None)
+                self.assertEqual((near.reference, memory.front, near.formation_state), (front.track, front.track, 1))
+                follow_x = front.x - r.desired_spacing(ego.speed)
+                follow_speed = ego.speed + .2 * (front.speed + .3*(follow_x-ego.x) - ego.speed)
+                self.assertAlmostEqual(near.speed, follow_speed)
+                self.assertAlmostEqual(near.target_x, (ego.x + front.x) / 2)
                 for distance in (50.01, 80., 200.):
                     with self.subTest(distance=distance):
                         fresh, own = self.command(
@@ -298,8 +355,9 @@ class NativeRulesTests(unittest.TestCase):
         ego = car(0, 100, speed=20)
         for mode in ('formation', 'transform'):
             with self.subTest(mode=mode):
-                _, memory = self.command(ego, (car(1, 122.5, speed=20),), mode, None)
-                self.assertEqual(memory.front, 1)
+                initial_front = car(1, 122.5, speed=20)
+                _, memory = self.command(ego, (initial_front,), mode, None)
+                self.assertEqual(memory.front, initial_front.track)
                 for distance in (80., 200.):
                     with self.subTest(distance=distance):
                         replacement = car(2, ego.x + distance, speed=20)
@@ -309,7 +367,8 @@ class NativeRulesTests(unittest.TestCase):
                             ego, (replacement, old), mode, None, memory)
                         target = replacement.x - (5.5 + .85 * ego.speed)
                         expected = min(33.3, 20 + .2 * (.3 * (target - ego.x)))
-                        self.assertEqual((command.reference, own.front, command.formation_state), (2, 2, 1))
+                        self.assertEqual((command.reference, own.front, command.formation_state),
+                                         (replacement.track, replacement.track, 1))
                         self.assertAlmostEqual(command.target_x, target)
                         self.assertAlmostEqual(command.speed, expected)
                 for rows in ((), (car(2, 300.01, speed=20),)):

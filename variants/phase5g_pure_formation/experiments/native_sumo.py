@@ -28,10 +28,18 @@ from research.common import ROOT, binary, lock_traci, tool_env
 STEP = 0.1
 LANE_WIDTH = 3.3
 MODES = ("noa", "formation", "transform", "global")
-# Upstream length, downstream length, surviving lanes. Only the demo extends the road.
-ROAD_LAYOUT = {"lane_drop": (1000, 200, 2), "straight3": (1000, 200, 3),
-              "formation_demo": (1600, 1000, 2), "four_to_three": (1000, 200, 3),
-              "four_to_three_demo": (1600, 1000, 3)}
+# Incoming lanes, outgoing lanes, upstream length, downstream length.
+_ROAD_SECTIONS = {
+    "lane_drop": (3, 2, 1000, 200), "formation_demo": (3, 2, 1600, 1000),
+    "four_to_three": (4, 3, 1000, 200), "four_to_three_demo": (4, 3, 1600, 1000),
+    "two_to_three": (2, 3, 1000, 200), "two_to_three_demo": (2, 3, 1600, 1000),
+    "three_to_four": (3, 4, 1000, 200), "three_to_four_demo": (3, 4, 1600, 1000),
+    "lane_drop_long": (3, 2, 2800, 1000), "four_to_three_long": (4, 3, 2800, 1000),
+    "two_to_three_long": (2, 3, 2800, 1000), "three_to_four_long": (3, 4, 2800, 1000),
+    "straight3": (3, 3, 1000, 200),
+}
+# Three-field public interface used by existing analysis and HDV scripts.
+ROAD_LAYOUT = {name: (up, down, outgoing) for name, (_, outgoing, up, down) in _ROAD_SECTIONS.items()}
 SCENARIOS = tuple(ROAD_LAYOUT)
 PHYSICAL = dict(
     length=4.0,
@@ -54,6 +62,34 @@ def write_json(path, value):
     Path(path).write_text(
         json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8"
     )
+
+
+def _record_transport_certificate(totals, command, lane, accepted):
+    """Count a local match once per vehicle step and a submission once per accepted request."""
+    counts = totals.get(command.reason)
+    if counts is None or command.certified is None:
+        return
+    counts["matched_ticks"] += 1
+    counts["certified_ticks"] += int(command.certified)
+    if command.step_certified is not None:
+        counts["step_certified_ticks"] += int(command.step_certified)
+        counts["step_only_certified_ticks"] += int(command.step_certified and not command.certified)
+        counts["step_only_requests"] += int(accepted and command.step_certified and not command.certified)
+        counts["refined_ticks"] += int(command.refined)
+        counts["refined_requests"] += int(accepted and command.refined)
+    counts["different_lane_ticks"] += int(command.proposal_lane is not None and command.proposal_lane != lane)
+    counts["accepted_requests"] += int(accepted)
+    gap = command.assignment_gap
+    if gap is None:
+        counts["unevaluated_gap_ticks"] += 1
+    elif gap == math.inf:
+        counts["no_alternative_ticks"] += 1
+    elif gap == 0:
+        counts["zero_gap_ticks"] += 1
+    elif math.isfinite(gap) and gap > 0:
+        counts["positive_gap_ticks"] += 1
+    else:
+        raise ValueError(f"invalid assignment gap: {gap}")
 
 
 class FormationStateStats:
@@ -114,7 +150,12 @@ def _ticks(duration):
 
 
 def upstream_lanes(scenario):
-    return 4 if scenario in ("four_to_three", "four_to_three_demo") else 3
+    return _ROAD_SECTIONS[scenario][0]
+
+
+def supports_global_reference(scenario):
+    incoming, outgoing, _, _ = _ROAD_SECTIONS[scenario]
+    return incoming == 3 and outgoing <= 3
 
 
 def arrival_tape(seed=1, flow=1250.0, duration=600.0, lanes=3):
@@ -191,7 +232,7 @@ def build_network(directory, scenario="lane_drop", road_limit=33.3):
         for lane in range(count):
             center = LANE_WIDTH * (lane + 0.5)
             ET.SubElement(edge, "lane", index=str(lane), width="3.3", shape=f"{x0},{center} {x1},{center}")
-    for lane in range(retained):
+    for lane in range(min(upstream_lanes(scenario), retained)):
         ET.SubElement(
             connections,
             "connection",
@@ -365,6 +406,9 @@ def _source_snapshot(directory):
         ROOT / "run_native_flow.py",
         ROOT / "research/common.py",
     )
+    # The frozen 11.24 variant ships its controller in native_rules alone.
+    sources += tuple(path for path in (ROOT / "noa/staggered.py", ROOT / "noa/transport.py")
+                     if path.is_file())
     result = {}
     for path in sources:
         content = path.read_bytes()
@@ -504,8 +548,8 @@ def run_case(
         raise ValueError("unknown mode or scenario")
     approach, downstream, retained = ROAD_LAYOUT[scenario]
     incoming = upstream_lanes(scenario)
-    if mode == "global" and incoming != 3:
-        raise ValueError("The Cai reference planner supports three upstream lanes")
+    if mode == "global" and not supports_global_reference(scenario):
+        raise ValueError("The Cai reference planner supports three upstream lanes and two or three downstream")
     lane_end = float(approach) if retained < incoming else None
     _ticks(duration)
     max_time = duration + 300.0 if max_time is None else float(max_time)
@@ -543,7 +587,7 @@ def run_case(
             if mode == "global"
             else "private local tracks: 200m ahead, 100m behind"
         ),
-        road_observation_m=ROAD_PREVIEW if lane_end is not None and mode != "global" else None,
+        road_observation_m=ROAD_PREVIEW if incoming != retained and mode != "global" else None,
         reference_is_full_paper_reproduction=False if mode == "global" else None,
         reference_description=(
             "Cai-style centralized assignment reference; not a full Cai2024 reproduction"
@@ -588,11 +632,18 @@ def run_case(
     conn = None
     now, states, memories = 0.0, {}, {}
     reasons, execution, lane_transitions = Counter(), Counter(), Counter()
+    certificate_fields = ("matched_ticks", "certified_ticks", "zero_gap_ticks", "positive_gap_ticks",
+                          "no_alternative_ticks", "unevaluated_gap_ticks", "different_lane_ticks", "accepted_requests",
+                          "step_certified_ticks", "step_only_certified_ticks", "step_only_requests",
+                          "refined_ticks", "refined_requests")
+    transport_certificates = {reason: dict.fromkeys(certificate_fields, 0)
+                              for reason in ("formation_transport", "transform_transport")}
     collision_events, teleports, error = [], [], None
     version = "unavailable"
     gui_views, gui_front_x = (), 0.0
     lane_attempts, lane_motions, previous_lanes = {}, {}, {}
     ending_lane_seen = set()
+    boundary_seen = set()
     local = LocalTracks()
     formation_stats = FormationStateStats() if mode != "global" else None
     try:
@@ -704,13 +755,15 @@ def run_case(
                     for key in arrived:
                         trips[key]["exited_s"] = now
                         memories.pop(key, None)
+                        boundary_seen.discard(key)
                         local.discard(key)
                         lane_attempts.pop(key, None)
                         lane_motions.pop(key, None)
                         previous_lanes.pop(key, None)
                         events.write(json.dumps(dict(time_s=now, kind="arrived", vehicle_id=key)) + "\n")
                     states = {}
-                    for key, data in conn.vehicle.getAllSubscriptionResults().items():
+                    subscriptions = conn.vehicle.getAllSubscriptionResults()
+                    for key, data in subscriptions.items():
                         if key in arrived:
                             continue
                         lane = int(data[tc.VAR_LANE_INDEX])
@@ -841,22 +894,24 @@ def run_case(
                         ego, neighbors = local.observe(key, states, ordered, xs)
                         # Only ego receives its own submitted request feedback.
                         ego = replace(ego, pending_lane=pending)
-                        downstream_edge = ego.x >= approach
+                        downstream_edge = subscriptions[key][tc.VAR_ROAD_ID] == "downstream"
                         lane_count = retained if downstream_edge else incoming
                         if planner is not None:
                             command = global_commands[key]
                         else:
-                            visible_end = (
-                                lane_end if lane_end is not None and 0 <= lane_end - ego.x <= ROAD_PREVIEW else None
-                            )
+                            visible = (not downstream_edge and incoming != retained
+                                       and 0 <= approach - ego.x <= ROAD_PREVIEW)
+                            if visible:
+                                boundary_seen.add(key)
                             command, memories[key] = decide(
                                 ego,
                                 neighbors,
                                 memories[key],
                                 mode=mode,
-                                drop_x=visible_end,
+                                drop_x=lane_end if visible else None,
                                 lane_count=lane_count,
-                                downstream=downstream_edge and lane_end is not None,
+                                downstream=downstream_edge and key in boundary_seen,
+                                upcoming_lanes=retained if visible else None,
                             )
                             formation_states[key] = command.formation_state
                         if not math.isfinite(command.speed):
@@ -882,6 +937,7 @@ def run_case(
                                 lane_motions[key] = (requested_lane, ego.lane, now)
                                 execution["native_lane_requests"] += 1
                                 accepted = True
+                        _record_transport_certificate(transport_certificates, command, ego.lane, accepted)
                         if diagnostic:
                             actions[key] = dict(
                                 speed=executed_speed,
@@ -1014,6 +1070,7 @@ def run_case(
                 len(ending_completed & ending_lane_seen) / len(ending_lane_seen) if ending_lane_seen else None
             ),
             action_reasons=dict(reasons),
+            transport_certificates=transport_certificates,
             formation_state=formation_stats.summary() if formation_stats is not None else None,
             execution=dict(execution),
             sumo_version=version,

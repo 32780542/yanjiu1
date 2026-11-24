@@ -35,12 +35,15 @@ def shape_assessment():
 class NativeEntrypointTests(unittest.TestCase):
     def test_each_model_runs_the_same_demand_on_each_selected_road(self):
         with TemporaryDirectory() as tmp, patch.object(runrun, "RANDOM_SEED", 20), patch.object(runrun, "FLOW_VEH_H_LANE", 1750):
-            for lanes, scenario in ((3, "lane_drop"), (4, "four_to_three")):
+            for selector, lanes, outgoing, scenario in (
+                (["--lanes", "3"], 3, 2, "lane_drop"), (["--lanes", "4"], 4, 3, "four_to_three"),
+                (["--layout", "2to3"], 2, 3, "two_to_three"), (["--layout", "3to4"], 3, 4, "three_to_four"),
+            ):
                 demand = None
                 for model, mode in (("hdv", "hdv"), ("noa", "noa"), ("formation", "transform")):
-                    with self.subTest(model=model, lanes=lanes):
-                        base = Path(tmp) / f"{lanes}_{model}"
-                        args = ["--model", model, "--lanes", str(lanes), "--duration", "12",
+                    with self.subTest(model=model, scenario=scenario):
+                        base = Path(tmp) / f"{scenario}_{model}"
+                        args = ["--model", model, *selector, "--duration", "12",
                                 "--headless", "--output-base", str(base)]
                         self.assertEqual(runrun.main(args, output_fn=lambda _: None), 0)
                         run, = base.iterdir()
@@ -49,7 +52,7 @@ class NativeEntrypointTests(unittest.TestCase):
                         self.assertGreater(result["completed"], 0)
                         self.assertEqual(result["completed"], result["requested"])
                         net = ET.parse(next(run.glob("*.net.xml")))
-                        for edge, count in (("upstream", lanes), ("downstream", lanes - 1)):
+                        for edge, count in (("upstream", lanes), ("downstream", outgoing)):
                             self.assertEqual(len(net.findall(f"./edge[@id='{edge}']/lane")), count)
                         routes = ET.parse(next(run.glob("*.rou.xml")))
                         tape = [v.attrib for v in routes.findall("vehicle")]
@@ -91,7 +94,7 @@ class NativeEntrypointTests(unittest.TestCase):
             run, = Path(tmp).iterdir()
             result = json.loads((run / "result.json").read_bytes())
             self.assertEqual((result["completed"], result["collisions"], result["teleports"]), (12, 0, 0))
-            self.assertGreater(result["action_reasons"]["formation_fill"], 0)
+            self.assertGreater(result["transport_certificates"]["formation_transport"]["accepted_requests"], 0)
             longest = consecutive = 0
             with gzip.open(run / "positions.jsonl.gz", "rt", encoding="utf-8") as stream:
                 for line in stream:

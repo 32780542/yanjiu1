@@ -10,6 +10,7 @@ HEADWAY = .85
 ROAD_PREVIEW = 200.
 CONTROL_STEP, SHAPE_FREQUENCY, SHAPE_ACCEL_LIMIT = .1, 2., 5.
 FRONT_VIEW, REAR_VIEW, GROUP_GAP = 200., 100., 50.
+LANE_CHANGE_TIME = 1.0
 
 
 @dataclass(frozen=True, slots=True)
@@ -33,13 +34,20 @@ class Command:
     target_x: float | None = None
     reference: int | None = None
     formation_state: int = 0
+    assignment_gap: float | None = None
+    certified: bool | None = None
+    proposal_lane: int | None = None
+    step_gap: float | None = None
+    step_certified: bool | None = None
+    refined: bool = False
 
 
 @dataclass(frozen=True, slots=True)
 class Memory:
     lane_target: int | None = None
     front: int | None = None
-    from_ending: frozenset[int] = frozenset()
+    proposed_step: int | None = None
+    proposal_since: float = 0.
 
 
 def desired_spacing(speed):
@@ -106,57 +114,6 @@ def _local_group(ego, rows):
     while last + 1 < len(cars) and cars[last + 1].x - cars[last].x <= GROUP_GAP:
         last += 1
     return cars[first:last + 1]
-
-
-def _formation_fill(ego, group, rows, lanes):
-    """从队首往后找能补前方缺位的车；每辆车只执行自己的决定。"""
-    sizes = [sum(c.lane == lane for c in group) for lane in range(lanes)]
-    balanced = max(sizes) - min(sizes) <= 1
-    if balanced and (lanes != 3 or sizes[1] <= min(sizes[0], sizes[2])):
-        return None
-    if any(abs(c.vy) > .05 or abs(c.y - (c.lane + .5) * LANE_WIDTH) > .05 for c in group):
-        return None
-    if balanced:
-        # 末层还没有填齐时，让中道最后一辆车补到较空的一侧。
-        if ego.lane != 1 or next(c for c in group if c.lane == 1) is not ego:
-            return None
-        return next((lane for lane in (0, 2) if sizes[lane] < sizes[1] and _clear(ego, rows, lane)), None)
-    # 从前向后读取实际占道。每辆车只在自己这一层能往前补一个位置时考虑换道。
-    counts = [0] * lanes
-    tails = [None] * lanes
-    for car in reversed(group):
-        source = car.lane
-        dest = min(range(lanes), key=lambda lane: (counts[lane], abs(lane - source), lane))
-        if counts[source] > counts[dest]:
-            step = source + (1 if dest > source else -1)
-            front = tails[dest]
-            gap = desired_spacing(car.speed)
-            slot = (front.x - gap if front is not None else
-                    group[-1].x + _phase(group[-1].lane, car.speed) - _phase(dest, car.speed))
-            vacant = all(c.lane != dest or abs(c.x - slot) >= gap / 2 for c in group)
-            if vacant and counts[step] <= counts[source] and _clear(car, group, step):
-                # 先让前面的候选车补，一次只跨相邻一道。
-                return step if car is ego and _clear(ego, rows, step) else None
-        if car is ego:
-            break
-        counts[source] += 1
-        tails[source] = car
-    return None
-
-
-def _layer_target(ego, group, lanes):
-    """把各道实车位置按同道层距和邻道半层错位换算到本车所在层。"""
-    spacing = desired_spacing(ego.speed)
-    rank = [0] * lanes
-    origin = 0.
-    for car in reversed(group):
-        lane = car.lane
-        offset = rank[lane] * spacing + _phase(lane, ego.speed)
-        origin += car.x + offset
-        if car is ego:
-            own_offset = offset
-        rank[lane] += 1
-    return origin / len(group) - own_offset
 
 
 def _following(ego, rows):
@@ -235,117 +192,17 @@ def _entry_spacing(speed):
     return max(desired_spacing(speed), 2 * CLEARANCE)
 
 
-def _two_lane_slot(group, rank, first_lane, seen_ending):
-    """在连续六个可见位置内，就近分道；同一目标道保持纵向顺序。"""
-    start = rank - rank % 6
-    indices = range(start, min(start + 6, len(group)))
-    slots = [[j for j in indices if (first_lane + j) % 2 == lane] for lane in (0, 1)]
-
-    def cost_to_lane_zero(j):
-        car = group[j]
-        return (car.track in seen_ending, j not in slots[0], car.lane != 0, j)
-
-    assigned_zero = set(sorted(indices, key=cost_to_lane_zero)[:len(slots[0])])
-    on_zero = rank in assigned_zero
-    lane = 0 if on_zero else 1
-    earlier = sum((j in assigned_zero) == on_zero for j in range(start, rank))
-    return lane, slots[lane][earlier]
-
-
-def _three_lane_position(group, rank, spacing):
-    """每三辆组成一层。两侧同相，中道落后半个同道间距。"""
-    start = rank - rank % 3
-    layer = group[start:start + 3]
-    if len(layer) == 1:
-        source = min(layer[0].lane, 2)
-        lane = source if len(group) == 1 else min((0, 2), key=lambda edge: abs(edge - source))
-    else:
-        lanes = (0, 2) if len(layer) == 2 else (0, 1, 2)
-        lane = lanes[sorted(layer, key=lambda car: car.lane).index(group[rank])]
-    own_offset = rank // 3 + (0.5 if lane == 1 and len(layer) == 3 else 0.)
-    target = sum(car.x + spacing * (j // 3 + (0.5 if j % 3 == 2 else 0.) - own_offset)
-                 for j, car in enumerate(group)) / len(group)
-    return lane, target
-
-
-def _fold(ego, rows, memory, lanes):
-    """按缩道后的可用车道数，在本车可见段内拟合交错队形。"""
-    group = list(reversed(_local_group(ego, rows)))
-    # 落单车可接到最近的可见队尾，两辆车须在彼此前后视距以内。
-    if lanes == 2 and len(group) == 1:
-        front = min((c for c in rows if 0 < c.x - ego.x <= REAR_VIEW),
-                    key=lambda c: (c.x, c.lane), default=None)
-        if front is not None:
-            group = [front, ego]
-    rank = group.index(ego)
-    mean_speed = sum(car.speed for car in group) / len(group)
-    spacing = desired_spacing(mean_speed)
-    seen_ending = frozenset()
-    if lanes == 2:
-        first_lane = min(group[0].lane, 1)
-        seen_ending = frozenset(car.track for car in group if car.lane == 2 or car.track in memory.from_ending)
-        target_lane, slot = _two_lane_slot(group, rank, first_lane, seen_ending)
-        target_x = sum(car.x + (j - slot) * (spacing / 2) for j, car in enumerate(group)) / len(group)
-    else:
-        target_lane, target_x = _three_lane_position(group, rank, spacing)
-
-    acceleration = (SHAPE_FREQUENCY ** 2 * (target_x - ego.x)
-                    + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
-    acceleration = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
-    speed = max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * acceleration))
-    lane = ego.pending_lane
-    if lane is None and ego.lane != target_lane:
-        adjacent = ego.lane + (1 if target_lane > ego.lane else -1)
-        if _clear(ego, rows, adjacent):
-            lane = adjacent
-    predecessor = group[rank - 1].track if rank else None
-    reason = 'two_lane_shape' if lanes == 2 else 'three_lane_shape'
-    return Command(speed, lane, reason, target_x, predecessor, int(len(group) > 1)), Memory(lane, predecessor, seen_ending)
-
-
-def _layered_formation(ego, rows, memory, lanes):
-    """在可见车群内补缺，再按当前车道数和交错相位调距。"""
+def _solo_follow(ego, rows, memory):
+    """落单车保留实际前车约束与本车已经发起的横移。"""
     speed, target, reference, linked = _following(ego, rows)
     physical = _front_following(ego, rows, FRONT_VIEW)
     if reference is None and physical[2] is not None and memory.front is not None:
         local_speed = _request(ego, ego.x, CRUISE)
         speed = max(0., min(MAX_SPEED, physical[0] + speed - local_speed))
         target, reference, linked = physical[1:4]
-    group = _local_group(ego, rows)
     if ego.pending_lane is not None:
-        participating = int(linked or len(group) > 1)
-        return Command(physical[0], ego.pending_lane, 'executing', physical[1], physical[2], participating), memory
-    # 一端外侧还有一个完整连接距离可看，才从这段车群数层补位。
-    end_visible = (group[-1].x - ego.x <= FRONT_VIEW - GROUP_GAP
-                   or ego.x - group[0].x <= REAR_VIEW - GROUP_GAP)
-    if len(group) >= 2 and end_visible:
-        lane = _formation_fill(ego, group, rows, lanes)
-        if lane is not None:
-            return Command(speed, lane, 'formation_fill', target, reference, 1), Memory(lane, reference)
-        target = _layer_target(ego, group, lanes)
-        speed = _request(ego, target, CRUISE)
-        if physical[1] is not None and physical[1] < ego.x:
-            speed = min(speed, physical[0])
-        return Command(speed, None, 'formation_align', target, reference, 1), Memory(front=reference)
-
+        return Command(physical[0], ego.pending_lane, 'executing', physical[1], physical[2], linked), memory
     return Command(speed, None, 'formation_follow', target, reference, linked), Memory(front=reference)
-
-
-def _decide(ego, neighbors, memory, mode, lanes, at_drop):
-    rows = tuple(c for c in neighbors if -REAR_VIEW <= c.x - ego.x <= FRONT_VIEW)
-    if mode == 'noa':
-        return _reactive(ego, rows, memory, lanes)
-    if mode not in ('formation', 'transform'):
-        raise ValueError('Unknown driving mode: ' + mode)
-    if mode == 'transform' and at_drop:
-        return _fold(ego, rows, memory, lanes)
-    if ego.lane >= lanes or (at_drop and mode == 'formation' and ego.pending_lane is not None):
-        command, own = _reactive(ego, rows, memory, lanes)
-        return replace(command, formation_state=_following(ego, rows)[3]), own
-    if at_drop and mode == 'formation':
-        speed, target, ref, linked = _following(ego, rows)
-        return Command(speed, None, 'formation_follow', target, ref, linked), Memory(front=ref)
-    return _layered_formation(ego, rows, memory, lanes)
 
 
 def safe_speed(ego, neighbors):
@@ -362,13 +219,82 @@ def safe_speed(ego, neighbors):
     return limit
 
 
-def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3, downstream=False):
-    """下游只需本地车道数。旧调用传入缩道位置时，仍按本车位置判断两道接续。"""
+def _transport(ego, rows, memory, lanes, opened, transforming):
+    from noa.staggered import choose_target
+
+    group = list(reversed(_local_group(ego, rows)))
+    if len(group) == 1 and transforming and lanes == 2:
+        front = min((c for c in rows if 0 < c.x - ego.x <= REAR_VIEW),
+                    key=lambda c: (c.x, c.lane), default=None)
+        if front is not None:
+            group = [front, ego]
+    if len(group) == 1:
+        if ego.lane >= lanes:
+            return _reactive(ego, rows, memory, lanes)
+        return _solo_follow(ego, rows, memory)
+
+    rank = group.index(ego)
+    spacing = desired_spacing(sum(c.speed for c in group) / len(group))
+    head_clipped = group[0].x - ego.x > FRONT_VIEW - GROUP_GAP
+    tail_clipped = ego.x - group[-1].x > REAR_VIEW - GROUP_GAP
+    target = choose_target(rank, group, lanes, spacing,
+                           head_clipped=head_clipped, tail_clipped=tail_clipped,
+                           sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW))
+    acceleration = (SHAPE_FREQUENCY ** 2 * (target.x - ego.x)
+                    + 2 * SHAPE_FREQUENCY * (CRUISE - ego.speed))
+    accel = max(-SHAPE_ACCEL_LIMIT, min(SHAPE_ACCEL_LIMIT, acceleration))
+    speed = max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * accel))
+
+    predecessor = group[rank - 1].track if rank else None
+    front_speed, front_x, front, _ = _front_following(ego, rows, FRONT_VIEW)
+    if front is not None and not transforming:
+        retained_front = memory.front == front and all(c.track != front for c in group)
+        if retained_front or all(c.lane == ego.lane for c in group):
+            # A side-by-side neighbour does not erase a previously followed
+            # car across a long gap. A single file also follows its real front.
+            speed, predecessor = front_speed, front
+        elif front_x < ego.x:
+            speed = min(speed, front_speed)
+
+    lane = ego.pending_lane
+    step = None
+    if target.lane != ego.lane and target.step_certified:
+        step = ego.lane + (1 if target.lane > ego.lane else -1)
+    since = memory.proposal_since if step == memory.proposed_step else ego.time
+    persistent = transforming or ego.time - since >= LANE_CHANGE_TIME - 1e-8
+    if lane is None and step is not None and step < opened and persistent and _clear(ego, rows, step):
+        lane = step
+    reason = 'transform_transport' if transforming else 'formation_transport'
+    return (Command(speed, lane, reason, target.x, predecessor, 1,
+                    target.gap, target.certified, target.lane, target.step_gap, target.step_certified,
+                    target.refined),
+            Memory(lane, predecessor, proposed_step=step, proposal_since=since))
+
+
+def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3, downstream=False,
+           upcoming_lanes=None):
+    """Use the downstream template once visible, crossing only into an open lane."""
     distance_to_end = drop_x - ego.x if drop_x is not None else float('inf')
-    # 旧调用可在驶过缩道后继续传缩道坐标。
     approaching = drop_x is not None and distance_to_end <= ROAD_PREVIEW and not downstream
-    lanes = lane_count - 1 if approaching and lane_count > 2 else lane_count
-    command, memory = _decide(ego, neighbors, memory, mode, lanes, approaching or downstream or lanes == 2)
+    lanes = (upcoming_lanes if upcoming_lanes is not None else
+             lane_count - 1 if approaching and lane_count > 2 else lane_count)
+    transition = approaching or downstream or upcoming_lanes is not None
+    rows = tuple(c for c in neighbors if -REAR_VIEW <= c.x - ego.x <= FRONT_VIEW)
+    usable = min(lanes, lane_count)
+    if mode == 'noa':
+        command, memory = _reactive(ego, rows, memory, usable)
+    elif mode == 'transform' or mode == 'formation' and not transition:
+        command, memory = _transport(ego, rows, memory, lanes, lane_count, transition)
+    elif mode == 'formation':
+        speed, target, reference, linked = _following(ego, rows)
+        if ego.lane >= usable or ego.pending_lane is not None:
+            command, memory = _reactive(ego, rows, memory, usable)
+            command = replace(command, formation_state=linked)
+        else:
+            command = Command(speed, None, 'formation_follow', target, reference, linked)
+            memory = Memory(front=reference)
+    else:
+        raise ValueError('Unknown driving mode: ' + mode)
     limit = safe_speed(ego, neighbors)
     if distance_to_end <= ROAD_PREVIEW and ego.lane >= lanes:
         distance = max(0., distance_to_end - STANDSTILL)
