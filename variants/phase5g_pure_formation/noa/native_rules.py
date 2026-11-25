@@ -48,6 +48,10 @@ class Memory:
     front: int | None = None
     proposed_step: int | None = None
     proposal_since: float = 0.
+    # (local track, last lane, longitudinal position of last observed crossing)
+    crossings: tuple[tuple[int, int, float], ...] = ()
+    preview_start: float | None = None
+    receiving_track: int | None = None
 
 
 def desired_spacing(speed):
@@ -226,8 +230,18 @@ def _shape_speed(ego, target_x):
     return max(0., min(MAX_SPEED, ego.speed + CONTROL_STEP * accel))
 
 
-def _transport(ego, rows, memory, lanes, opened, transforming):
+def _observed_crossings(group, memory):
+    previous = {track: (lane, x) for track, lane, x in memory.crossings}
+    observed = []
+    for car in group:
+        lane, x = previous.get(car.track, (car.lane, float("-inf")))
+        observed.append((car.track, car.lane, car.x if car.lane != lane else x))
+    return tuple(observed)
+
+
+def _transport(ego, rows, memory, lanes, opened, transforming, preview_start):
     from noa.staggered import anchored_x, choose_target
+    from noa.transport import compatible_join_step
 
     group = list(reversed(_local_group(ego, rows)))
     forward_anchor = None
@@ -238,6 +252,7 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
                     key=lambda c: (c.x, c.lane), default=None)
         if front is not None:
             group = [front, ego]
+    crossings = _observed_crossings(group, memory)
     if len(group) == 1:
         if ego.lane >= lanes:
             return _reactive(ego, rows, memory, lanes)
@@ -245,17 +260,26 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
         if forward_anchor is not None and command.reference is None and command.lane is None:
             x = anchored_x(ego.x, ego.x, desired_spacing(ego.speed), forward_anchor)
             command = replace(command, speed=_shape_speed(ego, x), target_x=x)
-        return command, memory
+        return command, replace(memory, crossings=crossings)
 
     rank = group.index(ego)
     spacing = desired_spacing(sum(c.speed for c in group) / len(group))
     head_clipped = group[0].x - ego.x > FRONT_VIEW - GROUP_GAP
     tail_clipped = ego.x - group[-1].x > REAR_VIEW - GROUP_GAP
-    target = choose_target(rank, group, lanes, spacing,
+    moved = (tuple(x >= preview_start for _, _, x in crossings)
+             if transforming and preview_start is not None else ())
+    target = choose_target(rank, group, lanes, spacing, moved=moved, receiving=transforming,
                            head_clipped=head_clipped, tail_clipped=tail_clipped,
                            sensor_bounds=(ego.x - REAR_VIEW, ego.x + FRONT_VIEW),
                            forward_anchor=forward_anchor, opened_lanes=opened if opened < lanes else None)
-    speed = _shape_speed(ego, target.x)
+    target_x = target.x
+    receiving_track = None
+    if target.incoming_front is not None:
+        incoming = group[target.incoming_front]
+        if incoming.track == memory.receiving_track or not _clear(incoming, (ego,), ego.lane):
+            target_x = min(target_x, incoming.x - spacing)
+            receiving_track = incoming.track
+    speed = _shape_speed(ego, target_x)
 
     predecessor = group[rank - 1].track if rank else None
     front_speed, front_x, front, _ = _front_following(ego, rows, FRONT_VIEW)
@@ -272,19 +296,24 @@ def _transport(ego, rows, memory, lanes, opened, transforming):
     step = None
     if target.lane != ego.lane and target.step_certified and target.released:
         step = ego.lane + (1 if target.lane > ego.lane else -1)
+    if not transforming and step is not None and len(group) < 1 + len(rows):
+        counts = tuple(sum(car.lane == lane for car in (ego, *rows)) for lane in range(lanes))
+        if not compatible_join_step(counts, ego.lane, step):
+            step = None
     since = memory.proposal_since if step == memory.proposed_step else ego.time
     persistent = transforming or ego.time - since >= LANE_CHANGE_TIME - 1e-8
     if lane is None and step is not None and step < opened and persistent and _clear(ego, rows, step):
         lane = step
     reason = 'transform_transport' if transforming else 'formation_transport'
-    return (Command(speed, lane, reason, target.x, predecessor, 1,
+    return (Command(speed, lane, reason, target_x, predecessor, 1,
                     target.gap, target.certified, target.lane, target.step_gap, target.step_certified,
                     target.refined),
-            Memory(lane, predecessor, proposed_step=step, proposal_since=since))
+            Memory(lane, predecessor, proposed_step=step, proposal_since=since,
+                   crossings=crossings, receiving_track=receiving_track))
 
 
 def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3, downstream=False,
-           upcoming_lanes=None):
+           upcoming_lanes=None, visible_boundary_x=None):
     """Use the downstream template once visible, crossing only into an open lane."""
     distance_to_end = drop_x - ego.x if drop_x is not None else float('inf')
     approaching = drop_x is not None and distance_to_end <= ROAD_PREVIEW and not downstream
@@ -296,7 +325,9 @@ def decide(ego, neighbors, memory, mode, drop_x=1000., *, lane_count=3, downstre
     if mode == 'noa':
         command, memory = _reactive(ego, rows, memory, usable)
     elif mode == 'transform' or mode == 'formation' and not transition:
-        command, memory = _transport(ego, rows, memory, lanes, lane_count, transition)
+        preview_start = memory.preview_start if visible_boundary_x is None else visible_boundary_x - ROAD_PREVIEW
+        command, memory = _transport(ego, rows, memory, lanes, lane_count, transition, preview_start)
+        memory = replace(memory, preview_start=preview_start)
     elif mode == 'formation':
         speed, target, reference, linked = _following(ego, rows)
         if ego.lane >= usable or ego.pending_lane is not None:

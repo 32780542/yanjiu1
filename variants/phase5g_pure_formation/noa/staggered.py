@@ -21,6 +21,7 @@ class Target:
     step_certified: bool
     refined: bool
     released: bool = True
+    incoming_front: int | None = None
 
 
 @lru_cache(maxsize=256)
@@ -157,8 +158,20 @@ def _open_road_allows(rank, group, slots, fit, opened, lanes):
     return rank in pool[:allowed[edge]]
 
 
+def _incoming_front(rank, group, assigned):
+    """Index of the adjacent car that should fill the slot directly ahead of ego."""
+    lane, x = assigned[rank]
+    if lane != group[rank].lane:
+        return None
+    front = min((i for i, (column, position) in enumerate(assigned) if column == lane and position > x),
+                key=lambda i: assigned[i][1], default=None)
+    if front is not None and abs(group[front].lane - lane) == 1 and group[front].x >= group[rank].x:
+        return front
+    return None
+
+
 def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipped=False,
-                  sensor_bounds=None, forward_anchor=None, opened_lanes=None):
+                  sensor_bounds=None, forward_anchor=None, opened_lanes=None, moved=(), receiving=False):
     offsets = None
     if lanes == 2 and all(c.lane < lanes for c in group):
         first = _leading_lane(group)
@@ -170,7 +183,7 @@ def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipp
     origin = sum(c.x + d for c, (_, d) in zip(group, offsets)) / len(group)
     slots = [(lane, origin - d) for lane, d in offsets]
     fit = solve_transport([(c.lane, c.x) for c in group], slots,
-                          ego_index=rank, action="next_lane", position_error=POSITION_ERROR_M)
+                          ego_index=rank, action="next_lane", position_error=POSITION_ERROR_M, moved=moved)
     lane, x = slots[fit.assignment[rank]]
     front_offset = min(d for _, d in offsets)
     if forward_anchor is not None:
@@ -178,6 +191,7 @@ def choose_target(rank, group, lanes, spacing, *, head_clipped=False, tail_clipp
     extent = max(d for _, d in offsets) - front_offset
     margin = 2 * len(group) * POSITION_ERROR_M * extent
     confirmed = fit.action_lower_bound > 0
+    front = _incoming_front(rank, group, [slots[j] for j in fit.assignment]) if receiving else None
     return Target(lane, x, fit.ego_gap, fit.ego_gap > margin,
                   fit.action_gap, confirmed, confirmed and fit.action_gap <= margin,
-                  _open_road_allows(rank, group, slots, fit, opened_lanes, lanes))
+                  _open_road_allows(rank, group, slots, fit, opened_lanes, lanes), front)

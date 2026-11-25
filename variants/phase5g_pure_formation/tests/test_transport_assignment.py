@@ -14,6 +14,27 @@ def permutation_cost(vehicles, slots, assignment):
 
 
 class LocalTransportTests(unittest.TestCase):
+    def test_local_crossing_observation_assigns_the_remaining_step_to_another_car(self):
+        cars = [(0, 10), (0, 20)]
+        slots = [(0, 10), (1, 20)]
+        def fit(moved):
+            return solve_transport(cars, slots, ego_index=1, action="next_lane", moved=moved)
+
+        self.assertEqual(fit(()).action_lane, 1)
+        retained = fit((False, True))
+        self.assertEqual((retained.assignment, retained.action_gap), ((1, 0), math.inf))
+        self.assertEqual((retained.max_crossings, retained.total_crossings), (1, 1))
+        # If everybody has already crossed, one must cross again to fill lane 1.
+        self.assertEqual(fit((True, True)), fit(()))
+
+    def test_future_balanced_population_can_accept_or_cancel_one_proposed_step(self):
+        from noa.transport import compatible_join_step
+        self.assertTrue(compatible_join_step((2, 0, 1), 0, 1))
+        self.assertFalse(compatible_join_step((1, 1, 1), 0, 1))
+        # The incomplete three-lane layer uses both outer slots.
+        self.assertTrue(compatible_join_step((0, 2, 0), 1, 0))
+        self.assertTrue(compatible_join_step((0, 2, 0), 1, 2))
+
     def assert_agrees_with_permutations(self, vehicles, slots, ego):
         candidates = [(permutation_cost(vehicles, slots, p), p)
                       for p in itertools.permutations(range(len(vehicles)))]

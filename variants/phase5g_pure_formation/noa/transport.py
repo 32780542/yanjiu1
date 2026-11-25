@@ -2,6 +2,7 @@
 from collections import Counter, deque
 from dataclasses import dataclass
 from functools import lru_cache
+from itertools import combinations
 from math import fsum, gcd, inf, isfinite
 from operator import index
 
@@ -35,6 +36,35 @@ def lane_bounds(source_lanes, target_lanes):
     return max(distances, default=0), sum(distances)
 
 
+@lru_cache(maxsize=512)
+def compatible_join_step(counts, origin, step):
+    """Can this first step belong to an optimal plan for all cars now in view?"""
+    lanes = len(counts)
+    source = [lane for lane, count in enumerate(counts) for _ in range(count)]
+    layers, tail = divmod(len(source), lanes)
+    profiles = []
+    for extra in combinations(range(lanes), tail):
+        if lanes == 3 and 1 in extra:
+            continue  # An incomplete three-lane layer fills its outer slots first.
+        target = list(range(lanes)) * layers + list(extra)
+        profiles.append((lane_bounds(source, target), target))
+    best = min(cost for cost, _ in profiles)
+    source.remove(origin)
+    for cost, target in profiles:
+        if cost != best:
+            continue
+        for destination in set(target):
+            distance = abs(destination - origin)
+            first_step = origin + (destination > origin) - (destination < origin)
+            if first_step == step and distance <= best[0]:
+                rest = target.copy()
+                rest.remove(destination)
+                radius, total = lane_bounds(source, rest)
+                if radius <= best[0] and total + distance == best[1]:
+                    return True
+    return False
+
+
 @lru_cache(maxsize=256)
 def _lane_constraints(source, target):
     """Cache only lane counts/order geometry, never another observer's assignment."""
@@ -58,6 +88,25 @@ def _lane_constraints(source, target):
          for b in target] for a in source
     ]
     return bottleneck, total, forbidden
+
+
+@lru_cache(maxsize=256)
+def _one_hop_mask(source, target, moved):
+    """Retain observed movers on their lane if a complete optimal matching survives."""
+    _, _, ordinary = _lane_constraints(source, target)
+    population, goals = Counter(source), Counter(target)
+    available = Counter(lane for lane, used in zip(source, moved) if not used)
+    # At radius one, net traffic across either boundary must originate in this
+    # lane. If there are enough unused movers, assign them and let the rest stay.
+    left_flow = 0
+    for lane in sorted(population.keys() | goals.keys()):
+        right_flow = left_flow + population[lane] - goals[lane]
+        departures = max(0, -left_flow) + max(0, right_flow)
+        if departures > available[lane]:
+            return ordinary
+        left_flow = right_flow
+    return [[forbidden or (used and a != b) for forbidden, b in zip(row, target)]
+            for a, used, row in zip(source, moved, ordinary)]
 
 
 def _integer_positions(values):
@@ -163,7 +212,7 @@ def _box_difference(chosen, allowed, xx, yy, x_unit, error):
     return sum(weights[i][j] for i,j in enumerate(alternative))
 
 
-def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_error=None):
+def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_error=None, moved=()):
     """Minimize (max crossings, total crossings, sum squared longitudinal moves).
 
     Each row is (lane, x) in the same longitudinal frame. Assignment entries
@@ -179,10 +228,15 @@ def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_er
     proposed lane move with a nonpositive coarse bound gets one extra solve
     for the worst competing action against the selected nominal permutation.
     The certificate is conditional on this specific observed group and slot set.
+    Optional per-row moved flags identify locally observed crossings during
+    the current transformation. For a one-hop optimum, preserve movers' lanes
+    when possible and compute both gaps on that same admissible graph.
     """
     n = len(vehicles)
     if not n or n != len(slots):
         raise ValueError("expected equally many nonempty vehicle and slot rows")
+    if moved and len(moved) != n:
+        raise ValueError("moved must contain one observation per vehicle")
     if ego_index is not None and not 0 <= index(ego_index) < n:
         raise IndexError("ego_index outside vehicles")
     if action is not None and (action not in ("target_lane", "next_lane") or ego_index is None):
@@ -217,6 +271,8 @@ def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_er
         return TransportResult(tuple(assignment), 0, 0, squared, gap, action_lane, action_gap,
                                inf if position_error is not None else None)
     bottleneck, total, forbidden = _lane_constraints(source, target)
+    if bottleneck == 1 and any(moved):
+        forbidden = _one_hop_mask(source, target, tuple(moved[i] for i in car_order))
 
     # In a bijection, sum(x^2 + y^2) is constant. Centering x and y separately
     # also adds only a constant, avoiding cancellation from a distant road origin.

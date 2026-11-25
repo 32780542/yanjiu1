@@ -1,9 +1,10 @@
 """Local geometric references and assignment confidence at road changes."""
 import unittest
 from dataclasses import replace
+from unittest.mock import patch
 
 from noa import native_rules as rules
-from noa.staggered import choose_target
+from noa.staggered import Target, _incoming_front, choose_target
 
 
 def car(x, lane, track=0):
@@ -11,6 +12,32 @@ def car(x, lane, track=0):
 
 
 class TransportControlTests(unittest.TestCase):
+    def test_only_the_immediate_front_slot_can_trigger_receiving(self):
+        group = [car(28, 1), car(17, 2), car(16, 1), car(12, 0)]
+        slots = [(0, 60), (2, 40), (0, 30), (0, 0)]
+        self.assertEqual(_incoming_front(3, group, slots), 2)
+        self.assertIsNone(_incoming_front(2, group, slots))  # still needs to change lane
+        self.assertIsNone(_incoming_front(3, group[:2] + [car(10, 1), group[3]], slots))
+
+    def test_receiving_link_opens_one_gap_and_ends_when_the_slot_changes(self):
+        ego = car(100, 0, 1)
+        target = Target(0, 100, 2, True, 3, True, False, incoming_front=0)
+        def control(distance, memory):
+            return rules.decide(ego, (car(100 + distance, 1, 2),), memory, 'transform',
+                                drop_x=None, lane_count=2, downstream=True)
+
+        with patch('noa.staggered.choose_target', return_value=target):
+            first, memory = control(1., rules.Memory())
+            self.assertEqual(memory.receiving_track, 2)
+            self.assertAlmostEqual(first.target_x, 101. - rules.desired_spacing(28.8))
+            held, memory = control(12., memory)
+            self.assertAlmostEqual(held.target_x, 112. - rules.desired_spacing(28.8))
+            self.assertEqual(control(12., rules.Memory())[0].target_x, 100.)
+        with patch('noa.staggered.choose_target', return_value=replace(target, incoming_front=None)):
+            released, memory = control(12., memory)
+            self.assertEqual(released.target_x, 100.)
+            self.assertIsNone(memory.receiving_track)
+
     def test_equal_lane_counts_fit_the_cheaper_mirror_to_all_positions(self):
         # Lane 0 owns the foremost car but lane 1 has the greater mean x.
         group = [car(70, 0), car(67, 1), car(45, 1), car(10, 0)]

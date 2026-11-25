@@ -912,6 +912,7 @@ def run_case(
                                 lane_count=lane_count,
                                 downstream=downstream_edge and key in boundary_seen,
                                 upcoming_lanes=retained if visible else None,
+                                visible_boundary_x=approach if visible else None,
                             )
                             formation_states[key] = command.formation_state
                         if not math.isfinite(command.speed):
