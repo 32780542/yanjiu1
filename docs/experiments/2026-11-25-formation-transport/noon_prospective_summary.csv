@@ -1,0 +1,11 @@
+road,method,cases,cars,completed,collisions,teleports,both,gained,lost,upstream_optimal,downstream_optimal,upstream_best_legal_tail,downstream_best_legal_tail,both_hold_at_least_10s,median_upstream_hold_s,median_downstream_hold_s
+3to2,morning,24,336,336,0,0,24,0,0,13,23,13,19,24,48.45,23.0
+all,morning,96,1344,1344,0,0,95,0,0,63,88,61,84,95,49.3,27.85
+3to2,noon,24,336,336,0,0,24,0,0,13,24,13,20,24,49.599999999999994,21.65
+all,noon,96,1344,1344,0,0,95,0,0,67,94,64,90,95,49.3,28.1
+4to3,morning,24,336,336,0,0,24,0,0,14,18,12,18,24,45.85,30.2
+4to3,noon,24,336,336,0,0,24,0,0,17,23,15,23,24,45.8,29.95
+2to3,morning,24,336,336,0,0,24,0,0,21,24,21,24,24,49.3,27.5
+2to3,noon,24,336,336,0,0,24,0,0,21,24,21,24,24,49.3,27.5
+3to4,morning,24,336,336,0,0,23,0,0,15,23,15,23,23,48.8,29.5
+3to4,noon,24,336,336,0,0,23,0,0,16,23,15,23,23,48.8,29.5

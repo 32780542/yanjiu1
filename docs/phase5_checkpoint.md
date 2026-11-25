@@ -1,5 +1,7 @@
 # 阶段5恢复检查点
 
+**2026-11-25 中午。** 当前工作区为 `D:\yanjiu1\keyan1`，分支为 `research/20261125-formation-transport`，源自 GitHub 的 `11.24版`。先读[当前形成与变换方法、实测结果和演示命令](experiments/2026-11-25-formation-transport/noon_review.md)，再读[上午续研时间线](experiments/2026-11-25-formation-transport/noon.md)。四种道路均可从普通 `runrun.py` 入口运行。已经复现的失败集中包含十一车二变三长列的上游相位错位，记录与对应成功对照都在审阅报告中。
+
 **11 月 25 日的恢复入口**是[不同车道数下的交错编队研究记录](experiments/2026-11-25-formation-transport/README.md)。当前研究分支为 `research/20261125-formation-transport`，从标签 `11.24版` 恢复。实时演示、理论、逐案结果和时间线在同一份记录中。以下条目按各自日期保留。
 
 **最新入口（2026-11-03晚间D1）：** 当前实际源码为423行D1，SHA256 `2be889140b497b763818a35814b0f34815c7cccd309dd5007ebaddca8a91f35a`。先读[本轮报告](experiments/2026-11-03-midflow-staggered/README.md)、[完整规则](原生SUMO编队变换系统说明.md)和[论文主线](experiments/2026-11-03-midflow-staggered/论文主线与贡献.md)。正式91–95五种子、三流量、两道路、三方法共90例全部安全排空且独立复算通过；现行窗口入口1750流量，实时逐步计算。以下为按时间保留的历史记录，旧S/TM状态不用于覆盖当前代码。最新归档与云端记录见文末。

@@ -1,5 +1,7 @@
 # 局部感知的时距交错编队与车道数变化
 
+**11 月 25 日中午研究入口。** 现版在形成时检查补位与可见车群合并后是否相容，变换时优先把必要的横移分给尚未跨过线的车辆，并让目标道的后车给已分配的前槽留出真实间隙。384 个配对初态、四种道路的真实窗口演示、最少换道证明与连续车流结果汇总在[中午审阅报告](docs/experiments/2026-11-25-formation-transport/noon_review.md)。逐次试验记录见[研究时间线](docs/experiments/2026-11-25-formation-transport/noon.md)。
+
 在根目录的 `runrun.py` 顶部设置 `MODEL` 和 `LANE_COUNT`，保存后点运行即可打开 SUMO 窗口。`MODEL` 可选 `"hdv"`（普通车，IDM 时距 0.85 秒）、`"noa"`（纯 NOA）或 `"formation"`（交错编队形成与变换）。`LANE_COUNT` 填 `3` 看三变二，填 `4` 看四变三。命令行参数可覆盖这次运行的设置，例如 `python runrun.py --model hdv --lanes 4`。
 
 11 月 25 日的研究从 GitHub 的 `11.24版` 恢复。形成时，每辆车用前方 200 米、后方 100 米内实际看到的车辆，拟合一段均匀的多车道交错队形。相邻车道错开半个同道间距，同道间距随车速变化，为 $5.5+0.85v$ 米。变换时，车辆在看见道路增减后更换目标车道集合。两阶段共用局部指派，依次减少单车最大跨道数、全队总跨道数和纵向调距。提交相邻横移前，本车计算测量误差是否足以推翻这一步，并检查真实间隙。[本轮研究进展、数学证明和时间线](docs/experiments/2026-11-25-formation-transport/README.md) · [单车控制](variants/phase5g_pure_formation/noa/native_rules.py) · [交错模板](variants/phase5g_pure_formation/noa/staggered.py) · [指派求解](variants/phase5g_pure_formation/noa/transport.py)

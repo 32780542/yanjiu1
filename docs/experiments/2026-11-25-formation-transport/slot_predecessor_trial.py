@@ -30,6 +30,8 @@ def build(out,mode,base):
         section=section.replace("x = min(x, ahead.x - spacing)","x = .5 * (x + min(x, ahead.x - spacing))")
     elif mode=="clearance":
         section=section.replace("x = min(x, ahead.x - spacing)","from noa.native_rules import CLEARANCE\n                x = min(x, ahead.x - CLEARANCE)")
+    elif mode=="conflict":
+        section=section.replace("if abs(ahead.lane-lane) == 1:", "from noa.native_rules import _clear\n            if abs(ahead.lane-lane) == 1 and ahead.x >= group[rank].x and not _clear(ahead,(group[rank],),lane):")
     elif mode=="order":
         section=section.replace("if abs(ahead.lane-lane) == 1:", "if abs(ahead.lane-lane) == 1 and ahead.x >= group[rank].x:")
     assert s.count(marker)==1
@@ -37,6 +39,6 @@ def build(out,mode,base):
 
 
 if __name__=="__main__":
-    p=argparse.ArgumentParser();p.add_argument("out",type=Path);p.add_argument("--mode",choices=("full","weighted","clearance","order"),required=True)
+    p=argparse.ArgumentParser();p.add_argument("out",type=Path);p.add_argument("--mode",choices=("full","weighted","clearance","order","conflict"),required=True)
     p.add_argument("--base",choices=("combined","transition"),default="combined")
     a=p.parse_args();build(a.out,a.mode,a.base)

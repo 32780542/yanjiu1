@@ -26,6 +26,10 @@ HOUR = (4801,)
 REVIEW = (10121,10122)
 # Batch labels are unique even when two batches share all frozen source files.
 BATCHES = {
+    "noon_prospective_exact_600": (SHRINK, ALL_FLOWS, (11803,), 600, "new_exact"),
+    "noon_prospective_noa_600": (SHRINK, ALL_FLOWS, (11803,), 600, "new_noa"),
+    "noon_minimum_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_minimum"),
+    "noon_noa_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_noa"),
     "noon_receive_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_receive"),
     "noon_combined_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_combined"),
     "noon_ref_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_ref1200"),
@@ -54,6 +58,16 @@ BATCHES = {
     "review_moment_expand_3600": (EXPAND, (2000,), HOUR, 3600, "moment3600"),
 }
 PANELS = {
+    "noon_prospective": ("冻结后新种子连续车流复核",
+        {"noon_prospective_exact_600":SHRINK,"noon_prospective_noa_600":SHRINK},
+        (("new_exact","new_noa",SHRINK),)),
+    "noon_exact": ("逐车道最少重复换道的正式对照",
+        {"noon_minimum_1200":SHRINK,"noon_hold_1200":SHRINK,"noon_ref_1200":SHRINK,"noon_noa_1200":SHRINK},
+        (("noon_minimum","noon_hold",SHRINK),("noon_minimum","noon_noa",SHRINK),
+         ("noon_minimum","noon_ref1200",SHRINK))),
+    "noon_product": ("中午版与同来车纯 NOA 的路内效率",
+        {"noon_hold_1200":SHRINK,"noon_ref_1200":SHRINK,"noon_noa_1200":SHRINK},
+        (("noon_hold","noon_noa",SHRINK),("noon_hold","noon_ref1200",SHRINK))),
     "noon_receive_1200": ("按目标槽前驱形成合流间隙的持续流对照",
         {"noon_receive_1200":SHRINK,"noon_combined_1200":SHRINK,"noon_ref_1200":SHRINK},
         (("noon_receive","noon_combined",SHRINK),("noon_receive","noon_ref1200",SHRINK))),
@@ -113,9 +127,21 @@ NAMES = {"e186":"e186","anchor":"前群锚","retained":"保留方案","path1200"
          "noon_hop1200":"一步分配","noon_ref1200":"上午原版",
          "noon_combined":"合群补位与一步变换",
          "noon_receive":"目标槽前驱跟驰",
+         "noon_noa":"纯 NOA",
+         "noon_minimum":"最少重复换道的交错编队",
+         "new_exact":"中午正式编队","new_noa":"纯 NOA",
          "subflow3600":"阶段通量整理版",
          "review_base":"晨间基准","review_final":"晨间候选","review_noa":"晨间纯 NOA","moment3600":"镜像矩正式版",
          "path3600":"路径闭式","11.24":"11.24","NOA":"纯 NOA"}
+for suffix, name in (("conflict","仅在净空不足时跟驰前槽"), ("hold","接收间隙持续到前槽车辆就位"), ("target","按目标位置识别接收冲突")):
+    label = "noon_" + suffix
+    batch = label + "_1200"
+    BATCHES[batch] = (SHRINK, ALL_FLOWS, (11261,11262), 1200, label)
+    NAMES[label] = name
+    PANELS[batch] = (name + "的连续流对照",
+                     {batch:SHRINK, "noon_receive_1200":SHRINK, "noon_ref_1200":SHRINK},
+                     ((label,"noon_receive",SHRINK),(label,"noon_ref1200",SHRINK)))
+
 EXTRA = ("crossings_per_100","upstream_crossings","approach_crossings","downstream_crossings",
          "vehicles_crossed","vehicles_crossed_twice_or_more","vehicle_crossing_max",
          "coordinate_crossings","coordinate_crossings_per_100","coordinate_upstream_crossings",
@@ -154,7 +180,7 @@ def get_design(panels):
         m = read(directory/"manifest.json")
         args, files = m["arguments"], m["files"]
         if (set(args["roads"])!=set(roads) or set(args["flows"])!=set(flows) or set(args["seeds"])!=set(seeds)
-                or args["duration"]!=duration or args["mode"]!=("noa" if method in ("NOA","review_noa") else "transform")):
+                or args["duration"]!=duration or args["mode"]!=("noa" if method in ("NOA","review_noa","noon_noa","new_noa") else "transform")):
             raise ValueError(f"Unexpected matrix or mode in {label}")
         for name, expected in files.items():
             if digest((directory/"source"/name).read_bytes()) != expected:
@@ -206,7 +232,7 @@ def audit(job):
         item=read(cache)
         if fingerprint==item["verified"]:
             return item["row"]
-    native_spec=(spec[0],"NOA",spec[2]) if spec[1]=="review_noa" else spec
+    native_spec=(spec[0],"NOA",spec[2]) if spec[1] in ("review_noa", "noon_noa", "new_noa") else spec
     out = audit_case(label,road,flow,seed,path,files,native_spec,physical_counts=True)
     out["method"]=spec[1]
     out["batch"] = label
