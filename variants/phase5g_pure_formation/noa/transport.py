@@ -92,21 +92,27 @@ def _lane_constraints(source, target):
 
 @lru_cache(maxsize=256)
 def _one_hop_mask(source, target, moved):
-    """Retain observed movers on their lane if a complete optimal matching survives."""
+    """Keep exactly the one-hop matchings that reuse the fewest observed movers."""
     _, _, ordinary = _lane_constraints(source, target)
     population, goals = Counter(source), Counter(target)
     available = Counter(lane for lane, used in zip(source, moved) if not used)
-    # At radius one, net traffic across either boundary must originate in this
-    # lane. If there are enough unused movers, assign them and let the rest stay.
+    # At radius one each departure must originate here. The two outgoing
+    # boundary flows fix how many cars must leave, independently on each lane.
+    enough_fresh = {}
     left_flow = 0
     for lane in sorted(population.keys() | goals.keys()):
         right_flow = left_flow + population[lane] - goals[lane]
         departures = max(0, -left_flow) + max(0, right_flow)
-        if departures > available[lane]:
-            return ordinary
+        enough_fresh[lane] = available[lane] >= departures
         left_flow = right_flow
-    return [[forbidden or (used and a != b) for forbidden, b in zip(row, target)]
-            for a, used, row in zip(source, moved, ordinary)]
+    masks = []
+    for lane, used, mask in zip(source, moved, ordinary):
+        if used and enough_fresh[lane]:
+            mask = [blocked or dest != lane for blocked, dest in zip(mask, target)]
+        elif not used and not enough_fresh[lane]:
+            mask = [blocked or dest == lane for blocked, dest in zip(mask, target)]
+        masks.append(mask)
+    return masks
 
 
 def _integer_positions(values):
@@ -229,8 +235,8 @@ def solve_transport(vehicles, slots, *, ego_index=None, action=None, position_er
     for the worst competing action against the selected nominal permutation.
     The certificate is conditional on this specific observed group and slot set.
     Optional per-row moved flags identify locally observed crossings during
-    the current transformation. For a one-hop optimum, preserve movers' lanes
-    when possible and compute both gaps on that same admissible graph.
+    the current transformation. For a one-hop optimum, first minimize reuse of
+    these movers and compute both gaps on that same admissible graph.
     """
     n = len(vehicles)
     if not n or n != len(slots):

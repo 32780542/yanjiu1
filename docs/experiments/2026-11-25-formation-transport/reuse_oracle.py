@@ -8,7 +8,7 @@ from random import Random
 import sys
 
 
-def verify(folder, policy):
+def verify(folder, policy, historical_api):
     sys.path.insert(0, str(folder.resolve()))
     from noa.transport import solve_transport
 
@@ -43,7 +43,7 @@ def verify(folder, policy):
             assert repetitions == minimum
             admissible = [(cost, p) for b, c, r, cost, p in cases if (b, c) == (radius, total)
                           and (r == minimum or (policy == "feasible" and minimum > 0))]
-            flags = {"moved" if policy == "feasible" else "history": used}
+            flags = {"history" if historical_api else "moved": used}
             result = solve_transport(list(zip(source, x)), list(zip(target, y)), ego_index=ego,
                                      action="next_lane", position_error=0., **flags)
             optimum = min(cost for cost, _ in admissible)
@@ -64,5 +64,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("variant", type=Path)
     parser.add_argument("policy", choices=("feasible", "minimum"))
+    parser.add_argument("--historical-api", action="store_true", help="Use the trial's history keyword")
     args = parser.parse_args()
-    verify(args.variant, args.policy)
+    verify(args.variant, args.policy, args.historical_api)

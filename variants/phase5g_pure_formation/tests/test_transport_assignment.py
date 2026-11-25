@@ -35,6 +35,15 @@ class LocalTransportTests(unittest.TestCase):
         self.assertTrue(compatible_join_step((0, 2, 0), 1, 0))
         self.assertTrue(compatible_join_step((0, 2, 0), 1, 2))
 
+    def test_minimizes_repeated_movers_when_one_repetition_is_unavoidable(self):
+        cars = [(0, 10), (0, 20), (0, 30)]
+        slots = [(0, 10), (1, 20), (1, 30)]
+        result = solve_transport(cars, slots, moved=(False, True, True), ego_index=0,
+                                 action="next_lane")
+        self.assertEqual(result.assignment, (1, 0, 2))
+        self.assertEqual((result.max_crossings, result.total_crossings), (1, 2))
+        self.assertEqual((result.action_lane, result.action_gap), (1, math.inf))
+
     def assert_agrees_with_permutations(self, vehicles, slots, ego):
         candidates = [(permutation_cost(vehicles, slots, p), p)
                       for p in itertools.permutations(range(len(vehicles)))]
