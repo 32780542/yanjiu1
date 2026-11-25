@@ -26,6 +26,11 @@ HOUR = (4801,)
 REVIEW = (10121,10122)
 # Batch labels are unique even when two batches share all frozen source files.
 BATCHES = {
+    "noon_receive_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_receive"),
+    "noon_combined_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_combined"),
+    "noon_ref_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_ref1200"),
+    "noon_onehop_1200": (SHRINK, ALL_FLOWS, (11261,11262), 1200, "noon_hop1200"),
+    "noon_onehop_900": (SHRINK, ALL_FLOWS, REVIEW, 900, "noon_onehop"),
     "anchor_base_1200": (SHRINK, ALL_FLOWS, FOUR, 1200, "e186"),
     "anchor_group_1200": (SHRINK, ALL_FLOWS, FOUR, 1200, "anchor"),
     "retained_product_1200": (SHRINK, ALL_FLOWS, FOUR, 1200, "retained"),
@@ -49,6 +54,18 @@ BATCHES = {
     "review_moment_expand_3600": (EXPAND, (2000,), HOUR, 3600, "moment3600"),
 }
 PANELS = {
+    "noon_receive_1200": ("按目标槽前驱形成合流间隙的持续流对照",
+        {"noon_receive_1200":SHRINK,"noon_combined_1200":SHRINK,"noon_ref_1200":SHRINK},
+        (("noon_receive","noon_combined",SHRINK),("noon_receive","noon_ref1200",SHRINK))),
+    "noon_combined_1200": ("合群补位与一步变换的连续流对照",
+        {"noon_combined_1200":SHRINK,"noon_onehop_1200":SHRINK,"noon_ref_1200":SHRINK},
+        (("noon_combined","noon_ref1200",SHRINK),("noon_combined","noon_hop1200",SHRINK))),
+    "noon_fresh_1200": ("新来车序列的一步分配对照",
+        {"noon_onehop_1200":SHRINK,"noon_ref_1200":SHRINK},
+        (("noon_hop1200","noon_ref1200",SHRINK),)),
+    "noon_onehop_900": ("一次换道名额的连续流验证",
+        {"noon_onehop_900":SHRINK,"review_final_900":SHRINK,"review_noa_900":SHRINK},
+        (("noon_onehop","review_final",SHRINK),("noon_onehop","review_noa",SHRINK))),
     "anchor_1200": (
         "前群锚与保留方案的 1200 秒缩道对照",
         {"anchor_base_1200":SHRINK,"anchor_group_1200":SHRINK,"retained_product_1200":SHRINK},
@@ -92,6 +109,10 @@ PANELS = {
          ("moment3600","e186",SHRINK),("moment3600","11.24",SHRINK),("moment3600","NOA",SHRINK))),
 }
 NAMES = {"e186":"e186","anchor":"前群锚","retained":"保留方案","path1200":"路径原型","subflow":"阶段通量",
+         "noon_onehop":"已观察跨道的一步分配",
+         "noon_hop1200":"一步分配","noon_ref1200":"上午原版",
+         "noon_combined":"合群补位与一步变换",
+         "noon_receive":"目标槽前驱跟驰",
          "subflow3600":"阶段通量整理版",
          "review_base":"晨间基准","review_final":"晨间候选","review_noa":"晨间纯 NOA","moment3600":"镜像矩正式版",
          "path3600":"路径闭式","11.24":"11.24","NOA":"纯 NOA"}
@@ -102,6 +123,7 @@ EXTRA = ("crossings_per_100","upstream_crossings","approach_crossings","downstre
          "coordinate_vehicles_crossed_twice_or_more","coordinate_vehicle_crossing_max")
 CACHE = ROOT / "tmp/nov25_public_flow_audit"
 RECOVERIES = {
+    ("review_moment_shrink_3600","4to3",2000,4801): "noon_moment_hour4",
     ("anchor_base_1200","4to3",2000,9303): "anchor_e186_recovery9303",
     ("anchor_base_1200","4to3",1750,9304): "anchor_e186_recovery9304",
     ("anchor_base_1200","4to3",2000,9304): "anchor_e186_recovery9304",
