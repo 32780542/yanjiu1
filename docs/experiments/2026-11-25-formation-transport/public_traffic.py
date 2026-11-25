@@ -113,6 +113,11 @@ COORD_FIELDS = (
     "matched_events_same_time","matched_events_time_differs","matched_max_abs_time_difference_s",
     "matched_events_different_spatial_bin",
 )
+TRACE_CHECKS = {
+    "subflow_1200":("subflow","retained",("4to3",)),
+    "review_900":("review_final","review_base",("4to3",)),
+    "moment_3600":("moment3600","subflow3600",("4to3","3to4")),
+}
 
 
 def get_design(panels):
@@ -223,12 +228,13 @@ def publish(panel, rows):
         for p in compare(sample, candidate, OUTCOMES+EXTRA):
             p["candidate"]=candidate
             pairs.append(p)
-    if panel=="subflow_1200":
+    if panel in TRACE_CHECKS:
+        left,right,check_roads=TRACE_CHECKS[panel]
         by_key={(r["method"],r["road"],r["flow"],r["seed"]):r for r in rows}
         for pair in pairs:
             pair["candidate_uncompressed_positions_sha256"]=None
             pair["reference_uncompressed_positions_sha256"]=None
-            if pair["reference"]=="retained" and pair["road"]=="4to3":
+            if pair["candidate"]==left and pair["reference"]==right and pair["road"] in check_roads:
                 for role in ("candidate","reference"):
                     r=by_key[(pair[role],pair["road"],pair["flow"],pair["seed"])]
                     with gzip.open(ROOT/r["run_dir"]/"positions.jsonl.gz","rb") as stream:
@@ -249,14 +255,16 @@ def publish(panel, rows):
         a,b=[read(BATCH/name/"manifest.json")["files"] for name in (before,after)]
         if {k for k in a.keys()|b.keys() if a.get(k)!=b.get(k)}!={"noa/staggered.py"}:
             raise ValueError("The mirror comparison now includes additional source changes")
-        lines+=["", "镜像矩方案与其阶段通量基准的冻结文件逐一核查后，只有 noa/staggered.py 不同。对局部两道均衡、车辆数为偶数的排列，新增规则依据横向两列的纵向一阶矩选择交错朝向。两者使用同一实际来车请求，表内成对差值反映这项规则在该次闭环运行中的总体影响。"]
+        lines+=["", "镜像矩方案与其阶段通量基准的冻结文件逐一核查后，只有 noa/staggered.py 不同。对局部两道车辆数相等的排列，两列纵向一阶矩差的绝对值超过车数乘以定位误差时，按其符号选择交错朝向。误差范围内沿用最前车所在道。两者使用同一实际来车请求，表内成对差值反映这项规则在该次闭环运行中的总体影响。"]
     resumed=[r for r in rows if r["actual_batch"]!=r["batch"]]
     if resumed:
         lines+=["",f"e186 原批次达到运行时限。{len(resumed)} 例在恢复批次完成，逐文件核对冻结源码并与原始输入逐车核对入口需求和物理设置。逐运行表的 actual_batch 和 run_dir 指向实际完成目录。"]
-    if panel=="subflow_1200":
+    if panel in TRACE_CHECKS:
+        left,right,check_roads=TRACE_CHECKS[panel]
         checked=[p for p in pairs if p["candidate_uncompressed_positions_sha256"]]
         identical=sum(p["candidate_uncompressed_positions_sha256"]==p["reference_uncompressed_positions_sha256"] for p in checked)
-        lines+=["",f"4→3 的阶段通量与保留方案另逐对核对了完整的原生轨迹。{identical}/{len(checked)} 对的解压 positions.jsonl 字节完全相同，逐种子表保留双方轨迹 SHA-256。"]
+        road_names="、".join(r.replace("to","→") for r in check_roads)
+        lines+=["",f"{road_names} 的{NAMES[left]}与{NAMES[right]}另逐对核对了完整的原生轨迹。{identical}/{len(checked)} 对的解压 positions.jsonl 字节完全相同，逐种子表保留双方轨迹 SHA-256。"]
     lines+=["", "## 车心越线与三秒持续队形", ""]
     for c,ref,roads in comparisons:
         for road in roads:
@@ -319,7 +327,7 @@ def comparison_index():
     unique={r["run_dir"]:r for rows,_ in results.values() for r in rows}
     cells={(r["road"],r["flow"],r["duration_s"],r["seed"]) for r in unique.values()}
     lines=["# 连续流公开对照索引","",
-           f"下列面板共使用 {len(unique)} 份不同的完整原生轨迹，覆盖 {len(cells)} 个道路、流量、来车时长及种子组合。多份面板共用参考轨迹。以同一种子同一来车条件的运行均值比较，程序版本分别列示。", "",
+           f"下列面板共使用 {len(unique)} 个完整原生运行目录，覆盖 {len(cells)} 个道路、流量、来车时长及种子组合。多份面板共用参考轨迹。以同一种子同一来车条件的运行均值比较，程序版本分别列示。", "",
            "| 对照明细 | 运行数 | 同种子方法配对数 | 已驶出/请求车次 | 原生碰撞/瞬移 |",
            "|---|---:|---:|---:|---:|"]
     for panel,(rows,pairs) in results.items():
